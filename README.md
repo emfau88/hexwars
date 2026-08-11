@@ -6,21 +6,23 @@ Dieses Repository enthält zwei eigenständige Browser-Spiele mit unterschiedlic
 
 | Spiel | Stil | Link |
 | --- | --- | --- |
-| **HEXWARS: Tactics** | Rundenbasierte Truppentaktik | **[Tactics spielen](https://emfau88.github.io/hexwars/)** |
+| **HEXFRONT: Tactics** | Zugängliche, rundenbasierte Truppentaktik | **[Tactics spielen](https://emfau88.github.io/hexwars/)** |
 | **HEXFRONT** | Echtzeit-Gebietskontrolle mit 10-Level-Kampagne | **[Kampagne spielen](https://emfau88.github.io/hexwars/campaign/)** |
 
-## HEXWARS: Tactics
+## HEXFRONT: Tactics
 
-Ein kompaktes, rundenbasiertes Taktikspiel. Drei blaue Einheiten kämpfen gegen eine KI, um den gegnerischen Reaktorkern zu zerstören. Jede Einheit besitzt eine eigene Rolle; der Zünder kann das Schlachtfeld in Brand setzen. Feuer verursacht Schaden und springt auf angrenzende Waldfelder über.
+Ein kompaktes, rundenbasiertes Taktikspiel im Stil der Kampagnenvariante. Das erste Gefecht ist als verständliches Training gebaut: Drei orange Einheiten treten gegen zwei blaue Gegner an, der eigene Kern ist widerstandsfähiger und die KI beginnt bewusst zurückhaltend. Eine kurze Einweisung und kontextabhängige Hinweise führen durch Auswahl, Bewegung, Angriff und Zugwechsel.
+
+Das Interface ist mobile-first gestaltet und funktioniert per Touch, Maus oder Tastatur.
 
 ### Steuerung
 
-1. Eine blaue Einheit auswählen.
-2. Auf ein türkis markiertes Feld klicken, um sie zu bewegen.
-3. Ein orange markiertes Ziel angreifen.
-4. Den Zug mit **E** oder der Schaltfläche beenden.
+1. Eine orange Einheit auswählen.
+2. Auf ein grün markiertes Feld tippen, um sie zu bewegen.
+3. Ein gold markiertes Ziel angreifen.
+4. Den Zug mit **E** oder der großen Schaltfläche beenden.
 
-Gewonnen wird durch die Zerstörung des roten Kerns oder aller roten Einheiten.
+Gewonnen wird durch die Zerstörung des blauen Kerns oder beider blauen Einheiten. Die Schaltfläche **Einweisung** öffnet die Kurzanleitung jederzeit erneut.
 
 ## HEXFRONT – 10-Level-Kampagne
 
@@ -37,7 +39,7 @@ Hügel stärken Verteidiger. Relais ermöglichen Sprünge über eine größere D
 
 ## Projektstruktur
 
-- `/index.html`, `/styles.css`, `/src/` – HEXWARS: Tactics
+- `/index.html`, `/styles.css`, `/src/` – HEXFRONT: Tactics
 - `/campaign/index.html` – eigenständige HEXFRONT-Kampagne
 - `/tests/` – Tests der Tactics-Spiellogik
 - `/scripts/build.mjs` – erzeugt das gemeinsame statische Deployment

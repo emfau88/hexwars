@@ -5,39 +5,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta
       name="description"
-      content="Hexwars – ein schnelles, rundenbasiertes Taktikspiel mit einem Schlachtfeld, das Feuer fängt."
+      content="HEXFRONT: Tactics – ein zugängliches, rundenbasiertes Taktiktraining auf dem Hexfeld."
     />
-    <meta name="theme-color" content="#071317" />
-    <title>Hexwars – First Playable</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23f4b942' d='M50 3 91 27v46L50 97 9 73V27z'/%3E%3Cpath fill='%23071317' d='m50 20 25 15v30L50 80 25 65V35z'/%3E%3C/svg%3E" />
+    <meta name="theme-color" content="#1b211f" />
+    <title>HEXFRONT: Tactics</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23e8c07d' d='M50 3 91 27v46L50 97 9 73V27z'/%3E%3Cpath fill='%23111715' d='m50 20 25 15v30L50 80 25 65V35z'/%3E%3C/svg%3E" />
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <div class="app-shell">
       <header class="topbar">
         <div class="brand-lockup">
-          <div class="brand-mark" aria-hidden="true"><span>H</span></div>
-          <div>
-            <p class="eyebrow">Tactical prototype</p>
-            <h1>Hexwars</h1>
+          <div class="brand-mark" aria-hidden="true">HF</div>
+          <div class="brand-copy">
+            <p class="eyebrow">Tactical Front Command</p>
+            <h1>HEXFRONT <span>TACTICS</span></h1>
           </div>
         </div>
-        <div class="round-chip">
-          <span id="phaseLabel">Dein Zug</span>
-          <strong id="roundLabel">Runde 1</strong>
+        <div class="top-actions">
+          <button id="helpButton" class="icon-button" type="button">Einweisung</button>
+          <button id="soundToggle" class="icon-button" type="button" aria-pressed="true">Ton an</button>
         </div>
       </header>
 
       <main class="game-layout">
         <section class="battlefield-card" aria-labelledby="battlefieldTitle">
-          <div class="battlefield-heading">
+          <div class="mission-header">
             <div>
-              <p class="eyebrow">Sektor 07 · Glutgrenze</p>
-              <h2 id="battlefieldTitle">Durchbrich den roten Kern</h2>
+              <p class="eyebrow">Training 01 · Glutgrenze</p>
+              <h2 id="battlefieldTitle">Zerstöre den blauen Kern</h2>
             </div>
-            <button id="soundToggle" class="icon-button" type="button" aria-pressed="true" title="Sound umschalten">
-              Sound: an
-            </button>
+            <div class="round-chip">
+              <span id="phaseLabel">Dein Zug</span>
+              <strong id="roundLabel">Runde 1</strong>
+            </div>
+          </div>
+
+          <div class="core-dashboard" aria-label="Kernintegrität">
+            <div class="core-meter player-core">
+              <div class="core-label"><span>Dein Kern</span><strong id="blueCoreValue">14 / 14</strong></div>
+              <div class="meter-track"><span id="blueCoreBar"></span></div>
+            </div>
+            <div class="versus-mark" aria-hidden="true">VS</div>
+            <div class="core-meter enemy-core">
+              <div class="core-label"><span>Feindkern</span><strong id="redCoreValue">8 / 8</strong></div>
+              <div class="meter-track"><span id="redCoreBar"></span></div>
+            </div>
+          </div>
+
+          <div class="coach-card" id="coachCard" aria-live="polite">
+            <span class="coach-step" id="coachStep">Schritt 1</span>
+            <div>
+              <strong id="coachTitle">Wähle eine Einheit</strong>
+              <p id="coachText">Tippe auf eine orange Einheit im Feld oder in der Liste.</p>
+            </div>
           </div>
 
           <div class="canvas-wrap" id="canvasWrap">
@@ -46,66 +67,69 @@
               width="900"
               height="650"
               tabindex="0"
-              aria-label="Hexwars Spielfeld. Wähle eine blaue Einheit und danach ein markiertes Feld oder Ziel."
+              aria-label="HEXFRONT Tactics Spielfeld. Wähle eine orange Einheit und danach ein grün markiertes Feld oder ein blaues Ziel."
             ></canvas>
             <div class="turn-banner" id="turnBanner" aria-live="polite"></div>
             <div class="game-over" id="gameOver" hidden>
-              <p class="eyebrow" id="gameOverKicker">Gefechtsbericht</p>
+              <p class="eyebrow" id="gameOverKicker">Trainingsbericht</p>
               <h2 id="gameOverTitle">Sieg</h2>
               <p id="gameOverMessage"></p>
-              <button id="playAgainButton" class="primary-button" type="button">Noch eine Runde</button>
+              <button id="playAgainButton" class="primary-button" type="button">Training wiederholen</button>
             </div>
           </div>
 
           <div class="status-strip" aria-live="polite">
             <span class="status-pulse" aria-hidden="true"></span>
-            <p id="statusText">Wähle eine blaue Einheit.</p>
+            <p id="statusText">Tippe auf eine orange Einheit.</p>
           </div>
         </section>
 
-        <aside class="command-panel" aria-label="Kommandozentrale">
-          <section class="core-section">
+        <aside class="command-panel" aria-label="Taktikübersicht">
+          <section class="unit-section">
             <div class="panel-heading">
               <div>
-                <p class="eyebrow">Primärziel</p>
-                <h2>Reaktorkerne</h2>
-              </div>
-              <span class="objective-tag">Zerstören</span>
-            </div>
-
-            <div class="core-meter blue">
-              <div class="core-label"><span>Dein Kern</span><strong id="blueCoreValue">10 / 10</strong></div>
-              <div class="meter-track"><span id="blueCoreBar"></span></div>
-            </div>
-            <div class="core-meter red">
-              <div class="core-label"><span>Feindkern</span><strong id="redCoreValue">10 / 10</strong></div>
-              <div class="meter-track"><span id="redCoreBar"></span></div>
-            </div>
-          </section>
-
-          <section class="unit-section">
-            <div class="panel-heading compact">
-              <div>
-                <p class="eyebrow">Einsatzteam</p>
-                <h2>Deine Einheiten</h2>
+                <p class="eyebrow">Dein Vorteil: 3 gegen 2</p>
+                <h2>Dein Trainingsteam</h2>
               </div>
             </div>
             <div id="unitRoster" class="unit-roster"></div>
           </section>
 
           <section class="intel-section">
-            <p class="eyebrow">Feldhandbuch</p>
-            <div class="intel-row"><span class="terrain-swatch move"></span><span>Türkis: bewegen</span></div>
-            <div class="intel-row"><span class="terrain-swatch attack"></span><span>Orange: angreifen</span></div>
-            <div class="intel-row"><span class="terrain-swatch fire"></span><span>Feuer verletzt und springt auf Wald über</span></div>
+            <p class="eyebrow">Farben lesen</p>
+            <div class="intel-grid">
+              <div class="intel-row"><span class="terrain-swatch move"></span><span>Grün: dorthin bewegen</span></div>
+              <div class="intel-row"><span class="terrain-swatch attack"></span><span>Gold: jetzt angreifen</span></div>
+              <div class="intel-row"><span class="terrain-swatch player"></span><span>Orange: dein Team</span></div>
+              <div class="intel-row"><span class="terrain-swatch enemy"></span><span>Blau: Trainings-KI</span></div>
+            </div>
+            <div class="fire-note">
+              <span class="terrain-swatch fire"></span>
+              <p><strong>Zünder-Spezial:</strong> Feuer verursacht am Rundenende Schaden und springt auf Wald über.</p>
+            </div>
           </section>
 
           <div class="command-actions">
             <button id="endTurnButton" class="primary-button" type="button">Zug beenden <kbd>E</kbd></button>
-            <button id="restartButton" class="secondary-button" type="button">Neu starten <kbd>R</kbd></button>
+            <button id="restartButton" class="secondary-button" type="button">Neu starten</button>
           </div>
         </aside>
       </main>
+    </div>
+
+    <div class="briefing-overlay" id="tutorialDialog" role="dialog" aria-modal="true" aria-labelledby="tutorialTitle" hidden>
+      <div class="briefing-card">
+        <p class="eyebrow">Training 01 · Kurzeinweisung</p>
+        <h2 id="tutorialTitle">Drei Schritte bis zum ersten Zug</h2>
+        <p class="briefing-intro">Du führst drei orange Einheiten gegen nur zwei blaue Gegner. Dein Kern ist stärker – dieses Gefecht ist zu deinen Gunsten aufgebaut.</p>
+        <ol class="tutorial-steps">
+          <li><span>1</span><div><strong>Einheit wählen</strong><p>Tippe auf eine orange Figur oder ihre Karte unter dem Spielfeld.</p></div></li>
+          <li><span>2</span><div><strong>Bewegen</strong><p>Grüne Hexfelder sind erreichbar. Tippe eines davon an.</p></div></li>
+          <li><span>3</span><div><strong>Angreifen</strong><p>Gold umrandete blaue Ziele sind in Reichweite. Danach beendest du den Zug.</p></div></li>
+        </ol>
+        <div class="briefing-goal"><strong>Ziel</strong><span>Besiege beide Gegner oder zerstöre den blauen Kern.</span></div>
+        <button id="tutorialStartButton" class="primary-button briefing-start" type="button">Training starten</button>
+      </div>
     </div>
 
     <script type="module" src="./src/game.js"></script>

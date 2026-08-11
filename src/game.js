@@ -31,18 +31,24 @@ const ui = {
   gameOverTitle: document.querySelector("#gameOverTitle"),
   gameOverMessage: document.querySelector("#gameOverMessage"),
   turnBanner: document.querySelector("#turnBanner"),
+  coachStep: document.querySelector("#coachStep"),
+  coachTitle: document.querySelector("#coachTitle"),
+  coachText: document.querySelector("#coachText"),
+  help: document.querySelector("#helpButton"),
+  tutorial: document.querySelector("#tutorialDialog"),
+  tutorialStart: document.querySelector("#tutorialStartButton"),
 };
 
 const RADIUS = 4;
-const CORE_MAX_HP = 10;
+const CORE_MAX_HP = { blue: 14, red: 8 };
 const TEAM = {
-  blue: { color: "#45d9e8", dark: "#0b6977", name: "Blau" },
-  red: { color: "#ff625f", dark: "#8f2731", name: "Rot" },
+  blue: { color: "#d97742", dark: "#7b3f27", name: "Orange" },
+  red: { color: "#4a86b0", dark: "#2e5775", name: "Blau" },
 };
 const UNIT_TYPES = {
-  sentinel: { name: "Wächter", mark: "W", maxHp: 5, move: 1, range: 1, damage: 2, role: "Panzer · Nahkampf" },
-  ranger: { name: "Jäger", mark: "J", maxHp: 3, move: 2, range: 3, damage: 1, role: "Mobil · Reichweite 3" },
-  igniter: { name: "Zünder", mark: "Z", maxHp: 4, move: 1, range: 2, damage: 1, role: "Entzündet Terrain" },
+  sentinel: { name: "Wächter", mark: "W", maxHp: 5, move: 1, range: 1, damage: 2, role: "Robust · Nahkampf" },
+  ranger: { name: "Jäger", mark: "J", maxHp: 3, move: 2, range: 3, damage: 1, role: "Schnell · Fernkampf" },
+  igniter: { name: "Zünder", mark: "Z", maxHp: 4, move: 1, range: 2, damage: 1, role: "Feuer · Reichweite 2" },
 };
 
 let game;
@@ -85,7 +91,7 @@ function terrainPreset() {
   return terrain;
 }
 
-function makeUnit(id, team, type, q, r) {
+function makeUnit(id, team, type, q, r, startingHp) {
   const stats = UNIT_TYPES[type];
   return {
     id,
@@ -93,7 +99,7 @@ function makeUnit(id, team, type, q, r) {
     type,
     q,
     r,
-    hp: stats.maxHp,
+    hp: startingHp ?? stats.maxHp,
     ap: 2,
     moved: false,
     attacked: false,
@@ -107,13 +113,12 @@ function createGame() {
       makeUnit("blue-sentinel", "blue", "sentinel", -3, 0),
       makeUnit("blue-ranger", "blue", "ranger", -3, 1),
       makeUnit("blue-igniter", "blue", "igniter", -2, -1),
-      makeUnit("red-sentinel", "red", "sentinel", 3, 0),
-      makeUnit("red-ranger", "red", "ranger", 3, -1),
-      makeUnit("red-igniter", "red", "igniter", 2, 1),
+      makeUnit("red-sentinel", "red", "sentinel", 3, 0, 4),
+      makeUnit("red-ranger", "red", "ranger", 2, -1, 2),
     ],
     cores: {
-      blue: { q: -4, r: 0, hp: CORE_MAX_HP },
-      red: { q: 4, r: 0, hp: CORE_MAX_HP },
+      blue: { q: -4, r: 0, hp: CORE_MAX_HP.blue },
+      red: { q: 4, r: 0, hp: CORE_MAX_HP.red },
     },
     selectedId: null,
     phase: "blue",
@@ -129,9 +134,20 @@ function resetGame() {
   floaters = [];
   shake = 0;
   ui.gameOver.hidden = true;
-  setStatus("Wähle eine blaue Einheit. Jede Einheit kann sich bewegen und einmal angreifen.");
+  setStatus("Tippe auf eine orange Einheit.");
   announceTurn("Dein Zug", "blue");
   updateUI();
+}
+
+function openTutorial() {
+  ui.tutorial.hidden = false;
+  window.setTimeout(() => ui.tutorialStart.focus(), 0);
+}
+
+function closeTutorial() {
+  ui.tutorial.hidden = true;
+  localStorage.setItem("hexfront-tactics-tutorial", "seen");
+  canvas.focus();
 }
 
 function getUnit(id) {
@@ -167,7 +183,7 @@ function selectUnit(unit) {
   if (game.phase !== "blue" || game.locked || unit.team !== "blue" || unit.ap <= 0) return;
   game.selectedId = unit.id;
   const stats = UNIT_TYPES[unit.type];
-  setStatus(`${stats.name} gewählt · ${unit.ap} AP · Bewegung ${stats.move} · Reichweite ${stats.range}`);
+  setStatus(`${stats.name} gewählt. ${unit.ap} Aktionen übrig.`);
   playTone("select");
   updateUI();
 }
@@ -178,7 +194,10 @@ function moveUnit(unit, destination) {
   unit.ap -= 1;
   unit.moved = true;
   addFloater(destination, "BEWEGT", TEAM[unit.team].color);
-  setStatus(`${UNIT_TYPES[unit.type].name} in Position. Wähle jetzt ein orange markiertes Ziel.`);
+  const targets = availableTargets(unit, unit.team);
+  setStatus(targets.units.length || targets.core
+    ? `${UNIT_TYPES[unit.type].name} ist in Position. Tippe auf ein gold markiertes Ziel.`
+    : `${UNIT_TYPES[unit.type].name} ist in Position. Wähle eine weitere Einheit oder beende den Zug.`);
   playTone("move");
   updateUI();
 }
@@ -188,7 +207,7 @@ function attackUnit(attacker, target) {
   target.hp -= stats.damage;
   attacker.ap -= 1;
   attacker.attacked = true;
-  addFloater(target, `−${stats.damage}`, "#ffd27a");
+  addFloater(target, `−${stats.damage}`, "#e8c07d");
   shake = Math.max(shake, 5);
   playTone(attacker.type === "igniter" ? "fire" : "attack");
 
@@ -197,7 +216,7 @@ function attackUnit(attacker, target) {
   }
 
   if (target.hp <= 0) {
-    addFloater(target, "AUSGESCHALTET", "#ff625f");
+    addFloater(target, "AUSGESCHALTET", "#d56a61");
     game.units = game.units.filter((unit) => unit.hp > 0);
     if (game.selectedId === target.id) game.selectedId = null;
     setStatus(`${UNIT_TYPES[target.type].name} ausgeschaltet.`);
@@ -217,7 +236,7 @@ function attackCore(attacker, team) {
   attacker.attacked = true;
   addFloater(core, `KERN −${stats.damage}`, TEAM[team].color);
   shake = Math.max(shake, 8);
-  setStatus(`${TEAM[team].name}er Kern getroffen: ${core.hp} Integrität verbleibt.`);
+  setStatus(`${team === "blue" ? "Dein Kern" : "Feindkern"} getroffen: noch ${core.hp} Stabilität.`);
   playTone("core");
   checkVictory();
   updateUI();
@@ -234,7 +253,7 @@ function handleBoardClick(hex) {
 
   const unit = selectedUnit();
   if (!unit) {
-    setStatus("Wähle zuerst eine einsatzbereite blaue Einheit.");
+    setStatus("Wähle zuerst eine orange Einheit.");
     playTone("deny");
     return;
   }
@@ -255,7 +274,7 @@ function handleBoardClick(hex) {
     return;
   }
 
-  setStatus(unit.ap <= 0 ? "Diese Einheit hat keine Aktionspunkte mehr." : "Dieses Feld ist aktuell nicht erreichbar.");
+  setStatus(unit.ap <= 0 ? "Diese Einheit hat keine Aktionen mehr." : "Dieses Feld ist nicht erreichbar. Nutze eine grüne Markierung.");
   playTone("deny");
 }
 
@@ -301,11 +320,12 @@ async function runEnemyTurn() {
     unit.attacked = false;
   }
   announceTurn("Feindzug", "red");
-  setStatus("Feindliche Taktik wird berechnet …");
+  setStatus("Die Trainings-KI führt ihren Zug aus …");
   updateUI();
   await wait(450);
 
-  const enemyUnits = [...game.units.filter((unit) => unit.team === "red")];
+  const allEnemyUnits = [...game.units.filter((unit) => unit.team === "red")];
+  const enemyUnits = game.round === 1 ? allEnemyUnits.slice(0, 1) : allEnemyUnits;
   for (const snapshot of enemyUnits) {
     const unit = getUnit(snapshot.id);
     if (!unit || game.winner) break;
@@ -345,7 +365,7 @@ async function runEnemyTurn() {
     unit.attacked = false;
   }
   announceTurn("Dein Zug", "blue");
-  setStatus("Neue Runde. Wähle eine blaue Einheit.");
+  setStatus("Neue Runde. Wähle eine orange Einheit.");
   updateUI();
 }
 
@@ -356,7 +376,7 @@ function resolveFire() {
     if (unit) addFloater(unit, "FEUER −1", "#ff8a3d");
   }
   const destroyed = game.units.filter((unit) => unit.hp <= 0);
-  for (const unit of destroyed) addFloater(unit, "VERBRANNT", "#ff625f");
+  for (const unit of destroyed) addFloater(unit, "VERBRANNT", "#d56a61");
   game.units = game.units.filter((unit) => unit.hp > 0);
   if (result.ignited.length) {
     setStatus(`Das Feuer springt auf ${result.ignited.length} weitere Waldfelder über.`);
@@ -378,11 +398,11 @@ function checkVictory() {
   game.locked = true;
   game.phase = winner;
   ui.gameOver.hidden = false;
-  ui.gameOverKicker.textContent = `Gefechtsbericht · ${game.round} Runden`;
+  ui.gameOverKicker.textContent = `Trainingsbericht · ${game.round} Runden`;
   ui.gameOverTitle.textContent = winner === "blue" ? "Sieg" : "Niederlage";
   ui.gameOverMessage.textContent = winner === "blue"
-    ? "Der rote Reaktorkern ist gefallen. Der Sektor gehört dir."
-    : "Dein Reaktorkern wurde überrannt. Passe deine Route an und versuche es erneut.";
+    ? "Training bestanden. Der blaue Kern ist gefallen und dein Team hält das Feld."
+    : "Fast geschafft. Dein Team ist überlegen – nutze beim nächsten Versuch zuerst den Jäger und bleibe zusammen.";
   playTone(winner === "blue" ? "victory" : "defeat");
   updateUI();
   return true;
@@ -390,6 +410,54 @@ function checkVictory() {
 
 function setStatus(message) {
   ui.status.textContent = message;
+}
+
+function setCoach(step, title, text) {
+  ui.coachStep.textContent = step;
+  ui.coachTitle.textContent = title;
+  ui.coachText.textContent = text;
+}
+
+function updateCoach() {
+  if (game.winner) {
+    setCoach("Training Ende", game.winner === "blue" ? "Training bestanden" : "Noch einmal versuchen", game.winner === "blue"
+      ? "Du hast Zielwahl, Bewegung und Angriff gemeistert."
+      : "Halte deine drei Einheiten zusammen und greife geschwächte Ziele zuerst an.");
+    return;
+  }
+
+  if (game.phase === "red") {
+    setCoach("Feindzug", "Beobachte die Trainings-KI", "Der erste Feindzug ist absichtlich kurz. Danach erhält dein ganzes Team neue Aktionen.");
+    return;
+  }
+
+  const unit = selectedUnit();
+  const readyUnits = game.units.filter((entry) => entry.team === "blue" && entry.ap > 0);
+  if (!unit) {
+    if (readyUnits.length) {
+      setCoach("Schritt 1", "Wähle eine Einheit", "Tippe auf eine orange Einheit im Feld oder in der Liste.");
+    } else {
+      setCoach("Zug fertig", "Beende deinen Zug", "Alle Aktionen sind verbraucht. Tippe unten auf „Zug beenden“.");
+    }
+    return;
+  }
+
+  const targets = availableTargets(unit, unit.team);
+  if (!unit.attacked && (targets.units.length || targets.core)) {
+    setCoach("Schritt 3", "Greife jetzt an", "Ein blaues Ziel leuchtet golden. Tippe es an, um Schaden zu verursachen.");
+    return;
+  }
+
+  if (!unit.moved && getMoveOptions(unit).size) {
+    setCoach("Schritt 2", "Bewege deine Einheit", "Grün markierte Hexfelder sind erreichbar. Tippe eines davon an.");
+    return;
+  }
+
+  if (readyUnits.some((entry) => entry.id !== unit.id)) {
+    setCoach("Weiter", "Nächste Einheit wählen", "Diese Einheit ist fertig. Wähle eine weitere orange Einheit aus der Liste.");
+  } else {
+    setCoach("Zug fertig", "Beende deinen Zug", "Tippe unten auf „Zug beenden“. Danach bewegt sich die Trainings-KI.");
+  }
 }
 
 function announceTurn(text, team) {
@@ -404,13 +472,14 @@ function updateUI() {
   ui.phase.style.color = TEAM[game.phase].color;
   ui.round.textContent = `Runde ${game.round}`;
   ui.endTurn.disabled = game.phase !== "blue" || game.locked || Boolean(game.winner);
-  ui.blueCoreValue.textContent = `${game.cores.blue.hp} / ${CORE_MAX_HP}`;
-  ui.redCoreValue.textContent = `${game.cores.red.hp} / ${CORE_MAX_HP}`;
-  ui.blueCoreBar.style.width = `${(game.cores.blue.hp / CORE_MAX_HP) * 100}%`;
-  ui.redCoreBar.style.width = `${(game.cores.red.hp / CORE_MAX_HP) * 100}%`;
-  ui.sound.textContent = `Sound: ${soundEnabled ? "an" : "aus"}`;
+  ui.blueCoreValue.textContent = `${game.cores.blue.hp} / ${CORE_MAX_HP.blue}`;
+  ui.redCoreValue.textContent = `${game.cores.red.hp} / ${CORE_MAX_HP.red}`;
+  ui.blueCoreBar.style.width = `${(game.cores.blue.hp / CORE_MAX_HP.blue) * 100}%`;
+  ui.redCoreBar.style.width = `${(game.cores.red.hp / CORE_MAX_HP.red) * 100}%`;
+  ui.sound.textContent = `Ton ${soundEnabled ? "an" : "aus"}`;
   ui.sound.setAttribute("aria-pressed", String(soundEnabled));
   renderRoster();
+  updateCoach();
 }
 
 function renderRoster() {
@@ -423,11 +492,11 @@ function renderRoster() {
     button.type = "button";
     button.className = `unit-card ${game.selectedId === unit.id ? "selected" : ""}`;
     button.disabled = game.phase !== "blue" || game.locked || unit.ap <= 0;
-    button.setAttribute("aria-label", `${stats.name}, ${unit.hp} Lebenspunkte, ${unit.ap} Aktionspunkte`);
+    button.setAttribute("aria-label", `${stats.name}, ${unit.hp} Lebenspunkte, ${unit.ap} Aktionen`);
     button.innerHTML = `
       <span class="unit-emblem">${stats.mark}</span>
       <span class="unit-copy"><strong>${stats.name}</strong><span>${stats.role}</span></span>
-      <span class="unit-stats">HP ${unit.hp}/${stats.maxHp}<span>${unit.ap} AP</span></span>
+      <span class="unit-stats">Leben ${unit.hp}/${stats.maxHp}<span>${unit.ap} Aktionen</span></span>
     `;
     button.addEventListener("click", () => selectUnit(unit));
     ui.roster.append(button);
@@ -503,16 +572,16 @@ function traceHex(x, y, size = metrics.size - 1) {
 }
 
 function drawBackdrop(time) {
-  ctx.fillStyle = "#061216";
+  ctx.fillStyle = "#111715";
   ctx.fillRect(0, 0, metrics.width, metrics.height);
 
   const glow = ctx.createRadialGradient(metrics.centerX, metrics.centerY, 20, metrics.centerX, metrics.centerY, metrics.width * 0.55);
-  glow.addColorStop(0, "rgba(35, 100, 96, 0.22)");
-  glow.addColorStop(1, "rgba(5, 15, 18, 0)");
+  glow.addColorStop(0, "rgba(73, 83, 77, 0.24)");
+  glow.addColorStop(1, "rgba(17, 23, 21, 0)");
   ctx.fillStyle = glow;
   ctx.fillRect(0, 0, metrics.width, metrics.height);
 
-  ctx.fillStyle = "rgba(120, 204, 196, 0.13)";
+  ctx.fillStyle = "rgba(216, 223, 218, 0.1)";
   for (let index = 0; index < 32; index += 1) {
     const x = (index * 97.3 + time * 0.006) % metrics.width;
     const y = (index * 53.7) % metrics.height;
@@ -521,12 +590,12 @@ function drawBackdrop(time) {
 }
 
 function tileFill(tile) {
-  if (tile.terrain === "forest") return "#183d35";
-  if (tile.terrain === "water") return "#123a48";
-  if (tile.terrain === "scorched") return "#302721";
-  if (tile.terrain === "coreBlue") return "#123f49";
-  if (tile.terrain === "coreRed") return "#49252a";
-  return "#173035";
+  if (tile.terrain === "forest") return "#283a30";
+  if (tile.terrain === "water") return "#243b46";
+  if (tile.terrain === "scorched") return "#342b24";
+  if (tile.terrain === "coreBlue") return "#553425";
+  if (tile.terrain === "coreRed") return "#263f52";
+  return "#252e2a";
 }
 
 function drawTile(tile, time, moveOptions, unit) {
@@ -534,16 +603,16 @@ function drawTile(tile, time, moveOptions, unit) {
   traceHex(x, y);
   ctx.fillStyle = tileFill(tile);
   ctx.fill();
-  ctx.strokeStyle = "rgba(134, 187, 182, 0.16)";
+  ctx.strokeStyle = "rgba(135, 146, 140, 0.24)";
   ctx.lineWidth = 1;
   ctx.stroke();
 
   const key = hexKey(tile);
   if (moveOptions.has(key)) {
     traceHex(x, y, metrics.size - 3);
-    ctx.fillStyle = "rgba(69, 217, 232, 0.16)";
+    ctx.fillStyle = "rgba(143, 207, 154, 0.17)";
     ctx.fill();
-    ctx.strokeStyle = "rgba(69, 217, 232, 0.72)";
+    ctx.strokeStyle = "rgba(143, 207, 154, 0.82)";
     ctx.lineWidth = 1.5;
     ctx.stroke();
   }
@@ -552,9 +621,9 @@ function drawTile(tile, time, moveOptions, unit) {
   const redCore = tile.q === game.cores.red.q && tile.r === game.cores.red.r;
   if (unit && canAttackHex(unit, tile) && (enemy?.team === "red" || redCore)) {
     traceHex(x, y, metrics.size - 3);
-    ctx.fillStyle = "rgba(244, 185, 66, 0.15)";
+    ctx.fillStyle = "rgba(232, 192, 125, 0.16)";
     ctx.fill();
-    ctx.strokeStyle = `rgba(244, 185, 66, ${0.64 + Math.sin(time * 0.006) * 0.18})`;
+    ctx.strokeStyle = `rgba(232, 192, 125, ${0.68 + Math.sin(time * 0.006) * 0.18})`;
     ctx.lineWidth = 2;
     ctx.stroke();
   }
@@ -572,7 +641,7 @@ function drawTile(tile, time, moveOptions, unit) {
 
 function drawTerrainSymbol(tile, x, y, time) {
   if (tile.terrain === "forest") {
-    ctx.fillStyle = "rgba(87, 158, 104, 0.72)";
+    ctx.fillStyle = "rgba(93, 135, 99, 0.78)";
     for (const [dx, dy, scale] of [[-9, 7, 0.9], [7, 5, 0.78], [0, -4, 1]]) {
       ctx.beginPath();
       ctx.moveTo(x + dx, y + dy - 11 * scale);
@@ -582,7 +651,7 @@ function drawTerrainSymbol(tile, x, y, time) {
       ctx.fill();
     }
   } else if (tile.terrain === "water") {
-    ctx.strokeStyle = "rgba(93, 187, 205, 0.58)";
+    ctx.strokeStyle = "rgba(120, 179, 205, 0.58)";
     ctx.lineWidth = 1.5;
     for (let line = -1; line <= 1; line += 1) {
       ctx.beginPath();
@@ -594,7 +663,7 @@ function drawTerrainSymbol(tile, x, y, time) {
       ctx.stroke();
     }
   } else if (tile.terrain === "scorched") {
-    ctx.strokeStyle = "rgba(197, 128, 75, 0.28)";
+    ctx.strokeStyle = "rgba(217, 119, 66, 0.32)";
     ctx.lineWidth = 1;
     ctx.beginPath();
     ctx.moveTo(x - 15, y - 5);
@@ -667,7 +736,7 @@ function drawUnit(unit, time) {
   ctx.translate(x, y + bob);
 
   if (selected) {
-    ctx.strokeStyle = `rgba(244, 185, 66, ${0.7 + Math.sin(time * 0.008) * 0.2})`;
+    ctx.strokeStyle = `rgba(232, 192, 125, ${0.7 + Math.sin(time * 0.008) * 0.2})`;
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.arc(0, 0, 24, 0, Math.PI * 2);
@@ -685,12 +754,12 @@ function drawUnit(unit, time) {
   ctx.arc(0, 0, 19, 0, Math.PI * 2);
   ctx.fill();
   ctx.shadowColor = "transparent";
-  ctx.strokeStyle = selected ? "#f4b942" : "rgba(232, 247, 242, 0.6)";
+  ctx.strokeStyle = selected ? "#e8c07d" : "rgba(216, 223, 218, 0.58)";
   ctx.lineWidth = 2;
   ctx.stroke();
 
-  ctx.fillStyle = "#effbf7";
-  ctx.font = `800 ${Math.max(13, metrics.size * 0.36)}px Barlow Condensed, sans-serif`;
+  ctx.fillStyle = "#f1e9dc";
+  ctx.font = `800 ${Math.max(13, metrics.size * 0.36)}px Inter, system-ui, sans-serif`;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   ctx.fillText(stats.mark, 0, 1);
@@ -704,7 +773,7 @@ function drawUnit(unit, time) {
   }
 
   for (let ap = 0; ap < 2; ap += 1) {
-    ctx.fillStyle = ap < unit.ap ? "#f4b942" : "rgba(244, 185, 66, 0.18)";
+    ctx.fillStyle = ap < unit.ap ? "#e8c07d" : "rgba(232, 192, 125, 0.18)";
     ctx.beginPath();
     ctx.arc(-4 + ap * 8, -25, 2.5, 0, Math.PI * 2);
     ctx.fill();
@@ -806,8 +875,10 @@ canvas.addEventListener("pointerdown", (event) => {
   handleBoardClick(pointerHex(event));
 });
 ui.endTurn.addEventListener("click", runEnemyTurn);
-ui.restart.addEventListener("click", resetGame);
-ui.playAgain.addEventListener("click", resetGame);
+ui.restart.addEventListener("click", () => resetGame());
+ui.playAgain.addEventListener("click", () => resetGame());
+ui.help.addEventListener("click", openTutorial);
+ui.tutorialStart.addEventListener("click", closeTutorial);
 ui.sound.addEventListener("click", () => {
   soundEnabled = !soundEnabled;
   localStorage.setItem("hexwars-sound", soundEnabled ? "on" : "off");
@@ -818,6 +889,10 @@ window.addEventListener("keydown", (event) => {
   if (event.key.toLowerCase() === "e") runEnemyTurn();
   if (event.key.toLowerCase() === "r") resetGame();
   if (event.key === "Escape") {
+    if (!ui.tutorial.hidden) {
+      closeTutorial();
+      return;
+    }
     game.selectedId = null;
     setStatus("Auswahl aufgehoben.");
     updateUI();
@@ -826,5 +901,6 @@ window.addEventListener("keydown", (event) => {
 
 new ResizeObserver(resizeCanvas).observe(canvasWrap);
 resetGame();
+if (localStorage.getItem("hexfront-tactics-tutorial") !== "seen") openTutorial();
 resizeCanvas();
 requestAnimationFrame(render);
