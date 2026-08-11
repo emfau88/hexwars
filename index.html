@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta
+      name="description"
+      content="Hexwars – ein schnelles, rundenbasiertes Taktikspiel mit einem Schlachtfeld, das Feuer fängt."
+    />
+    <meta name="theme-color" content="#071317" />
+    <title>Hexwars – First Playable</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23f4b942' d='M50 3 91 27v46L50 97 9 73V27z'/%3E%3Cpath fill='%23071317' d='m50 20 25 15v30L50 80 25 65V35z'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand-lockup">
+          <div class="brand-mark" aria-hidden="true"><span>H</span></div>
+          <div>
+            <p class="eyebrow">Tactical prototype</p>
+            <h1>Hexwars</h1>
+          </div>
+        </div>
+        <div class="round-chip">
+          <span id="phaseLabel">Dein Zug</span>
+          <strong id="roundLabel">Runde 1</strong>
+        </div>
+      </header>
+
+      <main class="game-layout">
+        <section class="battlefield-card" aria-labelledby="battlefieldTitle">
+          <div class="battlefield-heading">
+            <div>
+              <p class="eyebrow">Sektor 07 · Glutgrenze</p>
+              <h2 id="battlefieldTitle">Durchbrich den roten Kern</h2>
+            </div>
+            <button id="soundToggle" class="icon-button" type="button" aria-pressed="true" title="Sound umschalten">
+              Sound: an
+            </button>
+          </div>
+
+          <div class="canvas-wrap" id="canvasWrap">
+            <canvas
+              id="gameCanvas"
+              width="900"
+              height="650"
+              tabindex="0"
+              aria-label="Hexwars Spielfeld. Wähle eine blaue Einheit und danach ein markiertes Feld oder Ziel."
+            ></canvas>
+            <div class="turn-banner" id="turnBanner" aria-live="polite"></div>
+            <div class="game-over" id="gameOver" hidden>
+              <p class="eyebrow" id="gameOverKicker">Gefechtsbericht</p>
+              <h2 id="gameOverTitle">Sieg</h2>
+              <p id="gameOverMessage"></p>
+              <button id="playAgainButton" class="primary-button" type="button">Noch eine Runde</button>
+            </div>
+          </div>
+
+          <div class="status-strip" aria-live="polite">
+            <span class="status-pulse" aria-hidden="true"></span>
+            <p id="statusText">Wähle eine blaue Einheit.</p>
+          </div>
+        </section>
+
+        <aside class="command-panel" aria-label="Kommandozentrale">
+          <section class="core-section">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">Primärziel</p>
+                <h2>Reaktorkerne</h2>
+              </div>
+              <span class="objective-tag">Zerstören</span>
+            </div>
+
+            <div class="core-meter blue">
+              <div class="core-label"><span>Dein Kern</span><strong id="blueCoreValue">10 / 10</strong></div>
+              <div class="meter-track"><span id="blueCoreBar"></span></div>
+            </div>
+            <div class="core-meter red">
+              <div class="core-label"><span>Feindkern</span><strong id="redCoreValue">10 / 10</strong></div>
+              <div class="meter-track"><span id="redCoreBar"></span></div>
+            </div>
+          </section>
+
+          <section class="unit-section">
+            <div class="panel-heading compact">
+              <div>
+                <p class="eyebrow">Einsatzteam</p>
+                <h2>Deine Einheiten</h2>
+              </div>
+            </div>
+            <div id="unitRoster" class="unit-roster"></div>
+          </section>
+
+          <section class="intel-section">
+            <p class="eyebrow">Feldhandbuch</p>
+            <div class="intel-row"><span class="terrain-swatch move"></span><span>Türkis: bewegen</span></div>
+            <div class="intel-row"><span class="terrain-swatch attack"></span><span>Orange: angreifen</span></div>
+            <div class="intel-row"><span class="terrain-swatch fire"></span><span>Feuer verletzt und springt auf Wald über</span></div>
+          </section>
+
+          <div class="command-actions">
+            <button id="endTurnButton" class="primary-button" type="button">Zug beenden <kbd>E</kbd></button>
+            <button id="restartButton" class="secondary-button" type="button">Neu starten <kbd>R</kbd></button>
+          </div>
+        </aside>
+      </main>
+    </div>
+
+    <script type="module" src="./src/game.js"></script>
+  </body>
+</html>
