@@ -11,6 +11,7 @@ await Promise.all([
   cp(resolve(projectRoot, "index.html"), resolve(output, "index.html")),
   cp(resolve(projectRoot, "styles.css"), resolve(output, "styles.css")),
   cp(resolve(projectRoot, "src"), resolve(output, "src"), { recursive: true }),
+  cp(resolve(projectRoot, "campaign"), resolve(output, "campaign"), { recursive: true }),
   writeFile(resolve(output, ".nojekyll"), ""),
 ]);
 
