@@ -2,6 +2,8 @@
 
 Ein kompaktes, rundenbasiertes Taktikspiel für den Browser. Drei blaue Einheiten treten gegen eine KI an, um den gegnerischen Reaktorkern zu zerstören. Der Zünder kann Terrain in Brand setzen; Feuer verursacht Schaden und springt auf angrenzende Waldfelder über.
 
+**Spielen:** https://emfau88.github.io/hexwars/
+
 ## Spielen
 
 1. Eine blaue Einheit auswählen.
