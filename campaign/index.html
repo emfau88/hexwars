@@ -543,7 +543,7 @@ header{background:rgba(22,28,26,.94);backdrop-filter:blur(10px);border-bottom:1p
     .campaignProgressTrack { margin-top:5px; }
     .menuIconBtn { width:36px; height:36px; border-radius:11px; }
     .campaignShell { display:flex; flex-direction:column; gap:11px; padding:10px 10px calc(18px + env(safe-area-inset-bottom)); overflow:visible; }
-    #mapCenter { order:1; display:block; overflow:visible; border-radius:21px; }
+    #mapCenter { order:2; display:block; overflow:visible; border-radius:21px; scroll-margin-top:76px; }
     .previewFrame { height:218px; min-height:218px; }
     .missionContent { padding:17px 15px 15px; }
     .menuKicker { font-size:8px; }
@@ -553,16 +553,19 @@ header{background:rgba(22,28,26,.94);backdrop-filter:blur(10px);border-bottom:1p
     .briefItem { padding:11px; }
     .briefItem p { font-size:11px; }
     .playButton { min-height:52px; font-size:11px; }
-    .campaignJourney { order:2; padding:19px 15px 20px; overflow:visible; border-radius:21px; }
+    .campaignJourney { order:1; padding:15px; overflow:visible; border-radius:21px; }
     .campaignHero { display:block; }
-    .campaignEyebrow { font-size:8px; }
-    .campaignHero h1 { font-size:29px; line-height:1.02; letter-spacing:-1px; }
-    .campaignLead { margin-top:11px; font-size:13px; }
+    .campaignEyebrow { margin-bottom:7px; font-size:8px; }
+    .campaignHero h1 { font-size:20px; line-height:1.08; letter-spacing:-.4px; }
+    .campaignHero h1 br { display:none; }
+    .campaignLead { display:none; }
     .nextMissionBadge { display:none; }
-    .actNav { grid-template-columns:repeat(3,minmax(138px,1fr)); margin:18px -3px; padding:3px; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; }
+    .actNav { grid-template-columns:repeat(3,minmax(138px,1fr)); margin:13px -3px 12px; padding:3px; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; }
     .actNav::-webkit-scrollbar { display:none; }
     .actTab { scroll-snap-align:start; padding:11px; }
-    .actGroup + .actGroup { margin-top:18px; }
+    .actGroup:not(.current) { display:none; }
+    .actGroupHeader { display:none; }
+    .actGroup + .actGroup { margin-top:0; }
     #mapNodes { min-height:0; display:block; }
     .actLevels { display:flex; gap:8px; margin-right:-15px; padding-right:15px; overflow-x:auto; scroll-snap-type:x mandatory; scrollbar-width:none; }
     .actLevels::-webkit-scrollbar { display:none; }
@@ -576,7 +579,7 @@ header{background:rgba(22,28,26,.94);backdrop-filter:blur(10px);border-bottom:1p
     .missionBriefGrid { grid-template-columns:1fr; }
     .previewTopline span:last-child { display:none; }
     .previewFrame { height:205px; min-height:205px; }
-    .campaignHero h1 { font-size:26px; }
+    .campaignHero h1 { font-size:19px; }
   }
 
   @media (max-height:620px) and (orientation:landscape) {
@@ -731,6 +734,7 @@ header{background:rgba(22,28,26,.94);backdrop-filter:blur(10px);border-bottom:1p
         <div class="infoGrid">
           <span>Frontsaldo</span><b id="frontBalance">0</b>
           <span>Zeit</span><b id="timeStatus">0:00</b>
+          <span>Phase</span><b id="phaseStatus">WACHSTUM</b>
           <span>Aktionen</span><b id="actionStatus">0</b>
           <span>Eroberungen</span><b id="captureStatus">0</b>
         </div>
@@ -779,15 +783,15 @@ const COLORS={
   [OWNER.P1]:{lo:'#e58c49',hi:'#f4b66e',edge:'#c66b31',text:'#33251c'},
   [OWNER.P2]:{lo:'#69a9d3',hi:'#9bcbea',edge:'#4e8eb8',text:'#183246'},
 };
-const CFG={baseCap:42,travelSpeed:205,battleRate:14,startUnits:23,relayRange:2,maxStack:68};
+const CFG={baseCap:42,travelSpeed:205,battleRate:14,startUnits:23,relayRange:2,maxStack:68,endgameStart:180,endgameFade:60};
 
 const LEVELS=[
   {
     name:'I · DER PFAD', short:'DER PFAD', cols:7, rows:13, seed:101,
     blurb:'Eine kleine aktive Route schlängelt sich durch eine große, freundliche Landschaft.',
     objective:'Folge dem Weg zur blauen Basis. Hexes ohne Zahl sind Landschaft und in diesem Gefecht nicht spielbar.',
-    rule:'50-%- und 100-%-Sendungen sind verfügbar. Die KI ist langsam und die aktive Front bleibt bewusst klein.',
-    aiThink:2500, aiDelay:10, aiSkill:.42, aiActions:1, neutral:[2,5], features:{all:true,group:false,relay:false}, theme:'meadow',
+    rule:'In dieser Einführung sendest du jeweils 50 %. Die KI ist langsam und die aktive Route bleibt bewusst klein.',
+    aiThink:2500, aiDelay:10, aiSkill:.42, aiActions:1, neutral:[2,5], features:{all:false,group:false,relay:false}, theme:'meadow',
     build:(hs,g)=>{
       activateRows(hs,[[],[3],[2,3],[2,3],[3,4],[3],[2,3],[2,3],[3,4],[3],[3,4],[3],[]]);
       setUnits(hs,3,6,4);
@@ -839,7 +843,6 @@ const LEVELS=[
     build:(hs,g)=>{
       activateRows(hs,[[],[3],[2,3,4],[1,2,3,4,5],[1,2,4,5],[1,2,4,5],[1,5],[1,2,4,5],[1,2,4,5],[1,2,3,4,5],[2,3,4],[3],[]]);
       for(let c=0;c<7;c++)if(![1,5].includes(c))decor(hs,c,6,DECOR.MOUNTAIN);
-      mark(hs,1,6,TERRAIN.HILL);mark(hs,5,6,TERRAIN.HILL);
     },
   },
   {
@@ -882,7 +885,7 @@ const LEVELS=[
     blurb:'Eine helle Gebirgskette lässt drei Übergänge offen. Der mittlere Pass besitzt ein Relais.',
     objective:'Täusche an einem Pass an und konzentriere den eigentlichen Angriff an einem anderen.',
     rule:'Die KI reagiert schneller. Die äußeren Pässe sind Hügel, der mittlere ist ein Relais.',
-    aiThink:960, aiDelay:3, aiSkill:.88, aiActions:1, neutral:[5,11], features:{all:true,group:true,relay:true}, theme:'snow',
+    aiThink:960, aiDelay:3, aiSkill:.88, aiActions:1, neutral:[5,11], mirrorNeutral:true, features:{all:true,group:true,relay:true}, theme:'snow',
     build:(hs,g)=>{
       activateRows(hs,[[],[3],[2,3,4],[1,2,3,4,5],[1,2,3,4,5],[1,2,3,4,5],[1,3,5],[1,2,3,4,5],[1,2,3,4,5],[1,2,3,4,5],[2,3,4],[3],[]]);
       for(let c=0;c<7;c++)if(![1,3,5].includes(c))decor(hs,c,6,DECOR.MOUNTAIN);
@@ -925,7 +928,7 @@ let W=1,H=1,DPR=1,hexR=24,hSpacing=0,vSpacing=0,originX=0,originY=0;
 let hexes=[],armies=[],particles=[];
 let currentLevel=0,running=false,lastT=performance.now(),aiTimer=0,playerAiTimer=0;
 let selected=null,dragPos=null,pointerDown=false,sendMode='half';
-let elapsed=0,actions=0,captures=0;
+let elapsed=0,actions=0,captures=0,endgameStage=0;
 let soundOn=true,audioCtx=null,userActivated=false,toastTimer=null,hintTimer=null;
 let selectedMenuLevel=0;
 let focusTargets={ [OWNER.P1]:null,[OWNER.P2]:null };
@@ -941,6 +944,16 @@ function fmtTime(s){const m=Math.floor(s/60);return`${m}:${String(Math.floor(s%6
 function grid(){return LEVELS[currentLevel]||LEVELS[0];}
 function opposing(o){return o===OWNER.P1?OWNER.P2:OWNER.P1;}
 function ownerName(o){return o===OWNER.P1?'Du':o===OWNER.P2?'Feind':'Neutral';}
+function endgameStageForTime(time){return time>=CFG.endgameStart+CFG.endgameFade?2:time>=CFG.endgameStart?1:0;}
+function regenerationScale(){return elapsed<=CFG.endgameStart?1:1-clamp((elapsed-CFG.endgameStart)/CFG.endgameFade,0,1);}
+function endgameLabel(){return endgameStage===0?'WACHSTUM':endgameStage===1?'AUSKLANG':'ENTSCHEIDUNG';}
+function updateEndgamePresentation(announce=false){
+  const L=grid(),phase=document.getElementById('phaseStatus');
+  document.getElementById('headerLevel').textContent=`LEVEL ${currentLevel+1} · ${L.short}${endgameStage?` · ${endgameLabel()}`:''}`;
+  if(phase){phase.textContent=endgameLabel();phase.style.color=endgameStage===0?'var(--ink)':endgameStage===1?'var(--accent)':'var(--bad)';}
+  if(announce)showToast(endgameStage===1?'Ausklang: Das Wachstum nimmt jetzt ab.':'Entscheidung: Felder wachsen nicht mehr.');
+}
+function refreshEndgameStage(){const next=endgameStageForTime(elapsed);if(next===endgameStage)return;endgameStage=next;updateEndgamePresentation(true);}
 
 function loadProgress(){
   try{
@@ -1054,11 +1067,14 @@ function buildLevelHexes(levelIndex,randomFn,positionFor=()=>({x:0,y:0})){
   const eBase=state.find(h=>h.col===ENEMY_BASE[0]&&h.row===ENEMY_BASE[1]);
   pBase.terrain=TERRAIN.BASE;pBase.owner=OWNER.P1;pBase.units=CFG.startUnits;
   eBase.terrain=TERRAIN.BASE;eBase.owner=OWNER.P2;eBase.units=CFG.startUnits;
+  const mirroredUnits=new Map();
   for(const h of state){
     if(!isPlayable(h)||h.owner!==OWNER.NEUTRAL)continue;
-    const [mn,mx]=L.neutral;h.units=h.fixedUnits??Math.floor(mn+randomFn()*(mx-mn+1));
+    const [mn,mx]=L.neutral,mirrorKey=key(h.col,L.rows-1-h.row);
+    h.units=h.fixedUnits??(L.mirrorNeutral&&mirroredUnits.has(mirrorKey)?mirroredUnits.get(mirrorKey):Math.floor(mn+randomFn()*(mx-mn+1)));
     if(h.terrain===TERRAIN.HILL&&h.fixedUnits==null)h.units+=2;
     if(h.terrain===TERRAIN.RELAY&&h.fixedUnits==null)h.units+=2;
+    mirroredUnits.set(key(h.col,h.row),h.units);
   }
   return state;
 }
@@ -1110,12 +1126,12 @@ function scheduleLevelPreview(levelIndex=selectedMenuLevel){
 function init(levelIndex=currentLevel){
   currentLevel=clamp(levelIndex,0,LEVELS.length-1);const L=grid();random=rng(L.seed);
   hexes=[];armies=[];particles=[];selected=null;dragPos=null;pointerDown=false;
-  elapsed=0;actions=0;captures=0;aiTimer=0;playerAiTimer=0;focusTargets={ [OWNER.P1]:null,[OWNER.P2]:null };
+  elapsed=0;actions=0;captures=0;endgameStage=0;aiTimer=0;playerAiTimer=0;focusTargets={ [OWNER.P1]:null,[OWNER.P2]:null };
   layout();
   hexes=buildLevelHexes(currentLevel,random,hexCenter);
   sendMode='half';updateModeAvailability();
   running=true;lastT=performance.now();resultOverlay.classList.remove('show');campaignMenu.classList.remove('show');document.getElementById('app').classList.remove('menuOpen');document.body.classList.remove('campaignOpen');closeMenuSettings();
-  document.getElementById('headerLevel').textContent=`LEVEL ${currentLevel+1} · ${L.short}`;
+  updateEndgamePresentation();
   document.getElementById('missionName').textContent=L.name;
   document.getElementById('missionText').textContent=L.objective;
   document.getElementById('ruleText').textContent=L.rule;
@@ -1125,6 +1141,11 @@ function init(levelIndex=currentLevel){
 
 function showCampaignMap(focus=currentLevel){
   running=false;resultOverlay.classList.remove('show');campaignMenu.classList.add('show');document.getElementById('app').classList.add('menuOpen');document.body.classList.add('campaignOpen');closeMenuSettings();renderCampaignMap(focus);
+}
+function showMobileDossier(){
+  if(!matchMedia('(max-width:900px) and (orientation:portrait)').matches)return;
+  const behavior=matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth';
+  requestAnimationFrame(()=>document.getElementById('mapCenter').scrollIntoView({behavior,block:'start'}));
 }
 function updateMenuSelection(i){
   selectedMenuLevel=clamp(i,0,LEVELS.length-1);
@@ -1164,7 +1185,7 @@ function renderCampaignMap(focus=0){
       b.setAttribute('aria-label',`Level ${i+1}: ${L.short}${unlocked?'':' – gesperrt'}`);b.setAttribute('aria-disabled',String(!unlocked));
       b.innerHTML=`<span class="nodeIcon" aria-hidden="true">${LEVEL_ICONS[i]}</span><span class="nodeCopy"><small>LEVEL ${String(i+1).padStart(2,'0')}</small><strong>${L.short}</strong></span><span class="nodeState" aria-hidden="true">${completed?'✓':unlocked?'→':'·'}</span>`;
       b.classList.add(unlocked?'unlocked':'locked');if(completed)b.classList.add('completed');
-      const select=()=>{userActivated=true;updateMenuSelection(i);};
+      const select=()=>{userActivated=true;updateMenuSelection(i);showMobileDossier();};
       b.addEventListener('pointerenter',()=>{if(matchMedia('(hover:hover)').matches)updateMenuSelection(i);});
       b.addEventListener('focus',()=>updateMenuSelection(i));b.addEventListener('click',select);levelList.appendChild(b);
     }
@@ -1197,6 +1218,10 @@ function captureHex(h,newOwner,remaining){
   const old=h.owner;h.owner=newOwner;h.units=Math.max(1,remaining);h.siege=null;h.flash=.4;
   if(newOwner===OWNER.P1)captures++;burst(h.x,h.y,COLORS[newOwner].edge,14);
   if(newOwner===OWNER.P1||old===OWNER.P1)beep(newOwner===OWNER.P1?560:105,.08,.05);
+  if(h.terrain===TERRAIN.BASE){
+    if(h.col===ENEMY_BASE[0]&&h.row===ENEMY_BASE[1]&&newOwner===OWNER.P1)endGame(true,'Die blaue Basis wurde erobert.');
+    if(h.col===PLAYER_BASE[0]&&h.row===PLAYER_BASE[1]&&newOwner===OWNER.P2)endGame(false,'Deine Basis wurde erobert.');
+  }
 }
 function resolveSieges(dt){
   for(const h of hexes){
@@ -1216,7 +1241,8 @@ function updateArmies(dt){
   for(let i=armies.length-1;i>=0;i--){const a=armies[i];a.traveled+=CFG.travelSpeed*dt;if(a.traveled>=a.dist){resolveArrival(a);armies.splice(i,1);continue;}const t=a.traveled/a.dist;a.cx=a.x0+(a.tx-a.x0)*t;a.cy=a.y0+(a.ty-a.y0)*t;}
 }
 function updateEconomy(dt){
-  for(const h of hexes){h.flash=Math.max(0,h.flash-dt);if(h.owner===OWNER.NEUTRAL||!isPlayable(h)||h.siege)continue;const cap=terrainCap(h);if(h.units<cap)h.units=Math.min(cap,h.units+terrainRegen(h)*dt);}
+  const growth=regenerationScale();
+  for(const h of hexes){h.flash=Math.max(0,h.flash-dt);if(h.owner===OWNER.NEUTRAL||!isPlayable(h)||h.siege)continue;const cap=terrainCap(h);if(h.units<cap)h.units=Math.min(cap,h.units+terrainRegen(h)*growth*dt);}
 }
 
 function strategicValue(h,owner){
@@ -1226,12 +1252,28 @@ function strategicValue(h,owner){
 function threatened(h,owner){
   let s=0;if(h.siege&&h.siege[opposing(owner)])s+=250+h.siege[opposing(owner)]*5;for(const n of neighbors(h))if(n.owner===opposing(owner))s+=45+Math.max(0,n.units-h.units)*2;if(h.terrain===TERRAIN.BASE)s+=90;return s;
 }
+function ownedFrontDistances(owner){
+  const distances=new Map(),queue=[];
+  for(const h of hexes){
+    if(h.owner!==owner||!neighbors(h).some(n=>n.owner===opposing(owner)))continue;
+    distances.set(key(h.col,h.row),0);queue.push(h);
+  }
+  for(let i=0;i<queue.length;i++){
+    const h=queue[i],nextDistance=distances.get(key(h.col,h.row))+1;
+    for(const n of neighbors(h)){
+      const nk=key(n.col,n.row);if(n.owner!==owner||distances.has(nk))continue;
+      distances.set(nk,nextDistance);queue.push(n);
+    }
+  }
+  return distances;
+}
 function chooseAction(owner,skill){
   const oldFocus=focusTargets[owner];
   if(oldFocus&&(oldFocus.until<elapsed||!hexes.some(h=>key(h.col,h.row)===oldFocus.key&&h.owner!==owner)))focusTargets[owner]=null;
+  const frontDistances=elapsed>=75?ownedFrontDistances(owner):null;
   const sources=hexes.filter(h=>h.owner===owner&&h.units>=4),list=[];
   for(const src of sources){
-    const srcThreat=threatened(src,owner);
+    const srcThreat=threatened(src,owner),srcFrontDistance=frontDistances?.get(key(src.col,src.row));
     for(const tgt of hexes){
       if(tgt===src||!canSend(src,tgt))continue;
       if(tgt.owner!==owner){
@@ -1247,7 +1289,15 @@ function chooseAction(owner,skill){
         if(src.terrain===TERRAIN.BASE&&srcThreat>0)score-=130;
         score+=(random()-.5)*(1-skill)*110;list.push({type:'attack',src,tgt,amount,score});
       }else{
-        const t=threatened(tgt,owner);if(t>60&&srcThreat<40&&tgt.units<src.units*.8)list.push({type:'reinforce',src,tgt,amount:Math.floor(src.units*.5),score:t+(src.units-tgt.units)*2});
+        const t=threatened(tgt,owner),reinforceThreshold=endgameStage===2?40:60;
+        if(t>reinforceThreshold&&srcThreat<40&&tgt.units<src.units*.8)list.push({type:'reinforce',src,tgt,amount:Math.floor(src.units*.5),score:t+(src.units-tgt.units)*2});
+        if(frontDistances&&srcThreat<40&&Number.isFinite(srcFrontDistance)){
+          const tgtFrontDistance=frontDistances.get(key(tgt.col,tgt.row));
+          if(Number.isFinite(tgtFrontDistance)&&tgtFrontDistance<srcFrontDistance&&src.units>=tgt.units+4){
+            const logisticsBase=endgameStage===2?70:28;
+            list.push({type:'logistics',src,tgt,amount:Math.floor(src.units*.5),score:logisticsBase+(srcFrontDistance-tgtFrontDistance)*12+(src.units-tgt.units)*.5});
+          }
+        }
       }
     }
   }
@@ -1267,8 +1317,8 @@ function thinkFor(owner,skill,count=1){
 }
 function sideAlive(owner){return hexes.some(h=>h.owner===owner)||armies.some(a=>a.owner===owner)||hexes.some(h=>h.siege&&h.siege[owner]>0);}
 function checkEnd(){
-  const pBase=hexes.find(h=>h.terrain===TERRAIN.BASE&&h.owner===OWNER.P1),eBase=hexes.find(h=>h.terrain===TERRAIN.BASE&&h.owner===OWNER.P2);
-  if(!eBase)return endGame(true,'Die blaue Basis wurde erobert.');if(!pBase)return endGame(false,'Deine Basis wurde erobert.');
+  const pBase=hexAt(PLAYER_BASE[0],PLAYER_BASE[1]),eBase=hexAt(ENEMY_BASE[0],ENEMY_BASE[1]);
+  if(eBase&&eBase.owner===OWNER.P1)return endGame(true,'Die blaue Basis wurde erobert.');if(pBase&&pBase.owner===OWNER.P2)return endGame(false,'Deine Basis wurde erobert.');
   if(!sideAlive(OWNER.P1))return endGame(false,'Deine Front wurde ausgelöscht.');if(!sideAlive(OWNER.P2))return endGame(true,'Die feindliche Front wurde ausgelöscht.');
 }
 function endGame(win,reason){
@@ -1280,7 +1330,7 @@ function endGame(win,reason){
   resultOverlay.classList.add('show');updateBestText();
 }
 function update(dt){
-  elapsed+=dt;updateEconomy(dt);resolveSieges(dt);updateArmies(dt);
+  elapsed+=dt;refreshEndgameStage();updateEconomy(dt);resolveSieges(dt);updateArmies(dt);
   if(elapsed>=grid().aiDelay){aiTimer+=dt*1000;if(aiTimer>=grid().aiThink){aiTimer=0;thinkFor(OWNER.P2,grid().aiSkill,grid().aiActions);}}
   if(autoplay){playerAiTimer+=dt*1000;if(playerAiTimer>=grid().aiThink*1.08){playerAiTimer=0;thinkFor(OWNER.P1,.80,grid().aiActions>1?2:1);}}
   updateParticles(dt);checkEnd();updateHUD();
@@ -1442,7 +1492,7 @@ function bind(id,fn){document.getElementById(id)?.addEventListener('click',()=>{
 bind('playLevelBtn',()=>init(selectedMenuLevel));
 bind('restartBtn',()=>init());bind('mobileRestartBtn',()=>init());bind('levelsBtn',()=>showCampaignMap());bind('mobileLevelsBtn',()=>showCampaignMap());bind('mapBtn',()=>showCampaignMap());bind('retryBtn',()=>init());bind('nextLevelBtn',()=>init(currentLevel+1));bind('soundBtn',toggleSound);bind('sideSoundBtn',toggleSound);bind('fullscreenBtn',toggleFullscreen);bind('sideFullscreenBtn',toggleFullscreen);bind('mobileFullscreenBtn',toggleFullscreen);bind('menuSettingsBtn',toggleMenuSettings);
 bind('resetProgressBtn',()=>{if(confirm('Gespeicherten Kampagnenfortschritt wirklich löschen?'))resetProgress();});
-document.querySelectorAll('.actTab').forEach((button,index)=>button.addEventListener('click',()=>{userActivated=true;updateMenuSelection(CAMPAIGN_ACTS[index].range[0]);}));
+document.querySelectorAll('.actTab').forEach((button,index)=>button.addEventListener('click',()=>{userActivated=true;updateMenuSelection(CAMPAIGN_ACTS[index].range[0]);showMobileDossier();}));
 window.addEventListener('resize',()=>{resize();scheduleLevelPreview();});window.addEventListener('orientationchange',()=>setTimeout(()=>{resize();scheduleLevelPreview();},120));document.addEventListener('fullscreenchange',()=>{syncFullscreenUI();resize();scheduleLevelPreview();});document.addEventListener('webkitfullscreenchange',()=>{syncFullscreenUI();resize();scheduleLevelPreview();});document.addEventListener('pointerdown',e=>{const panel=document.getElementById('menuSettingsPanel');const btn=document.getElementById('menuSettingsBtn'); if(!panel||!panel.classList.contains('show')) return; if(panel.contains(e.target)||btn.contains(e.target)) return; closeMenuSettings();});
 if('ResizeObserver' in window)new ResizeObserver(()=>scheduleLevelPreview()).observe(document.getElementById('levelPreviewFrame'));
 window.addEventListener('keydown',e=>{if(e.key==='1')setMode('half');if(e.key==='2')setMode('all');if(e.key==='3')setMode('group');if(e.key.toLowerCase()==='r')init();if(e.key==='Escape')showCampaignMap();});
