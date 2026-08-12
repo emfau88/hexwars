@@ -58,28 +58,31 @@
 
         <main class="campaignShell">
           <section class="campaignJourney" aria-labelledby="campaignTitle">
-            <div class="campaignHero">
+            <div class="atlasHeader">
               <div>
-                <p class="campaignEyebrow">STRATEGISCHE KAMPAGNE</p>
-                <h1 id="campaignTitle">VOM ERSTEN FELD <br />BIS ZUM RING</h1>
-                <p class="campaignLead">Erobere die blaue Basis in zehn Gefechten. Jede Mission führt eine neue taktische Idee ein.</p>
+                <p class="campaignEyebrow">TERRAIN-ATLAS</p>
+                <h1 id="campaignTitle">KARTE WÄHLEN</h1>
               </div>
-              <div class="nextMissionBadge">
-                <span>NÄCHSTER EINSATZ</span>
-                <strong id="campaignFocusLabel">LEVEL 1</strong>
+              <div class="atlasActLegend" aria-label="Kampagnenabschnitte">
+                <span><i></i>GRUNDLAGEN</span>
+                <span><i></i>GELÄNDE</span>
+                <span><i></i>FINALE</span>
               </div>
             </div>
-
-            <nav class="actNav" aria-label="Kampagnenakte">
-              <button class="actTab" type="button" data-act="0"><span>AKT I</span><strong>GRUNDLAGEN</strong><small>LEVEL 1–3</small></button>
-              <button class="actTab" type="button" data-act="1"><span>AKT II</span><strong>GELÄNDE &amp; FRONTEN</strong><small>LEVEL 4–6</small></button>
-              <button class="actTab" type="button" data-act="2"><span>AKT III</span><strong>RELAIS &amp; FINALE</strong><small>LEVEL 7–10</small></button>
-            </nav>
-
-            <div id="mapNodes" class="campaignActs" aria-label="Gefechtsroute"></div>
+            <div class="atlasBody">
+              <svg id="campaignAtlasSvg" role="group" aria-label="Kampagnenkarte aus einem zusammenhängenden Hexraster"></svg>
+              <p class="atlasHint">Jede Station belegt genau ein Feld des Rasters.</p>
+            </div>
           </section>
 
           <section id="mapCenter" class="missionDossier" aria-labelledby="menuLevelName">
+            <div class="dossierHeader">
+              <div>
+                <p class="menuKicker" id="menuActLabel">AKT I · GRUNDLAGEN</p>
+                <h2 id="menuLevelName">I · DER PFAD</h2>
+              </div>
+              <span id="menuLevelState" class="ready">BEREIT</span>
+            </div>
             <div class="previewFrame" id="levelPreviewFrame">
               <div class="previewTopline"><span id="menuPreviewLabel">LEVEL 01 · KARTENVORSCHAU</span><span>STARTAUFSTELLUNG</span></div>
               <canvas id="levelPreview" width="720" height="460" aria-label="Vorschau der ausgewählten Levelkarte"></canvas>
@@ -87,8 +90,6 @@
             </div>
 
             <div class="missionContent">
-              <p class="menuKicker" id="menuActLabel">AKT I · GRUNDLAGEN</p>
-              <h2 id="menuLevelName">I · DER PFAD</h2>
               <p id="menuLevelText" class="missionBlurb">Eine kleine aktive Route schlängelt sich durch eine große, freundliche Landschaft.</p>
 
               <div class="missionBriefGrid">
@@ -97,7 +98,6 @@
               </div>
 
               <div class="menuMeta">
-                <span id="menuLevelState" class="ready">BEREIT</span>
                 <span id="menuDifficulty">EINSTIEG</span>
                 <span id="menuBestTime">NOCH NICHT GESCHAFFT</span>
               </div>

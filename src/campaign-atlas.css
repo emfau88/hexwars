@@ -1,0 +1,197 @@
+/* Production Terrain Atlas menu. Kept separate from gameplay styling on purpose. */
+#campaignMenu {
+  color:#1d2b24;
+  background:#14211b;
+}
+#campaignMenu.show { display:grid; grid-template-rows:62px minmax(0,1fr); }
+#campaignMenu::before,#campaignMenu::after { display:none; }
+
+#campaignMenu .campaignTop {
+  position:relative; inset:auto; min-height:62px; padding:0 20px;
+  display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center;
+  color:#f4e6c8; background:#101a16; border-bottom:1px solid rgba(238,218,176,.15);
+  backdrop-filter:none; pointer-events:auto;
+}
+#campaignMenu .campaignBrand { display:block; }
+#campaignMenu .campaignBrand::before { display:none; }
+#campaignMenu .campaignBrand .brandKicker { display:none; }
+#campaignMenu .campaignBrand strong { color:#f3ca88; font-size:18px; letter-spacing:5px; }
+#campaignMenu .campaignBrand span:last-child { margin-top:4px; color:#85928b; font:700 8px/1 var(--font-mono); letter-spacing:1.4px; }
+#campaignMenu .campaignTopRight { gap:9px; }
+#campaignMenu .progressText {
+  min-width:164px; padding:8px 10px; color:#89958e; background:#18241f;
+  border:1px solid #34453c; border-radius:10px;
+}
+#campaignMenu .progressHeading { font-size:8px; }
+#campaignMenu .progressText b { color:#f0eadb; font-size:12px; }
+#campaignMenu .campaignProgressTrack { background:#34453c; }
+#campaignMenu .menuIconBtn {
+  width:40px; height:40px; color:#d4dcd6; border:1px solid #34453c; border-radius:10px; background:#18241f;
+}
+
+#campaignMenu .campaignShell {
+  position:relative; min-height:0; display:grid; grid-template-columns:minmax(0,1fr) minmax(340px,390px);
+  gap:16px; padding:18px; overflow:hidden;
+}
+#campaignMenu .campaignJourney,#campaignMenu .missionDossier {
+  min-width:0; min-height:0; border:1px solid rgba(231,222,190,.28); border-radius:22px;
+  box-shadow:0 18px 55px rgba(4,10,7,.25),inset 0 1px rgba(255,255,255,.28);
+}
+#campaignMenu .campaignJourney {
+  padding:0; display:flex; flex-direction:column; overflow:hidden; background:#b8cba1;
+}
+#campaignMenu .atlasHeader {
+  flex:0 0 74px; display:flex; align-items:center; justify-content:space-between; gap:20px;
+  padding:0 24px; color:#1d2b24; border-bottom:1px solid rgba(55,81,65,.20); background:rgba(225,232,197,.46);
+}
+#campaignMenu .campaignEyebrow { margin:0 0 4px; color:#5c6c5e; font:750 10px/1 var(--font-mono); letter-spacing:1.8px; }
+#campaignMenu .atlasHeader h1 { margin:0; color:#17251e; font-size:26px; line-height:1; letter-spacing:-.6px; }
+#campaignMenu .atlasActLegend { display:flex; align-items:center; gap:17px; color:#4a5a50; font-size:10px; }
+#campaignMenu .atlasActLegend span { display:flex; align-items:center; gap:6px; white-space:nowrap; }
+#campaignMenu .atlasActLegend i { width:8px; height:8px; border-radius:50%; background:#7f9d6f; }
+#campaignMenu .atlasActLegend span:nth-child(2) i { background:#b7a86d; }
+#campaignMenu .atlasActLegend span:nth-child(3) i { background:#c47b4c; }
+#campaignMenu .atlasBody { position:relative; flex:1; min-height:0; overflow:hidden; }
+#campaignAtlasSvg { display:block; width:100%; height:100%; overflow:visible; }
+#campaignAtlasSvg .atlasHex { stroke:#8fa887; stroke-width:1.35; vector-effect:non-scaling-stroke; }
+#campaignAtlasSvg .atlasHex.water { stroke:#6d9eae; }
+#campaignAtlasSvg .atlasHex.station { stroke:#8f8870; stroke-width:1.7; }
+#campaignAtlasSvg .atlasShoreShadow { fill:none; stroke:#526b5c; stroke-width:7; stroke-linecap:round; opacity:.22; vector-effect:non-scaling-stroke; }
+#campaignAtlasSvg .atlasShoreMaterial { fill:none; stroke-width:4.5; stroke-linecap:round; vector-effect:non-scaling-stroke; }
+#campaignAtlasSvg .atlasShoreLight { fill:none; stroke:#eee5c3; stroke-width:.8; stroke-linecap:round; opacity:.7; vector-effect:non-scaling-stroke; }
+#campaignMenu .atlasHint {
+  position:absolute; left:18px; bottom:16px; z-index:3; margin:0; padding:8px 11px;
+  color:#edf3ed; background:rgba(24,40,32,.84); border-radius:10px; font-size:10px;
+  box-shadow:0 5px 18px rgba(8,16,11,.16); pointer-events:none;
+}
+
+#campaignAtlasSvg foreignObject { overflow:visible; }
+#campaignAtlasSvg .mapNode {
+  position:relative; inset:auto; width:100%; height:100%; min-width:0; min-height:0; margin:0; padding:0;
+  display:grid; place-items:center; border:0; border-radius:0; background:#8f8870; color:#26352d;
+  clip-path:polygon(25% 6.7%,75% 6.7%,100% 50%,75% 93.3%,25% 93.3%,0 50%);
+  box-shadow:none; backdrop-filter:none; opacity:1; filter:none; cursor:pointer;
+  transition:filter .14s ease,transform .14s ease;
+}
+#campaignAtlasSvg .mapNode::before {
+  content:''; position:absolute; inset:2px; display:block; z-index:0; border:0; border-radius:0;
+  background:#eee8d1; clip-path:inherit;
+}
+#campaignAtlasSvg .mapNode:hover { transform:scale(1.04); filter:brightness(1.04); }
+#campaignAtlasSvg .mapNode[data-act="0"] { background:#7f9d6f; }
+#campaignAtlasSvg .mapNode[data-act="1"] { background:#a89563; }
+#campaignAtlasSvg .mapNode[data-act="2"] { background:#b86f49; }
+#campaignAtlasSvg .mapNode.locked { cursor:pointer; opacity:.66; filter:saturate(.55); }
+#campaignAtlasSvg .mapNode.completed { background:#658862; opacity:1; filter:none; }
+#campaignAtlasSvg .mapNode.completed::before { background:#bed3aa; }
+#campaignAtlasSvg .mapNode.current { transform:none; background:#c66535; color:#4c2a19; filter:none; }
+#campaignAtlasSvg .mapNode.current::before { background:#efb36a; }
+#campaignAtlasSvg .mapNode.current::after {
+  content:''; position:absolute; inset:8px; display:block; z-index:1; clip-path:inherit;
+  border:1px solid #f8e1b2; pointer-events:none;
+}
+#campaignAtlasSvg .atlasLevelNumber { position:relative; z-index:2; font:850 18px/1 var(--font-mono); letter-spacing:-.8px; }
+#campaignAtlasSvg .atlasLevelState {
+  position:absolute; z-index:2; right:19%; top:17%; width:14px; height:14px; display:grid; place-items:center;
+  color:#5c6e60; border-radius:50%; font:800 9px/1 var(--font-ui);
+}
+#campaignAtlasSvg .mapNode.completed .atlasLevelState { color:#f5f3df; background:#658862; }
+#campaignAtlasSvg .mapNode.current .atlasLevelState { color:#6a361d; }
+
+#campaignMenu #mapCenter {
+  position:relative; inset:auto; width:auto; max-width:none; padding:0; transform:none;
+  display:grid; grid-template-rows:auto minmax(230px,1fr) auto; overflow:hidden; text-align:left;
+  color:#26342c; background:#eee7d3; border-color:rgba(231,222,190,.45); backdrop-filter:none;
+}
+#campaignMenu .dossierHeader {
+  min-height:78px; padding:18px 20px 13px; display:flex; align-items:flex-start; justify-content:space-between; gap:15px;
+}
+#campaignMenu .menuKicker { margin:0 0 5px; color:#667365; font:800 9px/1 var(--font-mono); letter-spacing:1.5px; }
+#campaignMenu #menuLevelName { margin:0; color:#17251e; font-size:28px; line-height:1; letter-spacing:-.7px; }
+#campaignMenu #menuLevelState {
+  flex:0 0 auto; padding:7px 9px; color:#556550; border:1px solid #94a482; border-radius:9px;
+  background:rgba(255,255,255,.18); font:800 9px/1 var(--font-mono); letter-spacing:1px;
+}
+#campaignMenu #menuLevelState.locked { color:#8b5146; border-color:#bc8578; }
+#campaignMenu .previewFrame {
+  position:relative; min-height:230px; margin:0 20px; overflow:hidden; border:1px solid #acb996;
+  border-radius:16px; background:#cedcb4; box-shadow:inset 0 1px 10px rgba(64,83,65,.08);
+}
+#campaignMenu .previewFrame::after { box-shadow:inset 0 -26px 38px rgba(64,83,65,.08); }
+#campaignMenu .previewTopline { color:#34443a; }
+#campaignMenu .previewLegend { color:#eef2ec; background:rgba(28,43,35,.76); }
+#campaignMenu .missionContent { padding:14px 20px 18px; }
+#campaignMenu #menuLevelText { margin:0; min-height:0; color:#536056; font-size:12px; line-height:1.5; }
+#campaignMenu .missionBriefGrid { grid-template-columns:1fr; gap:7px; margin-top:12px; }
+#campaignMenu .briefItem {
+  padding:10px 11px; color:#3d4b42; border:1px solid #cbc3ad; border-radius:10px; background:rgba(255,255,255,.16);
+}
+#campaignMenu .briefItem span { margin-bottom:4px; color:#6d776c; font-size:8px; }
+#campaignMenu .briefItem p { color:#455248; font-size:10px; line-height:1.4; }
+#campaignMenu .objectiveBrief { border-color:#d7a583; background:rgba(217,119,66,.055); }
+#campaignMenu .objectiveBrief span { color:#b76339; }
+#campaignMenu .menuMeta { justify-content:flex-start; gap:6px; margin:10px 0; }
+#campaignMenu .menuMeta span { padding:5px 7px; color:#5f6b61; border-color:#c8c0aa; background:rgba(255,255,255,.13); font-size:8px; }
+#campaignMenu .menuLockHint { margin:0 0 8px; color:#8b5146; background:rgba(183,94,72,.08); }
+#campaignMenu .playButton {
+  min-height:50px; color:#172019; border:1px solid #bd713f; border-radius:11px;
+  background:linear-gradient(#f1bc70,#eaa052); box-shadow:0 7px 14px rgba(122,69,33,.17); font-size:11px;
+}
+#campaignMenu .missionControlHint { margin:9px 1px 0; color:#69756a; font-size:9px; }
+#campaignMenu .controlArrow { color:#a95b34; background:rgba(217,119,66,.10); }
+
+@media (max-width:1100px) and (min-width:901px) and (min-height:621px) {
+  #campaignMenu .campaignShell { grid-template-columns:minmax(0,1fr) minmax(330px,36vw); gap:12px; padding:12px; }
+  #campaignMenu .atlasHeader { padding:0 18px; }
+  #campaignMenu .atlasActLegend { gap:9px; font-size:9px; }
+  #campaignMenu .dossierHeader { padding-left:16px; padding-right:16px; }
+  #campaignMenu .previewFrame { margin-left:16px; margin-right:16px; }
+  #campaignMenu .missionContent { padding-left:16px; padding-right:16px; }
+}
+
+@media (max-width:900px), (max-height:620px) {
+  #campaignMenu { overflow-y:auto; overflow-x:hidden; }
+  #campaignMenu.show { display:block; }
+  #campaignMenu .campaignTop {
+    position:sticky; top:0; z-index:20; min-height:56px; padding:0 10px; grid-template-columns:1fr auto;
+  }
+  #campaignMenu .campaignBrand strong { font-size:14px; letter-spacing:3px; }
+  #campaignMenu .campaignBrand span:last-child { display:none; }
+  #campaignMenu .campaignTopRight { gap:6px; }
+  #campaignMenu .progressText { min-width:78px; padding:6px 7px; }
+  #campaignMenu .progressHeading { display:block; text-align:center; }
+  #campaignMenu .progressHeading span { display:none; }
+  #campaignMenu .campaignProgressTrack { display:none; }
+  #campaignMenu .menuIconBtn { width:44px; height:44px; }
+  #campaignMenu #fullscreenBtn { display:none; }
+  #campaignMenu .campaignShell { display:flex; flex-direction:column; gap:8px; padding:8px 8px calc(16px + env(safe-area-inset-bottom)); overflow:visible; }
+  #campaignMenu .campaignJourney { order:1; flex:0 0 310px; height:310px; border-radius:16px; }
+  #campaignMenu .atlasHeader { flex:0 0 52px; min-height:52px; padding:0 13px; gap:8px; }
+  #campaignMenu .atlasHeader h1 { font-size:18px; }
+  #campaignMenu .campaignEyebrow { font-size:8px; letter-spacing:1.1px; }
+  #campaignMenu .atlasActLegend { gap:7px; font-size:8px; }
+  #campaignMenu .atlasActLegend span { gap:3px; }
+  #campaignMenu .atlasActLegend i { width:6px; height:6px; }
+  #campaignMenu .atlasHint { display:none; }
+  #campaignAtlasSvg .atlasLevelNumber { font-size:15px; }
+  #campaignAtlasSvg .atlasLevelState { width:11px; height:11px; font-size:7px; }
+  #campaignMenu #mapCenter { order:2; display:grid; border-radius:16px; scroll-margin-top:64px; }
+  #campaignMenu .dossierHeader { min-height:66px; padding:14px 13px 10px; }
+  #campaignMenu #menuLevelName { font-size:22px; }
+  #campaignMenu #menuLevelState { padding:6px 7px; font-size:8px; }
+  #campaignMenu .previewFrame { height:205px; min-height:205px; margin:0 13px; border-radius:11px; }
+  #campaignMenu .missionContent { padding:12px 13px 14px; }
+  #campaignMenu #menuLevelText { font-size:11px; }
+  #campaignMenu .briefItem p { font-size:10px; }
+  #campaignMenu .playButton { min-height:48px; }
+  #menuSettingsPanel { position:fixed; top:54px; right:9px; }
+}
+
+@media (max-height:620px) and (orientation:landscape) {
+  #campaignMenu .campaignShell { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr); align-items:stretch; }
+  #campaignMenu .campaignJourney { height:auto; min-height:0; }
+  #campaignMenu #mapCenter { min-height:0; }
+  #campaignMenu .previewFrame { height:auto; min-height:145px; }
+  #campaignMenu .missionBriefGrid,#campaignMenu #menuLevelText { display:none; }
+  #campaignMenu .missionContent { padding-top:9px; }
+}

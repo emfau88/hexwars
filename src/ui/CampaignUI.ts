@@ -1,16 +1,17 @@
 import type { GameState } from '../core/GameState';
 import { Owner, Terrain, type CampaignProgress, type SendMode } from '../core/types';
 import { buildLevel } from '../levels/buildLevel';
-import { CAMPAIGN_ACTS, campaignActForLevel, LEVEL_ICONS, LEVELS } from '../levels';
+import { CAMPAIGN_ACTS, campaignActForLevel, LEVELS } from '../levels';
 import { createSeededRandom } from '../core/random';
 import { BoardRenderer } from '../rendering/BoardRenderer';
 import { LandscapeRenderer } from '../rendering/LandscapeRenderer';
 import { OWNER_COLORS } from '../rendering/palette';
+import { CampaignAtlas } from './CampaignAtlas';
 
-const required = <T extends HTMLElement>(id: string): T => {
+const required = <T extends Element = HTMLElement>(id: string): T => {
   const element = document.getElementById(id);
   if (!element) throw new Error(`Required UI element #${id} is missing.`);
-  return element as T;
+  return element as unknown as T;
 };
 
 export interface UICallbacks {
@@ -29,6 +30,7 @@ export class CampaignUI {
   selectedMenuLevel = 0;
   private toastTimer = 0; private hintTimer = 0;
   private readonly previewLandscape = new LandscapeRenderer(() => this.renderPreview(this.selectedMenuLevel));
+  private readonly atlas = new CampaignAtlas(required<SVGSVGElement>('campaignAtlasSvg'));
 
   constructor(private readonly callbacks: UICallbacks) {
     required('playLevelBtn').addEventListener('click', () => callbacks.startLevel(this.selectedMenuLevel));
@@ -39,7 +41,15 @@ export class CampaignUI {
     for (const id of ['fullscreenBtn', 'sideFullscreenBtn', 'mobileFullscreenBtn']) required(id).addEventListener('click', callbacks.toggleFullscreen);
     required('resetProgressBtn').addEventListener('click', callbacks.resetProgress);
     document.querySelectorAll<HTMLButtonElement>('.modeBtn').forEach((button) => button.addEventListener('click', () => callbacks.setMode(button.dataset.mode as SendMode)));
-    document.querySelectorAll<HTMLButtonElement>('.actTab').forEach((button, index) => button.addEventListener('click', () => this.selectLevel(CAMPAIGN_ACTS[index].range[0], this.lastProgress, this.lastUnlocked)));
+    const settings = required('menuSettingsPanel');
+    required('menuSettingsBtn').addEventListener('click', (event) => {
+      event.stopPropagation(); const open = settings.classList.toggle('show'); settings.setAttribute('aria-hidden', String(!open));
+    });
+    document.addEventListener('pointerdown', (event) => {
+      if (!settings.contains(event.target as Node) && event.target !== required('menuSettingsBtn')) {
+        settings.classList.remove('show'); settings.setAttribute('aria-hidden', 'true');
+      }
+    });
     document.addEventListener('pointerdown', callbacks.activate, { once: true });
   }
 
@@ -61,32 +71,18 @@ export class CampaignUI {
   showMap(progress: CampaignProgress, unlocked: (index: number) => boolean, focus: number): void {
     this.lastProgress = progress; this.lastUnlocked = unlocked;
     this.overlay.classList.remove('show'); this.menu.classList.add('show'); this.app.classList.add('menuOpen'); document.body.classList.add('campaignOpen');
-    const nodes = required('mapNodes'); nodes.innerHTML = '';
     const done = progress.completed.filter(Boolean).length;
     required('progressCount').textContent = `${done} / ${LEVELS.length}`;
     (required('campaignProgressFill') as HTMLElement).style.width = `${done / LEVELS.length * 100}%`;
-    required('campaignFocusLabel').textContent = `LEVEL ${Math.min(LEVELS.length, focus + 1)}`;
-    CAMPAIGN_ACTS.forEach((act, actIndex) => {
-      const group = document.createElement('section'); group.className = 'actGroup'; group.dataset.act = String(actIndex);
-      group.innerHTML = `<div class="actGroupHeader"><span>${act.roman} · ${act.name}</span></div>`;
-      const list = document.createElement('div'); list.className = 'actLevels';
-      for (let index = act.range[0]; index <= act.range[1]; index += 1) {
-        const button = document.createElement('button'); button.type = 'button'; button.className = `mapNode ${unlocked(index) ? 'unlocked' : 'locked'}${progress.completed[index] ? ' completed' : ''}`;
-        button.setAttribute('aria-label', `Level ${index + 1}: ${LEVELS[index].short}${unlocked(index) ? '' : ' – gesperrt'}`);
-        button.innerHTML = `<span class="nodeIcon" aria-hidden="true">${LEVEL_ICONS[index]}</span><span class="nodeCopy"><small>LEVEL ${String(index + 1).padStart(2, '0')}</small><strong>${LEVELS[index].short}</strong></span><span class="nodeState" aria-hidden="true">${progress.completed[index] ? '✓' : unlocked(index) ? '→' : '·'}</span>`;
-        button.addEventListener('click', () => this.selectLevel(index, progress, unlocked)); list.appendChild(button);
-      }
-      group.appendChild(list); nodes.appendChild(group);
-    });
-    this.selectLevel(Math.max(0, Math.min(LEVELS.length - 1, focus)), progress, unlocked);
+    this.renderAtlas(focus);
+    this.selectLevel(Math.max(0, Math.min(LEVELS.length - 1, focus)), progress, unlocked, false);
   }
 
-  selectLevel(index: number, progress: CampaignProgress, unlocked: (index: number) => boolean): void {
+  selectLevel(index: number, progress: CampaignProgress, unlocked: (index: number) => boolean, reveal = true): void {
     this.selectedMenuLevel = Math.max(0, Math.min(LEVELS.length - 1, index));
     const level = LEVELS[this.selectedMenuLevel]; const actIndex = campaignActForLevel(this.selectedMenuLevel); const act = CAMPAIGN_ACTS[actIndex];
-    document.querySelectorAll('.mapNode').forEach((node, nodeIndex) => node.classList.toggle('current', nodeIndex === this.selectedMenuLevel));
-    document.querySelectorAll('.actTab').forEach((node, nodeIndex) => node.classList.toggle('current', nodeIndex === actIndex));
-    document.querySelectorAll('.actGroup').forEach((node, nodeIndex) => node.classList.toggle('current', nodeIndex === actIndex));
+    if (this.atlas.needsLayoutUpdate()) this.renderAtlas(this.selectedMenuLevel);
+    document.querySelectorAll<HTMLElement>('.mapNode').forEach((node) => node.classList.toggle('current', Number(node.dataset.level) === this.selectedMenuLevel));
     required('menuActLabel').textContent = `${act.roman} · ${act.name}`; required('menuLevelName').textContent = level.name;
     required('menuLevelText').textContent = level.blurb; required('menuLevelObjective').textContent = level.objective; required('menuLevelRule').textContent = level.rule;
     required('menuDifficulty').textContent = act.difficulty; required('menuPreviewLabel').textContent = `LEVEL ${String(this.selectedMenuLevel + 1).padStart(2, '0')} · KARTENVORSCHAU`;
@@ -96,7 +92,11 @@ export class CampaignUI {
     required('menuLockHint').hidden = available; const play = required<HTMLButtonElement>('playLevelBtn'); play.disabled = !available;
     play.textContent = done ? 'NOCH EINMAL SPIELEN' : !available ? 'VORHERIGES LEVEL ABSCHLIESSEN' : this.selectedMenuLevel === 0 && !progress.completed.some(Boolean) ? 'KAMPAGNE BEGINNEN' : 'LEVEL STARTEN';
     this.renderPreview(this.selectedMenuLevel);
-    if (matchMedia('(max-width:900px) and (orientation:portrait)').matches) requestAnimationFrame(() => required('mapCenter').scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    if (reveal && matchMedia('(max-width:900px) and (orientation:portrait)').matches) requestAnimationFrame(() => required('mapCenter').scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  }
+
+  private renderAtlas(selected: number): void {
+    this.atlas.render(this.lastProgress, this.lastUnlocked, selected, (index) => this.selectLevel(index, this.lastProgress, this.lastUnlocked));
   }
 
   setMode(mode: SendMode, state: GameState): void {

@@ -13,8 +13,10 @@ const input = read('../src/input/InputController.ts');
 const state = read('../src/core/GameState.ts');
 const main = read('../src/main.ts');
 const landscape = read('../src/rendering/LandscapeRenderer.ts');
+const atlas = read('../src/ui/CampaignAtlas.ts');
 const vite = read('../vite.config.ts');
 const styles = read('../src/styles.css');
+const atlasStyles = read('../src/campaign-atlas.css');
 
 test('campaign runtime is split into typed modules without ts-nocheck', () => {
   for (const source of [level1, builder, ai, victory, input, state, main]) assert.doesNotMatch(source, /@ts-nocheck/);
@@ -53,10 +55,12 @@ test('pointer input is isolated and executes a real send path', () => {
   assert.match(input, /this\.state\.send\(/);
 });
 
-test('mobile portrait keeps the compact route ahead of the dossier', () => {
-  assert.match(styles, /#mapCenter \{ order:2;/);
-  assert.match(styles, /\.campaignJourney \{ order:1;/);
-  assert.match(styles, /\.actGroup:not\(\.current\) \{ display:none; \}/);
+test('mobile portrait keeps the full terrain atlas ahead of the dossier', () => {
+  assert.match(atlasStyles, /\.campaignJourney \{ order:1;/);
+  assert.match(atlasStyles, /#mapCenter \{ order:2;/);
+  assert.match(atlas, /cells\(7, 4, 31/);
+  assert.match(atlas, /\['6,3',9\]/);
+  assert.doesNotMatch(atlas, /campaignPath/);
 });
 
 test('Level 1 landscape assets stay within the mobile budget', () => {

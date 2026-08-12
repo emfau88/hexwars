@@ -119,10 +119,15 @@ test('all ten campaign levels start with a valid board in this viewport', async 
 
 test('responsive shell has no page overflow and mobile controls meet the touch floor', async ({ page }) => {
   await page.goto('/');
+  await page.getByRole('button', { name: 'Menüoptionen' }).click();
+  await expect(page.locator('#menuSettingsPanel')).toBeVisible();
+  await page.getByRole('button', { name: 'Menüoptionen' }).click();
   const menuMetrics = await page.evaluate(() => ({
     viewport: innerWidth,
     body: document.body.scrollWidth,
     mobile: matchMedia('(max-width:900px), (max-height:620px)').matches,
+    atlasNodes: [...document.querySelectorAll<HTMLButtonElement>('.mapNode')]
+      .map((button) => ({ width: button.getBoundingClientRect().width, height: button.getBoundingClientRect().height })),
     topControls: [...document.querySelectorAll<HTMLButtonElement>('.campaignTop button')]
       .filter((button) => getComputedStyle(button).display !== 'none')
       .map((button) => ({ width: button.getBoundingClientRect().width, height: button.getBoundingClientRect().height })),
@@ -131,6 +136,8 @@ test('responsive shell has no page overflow and mobile controls meet the touch f
   if (menuMetrics.mobile) {
     expect(Math.min(...menuMetrics.topControls.map(({ width }) => width))).toBeGreaterThanOrEqual(44);
     expect(Math.min(...menuMetrics.topControls.map(({ height }) => height))).toBeGreaterThanOrEqual(44);
+    expect(Math.min(...menuMetrics.atlasNodes.map(({ width }) => width))).toBeGreaterThanOrEqual(44);
+    expect(Math.min(...menuMetrics.atlasNodes.map(({ height }) => height))).toBeGreaterThanOrEqual(44);
   }
   await page.getByRole('button', { name: 'KAMPAGNE BEGINNEN' }).click();
   const gameMetrics = await page.evaluate(() => ({
