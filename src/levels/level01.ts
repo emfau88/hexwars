@@ -7,7 +7,7 @@ export default defineLevel({
   objective: 'Erobere die blaue Basis. Nimm den direkten, stärker besetzten Weg oder baue über mehr schwache Felder Produktion auf.',
   rule: 'Du sendest jeweils 50 %. Zahlen sind spielbare Felder; Landschaft ohne Zahl ist nicht spielbar.',
   aiThinkMs: 2500, aiDelaySeconds: 6.5, aiSkill: 0.4, aiActions: 1,
-  neutralUnits: [2, 5], features: { all: false, group: false, relay: false }, theme: 'meadow',
+  neutralUnits: [2, 5], features: { all: false, group: false, relay: false }, theme: 'meadow', landscapeStyle: 'meadow-v1',
   activeRows: [[], [3], [3], [3], [3, 4, 5], [3, 5], [3, 4, 5], [3, 5], [3, 4, 5], [3], [3], [3], []],
   cells: [
     { col: 3, row: 2, units: 2 }, { col: 3, row: 3, units: 3 },

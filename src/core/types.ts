@@ -23,6 +23,7 @@ export type DecorType =
   | 'snow';
 
 export type SendMode = 'half' | 'all' | 'group';
+export type LandscapeStyle = 'classic' | 'meadow-v1';
 export type MissionResult = 'victory' | 'defeat';
 export type Point = { x: number; y: number };
 export type Cell = { col: number; row: number };
@@ -59,6 +60,7 @@ export interface LevelDefinition {
   mirrorNeutral?: boolean;
   features: FeatureFlags;
   theme: string;
+  landscapeStyle: LandscapeStyle;
   activeRows: readonly (readonly number[])[];
   cells?: readonly CellDefinition[];
 }

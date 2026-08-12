@@ -60,7 +60,7 @@ test('mobile portrait keeps the compact route ahead of the dossier', () => {
 });
 
 test('Level 1 landscape assets stay within the mobile budget', () => {
-  for (const name of ['level1-tree.webp', 'level1-conifer.webp', 'level1-bush.webp']) {
+  for (const name of ['level1-tree.webp', 'level1-conifer-v2.webp', 'level1-bush.webp', 'level1-water.webp', 'level1-shore.webp']) {
     const asset = new URL(`../public/assets/${name}`, import.meta.url);
     assert.ok(statSync(asset).size < 250_000, `${name} stays below 250 KB`);
   }

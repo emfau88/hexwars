@@ -1,7 +1,17 @@
 import { hash01 } from '../core/random';
-import { Terrain, type DecorType, type HexState } from '../core/types';
+import { Terrain, type DecorType, type HexState, type LandscapeStyle } from '../core/types';
 
 type PathDrawer = (context: CanvasRenderingContext2D, x: number, y: number, radius: number) => void;
+
+export interface WaterShoreEdge {
+  hex: HexState;
+  edge: number;
+}
+
+export function fitSpriteSize(width: number, aspect: number, maxHeight: number): { width: number; height: number } {
+  const height = Math.min(width * aspect, maxHeight);
+  return { width: height / aspect, height };
+}
 
 const decorPalette: Record<DecorType, { fill: string; edge: string }> = {
   meadow: { fill: '#cfe3b7', edge: '#9fbd8c' }, forest: { fill: '#b8d6a2', edge: '#8eaf7f' },
@@ -11,14 +21,24 @@ const decorPalette: Record<DecorType, { fill: string; edge: string }> = {
 };
 
 export class LandscapeRenderer {
-  private readonly sprites = {
-    tree: this.load(`${import.meta.env.BASE_URL}assets/level1-tree.webp`),
-    conifer: this.load(`${import.meta.env.BASE_URL}assets/level1-conifer.webp`),
-    bush: this.load(`${import.meta.env.BASE_URL}assets/level1-bush.webp`),
-  };
+  private readonly sprites: Record<'tree' | 'conifer' | 'bush' | 'water' | 'shore', HTMLImageElement>;
+  private readonly patterns = new WeakMap<CanvasRenderingContext2D, Partial<Record<'water' | 'shore', CanvasPattern>>>();
+
+  constructor(private readonly onAssetReady?: () => void) {
+    this.sprites = {
+      tree: this.load(`${import.meta.env.BASE_URL}assets/level1-tree.webp`),
+      conifer: this.load(`${import.meta.env.BASE_URL}assets/level1-conifer-v2.webp`),
+      bush: this.load(`${import.meta.env.BASE_URL}assets/level1-bush.webp`),
+      water: this.load(`${import.meta.env.BASE_URL}assets/level1-water.webp`),
+      shore: this.load(`${import.meta.env.BASE_URL}assets/level1-shore.webp`),
+    };
+  }
 
   private load(source: string): HTMLImageElement {
-    const image = new Image(); image.src = source; return image;
+    const image = new Image();
+    if (this.onAssetReady) image.addEventListener('load', this.onAssetReady, { once: true });
+    image.src = source;
+    return image;
   }
 
   backdrop(context: CanvasRenderingContext2D, width: number, height: number, levelIndex: number): void {
@@ -32,28 +52,48 @@ export class LandscapeRenderer {
     context.restore();
   }
 
-  drawHex(context: CanvasRenderingContext2D, hex: HexState, radius: number, seed: number, path: PathDrawer): void {
+  drawHex(context: CanvasRenderingContext2D, hex: HexState, radius: number, style: LandscapeStyle, seed: number, path: PathDrawer): void {
     const type = hex.decor ?? 'meadow';
     const palette = decorPalette[type];
     path(context, hex.x, hex.y, radius * 0.955);
     context.fillStyle = palette.fill; context.fill();
+    if (style === 'meadow-v1' && type === 'water') {
+      const material = this.materialPattern(context, 'water');
+      if (material) {
+        context.save(); context.globalAlpha = .7; context.fillStyle = material; context.fill(); context.restore();
+      }
+    }
     context.save(); path(context, hex.x, hex.y, radius * 0.84); context.clip();
     this.details(context, hex, radius, hash01(hex.col, hex.row, seed));
     context.restore();
     path(context, hex.x, hex.y, radius * 0.955); context.strokeStyle = palette.edge; context.lineWidth = 1.15; context.stroke();
   }
 
-  private sprite(context: CanvasRenderingContext2D, image: HTMLImageElement, x: number, y: number, width: number, anchor = 0.58): boolean {
+  private sprite(context: CanvasRenderingContext2D, image: HTMLImageElement, x: number, y: number, width: number, anchor = 0.58, maxHeight = Infinity): boolean {
     if (!image.complete || !image.naturalWidth) return false;
-    const height = width * image.naturalHeight / image.naturalWidth;
+    const aspect = image.naturalHeight / image.naturalWidth;
+    const fitted = fitSpriteSize(width, aspect, maxHeight);
     context.save(); context.globalAlpha = 0.94; context.filter = 'saturate(.82) contrast(.96)';
-    context.drawImage(image, x - width / 2, y - height * anchor, width, height); context.restore();
+    context.drawImage(image, x - fitted.width / 2, y - fitted.height * anchor, fitted.width, fitted.height); context.restore();
     return true;
   }
 
-  private tree(context: CanvasRenderingContext2D, x: number, y: number, size: number, conifer = false): void {
+  private materialPattern(context: CanvasRenderingContext2D, type: 'water' | 'shore'): CanvasPattern | null {
+    const existing = this.patterns.get(context)?.[type];
+    if (existing) return existing;
+    const image = this.sprites[type];
+    if (!image.complete || !image.naturalWidth) return null;
+    const pattern = context.createPattern(image, 'repeat');
+    if (!pattern) return null;
+    pattern.setTransform(new DOMMatrix().scale(.55));
+    const cached = this.patterns.get(context) ?? {};
+    cached[type] = pattern; this.patterns.set(context, cached);
+    return pattern;
+  }
+
+  private tree(context: CanvasRenderingContext2D, x: number, y: number, size: number, cellRadius: number, conifer = false): void {
     const image = conifer ? this.sprites.conifer : this.sprites.tree;
-    if (this.sprite(context, image, x, y, size, conifer ? 0.61 : 0.58)) return;
+    if (this.sprite(context, image, x, y, size, conifer ? 0.61 : 0.58, cellRadius * 1.25)) return;
     context.fillStyle = '#745f43'; context.fillRect(x - size * .05, y, size * .1, size * .32);
     context.fillStyle = conifer ? '#486f48' : '#547b4d';
     context.beginPath(); context.arc(x, y - size * .15, size * .28, 0, Math.PI * 2); context.fill();
@@ -63,8 +103,8 @@ export class LandscapeRenderer {
     const type = hex.decor ?? 'meadow';
     if (type === 'forest') {
       if (q < .22 && this.sprite(context, this.sprites.bush, hex.x - size * .15, hex.y + size * .16, size * .62, .5)) return;
-      this.tree(context, hex.x + (q - .5) * size * .22, hex.y + size * .15, size * (.76 + q * .28), q > .68);
-      if (q > .45) this.tree(context, hex.x - size * .25, hex.y + size * .25, size * .42, q > .82);
+      this.tree(context, hex.x + (q - .5) * size * .22, hex.y + size * .15, size * (.76 + q * .28), size, q > .68);
+      if (q > .45) this.tree(context, hex.x - size * .25, hex.y + size * .25, size * .42, size, q > .82);
     } else if (type === 'water') {
       context.strokeStyle = 'rgba(236,249,244,.62)'; context.lineWidth = Math.max(1, size * .04); context.lineCap = 'round';
       for (const offset of [-.2, .18]) { context.beginPath(); context.moveTo(hex.x - size * .32, hex.y + size * offset); context.quadraticCurveTo(hex.x, hex.y + size * (offset - .06), hex.x + size * .32, hex.y + size * offset); context.stroke(); }
@@ -83,10 +123,51 @@ export class LandscapeRenderer {
     }
   }
 
-  drawWaterShores(context: CanvasRenderingContext2D, hexes: readonly HexState[], radius: number, path: PathDrawer): void {
+  drawWaterShores(context: CanvasRenderingContext2D, hexes: readonly HexState[], radius: number, style: LandscapeStyle, path: PathDrawer): void {
+    if (style === 'meadow-v1') {
+      const material = this.materialPattern(context, 'shore');
+      context.save(); context.lineCap = 'round'; context.lineJoin = 'round';
+      for (const { hex, edge } of exposedWaterShoreEdges(hexes)) {
+        const startAngle = (60 * edge - 90) * Math.PI / 180;
+        const endAngle = (60 * (edge + 1) - 90) * Math.PI / 180;
+        const edgeRadius = radius * .955;
+        const x1 = hex.x + edgeRadius * Math.cos(startAngle); const y1 = hex.y + edgeRadius * Math.sin(startAngle);
+        const x2 = hex.x + edgeRadius * Math.cos(endAngle); const y2 = hex.y + edgeRadius * Math.sin(endAngle);
+        const midpointX = (x1 + x2) / 2; const midpointY = (y1 + y2) / 2;
+        const bend = radius * (.012 + hash01(hex.col * 7 + edge, hex.row, 101) * .022);
+        const length = Math.hypot(hex.x - midpointX, hex.y - midpointY) || 1;
+        const controlX = midpointX + (hex.x - midpointX) / length * bend;
+        const controlY = midpointY + (hex.y - midpointY) / length * bend;
+        const stroke = (style: string | CanvasPattern, width: number, alpha: number) => {
+          context.beginPath(); context.moveTo(x1, y1); context.quadraticCurveTo(controlX, controlY, x2, y2);
+          context.strokeStyle = style; context.lineWidth = width; context.globalAlpha = alpha; context.stroke();
+        };
+        stroke('#526b5c', Math.max(3.2, radius * .18), .22);
+        stroke(material ?? '#c9b27f', Math.max(2.4, radius * .115), .96);
+        stroke('#eee5c3', Math.max(.7, radius * .021), .72);
+      }
+      context.restore();
+      return;
+    }
     for (const hex of hexes.filter((candidate) => candidate.terrain === Terrain.Decor && candidate.decor === 'water')) {
       path(context, hex.x, hex.y, radius * .955); context.strokeStyle = 'rgba(233,209,154,.9)'; context.lineWidth = Math.max(1.8, radius * .11); context.stroke();
       path(context, hex.x, hex.y, radius * .91); context.strokeStyle = decorPalette.water.edge; context.lineWidth = 1.1; context.stroke();
     }
   }
+}
+
+const neighborForEdge = (hex: HexState, edge: number): string => {
+  const parity = hex.row & 1;
+  const offsets = [
+    [parity, -1], [1, 0], [parity, 1], [parity - 1, 1], [-1, 0], [parity - 1, -1],
+  ] as const;
+  const [col, row] = offsets[edge];
+  return `${hex.col + col},${hex.row + row}`;
+};
+
+export function exposedWaterShoreEdges(hexes: readonly HexState[]): WaterShoreEdge[] {
+  const water = hexes.filter((hex) => hex.terrain === Terrain.Decor && hex.decor === 'water');
+  const waterKeys = new Set(water.map((hex) => `${hex.col},${hex.row}`));
+  return water.flatMap((hex) => Array.from({ length: 6 }, (_, edge) => ({ hex, edge })))
+    .filter(({ hex, edge }) => !waterKeys.has(neighborForEdge(hex, edge)));
 }

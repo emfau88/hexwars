@@ -71,7 +71,7 @@ export class BoardRenderer {
     this.landscape.backdrop(this.context, this.width, this.height, state.currentLevel);
     const reachable = this.selected ? new Set(state.hexes.filter((hex) => state.canSend(this.selected, hex))) : null;
     for (const hex of state.hexes) this.drawHex(state, hex, reachable);
-    this.landscape.drawWaterShores(this.context, state.hexes, this.radius, BoardRenderer.path);
+    this.landscape.drawWaterShores(this.context, state.hexes, this.radius, state.level.landscapeStyle, BoardRenderer.path);
     for (const army of state.armies) {
       this.context.save(); this.context.globalAlpha = army.kind === 'supply' ? .24 : .18; this.context.strokeStyle = army.kind === 'supply' ? '#e8c07d' : OWNER_COLORS[army.owner].edge;
       this.context.lineWidth = army.kind === 'supply' ? 2 : 1.5; this.context.beginPath(); this.context.moveTo(army.x0, army.y0); this.context.lineTo(army.cx, army.cy); this.context.stroke(); this.context.restore();
@@ -82,7 +82,7 @@ export class BoardRenderer {
   }
 
   private drawHex(state: GameState, hex: HexState, reachable: Set<HexState> | null): void {
-    if (hex.terrain === Terrain.Decor) { this.landscape.drawHex(this.context, hex, this.radius, state.level.seed, BoardRenderer.path); return; }
+    if (hex.terrain === Terrain.Decor) { this.landscape.drawHex(this.context, hex, this.radius, state.level.landscapeStyle, state.level.seed, BoardRenderer.path); return; }
     if (!isPlayable(hex)) return;
     const colors = OWNER_COLORS[hex.owner];
     const load = hex.owner === Owner.Neutral ? .36 : Math.max(0, Math.min(1, hex.units / terrainCapacity(hex)));

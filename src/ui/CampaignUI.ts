@@ -4,6 +4,7 @@ import { buildLevel } from '../levels/buildLevel';
 import { CAMPAIGN_ACTS, campaignActForLevel, LEVEL_ICONS, LEVELS } from '../levels';
 import { createSeededRandom } from '../core/random';
 import { BoardRenderer } from '../rendering/BoardRenderer';
+import { LandscapeRenderer } from '../rendering/LandscapeRenderer';
 import { OWNER_COLORS } from '../rendering/palette';
 
 const required = <T extends HTMLElement>(id: string): T => {
@@ -27,6 +28,7 @@ export class CampaignUI {
   readonly hint = required('hint'); readonly toast = required('toast');
   selectedMenuLevel = 0;
   private toastTimer = 0; private hintTimer = 0;
+  private readonly previewLandscape = new LandscapeRenderer(() => this.renderPreview(this.selectedMenuLevel));
 
   constructor(private readonly callbacks: UICallbacks) {
     required('playLevelBtn').addEventListener('click', () => callbacks.startLevel(this.selectedMenuLevel));
@@ -146,10 +148,11 @@ export class CampaignUI {
     const hexes = buildLevel(levelIndex, createSeededRandom(level.seed), (col, row) => ({ x: originX + col * horizontal + (row % 2 ? horizontal / 2 : 0), y: originY + row * 1.5 * radius }));
     for (const hex of hexes) {
       BoardRenderer.path(context, hex.x, hex.y, radius * .9);
-      if (hex.terrain === Terrain.Decor) { const fill = hex.decor === 'water' ? '#91ccdc' : hex.decor === 'forest' ? '#a8c88e' : hex.decor === 'mountain' ? '#c9c4b5' : '#cedeaf'; context.fillStyle = fill; context.globalAlpha = .72; context.fill(); context.globalAlpha = 1; context.strokeStyle = '#92a583'; }
+      if (hex.terrain === Terrain.Decor) { this.previewLandscape.drawHex(context, hex, radius, level.landscapeStyle, level.seed, BoardRenderer.path); continue; }
       else { const colors = OWNER_COLORS[hex.owner]; context.fillStyle = hex.owner === Owner.Neutral ? '#eee9d5' : colors.high; context.fill(); context.strokeStyle = colors.edge; }
       context.lineWidth = hex.terrain === Terrain.Base ? 2 : .8; context.stroke();
     }
+    this.previewLandscape.drawWaterShores(context, hexes, radius, level.landscapeStyle, BoardRenderer.path);
   }
 
   private time(seconds: number): string { return `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`; }
