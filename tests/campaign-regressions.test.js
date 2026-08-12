@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, statSync } from 'node:fs';
 import test from 'node:test';
 
 const campaign = readFileSync(new URL('../campaign/index.html', import.meta.url), 'utf8');
@@ -50,4 +50,20 @@ test('mobile portrait puts the compact campaign route before the dossier', () =>
   assert.match(campaign, /\.campaignJourney \{ order:1;/);
   assert.match(campaign, /\.actGroup:not\(\.current\) \{ display:none; \}/);
   assert.match(campaign, /function showMobileDossier\(\)/);
+});
+
+test('Level 1 keeps a full visible hex field with bounded terrain decoration', () => {
+  assert.match(campaign, /function drawLevelOneAmbientGrid\(\)/);
+  assert.match(campaign, /function drawLevelOneDecorHex\(h\)/);
+  assert.match(campaign, /function drawLevelOneWaterShore\(/);
+  assert.match(campaign, /if\(currentLevel===0\)\{drawLevelOneDecorHex\(h\);return;\}/);
+  for (const name of ['level1-tree.webp', 'level1-conifer.webp', 'level1-bush.webp']) {
+    const asset = new URL(`../campaign/assets/${name}`, import.meta.url);
+    assert.ok(statSync(asset).size < 250_000, `${name} stays within the mobile asset budget`);
+  }
+  const treeRenderer = campaign.slice(campaign.indexOf('function drawLevelOneTree('), campaign.indexOf('function drawLevelOneMeadowDetails('));
+  assert.doesNotMatch(treeRenderer, /rotate|scale\(-/);
+  assert.match(campaign, /sprite\.naturalHeight\/sprite\.naturalWidth/);
+  assert.match(campaign, /function drawLevelOneConifer\(/);
+  assert.match(campaign, /function drawLevelOneBush\(/);
 });
