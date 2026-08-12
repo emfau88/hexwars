@@ -7,8 +7,7 @@ export default defineLevel({
   objective:'Halte beide Seiten stabil und nutze Bündelangriffe, um eine Front plötzlich zu überladen.',
   rule:'Bündelangriff wird freigeschaltet: Bis zu drei erreichbare Felder senden gemeinsam 50 %.',
   aiThinkMs:1450, aiDelaySeconds:4.5, aiSkill:.72, aiActions:1, neutralUnits:[4,9],
-  features:{all:true,group:true,relay:false}, theme:'marsh',
+  features:{all:true,group:true,relay:false,focus:true}, theme:'marsh',
   activeRows:[[],[3],[2,3,4],[1,2,4,5],[1,2,4,5],[1,2,4,5],[1,2,4,5],[1,2,4,5],[1,2,4,5],[1,2,3,4,5],[2,3,4],[3],[]],
   cells:Array.from({length:6},(_,index)=>({col:3,row:index+3,terrain:Terrain.Decor,decor:(index+3)%2?'marsh' as const:'water' as const})),
 });
-

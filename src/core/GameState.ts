@@ -1,5 +1,5 @@
 import { GAME_CONFIG } from './config';
-import { cellKey, hexDistance, isPlayable, neighborsOf } from './hex';
+import { cellKey, findOwnedPath, hexDistance, isPlayable, neighborsOf } from './hex';
 import { createSeededRandom, type RandomSource } from './random';
 import { Owner, Terrain, type ArmyMovement, type GameEvent, type GameSnapshot, type HexState, type MissionResult, type Point } from './types';
 import { buildLevel } from '../levels/buildLevel';
@@ -8,6 +8,7 @@ import { runAI, type AIContext } from '../systems/AISystem';
 import { resolveArrival, updateCombat } from '../systems/CombatSystem';
 import { updateGrowth } from '../systems/GrowthSystem';
 import { createMovement, updateMovements } from '../systems/MovementSystem';
+import { frontHexes, isFrontHex, SupplySystem } from '../systems/SupplySystem';
 import { evaluateVictory } from '../systems/VictorySystem';
 
 export class GameState {
@@ -27,6 +28,8 @@ export class GameState {
   private aiTimerMs = 0;
   private playerAiTimerMs = 0;
   private events: GameEvent[] = [];
+  private readonly supplySystem = new SupplySystem();
+  private readonly supplyFocus: Partial<Record<Owner, string | null>> = { [Owner.Player]: null, [Owner.Enemy]: null };
 
   get level() { return LEVELS[this.currentLevel] ?? LEVELS[0]; }
 
@@ -38,6 +41,8 @@ export class GameState {
     this.elapsed = 0; this.actions = 0; this.captures = 0; this.endgameStage = 0;
     this.aiTimerMs = 0; this.playerAiTimerMs = 0;
     this.result = null; this.resultReason = ''; this.events = [];
+    this.opponentEnabled = true; this.supplySystem.reset();
+    this.supplyFocus[Owner.Player] = null; this.supplyFocus[Owner.Enemy] = null;
     this.running = true;
   }
 
@@ -53,14 +58,16 @@ export class GameState {
     if (!from || !to || from === to || !isPlayable(from) || !isPlayable(to)) return false;
     const distance = hexDistance(from, to);
     if (distance === 1) return true;
+    if (this.level.features.supply && from.owner === to.owner && from.owner !== Owner.Neutral && findOwnedPath(this.hexes, from, to)) return true;
     return this.level.features.relay && from.terrain === Terrain.Relay && from.owner !== Owner.Neutral && distance <= GAME_CONFIG.relayRange;
   }
 
   send(from: HexState, to: HexState, owner: Owner, units: number, human = false): boolean {
     const amount = Math.floor(units);
     if (amount < 1 || from.owner !== owner || amount > Math.floor(from.units) || !this.canSend(from, to)) return false;
+    const ownedRoute = from.owner === to.owner && hexDistance(from, to) > 1 ? findOwnedPath(this.hexes, from, to) : null;
     from.units -= amount;
-    this.armies.push(createMovement(from, to, owner, amount));
+    this.armies.push(createMovement(from, to, owner, amount, ownedRoute ? 'reinforcement' : 'command', ownedRoute ?? [from, to]));
     if (human) this.actions += 1;
     this.events.push({ type: 'send', detail: { owner, human, units: amount, from } });
     return true;
@@ -110,6 +117,20 @@ export class GameState {
     return this.armies.filter((army) => army.owner === owner && army.toKey === cellKey(target)).reduce((sum, army) => sum + army.units, target.siege?.[owner] ?? 0);
   }
 
+  fronts(owner: Owner): HexState[] { return frontHexes(this.hexes, owner); }
+
+  focusedFront(owner: Owner): HexState | null {
+    const key = this.supplyFocus[owner];
+    return key ? this.hexes.find((hex) => cellKey(hex) === key) ?? null : null;
+  }
+
+  toggleSupplyFocus(hex: HexState, owner: Owner): boolean {
+    if (!this.level.features.focus || hex.owner !== owner || !isFrontHex(this.hexes, hex, owner)) return false;
+    const key = cellKey(hex);
+    this.supplyFocus[owner] = this.supplyFocus[owner] === key ? null : key;
+    return true;
+  }
+
   think(owner: Owner, skill: number, count = 1): number {
     const context: AIContext = {
       owner, elapsed: this.elapsed, endgameStage: this.endgameStage, hexes: this.hexes,
@@ -132,13 +153,18 @@ export class GameState {
       this.events.push({ type: 'endgame', detail: { stage: nextStage } });
     }
     updateGrowth(this.hexes, this.elapsed, deltaSeconds);
+    if (this.level.features.supply) {
+      for (const dispatch of this.supplySystem.update({ hexes: this.hexes, armies: this.armies, focus: this.supplyFocus }, deltaSeconds)) {
+        this.events.push({ type: 'supply', detail: dispatch });
+      }
+    }
     updateCombat(this.hexes, deltaSeconds, this.random, (target, oldOwner, newOwner) => {
       if (newOwner === Owner.Player) this.captures += 1;
       this.events.push({ type: 'capture', detail: { oldOwner, newOwner, target } });
     });
     updateMovements(this.armies, this.hexes, deltaSeconds, (movement, target) => {
       resolveArrival(movement, target);
-      if (target) this.events.push({ type: 'arrival', detail: { owner: movement.owner, target } });
+      if (target) this.events.push({ type: 'arrival', detail: { owner: movement.owner, target, kind: movement.kind } });
     });
     if (this.opponentEnabled && this.elapsed >= this.level.aiDelaySeconds) {
       this.aiTimerMs += deltaSeconds * 1000;

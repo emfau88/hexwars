@@ -62,17 +62,18 @@ Der Territory-Control-Kern, Canvas 2D und die Kampagnenprogression bleiben erhal
 - [x] Gegnerische Basis ohne `debugWin` über normale Sendung, Bewegung und Kampf erobert.
 - [x] Victory-Screen, Level-2-Unlock und gespeicherter Fortschritt nach neuem Seitenaufruf bestätigt.
 
-### Phase 4 – Supply-System — AUSSTEHEND
+### Phase 4 – Supply-System — ERLEDIGT
 
-- [ ] Front- und Hinterlanderkennung.
-- [ ] Konfigurierbare Garnison und automatische Überschussversorgung.
-- [ ] Physische, zeitgebundene Routen ausschließlich über eigenes Gebiet.
-- [ ] Kein automatischer Angriff auf neutrale oder gegnerische Felder.
-- [ ] Neurouting und sichere Rückgabe bei unterbrochenem Korridor.
-- [ ] Sinnvolle Verteilung auf mehrere Fronten.
-- [ ] Kontextueller Frontfokus mit konfigurierbarer Gewichtung.
-- [ ] Manueller Fernnachschub mit 50-/100-%-Regeln und realer Transportzeit.
-- [ ] Prototyptests A–G: Hinterland, kein Angriff, Trennung, zwei Fronten, Fokus, Ferntransport, Frontverschiebung.
+- [x] Front- und Hinterlanderkennung wird nach jeder Gebietsänderung aus dem Territory-Graphen neu berechnet.
+- [x] Zentrale `SUPPLY_CONFIG`: 20 % Garnison, Mindestreserve, Transportintervall/-tempo, Fokus- und Lastgewichtung.
+- [x] Hinterland verschickt ausschließlich den ganzzahligen Überschuss über physische, zeitgebundene Wege.
+- [x] Automatische Routen enthalten nur eigene Hexes und können weder neutrale noch gegnerische Felder betreten.
+- [x] Unterbrochene Korridore werden neu geroutet; ohne Route wird die komplette Ladung am letzten eigenen Feld gutgeschrieben.
+- [x] Mehrere Fronten werden nach Weglänge, vorhandenem Bestand und bereits ankommendem Supply verteilt.
+- [x] Kontextueller Frontfokus ab Level 6: eigenes Frontfeld antippen; konfigurierbare Gewichtung 3×; erneutes Antippen entfernt den Fokus.
+- [x] Manueller Fernnachschub per direktem Drag zwischen verbundenen eigenen Hexes, mit 50-/100-%-Regel und realer Wegzeit.
+- [x] Supply-Transporte sind als ruhige, goldumrandete Impulse sichtbar; Fokus erhält einen dezenten Ring.
+- [x] Prototyptests A–G bestanden: Hinterland, kein Angriff, Trennung, zwei Fronten, Fokus, Ferntransport, Frontverschiebung.
 
 ### Phase 5 – Level 1 neu gestalten — AUSSTEHEND
 
@@ -118,6 +119,9 @@ Der Territory-Control-Kern, Canvas 2D und die Kampagnenprogression bleiben erhal
 | 2026-08-12 | 3 | Unit-/Simulationstests | 16/16 bestanden |
 | 2026-08-12 | 3 | Playwright Desktop + Mobile-Porträt | 4/4 bestanden |
 | 2026-08-12 | 3 | Typecheck und Produktionsbuild | bestanden |
+| 2026-08-12 | 4 | Supply-Prototyptests A–G | 7/7 bestanden |
+| 2026-08-12 | 4 | Gesamte Unit-/Simulationssuite | 23/23 bestanden |
+| 2026-08-12 | 4 | Playwright inklusive Ferntransport/Fokus, Desktop + Mobile | 6/6 bestanden |
 
 ## Festgehaltene Befunde für spätere Phasen
 

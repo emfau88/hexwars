@@ -71,3 +71,38 @@ test('enemy acts and a completed mission persists its unlock after reload', asyn
   await expect(page.getByRole('button', { name: 'Level 2: ZWEI WEGE' })).toBeEnabled();
   await expect(page.getByText('1 / 10', { exact: true })).toBeVisible();
 });
+
+test('manual long-range reinforcement and contextual front focus use canvas input', async ({ page }) => {
+  await page.goto('/?autostart=1&level=0');
+  await page.evaluate(() => {
+    const api = window.__HEXFRONT__!; api.setOpponentEnabled(false);
+    for (const targetRow of [10, 9]) {
+      for (let attempt = 0; attempt < 20; attempt += 1) {
+        const board = api.getBoard();
+        if (board.find((hex) => hex.col === 3 && hex.row === targetRow)?.owner === 1) break;
+        const source = board.find((hex) => hex.col === 3 && hex.row === targetRow + 1 && hex.owner === 1);
+        if (source && source.units >= 2) api.send(source.col, source.row, 3, targetRow, .9);
+        api.simulate(5, .05);
+      }
+    }
+    api.simulate(12, .05);
+  });
+  const before = await page.evaluate(() => window.__HEXFRONT__!.getBoard()) as DebugBoard;
+  const source = before.find((hex) => hex.col === 3 && hex.row === 11)!;
+  const target = before.find((hex) => hex.col === 3 && hex.row === 9)!;
+  expect(target.owner).toBe(1);
+  await dragBetween(page, source, target);
+  await expect(page.locator('#actionStatus')).toHaveText('1');
+  await expect.poll(async () => {
+    const board = await page.evaluate(() => window.__HEXFRONT__!.getBoard()) as DebugBoard;
+    return board.find((hex) => hex.col === 3 && hex.row === 11)?.units ?? source.units;
+  }).toBeLessThan(source.units);
+
+  await page.goto('/?autostart=1&level=5');
+  const levelSix = await page.evaluate(() => window.__HEXFRONT__!.getBoard()) as DebugBoard;
+  const base = levelSix.find((hex) => hex.col === 3 && hex.row === 11)!;
+  const box = await page.locator('#gameCanvas').boundingBox();
+  if (!box) throw new Error('Canvas is not visible.');
+  await page.mouse.click(box.x + base.x, box.y + base.y);
+  await expect(page.locator('#toast')).toHaveText('Nachschubfokus gesetzt.');
+});

@@ -86,7 +86,7 @@ export interface ArmyMovement {
   toKey: string;
   dist: number;
   traveled: number;
-  kind: 'command' | 'supply';
+  kind: 'command' | 'reinforcement' | 'supply';
   path: string[];
   pathIndex: number;
 }
@@ -117,7 +117,7 @@ export interface GameSnapshot {
 
 export interface GameEventMap {
   send: { owner: Owner; human: boolean; units: number; from: Point };
-  arrival: { owner: Owner; target: HexState };
+  arrival: { owner: Owner; target: HexState; kind: ArmyMovement['kind'] };
   capture: { oldOwner: Owner; newOwner: Owner; target: HexState };
   result: { result: MissionResult; reason: string };
   endgame: { stage: number };
@@ -127,4 +127,3 @@ export interface GameEventMap {
 export type GameEvent<K extends keyof GameEventMap = keyof GameEventMap> = {
   [P in K]: { type: P; detail: GameEventMap[P] };
 }[K];
-

@@ -4,7 +4,7 @@ const defaultFeatures: FeatureFlags = {
   all: true,
   group: true,
   relay: true,
-  supply: false,
+  supply: true,
   focus: false,
 };
 

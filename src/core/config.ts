@@ -19,6 +19,7 @@ export const SUPPLY_CONFIG = Object.freeze({
   dispatchIntervalSeconds: 1.4,
   transportSpeedMultiplier: 0.72,
   focusWeight: 3,
+  loadBalanceWeight: 2.25,
 });
 
 export const WORLD_COLS = 7;

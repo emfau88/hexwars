@@ -89,6 +89,9 @@ export class BoardRenderer {
     if (hex.flash > 0) { BoardRenderer.path(this.context, hex.x, hex.y, this.radius * (.92 + hex.flash * .08)); this.context.strokeStyle = '#fff2c8'; this.context.globalAlpha = Math.min(1, hex.flash * 2); this.context.lineWidth = 3; this.context.stroke(); this.context.globalAlpha = 1; }
     if (hex.siege) { BoardRenderer.path(this.context, hex.x, hex.y, this.radius * .8); this.context.strokeStyle = '#e8c07d'; this.context.lineWidth = 3; this.context.stroke(); }
     if (this.selected === hex) { BoardRenderer.path(this.context, hex.x, hex.y, this.radius * .99); this.context.strokeStyle = '#e5a33d'; this.context.lineWidth = 3; this.context.stroke(); }
+    if (state.focusedFront(hex.owner) === hex) {
+      BoardRenderer.path(this.context, hex.x, hex.y, this.radius * 1.04); this.context.strokeStyle = '#f0c86c'; this.context.lineWidth = 2.5; this.context.setLineDash([3, 3]); this.context.stroke(); this.context.setLineDash([]);
+    }
     this.terrainGlyph(hex);
     this.context.fillStyle = colors.text; this.context.font = `700 ${Math.max(11, Math.floor(this.radius * .52))}px system-ui,sans-serif`;
     this.context.textAlign = 'center'; this.context.textBaseline = 'middle'; this.context.fillText(String(Math.floor(hex.units)), hex.x, hex.y - this.radius * .04);
@@ -120,4 +123,3 @@ export class BoardRenderer {
     this.context.fillText(`${Math.floor(this.selected.units)} → ${sent}`, this.selected.x, this.selected.y - this.radius * .62);
   }
 }
-

@@ -41,6 +41,13 @@ export class HexfrontApp {
       getMode: () => this.sendMode,
       onCommand: () => { navigator.vibrate?.(10); this.audio.beep(410, .035, .03); },
       onInvalid: (message) => this.ui.showToast(message), onActivate: () => this.audio.activate(),
+      onFocus: (hex) => {
+        if (!this.state.level.features.focus) return;
+        if (this.state.toggleSupplyFocus(hex, Owner.Player)) {
+          const focused = this.state.focusedFront(Owner.Player) === hex;
+          this.ui.showToast(focused ? 'Nachschubfokus gesetzt.' : 'Nachschubfokus aufgehoben.');
+        }
+      },
     });
     this.bindWindowEvents();
     this.renderer.resize(this.state);
@@ -98,7 +105,7 @@ export class HexfrontApp {
 
   private handleEvent(event: GameEvent): void {
     if (event.type === 'send') this.renderer.effects.burst(event.detail.from, OWNER_COLORS[event.detail.owner].edge, 5);
-    if (event.type === 'arrival') this.audio.beep(145, .035, .02);
+    if (event.type === 'arrival' && event.detail.kind !== 'supply') this.audio.beep(145, .035, .02);
     if (event.type === 'capture') {
       this.renderer.effects.burst(event.detail.target, OWNER_COLORS[event.detail.newOwner].edge, 14);
       if (event.detail.newOwner === Owner.Player || event.detail.oldOwner === Owner.Player) this.audio.beep(event.detail.newOwner === Owner.Player ? 560 : 105, .08, .05);
