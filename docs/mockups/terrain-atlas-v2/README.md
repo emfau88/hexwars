@@ -24,4 +24,22 @@ Refined campaign-menu direction based on the product-owner review of the first m
 - [Mobile portrait mockup](./terrain-atlas-v2-mobile.png)
 - [Deterministic responsive source](./index.html)
 
-The source exists only as a reviewable mockup. It is not connected to the production game.
+## Shore material experiment
+
+The optional shore-assets variant keeps all coastline geometry deterministic and
+derived from exposed water-cell edges. Generated bitmap assets contribute only
+surface character, so they cannot alter the grid, reverse a shoreline, place
+vegetation in water or distort at different aspect ratios.
+
+- [Water material](../../../public/assets/level1-water.webp)
+- [Shore material](../../../public/assets/level1-shore.webp)
+- [Desktop test render](./terrain-atlas-v2-shore-assets-desktop.png)
+- [Mobile portrait test render](./terrain-atlas-v2-shore-assets-mobile.png)
+
+This experiment deliberately uses a narrow three-layer coast: a soft contact
+shadow, textured sand/earth and a restrained light edge. Level 1 uses the same
+two production assets as a contained visual pilot.
+
+This page remains a reviewable layout reference, not a second game runtime or a
+parallel design branch. Runtime assets under `public/assets/` are the single
+source of truth.

@@ -20,7 +20,7 @@ The restructuring brief in `docs/auftrag-hexfront-neustrukturierung.md` is compl
 | 7 | Open | English-default runtime localization and persistent `EN | DE` toggle are not implemented. |
 | 8 | Partial | Real drag input and reduced Level-1 HUD exist; paused first action, tap-origin/tap-target and keyboard-equivalent input remain. |
 | 9 | Open | No shared visual direction has been approved; the current menu/board mismatch is confirmed. |
-| 10 | Open, reframed | Visible hexes must remain. Coherent water, shores and vegetation should be built across clearly readable decorative hexes, not replace the hex structure. |
+| 10 | Partial, Level 1 pilot | Visible hexes remain. Level 1 now uses generated water/shore materials with code-derived coast geometry only on exposed water edges; extension to other biomes and maps still requires approval. |
 | 11 | Partial | Levels 1 and 2 were rebuilt and tested; Level 3, mastery goals and human acquisition testing remain. |
 | 12 | Partial | Icon labels, reduced-motion CSS and 44 px touch targets exist; keyboard, zoom, non-color state and assistive-technology testing remain. |
 | 13 | Open | No production telemetry or consent model. |
@@ -40,7 +40,7 @@ These small corrections were approved separately from the full production roadma
 - Portrait mobile shows a compact current-act route before the mission dossier.
 - The AI now begins low-priority rear-to-front logistics once a front is established; Level 5 also has a bounded late phase to prevent the observed static reserve deadlock. This is a pragmatic human-versus-AI safeguard, not a claim of solved AI-versus-AI balance.
 - Correct base coordinates, rather than any captured base tile, now decide victory.
-- These contracts now sit inside a 31-test logic/simulation suite and a 10-flow desktop/mobile Playwright suite. A deterministic ten-level balance runner exists; the large-batch distributions and thresholds required to complete step 3 remain outstanding.
+- These contracts now sit inside a 34-test logic/simulation suite and a 10-flow desktop/mobile Playwright suite. A deterministic ten-level balance runner exists; the large-batch distributions and thresholds required to complete step 3 remain outstanding.
 
 ## How to read this roadmap
 
