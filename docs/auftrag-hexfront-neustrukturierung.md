@@ -75,12 +75,18 @@ Der Territory-Control-Kern, Canvas 2D und die Kampagnenprogression bleiben erhal
 - [x] Supply-Transporte sind als ruhige, goldumrandete Impulse sichtbar; Fokus erhält einen dezenten Ring.
 - [x] Prototyptests A–G bestanden: Hinterland, kein Angriff, Trennung, zwei Fronten, Fokus, Ferntransport, Frontverschiebung.
 
-### Phase 5 – Level 1 neu gestalten — AUSSTEHEND
+### Phase 5 – Level 1 neu gestalten — ERLEDIGT
 
-- [ ] Nur 50 %, keine Relais, keine Bündelmechanik.
-- [ ] Frühe echte Entscheidung zwischen kurzem/teurem und längerem/produktionsstärkerem Weg.
-- [ ] Zieltempo per Playtest prüfen: erste Eingabe 2–4 s, erste Eroberung <10 s, Gegner 6–10 s, Begegnung 20–35 s, Sieg 60–100 s.
-- [ ] Schwache, aber früher sichtbare KI.
+- [x] Nur 50 %, keine Relais, keine Bündelmechanik und kein Frontfokus.
+- [x] Symmetrische frühe Entscheidung für beide Seiten eingebaut.
+- [x] Direkte Route: weniger Felder, aber ein neutraler 8er-Widerstand.
+- [x] Ökonomieroute: drei zusätzliche Schritte und ausschließlich schwache 2er-/3er-Felder für mehr Produktion.
+- [x] Beide Routen sind echte zusammenhängende Hexpfade und laufen an derselben Front wieder zusammen.
+- [x] Texte beschreiben Tempo gegen Gebietsökonomie; keine irreführenden Versprechen von „sicher“, „riskant“ oder „Täuschung“.
+- [x] KI startet nach 6,5 s, denkt alle 2,5 s und bleibt mit Skill 0,40 klar einsteigerfreundlich.
+- [x] Deterministischer Pacing-Smoke: erste Entscheidung 2,5 s, erste Eroberung 3,0 s, erste KI-Aktion 9,0 s, Sieg 79,0 s.
+- [x] Mobile-Porträt visuell geprüft; Verzweigung, Zahlen und Dekoflächen bleiben lesbar.
+- Hinweis: Die gewünschte erste direkte Gegnerbegegnung von 20–35 s bleibt ein qualitativer Human-Playtest-Messpunkt. Der reproduzierbare Bot-Smoke ersetzt keine Nutzertests.
 
 ### Phase 6 – Core-UX — AUSSTEHEND
 
@@ -122,6 +128,8 @@ Der Territory-Control-Kern, Canvas 2D und die Kampagnenprogression bleiben erhal
 | 2026-08-12 | 4 | Supply-Prototyptests A–G | 7/7 bestanden |
 | 2026-08-12 | 4 | Gesamte Unit-/Simulationssuite | 23/23 bestanden |
 | 2026-08-12 | 4 | Playwright inklusive Ferntransport/Fokus, Desktop + Mobile | 6/6 bestanden |
+| 2026-08-12 | 5 | Level-1-Topologie und Trade-off | bestanden |
+| 2026-08-12 | 5 | Deterministischer Pacing-Smoke | Sieg 79,0 s; erste Eroberung 3,0 s; KI 9,0 s |
 
 ## Festgehaltene Befunde für spätere Phasen
 
