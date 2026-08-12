@@ -106,3 +106,13 @@ test('manual long-range reinforcement and contextual front focus use canvas inpu
   await page.mouse.click(box.x + base.x, box.y + base.y);
   await expect(page.locator('#toast')).toHaveText('Nachschubfokus gesetzt.');
 });
+
+test('all ten campaign levels start with a valid board in this viewport', async ({ page }) => {
+  for (let level = 0; level < 10; level += 1) {
+    await page.goto(`/?unlock=1&autostart=1&level=${level}`);
+    await expect(page.locator('#headerLevel')).toContainText(`LEVEL ${level + 1}`);
+    const state = await page.evaluate(() => ({ state: window.__HEXFRONT__?.getState(), board: window.__HEXFRONT__?.getBoard() }));
+    expect(state.state?.running).toBe(true);
+    expect(state.board?.filter((hex) => hex.terrain !== 5).length).toBeGreaterThan(2);
+  }
+});

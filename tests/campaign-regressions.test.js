@@ -23,7 +23,7 @@ test('campaign runtime is split into typed modules without ts-nocheck', () => {
 test('Level 1 teaches 50 percent and Level 2 unlocks 100 percent', () => {
   assert.match(level1, /sendest jeweils 50 %|sendest du jeweils 50 %/);
   assert.match(level1, /features: \{ all: false, group: false, relay: false \}/);
-  assert.match(level2, /100-%-Sendungen werden freigeschaltet/);
+  assert.match(level2, /100 % wird freigeschaltet/);
   assert.match(level2, /features:\{all:true,group:false,relay:false\}/);
 });
 

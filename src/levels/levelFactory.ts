@@ -18,6 +18,7 @@ export function defineLevel(
   return {
     cols: 7,
     rows: 13,
+    mirrorNeutral: true,
     ...level,
     features: { ...defaultFeatures, ...level.features },
   };

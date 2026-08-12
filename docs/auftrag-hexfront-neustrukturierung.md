@@ -98,12 +98,17 @@ Der Territory-Control-Kern, Canvas 2D und die Kampagnenprogression bleiben erhal
 - [x] Aktionen/Eroberungen bleiben für Ergebnis, Telemetrie und Tests erhalten, sind im primären Lage-HUD aber nicht mehr sichtbar.
 - [x] Mobile Touch-Ziele der sichtbaren Bottom-Bar auf gemessene 44 px Mindesthöhe angehoben.
 
-### Phase 7 – Kampagnenprogression und Supply-aware Balance — AUSSTEHEND
+### Phase 7 – Kampagnenprogression und Supply-aware Balance — ERLEDIGT
 
-- [ ] Bestehende Progressionsreihenfolge erhalten und alle zehn Level neu prüfen.
-- [ ] Level 2 so gestalten, dass 50 % und 100 % beide sinnvoll und riskant sind.
-- [ ] Endgame-System zunächst erhalten; normale Matchdauer priorisieren.
-- [ ] Alle Level auf Desktop und Mobile spielen/simulieren und Balancebefunde dokumentieren.
+- [x] Bestehende Progressionsreihenfolge unverändert erhalten.
+- [x] Alle symmetrischen Levels spiegeln zufällige Neutralstärken; kein Seed darf eine Seite unsichtbar bevorzugen.
+- [x] Level 2: schwaches 4er-Ziel für 50 % mit Reserve versus 12er-Ziel für sofortigen 100-%-Durchbruch bei leerer Quelle.
+- [x] Funktionale Tests bestätigen: 50 % erobert das schwache Ziel, scheitert sofort am starken; 100 % bricht das starke Ziel, leert aber die Basis.
+- [x] Endgame unverändert: Ausklang ab 180 s, Wachstumsende ab 240 s.
+- [x] Reproduzierbarer Balance-Runner für alle zehn Levels unter `npm run balance`.
+- [x] Supply-aware Messmatrix mit Ergebnissen, Dauer und verbleibenden Kräften dokumentiert: `docs/campaign-balance-report.md`.
+- [x] Alle zehn Levels in Playwright sowohl auf Desktop als auch Mobile-Porträt gestartet und auf gültiges Board geprüft.
+- [x] Level 6 und 8 als priorisierte Human-Playtest-Kandidaten festgehalten; keine Bot-vs-KI-Überanpassung.
 
 ### Phase 8 – gezielter Polish und Abnahme — AUSSTEHEND
 
@@ -134,6 +139,9 @@ Der Territory-Control-Kern, Canvas 2D und die Kampagnenprogression bleiben erhal
 | 2026-08-12 | 5 | Deterministischer Pacing-Smoke | Sieg 79,0 s; erste Eroberung 3,0 s; KI 9,0 s |
 | 2026-08-12 | 6 | Core-Loop-Feedback, Desktop + Mobile-Porträt | visuell geprüft |
 | 2026-08-12 | 6 | Mobile Bottom-Bar | sichtbare Ziele jeweils 44 px; irrelevante Modi verborgen |
+| 2026-08-12 | 7 | Level-2-Entscheidungstests | 3/3 bestanden |
+| 2026-08-12 | 7 | Supply-aware Balance-Matrix | 10/10 Levels mit Ergebnis innerhalb 240 s |
+| 2026-08-12 | 7 | Alle Levelstarts, Desktop + Mobile-Porträt | 20/20 Starts gültig |
 
 ## Festgehaltene Befunde für spätere Phasen
 
