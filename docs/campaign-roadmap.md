@@ -2,7 +2,34 @@
 
 **Derived from:** `docs/campaign-audit.md`  
 **Roadmap date:** 11 August 2026  
+**Implementation status updated:** 12 August 2026
 **Principle:** no production implementation begins until the relevant decision gate is approved
+
+## Current implementation status — 12 August 2026
+
+The restructuring brief in `docs/auftrag-hexfront-neustrukturierung.md` is complete. This roadmap remains the product and commercial plan beyond that technical/core-gameplay brief; “complete” below therefore means the roadmap exit criteria, not merely that implementation has started.
+
+| Step | Status | Current evidence / remaining gap |
+|---:|---|---|
+| 1 | Open | `HEXFRONT` is still a collision-prone working title; promise and clearance are not approved. |
+| 2 | Open | Some command-language outliers were removed, but no approved bilingual lexicon exists. |
+| 3 | Partial | `npm run balance` is deterministic and covers all ten maps; 1,000-run distributions, bias thresholds and CI failure gates remain. |
+| 4 | Partial | Symmetric decline/stop behavior exists at 180/240 s; alternatives and human comprehension have not been compared. |
+| 5 | Open | The earlier mockups were rejected. Three new desktop/mobile menu directions are required. |
+| 6 | Mostly complete | Runtime, level data, systems, input, rendering, UI, audio, persistence and debug are separated and typed; locale catalogues and CSS token consolidation remain. |
+| 7 | Open | English-default runtime localization and persistent `EN | DE` toggle are not implemented. |
+| 8 | Partial | Real drag input and reduced Level-1 HUD exist; paused first action, tap-origin/tap-target and keyboard-equivalent input remain. |
+| 9 | Open | No shared visual direction has been approved; the current menu/board mismatch is confirmed. |
+| 10 | Open, reframed | Visible hexes must remain. Coherent water, shores and vegetation should be built across clearly readable decorative hexes, not replace the hex structure. |
+| 11 | Partial | Levels 1 and 2 were rebuilt and tested; Level 3, mastery goals and human acquisition testing remain. |
+| 12 | Partial | Icon labels, reduced-motion CSS and 44 px touch targets exist; keyboard, zoom, non-color state and assistive-technology testing remain. |
+| 13 | Open | No production telemetry or consent model. |
+| 14 | Partial | All ten maps are supply-aware, mirrored where symmetric and regression-tested; authored roles/landmarks and human balance proof remain. |
+| 15 | Open | Results, mastery and next-dossier flow are not production-ready. |
+| 16 | Open | Sound remains a functional prototype without an authored nonmilitary palette. |
+| 17 | Partial | Build, browser matrix and Pages CI exist; screenshot regression, performance budgets, save recovery and release packaging remain. |
+| 18 | Open | Premium scope and monetization await vertical-slice data. |
+| 19 | Deferred | Post-launch systems remain intentionally out of scope. |
 
 ## Completed targeted corrections — 11 August 2026
 
@@ -13,7 +40,7 @@ These small corrections were approved separately from the full production roadma
 - Portrait mobile shows a compact current-act route before the mission dossier.
 - The AI now begins low-priority rear-to-front logistics once a front is established; Level 5 also has a bounded late phase to prevent the observed static reserve deadlock. This is a pragmatic human-versus-AI safeguard, not a claim of solved AI-versus-AI balance.
 - Correct base coordinates, rather than any captured base tile, now decide victory.
-- Five focused campaign regression tests cover these contracts; the broad balance harness in step 3 is still outstanding.
+- These contracts now sit inside a 31-test logic/simulation suite and a 10-flow desktop/mobile Playwright suite. A deterministic ten-level balance runner exists; the large-batch distributions and thresholds required to complete step 3 remain outstanding.
 
 ## How to read this roadmap
 
@@ -245,7 +272,7 @@ Exit criteria:
 - all primary touch targets at least 44×44 px;
 - 320–480 px portrait and standard desktop widths pass visual QA.
 
-### 10. Replace decorative hex tiles with a continuous environment layer
+### 10. Unify decorative hexes into coherent terrain regions
 
 **Audit:** VIS-02, VIS-03, VIS-04, A11Y-02  
 **Effort:** XL  
@@ -253,10 +280,11 @@ Exit criteria:
 
 Actions:
 
-- generate connected terrain regions from decorative cells;
-- draw shorelines at region boundaries;
-- remove most internal decorative hex outlines;
-- group trees/reeds across cells with playable-edge clearance;
+- retain the complete, clearly visible hex structure across playable and decorative terrain;
+- generate connected terrain regions from adjacent decorative cells without turning the board into a freeform background illustration;
+- draw coherent water and shoreline transitions across neighboring hexes while keeping the grid rhythm readable;
+- use a restrained library of trees, conifers, bushes, small trees, reeds and grass variations;
+- group vegetation across neighboring cells only where it does not obscure hex boundaries or playable-edge clearance;
 - author one or two landmarks per map;
 - redesign ruins so they cannot read as locks;
 - separate water from rival blue;
@@ -266,7 +294,7 @@ Actions:
 Exit criteria:
 
 - players distinguish playable versus decorative areas in under two seconds;
-- water is perceived as one body, not adjacent blue tiles;
+- water is perceived as one connected body while the underlying hex structure remains obvious;
 - no decorative symbol is mistaken for a lock, objective or selectable cell;
 - ownership remains readable in grayscale and common color-vision simulations.
 
