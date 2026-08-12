@@ -11,14 +11,26 @@ npm install
 npm run dev
 ```
 
-Open the Vite URL shown in the terminal to play HEXFRONT. `npm test`, `npm run typecheck`, and `npm run build` verify the product without serving it.
+Open the Vite URL shown in the terminal to play HEXFRONT.
+
+```bash
+npm run typecheck
+npm test
+npm run test:browser
+npm run balance
+npm run build
+```
+
+The browser suite covers desktop and mobile portrait. The balance runner is deterministic and reports all ten levels; it is a regression instrument, not a replacement for human playtests.
 
 ## Current structure
 
 - `index.html` – standalone HEXFRONT document shell
-- `src/` – Vite TypeScript app and Canvas runtime
+- `src/` – typed game state, levels, systems, input, Canvas rendering, UI, audio, persistence and debug boundary
 - `public/assets/` – campaign-owned runtime art
-- `tests/` – current HEXFRONT regression suite
+- `tests/` – unit, simulation, Supply A–G and Playwright regression suites
+- `docs/auftrag-hexfront-neustrukturierung.md` – completed phase record and verification log
+- `docs/campaign-balance-report.md` – reproducible supply-aware campaign matrix
 - `legacy/tactics/` – preserved historical tactics prototype; no product dependency
 
-The game is being migrated to a Vite + TypeScript + Canvas 2D codebase in small verified phases. The migration baseline and invariants live in [`docs/campaign-migration-baseline.md`](./docs/campaign-migration-baseline.md).
+HEXFRONT uses Vite, strict TypeScript, ES modules and Canvas 2D. The migration baseline and invariants live in [`docs/campaign-migration-baseline.md`](./docs/campaign-migration-baseline.md).

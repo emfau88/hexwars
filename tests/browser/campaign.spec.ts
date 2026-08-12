@@ -65,7 +65,7 @@ test('enemy acts and a completed mission persists its unlock after reload', asyn
     return api.getState().result;
   }), { timeout: 12_000 }).toBe('victory');
   await expect(page.locator('#verdict')).toHaveText('SIEG');
-  await page.getByRole('button', { name: 'KAMPAGNENKARTE' }).click();
+  await page.getByRole('button', { name: 'KAMPAGNENKARTE', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Level 2: ZWEI WEGE' })).toBeEnabled();
   await page.goto('/');
   await expect(page.getByRole('button', { name: 'Level 2: ZWEI WEGE' })).toBeEnabled();
@@ -114,5 +114,36 @@ test('all ten campaign levels start with a valid board in this viewport', async 
     const state = await page.evaluate(() => ({ state: window.__HEXFRONT__?.getState(), board: window.__HEXFRONT__?.getBoard() }));
     expect(state.state?.running).toBe(true);
     expect(state.board?.filter((hex) => hex.terrain !== 5).length).toBeGreaterThan(2);
+  }
+});
+
+test('responsive shell has no page overflow and mobile controls meet the touch floor', async ({ page }) => {
+  await page.goto('/');
+  const menuMetrics = await page.evaluate(() => ({
+    viewport: innerWidth,
+    body: document.body.scrollWidth,
+    mobile: matchMedia('(max-width:900px), (max-height:620px)').matches,
+    topControls: [...document.querySelectorAll<HTMLButtonElement>('.campaignTop button')]
+      .filter((button) => getComputedStyle(button).display !== 'none')
+      .map((button) => ({ width: button.getBoundingClientRect().width, height: button.getBoundingClientRect().height })),
+  }));
+  expect(menuMetrics.body).toBeLessThanOrEqual(menuMetrics.viewport);
+  if (menuMetrics.mobile) {
+    expect(Math.min(...menuMetrics.topControls.map(({ width }) => width))).toBeGreaterThanOrEqual(44);
+    expect(Math.min(...menuMetrics.topControls.map(({ height }) => height))).toBeGreaterThanOrEqual(44);
+  }
+  await page.getByRole('button', { name: 'KAMPAGNE BEGINNEN' }).click();
+  const gameMetrics = await page.evaluate(() => ({
+    viewport: innerWidth,
+    body: document.body.scrollWidth,
+    mobile: matchMedia('(max-width:900px), (max-height:520px)').matches,
+    controls: [...document.querySelectorAll<HTMLButtonElement>('#mobileBar button')]
+      .filter((button) => getComputedStyle(button).display !== 'none')
+      .map((button) => ({ width: button.getBoundingClientRect().width, height: button.getBoundingClientRect().height })),
+  }));
+  expect(gameMetrics.body).toBeLessThanOrEqual(gameMetrics.viewport);
+  if (gameMetrics.mobile) {
+    expect(Math.min(...gameMetrics.controls.map(({ width }) => width))).toBeGreaterThanOrEqual(44);
+    expect(Math.min(...gameMetrics.controls.map(({ height }) => height))).toBeGreaterThanOrEqual(44);
   }
 });

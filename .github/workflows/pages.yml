@@ -1,4 +1,4 @@
-name: Deploy Hexwars to GitHub Pages
+name: Verify and deploy HEXFRONT
 
 on:
   push:
@@ -26,8 +26,20 @@ jobs:
         with:
           node-version: 24
 
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
       - name: Test game logic
         run: npm test
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Test desktop and mobile browser flows
+        run: npm run test:browser
 
       - name: Build static site
         run: npm run build

@@ -22,7 +22,7 @@
     touch-action:none; user-select:none; -webkit-user-select:none;
   }
   button { font:inherit; }
-  #app { position:fixed; inset:0; display:flex; flex-direction:column; }
+  #app { position:fixed; inset:0; display:flex; flex-direction:column; overflow:hidden; }
   header {
     min-height:58px; display:grid; grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
     align-items:center; gap:10px; padding:8px 14px; z-index:5;
@@ -600,4 +600,41 @@ body.campaignOpen { touch-action:pan-y; }
     #mobileBar .modeBtn, #mobileBar .utilityBtn { min-height:44px; }
     #app.introLevel #mobileBar { grid-template-columns:minmax(120px,1fr) auto auto auto; }
     #app.introLevel #mobileBar .modeBtn:disabled { display:none; }
+  }
+
+  /* Final readability and accessibility floor. */
+  @media (min-width:901px) and (min-height:521px) {
+    #layout { grid-template-columns:minmax(0,1fr) 270px; }
+    #sidePanel { padding:15px; gap:12px; }
+    .eyebrow,.statLabel,.gameTitle small { font-size:10px; }
+    #missionText,#ruleText { font-size:12px; line-height:1.55; }
+    .infoGrid,.legend { font-size:11px; }
+    .modeBtn,.utilityBtn { min-height:44px; font-size:11px; }
+    #bestText { font-size:10px; }
+    .nodeCopy small,.previewTopline,.previewLegend,.actTab span,.actTab small,.actGroupHeader span { font-size:9px; }
+    .nodeCopy strong,.actTab strong { font-size:11px; }
+    .briefItem span,.menuMeta span,.missionControlHint { font-size:10px; }
+  }
+
+  @media (max-width:900px), (max-height:620px) {
+    .statLabel { display:none; }
+    .statValue { font-size:13px; }
+    .menuIconBtn { width:44px; height:44px; flex:0 0 44px; }
+    #mobileBar .utilityBtn { width:44px; }
+    .progressHeading,.actTab span,.actTab small,.actGroupHeader span,.nodeCopy small,.previewTopline,.previewLegend { font-size:9px; }
+    .actTab strong,.nodeCopy strong { font-size:11px; }
+    .menuKicker,.campaignEyebrow,.briefItem span,.menuMeta span { font-size:10px; }
+    .missionControlHint { font-size:11px; }
+    #toast,#hint { font-size:11px; line-height:1.35; }
+  }
+
+  @media (max-width:430px) {
+    .progressText { min-width:78px; }
+    .progressHeading { display:block; text-align:center; }
+    .progressHeading span { display:none; }
+    .progressHeading b { white-space:nowrap; }
+  }
+
+  @media (prefers-reduced-motion:reduce) {
+    *,*::before,*::after { scroll-behavior:auto !important; transition-duration:.01ms !important; animation-duration:.01ms !important; animation-iteration-count:1 !important; }
   }

@@ -110,12 +110,19 @@ Der Territory-Control-Kern, Canvas 2D und die Kampagnenprogression bleiben erhal
 - [x] Alle zehn Levels in Playwright sowohl auf Desktop als auch Mobile-Porträt gestartet und auf gültiges Board geprüft.
 - [x] Level 6 und 8 als priorisierte Human-Playtest-Kandidaten festgehalten; keine Bot-vs-KI-Überanpassung.
 
-### Phase 8 – gezielter Polish und Abnahme — AUSSTEHEND
+### Phase 8 – gezielter Polish und Abnahme — ERLEDIGT
 
-- [ ] Lesbarkeit, Input-, Bewegungs-, Kampf-, Supply- und Ergebnisfeedback polieren.
-- [ ] Mobile Textgrößen, Touch-Ziele, Drag/Scroll-Konflikte, Frontfokus und Ferntransport prüfen.
-- [ ] Abschließender Typecheck, Unit-, Browser- und Build-Lauf.
-- [ ] Dokumentation und Commitübersicht finalisieren.
+- [x] Dauerhafte UI-Kleinsttexte auf Desktop und Mobile angehoben; mobile Statistikbeschriftungen zugunsten der Kernwerte entfernt.
+- [x] Sichtbare Mobile-Touchziele in beiden Achsen auf mindestens 44 px angehoben; semantische Labels für reine Icon-Buttons ergänzt.
+- [x] App-Shell gegen Seiten-Overflow und die Canvas-Ebene gegen Scroll-/Drag-Konflikte abgesichert.
+- [x] Input-, Bewegungs-, Kampf-, Supply- und Eroberungsfeedback in den vorangehenden UX-/Supply-Phasen umgesetzt und in der finalen Browserabnahme erneut geprüft.
+- [x] Mobile-Porträt: Kampagnenroute vor Dossier, reduziertes Tutorial-HUD, echter Pointer-Drag, Frontfokus und Ferntransport geprüft.
+- [x] Übermäßig militärische Menüformulierungen `TACTICAL FRONT COMMAND` und `VOM ERSTEN BEFEHL` durch territoriale/taktische Sprache ersetzt.
+- [x] `prefers-reduced-motion` berücksichtigt.
+- [x] Relative Build- und Landschafts-Assetpfade für GitHub-Pages-Unterpfade abgesichert.
+- [x] Deployment-Workflow führt vor dem Build Typecheck, Unit-/Simulationstests und die Desktop-/Mobile-Browsersuite aus.
+- [x] Abschließender Typecheck, 31 Unit-/Simulationstests, 10 Playwright-Tests und Produktionsbuild bestanden.
+- [x] README, Auftragsakte und Commitübersicht finalisiert.
 
 ## Verifikationsprotokoll
 
@@ -142,11 +149,30 @@ Der Territory-Control-Kern, Canvas 2D und die Kampagnenprogression bleiben erhal
 | 2026-08-12 | 7 | Level-2-Entscheidungstests | 3/3 bestanden |
 | 2026-08-12 | 7 | Supply-aware Balance-Matrix | 10/10 Levels mit Ergebnis innerhalb 240 s |
 | 2026-08-12 | 7 | Alle Levelstarts, Desktop + Mobile-Porträt | 20/20 Starts gültig |
+| 2026-08-12 | 8 | TypeScript-Typecheck | bestanden |
+| 2026-08-12 | 8 | Unit-, Simulation-, Level- und Supply-Suite | 31/31 bestanden |
+| 2026-08-12 | 8 | Playwright Desktop + Mobile-Porträt | 10/10 bestanden |
+| 2026-08-12 | 8 | Produktionsbuild | bestanden; relative Assetpfade geprüft |
+| 2026-08-12 | 8 | Mobile UI | Kerntexte 10–11 px; sichtbare Touchziele mindestens 44 × 44 px |
 
-## Festgehaltene Befunde für spätere Phasen
+## Abnahme und verbleibende Human-Playtests
 
-- Mobile Bottom-Bar: gemessene Buttonhöhen von rund 37–42 px unterschreiten teilweise das 44-px-Mindestziel; Behebung in Phase 8.
+- Der technische Auftrag ist vollständig umgesetzt; es bestehen keine bekannten blockierenden Funktions- oder Buildfehler.
+- Level 1 erreicht im deterministischen Pacing-Smoke die technischen Zielkorridore. Die gewünschte erste direkte Begegnung nach etwa 20–35 s und ein normaler Sieg nach 60–100 s müssen zusätzlich mit neuen menschlichen Spielern validiert werden.
+- Level 6 und Level 8 bleiben die wichtigsten Human-Playtest-Kandidaten, weil der deterministische Balance-Agent dort die größten Auffälligkeiten zeigte. Das ist bewusst keine Einladung zu Bot-vs.-Bot-Überanpassung.
 - Die Begriffe „Täuschung“ und „sicherer Weg“ werden nicht als Kartenversprechen verwendet, wenn vollständige Information und direkte Reaktion diese Behauptung nicht tragen. Levelentscheidungen werden über Tempo, Truppenkosten, Produktion und Frontgeometrie messbar gemacht.
+
+## Commitübersicht
+
+- `8ffecc5` – `docs: record campaign migration baseline`
+- `9ef8e56` – `refactor: isolate standalone campaign app`
+- `7b49e12` – `refactor: split campaign monolith into modules`
+- `65bc070` – `test: add functional campaign regression suite`
+- `9b5221c` – `feat: add supply network and long-range reinforcement`
+- `895c790` – `design: rebuild level 1 decision structure`
+- `78d2876` – `ui: clarify core commands and simplify tutorial HUD`
+- `b59726e` – `balance: validate supply-aware campaign progression`
+- Phase 8 – `ui: finish responsive polish and release verification`
 
 ## Noch ausdrücklich ausgeschlossen
 

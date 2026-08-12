@@ -12,9 +12,9 @@ const decorPalette: Record<DecorType, { fill: string; edge: string }> = {
 
 export class LandscapeRenderer {
   private readonly sprites = {
-    tree: this.load('/assets/level1-tree.webp'),
-    conifer: this.load('/assets/level1-conifer.webp'),
-    bush: this.load('/assets/level1-bush.webp'),
+    tree: this.load(`${import.meta.env.BASE_URL}assets/level1-tree.webp`),
+    conifer: this.load(`${import.meta.env.BASE_URL}assets/level1-conifer.webp`),
+    bush: this.load(`${import.meta.env.BASE_URL}assets/level1-bush.webp`),
   };
 
   private load(source: string): HTMLImageElement {
@@ -90,4 +90,3 @@ export class LandscapeRenderer {
     }
   }
 }
-

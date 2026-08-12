@@ -12,6 +12,8 @@ const victory = read('../src/systems/VictorySystem.ts');
 const input = read('../src/input/InputController.ts');
 const state = read('../src/core/GameState.ts');
 const main = read('../src/main.ts');
+const landscape = read('../src/rendering/LandscapeRenderer.ts');
+const vite = read('../vite.config.ts');
 const styles = read('../src/styles.css');
 
 test('campaign runtime is split into typed modules without ts-nocheck', () => {
@@ -62,4 +64,10 @@ test('Level 1 landscape assets stay within the mobile budget', () => {
     const asset = new URL(`../public/assets/${name}`, import.meta.url);
     assert.ok(statSync(asset).size < 250_000, `${name} stays below 250 KB`);
   }
+});
+
+test('production assets support GitHub Pages sub-path hosting', () => {
+  assert.match(vite, /base: '\.\/'/);
+  assert.match(landscape, /import\.meta\.env\.BASE_URL/);
+  assert.doesNotMatch(landscape, /load\('\/assets\//);
 });
