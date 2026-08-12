@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, statSync } from 'node:fs';
 import test from 'node:test';
 
-const campaign = readFileSync(new URL('../campaign/index.html', import.meta.url), 'utf8');
+const campaign = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 
 function levelBlock(roman, nextRoman) {
   const start = campaign.indexOf(`name:'${roman} `);
@@ -58,7 +58,7 @@ test('Level 1 keeps a full visible hex field with bounded terrain decoration', (
   assert.match(campaign, /function drawLevelOneWaterShore\(/);
   assert.match(campaign, /if\(currentLevel===0\)\{drawLevelOneDecorHex\(h\);return;\}/);
   for (const name of ['level1-tree.webp', 'level1-conifer.webp', 'level1-bush.webp']) {
-    const asset = new URL(`../campaign/assets/${name}`, import.meta.url);
+    const asset = new URL(`../assets/${name}`, import.meta.url);
     assert.ok(statSync(asset).size < 250_000, `${name} stays within the mobile asset budget`);
   }
   const treeRenderer = campaign.slice(campaign.indexOf('function drawLevelOneTree('), campaign.indexOf('function drawLevelOneMeadowDetails('));

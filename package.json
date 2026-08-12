@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "A compact turn-based hex tactics game for the browser.",
+  "description": "HEXFRONT, a compact real-time territory-control campaign for the browser.",
   "scripts": {
     "build": "node scripts/build.mjs",
     "test": "node --test"
