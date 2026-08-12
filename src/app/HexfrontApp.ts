@@ -47,6 +47,7 @@ export class HexfrontApp {
     this.showMap(this.progressStore.focus(this.progress));
     installDebugApi({
       startLevel: (index) => this.startLevel(index), showMap: () => this.showMap(), setAutoplay: (value) => { this.state.autoplay = value; },
+      setOpponentEnabled: (value) => { this.state.opponentEnabled = value; },
       getState: () => ({ ...this.state.snapshot(), progress: this.progress }),
       getBoard: () => this.state.hexes.map(({ col, row, owner, units, terrain, decor, x, y }) => ({ col, row, owner, units, terrain, decor, x, y })),
       send: (fromCol, fromRow, toCol, toRow, fraction = .5) => {
@@ -55,7 +56,7 @@ export class HexfrontApp {
       },
       think: (owner = Owner.Enemy) => this.state.think(owner, .9),
       simulate: (seconds = 300, step = .05) => { for (let index = 0; index < Math.ceil(seconds / step) && this.state.running; index += 1) this.state.update(step); this.consumeEvents(); return this.state.snapshot(); },
-      debugWin: () => this.state.end('victory', 'Debug-Sieg.'), resetProgress: () => this.resetProgress(true),
+      debugWin: () => { this.state.end('victory', 'Debug-Sieg.'); this.consumeEvents(); }, resetProgress: () => this.resetProgress(true),
     });
     const requestedLevel = Number(this.parameters.get('level'));
     if (this.parameters.get('autostart') === '1') this.startLevel(Number.isFinite(requestedLevel) ? requestedLevel : 0);
@@ -85,8 +86,9 @@ export class HexfrontApp {
   private frame = (time: number): void => {
     const delta = Math.min(.05, (time - this.lastFrame) / 1000); this.lastFrame = time;
     if (this.state.running) {
-      this.state.update(delta * this.debugSpeed); this.renderer.effects.update(delta * this.debugSpeed); this.consumeEvents(); this.ui.updateHUD(this.state);
+      this.state.update(delta * this.debugSpeed); this.renderer.effects.update(delta * this.debugSpeed); this.ui.updateHUD(this.state);
     }
+    this.consumeEvents();
     this.renderer.draw(this.state); this.animationFrame = requestAnimationFrame(this.frame);
   };
 
@@ -134,4 +136,3 @@ export class HexfrontApp {
     });
   }
 }
-

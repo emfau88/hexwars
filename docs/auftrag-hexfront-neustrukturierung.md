@@ -52,10 +52,15 @@ Der Territory-Control-Kern, Canvas 2D und die Kampagnenprogression bleiben erhal
 - [x] Echte Pointer-Drags auf beiden Viewports erfolgreich (Aktion 0 → 1, Eroberung 0 → 1).
 - [x] Phase committed.
 
-### Phase 3 – Funktionale Tests professionalisieren — AUSSTEHEND
+### Phase 3 – Funktionale Tests professionalisieren — ERLEDIGT
 
-- [ ] Unit-/Simulationstests: Wachstum, 50 %, 100 %, Kampf, Eroberung, Basis-Eroberung, Victory, Bewegung, KI, Freischaltungen, Savegame, deterministische Levelgenerierung.
-- [ ] Playwright: Kampagnenkarte, Unlocks, Levelstart, Sendemodi, echter Drag, Eroberung, KI-Aktion, reguläre Basis-Eroberung, Victory, Level-2-Unlock und Persistenz nach Reload.
+- [x] Unit-/Simulationstests: Wachstum, 50 %, 100 %, Kampf, Eroberung, Basis-Eroberung, Victory, Bewegung, KI, Freischaltungen, Savegame und deterministische Levelgenerierung.
+- [x] Playwright-Konfiguration mit eigenem Produktionsbuild/Preview eingerichtet.
+- [x] Browser-Suite auf Desktop und Mobile-Porträt: Kampagnenkarte, Unlocks, Levelstart und Sendemodi.
+- [x] Echter Pointer-Drag löst einen regulären 50-%-Befehl und eine Eroberung aus.
+- [x] Selbständige KI-Aktion beobachtet.
+- [x] Gegnerische Basis ohne `debugWin` über normale Sendung, Bewegung und Kampf erobert.
+- [x] Victory-Screen, Level-2-Unlock und gespeicherter Fortschritt nach neuem Seitenaufruf bestätigt.
 
 ### Phase 4 – Supply-System — AUSSTEHEND
 
@@ -110,6 +115,9 @@ Der Territory-Control-Kern, Canvas 2D und die Kampagnenprogression bleiben erhal
 | 2026-08-12 | 2 | Vite-Produktionsbuild | bestanden |
 | 2026-08-12 | 2 | Desktop 1423 × 800, echter Pointer-Drag | Aktion und Eroberung jeweils 0 → 1 |
 | 2026-08-12 | 2 | Mobile-Porträt 434 × 938, echter Touch-Drag | Aktion und Eroberung jeweils 0 → 1 |
+| 2026-08-12 | 3 | Unit-/Simulationstests | 16/16 bestanden |
+| 2026-08-12 | 3 | Playwright Desktop + Mobile-Porträt | 4/4 bestanden |
+| 2026-08-12 | 3 | Typecheck und Produktionsbuild | bestanden |
 
 ## Festgehaltene Befunde für spätere Phasen
 

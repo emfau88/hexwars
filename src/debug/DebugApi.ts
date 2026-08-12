@@ -5,6 +5,7 @@ export interface HexfrontDebugApi {
   startLevel(index?: number): void;
   showMap(): void;
   setAutoplay(value: boolean): void;
+  setOpponentEnabled(value: boolean): void;
   getState(): ReturnType<GameState['snapshot']> & { progress: unknown };
   getBoard(): Array<Pick<HexState, 'col' | 'row' | 'owner' | 'units' | 'terrain' | 'decor' | 'x' | 'y'>>;
   send(fromCol: number, fromRow: number, toCol: number, toRow: number, fraction?: number): boolean;
@@ -20,4 +21,3 @@ export function installDebugApi(api: HexfrontDebugApi): () => void {
   window.__HEXFRONT__ = api;
   return () => { delete window.__HEXFRONT__; };
 }
-

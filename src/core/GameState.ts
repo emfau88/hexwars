@@ -22,6 +22,7 @@ export class GameState {
   hexes: HexState[] = [];
   armies: ArmyMovement[] = [];
   autoplay = false;
+  opponentEnabled = true;
   private random: RandomSource = Math.random;
   private aiTimerMs = 0;
   private playerAiTimerMs = 0;
@@ -139,7 +140,7 @@ export class GameState {
       resolveArrival(movement, target);
       if (target) this.events.push({ type: 'arrival', detail: { owner: movement.owner, target } });
     });
-    if (this.elapsed >= this.level.aiDelaySeconds) {
+    if (this.opponentEnabled && this.elapsed >= this.level.aiDelaySeconds) {
       this.aiTimerMs += deltaSeconds * 1000;
       if (this.aiTimerMs >= this.level.aiThinkMs) {
         this.aiTimerMs = 0;
@@ -180,4 +181,3 @@ export class GameState {
     return neighborsOf(this.hexes, hex).filter((candidate) => candidate.owner === hex.owner);
   }
 }
-
