@@ -6,6 +6,16 @@ HEXFRONT is a compact real-time territory-tactics game for desktop browsers and 
 
 > **Project status:** the campaign architecture and core-gameplay refactor are complete. The project is an internal vertical slice, not yet a commercially finished release. `HEXFRONT` remains a working title; product naming, the shared menu/board visual identity, English/German localization and human playtest validation are still open.
 
+## Current visual direction
+
+The current campaign-menu candidate is **Terrain Atlas V2**. It is a review mockup, not yet part of the production game.
+
+| Desktop · 1440 × 900 | Mobile portrait · 390 × 844 |
+|---|---|
+| ![Terrain Atlas V2 desktop](./docs/mockups/terrain-atlas-v2/terrain-atlas-v2-desktop.png) | ![Terrain Atlas V2 mobile](./docs/mockups/terrain-atlas-v2/terrain-atlas-v2-mobile.png) |
+
+Its defining rule is grid-first construction: one mathematically consistent hex grid is created before terrain, water, vegetation and level stations fill individual cells. Stations never overlay a second grid, shorelines exist only on valid water/land boundaries, and mobile uses a dedicated reflow rather than a compressed desktop layout. See the [V2 design notes and deterministic mockup source](./docs/mockups/terrain-atlas-v2/README.md). Earlier explored directions remain available in the [campaign-menu mockup archive](./docs/mockups/campaign-menu-directions/README.md).
+
 ## Play
 
 - [Open the current GitHub Pages build](https://emfau88.github.io/hexwars/)
@@ -87,8 +97,8 @@ The former turn-based prototype is preserved under [`legacy/tactics`](./legacy/t
 The highest-value next step is not adding more mechanics. It is approving one shared visual language for the campaign overview and the playable board.
 
 1. Resolve the product name, promise and nonmilitary English/German terminology.
-2. Produce three new desktop/mobile campaign-overview mockup pairs using the actual board palette and visible-hex terrain language.
-3. Approve one shared token system for color, typography, spacing, borders and surface treatment before changing production UI.
+2. Approve or revise Terrain Atlas V2 as the shared campaign/board direction.
+3. Approve one shared token system for color, typography, spacing, borders, shore treatment and surface treatment before changing production UI.
 4. Implement the persistent English-default `EN | DE` localization system.
 5. Complete first-session tap/keyboard onboarding and accessibility equivalents.
 6. Human-test and finish Levels 1–3 as the public vertical slice, then validate Levels 4–10.

@@ -15,7 +15,7 @@ The restructuring brief in `docs/auftrag-hexfront-neustrukturierung.md` is compl
 | 2 | Open | Some command-language outliers were removed, but no approved bilingual lexicon exists. |
 | 3 | Partial | `npm run balance` is deterministic and covers all ten maps; 1,000-run distributions, bias thresholds and CI failure gates remain. |
 | 4 | Partial | Symmetric decline/stop behavior exists at 180/240 s; alternatives and human comprehension have not been compared. |
-| 5 | Open | The earlier mockups were rejected. Three new desktop/mobile menu directions are required. |
+| 5 | Decision pending | Three initial pairs are stored under `docs/mockups/campaign-menu-directions/`. A grid-first Terrain Atlas V2 at exact 1440×900 and 390×844 now lives under `docs/mockups/terrain-atlas-v2/`; product-owner approval is still required before implementation. |
 | 6 | Mostly complete | Runtime, level data, systems, input, rendering, UI, audio, persistence and debug are separated and typed; locale catalogues and CSS token consolidation remain. |
 | 7 | Open | English-default runtime localization and persistent `EN | DE` toggle are not implemented. |
 | 8 | Partial | Real drag input and reduced Level-1 HUD exist; paused first action, tap-origin/tap-target and keyboard-equivalent input remain. |
