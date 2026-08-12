@@ -1,6 +1,6 @@
 # Terrain Atlas V2
 
-Refined campaign-menu direction based on the product-owner review of the first mockup round.
+The approved reference from which the production campaign menu was implemented.
 
 ## Fixed constraints
 
@@ -40,6 +40,7 @@ This experiment deliberately uses a narrow three-layer coast: a soft contact
 shadow, textured sand/earth and a restrained light edge. Level 1 uses the same
 two production assets as a contained visual pilot.
 
-This page remains a reviewable layout reference, not a second game runtime or a
-parallel design branch. Runtime assets under `public/assets/` are the single
-source of truth.
+This page remains a reviewable historical layout reference, not a second game
+runtime or a parallel design branch. The production implementation lives in
+`src/ui/CampaignAtlas.ts` and `src/campaign-atlas.css`; runtime assets under
+`public/assets/` are the single source of truth.

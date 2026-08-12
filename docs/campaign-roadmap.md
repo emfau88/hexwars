@@ -15,11 +15,11 @@ The restructuring brief in `docs/auftrag-hexfront-neustrukturierung.md` is compl
 | 2 | Open | Some command-language outliers were removed, but no approved bilingual lexicon exists. |
 | 3 | Partial | `npm run balance` is deterministic and covers all ten maps; 1,000-run distributions, bias thresholds and CI failure gates remain. |
 | 4 | Partial | Symmetric decline/stop behavior exists at 180/240 s; alternatives and human comprehension have not been compared. |
-| 5 | Decision pending | Three initial pairs are stored under `docs/mockups/campaign-menu-directions/`. A grid-first Terrain Atlas V2 at exact 1440×900 and 390×844 now lives under `docs/mockups/terrain-atlas-v2/`; product-owner approval is still required before implementation. |
+| 5 | Complete | Terrain Atlas V2 is now the production campaign menu on desktop and mobile: one deterministic hex grid, real-cell stations, exposed-edge shores and a responsive dossier. Earlier directions remain archived for traceability. |
 | 6 | Mostly complete | Runtime, level data, systems, input, rendering, UI, audio, persistence and debug are separated and typed; locale catalogues and CSS token consolidation remain. |
 | 7 | Open | English-default runtime localization and persistent `EN | DE` toggle are not implemented. |
 | 8 | Partial | Real drag input and reduced Level-1 HUD exist; paused first action, tap-origin/tap-target and keyboard-equivalent input remain. |
-| 9 | Open | No shared visual direction has been approved; the current menu/board mismatch is confirmed. |
+| 9 | Partial | The production menu and Level 1 now share the sage/cream shell, vegetation, water and shore materials. Remaining levels and the in-match HUD still need full token and biome alignment. |
 | 10 | Partial, Level 1 pilot | Visible hexes remain. Level 1 now uses generated water/shore materials with code-derived coast geometry only on exposed water edges; extension to other biomes and maps still requires approval. |
 | 11 | Partial | Levels 1 and 2 were rebuilt and tested; Level 3, mastery goals and human acquisition testing remain. |
 | 12 | Partial | Icon labels, reduced-motion CSS and 44 px touch targets exist; keyboard, zoom, non-color state and assistive-technology testing remain. |

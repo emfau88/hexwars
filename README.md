@@ -18,6 +18,7 @@ HEXFRONT is a compact real-time tactics game for desktop browsers and mobile por
 The project is a playable internal vertical slice, not yet a commercial release.
 
 - Ten deterministic campaign levels
+- Production campaign menu built as one coherent terrain-atlas hex grid
 - Desktop and mobile-portrait layouts
 - Persistent local campaign progress
 - Real-time AI, combat, supply and endgame systems
@@ -51,6 +52,6 @@ npm run build
 - [Prioritized roadmap](./docs/campaign-roadmap.md)
 - [Campaign balance report](./docs/campaign-balance-report.md)
 - [Completed restructuring brief](./docs/auftrag-hexfront-neustrukturierung.md)
-- [Visual design experiments](./docs/mockups/)
+- [Visual design references](./docs/mockups/)
 
 The former turn-based prototype is preserved under [`legacy/tactics`](./legacy/tactics) and is not part of the current runtime.
