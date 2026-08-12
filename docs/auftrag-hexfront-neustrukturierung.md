@@ -88,13 +88,15 @@ Der Territory-Control-Kern, Canvas 2D und die Kampagnenprogression bleiben erhal
 - [x] Mobile-Porträt visuell geprüft; Verzweigung, Zahlen und Dekoflächen bleiben lesbar.
 - Hinweis: Die gewünschte erste direkte Gegnerbegegnung von 20–35 s bleibt ein qualitativer Human-Playtest-Messpunkt. Der reproduzierbare Bot-Smoke ersetzt keine Nutzertests.
 
-### Phase 6 – Core-UX — AUSSTEHEND
+### Phase 6 – Core-UX — ERLEDIGT
 
-- [ ] Drag zeigt Quelle, Ziel, Ausgangsmenge und gesendete Menge klar.
-- [ ] Bewegungs-, Kampf- und Eroberungsfeedback verbessern.
-- [ ] Zahl = spielbar, keine Zahl = ruhige Landschaft konsequent stärken.
-- [ ] Level-1-HUD auf tatsächlich relevante Mechaniken reduzieren.
-- [ ] Aktionen/Eroberungen aus dem primären HUD zurückstufen.
+- [x] Drag zeigt Bestand und ausgehende Menge als `BESTAND → MENGE SENDEN`, eine klare Route sowie einen grün/rot markierten Zielhex.
+- [x] Normale Bewegung und Supply besitzen unterscheidbare dezente Spuren; Supply bleibt ruhiger und goldumrandet.
+- [x] Kämpfe pulsieren mit kontrastreichem Ring und leichter Gefahrenfläche; Eroberung bleibt mit Flash und Partikelstoß bestätigt.
+- [x] Spielbare Felder behalten Besitzerfarbe, definierten Rand und Zahl; Landschaft bleibt ohne Zahl und visuell organischer.
+- [x] Tutorial-HUD reduziert: Regelduplikat ausgeblendet, 100 % und Bündel auf Mobile vollständig entfernt, Hügel/Relais nicht erklärt.
+- [x] Aktionen/Eroberungen bleiben für Ergebnis, Telemetrie und Tests erhalten, sind im primären Lage-HUD aber nicht mehr sichtbar.
+- [x] Mobile Touch-Ziele der sichtbaren Bottom-Bar auf gemessene 44 px Mindesthöhe angehoben.
 
 ### Phase 7 – Kampagnenprogression und Supply-aware Balance — AUSSTEHEND
 
@@ -130,6 +132,8 @@ Der Territory-Control-Kern, Canvas 2D und die Kampagnenprogression bleiben erhal
 | 2026-08-12 | 4 | Playwright inklusive Ferntransport/Fokus, Desktop + Mobile | 6/6 bestanden |
 | 2026-08-12 | 5 | Level-1-Topologie und Trade-off | bestanden |
 | 2026-08-12 | 5 | Deterministischer Pacing-Smoke | Sieg 79,0 s; erste Eroberung 3,0 s; KI 9,0 s |
+| 2026-08-12 | 6 | Core-Loop-Feedback, Desktop + Mobile-Porträt | visuell geprüft |
+| 2026-08-12 | 6 | Mobile Bottom-Bar | sichtbare Ziele jeweils 44 px; irrelevante Modi verborgen |
 
 ## Festgehaltene Befunde für spätere Phasen
 

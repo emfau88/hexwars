@@ -72,7 +72,11 @@ export class BoardRenderer {
     const reachable = this.selected ? new Set(state.hexes.filter((hex) => state.canSend(this.selected, hex))) : null;
     for (const hex of state.hexes) this.drawHex(state, hex, reachable);
     this.landscape.drawWaterShores(this.context, state.hexes, this.radius, BoardRenderer.path);
-    for (const army of state.armies) this.drawArmy(army.owner, army.units, army.cx, army.cy, army.kind === 'supply');
+    for (const army of state.armies) {
+      this.context.save(); this.context.globalAlpha = army.kind === 'supply' ? .24 : .18; this.context.strokeStyle = army.kind === 'supply' ? '#e8c07d' : OWNER_COLORS[army.owner].edge;
+      this.context.lineWidth = army.kind === 'supply' ? 2 : 1.5; this.context.beginPath(); this.context.moveTo(army.x0, army.y0); this.context.lineTo(army.cx, army.cy); this.context.stroke(); this.context.restore();
+      this.drawArmy(army.owner, army.units, army.cx, army.cy, army.kind === 'supply');
+    }
     this.effects.draw(this.context);
     this.drawDrag(state);
   }
@@ -87,7 +91,11 @@ export class BoardRenderer {
     if (reachable && hex !== this.selected && !reachable.has(hex)) { this.context.fillStyle = 'rgba(80,91,82,.18)'; this.context.fill(); }
     this.context.strokeStyle = colors.edge; this.context.lineWidth = hex.terrain === Terrain.Base ? 3 : 1.8; this.context.stroke();
     if (hex.flash > 0) { BoardRenderer.path(this.context, hex.x, hex.y, this.radius * (.92 + hex.flash * .08)); this.context.strokeStyle = '#fff2c8'; this.context.globalAlpha = Math.min(1, hex.flash * 2); this.context.lineWidth = 3; this.context.stroke(); this.context.globalAlpha = 1; }
-    if (hex.siege) { BoardRenderer.path(this.context, hex.x, hex.y, this.radius * .8); this.context.strokeStyle = '#e8c07d'; this.context.lineWidth = 3; this.context.stroke(); }
+    if (hex.siege) {
+      const pulse = .72 + Math.sin(performance.now() / 110) * .08;
+      BoardRenderer.path(this.context, hex.x, hex.y, this.radius * pulse); this.context.strokeStyle = '#f3c966'; this.context.lineWidth = 3.5; this.context.stroke();
+      this.context.fillStyle = 'rgba(213,106,97,.12)'; this.context.fill();
+    }
     if (this.selected === hex) { BoardRenderer.path(this.context, hex.x, hex.y, this.radius * .99); this.context.strokeStyle = '#e5a33d'; this.context.lineWidth = 3; this.context.stroke(); }
     if (state.focusedFront(hex.owner) === hex) {
       BoardRenderer.path(this.context, hex.x, hex.y, this.radius * 1.04); this.context.strokeStyle = '#f0c86c'; this.context.lineWidth = 2.5; this.context.setLineDash([3, 3]); this.context.stroke(); this.context.setLineDash([]);
@@ -118,8 +126,14 @@ export class BoardRenderer {
     const target = this.findHex(state, this.dragPosition); const valid = Boolean(target && state.canSend(this.selected, target));
     this.context.strokeStyle = valid ? '#4a9d63' : target && target !== this.selected ? '#d56a61' : '#e8c07d'; this.context.lineWidth = 2.5; this.context.setLineDash([6, 5]);
     this.context.beginPath(); this.context.moveTo(this.selected.x, this.selected.y); this.context.lineTo(this.dragPosition.x, this.dragPosition.y); this.context.stroke(); this.context.setLineDash([]);
+    if (target && target !== this.selected) {
+      BoardRenderer.path(this.context, target.x, target.y, this.radius * 1.02); this.context.strokeStyle = valid ? '#4a9d63' : '#d56a61'; this.context.lineWidth = 3.5; this.context.stroke();
+    }
     const sent = this.sendMode === 'group' && target ? state.groupPotential(target, Owner.Player, this.selected) : Math.floor(this.selected.units * (this.sendMode === 'all' ? 1 : .5));
-    this.context.fillStyle = '#25332d'; this.context.font = `700 ${Math.max(10, Math.floor(this.radius * .3))}px ui-monospace`; this.context.textAlign = 'center';
-    this.context.fillText(`${Math.floor(this.selected.units)} → ${sent}`, this.selected.x, this.selected.y - this.radius * .62);
+    const label = `${Math.floor(this.selected.units)}  →  ${sent} SENDEN`;
+    this.context.font = `700 ${Math.max(10, Math.floor(this.radius * .28))}px ui-monospace`; this.context.textAlign = 'center';
+    const width = this.context.measureText(label).width + 16; const x = this.selected.x; const y = this.selected.y - this.radius * .72;
+    this.context.fillStyle = 'rgba(25,36,31,.94)'; this.context.fillRect(x - width / 2, y - 11, width, 20);
+    this.context.fillStyle = '#f4f0dd'; this.context.fillText(label, x, y);
   }
 }

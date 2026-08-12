@@ -116,16 +116,16 @@
     </div>
 
     <aside id="sidePanel">
-      <div class="panel">
+      <div class="panel" id="missionPanel">
         <div class="eyebrow">GEFECHT</div>
         <div id="missionName">—</div>
         <div id="missionText">Wähle ein Level auf der Kampagnenkarte.</div>
       </div>
-      <div class="panel">
+      <div class="panel" id="rulePanel">
         <div class="eyebrow">REGEL DIESES LEVELS</div>
         <div id="ruleText">—</div>
       </div>
-      <div class="panel">
+      <div class="panel" id="sendPanel">
         <div class="eyebrow">SENDUNG</div>
         <div class="modeRow">
           <button class="modeBtn active" data-mode="half">50 %</button>
@@ -133,21 +133,21 @@
           <button class="modeBtn" data-mode="group">BÜNDEL</button>
         </div>
       </div>
-      <div class="panel">
+      <div class="panel" id="statusPanel">
         <div class="eyebrow">LAGE</div>
         <div class="infoGrid">
           <span>Frontsaldo</span><b id="frontBalance">0</b>
           <span>Zeit</span><b id="timeStatus">0:00</b>
           <span>Phase</span><b id="phaseStatus">WACHSTUM</b>
-          <span>Aktionen</span><b id="actionStatus">0</b>
-          <span>Eroberungen</span><b id="captureStatus">0</b>
+          <span class="telemetry">Aktionen</span><b class="telemetry" id="actionStatus">0</b>
+          <span class="telemetry">Eroberungen</span><b class="telemetry" id="captureStatus">0</b>
         </div>
       </div>
-      <div class="panel legend">
+      <div class="panel legend" id="terrainPanel">
         <div class="eyebrow">FELDTYPEN</div>
         <div><span class="legendIcon">◆</span> Basis: Startpunkt und Siegesziel</div>
-        <div><span class="legendIcon">⌃</span> Hügel: verteidigt sich stärker</div>
-        <div><span class="legendIcon">◎</span> Relais: sendet bis Distanz 2</div>
+        <div id="legendHill"><span class="legendIcon">⌃</span> Hügel: verteidigt sich stärker</div>
+        <div id="legendRelay"><span class="legendIcon">◎</span> Relais: sendet bis Distanz 2</div>
         <div><span class="legendIcon">✿</span> Landschaft: Deko, nicht spielbar</div>
       </div>
       <div class="utilityRow utilityRowTriple">

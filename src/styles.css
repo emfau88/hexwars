@@ -587,3 +587,17 @@ body.campaignOpen { touch-action:pan-y; }
     .missionBriefGrid { margin-top:10px; }
     .missionControlHint { display:none; }
   }
+
+  /* Core-loop clarity: telemetry remains in the DOM for results/debugging, not in the primary HUD. */
+  #statusPanel .telemetry { display:none; }
+  #terrainPanel [hidden] { display:none; }
+  #app.introLevel #rulePanel { display:none; }
+  #app.introLevel #sidePanel { gap:10px; }
+  #app.introLevel #sidePanel .panel { padding:12px; }
+  #app.introLevel #bestText { margin-top:auto; }
+
+  @media (max-width:900px), (max-height:520px) {
+    #mobileBar .modeBtn, #mobileBar .utilityBtn { min-height:44px; }
+    #app.introLevel #mobileBar { grid-template-columns:minmax(120px,1fr) auto auto auto; }
+    #app.introLevel #mobileBar .modeBtn:disabled { display:none; }
+  }

@@ -47,6 +47,9 @@ export class CampaignUI {
   startMission(state: GameState): void {
     this.selectedMenuLevel = state.currentLevel;
     this.menu.classList.remove('show'); this.overlay.classList.remove('show'); this.app.classList.remove('menuOpen'); document.body.classList.remove('campaignOpen');
+    this.app.classList.toggle('introLevel', state.currentLevel === 0);
+    required('legendHill').hidden = state.currentLevel < 3;
+    required('legendRelay').hidden = !state.level.features.relay;
     required('missionName').textContent = state.level.name; required('missionText').textContent = state.level.objective; required('ruleText').textContent = state.level.rule;
     this.hint.textContent = state.currentLevel === 0 ? 'Zahl = spielbar · Orange wählen und zu einem Nachbarfeld ziehen.' : state.level.rule;
     this.hint.style.opacity = '1'; clearTimeout(this.hintTimer); this.hintTimer = window.setTimeout(() => { this.hint.style.opacity = '0'; }, 3600);
