@@ -1,0 +1,121 @@
+# Auftrag: HEXFRONT eigenständig strukturieren und Core-Gameplay verbessern
+
+Diese Datei ist die laufende, verbindliche Arbeitsakte für den Auftrag. Sie wird nach jeder Phase mit Ergebnis, Verifikation und Commit aktualisiert.
+
+## Leitentscheidung
+
+HEXFRONT ist die Echtzeit-Kampagne und das einzige aktuelle Produkt im normalen Build. Die frühere rundenbasierte Tactics-Version bleibt vollständig unter `legacy/tactics/` erhalten, besitzt aber keine Runtime-, Save-, Test- oder Build-Kopplung mit HEXFRONT.
+
+Der Territory-Control-Kern, Canvas 2D und die Kampagnenprogression bleiben erhalten. Es gibt keinen Genre-Pivot, keine neue Engine und kein Feature-Bloat. Routine-Logistik wird automatisiert; Angriffsrichtung, Truppenmenge, Risikowahl und Frontpriorität bleiben Entscheidungen des Spielers.
+
+## Qualitätsregeln
+
+- Phasen strikt trennen; während der Migration keine Balanceänderungen.
+- Nach jeder größeren Phase: Typecheck, Unit-Tests, Build und Browser-Test.
+- Große Änderungen in logisch getrennten Commits sichern.
+- Seed-basierte Simulation reproduzierbar halten.
+- Simulation, Input, Rendering, Leveldaten, UI, Audio und Persistenz klar trennen.
+- Desktop und Mobile-Porträt prüfen; echte Pointer-Drags sind Pflicht.
+- Die Debug-API darf Zustände prüfen, aber echte Eingabetests nicht ersetzen.
+
+## Phasenstatus
+
+### Phase 0 – Ausgangszustand sichern — ERLEDIGT
+
+- [x] Kampagnen-Monolith vollständig inventarisiert.
+- [x] Zielmodule für State, Level, Systeme, Input, Rendering, UI, Audio, Persistenz und Debug dokumentiert.
+- [x] Level 1 im Browser gestartet.
+- [x] Echten Pointer-Drag ausgeführt; neutrales Feld regulär erobert.
+- [x] Baseline-Tests und Build erfolgreich.
+- Ergebnis: `docs/campaign-migration-baseline.md`
+- Commit: `8ffecc5 docs: record campaign migration baseline`
+
+### Phase 1 – Kampagne als eigenständiges Produkt isolieren — ERLEDIGT
+
+- [x] Kampagne als Root-Produkt unter `index.html` startbar.
+- [x] Tactics vollständig nach `legacy/tactics/` archiviert.
+- [x] Legacy aus normalem Build und Testlauf entfernt.
+- [x] Assets und Campaign-Save unabhängig.
+- [x] Root-Start, Tests und Build geprüft.
+- Commit: `9ef8e56 refactor: isolate standalone campaign app`
+
+### Phase 2 – Vite-/TypeScript-/ES-Modularchitektur — ERLEDIGT
+
+- [x] Vite, TypeScript und ES-Module eingerichtet.
+- [x] HTML, CSS und Runtime aus der ehemaligen Single-HTML-Datei getrennt.
+- [x] `@ts-nocheck` entfernt und Runtime vollständig typisiert.
+- [x] State, zehn deklarative Leveldateien, Systeme, Input, Rendering, UI, Audio, Persistenz und Debug in klare Module getrennt.
+- [x] Simulation ist DOM-/Canvas-unabhängig; Input ruft eine enge Game-State-API auf.
+- [x] Kontrollierte `window.__HEXFRONT__`-Schnittstelle ausschließlich im Debug-Modul erhalten.
+- [x] UTF-8-Fehlkodierungen im Root-Shell bereinigt.
+- [x] Funktionsparität im Browser auf Desktop und Mobile-Porträt bestätigt.
+- [x] Echte Pointer-Drags auf beiden Viewports erfolgreich (Aktion 0 → 1, Eroberung 0 → 1).
+- [x] Phase committed.
+
+### Phase 3 – Funktionale Tests professionalisieren — AUSSTEHEND
+
+- [ ] Unit-/Simulationstests: Wachstum, 50 %, 100 %, Kampf, Eroberung, Basis-Eroberung, Victory, Bewegung, KI, Freischaltungen, Savegame, deterministische Levelgenerierung.
+- [ ] Playwright: Kampagnenkarte, Unlocks, Levelstart, Sendemodi, echter Drag, Eroberung, KI-Aktion, reguläre Basis-Eroberung, Victory, Level-2-Unlock und Persistenz nach Reload.
+
+### Phase 4 – Supply-System — AUSSTEHEND
+
+- [ ] Front- und Hinterlanderkennung.
+- [ ] Konfigurierbare Garnison und automatische Überschussversorgung.
+- [ ] Physische, zeitgebundene Routen ausschließlich über eigenes Gebiet.
+- [ ] Kein automatischer Angriff auf neutrale oder gegnerische Felder.
+- [ ] Neurouting und sichere Rückgabe bei unterbrochenem Korridor.
+- [ ] Sinnvolle Verteilung auf mehrere Fronten.
+- [ ] Kontextueller Frontfokus mit konfigurierbarer Gewichtung.
+- [ ] Manueller Fernnachschub mit 50-/100-%-Regeln und realer Transportzeit.
+- [ ] Prototyptests A–G: Hinterland, kein Angriff, Trennung, zwei Fronten, Fokus, Ferntransport, Frontverschiebung.
+
+### Phase 5 – Level 1 neu gestalten — AUSSTEHEND
+
+- [ ] Nur 50 %, keine Relais, keine Bündelmechanik.
+- [ ] Frühe echte Entscheidung zwischen kurzem/teurem und längerem/produktionsstärkerem Weg.
+- [ ] Zieltempo per Playtest prüfen: erste Eingabe 2–4 s, erste Eroberung <10 s, Gegner 6–10 s, Begegnung 20–35 s, Sieg 60–100 s.
+- [ ] Schwache, aber früher sichtbare KI.
+
+### Phase 6 – Core-UX — AUSSTEHEND
+
+- [ ] Drag zeigt Quelle, Ziel, Ausgangsmenge und gesendete Menge klar.
+- [ ] Bewegungs-, Kampf- und Eroberungsfeedback verbessern.
+- [ ] Zahl = spielbar, keine Zahl = ruhige Landschaft konsequent stärken.
+- [ ] Level-1-HUD auf tatsächlich relevante Mechaniken reduzieren.
+- [ ] Aktionen/Eroberungen aus dem primären HUD zurückstufen.
+
+### Phase 7 – Kampagnenprogression und Supply-aware Balance — AUSSTEHEND
+
+- [ ] Bestehende Progressionsreihenfolge erhalten und alle zehn Level neu prüfen.
+- [ ] Level 2 so gestalten, dass 50 % und 100 % beide sinnvoll und riskant sind.
+- [ ] Endgame-System zunächst erhalten; normale Matchdauer priorisieren.
+- [ ] Alle Level auf Desktop und Mobile spielen/simulieren und Balancebefunde dokumentieren.
+
+### Phase 8 – gezielter Polish und Abnahme — AUSSTEHEND
+
+- [ ] Lesbarkeit, Input-, Bewegungs-, Kampf-, Supply- und Ergebnisfeedback polieren.
+- [ ] Mobile Textgrößen, Touch-Ziele, Drag/Scroll-Konflikte, Frontfokus und Ferntransport prüfen.
+- [ ] Abschließender Typecheck, Unit-, Browser- und Build-Lauf.
+- [ ] Dokumentation und Commitübersicht finalisieren.
+
+## Verifikationsprotokoll
+
+| Datum | Phase | Prüfung | Ergebnis |
+| --- | --- | --- | --- |
+| 2026-08-12 | 0 | Bestehende Tests | 11/11 bestanden |
+| 2026-08-12 | 0 | Echter Pointer-Drag in Level 1 | Aktion und Eroberung jeweils 0 → 1 |
+| 2026-08-12 | 1 | Root-Start, Tests, Build | bestanden |
+| 2026-08-12 | 2 | TypeScript-Typecheck | bestanden |
+| 2026-08-12 | 2 | Übergangsguards | 8/8 bestanden |
+| 2026-08-12 | 2 | Vite-Produktionsbuild | bestanden |
+| 2026-08-12 | 2 | Desktop 1423 × 800, echter Pointer-Drag | Aktion und Eroberung jeweils 0 → 1 |
+| 2026-08-12 | 2 | Mobile-Porträt 434 × 938, echter Touch-Drag | Aktion und Eroberung jeweils 0 → 1 |
+
+## Festgehaltene Befunde für spätere Phasen
+
+- Mobile Bottom-Bar: gemessene Buttonhöhen von rund 37–42 px unterschreiten teilweise das 44-px-Mindestziel; Behebung in Phase 8.
+- Die Begriffe „Täuschung“ und „sicherer Weg“ werden nicht als Kartenversprechen verwendet, wenn vollständige Information und direkte Reaktion diese Behauptung nicht tragen. Levelentscheidungen werden über Tempo, Truppenkosten, Produktion und Frontgeometrie messbar gemacht.
+
+## Noch ausdrücklich ausgeschlossen
+
+Kein 3D, Phaser/Engine-Wechsel, komplexes RTS, Gebäude-, Spell-, Tech-Tree-, Unit-Roster- oder Meta-Progressionssystem; keine globale Supply-Ressource, Teleportation, automatische Spielerangriffe, Rally-Point-Flut oder komplexe Logistikmenüs.

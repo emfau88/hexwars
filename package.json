@@ -5,10 +5,19 @@
   "type": "module",
   "description": "HEXFRONT, a compact real-time territory-control campaign for the browser.",
   "scripts": {
-    "build": "node scripts/build.mjs",
-    "test": "node --test"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node --test",
+    "test:browser": "playwright test",
+    "typecheck": "tsc -p tsconfig.json"
   },
   "engines": {
     "node": ">=20"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.2.1"
   }
 }
