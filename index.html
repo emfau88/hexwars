@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#101614" />
-  <meta name="description" content="HEXFRONT – Echtzeit-Strategiespiel um Gebietskontrolle auf einem Hexfeld." />
+  <meta name="description" content="HEXFRONT — a real-time tactics game about territory control on a hex grid." data-i18n-content="meta.description" />
   <title>HEXFRONT</title>
 </head>
 <body>
@@ -12,11 +12,11 @@
   <header>
     <div class="armyStat">
       <span class="dot" style="background:var(--p1)"></span>
-      <div><div class="statLabel">DU · FELDER / TRUPPEN</div><div class="statValue"><span id="p1fields">0</span> / <span id="p1forces">0</span></div></div>
+      <div><div class="statLabel" data-i18n="stats.player">YOU · CELLS / UNITS</div><div class="statValue"><span id="p1fields">0</span> / <span id="p1forces">0</span></div></div>
     </div>
-    <div class="gameTitle"><strong>HEXFRONT</strong><small id="headerLevel">KAMPAGNE</small></div>
+    <div class="gameTitle"><strong>HEXFRONT</strong><small id="headerLevel" data-i18n="header.campaign">CAMPAIGN</small></div>
     <div class="armyStat right">
-      <div><div class="statLabel">FEIND · FELDER / TRUPPEN</div><div class="statValue"><span id="p2fields">0</span> / <span id="p2forces">0</span></div></div>
+      <div><div class="statLabel" data-i18n="stats.rival">RIVAL · CELLS / UNITS</div><div class="statValue"><span id="p2fields">0</span> / <span id="p2forces">0</span></div></div>
       <span class="dot" style="background:var(--p2)"></span>
     </div>
   </header>
@@ -24,7 +24,7 @@
   <div id="layout">
     <div id="stage">
       <canvas id="gameCanvas"></canvas>
-      <div id="hint">Von einem orangefarbenen Feld zu einem erreichbaren Ziel ziehen.</div>
+      <div id="hint" data-i18n="hint.default">Drag from an orange cell to a reachable target.</div>
       <div id="toast"></div>
 
       <div id="resultOverlay">
@@ -32,9 +32,9 @@
           <div class="verdict" id="verdict"></div>
           <div class="sub" id="verdictSub"></div>
           <div class="modalActions">
-            <button class="primaryBtn" id="nextLevelBtn">NÄCHSTES LEVEL</button>
-            <button class="secondaryBtn" id="retryBtn">NOCH EINMAL</button>
-            <button class="secondaryBtn" id="mapBtn">KAMPAGNENKARTE</button>
+            <button class="primaryBtn" id="nextLevelBtn" data-i18n="result.next">NEXT LEVEL</button>
+            <button class="secondaryBtn" id="retryBtn" data-i18n="result.retry">TRY AGAIN</button>
+            <button class="secondaryBtn" id="mapBtn" data-i18n="result.map">CAMPAIGN MAP</button>
           </div>
         </div>
       </div>
@@ -42,17 +42,17 @@
       <div id="campaignMenu" class="show">
         <div class="campaignTop">
           <div class="campaignBrand">
-            <span class="brandKicker">REAL-TIME TERRITORY TACTICS</span>
+            <span class="brandKicker" data-i18n="campaign.brandKicker">REAL-TIME TERRITORY TACTICS</span>
             <strong>HEXFRONT</strong>
-            <span>KAMPAGNE · 10 GEFECHTE</span>
+            <span data-i18n="campaign.subtitle">CAMPAIGN · 10 MAPS</span>
           </div>
           <div class="campaignTopRight">
-            <div class="progressText" aria-label="Kampagnenfortschritt">
-              <div class="progressHeading"><span>FORTSCHRITT</span><b id="progressCount">0 / 10</b></div>
+            <div class="progressText" aria-label="Campaign progress" data-i18n-aria-label="campaign.progressAria">
+              <div class="progressHeading"><span data-i18n="campaign.progress">PROGRESS</span><b id="progressCount">0 / 10</b></div>
               <div class="campaignProgressTrack"><span id="campaignProgressFill"></span></div>
             </div>
-            <button class="menuIconBtn" id="fullscreenBtn" aria-label="Vollbild" title="Vollbild">⛶</button>
-            <button class="menuIconBtn" id="menuSettingsBtn" aria-label="Menüoptionen" title="Menüoptionen">⋯</button>
+            <button class="menuIconBtn" id="fullscreenBtn" aria-label="Fullscreen" title="Fullscreen" data-i18n-aria-label="campaign.fullscreen" data-i18n-title="campaign.fullscreen">⛶</button>
+            <button class="menuIconBtn" id="menuSettingsBtn" aria-label="Menu settings" title="Menu settings" data-i18n-aria-label="campaign.settings" data-i18n-title="campaign.settings">⋯</button>
           </div>
         </div>
 
@@ -60,102 +60,109 @@
           <section class="campaignJourney" aria-labelledby="campaignTitle">
             <div class="atlasHeader">
               <div>
-                <p class="campaignEyebrow">TERRAIN-ATLAS</p>
-                <h1 id="campaignTitle">KARTE WÄHLEN</h1>
+                <p class="campaignEyebrow" data-i18n="campaign.eyebrow">TERRAIN ATLAS</p>
+                <h1 id="campaignTitle" data-i18n="campaign.title">SELECT MAP</h1>
               </div>
-              <div class="atlasActLegend" aria-label="Kampagnenabschnitte">
-                <span><i></i>GRUNDLAGEN</span>
-                <span><i></i>GELÄNDE</span>
-                <span><i></i>FINALE</span>
+              <div class="atlasActLegend" aria-label="Campaign sections" data-i18n-aria-label="campaign.sectionsAria">
+                <span><i></i><b data-i18n="campaign.section.foundations">FOUNDATIONS</b></span>
+                <span><i></i><b data-i18n="campaign.section.terrain">TERRAIN</b></span>
+                <span><i></i><b data-i18n="campaign.section.finale">FINALE</b></span>
               </div>
             </div>
             <div class="atlasBody">
-              <svg id="campaignAtlasSvg" role="group" aria-label="Kampagnenkarte aus einem zusammenhängenden Hexraster"></svg>
-              <p class="atlasHint">Jede Station belegt genau ein Feld des Rasters.</p>
+              <svg id="campaignAtlasSvg" role="group" aria-label="Campaign map on a continuous hex grid" data-i18n-aria-label="campaign.atlasAria"></svg>
+              <p class="atlasHint" data-i18n="campaign.atlasHint">Every station occupies exactly one grid cell.</p>
             </div>
           </section>
 
           <section id="mapCenter" class="missionDossier" aria-labelledby="menuLevelName">
             <div class="dossierHeader">
               <div>
-                <p class="menuKicker" id="menuActLabel">AKT I · GRUNDLAGEN</p>
-                <h2 id="menuLevelName">I · DER PFAD</h2>
+                <p class="menuKicker" id="menuActLabel">ACT I · FOUNDATIONS</p>
+                <h2 id="menuLevelName">I · THE PATH</h2>
               </div>
-              <span id="menuLevelState" class="ready">BEREIT</span>
+              <span id="menuLevelState" class="ready">READY</span>
             </div>
             <div class="previewFrame" id="levelPreviewFrame">
-              <div class="previewTopline"><span id="menuPreviewLabel">LEVEL 01 · KARTENVORSCHAU</span><span>STARTAUFSTELLUNG</span></div>
-              <canvas id="levelPreview" width="720" height="460" aria-label="Vorschau der ausgewählten Levelkarte"></canvas>
-              <div class="previewLegend" aria-hidden="true"><span><i class="previewDot player"></i>DU</span><span><i class="previewDot neutral"></i>NEUTRAL</span><span><i class="previewDot enemy"></i>FEIND</span></div>
+              <div class="previewTopline"><span id="menuPreviewLabel">LEVEL 01 · MAP PREVIEW</span><span data-i18n="campaign.startLayout">STARTING LAYOUT</span></div>
+              <canvas id="levelPreview" width="720" height="460" aria-label="Preview of the selected level map" data-i18n-aria-label="campaign.previewAria"></canvas>
+              <div class="previewLegend" aria-hidden="true"><span><i class="previewDot player"></i><b data-i18n="campaign.player">YOU</b></span><span><i class="previewDot neutral"></i><b data-i18n="campaign.neutral">NEUTRAL</b></span><span><i class="previewDot enemy"></i><b data-i18n="campaign.rival">RIVAL</b></span></div>
             </div>
 
             <div class="missionContent">
-              <p id="menuLevelText" class="missionBlurb">Eine kleine aktive Route schlängelt sich durch eine große, freundliche Landschaft.</p>
+              <p id="menuLevelText" class="missionBlurb">A compact field trades speed against additional territory and production.</p>
 
               <div class="missionBriefGrid">
-                <div class="briefItem objectiveBrief"><span>ZIEL</span><p id="menuLevelObjective">Erobere die blaue Basis.</p></div>
-                <div class="briefItem"><span>DIESES LEVEL</span><p id="menuLevelRule">50-%- und 100-%-Sendungen sind verfügbar.</p></div>
+                <div class="briefItem objectiveBrief"><span data-i18n="campaign.objective">OBJECTIVE</span><p id="menuLevelObjective">Capture the blue base.</p></div>
+                <div class="briefItem"><span data-i18n="campaign.thisLevel">THIS LEVEL</span><p id="menuLevelRule">Every move sends 50%.</p></div>
               </div>
 
               <div class="menuMeta">
-                <span id="menuDifficulty">EINSTIEG</span>
-                <span id="menuBestTime">NOCH NICHT GESCHAFFT</span>
+                <span id="menuDifficulty">ENTRY</span>
+                <span id="menuBestTime">NOT COMPLETED YET</span>
               </div>
-              <p class="menuLockHint" id="menuLockHint" hidden>Schließe zuerst das vorherige Gefecht ab.</p>
-              <button class="playButton" id="playLevelBtn">KAMPAGNE BEGINNEN</button>
-              <p class="missionControlHint"><span class="controlArrow">↗</span> Orangefarbenes Feld wählen und zu einem erreichbaren Ziel ziehen.</p>
+              <p class="menuLockHint" id="menuLockHint" hidden data-i18n="campaign.lockHint">Complete the previous level first.</p>
+              <button class="playButton" id="playLevelBtn">BEGIN CAMPAIGN</button>
+              <p class="missionControlHint"><span class="controlArrow">↗</span><span data-i18n="campaign.controlHint">Drag from an orange cell to a reachable target.</span></p>
             </div>
           </section>
         </main>
 
         <div id="menuSettingsPanel" aria-hidden="true">
-          <button class="secondaryBtn" id="soundBtn">TON AN</button>
-          <button class="secondaryBtn danger" id="resetProgressBtn">FORTSCHRITT LÖSCHEN</button>
+          <div class="languageSetting">
+            <span data-i18n="settings.language">LANGUAGE</span>
+            <div class="languageSwitcher" role="group" aria-label="Language" data-i18n-aria-label="settings.language">
+              <button type="button" data-locale="en" aria-pressed="true">EN</button>
+              <button type="button" data-locale="de" aria-pressed="false">DE</button>
+            </div>
+          </div>
+          <button class="secondaryBtn" id="soundBtn">SOUND ON</button>
+          <button class="secondaryBtn danger" id="resetProgressBtn" data-i18n="settings.reset">RESET PROGRESS</button>
         </div>
       </div>
     </div>
 
     <aside id="sidePanel">
       <div class="panel" id="missionPanel">
-        <div class="eyebrow">GEFECHT</div>
+        <div class="eyebrow" data-i18n="panel.round">MAP</div>
         <div id="missionName">—</div>
-        <div id="missionText">Wähle ein Level auf der Kampagnenkarte.</div>
+        <div id="missionText" data-i18n="panel.selectLevel">Select a level on the campaign map.</div>
       </div>
       <div class="panel" id="rulePanel">
-        <div class="eyebrow">REGEL DIESES LEVELS</div>
+        <div class="eyebrow" data-i18n="panel.rule">RULE FOR THIS LEVEL</div>
         <div id="ruleText">—</div>
       </div>
       <div class="panel" id="sendPanel">
-        <div class="eyebrow">SENDUNG</div>
+        <div class="eyebrow" data-i18n="panel.send">SEND</div>
         <div class="modeRow">
           <button class="modeBtn active" data-mode="half">50 %</button>
           <button class="modeBtn" data-mode="all">100 %</button>
-          <button class="modeBtn" data-mode="group">BÜNDEL</button>
+          <button class="modeBtn" data-mode="group" data-i18n="mode.group">GROUP</button>
         </div>
       </div>
       <div class="panel" id="statusPanel">
-        <div class="eyebrow">LAGE</div>
+        <div class="eyebrow" data-i18n="panel.status">STATUS</div>
         <div class="infoGrid">
-          <span>Frontsaldo</span><b id="frontBalance">0</b>
-          <span>Zeit</span><b id="timeStatus">0:00</b>
-          <span>Phase</span><b id="phaseStatus">WACHSTUM</b>
-          <span class="telemetry">Aktionen</span><b class="telemetry" id="actionStatus">0</b>
-          <span class="telemetry">Eroberungen</span><b class="telemetry" id="captureStatus">0</b>
+          <span data-i18n="panel.fieldLead">Cell lead</span><b id="frontBalance">0</b>
+          <span data-i18n="panel.time">Time</span><b id="timeStatus">0:00</b>
+          <span data-i18n="panel.phase">Phase</span><b id="phaseStatus">GROWTH</b>
+          <span class="telemetry" data-i18n="panel.actions">Actions</span><b class="telemetry" id="actionStatus">0</b>
+          <span class="telemetry" data-i18n="panel.captures">Captures</span><b class="telemetry" id="captureStatus">0</b>
         </div>
       </div>
       <div class="panel legend" id="terrainPanel">
-        <div class="eyebrow">FELDTYPEN</div>
-        <div><span class="legendIcon">◆</span> Basis: Startpunkt und Siegesziel</div>
-        <div id="legendHill"><span class="legendIcon">⌃</span> Hügel: verteidigt sich stärker</div>
-        <div id="legendRelay"><span class="legendIcon">◎</span> Relais: sendet bis Distanz 2</div>
-        <div><span class="legendIcon">✿</span> Landschaft: Deko, nicht spielbar</div>
+        <div class="eyebrow" data-i18n="panel.terrain">CELL TYPES</div>
+        <div><span class="legendIcon">◆</span><span data-i18n="terrain.base">Base: starting point and victory target</span></div>
+        <div id="legendHill"><span class="legendIcon">⌃</span><span data-i18n="terrain.hill">Hill: takes less damage</span></div>
+        <div id="legendRelay"><span class="legendIcon">◎</span><span data-i18n="terrain.relay">Relay: reaches targets up to distance 2</span></div>
+        <div><span class="legendIcon">✿</span><span data-i18n="terrain.landscape">Landscape: decorative, not playable</span></div>
       </div>
       <div class="utilityRow utilityRowTriple">
-        <button class="utilityBtn" id="restartBtn">NEUSTART</button>
-        <button class="utilityBtn" id="levelsBtn">KARTE</button>
-        <button class="utilityBtn" id="sideFullscreenBtn">VOLL</button>
+        <button class="utilityBtn" id="restartBtn" data-i18n="utility.restart">RESTART</button>
+        <button class="utilityBtn" id="levelsBtn" data-i18n="utility.map">MAP</button>
+        <button class="utilityBtn" id="sideFullscreenBtn" data-i18n="utility.fullscreenShort">FULL</button>
       </div>
-      <button class="utilityBtn" id="sideSoundBtn">TON AN</button>
+      <button class="utilityBtn" id="sideSoundBtn">SOUND ON</button>
       <div id="bestText"></div>
     </aside>
   </div>
@@ -163,10 +170,10 @@
   <div id="mobileBar">
     <button class="modeBtn active" data-mode="half">50 %</button>
     <button class="modeBtn" data-mode="all">100 %</button>
-    <button class="modeBtn" data-mode="group">BÜNDEL</button>
-    <button class="utilityBtn" id="mobileRestartBtn" aria-label="Level neu starten" title="Level neu starten">↻</button>
-    <button class="utilityBtn" id="mobileLevelsBtn" aria-label="Kampagnenkarte öffnen" title="Kampagnenkarte öffnen">☰</button>
-    <button class="utilityBtn" id="mobileFullscreenBtn" aria-label="Vollbild" title="Vollbild">⛶</button>
+    <button class="modeBtn" data-mode="group" data-i18n="mode.group">GROUP</button>
+    <button class="utilityBtn" id="mobileRestartBtn" aria-label="Restart level" title="Restart level" data-i18n-aria-label="utility.restartAria" data-i18n-title="utility.restartAria">↻</button>
+    <button class="utilityBtn" id="mobileLevelsBtn" aria-label="Open campaign map" title="Open campaign map" data-i18n-aria-label="utility.mapAria" data-i18n-title="utility.mapAria">☰</button>
+    <button class="utilityBtn" id="mobileFullscreenBtn" aria-label="Fullscreen" title="Fullscreen" data-i18n-aria-label="campaign.fullscreen" data-i18n-title="campaign.fullscreen">⛶</button>
   </div>
 </div>
 

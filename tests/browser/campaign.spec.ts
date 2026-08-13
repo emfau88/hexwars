@@ -22,9 +22,9 @@ test.beforeEach(async ({ page }) => clearProgress(page));
 
 test('campaign map, unlock state and real pointer drag work', async ({ page }) => {
   await expect(page.getByText('0 / 10', { exact: true })).toBeVisible();
-  await expect(page.getByRole('button', { name: 'Level 1: DER PFAD' })).toBeEnabled();
-  await expect(page.getByRole('button', { name: /Level 2: ZWEI WEGE/ })).toHaveAttribute('aria-label', /gesperrt/);
-  await page.getByRole('button', { name: 'KAMPAGNE BEGINNEN' }).click();
+  await expect(page.getByRole('button', { name: 'Level 1: THE PATH' })).toBeEnabled();
+  await expect(page.getByRole('button', { name: /Level 2: TWO ROUTES/ })).toHaveAttribute('aria-label', /locked/);
+  await page.getByRole('button', { name: 'BEGIN CAMPAIGN' }).click();
   await expect(page.locator('#sidePanel .modeBtn[data-mode="half"]')).toBeEnabled();
   await expect(page.locator('#sidePanel .modeBtn[data-mode="all"]')).toBeDisabled();
   await expect(page.locator('#sidePanel .modeBtn[data-mode="group"]')).toBeDisabled();
@@ -64,11 +64,11 @@ test('enemy acts and a completed mission persists its unlock after reload', asyn
     }
     return api.getState().result;
   }), { timeout: 12_000 }).toBe('victory');
-  await expect(page.locator('#verdict')).toHaveText('SIEG');
-  await page.getByRole('button', { name: 'KAMPAGNENKARTE', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Level 2: ZWEI WEGE' })).toBeEnabled();
+  await expect(page.locator('#verdict')).toHaveText('VICTORY');
+  await page.getByRole('button', { name: 'CAMPAIGN MAP', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Level 2: TWO ROUTES' })).toBeEnabled();
   await page.goto('/');
-  await expect(page.getByRole('button', { name: 'Level 2: ZWEI WEGE' })).toBeEnabled();
+  await expect(page.getByRole('button', { name: 'Level 2: TWO ROUTES' })).toBeEnabled();
   await expect(page.getByText('1 / 10', { exact: true })).toBeVisible();
 });
 
@@ -104,7 +104,7 @@ test('manual long-range reinforcement and contextual front focus use canvas inpu
   const box = await page.locator('#gameCanvas').boundingBox();
   if (!box) throw new Error('Canvas is not visible.');
   await page.mouse.click(box.x + base.x, box.y + base.y);
-  await expect(page.locator('#toast')).toHaveText('Nachschubfokus gesetzt.');
+  await expect(page.locator('#toast')).toHaveText('Supply focus set.');
 });
 
 test('all ten campaign levels start with a valid board in this viewport', async ({ page }) => {
@@ -119,9 +119,9 @@ test('all ten campaign levels start with a valid board in this viewport', async 
 
 test('responsive shell has no page overflow and mobile controls meet the touch floor', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Menüoptionen' }).click();
+  await page.getByRole('button', { name: 'Menu settings' }).click();
   await expect(page.locator('#menuSettingsPanel')).toBeVisible();
-  await page.getByRole('button', { name: 'Menüoptionen' }).click();
+  await page.getByRole('button', { name: 'Menu settings' }).click();
   const menuMetrics = await page.evaluate(() => ({
     viewport: innerWidth,
     body: document.body.scrollWidth,
@@ -139,7 +139,7 @@ test('responsive shell has no page overflow and mobile controls meet the touch f
     expect(Math.min(...menuMetrics.atlasNodes.map(({ width }) => width))).toBeGreaterThanOrEqual(44);
     expect(Math.min(...menuMetrics.atlasNodes.map(({ height }) => height))).toBeGreaterThanOrEqual(44);
   }
-  await page.getByRole('button', { name: 'KAMPAGNE BEGINNEN' }).click();
+  await page.getByRole('button', { name: 'BEGIN CAMPAIGN' }).click();
   const gameMetrics = await page.evaluate(() => ({
     viewport: innerWidth,
     body: document.body.scrollWidth,
@@ -153,4 +153,22 @@ test('responsive shell has no page overflow and mobile controls meet the touch f
     expect(Math.min(...gameMetrics.controls.map(({ width }) => width))).toBeGreaterThanOrEqual(44);
     expect(Math.min(...gameMetrics.controls.map(({ height }) => height))).toBeGreaterThanOrEqual(44);
   }
+});
+
+test('language defaults to English and the German choice survives reload', async ({ page }) => {
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  await expect(page.locator('#campaignTitle')).toHaveText('SELECT MAP');
+  await page.getByRole('button', { name: 'Menu settings' }).click();
+  await page.getByRole('button', { name: 'German' }).click();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'de');
+  await expect(page.locator('#campaignTitle')).toHaveText('KARTE WÄHLEN');
+  await expect(page.getByRole('button', { name: 'Level 1: DER PFAD' })).toBeEnabled();
+
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'de');
+  await expect(page.getByRole('button', { name: 'Level 1: DER PFAD' })).toBeEnabled();
+  await page.getByRole('button', { name: 'Menüoptionen' }).click();
+  await page.getByRole('button', { name: 'Englisch' }).click();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'en');
+  await expect(page.locator('#campaignTitle')).toHaveText('SELECT MAP');
 });

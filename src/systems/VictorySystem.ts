@@ -1,10 +1,10 @@
 import { ENEMY_BASE, PLAYER_BASE } from '../core/config';
 import { cellKey } from '../core/hex';
-import { Owner, type ArmyMovement, type HexState, type MissionResult } from '../core/types';
+import { Owner, type ArmyMovement, type HexState, type MissionResult, type ResultReason } from '../core/types';
 
 export interface VictoryEvaluation {
   result: MissionResult;
-  reason: string;
+  reason: ResultReason;
 }
 
 function sideAlive(owner: Owner, hexes: readonly HexState[], armies: readonly ArmyMovement[]): boolean {
@@ -15,10 +15,9 @@ function sideAlive(owner: Owner, hexes: readonly HexState[], armies: readonly Ar
 
 export function evaluateVictory(hexes: readonly HexState[], armies: readonly ArmyMovement[]): VictoryEvaluation | null {
   const byKey = new Map(hexes.map((hex) => [cellKey(hex), hex]));
-  if (byKey.get(cellKey(ENEMY_BASE))?.owner === Owner.Player) return { result: 'victory', reason: 'Die blaue Basis wurde erobert.' };
-  if (byKey.get(cellKey(PLAYER_BASE))?.owner === Owner.Enemy) return { result: 'defeat', reason: 'Deine Basis wurde erobert.' };
-  if (!sideAlive(Owner.Player, hexes, armies)) return { result: 'defeat', reason: 'Deine Front wurde ausgelöscht.' };
-  if (!sideAlive(Owner.Enemy, hexes, armies)) return { result: 'victory', reason: 'Die feindliche Front wurde ausgelöscht.' };
+  if (byKey.get(cellKey(ENEMY_BASE))?.owner === Owner.Player) return { result: 'victory', reason: 'enemyBaseCaptured' };
+  if (byKey.get(cellKey(PLAYER_BASE))?.owner === Owner.Enemy) return { result: 'defeat', reason: 'playerBaseCaptured' };
+  if (!sideAlive(Owner.Player, hexes, armies)) return { result: 'defeat', reason: 'playerEliminated' };
+  if (!sideAlive(Owner.Enemy, hexes, armies)) return { result: 'victory', reason: 'enemyEliminated' };
   return null;
 }
-

@@ -1,11 +1,12 @@
 import { Terrain } from '../core/types';
+import { localized } from '../i18n/types';
 import { defineLevel } from './levelFactory';
 
 export default defineLevel({
-  id: 'path', name: 'I · DER PFAD', short: 'DER PFAD', seed: 101,
-  blurb: 'Ein kompakter Frontbogen stellt Tempo gegen zusätzliche Felder und Produktion.',
-  objective: 'Erobere die blaue Basis. Nimm den direkten, stärker besetzten Weg oder baue über mehr schwache Felder Produktion auf.',
-  rule: 'Du sendest jeweils 50 %. Zahlen sind spielbare Felder; Landschaft ohne Zahl ist nicht spielbar.',
+  id: 'path', name: localized('I · THE PATH', 'I · DER PFAD'), short: localized('THE PATH', 'DER PFAD'), seed: 101,
+  blurb: localized('A compact field presents a choice between tempo and additional territory.', 'Ein kompaktes Spielfeld stellt Tempo gegen zusätzliche Felder und Produktion.'),
+  objective: localized('Capture the blue base. Take the shorter, strongly defended route or expand through more lightly defended cells to build production.', 'Erobere die blaue Basis. Nimm den kürzeren, stärker verteidigten Weg oder baue über mehr schwächere Felder Produktion auf.'),
+  rule: localized('Every move sends 50%. Numbered cells are playable; landscape without a number is not.', 'Du sendest jeweils 50 %. Zahlen sind spielbare Felder; Landschaft ohne Zahl ist nicht spielbar.'),
   aiThinkMs: 2500, aiDelaySeconds: 6.5, aiSkill: 0.4, aiActions: 1,
   neutralUnits: [2, 5], features: { all: false, group: false, relay: false }, theme: 'meadow', landscapeStyle: 'meadow-v1',
   activeRows: [[], [3], [3], [3], [3, 4, 5], [3, 5], [3, 4, 5], [3, 5], [3, 4, 5], [3], [3], [3], []],

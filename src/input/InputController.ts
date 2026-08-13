@@ -2,10 +2,12 @@ import type { GameState } from '../core/GameState';
 import { Owner, type HexState, type Point, type SendMode } from '../core/types';
 import type { BoardRenderer } from '../rendering/BoardRenderer';
 
+export type InputError = 'decor' | 'target';
+
 export interface InputCallbacks {
   getMode(): SendMode;
   onCommand(sent: number): void;
-  onInvalid(message: string): void;
+  onInvalid(error: InputError): void;
   onFocus(hex: HexState): void;
   onActivate(): void;
 }
@@ -72,8 +74,8 @@ export class InputController {
       if (sent > 0) this.callbacks.onCommand(sent);
     } else if (target && target !== source) {
       this.callbacks.onInvalid(target.owner === Owner.Neutral && target.decor
-        ? 'Landschaftsfeld – in diesem Level nicht spielbar.'
-        : 'Nur ein erlaubtes Ziel in Reichweite kann Truppen empfangen.');
+        ? 'decor'
+        : 'target');
     }
     this.cancel();
   };

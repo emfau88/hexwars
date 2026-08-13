@@ -1,3 +1,5 @@
+import type { LocalizedText } from '../i18n/types';
+
 export enum Owner {
   Neutral = 0,
   Player = 1,
@@ -25,6 +27,7 @@ export type DecorType =
 export type SendMode = 'half' | 'all' | 'group';
 export type LandscapeStyle = 'classic' | 'meadow-v1';
 export type MissionResult = 'victory' | 'defeat';
+export type ResultReason = 'enemyBaseCaptured' | 'playerBaseCaptured' | 'playerEliminated' | 'enemyEliminated' | 'debugVictory';
 export type Point = { x: number; y: number };
 export type Cell = { col: number; row: number };
 
@@ -44,14 +47,14 @@ export interface CellDefinition extends Cell {
 
 export interface LevelDefinition {
   id: string;
-  name: string;
-  short: string;
+  name: LocalizedText;
+  short: LocalizedText;
   cols: number;
   rows: number;
   seed: number;
-  blurb: string;
-  objective: string;
-  rule: string;
+  blurb: LocalizedText;
+  objective: LocalizedText;
+  rule: LocalizedText;
   aiThinkMs: number;
   aiDelaySeconds: number;
   aiSkill: number;
@@ -121,7 +124,7 @@ export interface GameEventMap {
   send: { owner: Owner; human: boolean; units: number; from: Point };
   arrival: { owner: Owner; target: HexState; kind: ArmyMovement['kind'] };
   capture: { oldOwner: Owner; newOwner: Owner; target: HexState };
-  result: { result: MissionResult; reason: string };
+  result: { result: MissionResult; reason: ResultReason };
   endgame: { stage: number };
   supply: { owner: Owner; units: number; from: HexState; to: HexState };
 }

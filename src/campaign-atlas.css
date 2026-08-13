@@ -67,6 +67,7 @@
   display:flex; align-items:center; gap:17px; color:#425348; font-size:11.5px; font-weight:650;
 }
 #campaignMenu .atlasActLegend span { display:flex; align-items:center; gap:6px; white-space:nowrap; }
+#campaignMenu .atlasActLegend b,#campaignMenu .previewLegend b { color:inherit; font:inherit; }
 #campaignMenu .atlasActLegend i { width:8px; height:8px; border-radius:50%; background:#7f9d6f; }
 #campaignMenu .atlasActLegend span:nth-child(2) i { background:#b7a86d; }
 #campaignMenu .atlasActLegend span:nth-child(3) i { background:#c47b4c; }
@@ -175,6 +176,24 @@
 #campaignMenu .missionControlHint { margin:9px 1px 0; color:#5d6a60; font-size:12px; font-weight:550; line-height:1.4; }
 #campaignMenu .controlArrow { color:#a95b34; background:rgba(217,119,66,.10); }
 
+#campaignMenu #menuSettingsPanel { min-width:220px; padding:12px; gap:9px; }
+#campaignMenu .languageSetting { display:grid; gap:7px; padding:2px 2px 5px; }
+#campaignMenu .languageSetting > span {
+  color:#aeb8b2; font-size:11px; font-weight:750; letter-spacing:.8px;
+}
+#campaignMenu .languageSwitcher {
+  display:grid; grid-template-columns:1fr 1fr; gap:4px; padding:4px;
+  border:1px solid #34453c; border-radius:11px; background:#101a16;
+}
+#campaignMenu .languageSwitcher button {
+  min-height:40px; border:1px solid transparent; border-radius:8px; color:#aeb8b2;
+  background:transparent; font-family:var(--font-display); font-size:12px; font-weight:700; cursor:pointer;
+}
+#campaignMenu .languageSwitcher button.active {
+  color:#172019; border-color:#d79250; background:linear-gradient(#f1bc70,#eaa052);
+}
+#campaignMenu .languageSwitcher button:focus-visible { outline:2px solid #f1c98b; outline-offset:2px; }
+
 @media (max-width:1100px) and (min-width:901px) and (min-height:621px) {
   #campaignMenu .campaignShell { grid-template-columns:minmax(0,1fr) minmax(330px,36vw); gap:12px; padding:12px; }
   #campaignMenu .atlasHeader { padding:0 18px; }
@@ -223,6 +242,7 @@
   #campaignMenu .menuMeta span { font-size:12px; }
   #campaignMenu .missionControlHint { font-size:13px; }
   #campaignMenu .playButton { min-height:50px; font-size:14px; }
+  #campaignMenu .languageSwitcher button { min-height:44px; font-size:13px; }
   #menuSettingsPanel { position:fixed; top:54px; right:9px; }
 }
 

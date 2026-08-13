@@ -2,7 +2,9 @@ import { AudioController } from '../audio/AudioController';
 import { GameState } from '../core/GameState';
 import { Owner, type CampaignProgress, type GameEvent, type SendMode } from '../core/types';
 import { installDebugApi } from '../debug/DebugApi';
-import { InputController } from '../input/InputController';
+import { I18n } from '../i18n/I18n';
+import type { Locale } from '../i18n/types';
+import { InputController, type InputError } from '../input/InputController';
 import { CampaignProgressStore } from '../persistence/CampaignProgressStore';
 import { BoardRenderer } from '../rendering/BoardRenderer';
 import { OWNER_COLORS } from '../rendering/palette';
@@ -13,6 +15,7 @@ export class HexfrontApp {
   readonly renderer: BoardRenderer;
   readonly ui: CampaignUI;
   readonly audio = new AudioController();
+  readonly i18n = new I18n();
   readonly progressStore = new CampaignProgressStore();
   progress: CampaignProgress;
   sendMode: SendMode = 'half';
@@ -36,16 +39,17 @@ export class HexfrontApp {
       startLevel: (index) => this.startLevel(index), showMap: (focus) => this.showMap(focus),
       setMode: (mode) => this.setMode(mode), toggleSound: () => this.toggleSound(),
       toggleFullscreen: () => void this.toggleFullscreen(), resetProgress: () => this.resetProgress(), activate: () => this.audio.activate(),
-    });
+      setLocale: (locale) => this.setLocale(locale),
+    }, this.i18n);
     this.input = new InputController(canvas, this.state, this.renderer, {
       getMode: () => this.sendMode,
       onCommand: () => { navigator.vibrate?.(10); this.audio.beep(410, .035, .03); },
-      onInvalid: (message) => this.ui.showToast(message), onActivate: () => this.audio.activate(),
+      onInvalid: (error) => this.ui.showToast(this.i18n.t(this.inputErrorKey(error))), onActivate: () => this.audio.activate(),
       onFocus: (hex) => {
         if (!this.state.level.features.focus) return;
         if (this.state.toggleSupplyFocus(hex, Owner.Player)) {
           const focused = this.state.focusedFront(Owner.Player) === hex;
-          this.ui.showToast(focused ? 'Nachschubfokus gesetzt.' : 'Nachschubfokus aufgehoben.');
+          this.ui.showToast(this.i18n.t(focused ? 'toast.focus.set' : 'toast.focus.cleared'));
         }
       },
     });
@@ -63,10 +67,11 @@ export class HexfrontApp {
       },
       think: (owner = Owner.Enemy) => this.state.think(owner, .9),
       simulate: (seconds = 300, step = .05) => { for (let index = 0; index < Math.ceil(seconds / step) && this.state.running; index += 1) this.state.update(step); this.consumeEvents(); return this.state.snapshot(); },
-      debugWin: () => { this.state.end('victory', 'Debug-Sieg.'); this.consumeEvents(); }, resetProgress: () => this.resetProgress(true),
+      debugWin: () => { this.state.end('victory', 'debugVictory'); this.consumeEvents(); }, resetProgress: () => this.resetProgress(true),
     });
     const requestedLevel = Number(this.parameters.get('level'));
     if (this.parameters.get('autostart') === '1') this.startLevel(Number.isFinite(requestedLevel) ? requestedLevel : 0);
+    this.ui.refreshLanguage(this.state, this.audio.enabled);
     this.animationFrame = requestAnimationFrame(this.frame);
   }
 
@@ -87,7 +92,7 @@ export class HexfrontApp {
     const features = this.state.level.features;
     if ((mode === 'all' && !features.all) || (mode === 'group' && !features.group)) return;
     this.sendMode = mode; this.renderer.sendMode = mode; this.ui.setMode(mode, this.state);
-    this.ui.showToast(mode === 'half' ? '50 % der Truppen senden.' : mode === 'all' ? 'Alle Truppen senden – das Quellfeld bleibt leer.' : 'Bis zu drei Felder senden gemeinsam 50 %.');
+    this.ui.showToast(this.i18n.t(mode === 'half' ? 'toast.mode.half' : mode === 'all' ? 'toast.mode.all' : 'toast.mode.group'));
   }
 
   private frame = (time: number): void => {
@@ -110,7 +115,7 @@ export class HexfrontApp {
       this.renderer.effects.burst(event.detail.target, OWNER_COLORS[event.detail.newOwner].edge, 14);
       if (event.detail.newOwner === Owner.Player || event.detail.oldOwner === Owner.Player) this.audio.beep(event.detail.newOwner === Owner.Player ? 560 : 105, .08, .05);
     }
-    if (event.type === 'endgame') { this.ui.updateEndgame(this.state); this.ui.showToast(event.detail.stage === 1 ? 'Ausklang: Das Wachstum nimmt ab.' : 'Entscheidung: Felder wachsen nicht mehr.'); }
+    if (event.type === 'endgame') { this.ui.updateEndgame(this.state); this.ui.showToast(this.i18n.t(event.detail.stage === 1 ? 'toast.endgame.decline' : 'toast.endgame.decision')); }
     if (event.type === 'result') {
       if (event.detail.result === 'victory') {
         this.progress = this.progressStore.complete(this.progress, this.state.currentLevel, this.state.elapsed);
@@ -125,13 +130,22 @@ export class HexfrontApp {
   private async toggleFullscreen(): Promise<void> {
     this.audio.activate();
     try { if (document.fullscreenElement) await document.exitFullscreen(); else await document.documentElement.requestFullscreen(); }
-    catch { this.ui.showToast('Vollbild konnte hier nicht gestartet werden.'); }
+    catch { this.ui.showToast(this.i18n.t('toast.fullscreenFailed')); }
     this.ui.syncFullscreen(); this.renderer.resize(this.state);
   }
 
   private resetProgress(skipConfirmation = false): void {
-    if (!skipConfirmation && !confirm('Gespeicherten Kampagnenfortschritt wirklich löschen?')) return;
+    if (!skipConfirmation && !confirm(this.i18n.t('settings.resetConfirm'))) return;
     this.progress = this.progressStore.reset(); this.showMap(0);
+  }
+
+  private setLocale(locale: Locale): void {
+    this.i18n.setLocale(locale);
+    this.ui.refreshLanguage(this.state, this.audio.enabled);
+  }
+
+  private inputErrorKey(error: InputError): 'toast.invalid.decor' | 'toast.invalid.target' {
+    return error === 'decor' ? 'toast.invalid.decor' : 'toast.invalid.target';
   }
 
   private bindWindowEvents(): void {

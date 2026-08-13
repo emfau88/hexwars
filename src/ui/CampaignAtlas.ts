@@ -1,4 +1,5 @@
 import type { CampaignProgress } from '../core/types';
+import type { I18n } from '../i18n/I18n';
 import { LEVELS } from '../levels';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -76,7 +77,7 @@ function shorePath(layout: AtlasLayout, cell: AtlasCell, edge: number): string {
 export class CampaignAtlas {
   private mobile: boolean | null = null;
 
-  constructor(private readonly svg: SVGSVGElement) {}
+  constructor(private readonly svg: SVGSVGElement, private readonly i18n: I18n) {}
 
   needsLayoutUpdate(): boolean {
     return this.mobile !== matchMedia('(max-width:900px), (max-height:620px)').matches;
@@ -123,7 +124,7 @@ export class CampaignAtlas {
     }
     this.svg.append(shores);
 
-    const nodes = svgNode('g', { id:'mapNodes', 'aria-label':'Kampagnenkarte' });
+    const nodes = svgNode('g', { id:'mapNodes', 'aria-label':this.i18n.t('campaign.atlasGroupAria') });
     for (const [cellKey, levelIndex] of layout.stations) {
       const cell = layout.cells.find((candidate) => key(candidate) === cellKey);
       if (!cell) continue;
@@ -134,7 +135,11 @@ export class CampaignAtlas {
       const available = unlocked(levelIndex); const complete = progress.completed[levelIndex];
       button.type = 'button'; button.dataset.level = String(levelIndex); button.dataset.act = String(levelIndex < 3 ? 0 : levelIndex < 6 ? 1 : 2);
       button.className = `mapNode ${available ? 'unlocked' : 'locked'}${complete ? ' completed' : ''}${selected === levelIndex ? ' current' : ''}`;
-      button.setAttribute('aria-label', `Level ${levelIndex + 1}: ${LEVELS[levelIndex].short}${available ? '' : ' – gesperrt'}`);
+      button.setAttribute('aria-label', this.i18n.t('campaign.levelAria', {
+        level: levelIndex + 1,
+        name: this.i18n.text(LEVELS[levelIndex].short),
+        locked: available ? '' : this.i18n.t('campaign.levelLockedSuffix'),
+      }));
       button.innerHTML = `<span class="atlasLevelNumber">${String(levelIndex + 1).padStart(2, '0')}</span><span class="atlasLevelState" aria-hidden="true">${complete ? '✓' : available ? '•' : '·'}</span>`;
       button.addEventListener('click', () => onSelect(levelIndex));
       foreign.append(button); nodes.append(foreign);

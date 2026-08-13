@@ -17,10 +17,9 @@ function run(level: number): BalanceRow {
   }
   const snapshot = game.snapshot();
   return {
-    level: level + 1, name: LEVELS[level].short, result: game.result, seconds: Number(game.elapsed.toFixed(1)),
+    level: level + 1, name: LEVELS[level].short.en, result: game.result, seconds: Number(game.elapsed.toFixed(1)),
     fields: `${snapshot.fields.p1}:${snapshot.fields.p2}`, forces: `${snapshot.forces.p1}:${snapshot.forces.p2}`,
   };
 }
 
 console.table(LEVELS.map((_, index) => run(index)));
-

@@ -1,7 +1,7 @@
 import { GAME_CONFIG } from './config';
 import { cellKey, findOwnedPath, hexDistance, isPlayable, neighborsOf } from './hex';
 import { createSeededRandom, type RandomSource } from './random';
-import { Owner, Terrain, type ArmyMovement, type GameEvent, type GameSnapshot, type HexState, type MissionResult, type Point } from './types';
+import { Owner, Terrain, type ArmyMovement, type GameEvent, type GameSnapshot, type HexState, type MissionResult, type Point, type ResultReason } from './types';
 import { buildLevel } from '../levels/buildLevel';
 import { LEVELS } from '../levels';
 import { runAI, type AIContext } from '../systems/AISystem';
@@ -19,7 +19,7 @@ export class GameState {
   captures = 0;
   endgameStage = 0;
   result: MissionResult | null = null;
-  resultReason = '';
+  resultReason: ResultReason | null = null;
   hexes: HexState[] = [];
   armies: ArmyMovement[] = [];
   autoplay = false;
@@ -40,7 +40,7 @@ export class GameState {
     this.armies = [];
     this.elapsed = 0; this.actions = 0; this.captures = 0; this.endgameStage = 0;
     this.aiTimerMs = 0; this.playerAiTimerMs = 0;
-    this.result = null; this.resultReason = ''; this.events = [];
+    this.result = null; this.resultReason = null; this.events = [];
     this.opponentEnabled = true; this.supplySystem.reset();
     this.supplyFocus[Owner.Player] = null; this.supplyFocus[Owner.Enemy] = null;
     this.running = true;
@@ -184,7 +184,7 @@ export class GameState {
     if (victory) this.end(victory.result, victory.reason);
   }
 
-  end(result: MissionResult, reason: string): void {
+  end(result: MissionResult, reason: ResultReason): void {
     if (!this.running) return;
     this.running = false; this.result = result; this.resultReason = reason;
     this.events.push({ type: 'result', detail: { result, reason } });

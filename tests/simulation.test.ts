@@ -74,7 +74,7 @@ test('capturing the enemy base yields victory', () => {
   const state = new GameState(); state.start(0, positionFor);
   const enemyBase = state.hexAt(ENEMY_BASE.col, ENEMY_BASE.row)!;
   enemyBase.owner = Owner.Player;
-  assert.deepEqual(evaluateVictory(state.hexes, state.armies), { result: 'victory', reason: 'Die blaue Basis wurde erobert.' });
+  assert.deepEqual(evaluateVictory(state.hexes, state.armies), { result: 'victory', reason: 'enemyBaseCaptured' });
 });
 
 test('AI issues a legal action from its initial position', () => {
@@ -106,4 +106,3 @@ test('progress unlocks sequentially and survives a reload', () => {
   assert.equal(reloaded.completed[0], true);
   assert.equal(reloaded.best[0], 72.5);
 });
-
