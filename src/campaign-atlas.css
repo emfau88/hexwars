@@ -18,7 +18,7 @@
 #campaignMenu .campaignBrand::before { display:none; }
 #campaignMenu .campaignBrand .brandKicker { display:none; }
 #campaignMenu .campaignBrand strong {
-  color:#f3ca88; font-family:var(--font-display); font-size:18px; font-weight:800;
+  color:#f3ca88; font-family:var(--font-display); font-size:19px; font-weight:800;
   letter-spacing:3.8px;
 }
 #campaignMenu .campaignBrand span:last-child {
@@ -30,9 +30,9 @@
   min-width:164px; padding:8px 10px; color:#89958e; background:#18241f;
   border:1px solid #34453c; border-radius:10px; font-family:var(--font-ui);
 }
-#campaignMenu .progressHeading { font-size:10px; font-weight:650; letter-spacing:.7px; }
+#campaignMenu .progressHeading { font-size:11px; font-weight:700; letter-spacing:.65px; }
 #campaignMenu .progressText b {
-  color:#f0eadb; font-family:var(--font-display); font-size:13px; font-weight:700;
+  color:#f0eadb; font-family:var(--font-display); font-size:14px; font-weight:750;
   font-variant-numeric:tabular-nums;
 }
 #campaignMenu .campaignProgressTrack { background:#34453c; }
@@ -56,15 +56,15 @@
   padding:0 24px; color:#1d2b24; border-bottom:1px solid rgba(55,81,65,.20); background:rgba(225,232,197,.46);
 }
 #campaignMenu .campaignEyebrow {
-  margin:0 0 4px; color:#526457; font-family:var(--font-ui); font-size:11px; font-weight:750; line-height:1;
+  margin:0 0 4px; color:#526457; font-family:var(--font-ui); font-size:11.5px; font-weight:800; line-height:1;
   letter-spacing:1.1px;
 }
 #campaignMenu .atlasHeader h1 {
-  margin:0; color:#17251e; font-family:var(--font-display); font-size:27px; font-weight:720;
+  margin:0; color:#17251e; font-family:var(--font-display); font-size:28px; font-weight:760;
   line-height:1.05; letter-spacing:-.55px;
 }
 #campaignMenu .atlasActLegend {
-  display:flex; align-items:center; gap:17px; color:#425348; font-size:11px; font-weight:600;
+  display:flex; align-items:center; gap:17px; color:#425348; font-size:11.5px; font-weight:650;
 }
 #campaignMenu .atlasActLegend span { display:flex; align-items:center; gap:6px; white-space:nowrap; }
 #campaignMenu .atlasActLegend i { width:8px; height:8px; border-radius:50%; background:#7f9d6f; }
@@ -80,7 +80,7 @@
 #campaignAtlasSvg .atlasShoreLight { fill:none; stroke:#eee5c3; stroke-width:.8; stroke-linecap:round; opacity:.7; vector-effect:non-scaling-stroke; }
 #campaignMenu .atlasHint {
   position:absolute; left:18px; bottom:16px; z-index:3; margin:0; padding:8px 11px;
-  color:#edf3ed; background:rgba(24,40,32,.84); border-radius:10px; font-size:11px; font-weight:550;
+  color:#edf3ed; background:rgba(24,40,32,.84); border-radius:10px; font-size:12px; font-weight:600;
   box-shadow:0 5px 18px rgba(8,16,11,.16); pointer-events:none;
 }
 
@@ -110,7 +110,7 @@
   border:1px solid #f8e1b2; pointer-events:none;
 }
 #campaignAtlasSvg .atlasLevelNumber {
-  position:relative; z-index:2; font-family:var(--font-display); font-size:18px; font-weight:750;
+  position:relative; z-index:2; font-family:var(--font-display); font-size:19px; font-weight:800;
   line-height:1; letter-spacing:-.45px; font-variant-numeric:tabular-nums;
 }
 #campaignAtlasSvg .atlasLevelState {
@@ -129,16 +129,16 @@
   min-height:78px; padding:18px 20px 13px; display:flex; align-items:flex-start; justify-content:space-between; gap:15px;
 }
 #campaignMenu .menuKicker {
-  margin:0 0 6px; color:#5c6b5f; font-family:var(--font-ui); font-size:10px; font-weight:750; line-height:1;
+  margin:0 0 6px; color:#5c6b5f; font-family:var(--font-ui); font-size:11px; font-weight:800; line-height:1;
   letter-spacing:1px;
 }
 #campaignMenu #menuLevelName {
-  margin:0; color:#17251e; font-family:var(--font-display); font-size:27px; font-weight:720;
+  margin:0; color:#17251e; font-family:var(--font-display); font-size:28px; font-weight:760;
   line-height:1.08; letter-spacing:-.55px;
 }
 #campaignMenu #menuLevelState {
   flex:0 0 auto; padding:7px 9px; color:#556550; border:1px solid #94a482; border-radius:9px;
-  background:rgba(255,255,255,.18); font-family:var(--font-ui); font-size:10px; font-weight:750; line-height:1; letter-spacing:.7px;
+  background:rgba(255,255,255,.18); font-family:var(--font-ui); font-size:11px; font-weight:800; line-height:1; letter-spacing:.65px;
 }
 #campaignMenu #menuLevelState.locked { color:#8b5146; border-color:#bc8578; }
 #campaignMenu .previewFrame {
@@ -147,32 +147,32 @@
 }
 #campaignMenu .previewFrame::after { box-shadow:inset 0 -26px 38px rgba(64,83,65,.08); }
 #campaignMenu .previewTopline { color:#34443a; }
-#campaignMenu .previewTopline,#campaignMenu .previewLegend { font-family:var(--font-display); font-weight:650; }
+#campaignMenu .previewTopline,#campaignMenu .previewLegend { font-family:var(--font-display); font-weight:700; }
 #campaignMenu .previewLegend { color:#eef2ec; background:rgba(28,43,35,.76); }
 #campaignMenu .missionContent { padding:14px 20px 18px; }
-#campaignMenu #menuLevelText { margin:0; min-height:0; color:#46554b; font-size:14px; line-height:1.5; }
+#campaignMenu #menuLevelText { margin:0; min-height:0; color:#46554b; font-size:14.5px; font-weight:500; line-height:1.5; }
 #campaignMenu .missionBriefGrid { grid-template-columns:1fr; gap:7px; margin-top:12px; }
 #campaignMenu .briefItem {
   padding:10px 11px; color:#3d4b42; border:1px solid #cbc3ad; border-radius:10px; background:rgba(255,255,255,.16);
 }
 #campaignMenu .briefItem span {
-  margin-bottom:4px; color:#5f6d62; font-family:var(--font-ui); font-size:10.5px; font-weight:750; letter-spacing:.7px;
+  margin-bottom:4px; color:#5f6d62; font-family:var(--font-ui); font-size:11px; font-weight:800; letter-spacing:.65px;
 }
-#campaignMenu .briefItem p { color:#3e4d43; font-size:12.5px; line-height:1.42; }
+#campaignMenu .briefItem p { color:#3e4d43; font-size:13px; font-weight:500; line-height:1.42; }
 #campaignMenu .objectiveBrief { border-color:#d7a583; background:rgba(217,119,66,.055); }
 #campaignMenu .objectiveBrief span { color:#b76339; }
 #campaignMenu .menuMeta { justify-content:flex-start; gap:6px; margin:10px 0; }
 #campaignMenu .menuMeta span {
   padding:5px 8px; color:#536157; border-color:#c8c0aa; background:rgba(255,255,255,.13);
-  font-size:10.5px; font-weight:600;
+  font-size:11px; font-weight:650;
 }
 #campaignMenu .menuLockHint { margin:0 0 8px; color:#8b5146; background:rgba(183,94,72,.08); }
 #campaignMenu .playButton {
   min-height:50px; color:#172019; border:1px solid #bd713f; border-radius:11px;
   background:linear-gradient(#f1bc70,#eaa052); box-shadow:0 7px 14px rgba(122,69,33,.17);
-  font-family:var(--font-display); font-size:13px; font-weight:700; letter-spacing:.7px;
+  font-family:var(--font-display); font-size:13.5px; font-weight:750; letter-spacing:.65px;
 }
-#campaignMenu .missionControlHint { margin:9px 1px 0; color:#5d6a60; font-size:11.5px; line-height:1.4; }
+#campaignMenu .missionControlHint { margin:9px 1px 0; color:#5d6a60; font-size:12px; font-weight:550; line-height:1.4; }
 #campaignMenu .controlArrow { color:#a95b34; background:rgba(217,119,66,.10); }
 
 @media (max-width:1100px) and (min-width:901px) and (min-height:621px) {
@@ -190,7 +190,7 @@
   #campaignMenu .campaignTop {
     position:sticky; top:0; z-index:20; min-height:56px; padding:0 10px; grid-template-columns:1fr auto;
   }
-  #campaignMenu .campaignBrand strong { font-size:16px; letter-spacing:2.8px; }
+  #campaignMenu .campaignBrand strong { font-size:17px; letter-spacing:2.7px; }
   #campaignMenu .campaignBrand span:last-child { display:none; }
   #campaignMenu .campaignTopRight { gap:6px; }
   #campaignMenu .progressText { min-width:78px; padding:6px 7px; }
@@ -202,26 +202,27 @@
   #campaignMenu .campaignShell { display:flex; flex-direction:column; gap:8px; padding:8px 8px calc(16px + env(safe-area-inset-bottom)); overflow:visible; }
   #campaignMenu .campaignJourney { order:1; flex:0 0 310px; height:310px; border-radius:16px; }
   #campaignMenu .atlasHeader { flex:0 0 52px; min-height:52px; padding:0 13px; gap:8px; }
-  #campaignMenu .atlasHeader h1 { font-size:20px; }
-  #campaignMenu .campaignEyebrow { font-size:10px; letter-spacing:.8px; }
-  #campaignMenu .atlasActLegend { gap:7px; font-size:9.5px; }
+  #campaignMenu .atlasHeader h1 { font-size:21px; }
+  #campaignMenu .campaignEyebrow { font-size:11px; letter-spacing:.75px; }
+  #campaignMenu .atlasActLegend { gap:7px; font-size:10.5px; }
   #campaignMenu .atlasActLegend span { gap:3px; }
   #campaignMenu .atlasActLegend i { width:6px; height:6px; }
   #campaignMenu .atlasHint { display:none; }
-  #campaignAtlasSvg .atlasLevelNumber { font-size:15px; }
+  #campaignAtlasSvg .atlasLevelNumber { font-size:16px; }
   #campaignAtlasSvg .atlasLevelState { width:11px; height:11px; font-size:7px; }
   #campaignMenu #mapCenter { order:2; display:grid; border-radius:16px; scroll-margin-top:64px; }
   #campaignMenu .dossierHeader { min-height:66px; padding:14px 13px 10px; }
-  #campaignMenu #menuLevelName { font-size:23px; }
-  #campaignMenu #menuLevelState { padding:6px 7px; font-size:10px; }
+  #campaignMenu #menuLevelName { font-size:24px; }
+  #campaignMenu #menuLevelState { padding:6px 7px; font-size:11px; }
   #campaignMenu .previewFrame { height:205px; min-height:205px; margin:0 13px; border-radius:11px; }
   #campaignMenu .missionContent { padding:12px 13px 14px; }
-  #campaignMenu #menuLevelText { font-size:14px; }
-  #campaignMenu .briefItem span { font-size:11px; }
-  #campaignMenu .briefItem p { font-size:13px; }
-  #campaignMenu .menuMeta span { font-size:11px; }
-  #campaignMenu .missionControlHint { font-size:12px; }
-  #campaignMenu .playButton { min-height:48px; }
+  #campaignMenu .previewTopline,#campaignMenu .previewLegend { font-size:10.5px; }
+  #campaignMenu #menuLevelText { font-size:15px; }
+  #campaignMenu .briefItem span { font-size:11.5px; }
+  #campaignMenu .briefItem p { font-size:14px; }
+  #campaignMenu .menuMeta span { font-size:12px; }
+  #campaignMenu .missionControlHint { font-size:13px; }
+  #campaignMenu .playButton { min-height:50px; font-size:14px; }
   #menuSettingsPanel { position:fixed; top:54px; right:9px; }
 }
 
