@@ -20,12 +20,13 @@ The project is a playable internal vertical slice, not yet a commercial release.
 - Ten deterministic campaign levels
 - Production campaign menu built as one coherent terrain-atlas hex grid
 - Desktop and mobile-portrait layouts
+- English by default with a persistent in-game `EN | DE` switch
 - Persistent local campaign progress
 - Real-time AI, combat, supply and endgame systems
 - Automated unit, simulation, balance and browser tests
 - Level 1 as the visual-quality test bed for terrain, vegetation, water and shores
 
-`HEXFRONT` is a working title. English-first localization with a German toggle, final product naming, accessibility onboarding and human playtest balancing are still in progress.
+`HEXFRONT` is the retained product name. A professional commercial name clearance, accessibility onboarding and human playtest balancing are still required before release.
 
 ## Local development
 
@@ -51,6 +52,7 @@ npm run build
 - [Product and game-design audit](./docs/campaign-audit.md)
 - [Prioritized roadmap](./docs/campaign-roadmap.md)
 - [Campaign balance report](./docs/campaign-balance-report.md)
+- [Localization guide for future EN/DE content](./docs/localization-guide.md)
 - [Completed restructuring brief](./docs/auftrag-hexfront-neustrukturierung.md)
 - [Visual design references](./docs/mockups/)
 

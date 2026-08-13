@@ -2,22 +2,22 @@
 
 **Derived from:** `docs/campaign-audit.md`  
 **Roadmap date:** 11 August 2026  
-**Implementation status updated:** 12 August 2026
+**Implementation status updated:** 13 August 2026
 **Principle:** no production implementation begins until the relevant decision gate is approved
 
-## Current implementation status — 12 August 2026
+## Current implementation status — 13 August 2026
 
 The restructuring brief in `docs/auftrag-hexfront-neustrukturierung.md` is complete. This roadmap remains the product and commercial plan beyond that technical/core-gameplay brief; “complete” below therefore means the roadmap exit criteria, not merely that implementation has started.
 
 | Step | Status | Current evidence / remaining gap |
 |---:|---|---|
-| 1 | Open | `HEXFRONT` is still a collision-prone working title; promise and clearance are not approved. |
-| 2 | Open | Some command-language outliers were removed, but no approved bilingual lexicon exists. |
+| 1 | Partial | `HEXFRONT` is retained as the product name; the product promise and professional commercial clearance are not yet approved. |
+| 2 | Partial | A complete typed runtime lexicon now covers EN/DE UI and level copy; final editorial tone review remains. |
 | 3 | Partial | `npm run balance` is deterministic and covers all ten maps; 1,000-run distributions, bias thresholds and CI failure gates remain. |
 | 4 | Partial | Symmetric decline/stop behavior exists at 180/240 s; alternatives and human comprehension have not been compared. |
 | 5 | Complete | Terrain Atlas V2 is now the production campaign menu on desktop and mobile: one deterministic hex grid, real-cell stations, exposed-edge shores and a responsive dossier. Earlier directions remain archived for traceability. |
-| 6 | Mostly complete | Runtime, level data, systems, input, rendering, UI, audio, persistence and debug are separated and typed; locale catalogues and CSS token consolidation remain. |
-| 7 | Open | English-default runtime localization and persistent `EN | DE` toggle are not implemented. |
+| 6 | Mostly complete | Runtime, level data, systems, input, rendering, UI, audio, persistence, debug and localization are separated and typed; CSS token consolidation remains. |
+| 7 | Complete | English is the default; the persistent `EN | DE` control updates UI, level copy, messages, results, document language and accessibility labels. Missing-key/content and desktop/mobile browser tests pass. |
 | 8 | Partial | Real drag input and reduced Level-1 HUD exist; paused first action, tap-origin/tap-target and keyboard-equivalent input remain. |
 | 9 | Partial | The production menu and Level 1 now share the sage/cream shell, vegetation, water and shore materials. Remaining levels and the in-match HUD still need full token and biome alignment. |
 | 10 | Partial, Level 1 pilot | Visible hexes remain. Level 1 now uses generated water/shore materials with code-derived coast geometry only on exposed water edges; extension to other biomes and maps still requires approval. |
@@ -31,7 +31,7 @@ The restructuring brief in `docs/auftrag-hexfront-neustrukturierung.md` is compl
 | 18 | Open | Premium scope and monetization await vertical-slice data. |
 | 19 | Deferred | Post-launch systems remain intentionally out of scope. |
 
-## Completed targeted corrections — 11 August 2026
+## Completed targeted corrections — 13 August 2026
 
 These small corrections were approved separately from the full production roadmap:
 
@@ -40,7 +40,8 @@ These small corrections were approved separately from the full production roadma
 - Portrait mobile shows a compact current-act route before the mission dossier.
 - The AI now begins low-priority rear-to-front logistics once a front is established; Level 5 also has a bounded late phase to prevent the observed static reserve deadlock. This is a pragmatic human-versus-AI safeguard, not a claim of solved AI-versus-AI balance.
 - Correct base coordinates, rather than any captured base tile, now decide victory.
-- These contracts now sit inside a 34-test logic/simulation suite and a 10-flow desktop/mobile Playwright suite. A deterministic ten-level balance runner exists; the large-batch distributions and thresholds required to complete step 3 remain outstanding.
+- English-default localization with a persistent German toggle now covers all current UI, campaign content, status messages, results and accessibility labels. Typed catalogues and localized level fields require both languages for future content.
+- These contracts now sit inside a 38-test logic/simulation/localization suite and a 12-flow desktop/mobile Playwright suite. A deterministic ten-level balance runner exists; the large-batch distributions and thresholds required to complete step 3 remain outstanding.
 
 ## How to read this roadmap
 
@@ -72,11 +73,10 @@ Effort is relative and intentionally coarse: `S` (small), `M` (medium), `L` (lar
 
 Actions:
 
-- freeze new public `HEXFRONT` branding;
+- retain `HEXFRONT` as the product name and document that decision;
 - write a one-sentence English product promise and German equivalent;
 - approve tone pillars and a prohibited-language list;
-- run a 50+ candidate naming sprint;
-- screen final candidates across app stores, Steam, web, domains and trademarks;
+- screen `HEXFRONT` across app stores, Steam, web, domains and trademarks;
 - obtain professional legal clearance before final identity work;
 - decide whether the separate turn-based root game remains, is renamed separately or is removed from the campaign acquisition path.
 
