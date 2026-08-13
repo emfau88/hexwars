@@ -1,7 +1,7 @@
 import { WORLD_COLS, WORLD_ROWS } from '../core/config';
 import type { GameState } from '../core/GameState';
 import { isPlayable } from '../core/hex';
-import { Owner, Terrain, type HexState, type Point, type SendMode } from '../core/types';
+import { Owner, Terrain, type HexState, type Point, type SendMode, type VisualVariant } from '../core/types';
 import { terrainCapacity } from '../systems/GrowthSystem';
 import { EffectsRenderer } from './EffectsRenderer';
 import { LandscapeRenderer } from './LandscapeRenderer';
@@ -15,12 +15,13 @@ export class BoardRenderer {
   readonly effects = new EffectsRenderer();
   private horizontal = 0; private vertical = 0; private originX = 0; private originY = 0;
   private readonly context: CanvasRenderingContext2D;
-  private readonly landscape = new LandscapeRenderer();
+  private readonly landscape: LandscapeRenderer;
 
-  constructor(readonly canvas: HTMLCanvasElement, readonly stage: HTMLElement) {
+  constructor(readonly canvas: HTMLCanvasElement, readonly stage: HTMLElement, visualVariant: VisualVariant = 'production') {
     const context = canvas.getContext('2d', { alpha: false });
     if (!context) throw new Error('Canvas 2D is unavailable.');
     this.context = context;
+    this.landscape = new LandscapeRenderer(undefined, visualVariant);
   }
 
   resize(state?: GameState): void {

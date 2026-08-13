@@ -1,5 +1,5 @@
 import { hash01 } from '../core/random';
-import { Terrain, type DecorType, type HexState, type LandscapeStyle } from '../core/types';
+import { Terrain, type DecorType, type HexState, type LandscapeStyle, type VisualVariant } from '../core/types';
 
 type PathDrawer = (context: CanvasRenderingContext2D, x: number, y: number, radius: number) => void;
 
@@ -20,11 +20,18 @@ const decorPalette: Record<DecorType, { fill: string; edge: string }> = {
   snow: { fill: '#edf5f2', edge: '#bfd4d2' },
 };
 
+type CandidateSprite =
+  | 'mountainRidge' | 'mountainOutcrop' | 'mountainScree' | 'mountainSnow'
+  | 'ruinCorner' | 'ruinPaving' | 'ruinFoundation'
+  | 'marshCattails' | 'marshSedge' | 'marshLilies' | 'marshReeds'
+  | 'snowConifer' | 'snowBush' | 'snowRocks' | 'snowdrift';
+
 export class LandscapeRenderer {
   private readonly sprites: Record<'tree' | 'conifer' | 'bush' | 'water' | 'shore', HTMLImageElement>;
+  private readonly candidates: Record<CandidateSprite, HTMLImageElement> | null;
   private readonly patterns = new WeakMap<CanvasRenderingContext2D, Partial<Record<'water' | 'shore', CanvasPattern>>>();
 
-  constructor(private readonly onAssetReady?: () => void) {
+  constructor(private readonly onAssetReady?: () => void, private readonly visualVariant: VisualVariant = 'production') {
     this.sprites = {
       tree: this.load(`${import.meta.env.BASE_URL}assets/level1-tree.webp`),
       conifer: this.load(`${import.meta.env.BASE_URL}assets/level1-conifer-v2.webp`),
@@ -32,6 +39,16 @@ export class LandscapeRenderer {
       water: this.load(`${import.meta.env.BASE_URL}assets/level1-water.webp`),
       shore: this.load(`${import.meta.env.BASE_URL}assets/level1-shore.webp`),
     };
+    const candidate = (name: string) => this.load(`${import.meta.env.BASE_URL}assets/experiments/decor-p1/${name}.webp`);
+    this.candidates = visualVariant !== 'production' ? {
+      mountainRidge: candidate('mountains-highland-ridge'), mountainOutcrop: candidate('mountains-rock-outcrop'),
+      mountainScree: candidate('mountains-scree-cluster'), mountainSnow: candidate('mountains-snow-peaks'),
+      ruinCorner: candidate('ruins-collapsed-corner'), ruinPaving: candidate('ruins-cracked-paving'),
+      ruinFoundation: candidate('ruins-broken-foundation'), marshCattails: candidate('marsh-cattails'),
+      marshSedge: candidate('marsh-sedge'), marshLilies: candidate('marsh-lily-leaves'),
+      marshReeds: candidate('marsh-reeds-stones'), snowConifer: candidate('snow-snow-conifer'),
+      snowBush: candidate('snow-snow-bush'), snowRocks: candidate('snow-snow-rocks'), snowdrift: candidate('snow-snowdrift'),
+    } : null;
   }
 
   private load(source: string): HTMLImageElement {
@@ -53,18 +70,21 @@ export class LandscapeRenderer {
   }
 
   drawHex(context: CanvasRenderingContext2D, hex: HexState, radius: number, style: LandscapeStyle, seed: number, path: PathDrawer): void {
-    const type = hex.decor ?? 'meadow';
-    const palette = decorPalette[type];
+    const type = this.visualDecorType(hex, seed);
+    const palette = this.visualVariant !== 'production' && seed === 909 && type === 'forest' ? decorPalette.snow
+      : this.visualVariant === 'decor-p2' && seed === 303 && type === 'ruin' ? { fill: '#d8c69d', edge: '#9e835b' }
+        : decorPalette[type];
+    const materialStyle = this.visualVariant !== 'production' ? 'meadow-v1' : style;
     path(context, hex.x, hex.y, radius * 0.955);
     context.fillStyle = palette.fill; context.fill();
-    if (style === 'meadow-v1' && type === 'water') {
+    if (materialStyle === 'meadow-v1' && type === 'water') {
       const material = this.materialPattern(context, 'water');
       if (material) {
         context.save(); context.globalAlpha = .7; context.fillStyle = material; context.fill(); context.restore();
       }
     }
     context.save(); path(context, hex.x, hex.y, radius * 0.84); context.clip();
-    this.details(context, hex, radius, hash01(hex.col, hex.row, seed));
+    this.details(context, hex, radius, hash01(hex.col, hex.row, seed), seed, type);
     context.restore();
     path(context, hex.x, hex.y, radius * 0.955); context.strokeStyle = palette.edge; context.lineWidth = 1.15; context.stroke();
   }
@@ -99,8 +119,33 @@ export class LandscapeRenderer {
     context.beginPath(); context.arc(x, y - size * .15, size * .28, 0, Math.PI * 2); context.fill();
   }
 
-  private details(context: CanvasRenderingContext2D, hex: HexState, size: number, q: number): void {
-    const type = hex.decor ?? 'meadow';
+  private details(context: CanvasRenderingContext2D, hex: HexState, size: number, q: number, seed: number, type: DecorType): void {
+    if (this.candidates) {
+      if (this.visualVariant === 'decor-p2' && seed === 303 && type === 'ruin') {
+        const image = hex.row === 6 ? this.candidates.ruinCorner : this.candidates.ruinPaving;
+        if (this.sprite(context, image, hex.x, hex.y + size * .2, size * 1.42, .55, size * .88)) return;
+      } else if (this.visualVariant === 'decor-p2' && seed === 404 && type === 'mountain') {
+        const image = hex.row === 4 ? this.candidates.mountainOutcrop
+          : hex.row === 8 ? this.candidates.mountainRidge : this.candidates.mountainScree;
+        if (this.sprite(context, image, hex.x, hex.y + size * .16, size * 1.34, .58, size * 1.18)) return;
+      } else if (type === 'mountain') {
+        const image = seed === 909 && q > .4 ? this.candidates.mountainSnow
+          : q < .34 ? this.candidates.mountainRidge : q < .68 ? this.candidates.mountainOutcrop : this.candidates.mountainScree;
+        if (this.sprite(context, image, hex.x, hex.y + size * .16, size * 1.28, .58, size * 1.18)) return;
+      } else if (type === 'ruin') {
+        const image = q < .38 ? this.candidates.ruinPaving : q < .72 ? this.candidates.ruinCorner : this.candidates.ruinFoundation;
+        if (this.sprite(context, image, hex.x, hex.y + size * .17, size * 1.25, .55, size * .78)) return;
+      } else if (type === 'marsh') {
+        const image = q < .28 ? this.candidates.marshSedge : q < .54 ? this.candidates.marshCattails : q < .78 ? this.candidates.marshReeds : this.candidates.marshLilies;
+        if (this.sprite(context, image, hex.x, hex.y + size * .16, size * .9, .56, size * 1.02)) return;
+      } else if (type === 'snow') {
+        const image = q < .38 ? this.candidates.snowBush : q < .72 ? this.candidates.snowRocks : this.candidates.snowdrift;
+        if (this.sprite(context, image, hex.x, hex.y + size * .14, size * .94, .55, size * .9)) return;
+      } else if (type === 'forest' && seed === 909) {
+        const image = q < .58 ? this.candidates.snowBush : this.candidates.snowConifer;
+        if (this.sprite(context, image, hex.x, hex.y + size * .15, size * .86, .58, size * 1.12)) return;
+      }
+    }
     if (type === 'forest') {
       if (q < .22 && this.sprite(context, this.sprites.bush, hex.x - size * .15, hex.y + size * .16, size * .62, .5)) return;
       this.tree(context, hex.x + (q - .5) * size * .22, hex.y + size * .15, size * (.76 + q * .28), size, q > .68);
@@ -124,7 +169,7 @@ export class LandscapeRenderer {
   }
 
   drawWaterShores(context: CanvasRenderingContext2D, hexes: readonly HexState[], radius: number, style: LandscapeStyle, path: PathDrawer): void {
-    if (style === 'meadow-v1') {
+    if (style === 'meadow-v1' || this.visualVariant !== 'production') {
       const material = this.materialPattern(context, 'shore');
       context.save(); context.lineCap = 'round'; context.lineJoin = 'round';
       for (const { hex, edge } of exposedWaterShoreEdges(hexes)) {
@@ -154,6 +199,23 @@ export class LandscapeRenderer {
       path(context, hex.x, hex.y, radius * .91); context.strokeStyle = decorPalette.water.edge; context.lineWidth = 1.1; context.stroke();
     }
   }
+
+  private visualDecorType(hex: HexState, seed: number): DecorType {
+    const original = hex.decor ?? 'meadow';
+    if (this.visualVariant !== 'decor-p2') return original;
+    if (seed === 303 && original === 'ruin' && !this.isTerraceCell(hex)) return 'meadow';
+    if (seed === 404 && original === 'mountain' && !this.isHighlandAccent(hex)) return 'meadow';
+    return original;
+  }
+
+  private isTerraceCell(hex: HexState): boolean {
+    return (hex.col === 0 || hex.col === 6) && hex.row >= 5 && hex.row <= 7;
+  }
+
+  private isHighlandAccent(hex: HexState): boolean {
+    return (hex.col === 0 || hex.col === 6) && (hex.row === 4 || hex.row === 8 || hex.row === 9);
+  }
+
 }
 
 const neighborForEdge = (hex: HexState, edge: number): string => {

@@ -1,6 +1,6 @@
 import { AudioController } from '../audio/AudioController';
 import { GameState } from '../core/GameState';
-import { Owner, type CampaignProgress, type GameEvent, type SendMode } from '../core/types';
+import { Owner, type CampaignProgress, type GameEvent, type SendMode, type VisualVariant } from '../core/types';
 import { installDebugApi } from '../debug/DebugApi';
 import { I18n } from '../i18n/I18n';
 import type { Locale } from '../i18n/types';
@@ -23,6 +23,7 @@ export class HexfrontApp {
   private readonly parameters = new URLSearchParams(location.search);
   private readonly debugSpeed: number;
   private readonly debugUnlock: boolean;
+  private readonly visualVariant: VisualVariant;
   private lastFrame = performance.now();
   private animationFrame = 0;
 
@@ -32,15 +33,17 @@ export class HexfrontApp {
     if (!canvas || !stage) throw new Error('HEXFRONT canvas shell is incomplete.');
     this.debugSpeed = Math.max(1, Math.min(20, Number(this.parameters.get('speed')) || 1));
     this.debugUnlock = this.parameters.get('unlock') === '1';
+    const requestedVisual = this.parameters.get('visual');
+    this.visualVariant = requestedVisual === 'decor-p1' || requestedVisual === 'decor-p2' ? requestedVisual : 'production';
     this.state.autoplay = this.parameters.get('autoplay') === '1';
     this.progress = this.progressStore.load();
-    this.renderer = new BoardRenderer(canvas, stage);
+    this.renderer = new BoardRenderer(canvas, stage, this.visualVariant);
     this.ui = new CampaignUI({
       startLevel: (index) => this.startLevel(index), showMap: (focus) => this.showMap(focus),
       setMode: (mode) => this.setMode(mode), toggleSound: () => this.toggleSound(),
       toggleFullscreen: () => void this.toggleFullscreen(), resetProgress: () => this.resetProgress(), activate: () => this.audio.activate(),
       setLocale: (locale) => this.setLocale(locale),
-    }, this.i18n);
+    }, this.i18n, this.visualVariant);
     this.input = new InputController(canvas, this.state, this.renderer, {
       getMode: () => this.sendMode,
       onCommand: () => { navigator.vibrate?.(10); this.audio.beep(410, .035, .03); },

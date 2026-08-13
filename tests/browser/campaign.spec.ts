@@ -172,3 +172,17 @@ test('language defaults to English and the German choice survives reload', async
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   await expect(page.locator('#campaignTitle')).toHaveText('SELECT MAP');
 });
+
+test('decor test modes load their isolated candidate assets', async ({ page }) => {
+  for (const visual of ['decor-p1', 'decor-p2']) {
+    await page.goto(`/?autostart=1&level=8&visual=${visual}`);
+    await expect.poll(async () => page.evaluate(() => performance.getEntriesByType('resource')
+      .filter((entry) => entry.name.includes('/assets/experiments/decor-p1/')).length)).toBe(15);
+    const canvas = await page.locator('#gameCanvas').evaluate((element) => ({
+      width: (element as HTMLCanvasElement).width,
+      height: (element as HTMLCanvasElement).height,
+    }));
+    expect(canvas.width).toBeGreaterThan(0);
+    expect(canvas.height).toBeGreaterThan(0);
+  }
+});

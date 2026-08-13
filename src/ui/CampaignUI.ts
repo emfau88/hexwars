@@ -1,5 +1,5 @@
 import type { GameState } from '../core/GameState';
-import { Owner, Terrain, type CampaignProgress, type SendMode } from '../core/types';
+import { Owner, Terrain, type CampaignProgress, type SendMode, type VisualVariant } from '../core/types';
 import type { TranslationKey } from '../i18n/catalog';
 import type { I18n } from '../i18n/I18n';
 import type { Locale } from '../i18n/types';
@@ -36,8 +36,8 @@ export class CampaignUI {
   private readonly previewLandscape: LandscapeRenderer;
   private readonly atlas: CampaignAtlas;
 
-  constructor(private readonly callbacks: UICallbacks, private readonly i18n: I18n) {
-    this.previewLandscape = new LandscapeRenderer(() => this.renderPreview(this.selectedMenuLevel));
+  constructor(private readonly callbacks: UICallbacks, private readonly i18n: I18n, visualVariant: VisualVariant = 'production') {
+    this.previewLandscape = new LandscapeRenderer(() => this.renderPreview(this.selectedMenuLevel), visualVariant);
     this.atlas = new CampaignAtlas(required<SVGSVGElement>('campaignAtlasSvg'), i18n);
     required('playLevelBtn').addEventListener('click', () => callbacks.startLevel(this.selectedMenuLevel));
     for (const id of ['restartBtn', 'mobileRestartBtn', 'retryBtn']) required(id).addEventListener('click', () => callbacks.startLevel());
