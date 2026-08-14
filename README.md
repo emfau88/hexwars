@@ -4,6 +4,23 @@
 
 HEXFRONT is a compact real-time tactics game for desktop browsers and mobile portrait screens. Expand across a hex grid, distribute growing forces and capture the opposing base.
 
+## Screenshots
+
+### Campaign atlas
+
+![HEXFRONT campaign atlas with mission briefing](./docs/readme/campaign-overview.png)
+
+<table>
+  <tr>
+    <th>Desktop battle</th>
+    <th>Mobile portrait</th>
+  </tr>
+  <tr>
+    <td width="68%"><img src="./docs/readme/gameplay-desktop.png" alt="HEXFRONT battle on the Split Field map"></td>
+    <td width="32%"><img src="./docs/readme/gameplay-mobile.png" alt="HEXFRONT mobile battle with touch controls"></td>
+  </tr>
+</table>
+
 ## Play
 
 [Play the current GitHub Pages build](https://emfau88.github.io/hexwars/)
