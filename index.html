@@ -95,6 +95,13 @@
               </div>
               <span id="menuLevelState" class="ready">READY</span>
             </div>
+
+            <div class="missionLaunch">
+              <p class="launchObjective"><span data-i18n="campaign.objective">OBJECTIVE</span><strong id="menuLevelObjective">Capture the blue base.</strong></p>
+              <button class="playButton" id="playLevelBtn">BEGIN CAMPAIGN</button>
+              <p class="menuLockHint" id="menuLockHint" hidden data-i18n="campaign.lockHint">Complete the previous level first.</p>
+            </div>
+
             <div class="previewFrame" id="levelPreviewFrame">
               <div class="previewTopline"><span id="menuPreviewLabel">LEVEL 01 · MAP PREVIEW</span><span data-i18n="campaign.startLayout">STARTING LAYOUT</span></div>
               <canvas id="levelPreview" width="720" height="460" aria-label="Preview of the selected level map" data-i18n-aria-label="campaign.previewAria"></canvas>
@@ -105,7 +112,6 @@
               <p id="menuLevelText" class="missionBlurb">A compact field trades speed against additional territory and production.</p>
 
               <div class="missionBriefGrid">
-                <div class="briefItem objectiveBrief"><span data-i18n="campaign.objective">OBJECTIVE</span><p id="menuLevelObjective">Capture the blue base.</p></div>
                 <div class="briefItem"><span data-i18n="campaign.thisLevel">THIS LEVEL</span><p id="menuLevelRule">Every move sends 50%.</p></div>
               </div>
 
@@ -113,8 +119,6 @@
                 <span id="menuDifficulty">ENTRY</span>
                 <span id="menuBestTime">NOT COMPLETED YET</span>
               </div>
-              <p class="menuLockHint" id="menuLockHint" hidden data-i18n="campaign.lockHint">Complete the previous level first.</p>
-              <button class="playButton" id="playLevelBtn">BEGIN CAMPAIGN</button>
               <p class="missionControlHint"><span class="controlArrow">↗</span><span data-i18n="campaign.controlHint">Drag from an orange cell to a reachable target.</span></p>
             </div>
           </section>

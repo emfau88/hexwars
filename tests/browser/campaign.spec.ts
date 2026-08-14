@@ -123,6 +123,15 @@ test('all ten campaign levels start with a valid board in this viewport', async 
 
 test('responsive shell has no page overflow and mobile controls meet the touch floor', async ({ page }) => {
   await page.goto('/');
+  const launchMetrics = await page.evaluate(() => {
+    const objective = document.querySelector<HTMLElement>('.launchObjective')!.getBoundingClientRect();
+    const cta = document.querySelector<HTMLElement>('#playLevelBtn')!.getBoundingClientRect();
+    const preview = document.querySelector<HTMLElement>('#levelPreviewFrame')!.getBoundingClientRect();
+    return { objectiveTop:objective.top, ctaTop:cta.top, ctaBottom:cta.bottom, previewTop:preview.top, viewportHeight:innerHeight };
+  });
+  expect(launchMetrics.objectiveTop).toBeLessThan(launchMetrics.ctaTop);
+  expect(launchMetrics.ctaTop).toBeLessThan(launchMetrics.previewTop);
+  expect(launchMetrics.ctaBottom).toBeLessThanOrEqual(launchMetrics.viewportHeight);
   await page.getByRole('button', { name: 'Menu settings' }).click();
   await expect(page.locator('#menuSettingsPanel')).toBeVisible();
   if ((page.viewportSize()?.width ?? 901) <= 900) {

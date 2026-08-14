@@ -44,6 +44,7 @@ These small corrections were approved separately from the full production roadma
 - Level 1 keeps the full decorative raster while using only 12 playable cells and a six-move direct route. Its AI remains active, starts with 12 units against the player's 23 and produces slightly more slowly only in this level. The two decorative gaps inside the playable cluster use quiet meadow terrain instead of distinct stone or plant motifs.
 - The result flow now shares the campaign visual language and opens the next dossier instead of launching the next match without context.
 - Fullscreen is available as a labeled action inside the mobile menu settings sheet as well as through the in-match controls.
+- The selected mission's single primary CTA now appears directly below its title and objective, before the optional preview and briefing details, so starting an available mission never requires reading or scrolling through the full dossier.
 - These contracts now sit inside a 39-test logic/simulation/localization suite and a 14-flow desktop/mobile Playwright suite. A deterministic ten-level balance runner exists; the large-batch distributions and thresholds required to complete step 3 remain outstanding.
 
 ## How to read this roadmap
