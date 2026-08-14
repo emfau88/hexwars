@@ -23,6 +23,7 @@ const decorPalette: Record<DecorType, { fill: string; edge: string }> = {
 type CandidateSprite =
   | 'mountainRidge' | 'mountainOutcrop' | 'mountainScree' | 'mountainSnow'
   | 'ruinCorner' | 'ruinPaving' | 'ruinRubble' | 'ruinFoundation'
+  | 'lowlandMushrooms' | 'lowlandBedrock' | 'lowlandFerns' | 'lowlandGrassStones'
   | 'marshCattails' | 'marshSedge' | 'marshLilies' | 'marshReeds'
   | 'snowConifer' | 'snowBush' | 'snowRocks' | 'snowdrift';
 
@@ -30,7 +31,9 @@ const candidateFiles: Record<CandidateSprite, string> = {
   mountainRidge: 'mountains-highland-ridge', mountainOutcrop: 'mountains-rock-outcrop',
   mountainScree: 'mountains-scree-cluster', mountainSnow: 'mountains-snow-peaks',
   ruinCorner: 'ruins-collapsed-corner', ruinPaving: 'ruins-cracked-paving',
-  ruinRubble: 'ruins-parallel-rubble', ruinFoundation: 'ruins-broken-foundation', marshCattails: 'marsh-cattails',
+  ruinRubble: 'ruins-parallel-rubble', ruinFoundation: 'ruins-broken-foundation',
+  lowlandMushrooms: 'lowland-mushroom-colony', lowlandBedrock: 'lowland-natural-bedrock',
+  lowlandFerns: 'lowland-fern-moss', lowlandGrassStones: 'lowland-dry-grass-stones', marshCattails: 'marsh-cattails',
   marshSedge: 'marsh-sedge', marshLilies: 'marsh-lily-leaves',
   marshReeds: 'marsh-reeds-stones', snowConifer: 'snow-snow-conifer',
   snowBush: 'snow-snow-bush', snowRocks: 'snow-snow-rocks', snowdrift: 'snow-snowdrift',
@@ -161,8 +164,10 @@ export class LandscapeRenderer {
           : q < .34 ? 'mountainRidge' : q < .68 ? 'mountainOutcrop' : 'mountainScree');
         if (this.candidateSprite(context, image, hex.x, hex.y + size * .16, size * 1.28, .58, size * 1.18)) return;
       } else if (type === 'ruin') {
-        const image = this.candidate(q < .25 ? 'ruinPaving' : q < .5 ? 'ruinCorner' : q < .75 ? 'ruinFoundation' : 'ruinRubble');
-        if (this.candidateSprite(context, image, hex.x, hex.y + size * .17, size * 1.25, .55, size * .78)) return;
+        const image = this.visualVariant === 'decor-v2'
+          ? this.candidate(q < .25 ? 'lowlandGrassStones' : q < .5 ? 'lowlandBedrock' : q < .75 ? 'lowlandFerns' : 'lowlandMushrooms')
+          : this.candidate(q < .25 ? 'ruinPaving' : q < .5 ? 'ruinCorner' : q < .75 ? 'ruinFoundation' : 'ruinRubble');
+        if (this.candidateSprite(context, image, hex.x, hex.y + size * .18, this.visualVariant === 'decor-v2' ? size * 1.46 : size * 1.25, .55, size * .82)) return;
       } else if (type === 'marsh') {
         const image = this.candidate(q < .28 ? 'marshSedge' : q < .54 ? 'marshCattails' : q < .78 ? 'marshReeds' : 'marshLilies');
         if (this.candidateSprite(context, image, hex.x, hex.y + size * .16, size * .9, .56, size * 1.02)) return;
