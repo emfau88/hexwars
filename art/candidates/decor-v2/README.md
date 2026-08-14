@@ -1,46 +1,65 @@
-# HEXFRONT simplified decorative asset candidates - V2
+# HEXFRONT simplified decorative assets - V2
 
-Status: **review package only - not integrated into the renderer**
+Status: **complete, exported and integrated as the default playable decoration set**
 
-This package starts the simplified replacement pass for four representative P1 assets. The goal is not lower technical quality; it is stronger game-scale readability through fewer, larger shapes and quieter texture. Water and shore assets are explicitly outside this pass.
+This package replaces fine-grained P1 decoration with larger shapes that remain readable on desktop and portrait mobile. It contains all sixteen mountain, ruin, marsh and snow sprites used by the campaign. Water and shore rendering are explicitly outside this pass and remain unchanged.
 
-## Included style anchors
+## Runtime behavior and rollback
 
-| Family | V2 candidate | Intended improvement |
-|---|---|---|
-| Mountain | `mountains-highland-ridge-v2.png` | Three broad, asymmetrical rock masses and a single stable silhouette instead of many small ledges and loose stones. |
-| Ruins | `ruins-cracked-paving-v2.png` | Four dominant slabs and one fragment instead of a busy field of similarly weighted paving pieces. |
-| Marsh | `marsh-reeds-stones-v2.png` | Three grouped foliage masses and two stones instead of dense fine reed detail. |
-| Snow | `snow-snow-rocks-v2.png` | Three clearly visible overlapping rocks and a calmer snow contour instead of five repeated snow-cap forms. |
+- Default game URL: loads `decor-v2`.
+- `?visual=decor-v2`: explicit V2 selection.
+- `?visual=production`: former procedural decoration without generated candidate sprites.
+- `?visual=decor-p1`: earlier detailed generated set.
+- `?visual=decor-p2`: earlier authored P1 placement experiment.
+
+The renderer loads assets lazily from `public/assets/decor-v2/`. Terrain assignment and V2 motif selection use separate deterministic hashes so all variants can occur without changing gameplay, level geometry or balance.
+
+## Complete asset set
+
+| Family | Runtime motifs |
+|---|---|
+| Mountains | rock outcrop, highland ridge, snow ridge, scree cluster |
+| Ruins | collapsed corner, cracked paving, offset rubble, broken foundation |
+| Marsh | cattails, sedge, lily leaves, reeds and stones |
+| Snow | asymmetric conifer, low bush, rock cluster, snowdrift |
+
+## Visual constraints
+
+- isolated transparent sprites without baked hexes, terrain, frames or cast shadows
+- one clear silhouette and a few large tonal masses per asset
+- neutral, grounded tactical-board-game tone without fantasy peaks or military iconography
+- mobile-first readability at a 31 px hex radius
+- conservative placement boxes that retain visible hex outlines and troop-number priority
+- compact tall-tree fitting so the lower hex edge is never clipped
 
 ## Review images
 
-- `previews/candidate-grid.png` compares P1 and V2 enlarged on identical representative hexes.
-- `previews/game-scale-comparison.png` compares P1 and V2 at 48 px desktop and 31 px portrait-mobile hex radii.
+- `previews/full-candidate-grid.png` - all sixteen V2 assets enlarged on family-specific hex colors
+- `previews/desktop-game-scale-grid.png` - complete set at a 48 px hex radius
+- `previews/mobile-game-scale-grid.png` - complete set at a 31 px hex radius
+- `previews/candidate-grid.png` - original P1 versus V2 style anchors
+- `previews/game-scale-comparison.png` - P1/V2 anchors at both target sizes
 
-## Deliberate constraints
+## Verification completed
 
-- isolated transparent sprites; no baked hex, terrain, shadow or frame
-- one clear silhouette per candidate
-- large tonal masses rather than microtexture
-- neutral, non-fantasy tactical-board-game tone
-- enough internal contrast for pale terrain without competing with troop numbers
-- no runtime exports, asset registrations, renderer changes or level-data changes
-- no work on water or shore visuals
+- all 16 runtime WebP files generated and each remains below 100 KB
+- transparent source corners and chroma-spill validation performed during processing
+- every V2 asset observed through real browser resource inventories across the ten campaign levels
+- all ten levels exercised at desktop and 390 x 844 portrait-mobile viewports
+- representative ruin, highland, marsh and snow maps visually reviewed at both sizes
+- no browser-console errors, missing assets or placeholder shapes
+- no water or shore asset changes
 
-## Current review status
-
-These four images are **style anchors, not final production approval**. They should first be judged in the supplied game-scale comparison.
-
-| Candidate | Working verdict | Main reservation before integration |
-|---|---|---|
-| Highland ridge V2 | Promising | Very calm and natural at mobile scale; needs an in-map contrast check against both light and dark ground. |
-| Cracked paving V2 | Conditional | Cleaner than P1, but at 31 px it can still read as four ordinary paving stones rather than a broader ruin region. Do not propagate this motif until that semantic choice is accepted. |
-| Reeds and stones V2 | Promising | Stronger grouping and calmer color; should be tested beside other vegetation to ensure it remains marsh-specific. |
-| Snow rocks V2 | Promising | Clearer mass at 31 px; requires a pale-snow terrain check because white-on-white contrast cannot be judged on the green review tile. |
-
-The first generated V2 mountain used concentric centered terraces and resembled a constructed platform. It was rejected after the game-scale review and is preserved under `rejected/` for traceability. If the accepted abstraction level is approved, the remaining mountain, ruin, marsh and snow variants can be recreated in the same direction. Only after that should a reversible renderer test be prepared.
+Ruins intentionally remain the quietest family. The collapsed corner provides the strongest semantic cue, while paving and foundation fragments prevent every ruin cell from reading as an identical building or objective.
 
 ## Reproduction
 
-The built-in ImageGen tool generated one flat-magenta source per asset using the P1 sprite only as a subject and perspective reference. The standard ImageGen chroma-removal helper produced the transparent sprites. Run `python process_candidates.py` to trim the sprites, regenerate both previews and print alpha/spill validation.
+The built-in ImageGen tool generated one flat-magenta source per asset. Each P1 sprite was used only as a subject/perspective reference; the accepted V2 anchor supplied abstraction and palette direction. The standard ImageGen chroma-removal helper produced transparent PNGs.
+
+Run:
+
+```bash
+python art/candidates/decor-v2/process_candidates.py
+```
+
+This trims and validates the sprites, regenerates all review sheets and exports the sixteen optimized runtime WebP files to `public/assets/decor-v2/`.
