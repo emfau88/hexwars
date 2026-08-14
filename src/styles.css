@@ -32,6 +32,7 @@
   .armyStat.right { justify-content:flex-end; text-align:right; }
   .dot { width:10px; height:10px; border-radius:2px; flex:0 0 auto; }
   .statLabel { color:var(--ink-dim); font-size:9px; letter-spacing:1.2px; }
+  .mobileStatLabel { display:none; color:var(--ink-dim); font-size:8px; line-height:1.1; letter-spacing:.65px; white-space:nowrap; }
   .statValue { font-size:15px; font-weight:700; font-variant-numeric:tabular-nums; white-space:nowrap; }
   .gameTitle { text-align:center; min-width:0; }
   .gameTitle strong { display:block; color:var(--accent); letter-spacing:4px; font-size:16px; }
@@ -667,6 +668,7 @@ body.campaignOpen { touch-action:pan-y; }
 
   @media (max-width:900px), (max-height:620px) {
     .statLabel { display:none; }
+    .mobileStatLabel { display:block; }
     .statValue { font-size:13px; }
     .menuIconBtn { width:44px; height:44px; flex:0 0 44px; }
     #mobileBar .utilityBtn { width:44px; }
@@ -678,6 +680,7 @@ body.campaignOpen { touch-action:pan-y; }
   }
 
   @media (max-width:430px) {
+    .mobileStatLabel { font-size:7px; letter-spacing:.35px; }
     .progressText { min-width:78px; }
     .progressHeading { display:block; text-align:center; }
     .progressHeading span { display:none; }

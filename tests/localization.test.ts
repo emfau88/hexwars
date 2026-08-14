@@ -16,6 +16,15 @@ test('English and German catalogues have the same complete key set', () => {
   }
 });
 
+test('German gameplay labels use concise player-facing wording', () => {
+  assert.equal(DE_TRANSLATIONS['panel.send'], 'SENDEN');
+  assert.equal(DE_TRANSLATIONS['mode.group'], 'GRUPPE');
+  assert.equal(DE_TRANSLATIONS['stats.rival'], 'GEGNER · FELDER / TRUPPEN');
+  assert.equal(DE_TRANSLATIONS['stats.mobileMetrics'], 'FELDER / TRUPPEN');
+  assert.equal(EN_TRANSLATIONS['drag.send'], 'SEND');
+  assert.equal(DE_TRANSLATIONS['drag.send'], 'SENDEN');
+});
+
 test('every campaign level and act supplies non-empty English and German copy', () => {
   for (const [index, level] of LEVELS.entries()) {
     for (const field of ['name', 'short', 'blurb', 'objective', 'rule'] as const) {
@@ -34,6 +43,13 @@ test('every translation binding in index.html points to a catalogue key', () => 
   const bindings = [...html.matchAll(/data-i18n(?:-aria-label|-title|-content)?="([^"]+)"/g)].map((match) => match[1]);
   assert.ok(bindings.length > 30, 'Expected the application shell to expose localization bindings');
   for (const key of bindings) assert.ok(isTranslationKey(key), `Unknown translation key in index.html: ${key}`);
+});
+
+test('canvas drag copy is supplied by the localization catalogue', () => {
+  const renderer = readFileSync(new URL('../src/rendering/BoardRenderer.ts', import.meta.url), 'utf8');
+  assert.match(renderer, /sendLabel = 'SEND'/);
+  assert.match(renderer, /\$\{this\.sendLabel\}/);
+  assert.doesNotMatch(renderer, /\$\{sent\} SENDEN/);
 });
 
 test('English is the default and a German selection survives a new I18n instance', () => {

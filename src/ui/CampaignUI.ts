@@ -116,8 +116,14 @@ export class CampaignUI {
     required('legendHill').hidden = state.currentLevel < 3;
     required('legendRelay').hidden = !state.level.features.relay;
     this.applyMissionCopy(state);
-    this.hint.style.opacity = '1'; clearTimeout(this.hintTimer); this.hintTimer = window.setTimeout(() => { this.hint.style.opacity = '0'; }, 3600);
+    this.hint.style.opacity = '1'; clearTimeout(this.hintTimer);
+    if (state.currentLevel !== 0) this.hintTimer = window.setTimeout(() => { this.hint.style.opacity = '0'; }, 3600);
     this.updateEndgame(state); this.updateHUD(state);
+  }
+
+  acknowledgeHint(): void {
+    clearTimeout(this.hintTimer);
+    this.hint.style.opacity = '0';
   }
 
   showMap(progress: CampaignProgress, unlocked: (index: number) => boolean, focus: number): void {
