@@ -71,7 +71,6 @@ export function chooseAIAction(context: AIContext, skill: number): AIAction | nu
     for (const target of context.hexes) {
       if (target === source || !context.canSend(source, target)) continue;
       if (target.owner !== context.owner) {
-        if (target.owner === opposing(context.owner) && context.elapsed < (context.level.aiAttackDelaySeconds ?? 0)) continue;
         const incoming = context.incomingTo(target, context.owner);
         const half = Math.max(1, Math.floor(source.units * 0.5));
         const all = Math.max(1, Math.floor(source.units - 1));
