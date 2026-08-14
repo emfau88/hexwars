@@ -8,7 +8,7 @@ ROOT = Path(__file__).parent
 SHEET_DIR = ROOT / "sheets"
 SPRITE_DIR = ROOT / "sprites"
 PREVIEW_DIR = ROOT / "previews"
-WEB_DIR = ROOT.parents[2] / "public" / "assets" / "experiments" / "decor-p1"
+WEB_DIR = ROOT.parents[2] / "public" / "assets" / "decor-p1"
 
 FAMILIES = {
     "mountains": ["rock-outcrop", "highland-ridge", "snow-peaks", "scree-cluster"],

@@ -26,9 +26,19 @@ type CandidateSprite =
   | 'marshCattails' | 'marshSedge' | 'marshLilies' | 'marshReeds'
   | 'snowConifer' | 'snowBush' | 'snowRocks' | 'snowdrift';
 
+const candidateFiles: Record<CandidateSprite, string> = {
+  mountainRidge: 'mountains-highland-ridge', mountainOutcrop: 'mountains-rock-outcrop',
+  mountainScree: 'mountains-scree-cluster', mountainSnow: 'mountains-snow-peaks',
+  ruinCorner: 'ruins-collapsed-corner', ruinPaving: 'ruins-cracked-paving',
+  ruinFoundation: 'ruins-broken-foundation', marshCattails: 'marsh-cattails',
+  marshSedge: 'marsh-sedge', marshLilies: 'marsh-lily-leaves',
+  marshReeds: 'marsh-reeds-stones', snowConifer: 'snow-snow-conifer',
+  snowBush: 'snow-snow-bush', snowRocks: 'snow-snow-rocks', snowdrift: 'snow-snowdrift',
+};
+
 export class LandscapeRenderer {
   private readonly sprites: Record<'tree' | 'conifer' | 'bush' | 'water' | 'shore', HTMLImageElement>;
-  private readonly candidates: Record<CandidateSprite, HTMLImageElement> | null;
+  private readonly candidates = new Map<CandidateSprite, HTMLImageElement>();
   private readonly patterns = new WeakMap<CanvasRenderingContext2D, Partial<Record<'water' | 'shore', CanvasPattern>>>();
 
   constructor(private readonly onAssetReady?: () => void, private readonly visualVariant: VisualVariant = 'production') {
@@ -39,22 +49,31 @@ export class LandscapeRenderer {
       water: this.load(`${import.meta.env.BASE_URL}assets/level1-water.webp`),
       shore: this.load(`${import.meta.env.BASE_URL}assets/level1-shore.webp`),
     };
-    const candidate = (name: string) => this.load(`${import.meta.env.BASE_URL}assets/experiments/decor-p1/${name}.webp`);
-    this.candidates = visualVariant !== 'production' ? {
-      mountainRidge: candidate('mountains-highland-ridge'), mountainOutcrop: candidate('mountains-rock-outcrop'),
-      mountainScree: candidate('mountains-scree-cluster'), mountainSnow: candidate('mountains-snow-peaks'),
-      ruinCorner: candidate('ruins-collapsed-corner'), ruinPaving: candidate('ruins-cracked-paving'),
-      ruinFoundation: candidate('ruins-broken-foundation'), marshCattails: candidate('marsh-cattails'),
-      marshSedge: candidate('marsh-sedge'), marshLilies: candidate('marsh-lily-leaves'),
-      marshReeds: candidate('marsh-reeds-stones'), snowConifer: candidate('snow-snow-conifer'),
-      snowBush: candidate('snow-snow-bush'), snowRocks: candidate('snow-snow-rocks'), snowdrift: candidate('snow-snowdrift'),
-    } : null;
   }
 
   private load(source: string): HTMLImageElement {
     const image = new Image();
-    if (this.onAssetReady) image.addEventListener('load', this.onAssetReady, { once: true });
-    image.src = source;
+    let retries = 0;
+    const request = () => {
+      const separator = source.includes('?') ? '&' : '?';
+      image.src = retries === 0 ? source : `${source}${separator}retry=${retries}`;
+    };
+    image.addEventListener('load', () => this.onAssetReady?.(), { once: true });
+    image.addEventListener('error', () => {
+      if (retries >= 2) return;
+      retries += 1;
+      window.setTimeout(request, retries * 300);
+    });
+    request();
+    return image;
+  }
+
+  private candidate(name: CandidateSprite): HTMLImageElement | null {
+    if (this.visualVariant === 'production') return null;
+    const existing = this.candidates.get(name);
+    if (existing) return existing;
+    const image = this.load(`${import.meta.env.BASE_URL}assets/decor-p1/${candidateFiles[name]}.webp`);
+    this.candidates.set(name, image);
     return image;
   }
 
@@ -98,6 +117,13 @@ export class LandscapeRenderer {
     return true;
   }
 
+  private candidateSprite(context: CanvasRenderingContext2D, image: HTMLImageElement | null, x: number, y: number, width: number, anchor: number, maxHeight: number): boolean {
+    if (!image) return false;
+    if (!image.complete || !image.naturalWidth) return true;
+    this.sprite(context, image, x, y, width, anchor, maxHeight);
+    return true;
+  }
+
   private materialPattern(context: CanvasRenderingContext2D, type: 'water' | 'shore'): CanvasPattern | null {
     const existing = this.patterns.get(context)?.[type];
     if (existing) return existing;
@@ -120,30 +146,29 @@ export class LandscapeRenderer {
   }
 
   private details(context: CanvasRenderingContext2D, hex: HexState, size: number, q: number, seed: number, type: DecorType): void {
-    if (this.candidates) {
+    if (this.visualVariant !== 'production') {
       if (this.visualVariant === 'decor-p2' && seed === 303 && type === 'ruin') {
-        const image = hex.row === 6 ? this.candidates.ruinCorner : this.candidates.ruinPaving;
-        if (this.sprite(context, image, hex.x, hex.y + size * .2, size * 1.42, .55, size * .88)) return;
+        const image = this.candidate(hex.row === 6 ? 'ruinCorner' : 'ruinPaving');
+        if (this.candidateSprite(context, image, hex.x, hex.y + size * .2, size * 1.42, .55, size * .88)) return;
       } else if (this.visualVariant === 'decor-p2' && seed === 404 && type === 'mountain') {
-        const image = hex.row === 4 ? this.candidates.mountainOutcrop
-          : hex.row === 8 ? this.candidates.mountainRidge : this.candidates.mountainScree;
-        if (this.sprite(context, image, hex.x, hex.y + size * .16, size * 1.34, .58, size * 1.18)) return;
+        const image = this.candidate(hex.row === 4 ? 'mountainOutcrop' : hex.row === 8 ? 'mountainRidge' : 'mountainScree');
+        if (this.candidateSprite(context, image, hex.x, hex.y + size * .16, size * 1.34, .58, size * 1.18)) return;
       } else if (type === 'mountain') {
-        const image = seed === 909 && q > .4 ? this.candidates.mountainSnow
-          : q < .34 ? this.candidates.mountainRidge : q < .68 ? this.candidates.mountainOutcrop : this.candidates.mountainScree;
-        if (this.sprite(context, image, hex.x, hex.y + size * .16, size * 1.28, .58, size * 1.18)) return;
+        const image = this.candidate(seed === 909 && q > .4 ? 'mountainSnow'
+          : q < .34 ? 'mountainRidge' : q < .68 ? 'mountainOutcrop' : 'mountainScree');
+        if (this.candidateSprite(context, image, hex.x, hex.y + size * .16, size * 1.28, .58, size * 1.18)) return;
       } else if (type === 'ruin') {
-        const image = q < .38 ? this.candidates.ruinPaving : q < .72 ? this.candidates.ruinCorner : this.candidates.ruinFoundation;
-        if (this.sprite(context, image, hex.x, hex.y + size * .17, size * 1.25, .55, size * .78)) return;
+        const image = this.candidate(q < .38 ? 'ruinPaving' : q < .72 ? 'ruinCorner' : 'ruinFoundation');
+        if (this.candidateSprite(context, image, hex.x, hex.y + size * .17, size * 1.25, .55, size * .78)) return;
       } else if (type === 'marsh') {
-        const image = q < .28 ? this.candidates.marshSedge : q < .54 ? this.candidates.marshCattails : q < .78 ? this.candidates.marshReeds : this.candidates.marshLilies;
-        if (this.sprite(context, image, hex.x, hex.y + size * .16, size * .9, .56, size * 1.02)) return;
+        const image = this.candidate(q < .28 ? 'marshSedge' : q < .54 ? 'marshCattails' : q < .78 ? 'marshReeds' : 'marshLilies');
+        if (this.candidateSprite(context, image, hex.x, hex.y + size * .16, size * .9, .56, size * 1.02)) return;
       } else if (type === 'snow') {
-        const image = q < .38 ? this.candidates.snowBush : q < .72 ? this.candidates.snowRocks : this.candidates.snowdrift;
-        if (this.sprite(context, image, hex.x, hex.y + size * .14, size * .94, .55, size * .9)) return;
+        const image = this.candidate(q < .38 ? 'snowBush' : q < .72 ? 'snowRocks' : 'snowdrift');
+        if (this.candidateSprite(context, image, hex.x, hex.y + size * .14, size * .94, .55, size * .9)) return;
       } else if (type === 'forest' && seed === 909) {
-        const image = q < .58 ? this.candidates.snowBush : this.candidates.snowConifer;
-        if (this.sprite(context, image, hex.x, hex.y + size * .15, size * .86, .58, size * 1.12)) return;
+        const image = this.candidate(q < .58 ? 'snowBush' : 'snowConifer');
+        if (this.candidateSprite(context, image, hex.x, hex.y + size * .15, size * .86, .58, size * 1.12)) return;
       }
     }
     if (type === 'forest') {
