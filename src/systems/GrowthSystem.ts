@@ -21,15 +21,15 @@ export function regenerationScale(elapsed: number): number {
   return 1 - Math.max(0, Math.min(1, (elapsed - GAME_CONFIG.endgameStart) / GAME_CONFIG.endgameFade));
 }
 
-export function updateGrowth(hexes: readonly HexState[], elapsed: number, deltaSeconds: number): void {
+export function updateGrowth(hexes: readonly HexState[], elapsed: number, deltaSeconds: number, multiplier = 1, enemyMultiplier = multiplier): void {
   const scale = regenerationScale(elapsed);
   for (const hex of hexes) {
     hex.flash = Math.max(0, hex.flash - deltaSeconds);
     if (hex.owner === Owner.Neutral || !isPlayable(hex) || hex.siege) continue;
     const capacity = terrainCapacity(hex);
     if (hex.units < capacity) {
-      hex.units = Math.min(capacity, hex.units + terrainRegeneration(hex) * scale * deltaSeconds);
+      const ownerMultiplier = hex.owner === Owner.Enemy ? enemyMultiplier : multiplier;
+      hex.units = Math.min(capacity, hex.units + terrainRegeneration(hex) * scale * ownerMultiplier * deltaSeconds);
     }
   }
 }
-

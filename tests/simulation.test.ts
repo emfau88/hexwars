@@ -50,7 +50,7 @@ test('50 and 100 percent commands remove the correct amount', () => {
 
 test('movement takes physical time before arrival', () => {
   const state = new GameState(); state.start(0, positionFor);
-  const source = state.hexAt(3, 11)!; const target = state.hexAt(3, 10)!;
+  const source = state.hexAt(3, 9)!; const target = state.hexAt(3, 8)!;
   state.send(source, target, Owner.Player, 10);
   const travelTime = Math.hypot(target.x - source.x, target.y - source.y) / GAME_CONFIG.travelSpeed;
   state.update(travelTime * .9);

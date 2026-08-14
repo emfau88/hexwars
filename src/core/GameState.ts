@@ -152,7 +152,8 @@ export class GameState {
       this.endgameStage = nextStage;
       this.events.push({ type: 'endgame', detail: { stage: nextStage } });
     }
-    updateGrowth(this.hexes, this.elapsed, deltaSeconds);
+    const growthMultiplier = this.level.growthMultiplier ?? 1;
+    updateGrowth(this.hexes, this.elapsed, deltaSeconds, growthMultiplier, this.level.enemyGrowthMultiplier ?? growthMultiplier);
     if (this.level.features.supply) {
       for (const dispatch of this.supplySystem.update({ hexes: this.hexes, armies: this.armies, focus: this.supplyFocus }, deltaSeconds)) {
         this.events.push({ type: 'supply', detail: dispatch });
@@ -180,7 +181,7 @@ export class GameState {
         this.think(Owner.Player, 0.8, this.level.aiActions > 1 ? 2 : 1);
       }
     }
-    const victory = evaluateVictory(this.hexes, this.armies);
+    const victory = evaluateVictory(this.hexes, this.armies, this.level.bases);
     if (victory) this.end(victory.result, victory.reason);
   }
 

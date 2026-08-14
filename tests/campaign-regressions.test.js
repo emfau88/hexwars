@@ -45,8 +45,9 @@ test('AI can move rear reserves toward the active front', () => {
 });
 
 test('victory is tied to the correct base coordinates', () => {
-  assert.match(victory, /cellKey\(ENEMY_BASE\).*Owner\.Player/);
-  assert.match(victory, /cellKey\(PLAYER_BASE\).*Owner\.Enemy/);
+  assert.match(victory, /cellKey\(bases\.enemy\).*Owner\.Player/);
+  assert.match(victory, /cellKey\(bases\.player\).*Owner\.Enemy/);
+  assert.match(victory, /player: PLAYER_BASE, enemy: ENEMY_BASE/);
 });
 
 test('pointer input is isolated and executes a real send path', () => {

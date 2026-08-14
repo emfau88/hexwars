@@ -54,11 +54,13 @@ export function buildLevel(
     if (definition.decor !== undefined) hex.decor = definition.decor;
   });
   for (const hex of state) if (hex.terrain === Terrain.Decor) hex.decor = decorTypeFor(hex, level);
-  const playerBase = at(PLAYER_BASE.col, PLAYER_BASE.row);
-  const enemyBase = at(ENEMY_BASE.col, ENEMY_BASE.row);
+  const bases = level.bases ?? { player: PLAYER_BASE, enemy: ENEMY_BASE };
+  const playerBase = at(bases.player.col, bases.player.row);
+  const enemyBase = at(bases.enemy.col, bases.enemy.row);
   if (!playerBase || !enemyBase) throw new Error(`Level ${level.id} is missing a base cell.`);
-  Object.assign(playerBase, { terrain: Terrain.Base, decor: null, owner: Owner.Player, units: GAME_CONFIG.startUnits });
-  Object.assign(enemyBase, { terrain: Terrain.Base, decor: null, owner: Owner.Enemy, units: GAME_CONFIG.startUnits });
+  const baseUnits = level.baseUnits ?? { player: GAME_CONFIG.startUnits, enemy: GAME_CONFIG.startUnits };
+  Object.assign(playerBase, { terrain: Terrain.Base, decor: null, owner: Owner.Player, units: baseUnits.player });
+  Object.assign(enemyBase, { terrain: Terrain.Base, decor: null, owner: Owner.Enemy, units: baseUnits.enemy });
   const mirroredUnits = new Map<string, number>();
   for (const hex of state) {
     if (!isPlayable(hex) || hex.owner !== Owner.Neutral) continue;
@@ -73,4 +75,3 @@ export function buildLevel(
   }
   return state;
 }
-

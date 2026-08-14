@@ -58,9 +58,14 @@ export interface LevelDefinition {
   rule: LocalizedText;
   aiThinkMs: number;
   aiDelaySeconds: number;
+  aiAttackDelaySeconds?: number;
   aiSkill: number;
   aiActions: number;
   neutralUnits: readonly [number, number];
+  growthMultiplier?: number;
+  enemyGrowthMultiplier?: number;
+  bases?: { player: Cell; enemy: Cell };
+  baseUnits?: { player: number; enemy: number };
   mirrorNeutral?: boolean;
   features: FeatureFlags;
   theme: string;
