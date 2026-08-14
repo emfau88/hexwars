@@ -125,7 +125,7 @@ export class HexfrontApp {
         this.progress = this.progressStore.complete(this.progress, this.state.currentLevel, this.state.elapsed);
         this.audio.beep(680, .12, .075); window.setTimeout(() => this.audio.beep(880, .15, .065), 100);
       } else this.audio.beep(95, .22, .075);
-      this.ui.showResult(this.state);
+      this.ui.showResult(this.state, this.progress);
     }
   }
 

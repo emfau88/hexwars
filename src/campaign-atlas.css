@@ -177,6 +177,7 @@
 #campaignMenu .controlArrow { color:#a95b34; background:rgba(217,119,66,.10); }
 
 #campaignMenu #menuSettingsPanel { min-width:220px; padding:12px; gap:9px; }
+#campaignMenu #menuFullscreenBtn { display:none; }
 #campaignMenu .languageSetting { display:grid; gap:7px; padding:2px 2px 5px; }
 #campaignMenu .languageSetting > span {
   color:#aeb8b2; font-size:11px; font-weight:750; letter-spacing:.8px;
@@ -218,6 +219,7 @@
   #campaignMenu .campaignProgressTrack { display:none; }
   #campaignMenu .menuIconBtn { width:44px; height:44px; }
   #campaignMenu #fullscreenBtn { display:none; }
+  #campaignMenu #menuFullscreenBtn { display:block; }
   #campaignMenu .campaignShell { display:flex; flex-direction:column; gap:8px; padding:8px 8px calc(16px + env(safe-area-inset-bottom)); overflow:visible; }
   #campaignMenu .campaignJourney { order:1; flex:0 0 310px; height:310px; border-radius:16px; }
   #campaignMenu .atlasHeader { flex:0 0 52px; min-height:52px; padding:0 13px; gap:8px; }

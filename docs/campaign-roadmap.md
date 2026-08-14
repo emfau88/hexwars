@@ -2,10 +2,10 @@
 
 **Derived from:** `docs/campaign-audit.md`  
 **Roadmap date:** 11 August 2026  
-**Implementation status updated:** 13 August 2026
+**Implementation status updated:** 14 August 2026
 **Principle:** no production implementation begins until the relevant decision gate is approved
 
-## Current implementation status — 13 August 2026
+## Current implementation status — 14 August 2026
 
 The restructuring brief in `docs/auftrag-hexfront-neustrukturierung.md` is complete. This roadmap remains the product and commercial plan beyond that technical/core-gameplay brief; “complete” below therefore means the roadmap exit criteria, not merely that implementation has started.
 
@@ -20,12 +20,12 @@ The restructuring brief in `docs/auftrag-hexfront-neustrukturierung.md` is compl
 | 7 | Complete | English is the default; the persistent `EN | DE` control updates UI, level copy, messages, results, document language and accessibility labels. Missing-key/content and desktop/mobile browser tests pass. |
 | 8 | Partial | Real drag input and reduced Level-1 HUD exist; paused first action, tap-origin/tap-target and keyboard-equivalent input remain. |
 | 9 | Partial | The production menu and Level 1 now share the sage/cream shell, vegetation, water and shore materials. Remaining levels and the in-match HUD still need full token and biome alignment. |
-| 10 | Partial, Level 1 pilot | Visible hexes remain. Level 1 now uses generated water/shore materials with code-derived coast geometry only on exposed water edges; extension to other biomes and maps still requires approval. |
-| 11 | Partial | Levels 1 and 2 were rebuilt and tested; Level 3, mastery goals and human acquisition testing remain. |
+| 10 | Partial, multi-map asset pass | Visible hexes remain. Connected water/shore rendering and a restrained 16-asset environment set are active. Former ruin visuals have been replaced in-place by broad natural ground motifs without increasing decoration density. Region-level biome art direction still requires approval. |
+| 11 | Partial | Level 1 keeps its complete 7×13 raster but moves its bases inward: the direct route is six moves, while optional lateral cells add choice without extending the mandatory path. A dedicated onboarding opponent delays direct aggression, acts less often and has lower starting strength/growth; the automated pacing smoke resolves in roughly 35 seconds. Level 2 is rebuilt; Level 3, mastery goals and human acquisition testing remain. |
 | 12 | Partial | Icon labels, reduced-motion CSS and 44 px touch targets exist; keyboard, zoom, non-color state and assistive-technology testing remain. |
 | 13 | Open | No production telemetry or consent model. |
 | 14 | Partial | All ten maps are supply-aware, mirrored where symmetric and regression-tested; authored roles/landmarks and human balance proof remain. |
-| 15 | Open | Results, mastery and next-dossier flow are not production-ready. |
+| 15 | Partial | A responsive campaign-aligned result sheet now reports outcome, reason, time, captures, best time and the next map; “Next map” opens its dossier. Mastery goals and the authored Level-10 campaign resolution remain. |
 | 16 | Open | Sound remains a functional prototype without an authored nonmilitary palette. |
 | 17 | Partial | Build, browser matrix and Pages CI exist; screenshot regression, performance budgets, save recovery and release packaging remain. |
 | 18 | Open | Premium scope and monetization await vertical-slice data. |
@@ -41,7 +41,10 @@ These small corrections were approved separately from the full production roadma
 - The AI now begins low-priority rear-to-front logistics once a front is established; Level 5 also has a bounded late phase to prevent the observed static reserve deadlock. This is a pragmatic human-versus-AI safeguard, not a claim of solved AI-versus-AI balance.
 - Correct base coordinates, rather than any captured base tile, now decide victory.
 - English-default localization with a persistent German toggle now covers all current UI, campaign content, status messages, results and accessibility labels. Typed catalogues and localized level fields require both languages for future content.
-- These contracts now sit inside a 38-test logic/simulation/localization suite and a 12-flow desktop/mobile Playwright suite. A deterministic ten-level balance runner exists; the large-batch distributions and thresholds required to complete step 3 remain outstanding.
+- Level 1 keeps the full decorative raster while its bases are only six moves apart. A dedicated onboarding opponent uses delayed aggression, a slower cadence and lower starting strength/growth so the 50%-only lesson does not become an early attrition test.
+- The result flow now shares the campaign visual language and opens the next dossier instead of launching the next match without context.
+- Fullscreen is available as a labeled action inside the mobile menu settings sheet as well as through the in-match controls.
+- These contracts now sit inside a 39-test logic/simulation/localization suite and a 14-flow desktop/mobile Playwright suite. A deterministic ten-level balance runner exists; the large-batch distributions and thresholds required to complete step 3 remain outstanding.
 
 ## How to read this roadmap
 
@@ -286,7 +289,7 @@ Actions:
 - use a restrained library of trees, conifers, bushes, small trees, reeds and grass variations;
 - group vegetation across neighboring cells only where it does not obscure hex boundaries or playable-edge clearance;
 - author one or two landmarks per map;
-- redesign ruins so they cannot read as locks;
+- retain the completed replacement of lock-like ruins with restrained natural ground motifs;
 - separate water from rival blue;
 - share the renderer with map previews;
 - honor reduced-motion preferences.

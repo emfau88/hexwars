@@ -42,9 +42,9 @@ export class CampaignUI {
     required('playLevelBtn').addEventListener('click', () => callbacks.startLevel(this.selectedMenuLevel));
     for (const id of ['restartBtn', 'mobileRestartBtn', 'retryBtn']) required(id).addEventListener('click', () => callbacks.startLevel());
     for (const id of ['levelsBtn', 'mobileLevelsBtn', 'mapBtn']) required(id).addEventListener('click', () => callbacks.showMap());
-    required('nextLevelBtn').addEventListener('click', () => callbacks.startLevel(this.selectedMenuLevel + 1));
+    required('nextLevelBtn').addEventListener('click', () => callbacks.showMap(this.selectedMenuLevel + 1));
     for (const id of ['soundBtn', 'sideSoundBtn']) required(id).addEventListener('click', callbacks.toggleSound);
-    for (const id of ['fullscreenBtn', 'sideFullscreenBtn', 'mobileFullscreenBtn']) required(id).addEventListener('click', callbacks.toggleFullscreen);
+    for (const id of ['fullscreenBtn', 'menuFullscreenBtn', 'sideFullscreenBtn', 'mobileFullscreenBtn']) required(id).addEventListener('click', callbacks.toggleFullscreen);
     required('resetProgressBtn').addEventListener('click', callbacks.resetProgress);
     document.querySelectorAll<HTMLButtonElement>('[data-locale]').forEach((button) => button.addEventListener('click', () => callbacks.setLocale(button.dataset.locale as Locale)));
     document.querySelectorAll<HTMLButtonElement>('.modeBtn').forEach((button) => button.addEventListener('click', () => callbacks.setMode(button.dataset.mode as SendMode)));
@@ -74,7 +74,7 @@ export class CampaignUI {
     }
     if (state.hexes.length) {
       this.applyMissionCopy(state); this.updateEndgame(state);
-      if (this.overlay.classList.contains('show') && state.result) this.showResult(state);
+      if (this.overlay.classList.contains('show') && state.result) this.showResult(state, this.lastProgress);
     }
   }
 
@@ -111,7 +111,7 @@ export class CampaignUI {
 
   startMission(state: GameState): void {
     this.selectedMenuLevel = state.currentLevel;
-    this.menu.classList.remove('show'); this.overlay.classList.remove('show'); this.app.classList.remove('menuOpen'); document.body.classList.remove('campaignOpen');
+    this.menu.classList.remove('show'); this.overlay.classList.remove('show'); this.app.classList.remove('menuOpen', 'resultOpen'); document.body.classList.remove('campaignOpen');
     this.app.classList.toggle('introLevel', state.currentLevel === 0);
     required('legendHill').hidden = state.currentLevel < 3;
     required('legendRelay').hidden = !state.level.features.relay;
@@ -122,7 +122,7 @@ export class CampaignUI {
 
   showMap(progress: CampaignProgress, unlocked: (index: number) => boolean, focus: number): void {
     this.lastProgress = progress; this.lastUnlocked = unlocked;
-    this.overlay.classList.remove('show'); this.menu.classList.add('show'); this.app.classList.add('menuOpen'); document.body.classList.add('campaignOpen');
+    this.overlay.classList.remove('show'); this.menu.classList.add('show'); this.app.classList.remove('resultOpen'); this.app.classList.add('menuOpen'); document.body.classList.add('campaignOpen');
     const done = progress.completed.filter(Boolean).length;
     required('progressCount').textContent = `${done} / ${LEVELS.length}`;
     (required('campaignProgressFill') as HTMLElement).style.width = `${done / LEVELS.length * 100}%`;
@@ -184,14 +184,34 @@ export class CampaignUI {
     required('phaseStatus').textContent = label;
   }
 
-  showResult(state: GameState): void {
+  showResult(state: GameState, progress: CampaignProgress = this.lastProgress): void {
+    this.lastProgress = progress;
+    const victory = state.result === 'victory';
+    const finalLevel = state.currentLevel >= LEVELS.length - 1;
     required('verdict').textContent = this.i18n.t(state.result === 'victory' ? 'result.victory' : 'result.defeat');
     const reason = state.resultReason ? this.i18n.t(`result.reason.${state.resultReason}`) : '';
-    const actions = this.i18n.t(state.actions === 1 ? 'result.actions.one' : 'result.actions.many');
-    const captures = this.i18n.t(state.captures === 1 ? 'result.captures.one' : 'result.captures.many');
-    required('verdictSub').textContent = `${reason} · ${this.time(state.elapsed)} · ${state.actions} ${actions} · ${state.captures} ${captures}`;
-    required<HTMLButtonElement>('nextLevelBtn').hidden = state.result !== 'victory' || state.currentLevel >= LEVELS.length - 1;
-    this.overlay.classList.add('show');
+    required('verdictSub').textContent = reason;
+    required('resultKicker').textContent = this.i18n.t(victory ? 'result.kicker.victory' : 'result.kicker.defeat');
+    required('resultTime').textContent = this.time(state.elapsed);
+    required('resultCaptures').textContent = String(state.captures);
+    const best = progress.best[state.currentLevel];
+    required('resultBest').textContent = best ? this.time(best) : '—';
+    const advance = required('resultAdvance');
+    advance.hidden = !victory;
+    if (victory && finalLevel) {
+      required('resultAdvanceLabel').textContent = this.i18n.t('result.campaignComplete');
+      required('resultAdvanceName').textContent = 'HEXFRONT';
+      required('resultAdvanceRule').textContent = this.i18n.t('result.campaignCompleteSub');
+    } else if (victory) {
+      const next = LEVELS[state.currentLevel + 1];
+      required('resultAdvanceLabel').textContent = this.i18n.t('result.advance');
+      required('resultAdvanceName').textContent = this.i18n.text(next.name);
+      required('resultAdvanceRule').textContent = this.i18n.text(next.rule);
+    }
+    required<HTMLButtonElement>('nextLevelBtn').hidden = !victory || finalLevel;
+    this.overlay.classList.toggle('victory', victory);
+    this.overlay.classList.toggle('defeat', !victory);
+    this.overlay.classList.add('show'); this.app.classList.add('resultOpen');
   }
 
   showToast(message: string): void {
@@ -209,6 +229,9 @@ export class CampaignUI {
     }
     const side = required('sideFullscreenBtn'); side.textContent = this.i18n.t(active ? 'utility.windowShort' : 'utility.fullscreenShort');
     side.setAttribute('aria-label', this.i18n.t(active ? 'utility.exitFullscreenAria' : 'campaign.fullscreen'));
+    const menu = required('menuFullscreenBtn');
+    menu.textContent = this.i18n.t(active ? 'settings.exitFullscreen' : 'settings.fullscreen');
+    menu.setAttribute('aria-label', this.i18n.t(active ? 'campaign.exitFullscreen' : 'campaign.fullscreen'));
   }
 
   private renderPreview(levelIndex: number): void {

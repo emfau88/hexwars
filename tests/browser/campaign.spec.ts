@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 
-type DebugBoard = Array<{ col: number; row: number; owner: number; units: number; x: number; y: number }>;
+type DebugBoard = Array<{ col: number; row: number; owner: number; units: number; terrain: number; x: number; y: number }>;
 
 async function clearProgress(page: Page): Promise<void> {
   await page.goto('/');
@@ -30,8 +30,8 @@ test('campaign map, unlock state and real pointer drag work', async ({ page }) =
   await expect(page.locator('#sidePanel .modeBtn[data-mode="group"]')).toBeDisabled();
 
   const board = await page.evaluate(() => window.__HEXFRONT__?.getBoard()) as DebugBoard;
-  const source = board.find((hex) => hex.col === 3 && hex.row === 11)!;
-  const target = board.find((hex) => hex.col === 3 && hex.row === 10)!;
+  const source = board.find((hex) => hex.col === 3 && hex.row === 9)!;
+  const target = board.find((hex) => hex.col === 3 && hex.row === 8)!;
   await dragBetween(page, source, target);
   await expect(page.locator('#actionStatus')).toHaveText('1');
   await expect.poll(async () => page.locator('#captureStatus').textContent()).toBe('1');
@@ -41,7 +41,7 @@ test('enemy acts and a completed mission persists its unlock after reload', asyn
   await page.goto('/?autostart=1&level=0&speed=20');
   await expect.poll(async () => {
     const board = await page.evaluate(() => window.__HEXFRONT__?.getBoard()) as DebugBoard;
-    const enemyBase = board.find((hex) => hex.col === 3 && hex.row === 1);
+    const enemyBase = board.find((hex) => hex.owner === 2 && hex.terrain === 4);
     return enemyBase?.units ?? 23;
   }).toBeLessThan(23);
 
@@ -65,6 +65,10 @@ test('enemy acts and a completed mission persists its unlock after reload', asyn
     return api.getState().result;
   }), { timeout: 12_000 }).toBe('victory');
   await expect(page.locator('#verdict')).toHaveText('VICTORY');
+  await expect(page.locator('#resultKicker')).toHaveText('MAP COMPLETE');
+  await expect(page.locator('.resultStats')).toBeVisible();
+  await expect(page.locator('#resultAdvanceName')).toContainText('TWO ROUTES');
+  await expect(page.getByRole('button', { name: 'NEXT MAP', exact: true })).toBeVisible();
   await page.getByRole('button', { name: 'CAMPAIGN MAP', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Level 2: TWO ROUTES' })).toBeEnabled();
   await page.goto('/');
@@ -76,7 +80,7 @@ test('manual long-range reinforcement and contextual front focus use canvas inpu
   await page.goto('/?autostart=1&level=0');
   await page.evaluate(() => {
     const api = window.__HEXFRONT__!; api.setOpponentEnabled(false);
-    for (const targetRow of [10, 9]) {
+    for (const targetRow of [8, 7]) {
       for (let attempt = 0; attempt < 20; attempt += 1) {
         const board = api.getBoard();
         if (board.find((hex) => hex.col === 3 && hex.row === targetRow)?.owner === 1) break;
@@ -88,14 +92,14 @@ test('manual long-range reinforcement and contextual front focus use canvas inpu
     api.simulate(12, .05);
   });
   const before = await page.evaluate(() => window.__HEXFRONT__!.getBoard()) as DebugBoard;
-  const source = before.find((hex) => hex.col === 3 && hex.row === 11)!;
-  const target = before.find((hex) => hex.col === 3 && hex.row === 9)!;
+  const source = before.find((hex) => hex.col === 3 && hex.row === 9)!;
+  const target = before.find((hex) => hex.col === 3 && hex.row === 7)!;
   expect(target.owner).toBe(1);
   await dragBetween(page, source, target);
   await expect(page.locator('#actionStatus')).toHaveText('1');
   await expect.poll(async () => {
     const board = await page.evaluate(() => window.__HEXFRONT__!.getBoard()) as DebugBoard;
-    return board.find((hex) => hex.col === 3 && hex.row === 11)?.units ?? source.units;
+    return board.find((hex) => hex.col === 3 && hex.row === 9)?.units ?? source.units;
   }).toBeLessThan(source.units);
 
   await page.goto('/?autostart=1&level=5');
@@ -121,6 +125,10 @@ test('responsive shell has no page overflow and mobile controls meet the touch f
   await page.goto('/');
   await page.getByRole('button', { name: 'Menu settings' }).click();
   await expect(page.locator('#menuSettingsPanel')).toBeVisible();
+  if ((page.viewportSize()?.width ?? 901) <= 900) {
+    await expect(page.locator('#menuFullscreenBtn')).toBeVisible();
+    await expect(page.locator('#menuFullscreenBtn')).toHaveText('FULLSCREEN');
+  } else await expect(page.locator('#menuFullscreenBtn')).toBeHidden();
   await page.getByRole('button', { name: 'Menu settings' }).click();
   const menuMetrics = await page.evaluate(() => ({
     viewport: innerWidth,
@@ -188,7 +196,7 @@ test('decor variants decode their lazily loaded candidate assets', async ({ page
       image.addEventListener('error', () => resolve(false), { once: true });
       image.src = url;
     }))), assetUrls);
-    expect(decoded.every(Boolean)).toBe(true);
+    expect(assetUrls.filter((_url, index) => !decoded[index])).toEqual([]);
     const canvas = await page.locator('#gameCanvas').evaluate((element) => ({
       width: (element as HTMLCanvasElement).width,
       height: (element as HTMLCanvasElement).height,

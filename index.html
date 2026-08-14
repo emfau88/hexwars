@@ -29,10 +29,22 @@
 
       <div id="resultOverlay">
         <div class="modalBox">
+          <div class="resultMark" aria-hidden="true">◆</div>
+          <div class="resultKicker" id="resultKicker"></div>
           <div class="verdict" id="verdict"></div>
           <div class="sub" id="verdictSub"></div>
+          <div class="resultStats">
+            <div><span data-i18n="result.stat.time">TIME</span><strong id="resultTime">0:00</strong></div>
+            <div><span data-i18n="result.stat.captures">CAPTURES</span><strong id="resultCaptures">0</strong></div>
+            <div><span data-i18n="result.stat.best">BEST</span><strong id="resultBest">—</strong></div>
+          </div>
+          <div class="resultAdvance" id="resultAdvance">
+            <span id="resultAdvanceLabel"></span>
+            <strong id="resultAdvanceName"></strong>
+            <small id="resultAdvanceRule"></small>
+          </div>
           <div class="modalActions">
-            <button class="primaryBtn" id="nextLevelBtn" data-i18n="result.next">NEXT LEVEL</button>
+            <button class="primaryBtn" id="nextLevelBtn" data-i18n="result.next">NEXT MAP</button>
             <button class="secondaryBtn" id="retryBtn" data-i18n="result.retry">TRY AGAIN</button>
             <button class="secondaryBtn" id="mapBtn" data-i18n="result.map">CAMPAIGN MAP</button>
           </div>
@@ -116,6 +128,7 @@
               <button type="button" data-locale="de" aria-pressed="false">DE</button>
             </div>
           </div>
+          <button class="secondaryBtn" id="menuFullscreenBtn" data-i18n="settings.fullscreen">FULLSCREEN</button>
           <button class="secondaryBtn" id="soundBtn">SOUND ON</button>
           <button class="secondaryBtn danger" id="resetProgressBtn" data-i18n="settings.reset">RESET PROGRESS</button>
         </div>
