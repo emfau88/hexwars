@@ -39,6 +39,7 @@ export class HexfrontApp {
     this.state.autoplay = this.parameters.get('autoplay') === '1';
     this.progress = this.progressStore.load();
     this.renderer = new BoardRenderer(canvas, stage, this.visualVariant);
+    this.renderer.sendLabel = this.i18n.t('drag.send');
     this.ui = new CampaignUI({
       startLevel: (index) => this.startLevel(index), showMap: (focus) => this.showMap(focus),
       setMode: (mode) => this.setMode(mode), toggleSound: () => this.toggleSound(),
@@ -47,7 +48,7 @@ export class HexfrontApp {
     }, this.i18n, this.visualVariant);
     this.input = new InputController(canvas, this.state, this.renderer, {
       getMode: () => this.sendMode,
-      onCommand: () => { navigator.vibrate?.(10); this.audio.beep(410, .035, .03); },
+      onCommand: () => { this.ui.acknowledgeHint(); navigator.vibrate?.(10); this.audio.beep(410, .035, .03); },
       onInvalid: (error) => this.ui.showToast(this.i18n.t(this.inputErrorKey(error))), onActivate: () => this.audio.activate(),
       onFocus: (hex) => {
         if (!this.state.level.features.focus) return;
@@ -145,6 +146,7 @@ export class HexfrontApp {
 
   private setLocale(locale: Locale): void {
     this.i18n.setLocale(locale);
+    this.renderer.sendLabel = this.i18n.t('drag.send');
     this.ui.refreshLanguage(this.state, this.audio.enabled);
   }
 

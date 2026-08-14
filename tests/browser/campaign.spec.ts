@@ -25,15 +25,19 @@ test('campaign map, unlock state and real pointer drag work', async ({ page }) =
   await expect(page.getByRole('button', { name: 'Level 1: THE PATH' })).toBeEnabled();
   await expect(page.getByRole('button', { name: /Level 2: TWO ROUTES/ })).toHaveAttribute('aria-label', /locked/);
   await page.getByRole('button', { name: 'BEGIN CAMPAIGN' }).click();
+  await page.evaluate(() => window.__HEXFRONT__?.setOpponentEnabled(false));
   await expect(page.locator('#sidePanel .modeBtn[data-mode="half"]')).toBeEnabled();
   await expect(page.locator('#sidePanel .modeBtn[data-mode="all"]')).toBeDisabled();
   await expect(page.locator('#sidePanel .modeBtn[data-mode="group"]')).toBeDisabled();
+  await page.waitForTimeout(3_800);
+  await expect(page.locator('#hint')).toHaveCSS('opacity', '1');
 
   const board = await page.evaluate(() => window.__HEXFRONT__?.getBoard()) as DebugBoard;
   const source = board.find((hex) => hex.col === 3 && hex.row === 9)!;
   const target = board.find((hex) => hex.col === 3 && hex.row === 8)!;
   await dragBetween(page, source, target);
   await expect(page.locator('#actionStatus')).toHaveText('1');
+  await expect(page.locator('#hint')).toHaveCSS('opacity', '0');
   await expect.poll(async () => page.locator('#captureStatus').textContent()).toBe('1');
 });
 
@@ -164,11 +168,15 @@ test('responsive shell has no page overflow and mobile controls meet the touch f
     controls: [...document.querySelectorAll<HTMLButtonElement>('#mobileBar button')]
       .filter((button) => getComputedStyle(button).display !== 'none')
       .map((button) => ({ width: button.getBoundingClientRect().width, height: button.getBoundingClientRect().height })),
+    statLabels: [...document.querySelectorAll<HTMLElement>('.mobileStatLabel')]
+      .map((label) => ({ display: getComputedStyle(label).display, text: label.textContent })),
   }));
   expect(gameMetrics.body).toBeLessThanOrEqual(gameMetrics.viewport);
   if (gameMetrics.mobile) {
     expect(Math.min(...gameMetrics.controls.map(({ width }) => width))).toBeGreaterThanOrEqual(44);
     expect(Math.min(...gameMetrics.controls.map(({ height }) => height))).toBeGreaterThanOrEqual(44);
+    expect(gameMetrics.statLabels.every(({ display }) => display !== 'none')).toBe(true);
+    expect(gameMetrics.statLabels.map(({ text }) => text)).toEqual(['CELLS / UNITS', 'CELLS / UNITS']);
   }
 });
 

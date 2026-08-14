@@ -12,6 +12,7 @@ export class BoardRenderer {
   selected: HexState | null = null;
   dragPosition: Point | null = null;
   sendMode: SendMode = 'half';
+  sendLabel = 'SEND';
   readonly effects = new EffectsRenderer();
   private horizontal = 0; private vertical = 0; private originX = 0; private originY = 0;
   private readonly context: CanvasRenderingContext2D;
@@ -131,7 +132,7 @@ export class BoardRenderer {
       BoardRenderer.path(this.context, target.x, target.y, this.radius * 1.02); this.context.strokeStyle = valid ? '#4a9d63' : '#d56a61'; this.context.lineWidth = 3.5; this.context.stroke();
     }
     const sent = this.sendMode === 'group' && target ? state.groupPotential(target, Owner.Player, this.selected) : Math.floor(this.selected.units * (this.sendMode === 'all' ? 1 : .5));
-    const label = `${Math.floor(this.selected.units)}  →  ${sent} SENDEN`;
+    const label = `${Math.floor(this.selected.units)}  →  ${sent} ${this.sendLabel}`;
     this.context.font = `700 ${Math.max(10, Math.floor(this.radius * .28))}px ui-monospace`; this.context.textAlign = 'center';
     const width = this.context.measureText(label).width + 16; const x = this.selected.x; const y = this.selected.y - this.radius * .72;
     this.context.fillStyle = 'rgba(25,36,31,.94)'; this.context.fillRect(x - width / 2, y - 11, width, 20);
