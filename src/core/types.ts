@@ -26,7 +26,7 @@ export type DecorType =
 
 export type SendMode = 'half' | 'all' | 'group';
 export type LandscapeStyle = 'classic' | 'meadow-v1';
-export type VisualVariant = 'production' | 'decor-p1' | 'decor-p2';
+export type VisualVariant = 'production' | 'decor-p1' | 'decor-p2' | 'decor-v2';
 export type MissionResult = 'victory' | 'defeat';
 export type ResultReason = 'enemyBaseCaptured' | 'playerBaseCaptured' | 'playerEliminated' | 'enemyEliminated' | 'debugVictory';
 export type Point = { x: number; y: number };

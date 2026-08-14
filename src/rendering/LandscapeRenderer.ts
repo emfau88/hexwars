@@ -22,7 +22,7 @@ const decorPalette: Record<DecorType, { fill: string; edge: string }> = {
 
 type CandidateSprite =
   | 'mountainRidge' | 'mountainOutcrop' | 'mountainScree' | 'mountainSnow'
-  | 'ruinCorner' | 'ruinPaving' | 'ruinFoundation'
+  | 'ruinCorner' | 'ruinPaving' | 'ruinRubble' | 'ruinFoundation'
   | 'marshCattails' | 'marshSedge' | 'marshLilies' | 'marshReeds'
   | 'snowConifer' | 'snowBush' | 'snowRocks' | 'snowdrift';
 
@@ -30,7 +30,7 @@ const candidateFiles: Record<CandidateSprite, string> = {
   mountainRidge: 'mountains-highland-ridge', mountainOutcrop: 'mountains-rock-outcrop',
   mountainScree: 'mountains-scree-cluster', mountainSnow: 'mountains-snow-peaks',
   ruinCorner: 'ruins-collapsed-corner', ruinPaving: 'ruins-cracked-paving',
-  ruinFoundation: 'ruins-broken-foundation', marshCattails: 'marsh-cattails',
+  ruinRubble: 'ruins-parallel-rubble', ruinFoundation: 'ruins-broken-foundation', marshCattails: 'marsh-cattails',
   marshSedge: 'marsh-sedge', marshLilies: 'marsh-lily-leaves',
   marshReeds: 'marsh-reeds-stones', snowConifer: 'snow-snow-conifer',
   snowBush: 'snow-snow-bush', snowRocks: 'snow-snow-rocks', snowdrift: 'snow-snowdrift',
@@ -72,7 +72,8 @@ export class LandscapeRenderer {
     if (this.visualVariant === 'production') return null;
     const existing = this.candidates.get(name);
     if (existing) return existing;
-    const image = this.load(`${import.meta.env.BASE_URL}assets/decor-p1/${candidateFiles[name]}.webp`);
+    const assetSet = this.visualVariant === 'decor-v2' ? 'decor-v2' : 'decor-p1';
+    const image = this.load(`${import.meta.env.BASE_URL}assets/${assetSet}/${candidateFiles[name]}.webp`);
     this.candidates.set(name, image);
     return image;
   }
@@ -90,6 +91,8 @@ export class LandscapeRenderer {
 
   drawHex(context: CanvasRenderingContext2D, hex: HexState, radius: number, style: LandscapeStyle, seed: number, path: PathDrawer): void {
     const type = this.visualDecorType(hex, seed);
+    const baseQ = hash01(hex.col, hex.row, seed);
+    const detailQ = this.visualVariant === 'decor-v2' ? hash01(hex.col + 37, hex.row + 53, seed + 1709) : baseQ;
     const palette = this.visualVariant !== 'production' && seed === 909 && type === 'forest' ? decorPalette.snow
       : this.visualVariant === 'decor-p2' && seed === 303 && type === 'ruin' ? { fill: '#d8c69d', edge: '#9e835b' }
         : decorPalette[type];
@@ -103,7 +106,7 @@ export class LandscapeRenderer {
       }
     }
     context.save(); path(context, hex.x, hex.y, radius * 0.84); context.clip();
-    this.details(context, hex, radius, hash01(hex.col, hex.row, seed), seed, type);
+    this.details(context, hex, radius, detailQ, seed, type);
     context.restore();
     path(context, hex.x, hex.y, radius * 0.955); context.strokeStyle = palette.edge; context.lineWidth = 1.15; context.stroke();
   }
@@ -158,7 +161,7 @@ export class LandscapeRenderer {
           : q < .34 ? 'mountainRidge' : q < .68 ? 'mountainOutcrop' : 'mountainScree');
         if (this.candidateSprite(context, image, hex.x, hex.y + size * .16, size * 1.28, .58, size * 1.18)) return;
       } else if (type === 'ruin') {
-        const image = this.candidate(q < .38 ? 'ruinPaving' : q < .72 ? 'ruinCorner' : 'ruinFoundation');
+        const image = this.candidate(q < .25 ? 'ruinPaving' : q < .5 ? 'ruinCorner' : q < .75 ? 'ruinFoundation' : 'ruinRubble');
         if (this.candidateSprite(context, image, hex.x, hex.y + size * .17, size * 1.25, .55, size * .78)) return;
       } else if (type === 'marsh') {
         const image = this.candidate(q < .28 ? 'marshSedge' : q < .54 ? 'marshCattails' : q < .78 ? 'marshReeds' : 'marshLilies');

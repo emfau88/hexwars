@@ -173,14 +173,15 @@ test('language defaults to English and the German choice survives reload', async
   await expect(page.locator('#campaignTitle')).toHaveText('SELECT MAP');
 });
 
-test('decor test modes decode their lazily loaded candidate assets', async ({ page }) => {
-  for (const visual of ['decor-p1', 'decor-p2']) {
+test('decor variants decode their lazily loaded candidate assets', async ({ page }) => {
+  for (const visual of ['decor-p1', 'decor-p2', 'decor-v2']) {
+    const assetSet = visual === 'decor-v2' ? 'decor-v2' : 'decor-p1';
     await page.goto(`/?autostart=1&level=8&visual=${visual}`);
-    await expect.poll(async () => page.evaluate(() => performance.getEntriesByType('resource')
-      .filter((entry) => entry.name.includes('/assets/decor-p1/')).length)).toBeGreaterThan(0);
-    const assetUrls = await page.evaluate(() => performance.getEntriesByType('resource')
+    await expect.poll(async () => page.evaluate((set) => performance.getEntriesByType('resource')
+      .filter((entry) => entry.name.includes(`/assets/${set}/`)).length, assetSet)).toBeGreaterThan(0);
+    const assetUrls = await page.evaluate((set) => performance.getEntriesByType('resource')
       .map((entry) => entry.name)
-      .filter((name) => name.includes('/assets/decor-p1/')));
+      .filter((name) => name.includes(`/assets/${set}/`)), assetSet);
     const decoded = await page.evaluate(async (urls) => Promise.all(urls.map((url) => new Promise<boolean>((resolve) => {
       const image = new Image();
       image.addEventListener('load', () => resolve(image.naturalWidth > 0 && image.naturalHeight > 0), { once: true });

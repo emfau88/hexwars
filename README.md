@@ -24,7 +24,10 @@ The project is a playable internal vertical slice, not yet a commercial release.
 - Persistent local campaign progress
 - Real-time AI, combat, supply and endgame systems
 - Automated unit, simulation, balance and browser tests
-- Level 1 as the visual-quality test bed for terrain, vegetation, water and shores
+- Complete 16-asset simplified environment set for mountains, ruins, marsh and snow
+- Connected water and shore rendering retained independently from the V2 decoration pass
+
+The simplified `decor-v2` environment set is the default visual presentation. For direct comparison or emergency rollback, append `?visual=production` to the URL to load the former procedural decoration. The earlier generated set remains available with `?visual=decor-p1`.
 
 `HEXFRONT` is the retained product name. A professional commercial name clearance, accessibility onboarding and human playtest balancing are still required before release.
 

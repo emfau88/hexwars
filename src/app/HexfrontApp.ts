@@ -34,7 +34,8 @@ export class HexfrontApp {
     this.debugSpeed = Math.max(1, Math.min(20, Number(this.parameters.get('speed')) || 1));
     this.debugUnlock = this.parameters.get('unlock') === '1';
     const requestedVisual = this.parameters.get('visual');
-    this.visualVariant = requestedVisual === 'decor-p1' || requestedVisual === 'decor-p2' ? requestedVisual : 'production';
+    this.visualVariant = requestedVisual === 'production' || requestedVisual === 'decor-p1'
+      || requestedVisual === 'decor-p2' || requestedVisual === 'decor-v2' ? requestedVisual : 'decor-v2';
     this.state.autoplay = this.parameters.get('autoplay') === '1';
     this.progress = this.progressStore.load();
     this.renderer = new BoardRenderer(canvas, stage, this.visualVariant);
