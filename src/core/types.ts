@@ -64,6 +64,7 @@ export interface LevelDefinition {
   growthMultiplier?: number;
   enemyGrowthMultiplier?: number;
   bases?: { player: Cell; enemy: Cell };
+  baseUnits?: { player: number; enemy: number };
   mirrorNeutral?: boolean;
   features: FeatureFlags;
   theme: string;

@@ -10,6 +10,7 @@ export default defineLevel({
   aiThinkMs: 2500, aiDelaySeconds: 6.5, aiSkill: 0.4, aiActions: 1,
   neutralUnits: [1, 2], growthMultiplier: 2.2, enemyGrowthMultiplier: 1.85,
   bases: { player: { col: 3, row: 9 }, enemy: { col: 3, row: 3 } },
+  baseUnits: { player: 23, enemy: 12 },
   features: { all: false, group: false, relay: false }, theme: 'meadow', landscapeStyle: 'meadow-v1',
   activeRows: [[], [], [], [3], [2, 3], [3, 4], [2, 3], [3, 4], [3, 4], [3], [], [], []],
   cells: [
@@ -18,6 +19,8 @@ export default defineLevel({
     { col: 2, row: 6, units: 1 }, { col: 3, row: 6, units: 2 },
     { col: 3, row: 7, units: 2 }, { col: 4, row: 7, units: 1 },
     { col: 3, row: 8, units: 1 }, { col: 4, row: 8, units: 1 },
+    { col: 2, row: 5, terrain: Terrain.Decor, decor: 'meadow' },
+    { col: 4, row: 6, terrain: Terrain.Decor, decor: 'meadow' },
     ...([[0,4],[1,4],[0,5],[1,5],[0,6],[1,6],[0,7],[1,7]] as const).map(([col,row])=>({col,row,terrain:Terrain.Decor,decor:'water' as const})),
     ...([[5,1],[6,1],[6,2],[6,3],[0,9],[1,9],[0,10],[1,10],[5,10],[6,10]] as const).map(([col,row])=>({col,row,terrain:Terrain.Decor,decor:'forest' as const})),
   ],
