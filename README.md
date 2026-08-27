@@ -41,16 +41,16 @@ HEXFRONT is a public, playable vertical slice and a browser-portal submission ca
 - English by default with a persistent in-game `EN | DE` switch
 - Campaign-aligned victory, defeat, retry and next-mission flows
 - Connected water and shore rendering plus a restrained 16-asset environment set
-- Minimal procedural sound feedback with an in-game sound toggle
+- Compact CC0 sound palette for commands, UI, captures and results with a persistent in-game sound toggle
 - 42 logic, simulation, localization and regression tests
-- 14 Playwright flows covering desktop and mobile campaign behavior
+- Playwright coverage for wide desktop, compact 1100 × 700 desktop and mobile campaign behavior
 - Deterministic ten-level balance smoke test
 
 The default `decor-v2` presentation uses mountains, marsh vegetation, snow and natural ground accents. The former lock-like ruin motifs have been replaced by mushrooms, low bedrock, fern/moss and dry grass/fieldstone details without increasing decoration density.
 
 Production builds ignore development query parameters and do not expose the `window.__HEXFRONT__` inspection API. Development and automated-test builds retain those tools for balancing, visual review and browser automation.
 
-Before a commercial release, the remaining priorities are human playtesting and balance evidence, keyboard/tap accessibility, a commercially cleared product name, an authored sound palette and final validation inside the target distribution portal.
+Before a commercial release, the remaining priorities are human playtesting and balance evidence, keyboard/tap accessibility, a commercially cleared product name, final audio mix validation on physical devices and validation inside the target distribution portal.
 
 ## Local development
 
@@ -79,6 +79,7 @@ npm run verify:production
 - [Prioritized roadmap](./docs/campaign-roadmap.md)
 - [Campaign balance report](./docs/campaign-balance-report.md)
 - [Localization guide for future EN/DE content](./docs/localization-guide.md)
+- [Audio sources and licenses](./public/assets/audio/ATTRIBUTION.md)
 - [Completed restructuring brief](./docs/auftrag-hexfront-neustrukturierung.md)
 - [Visual design references](./docs/mockups/)
 

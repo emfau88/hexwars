@@ -51,8 +51,8 @@ export class HexfrontApp {
     }, this.i18n, this.visualVariant);
     this.input = new InputController(canvas, this.state, this.renderer, {
       getMode: () => this.sendMode,
-      onCommand: () => { this.ui.acknowledgeHint(); navigator.vibrate?.(10); this.audio.beep(410, .035, .03); },
-      onInvalid: (error) => this.ui.showToast(this.i18n.t(this.inputErrorKey(error))), onActivate: () => this.audio.activate(),
+      onCommand: () => { this.ui.acknowledgeHint(); navigator.vibrate?.(10); this.audio.play('send'); },
+      onInvalid: (error) => { this.audio.play('denied'); this.ui.showToast(this.i18n.t(this.inputErrorKey(error))); }, onActivate: () => this.audio.activate(),
       onFocus: (hex) => {
         if (!this.state.level.features.focus) return;
         if (this.state.toggleSupplyFocus(hex, Owner.Player)) {
@@ -88,7 +88,7 @@ export class HexfrontApp {
     this.audio.activate(); this.renderer.resize();
     this.state.start(index, (col, row) => this.renderer.positionFor(col, row));
     this.sendMode = 'half'; this.renderer.sendMode = this.sendMode;
-    this.ui.startMission(this.state); this.ui.setMode(this.sendMode, this.state); this.audio.beep(220, .045, .035);
+    this.ui.startMission(this.state); this.ui.setMode(this.sendMode, this.state); this.audio.play('confirm');
     this.lastFrame = performance.now();
   }
 
@@ -101,6 +101,7 @@ export class HexfrontApp {
     const features = this.state.level.features;
     if ((mode === 'all' && !features.all) || (mode === 'group' && !features.group)) return;
     this.sendMode = mode; this.renderer.sendMode = mode; this.ui.setMode(mode, this.state);
+    this.audio.play('navigate');
     this.ui.showToast(this.i18n.t(mode === 'half' ? 'toast.mode.half' : mode === 'all' ? 'toast.mode.all' : 'toast.mode.group'));
   }
 
@@ -122,14 +123,15 @@ export class HexfrontApp {
     if (event.type === 'arrival' && event.detail.kind !== 'supply') this.audio.beep(145, .035, .02);
     if (event.type === 'capture') {
       this.renderer.effects.burst(event.detail.target, OWNER_COLORS[event.detail.newOwner].edge, 14);
-      if (event.detail.newOwner === Owner.Player || event.detail.oldOwner === Owner.Player) this.audio.beep(event.detail.newOwner === Owner.Player ? 560 : 105, .08, .05);
+      if (event.detail.newOwner === Owner.Player) this.audio.play('capture');
+      else if (event.detail.oldOwner === Owner.Player) this.audio.play('loss');
     }
     if (event.type === 'endgame') { this.ui.updateEndgame(this.state); this.ui.showToast(this.i18n.t(event.detail.stage === 1 ? 'toast.endgame.decline' : 'toast.endgame.decision')); }
     if (event.type === 'result') {
       if (event.detail.result === 'victory') {
         this.progress = this.progressStore.complete(this.progress, this.state.currentLevel, this.state.elapsed);
-        this.audio.beep(680, .12, .075); window.setTimeout(() => this.audio.beep(880, .15, .065), 100);
-      } else this.audio.beep(95, .22, .075);
+        this.audio.play('victory');
+      } else this.audio.play('defeat');
       this.ui.showResult(this.state, this.progress);
     }
   }

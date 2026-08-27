@@ -232,6 +232,44 @@ test('language defaults to English and the German choice survives reload', async
   await expect(page.locator('#campaignTitle')).toHaveText('SELECT MAP');
 });
 
+test('audio cues load, play on interaction and remember the sound preference', async ({ page }) => {
+  await page.addInitScript(() => {
+    const trackedWindow = window as Window & { __playedAudio?: string[] };
+    trackedWindow.__playedAudio = [];
+    HTMLMediaElement.prototype.play = function play(): Promise<void> {
+      trackedWindow.__playedAudio?.push(new URL(this.src).pathname.split('/').pop() ?? '');
+      return Promise.resolve();
+    };
+  });
+  await page.reload();
+
+  const assets = ['ui-confirm.mp3', 'ui-navigate.mp3', 'ui-denied.mp3', 'ui-toggle.mp3', 'send.mp3', 'capture.mp3', 'result-victory.ogg', 'result-defeat.ogg'];
+  const responses = await page.evaluate(async (names) => Promise.all(names.map(async (name) => {
+    const response = await fetch(`./assets/audio/${name}`);
+    return { name, ok:response.ok, bytes:(await response.arrayBuffer()).byteLength };
+  })), assets);
+  expect(responses.every(({ ok, bytes }) => ok && bytes > 1_000)).toBe(true);
+  const decoded = await page.evaluate(async (names) => Promise.all(names.map((name) => new Promise<boolean>((resolve) => {
+    const audio = new Audio(`./assets/audio/${name}`);
+    audio.addEventListener('loadedmetadata', () => resolve(audio.duration > 0), { once:true });
+    audio.addEventListener('error', () => resolve(false), { once:true });
+    audio.load();
+  }))), assets);
+  expect(decoded.every(Boolean)).toBe(true);
+
+  await page.getByRole('button', { name: 'BEGIN CAMPAIGN' }).click();
+  await expect.poll(async () => page.evaluate(() => (window as Window & { __playedAudio?: string[] }).__playedAudio ?? [])).toContain('ui-confirm.mp3');
+  await page.evaluate(() => window.__HEXFRONT__?.showMap());
+  await page.getByRole('button', { name: 'Menu settings' }).click();
+  await page.locator('#soundBtn').click();
+  await expect(page.locator('#soundBtn')).toHaveText('SOUND OFF');
+  await expect.poll(async () => page.evaluate(() => localStorage.getItem('hexfront:sound-enabled'))).toBe('off');
+
+  await page.reload();
+  await page.getByRole('button', { name: 'Menu settings' }).click();
+  await expect(page.locator('#soundBtn')).toHaveText('SOUND OFF');
+});
+
 test('decor variants decode their lazily loaded candidate assets', async ({ page }) => {
   for (const visual of ['decor-p1', 'decor-p2', 'decor-v2']) {
     const assetSet = visual === 'decor-v2' ? 'decor-v2' : 'decor-p1';
