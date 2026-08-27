@@ -10,6 +10,17 @@ import { BoardRenderer } from '../rendering/BoardRenderer';
 import { OWNER_COLORS } from '../rendering/palette';
 import { CampaignUI } from '../ui/CampaignUI';
 
+const DEBUG_ENABLED = import.meta.env.DEV || import.meta.env.MODE === 'test';
+const DEBUG_PARAMETERS = DEBUG_ENABLED ? new URLSearchParams(location.search) : null;
+const DEBUG_SPEED = Math.max(1, Math.min(20, Number(DEBUG_PARAMETERS?.get('speed')) || 1));
+const DEBUG_UNLOCK = DEBUG_PARAMETERS?.get('unlock') === '1';
+const DEBUG_AUTOPLAY = DEBUG_PARAMETERS?.get('autoplay') === '1';
+const DEBUG_AUTOSTART = DEBUG_PARAMETERS?.get('autostart') === '1';
+const DEBUG_LEVEL = Number(DEBUG_PARAMETERS?.get('level'));
+const REQUESTED_VISUAL = DEBUG_PARAMETERS?.get('visual');
+const VISUAL_VARIANT: VisualVariant = REQUESTED_VISUAL === 'production' || REQUESTED_VISUAL === 'decor-p1'
+  || REQUESTED_VISUAL === 'decor-p2' || REQUESTED_VISUAL === 'decor-v2' ? REQUESTED_VISUAL : 'decor-v2';
+
 export class HexfrontApp {
   readonly state = new GameState();
   readonly renderer: BoardRenderer;
@@ -20,10 +31,7 @@ export class HexfrontApp {
   progress: CampaignProgress;
   sendMode: SendMode = 'half';
   private readonly input: InputController;
-  private readonly parameters = new URLSearchParams(location.search);
-  private readonly debugSpeed: number;
-  private readonly debugUnlock: boolean;
-  private readonly visualVariant: VisualVariant;
+  private readonly visualVariant = VISUAL_VARIANT;
   private lastFrame = performance.now();
   private animationFrame = 0;
 
@@ -31,12 +39,7 @@ export class HexfrontApp {
     const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement | null;
     const stage = document.getElementById('stage');
     if (!canvas || !stage) throw new Error('HEXFRONT canvas shell is incomplete.');
-    this.debugSpeed = Math.max(1, Math.min(20, Number(this.parameters.get('speed')) || 1));
-    this.debugUnlock = this.parameters.get('unlock') === '1';
-    const requestedVisual = this.parameters.get('visual');
-    this.visualVariant = requestedVisual === 'production' || requestedVisual === 'decor-p1'
-      || requestedVisual === 'decor-p2' || requestedVisual === 'decor-v2' ? requestedVisual : 'decor-v2';
-    this.state.autoplay = this.parameters.get('autoplay') === '1';
+    this.state.autoplay = DEBUG_AUTOPLAY;
     this.progress = this.progressStore.load();
     this.renderer = new BoardRenderer(canvas, stage, this.visualVariant);
     this.renderer.sendLabel = this.i18n.t('drag.send');
@@ -48,8 +51,8 @@ export class HexfrontApp {
     }, this.i18n, this.visualVariant);
     this.input = new InputController(canvas, this.state, this.renderer, {
       getMode: () => this.sendMode,
-      onCommand: () => { this.ui.acknowledgeHint(); navigator.vibrate?.(10); this.audio.beep(410, .035, .03); },
-      onInvalid: (error) => this.ui.showToast(this.i18n.t(this.inputErrorKey(error))), onActivate: () => this.audio.activate(),
+      onCommand: () => { this.ui.acknowledgeHint(); navigator.vibrate?.(10); this.audio.play('send'); },
+      onInvalid: (error) => { this.audio.play('denied'); this.ui.showToast(this.i18n.t(this.inputErrorKey(error))); }, onActivate: () => this.audio.activate(),
       onFocus: (hex) => {
         if (!this.state.level.features.focus) return;
         if (this.state.toggleSupplyFocus(hex, Owner.Player)) {
@@ -61,21 +64,22 @@ export class HexfrontApp {
     this.bindWindowEvents();
     this.renderer.resize(this.state);
     this.showMap(this.progressStore.focus(this.progress));
-    installDebugApi({
-      startLevel: (index) => this.startLevel(index), showMap: () => this.showMap(), setAutoplay: (value) => { this.state.autoplay = value; },
-      setOpponentEnabled: (value) => { this.state.opponentEnabled = value; },
-      getState: () => ({ ...this.state.snapshot(), progress: this.progress }),
-      getBoard: () => this.state.hexes.map(({ col, row, owner, units, terrain, decor, x, y }) => ({ col, row, owner, units, terrain, decor, x, y })),
-      send: (fromCol, fromRow, toCol, toRow, fraction = .5) => {
-        const from = this.state.hexAt(fromCol, fromRow); const to = this.state.hexAt(toCol, toRow);
-        return Boolean(from && to && this.state.send(from, to, from.owner, Math.floor(from.units * fraction)));
-      },
-      think: (owner = Owner.Enemy) => this.state.think(owner, .9),
-      simulate: (seconds = 300, step = .05) => { for (let index = 0; index < Math.ceil(seconds / step) && this.state.running; index += 1) this.state.update(step); this.consumeEvents(); return this.state.snapshot(); },
-      debugWin: () => { this.state.end('victory', 'debugVictory'); this.consumeEvents(); }, resetProgress: () => this.resetProgress(true),
-    });
-    const requestedLevel = Number(this.parameters.get('level'));
-    if (this.parameters.get('autostart') === '1') this.startLevel(Number.isFinite(requestedLevel) ? requestedLevel : 0);
+    if (DEBUG_ENABLED) {
+      installDebugApi({
+        startLevel: (index) => this.startLevel(index), showMap: () => this.showMap(), setAutoplay: (value) => { this.state.autoplay = value; },
+        setOpponentEnabled: (value) => { this.state.opponentEnabled = value; },
+        getState: () => ({ ...this.state.snapshot(), progress: this.progress }),
+        getBoard: () => this.state.hexes.map(({ col, row, owner, units, terrain, decor, x, y }) => ({ col, row, owner, units, terrain, decor, x, y })),
+        send: (fromCol, fromRow, toCol, toRow, fraction = .5) => {
+          const from = this.state.hexAt(fromCol, fromRow); const to = this.state.hexAt(toCol, toRow);
+          return Boolean(from && to && this.state.send(from, to, from.owner, Math.floor(from.units * fraction)));
+        },
+        think: (owner = Owner.Enemy) => this.state.think(owner, .9),
+        simulate: (seconds = 300, step = .05) => { for (let index = 0; index < Math.ceil(seconds / step) && this.state.running; index += 1) this.state.update(step); this.consumeEvents(); return this.state.snapshot(); },
+        debugWin: () => { this.state.end('victory', 'debugVictory'); this.consumeEvents(); }, resetProgress: () => this.resetProgress(true),
+      });
+      if (DEBUG_AUTOSTART) this.startLevel(Number.isFinite(DEBUG_LEVEL) ? DEBUG_LEVEL : 0);
+    }
     this.ui.refreshLanguage(this.state, this.audio.enabled);
     this.animationFrame = requestAnimationFrame(this.frame);
   }
@@ -84,26 +88,27 @@ export class HexfrontApp {
     this.audio.activate(); this.renderer.resize();
     this.state.start(index, (col, row) => this.renderer.positionFor(col, row));
     this.sendMode = 'half'; this.renderer.sendMode = this.sendMode;
-    this.ui.startMission(this.state); this.ui.setMode(this.sendMode, this.state); this.audio.beep(220, .045, .035);
+    this.ui.startMission(this.state); this.ui.setMode(this.sendMode, this.state); this.audio.play('confirm');
     this.lastFrame = performance.now();
   }
 
   showMap(focus = this.state.currentLevel): void {
     this.state.running = false;
-    this.ui.showMap(this.progress, (index) => this.progressStore.isUnlocked(this.progress, index, this.debugUnlock), focus);
+    this.ui.showMap(this.progress, (index) => this.progressStore.isUnlocked(this.progress, index, DEBUG_UNLOCK), focus);
   }
 
   setMode(mode: SendMode): void {
     const features = this.state.level.features;
     if ((mode === 'all' && !features.all) || (mode === 'group' && !features.group)) return;
     this.sendMode = mode; this.renderer.sendMode = mode; this.ui.setMode(mode, this.state);
+    this.audio.play('navigate');
     this.ui.showToast(this.i18n.t(mode === 'half' ? 'toast.mode.half' : mode === 'all' ? 'toast.mode.all' : 'toast.mode.group'));
   }
 
   private frame = (time: number): void => {
     const delta = Math.min(.05, (time - this.lastFrame) / 1000); this.lastFrame = time;
     if (this.state.running) {
-      this.state.update(delta * this.debugSpeed); this.renderer.effects.update(delta * this.debugSpeed); this.ui.updateHUD(this.state);
+      this.state.update(delta * DEBUG_SPEED); this.renderer.effects.update(delta * DEBUG_SPEED); this.ui.updateHUD(this.state);
     }
     this.consumeEvents();
     this.renderer.draw(this.state); this.animationFrame = requestAnimationFrame(this.frame);
@@ -118,14 +123,15 @@ export class HexfrontApp {
     if (event.type === 'arrival' && event.detail.kind !== 'supply') this.audio.beep(145, .035, .02);
     if (event.type === 'capture') {
       this.renderer.effects.burst(event.detail.target, OWNER_COLORS[event.detail.newOwner].edge, 14);
-      if (event.detail.newOwner === Owner.Player || event.detail.oldOwner === Owner.Player) this.audio.beep(event.detail.newOwner === Owner.Player ? 560 : 105, .08, .05);
+      if (event.detail.newOwner === Owner.Player) this.audio.play('capture');
+      else if (event.detail.oldOwner === Owner.Player) this.audio.play('loss');
     }
     if (event.type === 'endgame') { this.ui.updateEndgame(this.state); this.ui.showToast(this.i18n.t(event.detail.stage === 1 ? 'toast.endgame.decline' : 'toast.endgame.decision')); }
     if (event.type === 'result') {
       if (event.detail.result === 'victory') {
         this.progress = this.progressStore.complete(this.progress, this.state.currentLevel, this.state.elapsed);
-        this.audio.beep(680, .12, .075); window.setTimeout(() => this.audio.beep(880, .15, .065), 100);
-      } else this.audio.beep(95, .22, .075);
+        this.audio.play('victory');
+      } else this.audio.play('defeat');
       this.ui.showResult(this.state, this.progress);
     }
   }
@@ -155,7 +161,7 @@ export class HexfrontApp {
   }
 
   private bindWindowEvents(): void {
-    const resize = () => { this.renderer.resize(this.state); if (this.ui.menu.classList.contains('show')) this.ui.selectLevel(this.ui.selectedMenuLevel, this.progress, (index) => this.progressStore.isUnlocked(this.progress, index, this.debugUnlock), false); };
+    const resize = () => { this.renderer.resize(this.state); if (this.ui.menu.classList.contains('show')) this.ui.selectLevel(this.ui.selectedMenuLevel, this.progress, (index) => this.progressStore.isUnlocked(this.progress, index, DEBUG_UNLOCK), false); };
     window.addEventListener('resize', resize); window.addEventListener('orientationchange', () => window.setTimeout(resize, 120)); document.addEventListener('fullscreenchange', resize);
     window.addEventListener('keydown', (event) => {
       if (event.key === '1') this.setMode('half'); if (event.key === '2') this.setMode('all'); if (event.key === '3') this.setMode('group');

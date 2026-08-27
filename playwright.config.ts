@@ -1,15 +1,18 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const port = Number(process.env.HEXFRONT_TEST_PORT) || 4173;
+const baseURL = `http://127.0.0.1:${port}`;
+
 export default defineConfig({
   testDir: './tests/browser',
   timeout: 30_000,
   expect: { timeout: 8_000 },
   fullyParallel: false,
-  use: { baseURL: 'http://127.0.0.1:4173', trace: 'retain-on-failure' },
+  use: { baseURL, trace: 'retain-on-failure' },
   webServer: {
-    command: 'npm run build && npm run preview -- --host 127.0.0.1',
-    url: 'http://127.0.0.1:4173',
-    reuseExistingServer: true,
+    command: `node ./node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port ${port}`,
+    url: baseURL,
+    reuseExistingServer: false,
     timeout: 30_000,
   },
   projects: [

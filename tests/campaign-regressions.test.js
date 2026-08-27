@@ -13,7 +13,9 @@ const input = read('../src/input/InputController.ts');
 const state = read('../src/core/GameState.ts');
 const main = read('../src/main.ts');
 const app = read('../src/app/HexfrontApp.ts');
+const audio = read('../src/audio/AudioController.ts');
 const landscape = read('../src/rendering/LandscapeRenderer.ts');
+const boardRenderer = read('../src/rendering/BoardRenderer.ts');
 const atlas = read('../src/ui/CampaignAtlas.ts');
 const vite = read('../vite.config.ts');
 const styles = read('../src/styles.css');
@@ -30,6 +32,8 @@ test('Level 1 teaches 50 percent and Level 2 unlocks 100 percent', () => {
   assert.match(level1, /features: \{ all: false, group: false, relay: false \}/);
   assert.match(level2, /100 % wird freigeschaltet/);
   assert.match(level2, /features:\{all:true,group:false,relay:false\}/);
+  assert.match(boardRenderer, /this\.width >= 1100 && this\.height >= 780 \? 42 : 34/);
+  assert.match(styles, /attr\(data-unlock-label\)/);
 });
 
 test('Level 9 mirrors deterministic neutral strength', () => {
@@ -86,5 +90,26 @@ test('complete decor V2 runtime set stays within the mobile budget', () => {
     assert.ok(statSync(new URL(name, directory)).size < 100_000, `${name} stays below 100 KB`);
   }
   assert.match(landscape, /visualVariant === 'decor-v2' \? hash01\(hex\.col \+ 37, hex\.row \+ 53, seed \+ 1709\) : baseQ/);
-  assert.match(app, /requestedVisual[\s\S]*: 'decor-v2'/);
+  assert.match(app, /REQUESTED_VISUAL[\s\S]*: 'decor-v2'/);
+});
+
+test('compact CC0 audio palette is wired to gameplay and persists its setting', () => {
+  const names = [
+    'ui-confirm.mp3', 'ui-navigate.mp3', 'ui-denied.mp3', 'ui-toggle.mp3',
+    'send.mp3', 'capture.mp3', 'result-victory.ogg', 'result-defeat.ogg',
+  ];
+  for (const name of names) {
+    const asset = new URL(`../public/assets/audio/${name}`, import.meta.url);
+    assert.ok(statSync(asset).size > 1_000, `${name} is not empty`);
+    assert.ok(statSync(asset).size < 25_000, `${name} stays below 25 KB`);
+  }
+  assert.match(audio, /hexfront:sound-enabled/);
+  assert.match(audio, /import\.meta\.env\.BASE_URL/);
+  for (const cue of ['send', 'capture', 'loss', 'victory', 'defeat']) assert.match(app, new RegExp(`audio\\.play\\('${cue}'\\)`));
+});
+
+test('debug entry points are restricted to development and test builds', () => {
+  assert.match(app, /const DEBUG_ENABLED = import\.meta\.env\.DEV \|\| import\.meta\.env\.MODE === 'test'/);
+  assert.match(app, /const DEBUG_PARAMETERS = DEBUG_ENABLED \? new URLSearchParams\(location\.search\) : null/);
+  assert.match(app, /if \(DEBUG_ENABLED\) \{[\s\S]*installDebugApi/);
 });

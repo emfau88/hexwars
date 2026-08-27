@@ -29,6 +29,9 @@ test('campaign map, unlock state and real pointer drag work', async ({ page }) =
   await expect(page.locator('#sidePanel .modeBtn[data-mode="half"]')).toBeEnabled();
   await expect(page.locator('#sidePanel .modeBtn[data-mode="all"]')).toBeDisabled();
   await expect(page.locator('#sidePanel .modeBtn[data-mode="group"]')).toBeDisabled();
+  await expect(page.locator('#sidePanel .modeBtn[data-mode="all"]')).toHaveAttribute('data-unlock-label', 'FROM II');
+  await expect(page.locator('#sidePanel .modeBtn[data-mode="group"]')).toHaveAttribute('data-unlock-label', 'FROM VI');
+  await expect(page.locator('#unlockPanel')).toContainText('The 100% send unlocks in Mission II.');
   await page.waitForTimeout(3_800);
   await expect(page.locator('#hint')).toHaveCSS('opacity', '1');
 
@@ -170,14 +173,45 @@ test('responsive shell has no page overflow and mobile controls meet the touch f
       .map((button) => ({ width: button.getBoundingClientRect().width, height: button.getBoundingClientRect().height })),
     statLabels: [...document.querySelectorAll<HTMLElement>('.mobileStatLabel')]
       .map((label) => ({ display: getComputedStyle(label).display, text: label.textContent })),
+    radius: (() => {
+      const board = window.__HEXFRONT__?.getBoard() ?? [];
+      const upper = board.find((hex) => hex.col === 3 && hex.row === 8);
+      const lower = board.find((hex) => hex.col === 3 && hex.row === 9);
+      return upper && lower ? Math.abs(lower.y - upper.y) / 1.5 : 0;
+    })(),
+    stageBackground: getComputedStyle(document.querySelector<HTMLElement>('#stage')!).backgroundColor,
   }));
   expect(gameMetrics.body).toBeLessThanOrEqual(gameMetrics.viewport);
+  expect(gameMetrics.stageBackground).toBe('rgb(208, 222, 193)');
   if (gameMetrics.mobile) {
     expect(Math.min(...gameMetrics.controls.map(({ width }) => width))).toBeGreaterThanOrEqual(44);
     expect(Math.min(...gameMetrics.controls.map(({ height }) => height))).toBeGreaterThanOrEqual(44);
     expect(gameMetrics.statLabels.every(({ display }) => display !== 'none')).toBe(true);
     expect(gameMetrics.statLabels.map(({ text }) => text)).toEqual(['CELLS / UNITS', 'CELLS / UNITS']);
-  }
+    expect(gameMetrics.radius).toBeLessThanOrEqual(31);
+  } else expect(gameMetrics.radius).toBeGreaterThan(34);
+});
+
+test('compact desktop keeps the full dossier controls visible', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-chromium');
+  await page.setViewportSize({ width: 1100, height: 700 });
+  await clearProgress(page);
+  await page.getByRole('button', { name: 'BEGIN CAMPAIGN' }).click();
+  const metrics = await page.evaluate(() => {
+    const dossier = document.querySelector<HTMLElement>('.sideDossier')!;
+    const sound = document.querySelector<HTMLElement>('#sideSoundBtn')!.getBoundingClientRect();
+    return {
+      dossierClientHeight:dossier.clientHeight,
+      dossierScrollHeight:dossier.scrollHeight,
+      soundBottom:sound.bottom,
+      viewportHeight:innerHeight,
+      pageWidth:document.documentElement.scrollWidth,
+      viewportWidth:innerWidth,
+    };
+  });
+  expect(metrics.dossierScrollHeight).toBeLessThanOrEqual(metrics.dossierClientHeight + 2);
+  expect(metrics.soundBottom).toBeLessThanOrEqual(metrics.viewportHeight);
+  expect(metrics.pageWidth).toBeLessThanOrEqual(metrics.viewportWidth);
 });
 
 test('language defaults to English and the German choice survives reload', async ({ page }) => {
@@ -196,6 +230,44 @@ test('language defaults to English and the German choice survives reload', async
   await page.getByRole('button', { name: 'Englisch' }).click();
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   await expect(page.locator('#campaignTitle')).toHaveText('SELECT MAP');
+});
+
+test('audio cues load, play on interaction and remember the sound preference', async ({ page }) => {
+  await page.addInitScript(() => {
+    const trackedWindow = window as Window & { __playedAudio?: string[] };
+    trackedWindow.__playedAudio = [];
+    HTMLMediaElement.prototype.play = function play(): Promise<void> {
+      trackedWindow.__playedAudio?.push(new URL(this.src).pathname.split('/').pop() ?? '');
+      return Promise.resolve();
+    };
+  });
+  await page.reload();
+
+  const assets = ['ui-confirm.mp3', 'ui-navigate.mp3', 'ui-denied.mp3', 'ui-toggle.mp3', 'send.mp3', 'capture.mp3', 'result-victory.ogg', 'result-defeat.ogg'];
+  const responses = await page.evaluate(async (names) => Promise.all(names.map(async (name) => {
+    const response = await fetch(`./assets/audio/${name}`);
+    return { name, ok:response.ok, bytes:(await response.arrayBuffer()).byteLength };
+  })), assets);
+  expect(responses.every(({ ok, bytes }) => ok && bytes > 1_000)).toBe(true);
+  const decoded = await page.evaluate(async (names) => Promise.all(names.map((name) => new Promise<boolean>((resolve) => {
+    const audio = new Audio(`./assets/audio/${name}`);
+    audio.addEventListener('loadedmetadata', () => resolve(audio.duration > 0), { once:true });
+    audio.addEventListener('error', () => resolve(false), { once:true });
+    audio.load();
+  }))), assets);
+  expect(decoded.every(Boolean)).toBe(true);
+
+  await page.getByRole('button', { name: 'BEGIN CAMPAIGN' }).click();
+  await expect.poll(async () => page.evaluate(() => (window as Window & { __playedAudio?: string[] }).__playedAudio ?? [])).toContain('ui-confirm.mp3');
+  await page.evaluate(() => window.__HEXFRONT__?.showMap());
+  await page.getByRole('button', { name: 'Menu settings' }).click();
+  await page.locator('#soundBtn').click();
+  await expect(page.locator('#soundBtn')).toHaveText('SOUND OFF');
+  await expect.poll(async () => page.evaluate(() => localStorage.getItem('hexfront:sound-enabled'))).toBe('off');
+
+  await page.reload();
+  await page.getByRole('button', { name: 'Menu settings' }).click();
+  await expect(page.locator('#soundBtn')).toHaveText('SOUND OFF');
 });
 
 test('decor variants decode their lazily loaded candidate assets', async ({ page }) => {

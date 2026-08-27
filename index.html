@@ -140,47 +140,55 @@
     </div>
 
     <aside id="sidePanel">
-      <div class="panel" id="missionPanel">
-        <div class="eyebrow" data-i18n="panel.round">MAP</div>
-        <div id="missionName">—</div>
-        <div id="missionText" data-i18n="panel.selectLevel">Select a level on the campaign map.</div>
-      </div>
-      <div class="panel" id="rulePanel">
-        <div class="eyebrow" data-i18n="panel.rule">RULE FOR THIS LEVEL</div>
-        <div id="ruleText">—</div>
-      </div>
-      <div class="panel" id="sendPanel">
-        <div class="eyebrow" data-i18n="panel.send">SEND</div>
-        <div class="modeRow">
-          <button class="modeBtn active" data-mode="half">50 %</button>
-          <button class="modeBtn" data-mode="all">100 %</button>
-          <button class="modeBtn" data-mode="group" data-i18n="mode.group">GROUP</button>
+      <div class="sideDossier">
+        <div class="panel" id="missionPanel">
+          <div class="eyebrow" data-i18n="panel.round">MAP</div>
+          <div id="missionName">—</div>
+          <div id="missionText" data-i18n="panel.selectLevel">Select a level on the campaign map.</div>
+        </div>
+        <div class="panel" id="rulePanel">
+          <div class="eyebrow" data-i18n="panel.rule">RULE FOR THIS LEVEL</div>
+          <div id="ruleText">—</div>
+        </div>
+        <div class="panel" id="sendPanel">
+          <div class="eyebrow" data-i18n="panel.send">SEND</div>
+          <div class="modeRow">
+            <button class="modeBtn active" data-mode="half">50 %</button>
+            <button class="modeBtn" data-mode="all">100 %</button>
+            <button class="modeBtn" data-mode="group" data-i18n="mode.group">GROUP</button>
+          </div>
+        </div>
+        <div class="panel nextTactic" id="unlockPanel" hidden>
+          <div class="eyebrow" data-i18n="panel.nextTactic">NEXT TACTIC</div>
+          <div id="unlockText">—</div>
+        </div>
+        <div class="panel" id="statusPanel">
+          <div class="eyebrow" data-i18n="panel.status">STATUS</div>
+          <div class="infoGrid">
+            <span data-i18n="panel.fieldLead">Cell lead</span><b id="frontBalance">0</b>
+            <span data-i18n="panel.time">Time</span><b id="timeStatus">0:00</b>
+            <span data-i18n="panel.phase">Phase</span><b id="phaseStatus">GROWTH</b>
+            <span class="telemetry" data-i18n="panel.actions">Actions</span><b class="telemetry" id="actionStatus">0</b>
+            <span class="telemetry" data-i18n="panel.captures">Captures</span><b class="telemetry" id="captureStatus">0</b>
+          </div>
+        </div>
+        <div class="panel legend" id="terrainPanel">
+          <div class="eyebrow" data-i18n="panel.terrain">CELL TYPES</div>
+          <div><span class="legendIcon">◆</span><span data-i18n="terrain.base">Base: starting point and victory target</span></div>
+          <div id="legendHill"><span class="legendIcon">⌃</span><span data-i18n="terrain.hill">Hill: takes less damage</span></div>
+          <div id="legendRelay"><span class="legendIcon">◎</span><span data-i18n="terrain.relay">Relay: reaches targets up to distance 2</span></div>
+          <div><span class="legendIcon">✿</span><span data-i18n="terrain.landscape">Landscape: decorative, not playable</span></div>
+        </div>
+        <div class="sideUtilityDock">
+          <div class="utilityRow utilityRowTriple">
+            <button class="utilityBtn" id="restartBtn" data-i18n="utility.restart">RESTART</button>
+            <button class="utilityBtn" id="levelsBtn" data-i18n="utility.map">MAP</button>
+            <button class="utilityBtn" id="sideFullscreenBtn" data-i18n="utility.fullscreenShort">FULL</button>
+          </div>
+          <button class="utilityBtn" id="sideSoundBtn">SOUND ON</button>
+          <div id="bestText"></div>
         </div>
       </div>
-      <div class="panel" id="statusPanel">
-        <div class="eyebrow" data-i18n="panel.status">STATUS</div>
-        <div class="infoGrid">
-          <span data-i18n="panel.fieldLead">Cell lead</span><b id="frontBalance">0</b>
-          <span data-i18n="panel.time">Time</span><b id="timeStatus">0:00</b>
-          <span data-i18n="panel.phase">Phase</span><b id="phaseStatus">GROWTH</b>
-          <span class="telemetry" data-i18n="panel.actions">Actions</span><b class="telemetry" id="actionStatus">0</b>
-          <span class="telemetry" data-i18n="panel.captures">Captures</span><b class="telemetry" id="captureStatus">0</b>
-        </div>
-      </div>
-      <div class="panel legend" id="terrainPanel">
-        <div class="eyebrow" data-i18n="panel.terrain">CELL TYPES</div>
-        <div><span class="legendIcon">◆</span><span data-i18n="terrain.base">Base: starting point and victory target</span></div>
-        <div id="legendHill"><span class="legendIcon">⌃</span><span data-i18n="terrain.hill">Hill: takes less damage</span></div>
-        <div id="legendRelay"><span class="legendIcon">◎</span><span data-i18n="terrain.relay">Relay: reaches targets up to distance 2</span></div>
-        <div><span class="legendIcon">✿</span><span data-i18n="terrain.landscape">Landscape: decorative, not playable</span></div>
-      </div>
-      <div class="utilityRow utilityRowTriple">
-        <button class="utilityBtn" id="restartBtn" data-i18n="utility.restart">RESTART</button>
-        <button class="utilityBtn" id="levelsBtn" data-i18n="utility.map">MAP</button>
-        <button class="utilityBtn" id="sideFullscreenBtn" data-i18n="utility.fullscreenShort">FULL</button>
-      </div>
-      <button class="utilityBtn" id="sideSoundBtn">SOUND ON</button>
-      <div id="bestText"></div>
     </aside>
   </div>
 

@@ -73,7 +73,7 @@ export class CampaignUI {
       return;
     }
     if (state.hexes.length) {
-      this.applyMissionCopy(state); this.updateEndgame(state);
+      this.applyMissionCopy(state); this.updateModeUnlockCopy(state); this.updateEndgame(state);
       if (this.overlay.classList.contains('show') && state.result) this.showResult(state, this.lastProgress);
     }
   }
@@ -170,6 +170,28 @@ export class CampaignUI {
       const allowed = candidate === 'half' || (candidate === 'all' && state.level.features.all) || (candidate === 'group' && state.level.features.group);
       button.disabled = !allowed; button.classList.toggle('active', candidate === mode);
     });
+    this.updateModeUnlockCopy(state);
+  }
+
+  private updateModeUnlockCopy(state: GameState): void {
+    document.querySelectorAll<HTMLButtonElement>('.modeBtn').forEach((button) => {
+      const candidate = button.dataset.mode as SendMode;
+      const locked = (candidate === 'all' && !state.level.features.all) || (candidate === 'group' && !state.level.features.group);
+      const baseLabel = candidate === 'group' ? this.i18n.t('mode.group') : candidate === 'all' ? '100 %' : '50 %';
+      const shortKey = candidate === 'all' ? 'mode.unlockAllShort' : candidate === 'group' ? 'mode.unlockGroupShort' : null;
+      const detailKey = candidate === 'all' ? 'panel.unlockAll' : candidate === 'group' ? 'panel.unlockGroup' : null;
+      if (locked && shortKey && detailKey) {
+        button.dataset.unlockLabel = this.i18n.t(shortKey);
+        button.setAttribute('aria-label', `${baseLabel} — ${this.i18n.t(detailKey)}`);
+      } else {
+        delete button.dataset.unlockLabel;
+        button.setAttribute('aria-label', baseLabel);
+      }
+    });
+    const unlockPanel = required('unlockPanel');
+    const unlockKey = !state.level.features.all ? 'panel.unlockAll' : !state.level.features.group ? 'panel.unlockGroup' : null;
+    unlockPanel.hidden = !unlockKey;
+    if (unlockKey) required('unlockText').textContent = this.i18n.t(unlockKey);
   }
 
   updateHUD(state: GameState): void {
