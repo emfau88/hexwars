@@ -4,22 +4,28 @@
 
 HEXFRONT is a compact real-time tactics game for desktop browsers and mobile portrait screens. Expand across a hex grid, distribute growing forces and capture the opposing base.
 
-## Screenshots
+<p align="center">
+  <img src="./docs/portal/kongregate/hexfront-icon.png" width="625" alt="HEXFRONT portal artwork with orange and blue bases on a compact hex battlefield">
+</p>
+
+## Current screenshots
 
 ### Campaign atlas
 
-![HEXFRONT campaign atlas with mission briefing](./docs/readme/campaign-overview.png)
+![HEXFRONT campaign atlas and English mission briefing](./docs/portal/kongregate/01-campaign-map.png)
 
 <table>
   <tr>
-    <th>Desktop battle</th>
-    <th>Mobile portrait</th>
+    <th>VI · Split Field</th>
+    <th>IX · Three Passes</th>
   </tr>
   <tr>
-    <td width="68%"><img src="./docs/readme/gameplay-desktop.png" alt="HEXFRONT battle on the Split Field map"></td>
-    <td width="32%"><img src="./docs/readme/gameplay-mobile.png" alt="HEXFRONT mobile battle with touch controls"></td>
+    <td width="50%"><img src="./docs/portal/kongregate/02-level-06-divided-field.png" alt="Balanced HEXFRONT battle on the Split Field map"></td>
+    <td width="50%"><img src="./docs/portal/kongregate/03-level-09-mirror.png" alt="Balanced HEXFRONT battle on the snowy Three Passes map"></td>
   </tr>
 </table>
+
+The upload-ready portal package contains one 1000 × 800 icon and three 1600 × 900 English screenshots in [`docs/portal/kongregate`](./docs/portal/kongregate/README.md).
 
 ## Play
 
@@ -32,7 +38,7 @@ HEXFRONT is a compact real-time tactics game for desktop browsers and mobile por
 
 ## Current state
 
-HEXFRONT is a public, playable vertical slice and a browser-portal submission candidate. It is not yet a finished commercial release.
+HEXFRONT is a public, playable vertical slice and browser-portal release candidate with a production-safe build and upload artwork. It is not yet a finished commercial release.
 
 - Ten deterministic campaign levels with sequential unlocks and best-time persistence
 - Real-time AI, combat, supply, reinforcement and visible endgame systems
@@ -42,7 +48,7 @@ HEXFRONT is a public, playable vertical slice and a browser-portal submission ca
 - Campaign-aligned victory, defeat, retry and next-mission flows
 - Connected water and shore rendering plus a restrained 16-asset environment set
 - Compact CC0 sound palette for commands, UI, captures and results with a persistent in-game sound toggle
-- 42 logic, simulation, localization and regression tests
+- 43 logic, simulation, localization and regression tests
 - Playwright coverage for wide desktop, compact 1100 × 700 desktop and mobile campaign behavior
 - Deterministic ten-level balance smoke test
 
