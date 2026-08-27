@@ -34,7 +34,8 @@ export class BoardRenderer {
     const padding = this.width < 900 ? 8 : 18;
     const byWidth = (this.width - padding * 2) / ((WORLD_COLS + .5) * Math.sqrt(3));
     const byHeight = (this.height - padding * 2) / (WORLD_ROWS * 1.5 + .5);
-    this.radius = Math.max(18, Math.min(this.width < 520 ? 31 : 34, byWidth, byHeight));
+    const desktopCap = this.width >= 1100 && this.height >= 780 ? 42 : 34;
+    this.radius = Math.max(18, Math.min(this.width < 520 ? 31 : desktopCap, byWidth, byHeight));
     this.horizontal = Math.sqrt(3) * this.radius; this.vertical = 1.5 * this.radius;
     const gridWidth = (WORLD_COLS + .5) * this.horizontal;
     const gridHeight = WORLD_ROWS * 1.5 * this.radius + .5 * this.radius;

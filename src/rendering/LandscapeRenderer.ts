@@ -82,7 +82,7 @@ export class LandscapeRenderer {
   }
 
   backdrop(context: CanvasRenderingContext2D, width: number, height: number, levelIndex: number): void {
-    context.fillStyle = levelIndex === 0 ? '#d7e3b3' : '#dce8d0';
+    context.fillStyle = levelIndex === 0 ? '#cddca8' : '#d0dec1';
     context.fillRect(0, 0, width, height);
     context.save(); context.globalAlpha = levelIndex === 0 ? 0.07 : 0.12; context.strokeStyle = '#8fa78f';
     for (let index = 0; index < 18; index += 1) {

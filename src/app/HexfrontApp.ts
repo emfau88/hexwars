@@ -10,6 +10,17 @@ import { BoardRenderer } from '../rendering/BoardRenderer';
 import { OWNER_COLORS } from '../rendering/palette';
 import { CampaignUI } from '../ui/CampaignUI';
 
+const DEBUG_ENABLED = import.meta.env.DEV || import.meta.env.MODE === 'test';
+const DEBUG_PARAMETERS = DEBUG_ENABLED ? new URLSearchParams(location.search) : null;
+const DEBUG_SPEED = Math.max(1, Math.min(20, Number(DEBUG_PARAMETERS?.get('speed')) || 1));
+const DEBUG_UNLOCK = DEBUG_PARAMETERS?.get('unlock') === '1';
+const DEBUG_AUTOPLAY = DEBUG_PARAMETERS?.get('autoplay') === '1';
+const DEBUG_AUTOSTART = DEBUG_PARAMETERS?.get('autostart') === '1';
+const DEBUG_LEVEL = Number(DEBUG_PARAMETERS?.get('level'));
+const REQUESTED_VISUAL = DEBUG_PARAMETERS?.get('visual');
+const VISUAL_VARIANT: VisualVariant = REQUESTED_VISUAL === 'production' || REQUESTED_VISUAL === 'decor-p1'
+  || REQUESTED_VISUAL === 'decor-p2' || REQUESTED_VISUAL === 'decor-v2' ? REQUESTED_VISUAL : 'decor-v2';
+
 export class HexfrontApp {
   readonly state = new GameState();
   readonly renderer: BoardRenderer;
@@ -20,10 +31,7 @@ export class HexfrontApp {
   progress: CampaignProgress;
   sendMode: SendMode = 'half';
   private readonly input: InputController;
-  private readonly parameters = new URLSearchParams(location.search);
-  private readonly debugSpeed: number;
-  private readonly debugUnlock: boolean;
-  private readonly visualVariant: VisualVariant;
+  private readonly visualVariant = VISUAL_VARIANT;
   private lastFrame = performance.now();
   private animationFrame = 0;
 
@@ -31,12 +39,7 @@ export class HexfrontApp {
     const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement | null;
     const stage = document.getElementById('stage');
     if (!canvas || !stage) throw new Error('HEXFRONT canvas shell is incomplete.');
-    this.debugSpeed = Math.max(1, Math.min(20, Number(this.parameters.get('speed')) || 1));
-    this.debugUnlock = this.parameters.get('unlock') === '1';
-    const requestedVisual = this.parameters.get('visual');
-    this.visualVariant = requestedVisual === 'production' || requestedVisual === 'decor-p1'
-      || requestedVisual === 'decor-p2' || requestedVisual === 'decor-v2' ? requestedVisual : 'decor-v2';
-    this.state.autoplay = this.parameters.get('autoplay') === '1';
+    this.state.autoplay = DEBUG_AUTOPLAY;
     this.progress = this.progressStore.load();
     this.renderer = new BoardRenderer(canvas, stage, this.visualVariant);
     this.renderer.sendLabel = this.i18n.t('drag.send');
@@ -61,21 +64,22 @@ export class HexfrontApp {
     this.bindWindowEvents();
     this.renderer.resize(this.state);
     this.showMap(this.progressStore.focus(this.progress));
-    installDebugApi({
-      startLevel: (index) => this.startLevel(index), showMap: () => this.showMap(), setAutoplay: (value) => { this.state.autoplay = value; },
-      setOpponentEnabled: (value) => { this.state.opponentEnabled = value; },
-      getState: () => ({ ...this.state.snapshot(), progress: this.progress }),
-      getBoard: () => this.state.hexes.map(({ col, row, owner, units, terrain, decor, x, y }) => ({ col, row, owner, units, terrain, decor, x, y })),
-      send: (fromCol, fromRow, toCol, toRow, fraction = .5) => {
-        const from = this.state.hexAt(fromCol, fromRow); const to = this.state.hexAt(toCol, toRow);
-        return Boolean(from && to && this.state.send(from, to, from.owner, Math.floor(from.units * fraction)));
-      },
-      think: (owner = Owner.Enemy) => this.state.think(owner, .9),
-      simulate: (seconds = 300, step = .05) => { for (let index = 0; index < Math.ceil(seconds / step) && this.state.running; index += 1) this.state.update(step); this.consumeEvents(); return this.state.snapshot(); },
-      debugWin: () => { this.state.end('victory', 'debugVictory'); this.consumeEvents(); }, resetProgress: () => this.resetProgress(true),
-    });
-    const requestedLevel = Number(this.parameters.get('level'));
-    if (this.parameters.get('autostart') === '1') this.startLevel(Number.isFinite(requestedLevel) ? requestedLevel : 0);
+    if (DEBUG_ENABLED) {
+      installDebugApi({
+        startLevel: (index) => this.startLevel(index), showMap: () => this.showMap(), setAutoplay: (value) => { this.state.autoplay = value; },
+        setOpponentEnabled: (value) => { this.state.opponentEnabled = value; },
+        getState: () => ({ ...this.state.snapshot(), progress: this.progress }),
+        getBoard: () => this.state.hexes.map(({ col, row, owner, units, terrain, decor, x, y }) => ({ col, row, owner, units, terrain, decor, x, y })),
+        send: (fromCol, fromRow, toCol, toRow, fraction = .5) => {
+          const from = this.state.hexAt(fromCol, fromRow); const to = this.state.hexAt(toCol, toRow);
+          return Boolean(from && to && this.state.send(from, to, from.owner, Math.floor(from.units * fraction)));
+        },
+        think: (owner = Owner.Enemy) => this.state.think(owner, .9),
+        simulate: (seconds = 300, step = .05) => { for (let index = 0; index < Math.ceil(seconds / step) && this.state.running; index += 1) this.state.update(step); this.consumeEvents(); return this.state.snapshot(); },
+        debugWin: () => { this.state.end('victory', 'debugVictory'); this.consumeEvents(); }, resetProgress: () => this.resetProgress(true),
+      });
+      if (DEBUG_AUTOSTART) this.startLevel(Number.isFinite(DEBUG_LEVEL) ? DEBUG_LEVEL : 0);
+    }
     this.ui.refreshLanguage(this.state, this.audio.enabled);
     this.animationFrame = requestAnimationFrame(this.frame);
   }
@@ -90,7 +94,7 @@ export class HexfrontApp {
 
   showMap(focus = this.state.currentLevel): void {
     this.state.running = false;
-    this.ui.showMap(this.progress, (index) => this.progressStore.isUnlocked(this.progress, index, this.debugUnlock), focus);
+    this.ui.showMap(this.progress, (index) => this.progressStore.isUnlocked(this.progress, index, DEBUG_UNLOCK), focus);
   }
 
   setMode(mode: SendMode): void {
@@ -103,7 +107,7 @@ export class HexfrontApp {
   private frame = (time: number): void => {
     const delta = Math.min(.05, (time - this.lastFrame) / 1000); this.lastFrame = time;
     if (this.state.running) {
-      this.state.update(delta * this.debugSpeed); this.renderer.effects.update(delta * this.debugSpeed); this.ui.updateHUD(this.state);
+      this.state.update(delta * DEBUG_SPEED); this.renderer.effects.update(delta * DEBUG_SPEED); this.ui.updateHUD(this.state);
     }
     this.consumeEvents();
     this.renderer.draw(this.state); this.animationFrame = requestAnimationFrame(this.frame);
@@ -155,7 +159,7 @@ export class HexfrontApp {
   }
 
   private bindWindowEvents(): void {
-    const resize = () => { this.renderer.resize(this.state); if (this.ui.menu.classList.contains('show')) this.ui.selectLevel(this.ui.selectedMenuLevel, this.progress, (index) => this.progressStore.isUnlocked(this.progress, index, this.debugUnlock), false); };
+    const resize = () => { this.renderer.resize(this.state); if (this.ui.menu.classList.contains('show')) this.ui.selectLevel(this.ui.selectedMenuLevel, this.progress, (index) => this.progressStore.isUnlocked(this.progress, index, DEBUG_UNLOCK), false); };
     window.addEventListener('resize', resize); window.addEventListener('orientationchange', () => window.setTimeout(resize, 120)); document.addEventListener('fullscreenchange', resize);
     window.addEventListener('keydown', (event) => {
       if (event.key === '1') this.setMode('half'); if (event.key === '2') this.setMode('all'); if (event.key === '3') this.setMode('group');

@@ -9,9 +9,11 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "tsx --test tests/*.test.js tests/*.test.ts",
+    "pretest:browser": "vite build --mode test",
     "test:browser": "playwright test",
     "balance": "tsx scripts/balance-campaign.ts",
-    "typecheck": "tsc -p tsconfig.json"
+    "typecheck": "tsc -p tsconfig.json",
+    "verify:production": "npm run build && node scripts/verify-production-build.mjs"
   },
   "engines": {
     "node": ">=20"
