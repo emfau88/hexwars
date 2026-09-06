@@ -6,9 +6,11 @@ import { I18n } from '../i18n/I18n';
 import type { Locale } from '../i18n/types';
 import { InputController, type InputError } from '../input/InputController';
 import { CampaignProgressStore } from '../persistence/CampaignProgressStore';
+import { KongregateStats } from '../platform/KongregateStats';
 import { BoardRenderer } from '../rendering/BoardRenderer';
 import { OWNER_COLORS } from '../rendering/palette';
 import { CampaignUI } from '../ui/CampaignUI';
+import { LEVELS } from '../levels';
 
 const DEBUG_ENABLED = import.meta.env.DEV || import.meta.env.MODE === 'test';
 const DEBUG_PARAMETERS = DEBUG_ENABLED ? new URLSearchParams(location.search) : null;
@@ -28,6 +30,7 @@ export class HexfrontApp {
   readonly audio = new AudioController();
   readonly i18n = new I18n();
   readonly progressStore = new CampaignProgressStore();
+  readonly kongregateStats = new KongregateStats();
   progress: CampaignProgress;
   sendMode: SendMode = 'half';
   private readonly input: InputController;
@@ -70,6 +73,7 @@ export class HexfrontApp {
     this.bindWindowEvents();
     this.renderer.resize(this.state);
     this.showMap(this.progressStore.focus(this.progress));
+    this.kongregateStats.initialize(() => this.submitCampaignStatistics());
     if (DEBUG_ENABLED) {
       installDebugApi({
         startLevel: (index) => this.startLevel(index), showMap: () => this.showMap(), setAutoplay: (value) => { this.state.autoplay = value; },
@@ -139,6 +143,7 @@ export class HexfrontApp {
         && !this.progress.completed[0];
       if (event.detail.result === 'victory') {
         this.progress = this.progressStore.complete(this.progress, this.state.currentLevel, this.state.elapsed);
+        this.submitCampaignStatistics();
         this.audio.play('victory');
       } else this.audio.play('defeat');
       this.ui.showResult(this.state, this.progress, firstFullSendUnlock);
@@ -146,6 +151,15 @@ export class HexfrontApp {
   }
 
   private toggleSound(): void { this.ui.syncSound(this.audio.toggle()); }
+
+  private submitCampaignStatistics(): void {
+    const completedMissions = this.progress.completed.filter(Boolean).length;
+    this.kongregateStats.submit('missions_completed', completedMissions);
+    if (completedMissions === LEVELS.length) this.kongregateStats.submit('campaign_complete', 1);
+    const finalMission = LEVELS.length - 1;
+    const finalBestSeconds = this.progress.completed[finalMission] ? this.progress.best[finalMission] : 0;
+    if (finalBestSeconds > 0) this.kongregateStats.submit('final_mission_best_ms', Math.round(finalBestSeconds * 1000));
+  }
 
   private async toggleFullscreen(): Promise<void> {
     this.audio.activate();
