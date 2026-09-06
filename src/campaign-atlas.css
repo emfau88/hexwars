@@ -145,6 +145,11 @@
 #campaignMenu .missionLaunch {
   display:grid; gap:8px; padding:0 20px 15px;
 }
+#campaignMenu .featureUnlockBadge {
+  justify-self:start; margin:0; padding:6px 9px; color:#6a361d; border:1px solid #cf8a4e; border-radius:999px;
+  background:#f2c987; font-family:var(--font-ui); font-size:10px; font-weight:800; letter-spacing:.75px;
+}
+#campaignMenu .featureUnlockBadge[hidden] { display:none; }
 #campaignMenu .launchObjective {
   display:grid; gap:4px; margin:0; color:#3e4d43;
 }

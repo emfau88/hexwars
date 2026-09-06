@@ -39,6 +39,10 @@
             <div><span data-i18n="result.stat.best">BEST</span><strong id="resultBest">—</strong></div>
           </div>
           <div class="resultAdvance" id="resultAdvance">
+            <div class="resultUnlockVisual" id="resultUnlockVisual" hidden aria-hidden="true">
+              <b>100 %</b>
+              <em id="resultUnlockMode">SEND</em>
+            </div>
             <span id="resultAdvanceLabel"></span>
             <strong id="resultAdvanceName"></strong>
             <small id="resultAdvanceRule"></small>
@@ -97,6 +101,7 @@
             </div>
 
             <div class="missionLaunch">
+              <p class="featureUnlockBadge" id="menuFeatureUnlock" hidden></p>
               <p class="launchObjective"><span data-i18n="campaign.objective">OBJECTIVE</span><strong id="menuLevelObjective">Capture the blue base.</strong></p>
               <button class="playButton" id="playLevelBtn">BEGIN CAMPAIGN</button>
               <p class="menuLockHint" id="menuLockHint" hidden data-i18n="campaign.lockHint">Complete the previous level first.</p>

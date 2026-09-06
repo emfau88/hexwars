@@ -74,13 +74,55 @@ test('enemy acts and a completed mission persists its unlock after reload', asyn
   await expect(page.locator('#verdict')).toHaveText('VICTORY');
   await expect(page.locator('#resultKicker')).toHaveText('MAP COMPLETE');
   await expect(page.locator('.resultStats')).toBeVisible();
-  await expect(page.locator('#resultAdvanceName')).toContainText('TWO ROUTES');
-  await expect(page.getByRole('button', { name: 'NEXT MAP', exact: true })).toBeVisible();
+  await expect(page.locator('#resultAdvance')).toHaveClass(/commandUnlock/);
+  await expect(page.locator('#resultUnlockVisual')).toBeVisible();
+  await expect(page.locator('#resultUnlockVisual')).toContainText('100 %');
+  await expect(page.locator('#resultAdvanceLabel')).toHaveText('NEW COMMAND UNLOCKED');
+  await expect(page.locator('#resultAdvanceName')).toHaveText('100% SEND');
+  await expect(page.locator('#resultAdvanceRule')).toContainText('The source is left empty.');
+  await expect(page.getByRole('button', { name: 'CONTINUE TO LEVEL 2', exact: true })).toBeVisible();
+  const unlockMetrics = await page.locator('.modalBox').evaluate((modal) => {
+    const box = modal.getBoundingClientRect();
+    return { top:box.top, bottom:box.bottom, viewportHeight:innerHeight, scrollHeight:modal.scrollHeight, clientHeight:modal.clientHeight };
+  });
+  expect(unlockMetrics.top).toBeGreaterThanOrEqual(0);
+  expect(unlockMetrics.bottom).toBeLessThanOrEqual(unlockMetrics.viewportHeight);
+  expect(unlockMetrics.scrollHeight).toBeLessThanOrEqual(unlockMetrics.clientHeight + 1);
   await page.getByRole('button', { name: 'CAMPAIGN MAP', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Level 2: TWO ROUTES' })).toBeEnabled();
+  await page.getByRole('button', { name: 'Level 2: TWO ROUTES' }).click();
+  await expect(page.locator('#menuFeatureUnlock')).toHaveText('NEW · 100% SEND');
+  await expect(page.getByRole('button', { name: 'START · TRY 100% SEND' })).toBeVisible();
+  await page.getByRole('button', { name: 'START · TRY 100% SEND' }).click();
+  await page.evaluate(() => window.__HEXFRONT__?.setOpponentEnabled(false));
+  await expect(page.locator('#app')).toHaveClass(/fullSendCoach/);
+  await expect(page.locator('.modeBtn[data-mode="all"]:visible')).toHaveClass(/newlyUnlocked/);
+  await expect(page.locator('#hint')).toContainText('choose 100%');
+  const levelTwoBoard = await page.evaluate(() => window.__HEXFRONT__?.getBoard()) as DebugBoard;
+  const levelTwoSource = levelTwoBoard.find((hex) => hex.col === 3 && hex.row === 11)!;
+  const levelTwoTarget = levelTwoBoard.find((hex) => hex.col === 3 && hex.row === 10)!;
+  await dragBetween(page, levelTwoSource, levelTwoTarget);
+  await expect(page.locator('#app')).toHaveClass(/fullSendCoach/);
+  await expect(page.locator('#hint')).toHaveCSS('opacity', '1');
+  await page.locator('.modeBtn[data-mode="all"]:visible').click();
+  await dragBetween(page, levelTwoSource, levelTwoTarget);
+  await expect(page.locator('#app')).not.toHaveClass(/fullSendCoach/);
+  await expect(page.locator('#hint')).toHaveCSS('opacity', '0');
+  await expect.poll(async () => page.evaluate(() => JSON.parse(localStorage.getItem('hexfront_campaign_progress_v2') ?? '{}').fullSendUsed)).toBe(true);
   await page.goto('/');
   await expect(page.getByRole('button', { name: 'Level 2: TWO ROUTES' })).toBeEnabled();
   await expect(page.getByText('1 / 10', { exact: true })).toBeVisible();
+});
+
+test('the full-send unlock is localized in German', async ({ page }) => {
+  await page.evaluate(() => localStorage.setItem('hexfront_locale_v1', 'de'));
+  await page.goto('/?autostart=1&level=0');
+  await page.evaluate(() => window.__HEXFRONT__?.debugWin());
+  await expect(page.locator('#resultAdvanceLabel')).toHaveText('NEUER BEFEHL FREIGESCHALTET');
+  await expect(page.locator('#resultAdvanceName')).toHaveText('100 % SENDEN');
+  await expect(page.locator('#resultAdvanceRule')).toContainText('Das Ausgangsfeld bleibt leer.');
+  await expect(page.locator('#resultUnlockMode')).toHaveText('SENDEN');
+  await expect(page.getByRole('button', { name: 'WEITER ZU LEVEL 2' })).toBeVisible();
 });
 
 test('manual long-range reinforcement and contextual front focus use canvas input', async ({ page }) => {

@@ -51,7 +51,13 @@ export class HexfrontApp {
     }, this.i18n, this.visualVariant);
     this.input = new InputController(canvas, this.state, this.renderer, {
       getMode: () => this.sendMode,
-      onCommand: () => { this.ui.acknowledgeHint(); navigator.vibrate?.(10); this.audio.play('send'); },
+      onCommand: () => {
+        if (this.state.currentLevel === 1 && this.sendMode === 'all') {
+          this.progress = this.progressStore.markFullSendUsed(this.progress);
+        }
+        this.ui.acknowledgeCommand(this.state, this.sendMode, this.progress);
+        navigator.vibrate?.(10); this.audio.play('send');
+      },
       onInvalid: (error) => { this.audio.play('denied'); this.ui.showToast(this.i18n.t(this.inputErrorKey(error))); }, onActivate: () => this.audio.activate(),
       onFocus: (hex) => {
         if (!this.state.level.features.focus) return;
@@ -88,7 +94,7 @@ export class HexfrontApp {
     this.audio.activate(); this.renderer.resize();
     this.state.start(index, (col, row) => this.renderer.positionFor(col, row));
     this.sendMode = 'half'; this.renderer.sendMode = this.sendMode;
-    this.ui.startMission(this.state); this.ui.setMode(this.sendMode, this.state); this.audio.play('confirm');
+    this.ui.startMission(this.state, this.progress); this.ui.setMode(this.sendMode, this.state); this.audio.play('confirm');
     this.lastFrame = performance.now();
   }
 
@@ -128,11 +134,14 @@ export class HexfrontApp {
     }
     if (event.type === 'endgame') { this.ui.updateEndgame(this.state); this.ui.showToast(this.i18n.t(event.detail.stage === 1 ? 'toast.endgame.decline' : 'toast.endgame.decision')); }
     if (event.type === 'result') {
+      const firstFullSendUnlock = event.detail.result === 'victory'
+        && this.state.currentLevel === 0
+        && !this.progress.completed[0];
       if (event.detail.result === 'victory') {
         this.progress = this.progressStore.complete(this.progress, this.state.currentLevel, this.state.elapsed);
         this.audio.play('victory');
       } else this.audio.play('defeat');
-      this.ui.showResult(this.state, this.progress);
+      this.ui.showResult(this.state, this.progress, firstFullSendUnlock);
     }
   }
 

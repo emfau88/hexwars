@@ -112,6 +112,7 @@ export interface Particle extends Point {
 export interface CampaignProgress {
   completed: boolean[];
   best: number[];
+  fullSendUsed: boolean;
 }
 
 export interface GameSnapshot {

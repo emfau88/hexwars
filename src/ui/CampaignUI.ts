@@ -61,8 +61,9 @@ export class CampaignUI {
     this.applyStaticTranslations(); this.syncLocaleControls();
   }
 
-  private lastProgress: CampaignProgress = { completed: LEVELS.map(() => false), best: LEVELS.map(() => 0) };
+  private lastProgress: CampaignProgress = { completed: LEVELS.map(() => false), best: LEVELS.map(() => 0), fullSendUsed: false };
   private lastUnlocked = (_index: number) => false;
+  private fullSendUnlockVisible = false;
 
   refreshLanguage(state: GameState, soundEnabled: boolean): void {
     document.documentElement.lang = this.i18n.locale;
@@ -106,28 +107,42 @@ export class CampaignUI {
     required('missionName').textContent = this.i18n.text(state.level.name);
     required('missionText').textContent = this.i18n.text(state.level.objective);
     required('ruleText').textContent = this.i18n.text(state.level.rule);
-    this.hint.textContent = state.currentLevel === 0 ? this.i18n.t('hint.levelOne') : this.i18n.text(state.level.rule);
+    this.hint.textContent = state.currentLevel === 0
+      ? this.i18n.t('hint.levelOne')
+      : state.currentLevel === 1 && !this.lastProgress.fullSendUsed
+        ? this.i18n.t('hint.levelTwoFullSend')
+        : this.i18n.text(state.level.rule);
   }
 
-  startMission(state: GameState): void {
+  startMission(state: GameState, progress: CampaignProgress): void {
+    this.lastProgress = progress;
+    this.fullSendUnlockVisible = false;
     this.selectedMenuLevel = state.currentLevel;
     this.menu.classList.remove('show'); this.overlay.classList.remove('show'); this.app.classList.remove('menuOpen', 'resultOpen'); document.body.classList.remove('campaignOpen');
     this.app.classList.toggle('introLevel', state.currentLevel === 0);
+    this.app.classList.toggle('fullSendCoach', state.currentLevel === 1 && !progress.fullSendUsed);
     required('legendHill').hidden = state.currentLevel < 3;
     required('legendRelay').hidden = !state.level.features.relay;
     this.applyMissionCopy(state);
     this.hint.style.opacity = '1'; clearTimeout(this.hintTimer);
-    if (state.currentLevel !== 0) this.hintTimer = window.setTimeout(() => { this.hint.style.opacity = '0'; }, 3600);
+    if (state.currentLevel !== 0 && !this.app.classList.contains('fullSendCoach')) {
+      this.hintTimer = window.setTimeout(() => { this.hint.style.opacity = '0'; }, 3600);
+    }
     this.updateEndgame(state); this.updateHUD(state);
   }
 
-  acknowledgeHint(): void {
+  acknowledgeCommand(state: GameState, mode: SendMode, progress: CampaignProgress): void {
+    this.lastProgress = progress;
+    if (state.currentLevel === 1 && this.app.classList.contains('fullSendCoach') && mode !== 'all') return;
+    if (mode === 'all') this.app.classList.remove('fullSendCoach');
     clearTimeout(this.hintTimer);
     this.hint.style.opacity = '0';
   }
 
   showMap(progress: CampaignProgress, unlocked: (index: number) => boolean, focus: number): void {
     this.lastProgress = progress; this.lastUnlocked = unlocked;
+    this.fullSendUnlockVisible = false;
+    this.app.classList.remove('fullSendCoach');
     this.overlay.classList.remove('show'); this.menu.classList.add('show'); this.app.classList.remove('resultOpen'); this.app.classList.add('menuOpen'); document.body.classList.add('campaignOpen');
     const done = progress.completed.filter(Boolean).length;
     required('progressCount').textContent = `${done} / ${LEVELS.length}`;
@@ -155,7 +170,19 @@ export class CampaignUI {
       ? this.i18n.t('campaign.bestTime', { time:this.time(progress.best[this.selectedMenuLevel]) })
       : this.i18n.t(done ? 'campaign.state.completed' : 'campaign.notCompleted');
     required('menuLockHint').hidden = available; const play = required<HTMLButtonElement>('playLevelBtn'); play.disabled = !available;
-    play.textContent = this.i18n.t(done ? 'campaign.play.again' : !available ? 'campaign.play.locked' : this.selectedMenuLevel === 0 && !progress.completed.some(Boolean) ? 'campaign.play.begin' : 'campaign.play.start');
+    const introducesFullSend = this.selectedMenuLevel === 1 && available && !done && !progress.fullSendUsed;
+    const featureUnlock = required('menuFeatureUnlock');
+    featureUnlock.hidden = !introducesFullSend;
+    featureUnlock.textContent = introducesFullSend ? this.i18n.t('campaign.unlock.allBadge') : '';
+    play.textContent = this.i18n.t(done
+      ? 'campaign.play.again'
+      : !available
+        ? 'campaign.play.locked'
+        : introducesFullSend
+          ? 'campaign.play.tryAll'
+          : this.selectedMenuLevel === 0 && !progress.completed.some(Boolean)
+            ? 'campaign.play.begin'
+            : 'campaign.play.start');
     this.renderPreview(this.selectedMenuLevel);
     if (reveal && matchMedia('(max-width:900px) and (orientation:portrait)').matches) requestAnimationFrame(() => required('mapCenter').scrollIntoView({ behavior: 'smooth', block: 'start' }));
   }
@@ -187,6 +214,10 @@ export class CampaignUI {
         delete button.dataset.unlockLabel;
         button.setAttribute('aria-label', baseLabel);
       }
+      const coached = candidate === 'all' && state.currentLevel === 1 && !this.lastProgress.fullSendUsed;
+      button.classList.toggle('newlyUnlocked', coached);
+      if (coached) button.dataset.newLabel = this.i18n.t('mode.newShort');
+      else delete button.dataset.newLabel;
     });
     const unlockPanel = required('unlockPanel');
     const unlockKey = !state.level.features.all ? 'panel.unlockAll' : !state.level.features.group ? 'panel.unlockGroup' : null;
@@ -212,10 +243,12 @@ export class CampaignUI {
     required('phaseStatus').textContent = label;
   }
 
-  showResult(state: GameState, progress: CampaignProgress = this.lastProgress): void {
+  showResult(state: GameState, progress: CampaignProgress = this.lastProgress, showFullSendUnlock = this.fullSendUnlockVisible): void {
     this.lastProgress = progress;
     const victory = state.result === 'victory';
     const finalLevel = state.currentLevel >= LEVELS.length - 1;
+    const fullSendUnlock = victory && state.currentLevel === 0 && showFullSendUnlock;
+    this.fullSendUnlockVisible = fullSendUnlock;
     required('verdict').textContent = this.i18n.t(state.result === 'victory' ? 'result.victory' : 'result.defeat');
     const reason = state.resultReason ? this.i18n.t(`result.reason.${state.resultReason}`) : '';
     required('verdictSub').textContent = reason;
@@ -226,7 +259,14 @@ export class CampaignUI {
     required('resultBest').textContent = best ? this.time(best) : '—';
     const advance = required('resultAdvance');
     advance.hidden = !victory;
-    if (victory && finalLevel) {
+    advance.classList.toggle('commandUnlock', fullSendUnlock);
+    required('resultUnlockVisual').toggleAttribute('hidden', !fullSendUnlock);
+    if (fullSendUnlock) {
+      required('resultUnlockMode').textContent = this.i18n.t('result.unlock.mode');
+      required('resultAdvanceLabel').textContent = this.i18n.t('result.unlock.label');
+      required('resultAdvanceName').textContent = this.i18n.t('result.unlock.name');
+      required('resultAdvanceRule').textContent = this.i18n.t('result.unlock.detail');
+    } else if (victory && finalLevel) {
       required('resultAdvanceLabel').textContent = this.i18n.t('result.campaignComplete');
       required('resultAdvanceName').textContent = 'HEXFRONT';
       required('resultAdvanceRule').textContent = this.i18n.t('result.campaignCompleteSub');
@@ -236,7 +276,9 @@ export class CampaignUI {
       required('resultAdvanceName').textContent = this.i18n.text(next.name);
       required('resultAdvanceRule').textContent = this.i18n.text(next.rule);
     }
-    required<HTMLButtonElement>('nextLevelBtn').hidden = !victory || finalLevel;
+    const nextButton = required<HTMLButtonElement>('nextLevelBtn');
+    nextButton.hidden = !victory || finalLevel;
+    nextButton.textContent = this.i18n.t(fullSendUnlock ? 'result.unlock.continue' : 'result.next');
     this.overlay.classList.toggle('victory', victory);
     this.overlay.classList.toggle('defeat', !victory);
     this.overlay.classList.add('show'); this.app.classList.add('resultOpen');
