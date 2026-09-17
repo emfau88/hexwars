@@ -25,7 +25,7 @@ Aufruf: `npm run balance`
 
 ## Entscheidungen
 
-- **Kleiner Progressions-Pass (September 2026):** Die schwache Route in Level 2 hat jetzt 5 statt 4 Einheiten. In Level 5 und 9 wächst die gegnerische Seite mit dem Faktor `1.02`; Level 10 bleibt unverändert.
+- **Gestaffelter Progressions-Pass (September 2026):** Die schwache Route in Level 2 hat jetzt 5 statt 4 Einheiten. Der gegnerische Wachstumsfaktor steigt von `1.005` in Level 2 in 0,5-%-Schritten bis `1.04` in Level 9; Level 5 bleibt bei `1.02`, Level 10 unverändert.
 - Kein pauschales Absenken später KI-Werte anhand von Bot-vs-KI-Ergebnissen. Ein menschlicher Frontfokus und bewusstes 100-%-Timing sind genau die Fähigkeiten, die das Modell nur unzureichend abbildet.
 - Level 6 und 8 sind priorisierte Human-Playtest-Kandidaten: Level 6 geht über 180 Sekunden, Level 8 ist der erste reproduzierbare Modellverlust.
 - Endgame bleibt unverändert bei 180 Sekunden Ausklang und 240 Sekunden Wachstumsende.

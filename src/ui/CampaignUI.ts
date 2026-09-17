@@ -235,6 +235,7 @@ export class CampaignUI {
         delete button.dataset.unlockLabel;
         button.setAttribute('aria-label', baseLabel);
       }
+      button.classList.toggle('locked', locked);
       const coached = (candidate === 'all' && state.currentLevel === 1 && !this.lastProgress.fullSendUsed)
         || (candidate === 'group' && state.currentLevel === 3);
       button.classList.toggle('newlyUnlocked', coached);

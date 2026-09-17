@@ -7,7 +7,7 @@ export default defineLevel({
   blurb:localized('Two opening targets reveal the difference between keeping a reserve and committing immediately.','Zwei erste Ziele zeigen den Unterschied zwischen Reserve und sofortigem Einsatz.'),
   objective:localized('Choose: secure the weaker cell with 50%, or overcome the stronger cell with 100% and leave your base empty.','Wähle: Mit 50 % das schwächere Feld sichern oder mit 100 % das stärkere Feld sofort überwinden und deine Basis leeren.'),
   rule:localized('The 100% send is now available. It creates immediate strength at the target but leaves the source without a reserve.','100 % wird freigeschaltet. Es schafft sofort Stärke am Ziel, lässt das Quellfeld aber ohne Reserve zurück.'),
-  aiThinkMs:2250, aiDelaySeconds:.6, aiSkill:.49, aiActions:1, neutralUnits:[2,6],
+  aiThinkMs:2250, aiDelaySeconds:.6, aiSkill:.49, aiActions:1, neutralUnits:[2,6], enemyGrowthMultiplier:1.005,
   features:{all:true,group:false,relay:false}, theme:'river',
   activeRows:[[],[3],[2,3,4],[2,4],[2,4],[2,4],[2,4],[2,4],[2,4],[2,4],[2,3,4],[3],[]],
   cells:[
