@@ -22,6 +22,7 @@ export interface UICallbacks {
   showMap(focus?: number): void;
   setMode(mode: SendMode): void;
   toggleSound(): void;
+  togglePlayerSupply(): void;
   toggleFullscreen(): void;
   resetProgress(): void;
   setLocale(locale: Locale): void;
@@ -42,12 +43,13 @@ export class CampaignUI {
     required('playLevelBtn').addEventListener('click', () => callbacks.startLevel(this.selectedMenuLevel));
     for (const id of ['restartBtn', 'mobileRestartBtn', 'retryBtn']) required(id).addEventListener('click', () => callbacks.startLevel());
     for (const id of ['levelsBtn', 'mobileLevelsBtn', 'mapBtn']) required(id).addEventListener('click', () => callbacks.showMap());
-    required('nextLevelBtn').addEventListener('click', () => callbacks.showMap(this.selectedMenuLevel + 1));
+    required('nextLevelBtn').addEventListener('click', () => callbacks.startLevel(this.selectedMenuLevel + 1));
     for (const id of ['soundBtn', 'sideSoundBtn']) required(id).addEventListener('click', callbacks.toggleSound);
     for (const id of ['fullscreenBtn', 'menuFullscreenBtn', 'sideFullscreenBtn', 'mobileFullscreenBtn']) required(id).addEventListener('click', callbacks.toggleFullscreen);
     required('resetProgressBtn').addEventListener('click', callbacks.resetProgress);
     document.querySelectorAll<HTMLButtonElement>('[data-locale]').forEach((button) => button.addEventListener('click', () => callbacks.setLocale(button.dataset.locale as Locale)));
     document.querySelectorAll<HTMLButtonElement>('.modeBtn').forEach((button) => button.addEventListener('click', () => callbacks.setMode(button.dataset.mode as SendMode)));
+    required('autoSupplyBtn').addEventListener('click', callbacks.togglePlayerSupply);
     const settings = required('menuSettingsPanel');
     required('menuSettingsBtn').addEventListener('click', (event) => {
       event.stopPropagation(); const open = settings.classList.toggle('show'); settings.setAttribute('aria-hidden', String(!open));
@@ -111,6 +113,8 @@ export class CampaignUI {
       ? this.i18n.t('hint.levelOne')
       : state.currentLevel === 1 && !this.lastProgress.fullSendUsed
         ? this.i18n.t('hint.levelTwoFullSend')
+        : state.currentLevel === 3
+          ? this.i18n.t('hint.levelFourGroup')
         : this.i18n.text(state.level.rule);
   }
 
@@ -121,11 +125,12 @@ export class CampaignUI {
     this.menu.classList.remove('show'); this.overlay.classList.remove('show'); this.app.classList.remove('menuOpen', 'resultOpen'); document.body.classList.remove('campaignOpen');
     this.app.classList.toggle('introLevel', state.currentLevel === 0);
     this.app.classList.toggle('fullSendCoach', state.currentLevel === 1 && !progress.fullSendUsed);
+    this.app.classList.toggle('groupSendCoach', state.currentLevel === 3);
     required('legendHill').hidden = state.currentLevel < 3;
     required('legendRelay').hidden = !state.level.features.relay;
     this.applyMissionCopy(state);
     this.hint.style.opacity = '1'; clearTimeout(this.hintTimer);
-    if (state.currentLevel !== 0 && !this.app.classList.contains('fullSendCoach')) {
+    if (state.currentLevel !== 0 && !this.app.classList.contains('fullSendCoach') && !this.app.classList.contains('groupSendCoach')) {
       this.hintTimer = window.setTimeout(() => { this.hint.style.opacity = '0'; }, 3600);
     }
     this.updateEndgame(state); this.updateHUD(state);
@@ -134,7 +139,9 @@ export class CampaignUI {
   acknowledgeCommand(state: GameState, mode: SendMode, progress: CampaignProgress): void {
     this.lastProgress = progress;
     if (state.currentLevel === 1 && this.app.classList.contains('fullSendCoach') && mode !== 'all') return;
+    if (state.currentLevel === 3 && this.app.classList.contains('groupSendCoach') && mode !== 'group') return;
     if (mode === 'all') this.app.classList.remove('fullSendCoach');
+    if (mode === 'group') this.app.classList.remove('groupSendCoach');
     clearTimeout(this.hintTimer);
     this.hint.style.opacity = '0';
   }
@@ -142,7 +149,7 @@ export class CampaignUI {
   showMap(progress: CampaignProgress, unlocked: (index: number) => boolean, focus: number): void {
     this.lastProgress = progress; this.lastUnlocked = unlocked;
     this.fullSendUnlockVisible = false;
-    this.app.classList.remove('fullSendCoach');
+    this.app.classList.remove('fullSendCoach', 'groupSendCoach');
     this.overlay.classList.remove('show'); this.menu.classList.add('show'); this.app.classList.remove('resultOpen'); this.app.classList.add('menuOpen'); document.body.classList.add('campaignOpen');
     const done = progress.completed.filter(Boolean).length;
     required('progressCount').textContent = `${done} / ${LEVELS.length}`;
@@ -171,15 +178,20 @@ export class CampaignUI {
       : this.i18n.t(done ? 'campaign.state.completed' : 'campaign.notCompleted');
     required('menuLockHint').hidden = available; const play = required<HTMLButtonElement>('playLevelBtn'); play.disabled = !available;
     const introducesFullSend = this.selectedMenuLevel === 1 && available && !done && !progress.fullSendUsed;
+    const introducesGroupSend = this.selectedMenuLevel === 3 && available && !done;
     const featureUnlock = required('menuFeatureUnlock');
-    featureUnlock.hidden = !introducesFullSend;
-    featureUnlock.textContent = introducesFullSend ? this.i18n.t('campaign.unlock.allBadge') : '';
+    featureUnlock.hidden = !introducesFullSend && !introducesGroupSend;
+    featureUnlock.textContent = introducesFullSend
+      ? this.i18n.t('campaign.unlock.allBadge')
+      : introducesGroupSend ? this.i18n.t('campaign.unlock.groupBadge') : '';
     play.textContent = this.i18n.t(done
       ? 'campaign.play.again'
       : !available
         ? 'campaign.play.locked'
         : introducesFullSend
           ? 'campaign.play.tryAll'
+          : introducesGroupSend
+            ? 'campaign.play.tryGroup'
           : this.selectedMenuLevel === 0 && !progress.completed.some(Boolean)
             ? 'campaign.play.begin'
             : 'campaign.play.start');
@@ -200,6 +212,15 @@ export class CampaignUI {
     this.updateModeUnlockCopy(state);
   }
 
+  syncPlayerSupply(enabled: boolean): void {
+    const button = required<HTMLButtonElement>('autoSupplyBtn');
+    button.classList.toggle('active', enabled);
+    button.setAttribute('aria-pressed', String(enabled));
+    button.textContent = this.i18n.t(enabled ? 'supply.toggle.on' : 'supply.toggle.off');
+    required('autoSupplyStatus').textContent = this.i18n.t(enabled ? 'supply.status.on' : 'supply.status.off');
+    required('autoSupplyDescription').textContent = this.i18n.t(enabled ? 'supply.description.on' : 'supply.description.off');
+  }
+
   private updateModeUnlockCopy(state: GameState): void {
     document.querySelectorAll<HTMLButtonElement>('.modeBtn').forEach((button) => {
       const candidate = button.dataset.mode as SendMode;
@@ -214,10 +235,12 @@ export class CampaignUI {
         delete button.dataset.unlockLabel;
         button.setAttribute('aria-label', baseLabel);
       }
-      const coached = candidate === 'all' && state.currentLevel === 1 && !this.lastProgress.fullSendUsed;
+      const coached = (candidate === 'all' && state.currentLevel === 1 && !this.lastProgress.fullSendUsed)
+        || (candidate === 'group' && state.currentLevel === 3);
       button.classList.toggle('newlyUnlocked', coached);
-      if (coached) button.dataset.newLabel = this.i18n.t('mode.newShort');
-      else delete button.dataset.newLabel;
+      if (coached) {
+        button.dataset.newLabel = candidate === 'all' ? this.i18n.t('mode.newAll') : this.i18n.t('mode.newShort');
+      } else delete button.dataset.newLabel;
     });
     const unlockPanel = required('unlockPanel');
     const unlockKey = !state.level.features.all ? 'panel.unlockAll' : !state.level.features.group ? 'panel.unlockGroup' : null;

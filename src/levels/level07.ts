@@ -7,8 +7,8 @@ export default defineLevel({
   blurb:localized('A relay sits on a small island between two shores.','Ein Relais liegt auf einer kleinen Insel zwischen zwei Ufern.'),
   objective:localized('Secure the island without neglecting your main territory.','Sichere die Insel, ohne dein Hauptgebiet zu vernachlässigen.'),
   rule:localized('Only a controlled relay can reach targets at hex distance 2.','Nur ein kontrolliertes Relais darf Ziele in Hexdistanz 2 erreichen.'),
-  aiThinkMs:1300, aiDelaySeconds:4, aiSkill:.77, aiActions:1, neutralUnits:[4,10],
-  features:{all:true,group:true,relay:true,focus:true}, theme:'island',
+  aiThinkMs:1300, aiDelaySeconds:1.6, aiSkill:.77, aiActions:1, neutralUnits:[4,10],
+  features:{all:true,group:true,relay:true}, theme:'island',
   activeRows:[[],[3],[2,3,4],[1,2,3,4,5],[1,2,3,4,5],[2,3,4],[2,3,4],[2,3,4],[1,2,3,4,5],[1,2,3,4,5],[2,3,4],[3],[]],
   cells:[
     {col:3,row:6,terrain:Terrain.Relay,units:12},

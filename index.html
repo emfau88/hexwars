@@ -25,6 +25,25 @@
   <div id="layout">
     <div id="stage">
       <canvas id="gameCanvas"></canvas>
+      <section id="commandDock" aria-label="Command controls" data-i18n-aria-label="command.aria">
+        <div class="commandDockTopline"><span data-i18n="command.title">COMMAND</span><span data-i18n="command.shortcuts">KEYS 1 · 2 · 3</span></div>
+        <div class="commandDockSection" id="sendPanel">
+          <div class="eyebrow" data-i18n="panel.send">SEND</div>
+          <div class="modeKeyboardGuide" data-i18n="panel.keyboardModes">KEYS · 1 = 50% · 2 = 100% · 3 = GROUP</div>
+          <div class="modeRow">
+            <button class="modeBtn active" data-mode="half"><span>50 %</span><kbd class="modeShortcut" aria-hidden="true">1</kbd></button>
+            <button class="modeBtn" data-mode="all"><span>100 %</span><kbd class="modeShortcut" aria-hidden="true">2</kbd></button>
+            <button class="modeBtn" data-mode="group"><span data-i18n="mode.group">GROUP</span><kbd class="modeShortcut" aria-hidden="true">3</kbd></button>
+          </div>
+        </div>
+        <div class="commandDockSection supplyControl">
+          <div class="supplyControlTopline">
+            <div><div class="eyebrow" data-i18n="supply.title">AUTO SUPPLY</div><strong id="autoSupplyStatus">ON</strong></div>
+            <button id="autoSupplyBtn" class="autoSupplyToggle active" type="button" aria-pressed="true">ON</button>
+          </div>
+          <p id="autoSupplyDescription" data-i18n="supply.description.on">Surplus moves toward the rival. Rear cells keep 20%; fronts keep 36%. Tap a front cell to redirect it.</p>
+        </div>
+      </section>
       <div id="hint" data-i18n="hint.default">Drag from an orange cell to a reachable target.</div>
       <div id="toast"></div>
 
@@ -49,7 +68,7 @@
             <small id="resultAdvanceRule"></small>
           </div>
           <div class="modalActions">
-            <button class="primaryBtn" id="nextLevelBtn" data-i18n="result.next">NEXT MAP</button>
+            <button class="primaryBtn" id="nextLevelBtn" data-i18n="result.next">NEXT LEVEL</button>
             <button class="secondaryBtn" id="retryBtn" data-i18n="result.retry">TRY AGAIN</button>
             <button class="secondaryBtn" id="mapBtn" data-i18n="result.map">CAMPAIGN MAP</button>
           </div>
@@ -140,6 +159,7 @@
           </div>
           <button class="secondaryBtn" id="menuFullscreenBtn" data-i18n="settings.fullscreen">FULLSCREEN</button>
           <button class="secondaryBtn" id="soundBtn">SOUND ON</button>
+          <p class="keyboardHint" data-i18n="settings.shortcuts">KEYS · 1/2/3 SEND · R RESTART · ESC MAP</p>
           <button class="secondaryBtn danger" id="resetProgressBtn" data-i18n="settings.reset">RESET PROGRESS</button>
         </div>
       </div>
@@ -155,14 +175,6 @@
         <div class="panel" id="rulePanel">
           <div class="eyebrow" data-i18n="panel.rule">RULE FOR THIS LEVEL</div>
           <div id="ruleText">—</div>
-        </div>
-        <div class="panel" id="sendPanel">
-          <div class="eyebrow" data-i18n="panel.send">SEND</div>
-          <div class="modeRow">
-            <button class="modeBtn active" data-mode="half">50 %</button>
-            <button class="modeBtn" data-mode="all">100 %</button>
-            <button class="modeBtn" data-mode="group" data-i18n="mode.group">GROUP</button>
-          </div>
         </div>
         <div class="panel nextTactic" id="unlockPanel" hidden>
           <div class="eyebrow" data-i18n="panel.nextTactic">NEXT TACTIC</div>
@@ -199,9 +211,9 @@
   </div>
 
   <div id="mobileBar">
-    <button class="modeBtn active" data-mode="half">50 %</button>
-    <button class="modeBtn" data-mode="all">100 %</button>
-    <button class="modeBtn" data-mode="group" data-i18n="mode.group">GROUP</button>
+    <button class="modeBtn active" data-mode="half"><span>50 %</span><kbd class="modeShortcut" aria-hidden="true">1</kbd></button>
+    <button class="modeBtn" data-mode="all"><span>100 %</span><kbd class="modeShortcut" aria-hidden="true">2</kbd></button>
+    <button class="modeBtn" data-mode="group"><span data-i18n="mode.group">GROUP</span><kbd class="modeShortcut" aria-hidden="true">3</kbd></button>
     <button class="utilityBtn" id="mobileRestartBtn" aria-label="Restart level" title="Restart level" data-i18n-aria-label="utility.restartAria" data-i18n-title="utility.restartAria">↻</button>
     <button class="utilityBtn" id="mobileLevelsBtn" aria-label="Open campaign map" title="Open campaign map" data-i18n-aria-label="utility.mapAria" data-i18n-title="utility.mapAria">☰</button>
     <button class="utilityBtn" id="mobileFullscreenBtn" aria-label="Fullscreen" title="Fullscreen" data-i18n-aria-label="campaign.fullscreen" data-i18n-title="campaign.fullscreen">⛶</button>

@@ -15,10 +15,11 @@ export const SUPPLY_CONFIG = Object.freeze({
   enabled: true,
   garrisonRatio: 0.2,
   minimumGarrison: 6,
+  frontReserveRatio: 0.36,
   dispatchThreshold: 1,
-  dispatchIntervalSeconds: 1.4,
-  transportSpeedMultiplier: 0.72,
-  focusWeight: 3,
+  dispatchIntervalSeconds: 0.8,
+  contestedDispatchIntervalSeconds: 0.45,
+  transportSpeedMultiplier: 0.95,
   loadBalanceWeight: 2.25,
 });
 

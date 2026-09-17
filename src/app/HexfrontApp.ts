@@ -49,6 +49,7 @@ export class HexfrontApp {
     this.ui = new CampaignUI({
       startLevel: (index) => this.startLevel(index), showMap: (focus) => this.showMap(focus),
       setMode: (mode) => this.setMode(mode), toggleSound: () => this.toggleSound(),
+      togglePlayerSupply: () => this.togglePlayerSupply(),
       toggleFullscreen: () => void this.toggleFullscreen(), resetProgress: () => this.resetProgress(), activate: () => this.audio.activate(),
       setLocale: (locale) => this.setLocale(locale),
     }, this.i18n, this.visualVariant);
@@ -62,13 +63,6 @@ export class HexfrontApp {
         navigator.vibrate?.(10); this.audio.play('send');
       },
       onInvalid: (error) => { this.audio.play('denied'); this.ui.showToast(this.i18n.t(this.inputErrorKey(error))); }, onActivate: () => this.audio.activate(),
-      onFocus: (hex) => {
-        if (!this.state.level.features.focus) return;
-        if (this.state.toggleSupplyFocus(hex, Owner.Player)) {
-          const focused = this.state.focusedFront(Owner.Player) === hex;
-          this.ui.showToast(this.i18n.t(focused ? 'toast.focus.set' : 'toast.focus.cleared'));
-        }
-      },
     });
     this.bindWindowEvents();
     this.renderer.resize(this.state);
@@ -98,7 +92,7 @@ export class HexfrontApp {
     this.audio.activate(); this.renderer.resize();
     this.state.start(index, (col, row) => this.renderer.positionFor(col, row));
     this.sendMode = 'half'; this.renderer.sendMode = this.sendMode;
-    this.ui.startMission(this.state, this.progress); this.ui.setMode(this.sendMode, this.state); this.audio.play('confirm');
+    this.ui.startMission(this.state, this.progress); this.ui.setMode(this.sendMode, this.state); this.ui.syncPlayerSupply(this.state.playerSupplyEnabled); this.audio.play('confirm');
     this.lastFrame = performance.now();
   }
 
@@ -113,6 +107,13 @@ export class HexfrontApp {
     this.sendMode = mode; this.renderer.sendMode = mode; this.ui.setMode(mode, this.state);
     this.audio.play('navigate');
     this.ui.showToast(this.i18n.t(mode === 'half' ? 'toast.mode.half' : mode === 'all' ? 'toast.mode.all' : 'toast.mode.group'));
+  }
+
+  private togglePlayerSupply(): void {
+    const enabled = this.state.togglePlayerSupply();
+    this.ui.syncPlayerSupply(enabled);
+    this.audio.play('navigate');
+    this.ui.showToast(this.i18n.t(enabled ? 'toast.supply.on' : 'toast.supply.off'));
   }
 
   private frame = (time: number): void => {

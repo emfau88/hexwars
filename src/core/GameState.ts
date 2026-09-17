@@ -8,7 +8,7 @@ import { runAI, type AIContext } from '../systems/AISystem';
 import { resolveArrival, updateCombat } from '../systems/CombatSystem';
 import { updateGrowth } from '../systems/GrowthSystem';
 import { createMovement, updateMovements } from '../systems/MovementSystem';
-import { frontHexes, isFrontHex, SupplySystem } from '../systems/SupplySystem';
+import { frontHexes, SupplySystem } from '../systems/SupplySystem';
 import { evaluateVictory } from '../systems/VictorySystem';
 
 export class GameState {
@@ -24,12 +24,12 @@ export class GameState {
   armies: ArmyMovement[] = [];
   autoplay = false;
   opponentEnabled = true;
+  playerSupplyEnabled = true;
   private random: RandomSource = Math.random;
   private aiTimerMs = 0;
   private playerAiTimerMs = 0;
   private events: GameEvent[] = [];
   private readonly supplySystem = new SupplySystem();
-  private readonly supplyFocus: Partial<Record<Owner, string | null>> = { [Owner.Player]: null, [Owner.Enemy]: null };
 
   get level() { return LEVELS[this.currentLevel] ?? LEVELS[0]; }
 
@@ -41,8 +41,7 @@ export class GameState {
     this.elapsed = 0; this.actions = 0; this.captures = 0; this.endgameStage = 0;
     this.aiTimerMs = 0; this.playerAiTimerMs = 0;
     this.result = null; this.resultReason = null; this.events = [];
-    this.opponentEnabled = true; this.supplySystem.reset();
-    this.supplyFocus[Owner.Player] = null; this.supplyFocus[Owner.Enemy] = null;
+    this.opponentEnabled = true; this.playerSupplyEnabled = true; this.supplySystem.reset();
     this.running = true;
   }
 
@@ -119,16 +118,10 @@ export class GameState {
 
   fronts(owner: Owner): HexState[] { return frontHexes(this.hexes, owner); }
 
-  focusedFront(owner: Owner): HexState | null {
-    const key = this.supplyFocus[owner];
-    return key ? this.hexes.find((hex) => cellKey(hex) === key) ?? null : null;
-  }
-
-  toggleSupplyFocus(hex: HexState, owner: Owner): boolean {
-    if (!this.level.features.focus || hex.owner !== owner || !isFrontHex(this.hexes, hex, owner)) return false;
-    const key = cellKey(hex);
-    this.supplyFocus[owner] = this.supplyFocus[owner] === key ? null : key;
-    return true;
+  togglePlayerSupply(): boolean {
+    if (!this.level.features.supply) return this.playerSupplyEnabled;
+    this.playerSupplyEnabled = !this.playerSupplyEnabled;
+    return this.playerSupplyEnabled;
   }
 
   think(owner: Owner, skill: number, count = 1): number {
@@ -155,7 +148,8 @@ export class GameState {
     const growthMultiplier = this.level.growthMultiplier ?? 1;
     updateGrowth(this.hexes, this.elapsed, deltaSeconds, growthMultiplier, this.level.enemyGrowthMultiplier ?? growthMultiplier);
     if (this.level.features.supply) {
-      for (const dispatch of this.supplySystem.update({ hexes: this.hexes, armies: this.armies, focus: this.supplyFocus }, deltaSeconds)) {
+      const owners = this.playerSupplyEnabled ? [Owner.Player, Owner.Enemy] : [Owner.Enemy];
+      for (const dispatch of this.supplySystem.update({ hexes: this.hexes, armies: this.armies, owners }, deltaSeconds)) {
         this.events.push({ type: 'supply', detail: dispatch });
       }
     }

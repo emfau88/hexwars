@@ -7,7 +7,7 @@ export default defineLevel({
   blurb:localized('A wide field opens around a heavily defended neutral center.','Ein breites Spielfeld öffnet sich um ein starkes neutrales Zentrum.'),
   objective:localized('Bypass the strong center or gather enough units to take it directly.','Umgehe das starke Zentrum oder sammle genug Einheiten, um es direkt zu übernehmen.'),
   rule:localized('For the first time, one neutral cell holds substantially more defenders than its surroundings.','Erstmals besitzt ein neutrales Feld deutlich mehr Verteidiger als seine Umgebung.'),
-  aiThinkMs:2050, aiDelaySeconds:7, aiSkill:.55, aiActions:1, neutralUnits:[3,7],
+  aiThinkMs:2050, aiDelaySeconds:.85, aiSkill:.55, aiActions:1, neutralUnits:[3,7],
   features:{all:true,group:false,relay:false}, theme:'ruins',
   activeRows:[[],[3],[2,3,4],[2,3,4],[1,2,3,4,5],[1,2,3,4,5],[1,2,3,4,5],[2,3,4],[2,3,4],[2,3,4],[2,3,4],[3],[]],
   cells:[

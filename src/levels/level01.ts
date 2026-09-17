@@ -7,7 +7,7 @@ export default defineLevel({
   blurb: localized('A short first map for learning the rhythm of moving, capturing and advancing.', 'Eine kurze erste Karte, um den Rhythmus aus Bewegen, Erobern und Vorrücken zu lernen.'),
   objective: localized('Capture the blue base. Choose a numbered neighbor, send 50% and keep the front moving.', 'Erobere die blaue Basis. Wähle ein benachbartes Zahlenfeld, sende 50 % und halte die Front in Bewegung.'),
   rule: localized('Every move sends 50%. Numbered cells are playable; landscape without a number is not.', 'Du sendest jeweils 50 %. Zahlen sind spielbare Felder; Landschaft ohne Zahl ist nicht spielbar.'),
-  aiThinkMs: 2500, aiDelaySeconds: 6.5, aiSkill: 0.4, aiActions: 1,
+  aiThinkMs: 2500, aiDelaySeconds: 0.3, aiSkill: 0.4, aiActions: 1,
   neutralUnits: [1, 2], growthMultiplier: 2.2, enemyGrowthMultiplier: 1.85,
   bases: { player: { col: 3, row: 9 }, enemy: { col: 3, row: 3 } },
   baseUnits: { player: 23, enemy: 12 },

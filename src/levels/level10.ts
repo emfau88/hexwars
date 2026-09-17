@@ -7,8 +7,8 @@ export default defineLevel({
   blurb:localized('The finale wraps several routes around a long lake. Two relays connect the sides.','Im Finale führen mehrere Wege um einen langen See. Zwei Relais verbinden die Seiten.'),
   objective:localized('Read the whole map, choose one point of concentration and capture the rival base.','Lies die ganze Karte, setze einen klaren Schwerpunkt und erobere die rivalisierende Basis.'),
   rule:localized('The rival may take two actions per decision cycle. All previous rules apply.','Die KI darf zwei Aktionen pro Denkzyklus ausführen. Alle bisherigen Regeln gelten.'),
-  aiThinkMs:820, aiDelaySeconds:2.5, aiSkill:.94, aiActions:2, neutralUnits:[5,12],
-  features:{all:true,group:true,relay:true,focus:true}, theme:'finale',
+  aiThinkMs:820, aiDelaySeconds:2.05, aiSkill:.94, aiActions:2, neutralUnits:[5,12],
+  features:{all:true,group:true,relay:true}, theme:'finale',
   activeRows:[[],[3],[2,3,4],[1,2,3,4,5],[1,2,4,5],[1,2,4,5],[1,2,4,5],[1,2,4,5],[1,2,4,5],[1,2,3,4,5],[2,3,4],[3],[]],
   cells:[
     ...[4,5,6,7,8].map(row=>({col:3,row,terrain:Terrain.Decor,decor:'water' as const})),

@@ -37,7 +37,6 @@ export interface FeatureFlags {
   group: boolean;
   relay: boolean;
   supply: boolean;
-  focus: boolean;
 }
 
 export interface CellDefinition extends Cell {

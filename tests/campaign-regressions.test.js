@@ -36,6 +36,15 @@ test('Level 1 teaches 50 percent and Level 2 unlocks 100 percent', () => {
   assert.match(styles, /attr\(data-unlock-label\)/);
 });
 
+test('Group send unlocks in Level 4 before the two-pass tactics mission', () => {
+  const level3 = read('../src/levels/level03.ts');
+  const level4 = read('../src/levels/level04.ts');
+  const level5 = read('../src/levels/level05.ts');
+  assert.match(level3, /features:\{all:true,group:false,relay:false\}/);
+  assert.match(level4, /features:\{all:true,group:true,relay:false\}/);
+  assert.match(level5, /features:\{all:true,group:true,relay:false\}/);
+});
+
 test('Level 9 mirrors deterministic neutral strength', () => {
   assert.match(level9, /mirrorNeutral:true/);
   assert.match(builder, /level\.mirrorNeutral && mirroredUnits\.has\(mirrorKey\)/);

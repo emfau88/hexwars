@@ -7,11 +7,14 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "package:kongregate": "npm run build && node scripts/package-kongregate.mjs",
     "preview": "vite preview",
     "test": "tsx --test tests/*.test.js tests/*.test.ts",
     "pretest:browser": "vite build --mode test",
     "test:browser": "playwright test",
     "balance": "tsx scripts/balance-campaign.ts",
+    "balance:doomstack": "tsx scripts/balance-doomstack.ts",
+    "balance:profiles": "tsx scripts/profile-balance.ts",
     "typecheck": "tsc -p tsconfig.json",
     "verify:production": "npm run build && node scripts/verify-production-build.mjs"
   },

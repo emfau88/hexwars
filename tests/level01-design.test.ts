@@ -37,8 +37,8 @@ test('Level 1 preserves the complete visible raster while adding optional latera
 });
 
 test('Level 1 retains active opposition with a smaller starting force and slightly slower production', () => {
-  assert.deepEqual(level01.features, { all: false, group: false, relay: false, supply: true, focus: false });
-  assert.equal(level01.aiDelaySeconds, 6.5);
+  assert.deepEqual(level01.features, { all: false, group: false, relay: false, supply: true });
+  assert.equal(level01.aiDelaySeconds, .3);
   assert.equal(level01.aiThinkMs, 2500);
   assert.equal(level01.aiSkill, .4);
   assert.equal(level01.growthMultiplier, 2.2);
@@ -71,6 +71,6 @@ test('Level 1 deterministic pacing smoke stays inside the target corridor', () =
   }
   assert.equal(game.result, 'victory');
   assert.ok(firstCapture > 0 && firstCapture < 10);
-  assert.ok(firstEnemyAction >= 8.5 && firstEnemyAction <= 10);
+  assert.ok(firstEnemyAction >= 2.7 && firstEnemyAction <= 3.1);
   assert.ok(game.elapsed >= 20 && game.elapsed <= 45);
 });

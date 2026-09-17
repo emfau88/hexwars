@@ -26,11 +26,11 @@ test('campaign map, unlock state and real pointer drag work', async ({ page }) =
   await expect(page.getByRole('button', { name: /Level 2: TWO ROUTES/ })).toHaveAttribute('aria-label', /locked/);
   await page.getByRole('button', { name: 'BEGIN CAMPAIGN' }).click();
   await page.evaluate(() => window.__HEXFRONT__?.setOpponentEnabled(false));
-  await expect(page.locator('#sidePanel .modeBtn[data-mode="half"]')).toBeEnabled();
-  await expect(page.locator('#sidePanel .modeBtn[data-mode="all"]')).toBeDisabled();
-  await expect(page.locator('#sidePanel .modeBtn[data-mode="group"]')).toBeDisabled();
-  await expect(page.locator('#sidePanel .modeBtn[data-mode="all"]')).toHaveAttribute('data-unlock-label', 'FROM II');
-  await expect(page.locator('#sidePanel .modeBtn[data-mode="group"]')).toHaveAttribute('data-unlock-label', 'FROM VI');
+  await expect(page.locator('#commandDock .modeBtn[data-mode="half"]')).toBeEnabled();
+  await expect(page.locator('#commandDock .modeBtn[data-mode="all"]')).toBeDisabled();
+  await expect(page.locator('#commandDock .modeBtn[data-mode="group"]')).toBeDisabled();
+  await expect(page.locator('#commandDock .modeBtn[data-mode="all"]')).toHaveAttribute('data-unlock-label', 'LOCKED · II');
+  await expect(page.locator('#commandDock .modeBtn[data-mode="group"]')).toHaveAttribute('data-unlock-label', 'LOCKED · IV');
   await expect(page.locator('#unlockPanel')).toContainText('The 100% send unlocks in Mission II.');
   await page.waitForTimeout(3_800);
   await expect(page.locator('#hint')).toHaveCSS('opacity', '1');
@@ -98,6 +98,7 @@ test('enemy acts and a completed mission persists its unlock after reload', asyn
   await expect(page.locator('#app')).toHaveClass(/fullSendCoach/);
   await expect(page.locator('.modeBtn[data-mode="all"]:visible')).toHaveClass(/newlyUnlocked/);
   await expect(page.locator('#hint')).toContainText('choose 100%');
+  await expect(page.locator('.modeBtn[data-mode="all"]:visible')).toHaveAttribute('data-new-label', 'NEW · 100% SEND');
   const levelTwoBoard = await page.evaluate(() => window.__HEXFRONT__?.getBoard()) as DebugBoard;
   const levelTwoSource = levelTwoBoard.find((hex) => hex.col === 3 && hex.row === 11)!;
   const levelTwoTarget = levelTwoBoard.find((hex) => hex.col === 3 && hex.row === 10)!;
@@ -125,7 +126,49 @@ test('the full-send unlock is localized in German', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'WEITER ZU LEVEL 2' })).toBeVisible();
 });
 
-test('manual long-range reinforcement and contextual front focus use canvas input', async ({ page }) => {
+test('group send is introduced in Level 4 with a visible coach', async ({ page }) => {
+  await page.goto('/?unlock=1');
+  await page.getByRole('button', { name: 'Level 4: HIGHLANDS' }).click();
+  await expect(page.locator('#menuFeatureUnlock')).toHaveText('NEW · GROUP SEND');
+  await page.getByRole('button', { name: 'START · TRY GROUP SEND' }).click();
+  await expect(page.locator('#commandDock .modeBtn[data-mode="group"]')).toBeEnabled();
+  await expect(page.locator('#app')).toHaveClass(/groupSendCoach/);
+  await expect(page.locator('#hint')).toContainText('choose GROUP');
+  await expect(page.locator('.modeBtn[data-mode="group"]:visible')).toHaveClass(/newlyUnlocked/);
+});
+
+test('desktop exposes keyboard shortcuts and advances straight to the next level', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-chromium');
+  await page.goto('/?autostart=1&level=1');
+  await expect(page.locator('#commandDock .modeShortcut')).toHaveText(['1', '2', '3']);
+  await page.keyboard.press('2');
+  await expect(page.locator('#commandDock .modeBtn[data-mode="all"]')).toHaveClass(/active/);
+  await page.keyboard.press('1');
+  await expect(page.locator('#commandDock .modeBtn[data-mode="half"]')).toHaveClass(/active/);
+
+  await page.goto('/?autostart=1&level=0');
+  await page.evaluate(() => window.__HEXFRONT__?.debugWin());
+  await page.getByRole('button', { name: 'CONTINUE TO LEVEL 2', exact: true }).click();
+  await expect(page.locator('#campaignMenu')).not.toHaveClass(/show/);
+  await expect(page.locator('#headerLevel')).toContainText('LEVEL 2');
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getState().running)).toBe(true);
+});
+
+test('water rendering survives browsers without pattern transforms', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'DOMMatrix', { configurable: true, value: undefined });
+    try { Object.defineProperty(CanvasPattern.prototype, 'setTransform', { configurable: true, value: undefined }); } catch { /* read-only in this browser */ }
+  });
+  await page.goto('/?autostart=1&level=0');
+  await expect(page.locator('#gameCanvas')).toBeVisible();
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getState().running)).toBe(true);
+  await page.waitForTimeout(500);
+  expect(errors).toEqual([]);
+});
+
+test('manual long-range reinforcement uses canvas input', async ({ page }) => {
   await page.goto('/?autostart=1&level=0');
   await page.evaluate(() => {
     const api = window.__HEXFRONT__!; api.setOpponentEnabled(false);
@@ -150,14 +193,6 @@ test('manual long-range reinforcement and contextual front focus use canvas inpu
     const board = await page.evaluate(() => window.__HEXFRONT__!.getBoard()) as DebugBoard;
     return board.find((hex) => hex.col === 3 && hex.row === 9)?.units ?? source.units;
   }).toBeLessThan(source.units);
-
-  await page.goto('/?autostart=1&level=5');
-  const levelSix = await page.evaluate(() => window.__HEXFRONT__!.getBoard()) as DebugBoard;
-  const base = levelSix.find((hex) => hex.col === 3 && hex.row === 11)!;
-  const box = await page.locator('#gameCanvas').boundingBox();
-  if (!box) throw new Error('Canvas is not visible.');
-  await page.mouse.click(box.x + base.x, box.y + base.y);
-  await expect(page.locator('#toast')).toHaveText('Supply focus set.');
 });
 
 test('all ten campaign levels start with a valid board in this viewport', async ({ page }) => {
@@ -254,6 +289,43 @@ test('compact desktop keeps the full dossier controls visible', async ({ page },
   expect(metrics.dossierScrollHeight).toBeLessThanOrEqual(metrics.dossierClientHeight + 2);
   expect(metrics.soundBottom).toBeLessThanOrEqual(metrics.viewportHeight);
   expect(metrics.pageWidth).toBeLessThanOrEqual(metrics.viewportWidth);
+});
+
+test('large desktop keeps the board complete and exposes the command dock', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-chromium');
+  await page.setViewportSize({ width: 1920, height: 1080 });
+  await page.goto('/?unlock=1&autostart=1&level=1');
+  const metrics = await page.evaluate(() => {
+    const dock = document.querySelector<HTMLElement>('#commandDock')!.getBoundingClientRect();
+    const button = document.querySelector<HTMLElement>('#commandDock .modeBtn')!.getBoundingClientRect();
+    const shortcut = document.querySelector<HTMLElement>('#commandDock .modeShortcut')!;
+    const upper = window.__HEXFRONT__?.getBoard().find((hex) => hex.col === 3 && hex.row === 8);
+    const lower = window.__HEXFRONT__?.getBoard().find((hex) => hex.col === 3 && hex.row === 9);
+    return {
+      dockWidth: dock.width,
+      buttonHeight: button.height,
+      shortcutFontSize: Number.parseFloat(getComputedStyle(shortcut).fontSize),
+      guide: document.querySelector('#commandDock .modeKeyboardGuide')?.textContent,
+      radius: upper && lower ? Math.abs(lower.y - upper.y) / 1.5 : 0,
+    };
+  });
+  expect(metrics.dockWidth).toBeGreaterThanOrEqual(300);
+  expect(metrics.buttonHeight).toBeGreaterThanOrEqual(64);
+  expect(metrics.shortcutFontSize).toBeGreaterThanOrEqual(12);
+  expect(metrics.guide).toContain('1 = 50%');
+  expect(metrics.radius).toBeGreaterThanOrEqual(41);
+});
+
+test('desktop auto supply can be paused without hiding its explanation', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'desktop-chromium');
+  await page.goto('/?unlock=1&autostart=1&level=1');
+  const toggle = page.locator('#autoSupplyBtn');
+  await expect(toggle).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('#autoSupplyDescription')).toContainText('Surplus follows the forward route toward the rival');
+  await toggle.click();
+  await expect(toggle).toHaveAttribute('aria-pressed', 'false');
+  await expect(page.locator('#autoSupplyStatus')).toHaveText('OFF · MANUAL');
+  await expect(page.locator('#autoSupplyDescription')).toContainText('Your units stay put');
 });
 
 test('language defaults to English and the German choice survives reload', async ({ page }) => {

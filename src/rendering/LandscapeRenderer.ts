@@ -118,7 +118,8 @@ export class LandscapeRenderer {
     if (!image.complete || !image.naturalWidth) return false;
     const aspect = image.naturalHeight / image.naturalWidth;
     const fitted = fitSpriteSize(width, aspect, maxHeight);
-    context.save(); context.globalAlpha = 0.94; context.filter = 'saturate(.82) contrast(.96)';
+    context.save(); context.globalAlpha = 0.94;
+    if ('filter' in context) context.filter = 'saturate(.82) contrast(.96)';
     context.drawImage(image, x - fitted.width / 2, y - fitted.height * anchor, fitted.width, fitted.height); context.restore();
     return true;
   }
@@ -137,7 +138,9 @@ export class LandscapeRenderer {
     if (!image.complete || !image.naturalWidth) return null;
     const pattern = context.createPattern(image, 'repeat');
     if (!pattern) return null;
-    pattern.setTransform(new DOMMatrix().scale(.55));
+    if (typeof DOMMatrix !== 'undefined' && typeof pattern.setTransform === 'function') {
+      pattern.setTransform(new DOMMatrix().scale(.55));
+    }
     const cached = this.patterns.get(context) ?? {};
     cached[type] = pattern; this.patterns.set(context, cached);
     return pattern;

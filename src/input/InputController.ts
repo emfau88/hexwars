@@ -1,5 +1,5 @@
 import type { GameState } from '../core/GameState';
-import { Owner, type HexState, type Point, type SendMode } from '../core/types';
+import { Owner, type Point, type SendMode } from '../core/types';
 import type { BoardRenderer } from '../rendering/BoardRenderer';
 
 export type InputError = 'decor' | 'target';
@@ -8,13 +8,11 @@ export interface InputCallbacks {
   getMode(): SendMode;
   onCommand(sent: number): void;
   onInvalid(error: InputError): void;
-  onFocus(hex: HexState): void;
   onActivate(): void;
 }
 
 export class InputController {
   private pointerDown = false;
-  private origin: Point | null = null;
 
   constructor(
     private readonly canvas: HTMLCanvasElement,
@@ -46,7 +44,6 @@ export class InputController {
     const point = this.point(event); const hex = this.renderer.findHex(this.state, point);
     if (hex?.owner === Owner.Player && hex.units >= 2) {
       this.renderer.selected = hex; this.renderer.dragPosition = point; this.pointerDown = true;
-      this.origin = point;
       this.canvas.setPointerCapture?.(event.pointerId);
     }
   };
@@ -61,10 +58,7 @@ export class InputController {
     event.preventDefault();
     const target = this.renderer.findHex(this.state, this.point(event)); const source = this.renderer.selected;
     let sent = 0;
-    const end = this.point(event);
-    if (target === source && this.origin && Math.hypot(end.x - this.origin.x, end.y - this.origin.y) < 10) {
-      this.callbacks.onFocus(source);
-    } else if (target && target !== source && this.state.canSend(source, target)) {
+    if (target && target !== source && this.state.canSend(source, target)) {
       const mode = this.callbacks.getMode();
       if (mode === 'group') sent = this.state.sendGroup(target, Owner.Player, true, source);
       else {
@@ -81,6 +75,6 @@ export class InputController {
   };
 
   private cancel = (): void => {
-    this.pointerDown = false; this.origin = null; this.renderer.selected = null; this.renderer.dragPosition = null;
+    this.pointerDown = false; this.renderer.selected = null; this.renderer.dragPosition = null;
   };
 }

@@ -5,7 +5,6 @@ const defaultFeatures: FeatureFlags = {
   group: true,
   relay: true,
   supply: true,
-  focus: false,
 };
 
 export function defineLevel(
