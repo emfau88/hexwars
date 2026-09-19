@@ -14,7 +14,6 @@ type AtlasLayout = {
   cells: AtlasCell[];
   stations: ReadonlyMap<string, number>;
   water: ReadonlySet<string>;
-  vegetation: ReadonlyMap<string, 'tree' | 'conifer' | 'bush'>;
 };
 
 const key = ({ q, r }: Pick<AtlasCell, 'q' | 'r'>): string => `${q},${r}`;
@@ -45,13 +44,11 @@ function layoutForMobile(mobile: boolean): AtlasLayout {
     width: 390, height: 250, size: 31, cells: cells(7, 4, 31, 50, 27),
     stations: new Map([['0,0',0],['2,0',1],['4,0',2],['1,1',3],['3,1',4],['5,1',5],['0,3',6],['2,3',7],['4,3',8],['6,3',9]]),
     water: new Set(['5,2','6,0','6,1','6,2','0,2','1,2']),
-    vegetation: new Map([['1,0','tree'],['3,0','conifer'],['5,0','bush'],['2,2','bush'],['4,2','tree'],['1,3','conifer'],['3,3','tree'],['5,3','conifer']]),
   };
   return {
     width: 760, height: 650, size: 39, cells: cells(11, 8, 39, 64, 56),
     stations: new Map([['1,1',0],['4,1',1],['7,1',2],['2,3',3],['5,3',4],['8,3',5],['1,5',6],['4,5',7],['7,5',8],['9,6',9]]),
     water: new Set(['8,0','9,0','9,1','10,0','10,1','10,2','0,4','0,5','1,5','1,6','2,6']),
-    vegetation: new Map([['0,0','tree'],['2,0','conifer'],['6,0','bush'],['10,4','tree'],['9,4','conifer'],['3,2','bush'],['0,7','conifer'],['2,7','tree'],['5,7','conifer'],['6,6','bush'],['8,7','tree'],['10,7','conifer']]),
   };
 }
 
@@ -89,14 +86,13 @@ export class CampaignAtlas {
     this.svg.replaceChildren();
     this.svg.setAttribute('viewBox', `0 0 ${layout.width} ${layout.height}`);
 
-    const defs = svgNode('defs');
-    const waterPattern = svgNode('pattern', { id:'campaign-water-material', patternUnits:'userSpaceOnUse', width:768, height:768 });
-    waterPattern.append(svgNode('rect', { width:768, height:768, fill:'#6ea8ba' }));
-    waterPattern.append(svgNode('image', { href:`${import.meta.env.BASE_URL}assets/level1-water.webp`, width:768, height:768, opacity:.72 }));
-    const shorePattern = svgNode('pattern', { id:'campaign-shore-material', patternUnits:'userSpaceOnUse', width:768, height:768 });
-    shorePattern.append(svgNode('rect', { width:768, height:768, fill:'#c9b27f' }));
-    shorePattern.append(svgNode('image', { href:`${import.meta.env.BASE_URL}assets/level1-shore.webp`, width:768, height:768, opacity:.76 }));
-    defs.append(waterPattern, shorePattern); this.svg.append(defs);
+    this.svg.append(
+      svgNode('image', {
+        href:`${import.meta.env.BASE_URL}assets/ui/campaign-atlas-v1.webp`, x:0, y:0,
+        width:layout.width, height:layout.height, preserveAspectRatio:'xMidYMid slice', class:'atlasBackdrop',
+      }),
+      svgNode('rect', { x:0, y:0, width:layout.width, height:layout.height, class:'atlasBackdropVeil', 'aria-hidden':'true' }),
+    );
 
     const terrain = svgNode('g', { 'aria-hidden':'true' });
     layout.cells.forEach((cell, index) => {
@@ -104,11 +100,10 @@ export class CampaignAtlas {
       const band = this.mobile ? (cell.r < 2 ? 0 : cell.r < 3 ? 1 : 2) : (cell.r < 3 ? 0 : cell.r < 5 ? 1 : 2);
       const fills = ['#c7d7ae','#becd9d','#b3c592'];
       terrain.append(svgNode('polygon', {
-        points:points(cell, layout.size), fill:station === undefined ? (water ? 'url(#campaign-water-material)' : fills[band]) : '#eee8d1',
+        points:points(cell, layout.size), fill:station === undefined ? (water ? '#4c9bb6' : fills[band]) : '#eee8d1',
+        'fill-opacity':station !== undefined ? .76 : water ? .26 : .14,
         class:`atlasHex${water ? ' water' : ''}${station !== undefined ? ' station' : ''}`,
       }));
-      const vegetation = layout.vegetation.get(cellKey);
-      if (vegetation && station === undefined && !water) this.addVegetation(defs, terrain, layout, cell, vegetation, index);
     });
     this.svg.append(terrain);
 
@@ -118,7 +113,7 @@ export class CampaignAtlas {
       if (!neighbour || !layout.water.has(key(neighbour))) {
         const d = shorePath(layout, cell, edge);
         shores.append(svgNode('path', { d, class:'atlasShoreShadow' }));
-        shores.append(svgNode('path', { d, class:'atlasShoreMaterial', stroke:'url(#campaign-shore-material)' }));
+        shores.append(svgNode('path', { d, class:'atlasShoreMaterial' }));
         shores.append(svgNode('path', { d, class:'atlasShoreLight' }));
       }
     }
@@ -147,15 +142,4 @@ export class CampaignAtlas {
     this.svg.append(nodes);
   }
 
-  private addVegetation(defs: SVGDefsElement, group: SVGGElement, layout: AtlasLayout, cell: AtlasCell, type: 'tree' | 'conifer' | 'bush', index: number): void {
-    const clipId = `campaign-cell-${index}`;
-    const clip = svgNode('clipPath', { id:clipId }); clip.append(svgNode('polygon', { points:points(cell, layout.size, .86) })); defs.append(clip);
-    const href = type === 'tree' ? 'level1-tree.webp' : type === 'conifer' ? 'level1-conifer-v2.webp' : 'level1-bush.webp';
-    const width = type === 'bush' ? layout.size * .82 : type === 'conifer' ? layout.size * .72 : layout.size * 1.25;
-    const height = type === 'conifer' ? width * 1.52 : width;
-    group.append(svgNode('image', {
-      href:`${import.meta.env.BASE_URL}assets/${href}`, x:cell.x - width / 2, y:cell.y - height * .57,
-      width, height, 'clip-path':`url(#${clipId})`, preserveAspectRatio:'xMidYMid meet', opacity:.94,
-    }));
-  }
 }

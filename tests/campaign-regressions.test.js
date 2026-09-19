@@ -76,6 +76,13 @@ test('mobile portrait keeps the full terrain atlas ahead of the dossier', () => 
   assert.doesNotMatch(atlas, /campaignPath/);
 });
 
+test('campaign atlas art remains decorative and within its mobile budget', () => {
+  const art = new URL('../public/assets/ui/campaign-atlas-v1.webp', import.meta.url);
+  assert.ok(statSync(art).size < 1_000_000, 'Campaign atlas art stays below 1 MB');
+  assert.match(atlas, /assets\/ui\/campaign-atlas-v1\.webp/);
+  assert.match(atlas, /preserveAspectRatio:'xMidYMid slice'/);
+});
+
 test('Level 1 landscape assets stay within the mobile budget', () => {
   for (const name of ['level1-tree.webp', 'level1-conifer-v2.webp', 'level1-bush.webp', 'level1-water.webp', 'level1-shore.webp']) {
     const asset = new URL(`../public/assets/${name}`, import.meta.url);

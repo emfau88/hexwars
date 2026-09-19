@@ -49,7 +49,7 @@
   box-shadow:0 18px 55px rgba(4,10,7,.25),inset 0 1px rgba(255,255,255,.28);
 }
 #campaignMenu .campaignJourney {
-  padding:0; display:flex; flex-direction:column; overflow:hidden; background:#b8cba1;
+  padding:0; display:flex; flex-direction:column; overflow:hidden; background:#496554;
 }
 #campaignMenu .atlasHeader {
   flex:0 0 74px; display:flex; align-items:center; justify-content:space-between; gap:20px;
@@ -73,11 +73,13 @@
 #campaignMenu .atlasActLegend span:nth-child(3) i { background:#c47b4c; }
 #campaignMenu .atlasBody { position:relative; flex:1; min-height:0; overflow:hidden; }
 #campaignAtlasSvg { display:block; width:100%; height:100%; overflow:visible; }
-#campaignAtlasSvg .atlasHex { stroke:#8fa887; stroke-width:1.35; vector-effect:non-scaling-stroke; }
-#campaignAtlasSvg .atlasHex.water { stroke:#6d9eae; }
+#campaignAtlasSvg .atlasBackdrop { filter:saturate(.82) contrast(.92) brightness(.9); }
+#campaignAtlasSvg .atlasBackdropVeil { fill:rgba(228,232,203,.10); }
+#campaignAtlasSvg .atlasHex { stroke:rgba(225,226,194,.66); stroke-width:1.35; vector-effect:non-scaling-stroke; }
+#campaignAtlasSvg .atlasHex.water { stroke:rgba(166,220,226,.72); }
 #campaignAtlasSvg .atlasHex.station { stroke:#8f8870; stroke-width:1.7; }
 #campaignAtlasSvg .atlasShoreShadow { fill:none; stroke:#526b5c; stroke-width:7; stroke-linecap:round; opacity:.22; vector-effect:non-scaling-stroke; }
-#campaignAtlasSvg .atlasShoreMaterial { fill:none; stroke-width:4.5; stroke-linecap:round; vector-effect:non-scaling-stroke; }
+#campaignAtlasSvg .atlasShoreMaterial { fill:none; stroke:#b9d7ce; stroke-width:3.2; stroke-linecap:round; opacity:.48; vector-effect:non-scaling-stroke; }
 #campaignAtlasSvg .atlasShoreLight { fill:none; stroke:#eee5c3; stroke-width:.8; stroke-linecap:round; opacity:.7; vector-effect:non-scaling-stroke; }
 #campaignMenu .atlasHint {
   position:absolute; left:18px; bottom:16px; z-index:3; margin:0; padding:8px 11px;
@@ -124,10 +126,11 @@
 #campaignMenu #mapCenter {
   position:relative; inset:auto; width:auto; max-width:none; padding:0; transform:none;
   display:grid; grid-template-rows:auto auto minmax(230px,1fr) auto; overflow:hidden; text-align:left;
-  color:#26342c; background:#eee7d3; border-color:rgba(231,222,190,.45); backdrop-filter:none;
+  color:#26342c; background:linear-gradient(155deg,#f1ead7 0%,#e8dfc8 100%); border-color:rgba(231,222,190,.45); backdrop-filter:none;
 }
 #campaignMenu .dossierHeader {
   min-height:78px; padding:18px 20px 13px; display:flex; align-items:flex-start; justify-content:space-between; gap:15px;
+  border-bottom:1px solid rgba(117,112,89,.16); background:linear-gradient(90deg,rgba(32,55,43,.07),transparent 65%);
 }
 #campaignMenu .menuKicker {
   margin:0 0 6px; color:#5c6b5f; font-family:var(--font-ui); font-size:11px; font-weight:800; line-height:1;
@@ -151,7 +154,8 @@
 }
 #campaignMenu .featureUnlockBadge[hidden] { display:none; }
 #campaignMenu .launchObjective {
-  display:grid; gap:4px; margin:0; color:#3e4d43;
+  display:grid; gap:4px; margin:0; padding:9px 11px; color:#3e4d43;
+  border-left:3px solid #bb6a3c; border-radius:3px 9px 9px 3px; background:rgba(255,255,255,.22);
 }
 #campaignMenu .launchObjective span {
   color:#b76339; font-family:var(--font-ui); font-size:11px; font-weight:800; line-height:1; letter-spacing:.65px;
@@ -188,6 +192,7 @@
   background:linear-gradient(#f1bc70,#eaa052); box-shadow:0 7px 14px rgba(122,69,33,.17);
   font-family:var(--font-display); font-size:13.5px; font-weight:750; letter-spacing:.65px;
 }
+#campaignMenu .playButton::after { content:'  ›'; font-size:18px; line-height:0; }
 #campaignMenu .missionControlHint { margin:9px 1px 0; color:#5d6a60; font-size:12px; font-weight:550; line-height:1.4; }
 #campaignMenu .controlArrow { color:#a95b34; background:rgba(217,119,66,.10); }
 
