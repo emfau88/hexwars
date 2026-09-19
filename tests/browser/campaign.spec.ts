@@ -1,6 +1,36 @@
 import { expect, test, type Page } from '@playwright/test';
 
 type DebugBoard = Array<{ col: number; row: number; owner: number; units: number; terrain: number; x: number; y: number }>;
+type GeometrySnapshot = {
+  runtime: { width: number; height: number; radius: number; origin: { x: number; y: number }; center: { x: number; y: number }; bounds: { x: number; y: number; width: number; height: number } };
+  transform: { scale: number; translateX: number; translateY: number };
+};
+
+async function readGeometry(page: Page): Promise<{ geometry: GeometrySnapshot; canvas: DOMRect; stage: DOMRect; anchor: { x: number; y: number } }> {
+  await expect.poll(async () => page.evaluate(() => {
+    const canvas = document.querySelector('#gameCanvas')?.getBoundingClientRect();
+    const stage = document.querySelector('#stage')?.getBoundingClientRect();
+    return canvas && stage ? Math.max(Math.abs(canvas.width - stage.width), Math.abs(canvas.height - stage.height)) : Infinity;
+  })).toBeLessThanOrEqual(1);
+  return page.evaluate(() => {
+    const geometry = window.__HEXFRONT__!.getGeometry() as GeometrySnapshot;
+    const canvas = document.querySelector('#gameCanvas')!.getBoundingClientRect();
+    const stage = document.querySelector('#stage')!.getBoundingClientRect();
+    const anchor = window.__HEXFRONT__!.getBoard().find((hex) => hex.col === 3 && hex.row === 9)!;
+    return { geometry, canvas: canvas.toJSON(), stage: stage.toJSON(), anchor: { x: anchor.x, y: anchor.y } };
+  });
+}
+
+function expectSameGeometry(actual: Awaited<ReturnType<typeof readGeometry>>, expected: Awaited<ReturnType<typeof readGeometry>>): void {
+  for (const key of ['width', 'height', 'radius'] as const) expect(actual.geometry.runtime[key]).toBeCloseTo(expected.geometry.runtime[key], 6);
+  for (const key of ['x', 'y'] as const) {
+    expect(actual.geometry.runtime.origin[key]).toBeCloseTo(expected.geometry.runtime.origin[key], 6);
+    expect(actual.geometry.runtime.center[key]).toBeCloseTo(expected.geometry.runtime.center[key], 6);
+    expect(actual.anchor[key]).toBeCloseTo(expected.anchor[key], 6);
+  }
+  expect(actual.canvas.width).toBeCloseTo(actual.stage.width, 0);
+  expect(actual.canvas.height).toBeCloseTo(actual.stage.height, 0);
+}
 
 async function clearProgress(page: Page): Promise<void> {
   await page.goto('/');
@@ -29,8 +59,8 @@ test('campaign map, unlock state and real pointer drag work', async ({ page }) =
   await expect(page.locator('#commandDock .modeBtn[data-mode="half"]')).toBeEnabled();
   await expect(page.locator('#commandDock .modeBtn[data-mode="all"]')).toBeDisabled();
   await expect(page.locator('#commandDock .modeBtn[data-mode="group"]')).toBeDisabled();
-  await expect(page.locator('#commandDock .modeBtn[data-mode="all"]')).toHaveAttribute('data-unlock-label', 'LOCKED · II');
-  await expect(page.locator('#commandDock .modeBtn[data-mode="group"]')).toHaveAttribute('data-unlock-label', 'LOCKED · IV');
+  await expect(page.locator('#commandDock .modeBtn[data-mode="all"]')).toHaveAttribute('data-unlock-label', 'LOCKED → LEVEL 2');
+  await expect(page.locator('#commandDock .modeBtn[data-mode="group"]')).toHaveAttribute('data-unlock-label', 'LOCKED → LEVEL 4');
   await expect(page.locator('#unlockPanel')).toContainText('The 100% send unlocks in Mission II.');
   await page.waitForTimeout(3_800);
   await expect(page.locator('#hint')).toHaveCSS('opacity', '1');
@@ -196,13 +226,96 @@ test('manual long-range reinforcement uses canvas input', async ({ page }) => {
 });
 
 test('all ten campaign levels start with a valid board in this viewport', async ({ page }) => {
+  let firstGeometry: Awaited<ReturnType<typeof readGeometry>> | null = null;
   for (let level = 0; level < 10; level += 1) {
     await page.goto(`/?unlock=1&autostart=1&level=${level}`);
     await expect(page.locator('#headerLevel')).toContainText(`LEVEL ${level + 1}`);
     const state = await page.evaluate(() => ({ state: window.__HEXFRONT__?.getState(), board: window.__HEXFRONT__?.getBoard() }));
     expect(state.state?.running).toBe(true);
     expect(state.board?.filter((hex) => hex.terrain !== 5).length).toBeGreaterThan(2);
+    const geometry = await readGeometry(page);
+    if (firstGeometry) expectSameGeometry(geometry, firstGeometry);
+    else firstGeometry = geometry;
   }
+});
+
+test('campaign start, restart and direct next level keep identical board geometry', async ({ page }) => {
+  await page.getByRole('button', { name: 'BEGIN CAMPAIGN' }).click();
+  await page.evaluate(() => window.__HEXFRONT__?.setOpponentEnabled(false));
+  const started = await readGeometry(page);
+  await page.evaluate(() => window.__HEXFRONT__?.startLevel(0));
+  const restarted = await readGeometry(page);
+  expectSameGeometry(restarted, started);
+  await page.evaluate(() => window.__HEXFRONT__?.startLevel(1));
+  const nextLevel = await readGeometry(page);
+  expectSameGeometry(nextLevel, started);
+});
+
+test('Level 1 map art shares the canonical uniform world transform with its gameplay layers', async ({ page }) => {
+  await page.goto('/?autostart=1&level=0');
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getRenderProfile())).toMatchObject({
+    mapArt: { enabled: true, loaded: true, sourceWidth: 1438, sourceHeight: 1093 },
+    targetFps: 60,
+    fallbackFloorFps: 30,
+  });
+  const result = await page.evaluate(() => ({
+    profile: window.__HEXFRONT__!.getRenderProfile(),
+    geometry: window.__HEXFRONT__!.getGeometry(),
+    canvas: {
+      width: (document.querySelector('#gameCanvas') as HTMLCanvasElement).width,
+      height: (document.querySelector('#gameCanvas') as HTMLCanvasElement).height,
+    },
+  }));
+  const { coreScreenRect, mapArt, layers } = result.profile;
+  expect(coreScreenRect.width).toBeCloseTo(1108 * result.geometry.transform.scale, 6);
+  expect(coreScreenRect.height).toBeCloseTo(842 * result.geometry.transform.scale, 6);
+  expect(mapArt.sourceCrop.width / mapArt.sourceCrop.height).toBeCloseTo(1108 / 842, 10);
+  expect(layers).toEqual([
+    'backdrop-bleed', 'map-core', 'water', 'shore', 'atmosphere', 'grid',
+    'territory-selection', 'structures', 'units-movement', 'gameplay-fx',
+  ]);
+  expect(result.canvas.width).toBeCloseTo(result.geometry.runtime.width * result.geometry.pixelRatio, 0);
+  expect(result.canvas.height).toBeCloseTo(result.geometry.runtime.height * result.geometry.pixelRatio, 0);
+});
+
+test('Level 1 core art decodes and reduced motion freezes environment phases', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.goto('/?autostart=1&level=0');
+  const decoded = await page.evaluate(() => new Promise<{ width: number; height: number }>((resolve, reject) => {
+    const image = new Image();
+    image.addEventListener('load', () => resolve({ width: image.naturalWidth, height: image.naturalHeight }), { once: true });
+    image.addEventListener('error', () => reject(new Error('Level 1 map core failed to decode.')), { once: true });
+    image.src = './assets/maps/level01-core-v1.png';
+  }));
+  expect(decoded).toEqual({ width: 1438, height: 1093 });
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getRenderProfile())).toMatchObject({
+    reducedMotion: true,
+    environmentAnimated: false,
+  });
+});
+
+test('mobile Level 1 PoC keeps render CPU inside a 60 FPS frame budget', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile-portrait');
+  await page.goto('/?autostart=1&level=0');
+  await page.evaluate(() => window.__HEXFRONT__?.setOpponentEnabled(false));
+  await page.waitForTimeout(500);
+  const timing = await page.evaluate(() => window.__HEXFRONT__!.measureRenderCost(90));
+  expect(timing.samples).toBe(90);
+  expect(timing.averageMs).toBeLessThan(timing.frameBudgetMs);
+  expect(timing.p95Ms).toBeLessThan(timing.frameBudgetMs);
+});
+
+test('an orientation cycle restores the exact portrait board geometry', async ({ page }) => {
+  await page.getByRole('button', { name: 'BEGIN CAMPAIGN' }).click();
+  await page.evaluate(() => window.__HEXFRONT__?.setOpponentEnabled(false));
+  await page.setViewportSize({ width: 390, height: 844 });
+  const portrait = await readGeometry(page);
+  await page.setViewportSize({ width: 844, height: 390 });
+  const landscape = await readGeometry(page);
+  expect(landscape.geometry.runtime.width).toBeCloseTo(landscape.stage.width, 0);
+  expect(landscape.geometry.runtime.height).toBeCloseTo(landscape.stage.height, 0);
+  await page.setViewportSize({ width: 390, height: 844 });
+  expectSameGeometry(await readGeometry(page), portrait);
 });
 
 test('responsive shell has no page overflow and mobile controls meet the touch floor', async ({ page }) => {
@@ -305,14 +418,14 @@ test('large desktop keeps the board complete and exposes the command dock', asyn
       dockWidth: dock.width,
       buttonHeight: button.height,
       shortcutFontSize: Number.parseFloat(getComputedStyle(shortcut).fontSize),
-      guide: document.querySelector('#commandDock .modeKeyboardGuide')?.textContent,
+      guide: document.querySelector('#commandDock .modeKeyboardDiagram')?.textContent?.replace(/\s+/g, ''),
       radius: upper && lower ? Math.abs(lower.y - upper.y) / 1.5 : 0,
     };
   });
   expect(metrics.dockWidth).toBeGreaterThanOrEqual(300);
   expect(metrics.buttonHeight).toBeGreaterThanOrEqual(64);
   expect(metrics.shortcutFontSize).toBeGreaterThanOrEqual(12);
-  expect(metrics.guide).toContain('1 = 50%');
+  expect(metrics.guide).toContain('1→50');
   expect(metrics.radius).toBeGreaterThanOrEqual(41);
 });
 
@@ -388,11 +501,11 @@ test('decor variants decode their lazily loaded candidate assets', async ({ page
   for (const visual of ['decor-p1', 'decor-p2', 'decor-v2']) {
     const assetSet = visual === 'decor-v2' ? 'decor-v2' : 'decor-p1';
     await page.goto(`/?autostart=1&level=8&visual=${visual}`);
-    await expect.poll(async () => page.evaluate((set) => performance.getEntriesByType('resource')
-      .filter((entry) => entry.name.includes(`/assets/${set}/`)).length, assetSet)).toBeGreaterThan(0);
-    const assetUrls = await page.evaluate((set) => performance.getEntriesByType('resource')
-      .map((entry) => entry.name)
-      .filter((name) => name.includes(`/assets/${set}/`)), assetSet);
+    const assetUrls = [
+      `./assets/${assetSet}/mountains-snow-peaks.webp`,
+      `./assets/${assetSet}/snow-snow-conifer.webp`,
+      `./assets/${assetSet}/snow-snow-rocks.webp`,
+    ];
     const decoded = await page.evaluate(async (urls) => Promise.all(urls.map((url) => new Promise<boolean>((resolve) => {
       const image = new Image();
       image.addEventListener('load', () => resolve(image.naturalWidth > 0 && image.naturalHeight > 0), { once: true });

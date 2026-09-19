@@ -204,7 +204,15 @@ export class LandscapeRenderer {
     }
   }
 
-  drawWaterShores(context: CanvasRenderingContext2D, hexes: readonly HexState[], radius: number, style: LandscapeStyle, path: PathDrawer): void {
+  drawWaterShores(
+    context: CanvasRenderingContext2D,
+    hexes: readonly HexState[],
+    radius: number,
+    style: LandscapeStyle,
+    path: PathDrawer,
+    animationPhase = 0,
+    subtle = false,
+  ): void {
     if (style === 'meadow-v1' || this.visualVariant !== 'production') {
       const material = this.materialPattern(context, 'shore');
       context.save(); context.lineCap = 'round'; context.lineJoin = 'round';
@@ -223,9 +231,17 @@ export class LandscapeRenderer {
           context.beginPath(); context.moveTo(x1, y1); context.quadraticCurveTo(controlX, controlY, x2, y2);
           context.strokeStyle = style; context.lineWidth = width; context.globalAlpha = alpha; context.stroke();
         };
-        stroke('#526b5c', Math.max(3.2, radius * .18), .22);
-        stroke(material ?? '#c9b27f', Math.max(2.4, radius * .115), .96);
-        stroke('#eee5c3', Math.max(.7, radius * .021), .72);
+        if (!subtle) {
+          stroke('#526b5c', Math.max(3.2, radius * .18), .22);
+          stroke(material ?? '#c9b27f', Math.max(2.4, radius * .115), .96);
+        }
+        stroke('#f4ecd2', Math.max(.8, radius * (subtle ? .032 : .021)), subtle ? .54 : .72);
+        if (subtle) {
+          context.setLineDash([Math.max(5, radius * .17), Math.max(6, radius * .2)]);
+          context.lineDashOffset = -(animationPhase * 2.4 + hash01(hex.col, hex.row, edge) * 12);
+          stroke('#ffffff', Math.max(.65, radius * .019), .42);
+          context.setLineDash([]);
+        }
       }
       context.restore();
       return;

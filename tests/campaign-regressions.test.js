@@ -15,7 +15,6 @@ const main = read('../src/main.ts');
 const app = read('../src/app/HexfrontApp.ts');
 const audio = read('../src/audio/AudioController.ts');
 const landscape = read('../src/rendering/LandscapeRenderer.ts');
-const boardRenderer = read('../src/rendering/BoardRenderer.ts');
 const atlas = read('../src/ui/CampaignAtlas.ts');
 const vite = read('../vite.config.ts');
 const styles = read('../src/styles.css');
@@ -32,7 +31,6 @@ test('Level 1 teaches 50 percent and Level 2 unlocks 100 percent', () => {
   assert.match(level1, /features: \{ all: false, group: false, relay: false \}/);
   assert.match(level2, /100 % wird freigeschaltet/);
   assert.match(level2, /features:\{all:true,group:false,relay:false\}/);
-  assert.match(boardRenderer, /this\.width >= 1100 && this\.height >= 780 \? 42 : 34/);
   assert.match(styles, /attr\(data-unlock-label\)/);
 });
 
@@ -83,11 +81,14 @@ test('Level 1 landscape assets stay within the mobile budget', () => {
     const asset = new URL(`../public/assets/${name}`, import.meta.url);
     assert.ok(statSync(asset).size < 250_000, `${name} stays below 250 KB`);
   }
+  const core = new URL('../public/assets/maps/level01-core-v1.png', import.meta.url);
+  assert.ok(statSync(core).size < 3_200_000, 'Level 1 core art stays below the 3.2 MB PoC ceiling');
 });
 
 test('production assets support GitHub Pages sub-path hosting', () => {
   assert.match(vite, /base: '\.\/'/);
   assert.match(landscape, /import\.meta\.env\.BASE_URL/);
+  assert.match(read('../src/rendering/MapArtManifest.ts'), /import\.meta\.env\?\.BASE_URL/);
   assert.doesNotMatch(landscape, /load\('\/assets\//);
 });
 

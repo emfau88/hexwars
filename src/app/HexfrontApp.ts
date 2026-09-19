@@ -35,6 +35,8 @@ export class HexfrontApp {
   sendMode: SendMode = 'half';
   private readonly input: InputController;
   private readonly visualVariant = VISUAL_VARIANT;
+  private stageResizeObserver: ResizeObserver | null = null;
+  private resizeFrame = 0;
   private lastFrame = performance.now();
   private animationFrame = 0;
 
@@ -64,16 +66,38 @@ export class HexfrontApp {
       },
       onInvalid: (error) => { this.audio.play('denied'); this.ui.showToast(this.i18n.t(this.inputErrorKey(error))); }, onActivate: () => this.audio.activate(),
     });
-    this.bindWindowEvents();
-    this.renderer.resize(this.state);
     this.showMap(this.progressStore.focus(this.progress));
+    this.bindWindowEvents();
+    this.resizeLayout();
     this.kongregateStats.initialize(() => this.submitCampaignStatistics());
     if (DEBUG_ENABLED) {
       installDebugApi({
         startLevel: (index) => this.startLevel(index), showMap: () => this.showMap(), setAutoplay: (value) => { this.state.autoplay = value; },
         setOpponentEnabled: (value) => { this.state.opponentEnabled = value; },
         getState: () => ({ ...this.state.snapshot(), progress: this.progress }),
-        getBoard: () => this.state.hexes.map(({ col, row, owner, units, terrain, decor, x, y }) => ({ col, row, owner, units, terrain, decor, x, y })),
+        getBoard: () => this.state.hexes.map(({ col, row, owner, units, terrain, decor, x, y }) => ({
+          col, row, owner, units, terrain, decor, ...this.renderer.screenPositionFor({ x, y }),
+        })),
+        getGeometry: () => this.renderer.geometrySnapshot(),
+        getRenderProfile: () => this.renderer.renderSnapshot(this.state.currentLevel),
+        measureRenderCost: (samples = 60) => {
+          const count = Math.max(1, Math.min(240, Math.floor(samples)));
+          const timings: number[] = [];
+          const timelineStart = performance.now();
+          for (let index = 0; index < count; index += 1) {
+            const started = performance.now();
+            this.renderer.draw(this.state, timelineStart + index * (1000 / 60));
+            timings.push(performance.now() - started);
+          }
+          timings.sort((left, right) => left - right);
+          return {
+            samples: count,
+            averageMs: timings.reduce((sum, value) => sum + value, 0) / count,
+            medianMs: timings[Math.floor(count * .5)],
+            p95Ms: timings[Math.min(count - 1, Math.floor(count * .95))],
+            frameBudgetMs: 1000 / 60,
+          };
+        },
         send: (fromCol, fromRow, toCol, toRow, fraction = .5) => {
           const from = this.state.hexAt(fromCol, fromRow); const to = this.state.hexAt(toCol, toRow);
           return Boolean(from && to && this.state.send(from, to, from.owner, Math.floor(from.units * fraction)));
@@ -89,16 +113,18 @@ export class HexfrontApp {
   }
 
   startLevel(index = this.state.currentLevel): void {
-    this.audio.activate(); this.renderer.resize();
+    this.audio.activate();
     this.state.start(index, (col, row) => this.renderer.positionFor(col, row));
     this.sendMode = 'half'; this.renderer.sendMode = this.sendMode;
     this.ui.startMission(this.state, this.progress); this.ui.setMode(this.sendMode, this.state); this.ui.syncPlayerSupply(this.state.playerSupplyEnabled); this.audio.play('confirm');
+    this.resizeLayout();
     this.lastFrame = performance.now();
   }
 
   showMap(focus = this.state.currentLevel): void {
     this.state.running = false;
     this.ui.showMap(this.progress, (index) => this.progressStore.isUnlocked(this.progress, index, DEBUG_UNLOCK), focus);
+    this.resizeLayout();
   }
 
   setMode(mode: SendMode): void {
@@ -122,7 +148,7 @@ export class HexfrontApp {
       this.state.update(delta * DEBUG_SPEED); this.renderer.effects.update(delta * DEBUG_SPEED); this.ui.updateHUD(this.state);
     }
     this.consumeEvents();
-    this.renderer.draw(this.state); this.animationFrame = requestAnimationFrame(this.frame);
+    this.renderer.draw(this.state, time); this.animationFrame = requestAnimationFrame(this.frame);
   };
 
   private consumeEvents(): void {
@@ -166,7 +192,7 @@ export class HexfrontApp {
     this.audio.activate();
     try { if (document.fullscreenElement) await document.exitFullscreen(); else await document.documentElement.requestFullscreen(); }
     catch { this.ui.showToast(this.i18n.t('toast.fullscreenFailed')); }
-    this.ui.syncFullscreen(); this.renderer.resize(this.state);
+    this.ui.syncFullscreen(); this.scheduleResize();
   }
 
   private resetProgress(skipConfirmation = false): void {
@@ -185,11 +211,28 @@ export class HexfrontApp {
   }
 
   private bindWindowEvents(): void {
-    const resize = () => { this.renderer.resize(this.state); if (this.ui.menu.classList.contains('show')) this.ui.selectLevel(this.ui.selectedMenuLevel, this.progress, (index) => this.progressStore.isUnlocked(this.progress, index, DEBUG_UNLOCK), false); };
-    window.addEventListener('resize', resize); window.addEventListener('orientationchange', () => window.setTimeout(resize, 120)); document.addEventListener('fullscreenchange', resize);
+    window.addEventListener('resize', this.scheduleResize);
+    window.addEventListener('orientationchange', () => window.setTimeout(this.scheduleResize, 120));
+    document.addEventListener('fullscreenchange', this.scheduleResize);
+    if (typeof ResizeObserver !== 'undefined') {
+      this.stageResizeObserver = new ResizeObserver(this.scheduleResize);
+      this.stageResizeObserver.observe(this.renderer.stage);
+    }
     window.addEventListener('keydown', (event) => {
       if (event.key === '1') this.setMode('half'); if (event.key === '2') this.setMode('all'); if (event.key === '3') this.setMode('group');
       if (event.key.toLowerCase() === 'r') this.startLevel(); if (event.key === 'Escape') this.showMap();
     });
   }
+
+  private resizeLayout = (): void => {
+    const changed = this.renderer.resize();
+    if (changed && this.ui.menu.classList.contains('show')) {
+      this.ui.selectLevel(this.ui.selectedMenuLevel, this.progress, (index) => this.progressStore.isUnlocked(this.progress, index, DEBUG_UNLOCK), false);
+    }
+  };
+
+  private scheduleResize = (): void => {
+    cancelAnimationFrame(this.resizeFrame);
+    this.resizeFrame = requestAnimationFrame(this.resizeLayout);
+  };
 }

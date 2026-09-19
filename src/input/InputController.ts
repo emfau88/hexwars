@@ -35,7 +35,7 @@ export class InputController {
 
   private point(event: PointerEvent): Point {
     const bounds = this.canvas.getBoundingClientRect();
-    return { x: event.clientX - bounds.left, y: event.clientY - bounds.top };
+    return this.renderer.worldPositionFor({ x: event.clientX - bounds.left, y: event.clientY - bounds.top });
   }
 
   private onDown = (event: PointerEvent): void => {

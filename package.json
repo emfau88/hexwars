@@ -14,7 +14,9 @@
     "test:browser": "playwright test",
     "balance": "tsx scripts/balance-campaign.ts",
     "balance:doomstack": "tsx scripts/balance-doomstack.ts",
+    "balance:guardians": "tsx scripts/balance-guardian-lab.ts",
     "balance:profiles": "tsx scripts/profile-balance.ts",
+    "artguide:level1": "tsx scripts/export-level1-art-guide.ts",
     "typecheck": "tsc -p tsconfig.json",
     "verify:production": "npm run build && node scripts/verify-production-build.mjs"
   },

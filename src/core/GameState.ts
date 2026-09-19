@@ -45,10 +45,6 @@ export class GameState {
     this.running = true;
   }
 
-  setPositions(positionFor: (col: number, row: number) => Point): void {
-    for (const hex of this.hexes) Object.assign(hex, positionFor(hex.col, hex.row));
-  }
-
   hexAt(col: number, row: number): HexState | null {
     return this.hexes.find((hex) => hex.col === col && hex.row === row) ?? null;
   }
