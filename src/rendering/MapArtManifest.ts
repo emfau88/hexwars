@@ -128,12 +128,38 @@ export const LEVEL_FIVE_MAP_ART = Object.freeze({
   fog: '225,229,211',
 } as const satisfies MapArtManifest);
 
+export const LEVEL_SIX_MAP_ART = Object.freeze({
+  levelIndex: 5,
+  core: {
+    source: `${ASSET_BASE}assets/maps/level06-core-v1.webp`,
+    sourceWidth: 1438,
+    sourceHeight: 1093,
+  },
+  worldRect: { x: 0, y: 0, width: REFERENCE_WORLD_WIDTH, height: REFERENCE_WORLD_HEIGHT },
+  landscapeOverlays: [{
+    source: `${ASSET_BASE}assets/maps/level06-central-wetland-v3.webp`,
+    sourceWidth: 1108,
+    sourceHeight: 842,
+    // Six central decor cells, staggered with the odd rows:
+    // (3,3), (3,4), (3,5), (3,6), (3,7), (3,8).
+    worldRect: { x: 0, y: 0, width: REFERENCE_WORLD_WIDTH, height: REFERENCE_WORLD_HEIGHT },
+  }],
+  structureSafeAreas: [
+    { kind: 'hq', col: 3, row: 1, radius: 35 },
+    { kind: 'guardian', col: 2, row: 4, radius: 31.4 },
+    { kind: 'hq', col: 3, row: 11, radius: 35 },
+  ],
+  backdrop: ['#456e70', '#779765', '#9da367', '#4d6d57'],
+  fog: '218,229,210',
+} as const satisfies MapArtManifest);
+
 export const MAP_ART_MANIFESTS: readonly MapArtManifest[] = Object.freeze([
   LEVEL_ONE_MAP_ART,
   LEVEL_TWO_MAP_ART,
   LEVEL_THREE_MAP_ART,
   LEVEL_FOUR_MAP_ART,
   LEVEL_FIVE_MAP_ART,
+  LEVEL_SIX_MAP_ART,
 ]);
 
 export function mapArtForLevel(levelIndex: number): MapArtManifest | null {

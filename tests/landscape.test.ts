@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { Terrain, type HexState } from '../src/core/types';
 import { exposedWaterShoreEdges, fitSpriteSize } from '../src/rendering/LandscapeRenderer';
-import { centeredAspectCrop, LEVEL_FIVE_MAP_ART, LEVEL_FOUR_MAP_ART, LEVEL_ONE_MAP_ART, LEVEL_THREE_MAP_ART, LEVEL_TWO_MAP_ART, mapArtForLevel } from '../src/rendering/MapArtManifest';
+import { centeredAspectCrop, LEVEL_FIVE_MAP_ART, LEVEL_FOUR_MAP_ART, LEVEL_ONE_MAP_ART, LEVEL_SIX_MAP_ART, LEVEL_THREE_MAP_ART, LEVEL_TWO_MAP_ART, mapArtForLevel } from '../src/rendering/MapArtManifest';
 import { MAP_ART_RENDER_LAYERS } from '../src/rendering/MapArtRenderer';
 
 const water = (col: number, row: number): HexState => ({
@@ -88,6 +88,22 @@ test('Level 5 map art reserves both HQs and both guardian stations', () => {
   assert.deepEqual(
     LEVEL_FIVE_MAP_ART.structureSafeAreas.map(({ kind, col, row }) => [kind, col, row]),
     [['hq', 3, 1], ['guardian', 1, 4], ['guardian', 5, 4], ['hq', 3, 11]],
+  );
+});
+
+test('Level 6 map art reserves the two corridors and maps its wetland barrier to six decor cells', () => {
+  assert.equal(mapArtForLevel(5), LEVEL_SIX_MAP_ART);
+  assert.equal(LEVEL_SIX_MAP_ART.worldRect.width, LEVEL_ONE_MAP_ART.worldRect.width);
+  assert.equal(LEVEL_SIX_MAP_ART.worldRect.height, LEVEL_ONE_MAP_ART.worldRect.height);
+  assert.deepEqual(LEVEL_SIX_MAP_ART.landscapeOverlays, [{
+    source: './assets/maps/level06-central-wetland-v3.webp',
+    sourceWidth: 1108,
+    sourceHeight: 842,
+    worldRect: { x: 0, y: 0, width: 1108, height: 842 },
+  }]);
+  assert.deepEqual(
+    LEVEL_SIX_MAP_ART.structureSafeAreas.map(({ kind, col, row }) => [kind, col, row]),
+    [['hq', 3, 1], ['guardian', 2, 4], ['hq', 3, 11]],
   );
 });
 

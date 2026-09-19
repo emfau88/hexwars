@@ -117,6 +117,12 @@ test('Level 5 static map core stays within the rollout budget', () => {
   assert.ok(statSync(core).size + statSync(massif).size < 1_600_000, 'Level 5 static map layers stay below 1.6 MB combined');
 });
 
+test('Level 6 static wetland map layers stay within the rollout budget', () => {
+  const core = new URL('../public/assets/maps/level06-core-v1.webp', import.meta.url);
+  const wetland = new URL('../public/assets/maps/level06-central-wetland-v3.webp', import.meta.url);
+  assert.ok(statSync(core).size + statSync(wetland).size < 1_600_000, 'Level 6 static map layers stay below 1.6 MB combined');
+});
+
 test('production assets support GitHub Pages sub-path hosting', () => {
   assert.match(vite, /base: '\.\/'/);
   assert.match(landscape, /import\.meta\.env\.BASE_URL/);
