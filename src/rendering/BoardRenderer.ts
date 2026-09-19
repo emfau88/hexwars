@@ -7,6 +7,7 @@ import { EffectsRenderer } from './EffectsRenderer';
 import { LandscapeRenderer } from './LandscapeRenderer';
 import { MAP_ART_RENDER_LAYERS, MapArtRenderer } from './MapArtRenderer';
 import { mix, OWNER_COLORS } from './palette';
+import { StructureAssetRenderer } from './StructureAssetRenderer';
 import {
   calculateWorldGeometry,
   inverseTransformPoint,
@@ -37,6 +38,7 @@ export class BoardRenderer {
   private readonly environmentContext: CanvasRenderingContext2D;
   private readonly landscape: LandscapeRenderer;
   private readonly mapArt: MapArtRenderer;
+  private readonly structureAssets = new StructureAssetRenderer();
   private readonly reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   private mapLayerDirty = true;
   private environmentLayerDirty = true;
@@ -233,7 +235,9 @@ export class BoardRenderer {
       this.context.fillStyle = 'rgba(213,106,97,.12)'; this.context.fill();
     }
     if (this.selected === hex) { BoardRenderer.path(this.context, hex.x, hex.y, this.radius * .99); this.context.strokeStyle = '#e5a33d'; this.context.lineWidth = 3; this.context.stroke(); }
-    if (state.structureAt(hex.col, hex.row)?.type !== 'guardian') {
+    if (hex.terrain === Terrain.Base && this.structureAssets.drawHq(this.context, hex.owner, hex.x, hex.y, this.radius)) {
+      this.drawNumberBadge(hex.owner, Math.floor(hex.units), hex.x, hex.y + this.radius * .58);
+    } else if (state.structureAt(hex.col, hex.row)?.type !== 'guardian') {
       this.terrainGlyph(hex);
       this.context.fillStyle = colors.text; this.context.font = `700 ${Math.max(11, Math.floor(this.radius * .52))}px system-ui,sans-serif`;
       this.context.textAlign = 'center'; this.context.textBaseline = 'middle'; this.context.fillText(String(Math.floor(hex.units)), hex.x, hex.y - this.radius * .04);
@@ -303,6 +307,7 @@ export class BoardRenderer {
 
   private drawStructure(hex: HexState): void {
     if (hex.terrain !== Terrain.Base) return;
+    if (this.structureAssets.drawHq(this.context, hex.owner, hex.x, hex.y, this.radius)) return;
     const colors = OWNER_COLORS[hex.owner];
     const size = this.radius;
     this.context.save();
@@ -356,6 +361,28 @@ export class BoardRenderer {
 
   private drawGuardian(structure: StructureState, hex: HexState, phase: number): void {
     const colors = OWNER_COLORS[structure.owner]; const size = this.radius; const active = structure.status === 'active' && structure.shield > 0;
+    if (this.structureAssets.drawGuardian(this.context, hex.x, hex.y, size)) {
+      this.context.save();
+      this.context.beginPath();
+      this.context.arc(hex.x, hex.y, size * (.42 + (active ? Math.sin(phase * 2.4 + structure.col) * .018 : 0)), 0, Math.PI * 2);
+      this.context.strokeStyle = active ? colors.high : '#788079';
+      this.context.globalAlpha = active ? .62 : .72;
+      this.context.lineWidth = active ? 2.4 : 1.7;
+      this.context.stroke();
+      if (!active) {
+        this.context.globalAlpha = 1;
+        this.context.strokeStyle = '#d9c8a7';
+        this.context.lineWidth = 2;
+        this.context.beginPath();
+        this.context.moveTo(hex.x - size * .1, hex.y - size * .08);
+        this.context.lineTo(hex.x + size * .1, hex.y + size * .09);
+        this.context.moveTo(hex.x + size * .1, hex.y - size * .08);
+        this.context.lineTo(hex.x - size * .1, hex.y + size * .09);
+        this.context.stroke();
+      }
+      this.context.restore();
+      return;
+    }
     this.context.save(); this.context.translate(hex.x, hex.y - size * .04);
     this.context.fillStyle = 'rgba(13,20,18,.38)'; this.context.beginPath(); this.context.ellipse(0, size * .18, size * .4, size * .22, 0, 0, Math.PI * 2); this.context.fill();
     this.context.beginPath();
