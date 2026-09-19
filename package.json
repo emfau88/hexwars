@@ -17,6 +17,8 @@
     "balance:guardians": "tsx scripts/balance-guardian-lab.ts",
     "balance:guardian-production": "tsx scripts/balance-guardian-production.ts",
     "balance:guardian-rollout": "tsx scripts/balance-guardian-rollout.ts",
+    "balance:guardian-profiles": "tsx scripts/balance-guardian-player-profiles.ts",
+    "balance:level6-diagnostic": "tsx scripts/diagnose-level6-stalemate.ts",
     "balance:profiles": "tsx scripts/profile-balance.ts",
     "artguide:level1": "tsx scripts/export-level1-art-guide.ts",
     "typecheck": "tsc -p tsconfig.json",

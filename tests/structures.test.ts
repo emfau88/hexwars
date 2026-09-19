@@ -129,25 +129,25 @@ test('Level 5 production guardian route beats the still-possible direct HQ rush'
   assert.equal(east.guardianStatus, 'captured');
 });
 
-test('Level 6 uses one eastern guardian without turning both routes into a checklist', () => {
+test('Level 6 uses one western guardian without turning both routes into a checklist', () => {
   const game = new GameState(); game.start(5, positionFor);
   const guardians = game.structures.filter(({ type }) => type === 'guardian');
   assert.equal(guardians.length, 1);
   assert.deepEqual(guardians.map(({ id, col, row, shield, linkedTo }) => ({ id, col, row, shield, linkedTo })), [
-    { id: 'enemy-guardian-east', col: 4, row: 4, shield: 36, linkedTo: 'enemy-hq' },
+    { id: 'enemy-guardian-west', col: 2, row: 4, shield: 36, linkedTo: 'enemy-hq' },
   ]);
-  assert.equal(game.hexAt(4, 4)?.units, 7);
+  assert.equal(game.hexAt(2, 4)?.units, 7);
   assert.deepEqual(hqShield(game.structures, 'enemy-hq'), { current: 36, maximum: 36, active: 1 });
-  assert.equal(game.hexAt(2, 4)?.owner, Owner.Neutral);
+  assert.equal(game.hexAt(4, 4)?.owner, Owner.Neutral);
 });
 
-test('Level 6 guardian route saves time while the direct western route remains viable', () => {
-  const direct = runSplitFieldRoute('west-direct');
-  const east = runSplitFieldRoute('east-guardian');
+test('Level 6 guardian route saves time while the direct eastern route remains viable', () => {
+  const direct = runSplitFieldRoute('east-direct');
+  const west = runSplitFieldRoute('west-guardian');
   assert.equal(direct.result, 'victory');
-  assert.equal(east.result, 'victory');
+  assert.equal(west.result, 'victory');
   assert.equal(direct.guardian, 'disabled');
-  assert.equal(east.guardian, 'captured');
-  assert.ok(east.seconds < direct.seconds * .9);
-  assert.ok(direct.playerForce > east.playerForce);
+  assert.equal(west.guardian, 'captured');
+  assert.ok(west.seconds < direct.seconds * .9);
+  assert.ok(direct.playerForce > west.playerForce);
 });

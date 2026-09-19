@@ -42,6 +42,8 @@ export interface ProfileBalanceRow {
   maxForceDeficit: number;
   fields: string;
   forces: string;
+  firstNorthernFlank: 'west' | 'east' | null;
+  guardianCaptureSeconds: number | null;
 }
 
 export interface ProfileBalanceSummary {
@@ -188,10 +190,21 @@ export function runProfileBalance(levelIndex: number, profile: PlayerProfile, va
   let firstAiAction: number | null = null;
   let maxCellDeficit = 0;
   let maxForceDeficit = 0;
+  let firstNorthernFlank: ProfileBalanceRow['firstNorthernFlank'] = null;
+  let guardianCaptureSeconds: number | null = null;
   while (game.running && game.elapsed < MAX_SECONDS) {
     game.update(STEP_SECONDS);
     for (const event of game.drainEvents()) {
       if (firstAiAction === null && event.type === 'send' && event.detail.owner === Owner.Enemy) firstAiAction = game.elapsed;
+      if (event.type === 'capture' && event.detail.newOwner === Owner.Player) {
+        const { target } = event.detail;
+        if (firstNorthernFlank === null && target.row <= 5 && target.col !== 3) {
+          firstNorthernFlank = target.col < 3 ? 'west' : 'east';
+        }
+        if (guardianCaptureSeconds === null && structureAt(game.structures, target, 'guardian')) {
+          guardianCaptureSeconds = Number(game.elapsed.toFixed(2));
+        }
+      }
     }
     maxCellDeficit = Math.max(maxCellDeficit, game.fieldCount(Owner.Enemy) - game.fieldCount(Owner.Player));
     maxForceDeficit = Math.max(maxForceDeficit, forceDeficit(game));
@@ -215,6 +228,8 @@ export function runProfileBalance(levelIndex: number, profile: PlayerProfile, va
     maxForceDeficit: Math.round(maxForceDeficit),
     fields: `${snapshot.fields.p1}:${snapshot.fields.p2}`,
     forces: `${snapshot.forces.p1}:${snapshot.forces.p2}`,
+    firstNorthernFlank,
+    guardianCaptureSeconds,
   };
 }
 

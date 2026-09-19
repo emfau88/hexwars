@@ -17,6 +17,7 @@ export interface AIContext {
   send(from: HexState, to: HexState, owner: Owner, units: number): boolean;
   groupPotential(target: HexState, owner: Owner, preferred?: HexState): number;
   sendGroup(target: HexState, owner: Owner, preferred?: HexState): number;
+  onAction?(action: AIAction): void;
 }
 
 export interface AIAction { type: 'attack' | 'breakout' | 'reinforce' | 'logistics' | 'counter'; src: HexState; tgt: HexState; amount: number; score: number }
@@ -78,15 +79,18 @@ function baseApproach(context: AIContext): { base: HexState; urgency: number } |
   const base = context.hexes.find((hex) => hex.owner === context.owner && hex.terrain === Terrain.Base);
   if (!base) return null;
   const enemy = opposing(context.owner);
-  let urgency = 0;
-  let requiredReserve = 0;
+  const directIncoming = context.incomingTo(base, enemy);
+  let urgency = directIncoming > 0 ? 420 + directIncoming * 5 : 0;
+  let requiredReserve = directIncoming > 0 ? Math.min(42, directIncoming * 1.35 + 8) : 0;
   for (const hex of context.hexes) {
     if (hex.owner !== enemy) continue;
     const distance = hexDistance(hex, base);
-    if (distance > 6) continue;
+    // A broad six-hex alarm made both AIs empty their fronts into their HQs.
+    // Counter-reserves are for a real approach; distant fronts remain an attack/logistics concern.
+    if (distance > 3) continue;
     const force = hex.units + context.incomingTo(hex, enemy);
     if (force < 10) continue;
-    urgency = Math.max(urgency, (7 - distance) * 38 + force * 3);
+    urgency = Math.max(urgency, (4 - distance) * 76 + force * 3);
     requiredReserve = Math.max(requiredReserve, Math.min(42, force * 1.35 + 8));
   }
   const baseReserve = base.units + context.incomingTo(base, context.owner);
@@ -171,6 +175,7 @@ export function runAI(context: AIContext, skill: number, count = 1): number {
   for (let index = 0; index < count; index += 1) {
     const action = chooseAIAction(context, skill);
     if (!action || action.src.units < 4) break;
+    context.onAction?.(action);
     const maximum = Math.max(1, Math.floor(action.src.units - (action.src.terrain === Terrain.Base ? 3 : 1)));
     const coordinated = context.level.features.group || context.elapsed > 75;
     const attackLike = action.type === 'attack' || action.type === 'breakout';

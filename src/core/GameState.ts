@@ -4,8 +4,8 @@ import { createSeededRandom, type RandomSource } from './random';
 import { Owner, Terrain, type ArmyMovement, type GameEvent, type GameSnapshot, type HexState, type MissionResult, type Point, type ResultReason, type StructureState } from './types';
 import { buildLevel } from '../levels/buildLevel';
 import { LEVELS } from '../levels';
-import { runAI, type AIContext } from '../systems/AISystem';
-import { resolveArrival, updateCombat } from '../systems/CombatSystem';
+import { runAI, type AIAction, type AIContext } from '../systems/AISystem';
+import { resolveArrival, updateCombat, type CombatExchange } from '../systems/CombatSystem';
 import { updateGrowth } from '../systems/GrowthSystem';
 import { createMovement, updateMovements } from '../systems/MovementSystem';
 import { frontHexes, SupplySystem } from '../systems/SupplySystem';
@@ -27,6 +27,9 @@ export class GameState {
   autoplay = false;
   opponentEnabled = true;
   playerSupplyEnabled = true;
+  onCombatExchange: ((exchange: CombatExchange) => void) | null = null;
+  onGrowth: ((hex: HexState, owner: Owner, units: number) => void) | null = null;
+  onAIAction: ((owner: Owner, action: AIAction) => void) | null = null;
   private random: RandomSource = Math.random;
   private aiTimerMs = 0;
   private playerAiTimerMs = 0;
@@ -140,6 +143,7 @@ export class GameState {
       send: (from, to, candidate, units) => this.send(from, to, candidate, units),
       groupPotential: (target, candidate, preferred) => this.groupPotential(target, candidate, preferred),
       sendGroup: (target, candidate, preferred) => this.sendGroup(target, candidate, false, preferred),
+      onAction: (action) => this.onAIAction?.(owner, action),
     };
     return runAI(context, skill, count);
   }
@@ -153,7 +157,8 @@ export class GameState {
       this.events.push({ type: 'endgame', detail: { stage: nextStage } });
     }
     const growthMultiplier = this.level.growthMultiplier ?? 1;
-    updateGrowth(this.hexes, this.elapsed, deltaSeconds, growthMultiplier, this.level.enemyGrowthMultiplier ?? growthMultiplier, this.structures);
+    updateGrowth(this.hexes, this.elapsed, deltaSeconds, growthMultiplier, this.level.enemyGrowthMultiplier ?? growthMultiplier, this.structures,
+      this.onGrowth ?? undefined);
     if (this.level.features.supply) {
       const owners = this.playerSupplyEnabled ? [Owner.Player, Owner.Enemy] : [Owner.Enemy];
       for (const dispatch of this.supplySystem.update({ hexes: this.hexes, armies: this.armies, owners, structures: this.structures }, deltaSeconds)) {
@@ -164,7 +169,8 @@ export class GameState {
       syncStructureCapture(this.structures, target, newOwner);
       if (newOwner === Owner.Player) this.captures += 1;
       this.events.push({ type: 'capture', detail: { oldOwner, newOwner, target } });
-    }, (target, defendingOwner, requested) => absorbHqShield(this.structures, target, defendingOwner, requested));
+    }, (target, defendingOwner, requested) => absorbHqShield(this.structures, target, defendingOwner, requested),
+    this.onCombatExchange ?? undefined);
     updateMovements(this.armies, this.hexes, deltaSeconds, (movement, target) => {
       resolveArrival(movement, target);
       if (target) this.events.push({ type: 'arrival', detail: { owner: movement.owner, target, kind: movement.kind } });

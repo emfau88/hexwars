@@ -29,6 +29,7 @@ export function updateGrowth(
   multiplier = 1,
   enemyMultiplier = multiplier,
   structures: readonly StructureState[] = [],
+  onGrowth?: (hex: HexState, owner: Owner, units: number) => void,
 ): void {
   const scale = regenerationScale(elapsed);
   for (const hex of hexes) {
@@ -36,8 +37,10 @@ export function updateGrowth(
     if (hex.owner === Owner.Neutral || !isPlayable(hex) || hex.siege || isGuardianCell(structures, hex)) continue;
     const capacity = terrainCapacity(hex);
     if (hex.units < capacity) {
+      const before = hex.units;
       const ownerMultiplier = hex.owner === Owner.Enemy ? enemyMultiplier : multiplier;
       hex.units = Math.min(capacity, hex.units + terrainRegeneration(hex) * scale * ownerMultiplier * deltaSeconds);
+      if (hex.units > before) onGrowth?.(hex, hex.owner, hex.units - before);
     }
   }
 }

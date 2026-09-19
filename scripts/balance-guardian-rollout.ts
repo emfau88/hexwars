@@ -3,7 +3,7 @@ import { GameState } from '../src/core/GameState';
 import { Owner } from '../src/core/types';
 import { actDoomstack, doomstackPositionFor, shortestPlayableRoute } from './doomstack';
 
-export type SplitFieldRoute = 'west-direct' | 'east-guardian';
+export type SplitFieldRoute = 'west-guardian' | 'east-direct';
 
 export function runSplitFieldRoute(routeName: SplitFieldRoute) {
   const game = new GameState(); game.start(5, doomstackPositionFor);
@@ -12,7 +12,7 @@ export function runSplitFieldRoute(routeName: SplitFieldRoute) {
   const enemyHq = game.structures.find(({ id }) => id === 'enemy-hq')!;
   const start = game.hexAt(playerHq.col, playerHq.row)!;
   const goal = game.hexAt(enemyHq.col, enemyHq.row)!;
-  const waypoint = routeName === 'east-guardian' ? game.hexAt(4, 4) : null;
+  const waypoint = routeName === 'west-guardian' ? game.hexAt(2, 4) : game.hexAt(4, 5);
   const route = waypoint
     ? [...shortestPlayableRoute(game, start, waypoint), ...shortestPlayableRoute(game, waypoint, goal).slice(1)]
     : shortestPlayableRoute(game, start, goal);
@@ -34,5 +34,5 @@ export function runSplitFieldRoute(routeName: SplitFieldRoute) {
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  console.table((['west-direct', 'east-guardian'] as const).map(runSplitFieldRoute));
+  console.table((['west-guardian', 'east-direct'] as const).map(runSplitFieldRoute));
 }

@@ -122,6 +122,21 @@ test('AI pulls a reserve into its base when a strong early vanguard approaches',
   assert.ok(reserve.units >= 3);
 });
 
+test('AI does not abandon its front for a distant HQ alarm', () => {
+  const base = makeHex({ col: 0, owner: Owner.Enemy, terrain: Terrain.Base, units: 10 });
+  const reserve = makeHex({ col: 1, owner: Owner.Enemy, units: 28 });
+  const distantFront = makeHex({ col: 6, owner: Owner.Player, units: 30 });
+  const action = chooseAIAction({
+    owner: Owner.Enemy, elapsed: 80, endgameStage: 1, hexes: [base, reserve, distantFront], level: LEVELS[1], random: () => 0,
+    canSend: (from, to) => from.owner === to.owner,
+    incomingTo: () => 0,
+    send: () => true,
+    groupPotential: () => 0,
+    sendGroup: () => 0,
+  }, 1);
+  assert.notEqual(action?.type, 'counter');
+});
+
 test('AI breaks out toward reachable territory when it is materially behind on cells', () => {
   const base = makeHex({ col: 0, owner: Owner.Enemy, terrain: Terrain.Base, units: 42 });
   const front = makeHex({ col: 1, owner: Owner.Enemy, units: 20 });
