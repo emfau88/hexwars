@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { GameState } from '../src/core/GameState';
+import { hexDistance } from '../src/core/hex';
 import { Owner } from '../src/core/types';
 
 const positionFor = (col: number, row: number) => ({ x: col * 50 + (row % 2 ? 25 : 0), y: row * 45 });
@@ -38,3 +39,14 @@ test('Level 2 prevents an immediate 50 percent breakthrough on the strong field'
   assert.equal(base.owner, Owner.Player);
 });
 
+test('Level 2 right route detours around both pond pairs without a gap or extra move', () => {
+  const game = new GameState(); game.start(1, positionFor);
+  const route = [
+    [3, 11], [4, 10], [4, 9], [5, 8], [5, 7], [5, 6],
+    [5, 5], [5, 4], [4, 3], [4, 2], [3, 1],
+  ].map(([col, row]) => game.hexAt(col, row)!);
+  assert.equal(route.length - 1, 10);
+  assert.ok(route.every(Boolean));
+  assert.ok(route.slice(1).every((hex, index) => hexDistance(route[index], hex) === 1));
+  assert.ok(route.every(({ col, row }) => col !== 3 || ![4, 5, 7, 8].includes(row)));
+});

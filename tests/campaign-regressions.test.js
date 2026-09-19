@@ -85,6 +85,15 @@ test('Level 1 landscape assets stay within the mobile budget', () => {
   assert.ok(statSync(core).size < 3_200_000, 'Level 1 core art stays below the 3.2 MB PoC ceiling');
 });
 
+test('Level 2 map core and water phases stay within the visual PoC budget', () => {
+  const names = ['level02-core-v5.png', 'level02-water-low-v3.png', 'level02-water-high-v3.png'];
+  const assets = names.map((name) => new URL(`../public/assets/maps/${name}`, import.meta.url));
+  assert.ok(statSync(assets[0]).size < 3_200_000, 'Level 2 core art stays below the 3.2 MB PoC ceiling');
+  assert.ok(statSync(assets[1]).size < 850_000, 'Level 2 low-water phase stays below 850 KB');
+  assert.ok(statSync(assets[2]).size < 850_000, 'Level 2 high-water phase stays below 850 KB');
+  assert.ok(assets.reduce((sum, asset) => sum + statSync(asset).size, 0) < 4_300_000, 'Level 2 visual stack stays below 4.3 MB');
+});
+
 test('production assets support GitHub Pages sub-path hosting', () => {
   assert.match(vite, /base: '\.\/'/);
   assert.match(landscape, /import\.meta\.env\.BASE_URL/);

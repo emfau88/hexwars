@@ -317,6 +317,39 @@ test('Level 1 core art decodes and reduced motion freezes environment phases', a
   });
 });
 
+test('Level 2 loads its corrected core and both asset-authored water phases', async ({ page }) => {
+  await page.goto('/?unlock=1&autostart=1&level=1');
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getRenderProfile())).toMatchObject({
+    mapArt: {
+      enabled: true,
+      loaded: true,
+      sourceWidth: 1438,
+      sourceHeight: 1093,
+      waterFrames: 2,
+      loadedWaterFrames: 2,
+    },
+    targetFps: 60,
+    fallbackFloorFps: 30,
+  });
+  const result = await page.evaluate(() => ({
+    profile: window.__HEXFRONT__!.getRenderProfile(),
+    geometry: window.__HEXFRONT__!.getGeometry(),
+  }));
+  expect(result.profile.coreScreenRect.width).toBeCloseTo(1108 * result.geometry.transform.scale, 6);
+  expect(result.profile.coreScreenRect.height).toBeCloseTo(842 * result.geometry.transform.scale, 6);
+});
+
+test('mobile Level 2 asset-water PoC keeps render CPU inside a 60 FPS frame budget', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'mobile-portrait');
+  await page.goto('/?unlock=1&autostart=1&level=1');
+  await page.evaluate(() => window.__HEXFRONT__?.setOpponentEnabled(false));
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getRenderProfile().mapArt.loadedWaterFrames)).toBe(2);
+  const timing = await page.evaluate(() => window.__HEXFRONT__!.measureRenderCost(90));
+  expect(timing.samples).toBe(90);
+  expect(timing.averageMs).toBeLessThan(timing.frameBudgetMs);
+  expect(timing.p95Ms).toBeLessThan(timing.frameBudgetMs);
+});
+
 test('mobile Level 1 PoC keeps render CPU inside a 60 FPS frame budget', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'mobile-portrait');
   await page.goto('/?autostart=1&level=0');

@@ -21,6 +21,9 @@
     "balance:level6-diagnostic": "tsx scripts/diagnose-level6-stalemate.ts",
     "balance:profiles": "tsx scripts/profile-balance.ts",
     "artguide:level1": "tsx scripts/export-level1-art-guide.ts",
+    "artguide:level2": "tsx scripts/export-map-art-guide.ts 2",
+    "artguide:level2-overlay": "tsx scripts/capture-map-art-overlay.ts",
+    "qa:capture:level2": "tsx scripts/capture-level-map.ts 2",
     "typecheck": "tsc -p tsconfig.json",
     "verify:production": "npm run build && node scripts/verify-production-build.mjs"
   },

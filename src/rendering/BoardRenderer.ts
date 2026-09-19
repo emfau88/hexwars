@@ -5,7 +5,7 @@ import { terrainCapacity } from '../systems/GrowthSystem';
 import { hqShield } from '../systems/StructureSystem';
 import { EffectsRenderer } from './EffectsRenderer';
 import { LandscapeRenderer } from './LandscapeRenderer';
-import { LEVEL_ONE_RENDER_LAYERS, MapArtRenderer } from './MapArtRenderer';
+import { MAP_ART_RENDER_LAYERS, MapArtRenderer } from './MapArtRenderer';
 import { mix, OWNER_COLORS } from './palette';
 import {
   calculateWorldGeometry,
@@ -41,6 +41,7 @@ export class BoardRenderer {
   private mapLayerDirty = true;
   private environmentLayerDirty = true;
   private lastEnvironmentFrame = -Infinity;
+  private lastMapArtLevel = -1;
 
   constructor(readonly canvas: HTMLCanvasElement, readonly stage: HTMLElement, visualVariant: VisualVariant = 'production') {
     const context = canvas.getContext('2d', { alpha: true });
@@ -55,7 +56,10 @@ export class BoardRenderer {
     this.environmentContext = environmentContext;
     canvas.before(this.mapCanvas, this.environmentCanvas);
     this.landscape = new LandscapeRenderer(undefined, visualVariant);
-    this.mapArt = new MapArtRenderer(() => { this.mapLayerDirty = true; });
+    this.mapArt = new MapArtRenderer(() => {
+      this.mapLayerDirty = true;
+      this.environmentLayerDirty = true;
+    });
   }
 
   private createLayerCanvas(className: string): HTMLCanvasElement {
@@ -118,8 +122,8 @@ export class BoardRenderer {
   } {
     return {
       mapArt: this.mapArt.status(levelIndex),
-      coreScreenRect: this.mapArt.coreScreenRect(this.worldTransform),
-      layers: LEVEL_ONE_RENDER_LAYERS,
+      coreScreenRect: this.mapArt.coreScreenRect(this.worldTransform, levelIndex),
+      layers: MAP_ART_RENDER_LAYERS,
       reducedMotion: this.reducedMotion.matches,
       environmentAnimated: !this.reducedMotion.matches && document.visibilityState === 'visible',
       targetFps: 60,
@@ -151,6 +155,12 @@ export class BoardRenderer {
 
   draw(state: GameState, time = performance.now()): void {
     const mapArtEnabled = this.mapArt.supports(state.currentLevel);
+    if (this.lastMapArtLevel !== state.currentLevel) {
+      this.lastMapArtLevel = state.currentLevel;
+      this.mapLayerDirty = true;
+      this.environmentLayerDirty = true;
+      this.lastEnvironmentFrame = -Infinity;
+    }
     this.mapCanvas.style.display = mapArtEnabled ? 'block' : 'none';
     this.environmentCanvas.style.display = mapArtEnabled ? 'block' : 'none';
     if (mapArtEnabled) this.drawMapLayers(state, time);
@@ -183,10 +193,10 @@ export class BoardRenderer {
   private drawMapLayers(state: GameState, time: number): void {
     if (this.mapLayerDirty) {
       this.mapContext.clearRect(0, 0, this.width, this.height);
-      this.mapArt.drawBackdrop(this.mapContext, this.width, this.height);
+      this.mapArt.drawBackdrop(this.mapContext, this.width, this.height, state.currentLevel);
       this.mapContext.save();
       this.mapContext.transform(this.worldTransform.scale, 0, 0, this.worldTransform.scale, this.worldTransform.translateX, this.worldTransform.translateY);
-      const coreLoaded = this.mapArt.drawCore(this.mapContext);
+      const coreLoaded = this.mapArt.drawCore(this.mapContext, state.currentLevel);
       if (!coreLoaded) for (const hex of state.hexes) if (hex.terrain === Terrain.Decor) this.landscape.drawHex(this.mapContext, hex, this.radius, state.level.landscapeStyle, state.level.seed, BoardRenderer.path);
       this.mapContext.restore();
       this.mapLayerDirty = !coreLoaded;
@@ -197,10 +207,12 @@ export class BoardRenderer {
     this.environmentContext.clearRect(0, 0, this.width, this.height);
     this.environmentContext.save();
     this.environmentContext.transform(this.worldTransform.scale, 0, 0, this.worldTransform.scale, this.worldTransform.translateX, this.worldTransform.translateY);
-    this.mapArt.drawWaterMotion(this.environmentContext, state.hexes, this.radius, phase);
-    this.landscape.drawWaterShores(this.environmentContext, state.hexes, this.radius, state.level.landscapeStyle, BoardRenderer.path, phase, true);
+    const assetWater = this.mapArt.drawWaterMotion(this.environmentContext, state.currentLevel, phase);
+    if (!assetWater) {
+      this.landscape.drawWaterShores(this.environmentContext, state.hexes, this.radius, state.level.landscapeStyle, BoardRenderer.path, phase, true);
+    }
     this.environmentContext.restore();
-    this.mapArt.drawAtmosphere(this.environmentContext, this.width, this.height, this.runtimeGeometry, phase);
+    this.mapArt.drawAtmosphere(this.environmentContext, this.width, this.height, this.runtimeGeometry, phase, state.currentLevel);
     this.environmentLayerDirty = false;
     this.lastEnvironmentFrame = time;
   }

@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { Terrain, type HexState } from '../src/core/types';
 import { exposedWaterShoreEdges, fitSpriteSize } from '../src/rendering/LandscapeRenderer';
-import { centeredAspectCrop, LEVEL_ONE_MAP_ART } from '../src/rendering/MapArtManifest';
-import { LEVEL_ONE_RENDER_LAYERS } from '../src/rendering/MapArtRenderer';
+import { centeredAspectCrop, LEVEL_ONE_MAP_ART, LEVEL_TWO_MAP_ART, mapArtForLevel } from '../src/rendering/MapArtManifest';
+import { MAP_ART_RENDER_LAYERS } from '../src/rendering/MapArtRenderer';
 
 const water = (col: number, row: number): HexState => ({
   col, row, x: 0, y: 0, owner: 0, units: 0, terrain: Terrain.Decor, decor: 'water',
@@ -29,8 +29,8 @@ test('tall tree sprites are height-fitted before drawing inside a hex', () => {
 
 test('Level 1 map art uses one centered uniform crop for the canonical world', () => {
   const crop = centeredAspectCrop(
-    LEVEL_ONE_MAP_ART.sourceWidth,
-    LEVEL_ONE_MAP_ART.sourceHeight,
+    LEVEL_ONE_MAP_ART.core.sourceWidth,
+    LEVEL_ONE_MAP_ART.core.sourceHeight,
     LEVEL_ONE_MAP_ART.worldRect.width,
     LEVEL_ONE_MAP_ART.worldRect.height,
   );
@@ -41,16 +41,27 @@ test('Level 1 map art uses one centered uniform crop for the canonical world', (
   assert.equal(LEVEL_ONE_MAP_ART.worldRect.height, 842);
 });
 
-test('Level 1 render layers keep atmosphere below all gameplay information', () => {
-  const grid = LEVEL_ONE_RENDER_LAYERS.indexOf('grid');
-  const territory = LEVEL_ONE_RENDER_LAYERS.indexOf('territory-selection');
-  const structures = LEVEL_ONE_RENDER_LAYERS.indexOf('structures');
-  const units = LEVEL_ONE_RENDER_LAYERS.indexOf('units-movement');
-  const atmosphere = LEVEL_ONE_RENDER_LAYERS.indexOf('atmosphere');
-  assert.ok(atmosphere > LEVEL_ONE_RENDER_LAYERS.indexOf('shore'));
+test('Level 2 map art keeps the same canonical world and supplies two asset water states', () => {
+  assert.equal(mapArtForLevel(1), LEVEL_TWO_MAP_ART);
+  assert.equal(LEVEL_TWO_MAP_ART.worldRect.width, LEVEL_ONE_MAP_ART.worldRect.width);
+  assert.equal(LEVEL_TWO_MAP_ART.worldRect.height, LEVEL_ONE_MAP_ART.worldRect.height);
+  assert.equal(LEVEL_TWO_MAP_ART.waterFrames.length, 2);
+  assert.deepEqual(
+    LEVEL_TWO_MAP_ART.structureSafeAreas.filter(({ kind }) => kind === 'hq').map(({ col, row }) => [col, row]),
+    [[3, 1], [3, 11]],
+  );
+});
+
+test('map-art render layers keep atmosphere below all gameplay information', () => {
+  const grid = MAP_ART_RENDER_LAYERS.indexOf('grid');
+  const territory = MAP_ART_RENDER_LAYERS.indexOf('territory-selection');
+  const structures = MAP_ART_RENDER_LAYERS.indexOf('structures');
+  const units = MAP_ART_RENDER_LAYERS.indexOf('units-movement');
+  const atmosphere = MAP_ART_RENDER_LAYERS.indexOf('atmosphere');
+  assert.ok(atmosphere > MAP_ART_RENDER_LAYERS.indexOf('shore'));
   assert.ok(grid > atmosphere);
   assert.ok(territory > grid);
   assert.ok(structures > territory);
   assert.ok(units > structures);
-  assert.ok(LEVEL_ONE_RENDER_LAYERS.indexOf('gameplay-fx') > units);
+  assert.ok(MAP_ART_RENDER_LAYERS.indexOf('gameplay-fx') > units);
 });

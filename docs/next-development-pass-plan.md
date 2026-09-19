@@ -1,8 +1,8 @@
 # HEXFRONT – Living Plan für den nächsten Entwicklungs-Pass
 
-**Dokumentstatus:** Lebende Arbeitsgrundlage; Bulks 0–2 abgeschlossen, Bulks 3–5 in Review
+**Dokumentstatus:** Lebende Arbeitsgrundlage; Bulks 0–2 abgeschlossen, Bulks 3–5 und Teilbulk 8A in Review
 **Stand:** 19. September 2026  
-**Aktueller nächster Schritt:** Bulk 5 bleibt für Matchgefühl und Guardian-Tuning in `REVIEW`; der technische Timeout ist behoben. Um sichtbaren Produktfortschritt ohne voreiliges Node- oder Guardian-Rollout zu erzielen, wird der begrenzte visuelle Teilbulk **8A – Pipeline-Generalisation + Level-7-PoC** vor Bulk 6 gezogen. Der vollständige Multi-Map-Rollout und das physische Mobile-60-FPS-Gate bleiben weiterhin kontrollierte Gates.
+**Aktueller nächster Schritt:** Bulk 5 bleibt für Matchgefühl und Guardian-Tuning in `REVIEW`; der technische Timeout ist behoben. Der begrenzte visuelle Teilbulk **8A – Pipeline-Generalisation + Level-2-PoC** ist implementiert und wartet auf Human-Abnahme der Routenklarheit und Wasserbewegung. Der vollständige Multi-Map-Rollout und das physische Mobile-60-FPS-Gate bleiben kontrollierte Gates.
 **Pflegeprinzip:** Dieses Dokument wird nach jedem Bulk mit Status, Evidenz, Entscheidungen und offenen Risiken aktualisiert.
 
 ## 1. Zweck und Arbeitsregeln
@@ -180,7 +180,7 @@ Ein pauschaler Atmosphere-Pass über Grid und Structures wird verworfen, weil er
 | 5 – Guardian-Rollout und Map-Rebalance | `REVIEW` | strukturell größer | mapweise belegte strategische Mehrtiefe |
 | 6 – Upgrade-Node-Experiment | `OPEN` | mittel bis strukturell größer | Investitionsentscheidung erzeugt echten Trade-off |
 | 7 – Structure-/Special-Tile-Art und Lesbarkeit | `OPEN` | mittel bis strukturell größer | Mechaniken ohne Kleinglyphen sofort unterscheidbar |
-| 8A – Pipeline-Generalisation + Level-7-PoC | `READY` | mittel | Level-1-Sondercode wird mapfähig; zweite strukturell andere Karte beweist Wiederholbarkeit |
+| 8A – Pipeline-Generalisation + Level-2-PoC | `REVIEW` | mittel | Level-1-Sondercode ist mapfähig; zweite Karte und Asset-Wasser sind technisch bewiesen, Human-Abnahme offen |
 | 8 – Map-Pipeline-Rollout | `OPEN` | strukturell größer | weitere Maps nur über bewiesene Pipeline migriert |
 | 9 – Performance-, Accessibility- und Kongregate-Hardening | `OPEN` | mittel | Release-Budget und Plattformmatrix erfüllt |
 
@@ -583,9 +583,9 @@ Ein pauschaler Atmosphere-Pass über Grid und Structures wird verworfen, weil er
 **Einstufung:** strukturell größer  
 **Ziel / Problem:** Die bewiesene Level-1-Pipeline kontrolliert auf weitere Karten übertragen, ohne Layout und Art gleichzeitig unkontrolliert zu verändern.
 
-#### Vorgezogener Teilbulk 8A – Pipeline-Generalisation + Level-7-PoC
+#### Vorgezogener Teilbulk 8A – Pipeline-Generalisation + Level-2-PoC
 
-**Status:** `READY`
+**Status:** `REVIEW`
 
 Die technische Grundlage existiert bereits und wird nicht neu geschrieben: drei Canvas-Schichten, uniformer World Transform, statischer Core, 15-Hz-Environment, Code-Grid, Ownership und Fallback-Landscape bleiben erhalten. Noch nicht wiederverwendbar sind jedoch `MapArtManifest`, `MapArtRenderer` und der Guide-Exporter: Sie referenzieren derzeit direkt `LEVEL_ONE_MAP_ART`, laden genau ein Bild und akzeptieren nur Levelindex 0.
 
@@ -598,9 +598,9 @@ Deshalb wird nicht sofort Art für neun Karten produziert. Zuerst wird der Level
 - `MapArtRenderer` wählt das Manifest der aktiven Map und behält für alle nicht migrierten Levels den bisherigen Landscape-Fallback;
 - bestehende World-Transform-, Grid-, Ownership- und Environment-Pfade werden nicht dupliziert.
 
-Als zweite Beweiskarte wird **Level 7 – Relay Island** empfohlen: Sie ist gameplayseitig guardianfrei und stabil, besitzt eine deutlich andere spielbare Silhouette, zusammenhängende Wasserbereiche/Ufer und ein zentrales Relay. Damit testet sie mehr Pipelineannahmen als eine optisch ähnliche Wiesenkarte, ohne die noch offene Level-5/6-Guardianbalance in die Artentscheidung einzubauen.
+Auf Nutzerentscheidung wurde **Level 2 – Zwei Wege** als zweite Beweiskarte vorgezogen. Sie besitzt zwei klar getrennte Kampfrouten, zentrale Wasser-/Waldtrenner und das frühe 50-%-/100-%-Tutorial. Gerade deshalb ist sie ein strenger Lesbarkeitstest: Artwork darf weder Route noch HQ-Lage verändern oder verdecken. Level 7 bleibt eine spätere Relay-/Structure-Prüfkarte.
 
-**8A-Gate:** Level 1 bleibt pixelidentisch ausgerichtet; Level 7 besitzt exakten Guide, Core-Art, sichtbares Code-Grid, korrekte Relay-Safe-Area, Wasser/Shore/Fog, responsive Bleed und stabile Desktop-/Mobile-Geometrie. Erst danach werden weitere Maps in kleinen Gruppen authoriert. Finale Relay-/Guardian-/Node-Grafiken dürfen später aus Bulk 7 kommen; sie bleiben separate transparente Structure-Layer und werden nicht in den Core gebacken.
+**8A-Gate:** Level 1 bleibt pixelidentisch ausgerichtet; Level 2 besitzt exakten Guide, korrigiertes Core-Art, sichtbares Code-Grid, freie HQ-Safe-Areas, assetbasierte Wasserphasen, Fog, responsive Bleed und stabile Desktop-/Mobile-Geometrie. Das technische Gate ist erfüllt; Human-Abnahme und physisches Mobile-Frame-Pacing bleiben offen. Erst danach werden weitere Maps in kleinen Gruppen authoriert. Finale Relay-/Guardian-/Node-Grafiken dürfen später aus Bulk 7 kommen; sie bleiben separate transparente Structure-Layer und werden nicht in den Core gebacken.
 
 **Konkrete Änderungen:**
 
@@ -752,6 +752,7 @@ Diese Fragen werden nicht vorzeitig durch Implementierung beantwortet:
 | 2026-09-19 | 5 | `REVIEW` | Spielerprofile um reale Flanken- und Guardian-Capture-Metriken ergänzt. Gegenprobe ohne Guardian und mit Ost-/West-Platzierung verwirft Ost als Verstärker der vorhandenen Schieflage; West liefert den besten der drei automatisierten Level-6-Vergleiche. Der zunächst offene Timeout wurde anschließend separat diagnostiziert. |
 | 2026-09-19 | 5 | `REVIEW` | Headless-Feld-/Combat-/Send-Diagnose identifiziert den Timeout als globalen Sechs-Hex-HQ-Fehlalarm: 84/84 späte Aktionen waren Rücktransporte ohne Kampf. Notfallradius auf echte Nahgefahr (≤3) plus direkte HQ-Incomings begrenzt; identischer Lauf endet nun nach 239,2 s. Guardian-Dauer und Human-Abnahme bleiben offen. |
 | 2026-09-19 | 8A | `OPEN` → `READY` | Visuelle Arbeit kontrolliert vorgezogen: vorhandene Level-1-Pipeline zuerst von den Hardcodings lösen und an Level 7 als andersartiger Relay-/Wasserkarte beweisen; noch kein unkontrollierter Neun-Map-Artrollout. |
+| 2026-09-19 | 8A | `READY` → `REVIEW` | Auf Nutzerentscheidung Level 2 als zweite Beweiskarte umgesetzt: Registry/Manifest, generischer Guide, korrigiertes Core-Art, zwei transparente Wasserphasen, Desktop-/Mobile-Captures und 60-FPS-CPU-Gate grün. Human-Abnahme und physische Mobilhardware bleiben offen; Evidenz in `docs/bulk-8a-level2-visual-poc-report.md`. |
 
 ## 12. Decision Log
 
@@ -783,6 +784,9 @@ Diese Fragen werden nicht vorzeitig durch Implementierung beantwortet:
 | D-024 | 2026-09-19 | Level-6-Guardian von Ost nach West verschoben; Bulk 5 bleibt `REVIEW` | Die drei Spielerprofile zeigen bereits ohne Guardian Ostpräferenz. Der Ost-Guardian verstärkte sie; West verbesserte die schwächere Route. Der damalige Timeout wurde später durch D-025 technisch gelöst; Matchdauer und häufige Guardian-Captures nach Ost-Eröffnung bleiben Reviewgründe. |
 | D-025 | 2026-09-19 | HQ-`counter` reagiert auf direkte Incomings oder starke Gegner bis drei statt pauschal sechs Hex Entfernung | Der breite Alarm entleerte auf Level 6 beide Fronten dauerhaft ins eigene HQ. Die engere Regel bewahrt echte Basisverteidigung, beendet den deterministischen Stillstand und lässt entfernte Fronten bei Attack/Breakout/Logistics. |
 | D-026 | 2026-09-19 | Visuelle Pipeline-Generalisation mit Level 7 wird vor das Upgrade-Node-Experiment gezogen | Die Level-1-Pipeline ist technisch vorhanden, aber noch hart auf eine Map verdrahtet. Eine zweite andersartige Karte liefert mehr Erkenntnis und sichtbaren Nutzen als ein voreiliger Node-Slice; neun Art-Cores vor dieser Generalisierung würden unnötiges Rework riskieren. |
+| D-027 | 2026-09-19 | Level 2 ersetzt Level 7 als zweite Pipeline-Beweiskarte; Tutorialgrundlayout bleibt maßgeblich | Nutzerpriorität ist sichtbarer Level-2-Fortschritt mit assetbasiertem Wasser. Zwei AI-Fassungen verletzten Route/HQ-Safe-Areas; deshalb wurde zuerst die Art korrigiert. Die spätere minimale Rechtsrouten-Ausweichung ist separat in D-029 begründet und getestet. |
+| D-028 | 2026-09-19 | Wasseranimation besteht aus zwei transparenten Art-Phasen, nicht aus prozedural gezeichneten Wellen | Crossfade auf dem bestehenden 15-Hz-Environment-Layer liefert echte Assetbewegung, hält das 60-FPS-Gameplay frei und kann bei Reduced Motion eingefroren werden. |
+| D-029 | 2026-09-19 | Nur der mittlere Level-2-Rechtskorridor weicht den Wasserbecken aus | Die erste Ganzroutenverschiebung erzeugte oben und unten Adjazenzlücken. Die minimale Route `(4,9) → (5,8…4) → (4,3)` umgeht beide Wasserpaare, behält zehn Bewegungen und lässt Start-/Endgabel unverändert. |
 
 ### Vorgemerktes Visual Polish nach Bulk 3
 
