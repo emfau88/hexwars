@@ -26,26 +26,28 @@
     <div id="stage">
       <canvas id="gameCanvas"></canvas>
       <section id="commandDock" aria-label="Command controls" data-i18n-aria-label="command.aria">
-        <div class="commandDockTopline"><span data-i18n="command.title">COMMAND</span><span data-i18n="command.shortcuts">KEYS 1 · 2 · 3</span></div>
-        <div class="modeKeyboardDiagram" aria-hidden="true">
-          <span><kbd>1</kbd><i>→</i><b data-i18n="mode.halfAction">50% SEND</b></span>
-          <span><kbd>2</kbd><i>→</i><b data-i18n="mode.allAction">100% SEND</b></span>
-          <span><kbd>3</kbd><i>→</i><b data-i18n="mode.groupAction">GROUP SEND</b></span>
-        </div>
-        <div class="commandDockSection" id="sendPanel">
-          <div class="eyebrow" data-i18n="panel.send">SEND</div>
-          <div class="modeRow">
-            <button class="modeBtn active" data-mode="half"><kbd class="modeShortcut" aria-hidden="true">1</kbd><span class="modeButtonText"><b>50 %</b><small data-i18n="mode.halfAction">50% SEND</small></span></button>
-            <button class="modeBtn" data-mode="all"><kbd class="modeShortcut" aria-hidden="true">2</kbd><span class="modeButtonText"><b>100 %</b><small data-i18n="mode.allAction">100% SEND</small></span></button>
-            <button class="modeBtn" data-mode="group"><kbd class="modeShortcut" aria-hidden="true">3</kbd><span class="modeButtonText"><b data-i18n="mode.group">GROUP</b><small data-i18n="mode.groupAction">GROUP SEND</small></span></button>
+        <div class="commandDockTopline"><span data-i18n="command.title">COMMAND</span><div class="commandDockTools"><span data-i18n="command.shortcuts">KEYS 1 · 2 · 3</span><button id="commandDockToggle" class="commandDockToggle" type="button" aria-expanded="true">−</button></div></div>
+        <div class="commandDockBody">
+          <div class="modeKeyboardDiagram" aria-hidden="true">
+            <span><kbd>1</kbd><i>→</i><b>50 %</b></span>
+            <span><kbd>2</kbd><i>→</i><b>100 %</b></span>
+            <span><kbd>3</kbd><i>→</i><b data-i18n="mode.group">GROUP</b></span>
           </div>
-        </div>
-        <div class="commandDockSection supplyControl">
-          <div class="supplyControlTopline">
-            <div><div class="eyebrow" data-i18n="supply.title">AUTO SUPPLY</div><strong id="autoSupplyStatus">ON</strong></div>
-            <button id="autoSupplyBtn" class="autoSupplyToggle active" type="button" aria-pressed="true">ON</button>
+          <div class="commandDockSection" id="sendPanel">
+            <div class="eyebrow" data-i18n="panel.send">SEND</div>
+            <div class="modeRow">
+              <button class="modeBtn active" data-mode="half"><kbd class="modeShortcut" aria-hidden="true">1</kbd><span class="modeButtonText"><b>50 %</b><small data-i18n="mode.halfAction">50% SEND</small></span></button>
+              <button class="modeBtn" data-mode="all"><kbd class="modeShortcut" aria-hidden="true">2</kbd><span class="modeButtonText"><b>100 %</b><small data-i18n="mode.allAction">100% SEND</small></span></button>
+              <button class="modeBtn" data-mode="group"><kbd class="modeShortcut" aria-hidden="true">3</kbd><span class="modeButtonText"><b data-i18n="mode.group">GROUP</b><small data-i18n="mode.groupAction">GROUP SEND</small></span></button>
+            </div>
           </div>
-          <p id="autoSupplyDescription" data-i18n="supply.description.on">Surplus moves toward the rival. Rear cells keep 20%; fronts keep 36%. Tap a front cell to redirect it.</p>
+          <div class="commandDockSection supplyControl">
+            <div class="supplyControlTopline">
+              <div><div class="eyebrow" data-i18n="supply.title">AUTO SUPPLY</div><strong id="autoSupplyStatus">ON</strong></div>
+              <button id="autoSupplyBtn" class="autoSupplyToggle active" type="button" aria-pressed="true">ON</button>
+            </div>
+            <p id="autoSupplyDescription" data-i18n="supply.description.on">Surplus moves toward the rival. Rear cells keep 20%; fronts keep 36%. Tap a front cell to redirect it.</p>
+          </div>
         </div>
       </section>
       <div id="hint" data-i18n="hint.default">Drag from an orange cell to a reachable target.</div>

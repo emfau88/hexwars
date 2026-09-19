@@ -41,6 +41,10 @@
   #layout { flex:1; min-height:0; display:grid; grid-template-columns:minmax(0,1fr) 252px; }
   #stage { position:relative; min-width:0; min-height:0; overflow:hidden; background:var(--paper); }
   canvas { display:block; width:100%; height:100%; }
+  #gameCanvas,.mapArtCanvas,.environmentCanvas { position:absolute; inset:0; }
+  .mapArtCanvas { z-index:0; pointer-events:none; }
+  .environmentCanvas { z-index:1; pointer-events:none; background:transparent !important; }
+  #gameCanvas { z-index:2; background:transparent !important; }
   #commandDock { display:none; }
   #sidePanel {
     border-left:1px solid var(--line); background:var(--paper2); padding:14px;
@@ -737,12 +741,18 @@ body.campaignOpen { touch-action:pan-y; }
     #sidePanel .eyebrow { margin-bottom:8px; color:#68766b; font-size:11px; font-weight:850; }
     #sidePanel #missionText,#sidePanel #ruleText { color:#3f5046; font-size:14px; font-weight:590; line-height:1.55; }
     #commandDock {
-      position:absolute; z-index:12; top:14px; left:14px; width:min(390px,calc(100% - 28px)); display:block;
+      position:absolute; z-index:12; top:14px; left:14px; width:min(330px,calc(100% - 28px)); display:block;
       padding:14px; color:#edf1e6; border:1px solid rgba(238,231,211,.22); border-radius:16px;
       background:linear-gradient(155deg,rgba(22,31,27,.95),rgba(13,20,17,.94)); box-shadow:0 14px 35px rgba(5,12,8,.24); backdrop-filter:blur(12px);
     }
-    .commandDockTopline { display:flex; justify-content:space-between; margin-bottom:11px; color:#d8b878; font:850 12px/1 var(--font-mono); letter-spacing:1.45px; }
-    .commandDockTopline span:last-child { color:#aeb8ad; font-size:10px; letter-spacing:.7px; }
+    #commandDock.collapsed { width:min(214px,calc(100% - 28px)); padding:11px 12px; }
+    #commandDock.collapsed .commandDockTopline { margin-bottom:0; }
+    #commandDock.collapsed .commandDockBody { display:none; }
+    .commandDockTopline { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:11px; color:#d8b878; font:850 12px/1 var(--font-mono); letter-spacing:1.45px; }
+    .commandDockTools { display:flex; align-items:center; gap:7px; min-width:0; }
+    .commandDockTools > span { color:#aeb8ad; font-size:9px; letter-spacing:.45px; white-space:nowrap; }
+    .commandDockToggle { display:grid; place-items:center; width:26px; height:26px; padding:0; color:#fff0d4; border:1px solid rgba(238,231,211,.34); border-radius:7px; background:rgba(255,255,255,.08); cursor:pointer; font:850 17px/1 var(--font-mono); }
+    .commandDockToggle:hover { border-color:#e4ae64; background:rgba(228,174,100,.16); }
     .modeKeyboardDiagram { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:6px; margin:0 0 12px; padding:8px; border:1px solid rgba(238,231,211,.13); border-radius:10px; background:rgba(255,255,255,.045); }
     .modeKeyboardDiagram > span { display:flex; align-items:center; justify-content:center; gap:5px; min-width:0; color:#d9e2d6; }
     .modeKeyboardDiagram kbd { display:grid; place-items:center; min-width:25px; min-height:23px; padding:2px 5px; color:#fff7e8; border:1px solid rgba(238,231,211,.52); border-radius:5px; background:rgba(255,255,255,.13); box-shadow:inset 0 -1px rgba(0,0,0,.22); font:850 12px/1 var(--font-mono); }
@@ -750,7 +760,7 @@ body.campaignOpen { touch-action:pan-y; }
     .modeKeyboardDiagram b { overflow:hidden; color:#d9e2d6; font:850 10px/1.15 var(--font-mono); letter-spacing:.15px; white-space:nowrap; text-overflow:ellipsis; }
     .commandDockSection + .commandDockSection { margin-top:12px; padding-top:12px; border-top:1px solid rgba(238,231,211,.14); }
     #commandDock .eyebrow { margin-bottom:8px; color:#aebbae; font-size:10px; font-weight:850; }
-    #commandDock .modeRow { gap:8px; }
+    #commandDock .modeRow { grid-template-columns:1fr; gap:8px; }
     #commandDock .modeBtn {
       display:grid; grid-template-columns:30px minmax(0,1fr); align-items:center; column-gap:8px; min-height:84px; padding:11px 8px; text-align:left;
       color:#dae3d9; border:1px solid rgba(238,231,211,.23); border-radius:10px; background:rgba(255,255,255,.075); line-height:1.05;
@@ -817,7 +827,8 @@ body.campaignOpen { touch-action:pan-y; }
     #sidePanel #missionName { margin-bottom:4px; font-size:14px; }
     #sidePanel .eyebrow { margin-bottom:4px; font-size:9px; }
     #sidePanel #missionText,#sidePanel #ruleText { font-size:11px; line-height:1.35; }
-    #commandDock { width:min(360px,calc(100% - 20px)); padding:10px; }
+    #commandDock { width:min(330px,calc(100% - 20px)); padding:10px; }
+    #commandDock.collapsed { width:min(196px,calc(100% - 20px)); }
     .commandDockTopline { margin-bottom:7px; }
     .modeKeyboardDiagram { margin-bottom:8px; padding:6px; }
     .modeKeyboardDiagram b { font-size:8px; }

@@ -50,6 +50,9 @@ export class CampaignUI {
     document.querySelectorAll<HTMLButtonElement>('[data-locale]').forEach((button) => button.addEventListener('click', () => callbacks.setLocale(button.dataset.locale as Locale)));
     document.querySelectorAll<HTMLButtonElement>('.modeBtn').forEach((button) => button.addEventListener('click', () => callbacks.setMode(button.dataset.mode as SendMode)));
     required('autoSupplyBtn').addEventListener('click', callbacks.togglePlayerSupply);
+    required('commandDockToggle').addEventListener('click', () => {
+      required('commandDock').classList.toggle('collapsed'); this.syncCommandDockToggle();
+    });
     const settings = required('menuSettingsPanel');
     required('menuSettingsBtn').addEventListener('click', (event) => {
       event.stopPropagation(); const open = settings.classList.toggle('show'); settings.setAttribute('aria-hidden', String(!open));
@@ -60,7 +63,7 @@ export class CampaignUI {
       }
     });
     document.addEventListener('pointerdown', callbacks.activate, { once: true });
-    this.applyStaticTranslations(); this.syncLocaleControls();
+    this.applyStaticTranslations(); this.syncLocaleControls(); this.syncCommandDockToggle();
   }
 
   private lastProgress: CampaignProgress = { completed: LEVELS.map(() => false), best: LEVELS.map(() => 0), fullSendUsed: false };
@@ -69,7 +72,7 @@ export class CampaignUI {
 
   refreshLanguage(state: GameState, soundEnabled: boolean): void {
     document.documentElement.lang = this.i18n.locale;
-    this.applyStaticTranslations(); this.syncLocaleControls(); this.syncSound(soundEnabled); this.syncFullscreen();
+    this.applyStaticTranslations(); this.syncLocaleControls(); this.syncCommandDockToggle(); this.syncSound(soundEnabled); this.syncFullscreen();
     if (this.menu.classList.contains('show')) {
       this.renderAtlas(this.selectedMenuLevel);
       this.selectLevel(this.selectedMenuLevel, this.lastProgress, this.lastUnlocked, false);
@@ -103,6 +106,13 @@ export class CampaignUI {
       const key = locale === 'en' ? 'settings.english' : 'settings.german';
       button.setAttribute('aria-label', this.i18n.t(key)); button.title = this.i18n.t(key);
     });
+  }
+
+  private syncCommandDockToggle(): void {
+    const dock = required('commandDock'); const toggle = required<HTMLButtonElement>('commandDockToggle');
+    const collapsed = dock.classList.contains('collapsed');
+    toggle.textContent = collapsed ? '+' : '−'; toggle.setAttribute('aria-expanded', String(!collapsed));
+    toggle.setAttribute('aria-label', this.i18n.t(collapsed ? 'command.expand' : 'command.collapse'));
   }
 
   private applyMissionCopy(state: GameState): void {
