@@ -1,0 +1,484 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1108" height="842" viewBox="0 0 1108 842">
+  <rect width="100%" height="100%" fill="#cddcc0"/>
+  <style>
+    text { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 8px; fill: #f7f4e8; }
+    .safe-label { font-size: 9px; font-weight: 800; fill: #17231e; paint-order: stroke; stroke: #f5ecd4; stroke-width: 2px; }
+  </style>
+  <g><g data-cell="0,0" data-terrain="mountain" data-playable="false">
+    <polygon points="327.14,19.81 360.47,39.06 360.47,77.54 327.14,96.79 293.81,77.54 293.81,39.06" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="313.14464547866635" y="51.3" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="327.14464547866635" y="61.3" text-anchor="middle">0,0</text>
+  </g>
+<g data-cell="1,0" data-terrain="mountain" data-playable="false">
+    <polygon points="396.95,19.81 430.28,39.06 430.28,77.54 396.95,96.79 363.62,77.54 363.62,39.06" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="382.9462930236921" y="51.3" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="396.9462930236921" y="61.3" text-anchor="middle">1,0</text>
+  </g>
+<g data-cell="2,0" data-terrain="meadow" data-playable="false">
+    <polygon points="466.75,19.81 500.08,39.06 500.08,77.54 466.75,96.79 433.42,77.54 433.42,39.06" fill="#cbdcb9" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="452.7479405687178" y="51.3" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="466.7479405687178" y="61.3" text-anchor="middle">2,0</text>
+  </g>
+<g data-cell="3,0" data-terrain="mountain" data-playable="false">
+    <polygon points="536.55,19.81 569.88,39.06 569.88,77.54 536.55,96.79 503.22,77.54 503.22,39.06" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="522.5495881137435" y="51.3" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="536.5495881137435" y="61.3" text-anchor="middle">3,0</text>
+  </g>
+<g data-cell="4,0" data-terrain="meadow" data-playable="false">
+    <polygon points="606.35,19.81 639.68,39.06 639.68,77.54 606.35,96.79 573.02,77.54 573.02,39.06" fill="#cbdcb9" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="592.3512356587694" y="51.3" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="606.3512356587694" y="61.3" text-anchor="middle">4,0</text>
+  </g>
+<g data-cell="5,0" data-terrain="mountain" data-playable="false">
+    <polygon points="676.15,19.81 709.48,39.06 709.48,77.54 676.15,96.79 642.82,77.54 642.82,39.06" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="662.152883203795" y="51.3" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="676.152883203795" y="61.3" text-anchor="middle">5,0</text>
+  </g>
+<g data-cell="6,0" data-terrain="meadow" data-playable="false">
+    <polygon points="745.95,19.81 779.28,39.06 779.28,77.54 745.95,96.79 712.62,77.54 712.62,39.06" fill="#cbdcb9" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="731.9545307488208" y="51.3" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="745.9545307488208" y="61.3" text-anchor="middle">6,0</text>
+  </g>
+<g data-cell="0,1" data-terrain="mountain" data-playable="false">
+    <polygon points="362.05,80.26 395.38,99.51 395.38,137.99 362.05,157.24 328.72,137.99 328.72,99.51" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="348.0454692511792" y="111.75" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="362.0454692511792" y="121.75" text-anchor="middle">0,1</text>
+  </g>
+<g data-cell="1,1" data-terrain="meadow" data-playable="false">
+    <polygon points="431.85,80.26 465.18,99.51 465.18,137.99 431.85,157.24 398.52,137.99 398.52,99.51" fill="#cbdcb9" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="417.84711679620494" y="111.75" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="431.84711679620494" y="121.75" text-anchor="middle">1,1</text>
+  </g>
+<g data-cell="2,1" data-terrain="mountain" data-playable="false">
+    <polygon points="501.65,80.26 534.98,99.51 534.98,137.99 501.65,157.24 468.32,137.99 468.32,99.51" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="487.6487643412307" y="111.75" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="501.6487643412307" y="121.75" text-anchor="middle">2,1</text>
+  </g>
+<g data-cell="3,1" data-terrain="Base" data-playable="true">
+    <polygon points="571.45,80.26 604.78,99.51 604.78,137.99 571.45,157.24 538.12,137.99 538.12,99.51" fill="#e9d5ae" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="557.4504118862565" y="111.75" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="571.4504118862565" y="121.75" text-anchor="middle">3,1</text>
+  </g>
+<g data-cell="4,1" data-terrain="forest" data-playable="false">
+    <polygon points="641.25,80.26 674.58,99.51 674.58,137.99 641.25,157.24 607.92,137.99 607.92,99.51" fill="#698d60" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="627.2520594312823" y="111.75" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="641.2520594312823" y="121.75" text-anchor="middle">4,1</text>
+  </g>
+<g data-cell="5,1" data-terrain="mountain" data-playable="false">
+    <polygon points="711.05,80.26 744.38,99.51 744.38,137.99 711.05,157.24 677.72,137.99 677.72,99.51" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="697.0537069763079" y="111.75" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="711.0537069763079" y="121.75" text-anchor="middle">5,1</text>
+  </g>
+<g data-cell="6,1" data-terrain="meadow" data-playable="false">
+    <polygon points="780.86,80.26 814.19,99.51 814.19,137.99 780.86,157.24 747.53,137.99 747.53,99.51" fill="#cbdcb9" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="766.8553545213338" y="111.75" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="780.8553545213338" y="121.75" text-anchor="middle">6,1</text>
+  </g>
+<g data-cell="0,2" data-terrain="meadow" data-playable="false">
+    <polygon points="327.14,140.71 360.47,159.96 360.47,198.44 327.14,217.69 293.81,198.44 293.81,159.96" fill="#cbdcb9" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="313.14464547866635" y="172.2" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="327.14464547866635" y="182.2" text-anchor="middle">0,2</text>
+  </g>
+<g data-cell="1,2" data-terrain="mountain" data-playable="false">
+    <polygon points="396.95,140.71 430.28,159.96 430.28,198.44 396.95,217.69 363.62,198.44 363.62,159.96" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="382.9462930236921" y="172.2" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="396.9462930236921" y="182.2" text-anchor="middle">1,2</text>
+  </g>
+<g data-cell="2,2" data-terrain="Normal" data-playable="true">
+    <polygon points="466.75,140.71 500.08,159.96 500.08,198.44 466.75,217.69 433.42,198.44 433.42,159.96" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="452.7479405687178" y="172.2" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="466.7479405687178" y="182.2" text-anchor="middle">2,2</text>
+  </g>
+<g data-cell="3,2" data-terrain="Normal" data-playable="true">
+    <polygon points="536.55,140.71 569.88,159.96 569.88,198.44 536.55,217.69 503.22,198.44 503.22,159.96" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="522.5495881137435" y="172.2" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="536.5495881137435" y="182.2" text-anchor="middle">3,2</text>
+  </g>
+<g data-cell="4,2" data-terrain="Normal" data-playable="true">
+    <polygon points="606.35,140.71 639.68,159.96 639.68,198.44 606.35,217.69 573.02,198.44 573.02,159.96" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="592.3512356587694" y="172.2" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="606.3512356587694" y="182.2" text-anchor="middle">4,2</text>
+  </g>
+<g data-cell="5,2" data-terrain="mountain" data-playable="false">
+    <polygon points="676.15,140.71 709.48,159.96 709.48,198.44 676.15,217.69 642.82,198.44 642.82,159.96" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="662.152883203795" y="172.2" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="676.152883203795" y="182.2" text-anchor="middle">5,2</text>
+  </g>
+<g data-cell="6,2" data-terrain="meadow" data-playable="false">
+    <polygon points="745.95,140.71 779.28,159.96 779.28,198.44 745.95,217.69 712.62,198.44 712.62,159.96" fill="#cbdcb9" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="731.9545307488208" y="172.2" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="745.9545307488208" y="182.2" text-anchor="middle">6,2</text>
+  </g>
+<g data-cell="0,3" data-terrain="meadow" data-playable="false">
+    <polygon points="362.05,201.16 395.38,220.41 395.38,258.89 362.05,278.14 328.72,258.89 328.72,220.41" fill="#cbdcb9" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="348.0454692511792" y="232.64999999999998" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="362.0454692511792" y="242.64999999999998" text-anchor="middle">0,3</text>
+  </g>
+<g data-cell="1,3" data-terrain="Normal" data-playable="true">
+    <polygon points="431.85,201.16 465.18,220.41 465.18,258.89 431.85,278.14 398.52,258.89 398.52,220.41" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="417.84711679620494" y="232.64999999999998" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="431.84711679620494" y="242.64999999999998" text-anchor="middle">1,3</text>
+  </g>
+<g data-cell="2,3" data-terrain="Normal" data-playable="true">
+    <polygon points="501.65,201.16 534.98,220.41 534.98,258.89 501.65,278.14 468.32,258.89 468.32,220.41" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="487.6487643412307" y="232.64999999999998" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="501.6487643412307" y="242.64999999999998" text-anchor="middle">2,3</text>
+  </g>
+<g data-cell="3,3" data-terrain="Normal" data-playable="true">
+    <polygon points="571.45,201.16 604.78,220.41 604.78,258.89 571.45,278.14 538.12,258.89 538.12,220.41" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="557.4504118862565" y="232.64999999999998" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="571.4504118862565" y="242.64999999999998" text-anchor="middle">3,3</text>
+  </g>
+<g data-cell="4,3" data-terrain="Normal" data-playable="true">
+    <polygon points="641.25,201.16 674.58,220.41 674.58,258.89 641.25,278.14 607.92,258.89 607.92,220.41" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="627.2520594312823" y="232.64999999999998" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="641.2520594312823" y="242.64999999999998" text-anchor="middle">4,3</text>
+  </g>
+<g data-cell="5,3" data-terrain="Normal" data-playable="true">
+    <polygon points="711.05,201.16 744.38,220.41 744.38,258.89 711.05,278.14 677.72,258.89 677.72,220.41" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="697.0537069763079" y="232.64999999999998" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="711.0537069763079" y="242.64999999999998" text-anchor="middle">5,3</text>
+  </g>
+<g data-cell="6,3" data-terrain="forest" data-playable="false">
+    <polygon points="780.86,201.16 814.19,220.41 814.19,258.89 780.86,278.14 747.53,258.89 747.53,220.41" fill="#698d60" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="766.8553545213338" y="232.64999999999998" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="780.8553545213338" y="242.64999999999998" text-anchor="middle">6,3</text>
+  </g>
+<g data-cell="0,4" data-terrain="mountain" data-playable="false">
+    <polygon points="327.14,261.61 360.47,280.86 360.47,319.34 327.14,338.59 293.81,319.34 293.81,280.86" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="313.14464547866635" y="293.09999999999997" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="327.14464547866635" y="303.09999999999997" text-anchor="middle">0,4</text>
+  </g>
+<g data-cell="1,4" data-terrain="Normal" data-playable="true">
+    <polygon points="396.95,261.61 430.28,280.86 430.28,319.34 396.95,338.59 363.62,319.34 363.62,280.86" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="382.9462930236921" y="293.09999999999997" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="396.9462930236921" y="303.09999999999997" text-anchor="middle">1,4</text>
+  </g>
+<g data-cell="2,4" data-terrain="Normal" data-playable="true">
+    <polygon points="466.75,261.61 500.08,280.86 500.08,319.34 466.75,338.59 433.42,319.34 433.42,280.86" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="452.7479405687178" y="293.09999999999997" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="466.7479405687178" y="303.09999999999997" text-anchor="middle">2,4</text>
+  </g>
+<g data-cell="3,4" data-terrain="meadow" data-playable="false">
+    <polygon points="536.55,261.61 569.88,280.86 569.88,319.34 536.55,338.59 503.22,319.34 503.22,280.86" fill="#cbdcb9" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="522.5495881137435" y="293.09999999999997" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="536.5495881137435" y="303.09999999999997" text-anchor="middle">3,4</text>
+  </g>
+<g data-cell="4,4" data-terrain="Normal" data-playable="true">
+    <polygon points="606.35,261.61 639.68,280.86 639.68,319.34 606.35,338.59 573.02,319.34 573.02,280.86" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="592.3512356587694" y="293.09999999999997" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="606.3512356587694" y="303.09999999999997" text-anchor="middle">4,4</text>
+  </g>
+<g data-cell="5,4" data-terrain="Normal" data-playable="true">
+    <polygon points="676.15,261.61 709.48,280.86 709.48,319.34 676.15,338.59 642.82,319.34 642.82,280.86" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="662.152883203795" y="293.09999999999997" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="676.152883203795" y="303.09999999999997" text-anchor="middle">5,4</text>
+  </g>
+<g data-cell="6,4" data-terrain="meadow" data-playable="false">
+    <polygon points="745.95,261.61 779.28,280.86 779.28,319.34 745.95,338.59 712.62,319.34 712.62,280.86" fill="#cbdcb9" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="731.9545307488208" y="293.09999999999997" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="745.9545307488208" y="303.09999999999997" text-anchor="middle">6,4</text>
+  </g>
+<g data-cell="0,5" data-terrain="mountain" data-playable="false">
+    <polygon points="362.05,322.06 395.38,341.31 395.38,379.79 362.05,399.04 328.72,379.79 328.72,341.31" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="348.0454692511792" y="353.55" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="362.0454692511792" y="363.55" text-anchor="middle">0,5</text>
+  </g>
+<g data-cell="1,5" data-terrain="Normal" data-playable="true">
+    <polygon points="431.85,322.06 465.18,341.31 465.18,379.79 431.85,399.04 398.52,379.79 398.52,341.31" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="417.84711679620494" y="353.55" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="431.84711679620494" y="363.55" text-anchor="middle">1,5</text>
+  </g>
+<g data-cell="2,5" data-terrain="Normal" data-playable="true">
+    <polygon points="501.65,322.06 534.98,341.31 534.98,379.79 501.65,399.04 468.32,379.79 468.32,341.31" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="487.6487643412307" y="353.55" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="501.6487643412307" y="363.55" text-anchor="middle">2,5</text>
+  </g>
+<g data-cell="3,5" data-terrain="mountain" data-playable="false">
+    <polygon points="571.45,322.06 604.78,341.31 604.78,379.79 571.45,399.04 538.12,379.79 538.12,341.31" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="557.4504118862565" y="353.55" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="571.4504118862565" y="363.55" text-anchor="middle">3,5</text>
+  </g>
+<g data-cell="4,5" data-terrain="Normal" data-playable="true">
+    <polygon points="641.25,322.06 674.58,341.31 674.58,379.79 641.25,399.04 607.92,379.79 607.92,341.31" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="627.2520594312823" y="353.55" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="641.2520594312823" y="363.55" text-anchor="middle">4,5</text>
+  </g>
+<g data-cell="5,5" data-terrain="Normal" data-playable="true">
+    <polygon points="711.05,322.06 744.38,341.31 744.38,379.79 711.05,399.04 677.72,379.79 677.72,341.31" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="697.0537069763079" y="353.55" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="711.0537069763079" y="363.55" text-anchor="middle">5,5</text>
+  </g>
+<g data-cell="6,5" data-terrain="forest" data-playable="false">
+    <polygon points="780.86,322.06 814.19,341.31 814.19,379.79 780.86,399.04 747.53,379.79 747.53,341.31" fill="#698d60" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="766.8553545213338" y="353.55" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="780.8553545213338" y="363.55" text-anchor="middle">6,5</text>
+  </g>
+<g data-cell="0,6" data-terrain="mountain" data-playable="false">
+    <polygon points="327.14,382.51 360.47,401.76 360.47,440.24 327.14,459.49 293.81,440.24 293.81,401.76" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="313.14464547866635" y="414" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="327.14464547866635" y="424" text-anchor="middle">0,6</text>
+  </g>
+<g data-cell="1,6" data-terrain="Normal" data-playable="true">
+    <polygon points="396.95,382.51 430.28,401.76 430.28,440.24 396.95,459.49 363.62,440.24 363.62,401.76" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="382.9462930236921" y="414" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="396.9462930236921" y="424" text-anchor="middle">1,6</text>
+  </g>
+<g data-cell="2,6" data-terrain="mountain" data-playable="false">
+    <polygon points="466.75,382.51 500.08,401.76 500.08,440.24 466.75,459.49 433.42,440.24 433.42,401.76" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="452.7479405687178" y="414" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="466.7479405687178" y="424" text-anchor="middle">2,6</text>
+  </g>
+<g data-cell="3,6" data-terrain="mountain" data-playable="false">
+    <polygon points="536.55,382.51 569.88,401.76 569.88,440.24 536.55,459.49 503.22,440.24 503.22,401.76" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="522.5495881137435" y="414" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="536.5495881137435" y="424" text-anchor="middle">3,6</text>
+  </g>
+<g data-cell="4,6" data-terrain="mountain" data-playable="false">
+    <polygon points="606.35,382.51 639.68,401.76 639.68,440.24 606.35,459.49 573.02,440.24 573.02,401.76" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="592.3512356587694" y="414" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="606.3512356587694" y="424" text-anchor="middle">4,6</text>
+  </g>
+<g data-cell="5,6" data-terrain="Normal" data-playable="true">
+    <polygon points="676.15,382.51 709.48,401.76 709.48,440.24 676.15,459.49 642.82,440.24 642.82,401.76" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="662.152883203795" y="414" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="676.152883203795" y="424" text-anchor="middle">5,6</text>
+  </g>
+<g data-cell="6,6" data-terrain="mountain" data-playable="false">
+    <polygon points="745.95,382.51 779.28,401.76 779.28,440.24 745.95,459.49 712.62,440.24 712.62,401.76" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="731.9545307488208" y="414" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="745.9545307488208" y="424" text-anchor="middle">6,6</text>
+  </g>
+<g data-cell="0,7" data-terrain="mountain" data-playable="false">
+    <polygon points="362.05,442.96 395.38,462.21 395.38,500.69 362.05,519.94 328.72,500.69 328.72,462.21" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="348.0454692511792" y="474.45" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="362.0454692511792" y="484.45" text-anchor="middle">0,7</text>
+  </g>
+<g data-cell="1,7" data-terrain="Normal" data-playable="true">
+    <polygon points="431.85,442.96 465.18,462.21 465.18,500.69 431.85,519.94 398.52,500.69 398.52,462.21" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="417.84711679620494" y="474.45" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="431.84711679620494" y="484.45" text-anchor="middle">1,7</text>
+  </g>
+<g data-cell="2,7" data-terrain="Normal" data-playable="true">
+    <polygon points="501.65,442.96 534.98,462.21 534.98,500.69 501.65,519.94 468.32,500.69 468.32,462.21" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="487.6487643412307" y="474.45" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="501.6487643412307" y="484.45" text-anchor="middle">2,7</text>
+  </g>
+<g data-cell="3,7" data-terrain="meadow" data-playable="false">
+    <polygon points="571.45,442.96 604.78,462.21 604.78,500.69 571.45,519.94 538.12,500.69 538.12,462.21" fill="#cbdcb9" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="557.4504118862565" y="474.45" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="571.4504118862565" y="484.45" text-anchor="middle">3,7</text>
+  </g>
+<g data-cell="4,7" data-terrain="Normal" data-playable="true">
+    <polygon points="641.25,442.96 674.58,462.21 674.58,500.69 641.25,519.94 607.92,500.69 607.92,462.21" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="627.2520594312823" y="474.45" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="641.2520594312823" y="484.45" text-anchor="middle">4,7</text>
+  </g>
+<g data-cell="5,7" data-terrain="Normal" data-playable="true">
+    <polygon points="711.05,442.96 744.38,462.21 744.38,500.69 711.05,519.94 677.72,500.69 677.72,462.21" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="697.0537069763079" y="474.45" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="711.0537069763079" y="484.45" text-anchor="middle">5,7</text>
+  </g>
+<g data-cell="6,7" data-terrain="forest" data-playable="false">
+    <polygon points="780.86,442.96 814.19,462.21 814.19,500.69 780.86,519.94 747.53,500.69 747.53,462.21" fill="#698d60" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="766.8553545213338" y="474.45" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="780.8553545213338" y="484.45" text-anchor="middle">6,7</text>
+  </g>
+<g data-cell="0,8" data-terrain="mountain" data-playable="false">
+    <polygon points="327.14,503.41 360.47,522.66 360.47,561.14 327.14,580.39 293.81,561.14 293.81,522.66" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="313.14464547866635" y="534.9" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="327.14464547866635" y="544.9" text-anchor="middle">0,8</text>
+  </g>
+<g data-cell="1,8" data-terrain="Normal" data-playable="true">
+    <polygon points="396.95,503.41 430.28,522.66 430.28,561.14 396.95,580.39 363.62,561.14 363.62,522.66" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="382.9462930236921" y="534.9" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="396.9462930236921" y="544.9" text-anchor="middle">1,8</text>
+  </g>
+<g data-cell="2,8" data-terrain="Normal" data-playable="true">
+    <polygon points="466.75,503.41 500.08,522.66 500.08,561.14 466.75,580.39 433.42,561.14 433.42,522.66" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="452.7479405687178" y="534.9" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="466.7479405687178" y="544.9" text-anchor="middle">2,8</text>
+  </g>
+<g data-cell="3,8" data-terrain="meadow" data-playable="false">
+    <polygon points="536.55,503.41 569.88,522.66 569.88,561.14 536.55,580.39 503.22,561.14 503.22,522.66" fill="#cbdcb9" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="522.5495881137435" y="534.9" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="536.5495881137435" y="544.9" text-anchor="middle">3,8</text>
+  </g>
+<g data-cell="4,8" data-terrain="Normal" data-playable="true">
+    <polygon points="606.35,503.41 639.68,522.66 639.68,561.14 606.35,580.39 573.02,561.14 573.02,522.66" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="592.3512356587694" y="534.9" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="606.3512356587694" y="544.9" text-anchor="middle">4,8</text>
+  </g>
+<g data-cell="5,8" data-terrain="Normal" data-playable="true">
+    <polygon points="676.15,503.41 709.48,522.66 709.48,561.14 676.15,580.39 642.82,561.14 642.82,522.66" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="662.152883203795" y="534.9" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="676.152883203795" y="544.9" text-anchor="middle">5,8</text>
+  </g>
+<g data-cell="6,8" data-terrain="mountain" data-playable="false">
+    <polygon points="745.95,503.41 779.28,522.66 779.28,561.14 745.95,580.39 712.62,561.14 712.62,522.66" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="731.9545307488208" y="534.9" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="745.9545307488208" y="544.9" text-anchor="middle">6,8</text>
+  </g>
+<g data-cell="0,9" data-terrain="mountain" data-playable="false">
+    <polygon points="362.05,563.86 395.38,583.11 395.38,621.59 362.05,640.84 328.72,621.59 328.72,583.11" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="348.0454692511792" y="595.3499999999999" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="362.0454692511792" y="605.3499999999999" text-anchor="middle">0,9</text>
+  </g>
+<g data-cell="1,9" data-terrain="Normal" data-playable="true">
+    <polygon points="431.85,563.86 465.18,583.11 465.18,621.59 431.85,640.84 398.52,621.59 398.52,583.11" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="417.84711679620494" y="595.3499999999999" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="431.84711679620494" y="605.3499999999999" text-anchor="middle">1,9</text>
+  </g>
+<g data-cell="2,9" data-terrain="Normal" data-playable="true">
+    <polygon points="501.65,563.86 534.98,583.11 534.98,621.59 501.65,640.84 468.32,621.59 468.32,583.11" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="487.6487643412307" y="595.3499999999999" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="501.6487643412307" y="605.3499999999999" text-anchor="middle">2,9</text>
+  </g>
+<g data-cell="3,9" data-terrain="Normal" data-playable="true">
+    <polygon points="571.45,563.86 604.78,583.11 604.78,621.59 571.45,640.84 538.12,621.59 538.12,583.11" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="557.4504118862565" y="595.3499999999999" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="571.4504118862565" y="605.3499999999999" text-anchor="middle">3,9</text>
+  </g>
+<g data-cell="4,9" data-terrain="Normal" data-playable="true">
+    <polygon points="641.25,563.86 674.58,583.11 674.58,621.59 641.25,640.84 607.92,621.59 607.92,583.11" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="627.2520594312823" y="595.3499999999999" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="641.2520594312823" y="605.3499999999999" text-anchor="middle">4,9</text>
+  </g>
+<g data-cell="5,9" data-terrain="Normal" data-playable="true">
+    <polygon points="711.05,563.86 744.38,583.11 744.38,621.59 711.05,640.84 677.72,621.59 677.72,583.11" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="697.0537069763079" y="595.3499999999999" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="711.0537069763079" y="605.3499999999999" text-anchor="middle">5,9</text>
+  </g>
+<g data-cell="6,9" data-terrain="meadow" data-playable="false">
+    <polygon points="780.86,563.86 814.19,583.11 814.19,621.59 780.86,640.84 747.53,621.59 747.53,583.11" fill="#cbdcb9" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="766.8553545213338" y="595.3499999999999" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="780.8553545213338" y="605.3499999999999" text-anchor="middle">6,9</text>
+  </g>
+<g data-cell="0,10" data-terrain="mountain" data-playable="false">
+    <polygon points="327.14,624.31 360.47,643.56 360.47,682.04 327.14,701.29 293.81,682.04 293.81,643.56" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="313.14464547866635" y="655.8" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="327.14464547866635" y="665.8" text-anchor="middle">0,10</text>
+  </g>
+<g data-cell="1,10" data-terrain="mountain" data-playable="false">
+    <polygon points="396.95,624.31 430.28,643.56 430.28,682.04 396.95,701.29 363.62,682.04 363.62,643.56" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="382.9462930236921" y="655.8" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="396.9462930236921" y="665.8" text-anchor="middle">1,10</text>
+  </g>
+<g data-cell="2,10" data-terrain="Normal" data-playable="true">
+    <polygon points="466.75,624.31 500.08,643.56 500.08,682.04 466.75,701.29 433.42,682.04 433.42,643.56" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="452.7479405687178" y="655.8" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="466.7479405687178" y="665.8" text-anchor="middle">2,10</text>
+  </g>
+<g data-cell="3,10" data-terrain="Normal" data-playable="true">
+    <polygon points="536.55,624.31 569.88,643.56 569.88,682.04 536.55,701.29 503.22,682.04 503.22,643.56" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="522.5495881137435" y="655.8" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="536.5495881137435" y="665.8" text-anchor="middle">3,10</text>
+  </g>
+<g data-cell="4,10" data-terrain="Normal" data-playable="true">
+    <polygon points="606.35,624.31 639.68,643.56 639.68,682.04 606.35,701.29 573.02,682.04 573.02,643.56" fill="#e8dfc3" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="592.3512356587694" y="655.8" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="606.3512356587694" y="665.8" text-anchor="middle">4,10</text>
+  </g>
+<g data-cell="5,10" data-terrain="meadow" data-playable="false">
+    <polygon points="676.15,624.31 709.48,643.56 709.48,682.04 676.15,701.29 642.82,682.04 642.82,643.56" fill="#cbdcb9" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="662.152883203795" y="655.8" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="676.152883203795" y="665.8" text-anchor="middle">5,10</text>
+  </g>
+<g data-cell="6,10" data-terrain="mountain" data-playable="false">
+    <polygon points="745.95,624.31 779.28,643.56 779.28,682.04 745.95,701.29 712.62,682.04 712.62,643.56" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="731.9545307488208" y="655.8" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="745.9545307488208" y="665.8" text-anchor="middle">6,10</text>
+  </g>
+<g data-cell="0,11" data-terrain="meadow" data-playable="false">
+    <polygon points="362.05,684.76 395.38,704.01 395.38,742.49 362.05,761.74 328.72,742.49 328.72,704.01" fill="#cbdcb9" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="348.0454692511792" y="716.2499999999999" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="362.0454692511792" y="726.2499999999999" text-anchor="middle">0,11</text>
+  </g>
+<g data-cell="1,11" data-terrain="forest" data-playable="false">
+    <polygon points="431.85,684.76 465.18,704.01 465.18,742.49 431.85,761.74 398.52,742.49 398.52,704.01" fill="#698d60" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="417.84711679620494" y="716.2499999999999" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="431.84711679620494" y="726.2499999999999" text-anchor="middle">1,11</text>
+  </g>
+<g data-cell="2,11" data-terrain="forest" data-playable="false">
+    <polygon points="501.65,684.76 534.98,704.01 534.98,742.49 501.65,761.74 468.32,742.49 468.32,704.01" fill="#698d60" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="487.6487643412307" y="716.2499999999999" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="501.6487643412307" y="726.2499999999999" text-anchor="middle">2,11</text>
+  </g>
+<g data-cell="3,11" data-terrain="Base" data-playable="true">
+    <polygon points="571.45,684.76 604.78,704.01 604.78,742.49 571.45,761.74 538.12,742.49 538.12,704.01" fill="#e9d5ae" fill-opacity="0.86" stroke="#263d33" stroke-width="1.5"/>
+    <rect x="557.4504118862565" y="716.2499999999999" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="571.4504118862565" y="726.2499999999999" text-anchor="middle">3,11</text>
+  </g>
+<g data-cell="4,11" data-terrain="meadow" data-playable="false">
+    <polygon points="641.25,684.76 674.58,704.01 674.58,742.49 641.25,761.74 607.92,742.49 607.92,704.01" fill="#cbdcb9" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="627.2520594312823" y="716.2499999999999" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="641.2520594312823" y="726.2499999999999" text-anchor="middle">4,11</text>
+  </g>
+<g data-cell="5,11" data-terrain="meadow" data-playable="false">
+    <polygon points="711.05,684.76 744.38,704.01 744.38,742.49 711.05,761.74 677.72,742.49 677.72,704.01" fill="#cbdcb9" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="697.0537069763079" y="716.2499999999999" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="711.0537069763079" y="726.2499999999999" text-anchor="middle">5,11</text>
+  </g>
+<g data-cell="6,11" data-terrain="mountain" data-playable="false">
+    <polygon points="780.86,684.76 814.19,704.01 814.19,742.49 780.86,761.74 747.53,742.49 747.53,704.01" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="766.8553545213338" y="716.2499999999999" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="780.8553545213338" y="726.2499999999999" text-anchor="middle">6,11</text>
+  </g>
+<g data-cell="0,12" data-terrain="mountain" data-playable="false">
+    <polygon points="327.14,745.21 360.47,764.46 360.47,802.94 327.14,822.19 293.81,802.94 293.81,764.46" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="313.14464547866635" y="776.6999999999999" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="327.14464547866635" y="786.6999999999999" text-anchor="middle">0,12</text>
+  </g>
+<g data-cell="1,12" data-terrain="mountain" data-playable="false">
+    <polygon points="396.95,745.21 430.28,764.46 430.28,802.94 396.95,822.19 363.62,802.94 363.62,764.46" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="382.9462930236921" y="776.6999999999999" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="396.9462930236921" y="786.6999999999999" text-anchor="middle">1,12</text>
+  </g>
+<g data-cell="2,12" data-terrain="mountain" data-playable="false">
+    <polygon points="466.75,745.21 500.08,764.46 500.08,802.94 466.75,822.19 433.42,802.94 433.42,764.46" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="452.7479405687178" y="776.6999999999999" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="466.7479405687178" y="786.6999999999999" text-anchor="middle">2,12</text>
+  </g>
+<g data-cell="3,12" data-terrain="meadow" data-playable="false">
+    <polygon points="536.55,745.21 569.88,764.46 569.88,802.94 536.55,822.19 503.22,802.94 503.22,764.46" fill="#cbdcb9" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="522.5495881137435" y="776.6999999999999" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="536.5495881137435" y="786.6999999999999" text-anchor="middle">3,12</text>
+  </g>
+<g data-cell="4,12" data-terrain="forest" data-playable="false">
+    <polygon points="606.35,745.21 639.68,764.46 639.68,802.94 606.35,822.19 573.02,802.94 573.02,764.46" fill="#698d60" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="592.3512356587694" y="776.6999999999999" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="606.3512356587694" y="786.6999999999999" text-anchor="middle">4,12</text>
+  </g>
+<g data-cell="5,12" data-terrain="meadow" data-playable="false">
+    <polygon points="676.15,745.21 709.48,764.46 709.48,802.94 676.15,822.19 642.82,802.94 642.82,764.46" fill="#cbdcb9" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="662.152883203795" y="776.6999999999999" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="676.152883203795" y="786.6999999999999" text-anchor="middle">5,12</text>
+  </g>
+<g data-cell="6,12" data-terrain="mountain" data-playable="false">
+    <polygon points="745.95,745.21 779.28,764.46 779.28,802.94 745.95,822.19 712.62,802.94 712.62,764.46" fill="#9b958b" fill-opacity="0.76" stroke="#496355" stroke-width="1"/>
+    <rect x="731.9545307488208" y="776.6999999999999" width="28" height="14" rx="4" fill="#17231e" fill-opacity=".58"/>
+    <text x="745.9545307488208" y="786.6999999999999" text-anchor="middle">6,12</text>
+  </g></g>
+  <g><g data-safe-area="enemy-hq:3,1">
+    <circle cx="571.4504118862565" cy="118.75" r="35" fill="#2b83bf" fill-opacity=".13" stroke="#2b83bf" stroke-width="4"/>
+    <circle cx="571.4504118862565" cy="118.75" r="4" fill="#17231e"/>
+    <text x="571.4504118862565" y="165.75" text-anchor="middle" class="safe-label">enemy-hq</text>
+  </g>
+<g data-safe-area="player-hq:3,11">
+    <circle cx="571.4504118862565" cy="723.2499999999999" r="35" fill="#e9782d" fill-opacity=".13" stroke="#e9782d" stroke-width="4"/>
+    <circle cx="571.4504118862565" cy="723.2499999999999" r="4" fill="#17231e"/>
+    <text x="571.4504118862565" y="770.2499999999999" text-anchor="middle" class="safe-label">player-hq</text>
+  </g>
+<g data-safe-area="guardian:1,4">
+    <circle cx="396.9462930236921" cy="300.09999999999997" r="31.433999999999997" fill="#2b83bf" fill-opacity=".13" stroke="#2b83bf" stroke-width="4"/>
+    <circle cx="396.9462930236921" cy="300.09999999999997" r="4" fill="#17231e"/>
+    <text x="396.9462930236921" y="343.534" text-anchor="middle" class="safe-label">guardian</text>
+  </g>
+<g data-safe-area="guardian:5,4">
+    <circle cx="676.152883203795" cy="300.09999999999997" r="31.433999999999997" fill="#2b83bf" fill-opacity=".13" stroke="#2b83bf" stroke-width="4"/>
+    <circle cx="676.152883203795" cy="300.09999999999997" r="4" fill="#17231e"/>
+    <text x="676.152883203795" y="343.534" text-anchor="middle" class="safe-label">guardian</text>
+  </g></g>
+  <rect x="12" y="10" width="1084" height="31" rx="9" fill="#18231d" fill-opacity=".92"/>
+  <text x="24" y="31" font-size="12" font-weight="700">HEXFRONT LEVEL05 EXACT ART GUIDE · 1108×842 · 7×13 · radius 40.30px</text>
+</svg>
