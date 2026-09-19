@@ -113,7 +113,8 @@ test('Level 4 static map core stays within the rollout budget', () => {
 
 test('Level 5 static map core stays within the rollout budget', () => {
   const core = new URL('../public/assets/maps/level05-core-v1.webp', import.meta.url);
-  assert.ok(statSync(core).size < 1_600_000, 'Level 5 static core stays below 1.6 MB');
+  const massif = new URL('../public/assets/maps/level05-central-massif-v1.webp', import.meta.url);
+  assert.ok(statSync(core).size + statSync(massif).size < 1_600_000, 'Level 5 static map layers stay below 1.6 MB combined');
 });
 
 test('production assets support GitHub Pages sub-path hosting', () => {

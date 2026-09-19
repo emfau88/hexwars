@@ -79,6 +79,12 @@ test('Level 5 map art reserves both HQs and both guardian stations', () => {
   assert.equal(LEVEL_FIVE_MAP_ART.worldRect.width, LEVEL_ONE_MAP_ART.worldRect.width);
   assert.equal(LEVEL_FIVE_MAP_ART.worldRect.height, LEVEL_ONE_MAP_ART.worldRect.height);
   assert.equal('waterFrames' in LEVEL_FIVE_MAP_ART, false);
+  assert.deepEqual(LEVEL_FIVE_MAP_ART.landscapeOverlays, [{
+    source: './assets/maps/level05-central-massif-v1.webp',
+    sourceWidth: 1024,
+    sourceHeight: 1536,
+    worldRect: { x: 418, y: 235, width: 241, height: 371 },
+  }]);
   assert.deepEqual(
     LEVEL_FIVE_MAP_ART.structureSafeAreas.map(({ kind, col, row }) => [kind, col, row]),
     [['hq', 3, 1], ['guardian', 1, 4], ['guardian', 5, 4], ['hq', 3, 11]],

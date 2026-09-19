@@ -1,5 +1,5 @@
 import { hash01 } from '../core/random';
-import { centeredAspectCrop, mapArtForLevel, type MapArtAsset, type MapArtManifest } from './MapArtManifest';
+import { centeredAspectCrop, mapArtForLevel, type MapArtAsset, type MapArtManifest, type PositionedMapArtAsset } from './MapArtManifest';
 import type { WorldGeometry, WorldTransform } from './WorldGeometry';
 
 export const MAP_ART_RENDER_LAYERS = Object.freeze([
@@ -26,7 +26,12 @@ interface LoadedAsset {
 interface LoadedMapArt {
   manifest: MapArtManifest;
   core: LoadedAsset;
+  landscapeOverlays: LoadedPositionedAsset[];
   water: LoadedAsset[];
+}
+
+interface LoadedPositionedAsset extends LoadedAsset {
+  definition: PositionedMapArtAsset;
 }
 
 export class MapArtRenderer {
@@ -46,7 +51,7 @@ export class MapArtRenderer {
     const width = loaded.core.image.naturalWidth || manifest.core.sourceWidth;
     const height = loaded.core.image.naturalHeight || manifest.core.sourceHeight;
     return {
-      enabled: true, loaded: loaded.core.loaded,
+      enabled: true, loaded: loaded.core.loaded && loaded.landscapeOverlays.every(({ loaded: ready }) => ready),
       sourceWidth: width, sourceHeight: height,
       sourceCrop: centeredAspectCrop(width, height, manifest.worldRect.width, manifest.worldRect.height),
       waterFrames: loaded.water.length,
@@ -85,6 +90,10 @@ export class MapArtRenderer {
     const entry = this.ensure(levelIndex);
     if (!entry.core.loaded) return false;
     this.drawAsset(context, entry.core, entry.manifest.worldRect);
+    for (const overlay of entry.landscapeOverlays) {
+      if (!overlay.loaded) return false;
+      this.drawPositionedAsset(context, overlay);
+    }
     return true;
   }
 
@@ -184,6 +193,7 @@ export class MapArtRenderer {
     const entry: LoadedMapArt = {
       manifest,
       core: this.loadAsset(manifest.core),
+      landscapeOverlays: (manifest.landscapeOverlays ?? []).map((asset) => this.loadAsset(asset) as LoadedPositionedAsset),
       water: (manifest.waterFrames ?? []).map((asset) => this.loadAsset(asset)),
     };
     this.loaded.set(levelIndex, entry);
@@ -207,5 +217,10 @@ export class MapArtRenderer {
   ): void {
     const crop = centeredAspectCrop(asset.image.naturalWidth, asset.image.naturalHeight, rect.width, rect.height);
     context.drawImage(asset.image, crop.x, crop.y, crop.width, crop.height, rect.x, rect.y, rect.width, rect.height);
+  }
+
+  private drawPositionedAsset(context: CanvasRenderingContext2D, asset: LoadedPositionedAsset): void {
+    const { x, y, width, height } = asset.definition.worldRect;
+    context.drawImage(asset.image, 0, 0, asset.image.naturalWidth, asset.image.naturalHeight, x, y, width, height);
   }
 }

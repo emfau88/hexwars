@@ -6,6 +6,7 @@ export interface MapArtManifest {
   levelIndex: number;
   core: MapArtAsset;
   worldRect: { x: number; y: number; width: number; height: number };
+  landscapeOverlays?: readonly PositionedMapArtAsset[];
   structureSafeAreas: readonly { kind: 'hq' | 'guardian' | 'relay' | 'node'; col: number; row: number; radius: number }[];
   backdrop: readonly [string, string, string, string];
   fog: string;
@@ -18,6 +19,10 @@ export interface MapArtAsset {
   source: string;
   sourceWidth: number;
   sourceHeight: number;
+}
+
+export interface PositionedMapArtAsset extends MapArtAsset {
+  worldRect: { x: number; y: number; width: number; height: number };
 }
 
 export interface SourceCrop {
@@ -105,6 +110,14 @@ export const LEVEL_FIVE_MAP_ART = Object.freeze({
     sourceHeight: 1093,
   },
   worldRect: { x: 0, y: 0, width: REFERENCE_WORLD_WIDTH, height: REFERENCE_WORLD_HEIGHT },
+  landscapeOverlays: [{
+    source: `${ASSET_BASE}assets/maps/level05-central-massif-v1.webp`,
+    sourceWidth: 1024,
+    sourceHeight: 1536,
+    // The opaque content maps exactly across the seven central decor cells:
+    // (3,4), (3,5), (2,6), (3,6), (4,6), (3,7), (3,8).
+    worldRect: { x: 418, y: 235, width: 241, height: 371 },
+  }],
   structureSafeAreas: [
     { kind: 'hq', col: 3, row: 1, radius: 35 },
     { kind: 'guardian', col: 1, row: 4, radius: 31.4 },
