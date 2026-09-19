@@ -249,9 +249,11 @@ export class BoardRenderer {
     this.context.lineJoin = 'round';
     for (const hex of hexes) {
       BoardRenderer.path(this.context, hex.x, hex.y, this.radius * .955);
-      const water = hex.terrain === Terrain.Decor && hex.decor === 'water';
-      this.context.strokeStyle = water ? 'rgba(224,246,242,.42)' : 'rgba(37,55,38,.28)';
-      this.context.lineWidth = water ? 1.35 : 1.2;
+      const inactive = !isPlayable(hex);
+      // Decorative and void cells never communicate an available move: keep their
+      // contour intentionally quieter than the inner playable-cell border.
+      this.context.strokeStyle = inactive ? 'rgba(29,52,43,.18)' : 'rgba(37,55,38,.28)';
+      this.context.lineWidth = inactive ? .9 : 1.2;
       this.context.stroke();
       if (isPlayable(hex)) {
         BoardRenderer.path(this.context, hex.x, hex.y, this.radius * .92);

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { Terrain, type HexState } from '../src/core/types';
 import { exposedWaterShoreEdges, fitSpriteSize } from '../src/rendering/LandscapeRenderer';
-import { centeredAspectCrop, LEVEL_FIVE_MAP_ART, LEVEL_FOUR_MAP_ART, LEVEL_ONE_MAP_ART, LEVEL_SIX_MAP_ART, LEVEL_THREE_MAP_ART, LEVEL_TWO_MAP_ART, mapArtForLevel } from '../src/rendering/MapArtManifest';
+import { centeredAspectCrop, LEVEL_FIVE_MAP_ART, LEVEL_FOUR_MAP_ART, LEVEL_ONE_MAP_ART, LEVEL_SEVEN_MAP_ART, LEVEL_SIX_MAP_ART, LEVEL_THREE_MAP_ART, LEVEL_TWO_MAP_ART, mapArtForLevel } from '../src/rendering/MapArtManifest';
 import { MAP_ART_RENDER_LAYERS } from '../src/rendering/MapArtRenderer';
 
 const water = (col: number, row: number): HexState => ({
@@ -104,6 +104,17 @@ test('Level 6 map art reserves the two corridors and maps its wetland barrier to
   assert.deepEqual(
     LEVEL_SIX_MAP_ART.structureSafeAreas.map(({ kind, col, row }) => [kind, col, row]),
     [['hq', 3, 1], ['guardian', 2, 4], ['hq', 3, 11]],
+  );
+});
+
+test('Level 7 map art keeps its relay island and both headquarters clear', () => {
+  assert.equal(mapArtForLevel(6), LEVEL_SEVEN_MAP_ART);
+  assert.equal(LEVEL_SEVEN_MAP_ART.worldRect.width, LEVEL_ONE_MAP_ART.worldRect.width);
+  assert.equal(LEVEL_SEVEN_MAP_ART.worldRect.height, LEVEL_ONE_MAP_ART.worldRect.height);
+  assert.equal('landscapeOverlays' in LEVEL_SEVEN_MAP_ART, false);
+  assert.deepEqual(
+    LEVEL_SEVEN_MAP_ART.structureSafeAreas.map(({ kind, col, row }) => [kind, col, row]),
+    [['hq', 3, 1], ['relay', 3, 6], ['hq', 3, 11]],
   );
 });
 
