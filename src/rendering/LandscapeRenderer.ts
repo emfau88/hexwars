@@ -139,7 +139,12 @@ export class LandscapeRenderer {
     const pattern = context.createPattern(image, 'repeat');
     if (!pattern) return null;
     if (typeof DOMMatrix !== 'undefined' && typeof pattern.setTransform === 'function') {
-      pattern.setTransform(new DOMMatrix().scale(.55));
+      try {
+        pattern.setTransform(new DOMMatrix().scale(.55));
+      } catch {
+        // Some legacy engines expose setTransform but only accept SVGMatrix.
+        // The unscaled pattern is a safe cosmetic fallback while map art loads.
+      }
     }
     const cached = this.patterns.get(context) ?? {};
     cached[type] = pattern; this.patterns.set(context, cached);

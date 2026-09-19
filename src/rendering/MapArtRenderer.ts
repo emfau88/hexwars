@@ -130,7 +130,9 @@ export class MapArtRenderer {
     const manifest = mapArtForLevel(levelIndex);
     if (!manifest) return;
     const fogColor = manifest.fog;
-    const margin = Math.max(12, runtime.radius * .55);
+    // Keep the playable board clear. A wider exclusion zone also prevents the
+    // atmosphere from reading as a hard, vertical frame beside the board.
+    const margin = Math.max(18, runtime.radius * 1.25);
     const safe = {
       x: runtime.bounds.x - margin,
       y: runtime.bounds.y - margin,
@@ -143,26 +145,21 @@ export class MapArtRenderer {
     context.rect(safe.x, safe.y, safe.width, safe.height);
     context.clip('evenodd');
     const topFog = context.createLinearGradient(0, 0, 0, Math.max(1, safe.y));
-    topFog.addColorStop(0, `rgba(${fogColor},.72)`); topFog.addColorStop(1, `rgba(${fogColor},0)`);
+    topFog.addColorStop(0, `rgba(${fogColor},.5)`); topFog.addColorStop(1, `rgba(${fogColor},0)`);
     context.fillStyle = topFog; context.fillRect(0, 0, width, Math.max(0, safe.y));
     const bottomStart = safe.y + safe.height;
     const bottomFog = context.createLinearGradient(0, bottomStart, 0, height);
-    bottomFog.addColorStop(0, `rgba(${fogColor},0)`); bottomFog.addColorStop(1, `rgba(${fogColor},.76)`);
+    bottomFog.addColorStop(0, `rgba(${fogColor},0)`); bottomFog.addColorStop(1, `rgba(${fogColor},.52)`);
     context.fillStyle = bottomFog; context.fillRect(0, bottomStart, width, Math.max(0, height - bottomStart));
-    const leftFog = context.createLinearGradient(0, 0, Math.max(1, safe.x), 0);
-    leftFog.addColorStop(0, `rgba(${fogColor},.55)`); leftFog.addColorStop(1, `rgba(${fogColor},0)`);
-    context.fillStyle = leftFog; context.fillRect(0, 0, Math.max(0, safe.x), height);
-    const rightStart = safe.x + safe.width;
-    const rightFog = context.createLinearGradient(rightStart, 0, width, 0);
-    rightFog.addColorStop(0, `rgba(${fogColor},0)`); rightFog.addColorStop(1, `rgba(${fogColor},.58)`);
-    context.fillStyle = rightFog; context.fillRect(rightStart, 0, Math.max(0, width - rightStart), height);
-    context.globalAlpha = .34;
+    // Side fog is intentionally radial only: horizontal linear gradients made
+    // their start/end points visible as vertical bands on brighter maps.
+    context.globalAlpha = .26;
     const drift = Math.sin(phase * .12) * Math.min(width, height) * .018;
     const fogClouds = [
-      { x: -width * .02 + drift, y: height * .22, radius: Math.max(180, height * .46) },
-      { x: width * 1.02 - drift, y: height * .3, radius: Math.max(180, height * .52) },
-      { x: width * .24, y: height * 1.05 + drift, radius: Math.max(160, width * .25) },
-      { x: width * .78, y: -height * .06 - drift, radius: Math.max(160, width * .23) },
+      { x: -width * .16 + drift, y: height * .22, radius: Math.max(220, height * .58) },
+      { x: width * 1.16 - drift, y: height * .3, radius: Math.max(220, height * .62) },
+      { x: width * .24, y: height * 1.12 + drift, radius: Math.max(190, width * .29) },
+      { x: width * .78, y: -height * .12 - drift, radius: Math.max(190, width * .27) },
     ];
     for (const cloud of fogClouds) {
       const gradient = context.createRadialGradient(cloud.x, cloud.y, 0, cloud.x, cloud.y, cloud.radius);

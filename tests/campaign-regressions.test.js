@@ -16,6 +16,7 @@ const app = read('../src/app/HexfrontApp.ts');
 const audio = read('../src/audio/AudioController.ts');
 const landscape = read('../src/rendering/LandscapeRenderer.ts');
 const atlas = read('../src/ui/CampaignAtlas.ts');
+const campaignUi = read('../src/ui/CampaignUI.ts');
 const vite = read('../vite.config.ts');
 const styles = read('../src/styles.css');
 const atlasStyles = read('../src/campaign-atlas.css');
@@ -68,19 +69,29 @@ test('pointer input is isolated and executes a real send path', () => {
   assert.match(input, /this\.state\.send\(/);
 });
 
-test('mobile portrait keeps the full terrain atlas ahead of the dossier', () => {
+test('mobile portrait keeps the level-node atlas ahead of the dossier', () => {
   assert.match(atlasStyles, /\.campaignJourney \{ order:1;/);
   assert.match(atlasStyles, /#mapCenter \{ order:2;/);
-  assert.match(atlas, /cells\(7, 4, 31/);
-  assert.match(atlas, /\['6,3',9\]/);
+  assert.match(atlas, /width = mobile \? 390 : 760/);
+  assert.match(atlas, /size:mobile \? 31 : 39/);
+  assert.match(atlas, /STATION_POSITIONS\.map/);
+  assert.doesNotMatch(atlas, /terrain\.append/);
   assert.doesNotMatch(atlas, /campaignPath/);
 });
 
 test('campaign atlas art remains decorative and within its mobile budget', () => {
-  const art = new URL('../public/assets/ui/campaign-atlas-v1.webp', import.meta.url);
+  const art = new URL('../public/assets/ui/campaign-atlas-v2.webp', import.meta.url);
   assert.ok(statSync(art).size < 1_000_000, 'Campaign atlas art stays below 1 MB');
-  assert.match(atlas, /assets\/ui\/campaign-atlas-v1\.webp/);
+  assert.match(atlas, /assets\/ui\/campaign-atlas-v2\.webp/);
   assert.match(atlas, /preserveAspectRatio:'xMidYMid slice'/);
+});
+
+test('map previews composite positioned landscape overlays over their core art', () => {
+  assert.match(campaignUi, /mapArt\?\.landscapeOverlays/);
+  assert.match(campaignUi, /rect\.x \/ REFERENCE_WORLD_WIDTH \* width/);
+  assert.match(campaignUi, /rect\.y \/ REFERENCE_WORLD_HEIGHT \* height/);
+  assert.match(campaignUi, /new Map<string, HTMLImageElement>/);
+  assert.match(campaignUi, /this\.renderPreview\(this\.selectedMenuLevel\)/);
 });
 
 test('Level 1 landscape assets stay within the mobile budget', () => {

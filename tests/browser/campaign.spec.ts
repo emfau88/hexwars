@@ -198,6 +198,28 @@ test('water rendering survives browsers without pattern transforms', async ({ pa
   expect(errors).toEqual([]);
 });
 
+test('water rendering survives browsers with incompatible pattern transforms', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await page.addInitScript(() => {
+    const trackedWindow = window as Window & { __patternTransformCalls?: number };
+    trackedWindow.__patternTransformCalls = 0;
+    Object.defineProperty(CanvasPattern.prototype, 'setTransform', {
+      configurable: true,
+      value: () => {
+        trackedWindow.__patternTransformCalls = (trackedWindow.__patternTransformCalls ?? 0) + 1;
+        throw new TypeError('Legacy browser requires SVGMatrix');
+      },
+    });
+  });
+  await page.route('**/assets/maps/level01-core-v1.png', (route) => route.abort());
+  await page.goto('/?autostart=1&level=0');
+  await expect(page.locator('#gameCanvas')).toBeVisible();
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getState().running)).toBe(true);
+  await expect.poll(() => page.evaluate(() => (window as Window & { __patternTransformCalls?: number }).__patternTransformCalls ?? 0)).toBeGreaterThan(0);
+  expect(errors).toEqual([]);
+});
+
 test('manual long-range reinforcement uses canvas input', async ({ page }) => {
   await page.goto('/?autostart=1&level=0');
   await page.evaluate(() => {

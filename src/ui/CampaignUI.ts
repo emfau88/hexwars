@@ -10,6 +10,7 @@ import { BoardRenderer } from '../rendering/BoardRenderer';
 import { LandscapeRenderer } from '../rendering/LandscapeRenderer';
 import { OWNER_COLORS } from '../rendering/palette';
 import { centeredAspectCrop, mapArtForLevel } from '../rendering/MapArtManifest';
+import { REFERENCE_WORLD_HEIGHT, REFERENCE_WORLD_WIDTH } from '../rendering/WorldGeometry';
 import { CampaignAtlas } from './CampaignAtlas';
 
 const required = <T extends Element = HTMLElement>(id: string): T => {
@@ -37,7 +38,7 @@ export class CampaignUI {
   private toastTimer = 0; private hintTimer = 0;
   private readonly previewLandscape: LandscapeRenderer;
   private readonly atlas: CampaignAtlas;
-  private readonly previewMapImages = new Map<number, HTMLImageElement>();
+  private readonly previewMapImages = new Map<string, HTMLImageElement>();
 
   constructor(private readonly callbacks: UICallbacks, private readonly i18n: I18n, visualVariant: VisualVariant = 'production') {
     this.previewLandscape = new LandscapeRenderer(() => this.renderPreview(this.selectedMenuLevel), visualVariant);
@@ -345,11 +346,23 @@ export class CampaignUI {
     const canvas = required<HTMLCanvasElement>('levelPreview'); const bounds = canvas.getBoundingClientRect(); const width = Math.max(260, Math.round(bounds.width)); const height = Math.max(170, Math.round(bounds.height));
     const ratio = Math.min(devicePixelRatio || 1, 2); canvas.width = width * ratio; canvas.height = height * ratio;
     const context = canvas.getContext('2d'); if (!context) return; context.setTransform(ratio, 0, 0, ratio, 0, 0); context.fillStyle = '#d7e3cf'; context.fillRect(0, 0, width, height);
-    const mapArt = mapArtForLevel(levelIndex); const mapImage = mapArt ? this.previewMapImage(levelIndex, mapArt.core.source) : null;
+    const mapArt = mapArtForLevel(levelIndex); const mapImage = mapArt ? this.previewMapImage(mapArt.core.source) : null;
     const hasMapArt = Boolean(mapImage?.complete && mapImage.naturalWidth);
     if (hasMapArt && mapImage) {
       const crop = centeredAspectCrop(mapImage.naturalWidth, mapImage.naturalHeight, width, height);
       context.drawImage(mapImage, crop.x, crop.y, crop.width, crop.height, 0, 0, width, height);
+      for (const overlay of mapArt?.landscapeOverlays ?? []) {
+        const image = this.previewMapImage(overlay.source);
+        if (!image.complete || !image.naturalWidth) continue;
+        const rect = overlay.worldRect;
+        context.drawImage(
+          image, 0, 0, image.naturalWidth, image.naturalHeight,
+          rect.x / REFERENCE_WORLD_WIDTH * width,
+          rect.y / REFERENCE_WORLD_HEIGHT * height,
+          rect.width / REFERENCE_WORLD_WIDTH * width,
+          rect.height / REFERENCE_WORLD_HEIGHT * height,
+        );
+      }
       context.fillStyle = 'rgba(17,31,24,.08)'; context.fillRect(0, 0, width, height);
     }
     const level = LEVELS[levelIndex]; const radius = Math.max(5, Math.min((width - 40) / ((level.cols + .5) * Math.sqrt(3)), (height - 32) / (level.rows * 1.5 + .5)));
@@ -362,7 +375,7 @@ export class CampaignUI {
         continue;
       } else {
         const colors = OWNER_COLORS[hex.owner];
-        context.globalAlpha = hasMapArt ? (hex.owner === Owner.Neutral ? .18 : .34) : 1;
+        context.globalAlpha = hasMapArt ? (hex.owner === Owner.Neutral ? .18 : .41) : 1;
         context.fillStyle = hex.owner === Owner.Neutral ? '#eee9d5' : colors.high; context.fill(); context.globalAlpha = 1;
         context.strokeStyle = hasMapArt && hex.owner === Owner.Neutral ? 'rgba(245,239,211,.78)' : colors.edge;
       }
@@ -371,13 +384,13 @@ export class CampaignUI {
     if (!hasMapArt) this.previewLandscape.drawWaterShores(context, hexes, radius, level.landscapeStyle, BoardRenderer.path);
   }
 
-  private previewMapImage(levelIndex: number, source: string): HTMLImageElement {
-    const cached = this.previewMapImages.get(levelIndex); if (cached) return cached;
+  private previewMapImage(source: string): HTMLImageElement {
+    const cached = this.previewMapImages.get(source); if (cached) return cached;
     const image = new Image(); image.decoding = 'async'; image.src = source;
     image.addEventListener('load', () => {
-      if (this.selectedMenuLevel === levelIndex && this.menu.classList.contains('show')) this.renderPreview(levelIndex);
+      if (this.menu.classList.contains('show')) this.renderPreview(this.selectedMenuLevel);
     }, { once:true });
-    this.previewMapImages.set(levelIndex, image); return image;
+    this.previewMapImages.set(source, image); return image;
   }
 
   private time(seconds: number): string { return `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`; }
