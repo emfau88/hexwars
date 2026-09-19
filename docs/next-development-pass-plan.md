@@ -1,8 +1,8 @@
 # HEXFRONT – Living Plan für den nächsten Entwicklungs-Pass
 
-**Dokumentstatus:** Lebende Arbeitsgrundlage; Bulks 0–2 abgeschlossen, Bulks 3–4 in Review
+**Dokumentstatus:** Lebende Arbeitsgrundlage; Bulks 0–2 abgeschlossen, Bulks 3–5 in Review
 **Stand:** 19. September 2026  
-**Aktueller nächster Schritt:** Bulk 4 – weitere Level-5-Spieltests und gezielte AI-/Balance-Korrektur; parallel bleibt der physische Mobile-60-FPS-Test aus Bulk 3 offen
+**Aktueller nächster Schritt:** Bulk 5 – Level 6 manuell auf Frontwahl und Dauer testen, Level-5-Balance weiter prüfen und danach über den nächsten Rollout entscheiden; Bulk 6 startet erst nach dem Bulk-5-Gate. Der physische Mobile-60-FPS-Test aus Bulk 3 bleibt parallel offen.
 **Pflegeprinzip:** Dieses Dokument wird nach jedem Bulk mit Status, Evidenz, Entscheidungen und offenen Risiken aktualisiert.
 
 ## 1. Zweck und Arbeitsregeln
@@ -177,7 +177,7 @@ Ein pauschaler Atmosphere-Pass über Grid und Structures wird verworfen, weil er
 | 2 – Doomstack-/Guardian-Regellabor | `DONE` | mittel | endlicher Shield-Pool pro aktivem Guardian ausgewählt |
 | 3 – vollständiger Level-1-Visual-PoC | `REVIEW` | strukturell größer | Pipeline, Lesbarkeit, Alignment und 60-FPS-Ziel bewiesen |
 | 4 – Structure-Domain und Guardian-Vertikalschnitt | `REVIEW` | strukturell größer | ein vollständig integrierter Guardian-Slice |
-| 5 – Guardian-Rollout und Map-Rebalance | `OPEN` | strukturell größer | mapweise belegte strategische Mehrtiefe |
+| 5 – Guardian-Rollout und Map-Rebalance | `REVIEW` | strukturell größer | mapweise belegte strategische Mehrtiefe |
 | 6 – Upgrade-Node-Experiment | `OPEN` | mittel bis strukturell größer | Investitionsentscheidung erzeugt echten Trade-off |
 | 7 – Structure-/Special-Tile-Art und Lesbarkeit | `OPEN` | mittel bis strukturell größer | Mechaniken ohne Kleinglyphen sofort unterscheidbar |
 | 8 – Map-Pipeline-Rollout | `OPEN` | strukturell größer | weitere Maps nur über bewiesene Pipeline migriert |
@@ -439,7 +439,7 @@ Ein pauschaler Atmosphere-Pass über Grid und Structures wird verworfen, weil er
 
 ### Bulk 5 – Guardian-Rollout und Map-Rebalance
 
-**Status:** `OPEN`  
+**Status:** `REVIEW`
 **Einstufung:** strukturell größer  
 **Ziel / Problem:** Guardian-System nur dort einsetzen, wo es Kartenentscheidungen verbessert, und die Kampagne nicht in zehn Varianten derselben Pflichtsequenz verwandeln.
 
@@ -480,6 +480,8 @@ Ein pauschaler Atmosphere-Pass über Grid und Structures wird verworfen, weil er
 
 **Abhängigkeit:** Bulk 4  
 **Exit Gate:** Jede Guardian-Platzierung besitzt einen dokumentierten spielerischen Grund; Kampagnendauer und Kartenrollen bleiben kontrolliert.
+
+**Zwischenstand 19. September 2026:** Der mapweise Audit hält Levels 1–4 und 7–10 vorerst guardianfrei. Level 6 erhielt einen einzelnen östlichen Guardian als kontrollierten zweiten Regelslice; im isolierten Vergleich ist die Guardian-Route rund 14 % schneller als der mögliche direkte Westweg, dieser bewahrt aber mehr Reststärke. Der einfache Doomstack gewinnt Level 6 weiter und der symmetrische Bot braucht wesentlich länger. Deshalb `REVIEW`: Level-6-Human-Test, erneute Level-5-Abnahme und Level-10-Grundbalance sind vor einem breiteren Rollout nötig. Bulk 6 bleibt bis zum erfolgreichen Gate geschlossen. Evidenz: [`docs/bulk-5-guardian-map-rollout.md`](bulk-5-guardian-map-rollout.md).
 
 ### Bulk 6 – Upgrade-Node-Experiment
 
@@ -726,6 +728,7 @@ Diese Fragen werden nicht vorzeitig durch Implementierung beantwortet:
 | 2026-09-19 | 3 | `READY` → `REVIEW` | Level-1-Core-Art, Drei-Canvas-Layering, Grid/Ownership, Wasser/Shore/Fog, Art-Guide-Export und Viewport-/Reduced-Motion-/Renderbudgettests implementiert. Physischer Mobile-60-FPS-Test bleibt offen. |
 | 2026-09-19 | 3 | `REVIEW` | Lesbarkeits-Pass aus visueller Abnahme umgesetzt: zweistufiges Vollraster, Playable-Wash, stärkere Team-Tints, Zahlenplaketten, separates HQ-Label und Reachability-Ring; Desktop/Mobile visuell geprüft und Regressionen grün. |
 | 2026-09-19 | 4 | `OPEN` → `REVIEW` | Level-5-Guardian-Slice über Structure-Domain, Combat, Supply, Growth, AI, Victory, Rendering, UI und Debug integriert. Direkte und Guardian-Routen bestehen den isolierten Ökonomietest; stationäre Guardian-AI korrigiert. Erster Human-Test bestätigt gewünschte höhere Schwierigkeit; wiederholte Balance-Abnahme bleibt offen. |
+| 2026-09-19 | 5 | `OPEN` → `REVIEW` | Alle Levelrollen geprüft; ein einzelner Level-6-Guardian testet eine andere Zwei-Front-Ökonomie. Route, AI-Profile und Kampagnendauer gemessen; Human-Test und spätere Kartenbalance offen. Bulk 6 noch nicht begonnen. |
 
 ## 12. Decision Log
 
@@ -752,6 +755,8 @@ Diese Fragen werden nicht vorzeitig durch Implementierung beantwortet:
 | D-019 | 2026-09-19 | Der Produktionsslice startet mit 48 endlichen Shieldpunkten und 8 Garnison pro Guardian | 48 war im Labor der Level-5-Break-even; der Wert bleibt bis zum Human-Playtest ausdrücklich Testtuning. |
 | D-020 | 2026-09-19 | Guardian-Capture entfernt den Restschild dauerhaft; keine Regeneration im ersten Slice | Verhindert Rückeroberungsloops und hält Zustand, Combat und visuelle Kommunikation kompakt. |
 | D-021 | 2026-09-19 | Kontrollierter Bulk-4-Vertikalschnitt trotz offenem physischem Mobile-Gate aus Bulk 3 | Die offene Prüfung betrifft ausschließlich den visuellen Level-1-Rollout; der Level-5-Regelslice nutzt keine neue Map-Art und wird nicht auf weitere Karten verteilt. Bulk 3 und 4 bleiben bis zu ihren separaten Exit-Gates in `REVIEW`. |
+| D-022 | 2026-09-19 | Level 6 erhält als zweiter kontrollierter Regelslice genau einen Guardian | Die getrennten West-/Ostkorridore erlauben eine Timing-vs-Reserve-Wahl; Level 1–4 und die Relay-Karten behalten ihre Lern-/Kartenrolle. Bulk 4 bleibt bis zur wiederholten Human-Abnahme in `REVIEW`; dies ist kein Kampagnen-Go. |
+| D-023 | 2026-09-19 | Level 10 erhält vorerst keinen Guardian; Bulk 6 bleibt nach dem Level-6-Slice geschlossen | Alle 15 Spielerprofil-Läufe verlieren im Finale bereits ohne zusätzlichen Schutz. Shield-Rollout und Upgrade-Node würden eine ungelöste Grundbalance überdecken. |
 
 ### Vorgemerktes Visual Polish nach Bulk 3
 

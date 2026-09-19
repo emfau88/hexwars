@@ -251,6 +251,17 @@ test('Level 5 exposes two active guardians and their finite HQ shield', async ({
   expect(guardians.every(({ owner, status, shield, linkedTo }) => owner === 2 && status === 'active' && shield === 48 && linkedTo === 'enemy-hq')).toBe(true);
 });
 
+test('Level 6 exposes one eastern guardian and its smaller HQ shield', async ({ page }, testInfo) => {
+  await page.goto('/?unlock=1&autostart=1&level=5');
+  await expect(page.locator('#legendGuardian')).not.toHaveAttribute('hidden');
+  if (testInfo.project.name !== 'mobile-portrait') await expect(page.locator('#legendGuardian')).toBeVisible();
+  await expect(page.locator('#ruleText')).toContainText('guardian');
+  const structures = await page.evaluate(() => window.__HEXFRONT__?.getStructures());
+  const guardians = structures?.filter(({ type }) => type === 'guardian') ?? [];
+  expect(guardians).toHaveLength(1);
+  expect(guardians[0]).toMatchObject({ id: 'enemy-guardian-east', owner: 2, col: 4, row: 4, status: 'active', shield: 36, linkedTo: 'enemy-hq' });
+});
+
 test('campaign start, restart and direct next level keep identical board geometry', async ({ page }) => {
   await page.getByRole('button', { name: 'BEGIN CAMPAIGN' }).click();
   await page.evaluate(() => window.__HEXFRONT__?.setOpponentEnabled(false));

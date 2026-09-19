@@ -3,6 +3,7 @@ import { pathToFileURL } from 'node:url';
 import { hexDistance, isPlayable } from '../src/core/hex';
 import { Owner, Terrain, type HexState } from '../src/core/types';
 import { defenseMultiplier } from '../src/systems/CombatSystem';
+import { hqShield, structureAt } from '../src/systems/StructureSystem';
 import { LEVELS } from '../src/levels';
 
 const POSITION_SCALE = { column: 50, row: 45, stagger: 25 };
@@ -77,7 +78,9 @@ function enemyBase(game: GameState): HexState | null {
 }
 
 function estimatedDefense(game: GameState, target: HexState, profile: PlayerProfile): number {
-  const exact = target.units / defenseMultiplier(target) + game.incomingTo(target, Owner.Enemy);
+  const hq = structureAt(game.structures, target, 'hq');
+  const shield = hq ? hqShield(game.structures, hq.id).current : 0;
+  const exact = target.units / defenseMultiplier(target) + shield + game.incomingTo(target, Owner.Enemy);
   return Math.max(1, Math.round(exact / profile.defenseRounding) * profile.defenseRounding);
 }
 
@@ -86,18 +89,23 @@ function attackTargets(game: GameState, profile: PlayerProfile, variant: Profile
   return game.hexes
     .filter((target) => isPlayable(target) && target.owner !== Owner.Player)
     .filter((target) => game.hexes.some((source) => source.owner === Owner.Player && source.units >= 2 && game.canSend(source, target)))
-    .sort((first, second) => scoreTarget(second, base, variant) - scoreTarget(first, base, variant))
+    .sort((first, second) => scoreTarget(game, second, base, variant) - scoreTarget(game, first, base, variant))
     .slice(0, profile.targetScanLimit);
 }
 
-function scoreTarget(target: HexState, base: HexState | null, variant: ProfileVariant): number {
+function scoreTarget(game: GameState, target: HexState, base: HexState | null, variant: ProfileVariant): number {
   const distance = base ? hexDistance(target, base) : 10;
   let score = (18 - distance) * 12 - target.units * .65;
   if (target.owner === Owner.Neutral) score += 50;
   if (target.owner === Owner.Enemy) score += 95;
   if (target.terrain === Terrain.Relay) score += 55;
   if (target.terrain === Terrain.Hill) score += 20;
-  if (target.terrain === Terrain.Base) score += 5000;
+  if (target.terrain === Terrain.Base) {
+    const hq = structureAt(game.structures, target, 'hq');
+    score += hq && hqShield(game.structures, hq.id).current > 0 ? 420 : 5000;
+  }
+  const structure = structureAt(game.structures, target, 'guardian');
+  if (structure?.status === 'active' && structure.owner === Owner.Enemy) score += 900 + structure.shield * 3;
   if (variant.id === 'pressure' && target.owner === Owner.Enemy) score += 55;
   if (variant.id === 'left') score += (6 - target.col) * 6;
   if (variant.id === 'right') score += target.col * 6;

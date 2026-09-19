@@ -10,6 +10,7 @@ import { SupplySystem } from '../src/systems/SupplySystem';
 import { absorbHqShield, buildStructures, hqShield, syncStructureCapture } from '../src/systems/StructureSystem';
 import { evaluateVictory } from '../src/systems/VictorySystem';
 import { runGuardianProductionRoute } from '../scripts/balance-guardian-production';
+import { runSplitFieldRoute } from '../scripts/balance-guardian-rollout';
 
 const positionFor = (col: number, row: number) => ({ x: col * 70 + (row % 2 ? 35 : 0), y: row * 60 });
 
@@ -98,6 +99,14 @@ test('all legacy missions still expose HQ structures while keeping terrain compa
   }
 });
 
+test('guardian rollout is deliberately limited by campaign role', () => {
+  const counts = LEVELS.map((_level, index) => {
+    const game = new GameState(); game.start(index, positionFor);
+    return game.structures.filter(({ type }) => type === 'guardian').length;
+  });
+  assert.deepEqual(counts, [0, 0, 0, 0, 2, 1, 0, 0, 0, 0]);
+});
+
 test('structure authoring rejects overlapping or unlinked guardians', () => {
   const game = new GameState(); game.start(4, positionFor);
   const first = LEVELS[4].structures![0];
@@ -118,4 +127,27 @@ test('Level 5 production guardian route beats the still-possible direct HQ rush'
   assert.ok(east.seconds < direct.seconds * .9);
   assert.equal(west.guardianStatus, 'captured');
   assert.equal(east.guardianStatus, 'captured');
+});
+
+test('Level 6 uses one eastern guardian without turning both routes into a checklist', () => {
+  const game = new GameState(); game.start(5, positionFor);
+  const guardians = game.structures.filter(({ type }) => type === 'guardian');
+  assert.equal(guardians.length, 1);
+  assert.deepEqual(guardians.map(({ id, col, row, shield, linkedTo }) => ({ id, col, row, shield, linkedTo })), [
+    { id: 'enemy-guardian-east', col: 4, row: 4, shield: 36, linkedTo: 'enemy-hq' },
+  ]);
+  assert.equal(game.hexAt(4, 4)?.units, 7);
+  assert.deepEqual(hqShield(game.structures, 'enemy-hq'), { current: 36, maximum: 36, active: 1 });
+  assert.equal(game.hexAt(2, 4)?.owner, Owner.Neutral);
+});
+
+test('Level 6 guardian route saves time while the direct western route remains viable', () => {
+  const direct = runSplitFieldRoute('west-direct');
+  const east = runSplitFieldRoute('east-guardian');
+  assert.equal(direct.result, 'victory');
+  assert.equal(east.result, 'victory');
+  assert.equal(direct.guardian, 'disabled');
+  assert.equal(east.guardian, 'captured');
+  assert.ok(east.seconds < direct.seconds * .9);
+  assert.ok(direct.playerForce > east.playerForce);
 });
