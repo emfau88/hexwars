@@ -16,9 +16,20 @@ Status: `REVIEW` – Level-6-Testkarte und Stillstandskorrektur technisch integr
 | 7 | einzelnes Insel-Relay | 0 | Das Relay ist bereits das prägende Positionsziel. |
 | 8 | zwei Relay-Flanken | 0 | Zusätzliche Guardians würden die offene Relay-Wahl überladen. |
 | 9 | drei Pässe: äußere Hills, mittleres Relay | 0 | Ein Guardian könnte einen Übergang zur Pflichtstrecke machen; erst die bestehende Routenwahl human-validieren. |
-| 10 | Finale um See und zwei Relays | 0 | Die drei Spieler-Botprofile verlieren bereits ohne Guardian alle 15 Läufe. Erst Grundbalance klären, dann Finale-Schutz erneut prüfen. |
+| 10 | Finale um See und zwei Relays | 0 | Die drei Spieler-Botprofile gewinnen aktuell nur 1 von 15 Läufen. Erst Grundbalance klären, dann Finale-Schutz erneut prüfen. |
 
 Diese Null-Entscheidungen sind bewusst, nicht die Behauptung, dass der direkte HQ-Rush auf allen Karten gelöst wäre. Der primitive Doomstack gewinnt weiterhin auf mehreren ungeschützten Karten und auch auf Level 6. Die West-Platzierung macht seine Route teurer als zuvor, verbietet Konzentration aber nicht.
+
+## Interpretationsgrenze: HQ-Rush ist nicht gleich allgemeines Doomstacking
+
+Die vorhandenen Daten tragen zwei unterschiedliche Aussagen:
+
+1. **Belegt:** Guardians verteuern den direkten konzentrierten HQ-Rush auf passenden Karten. Auf Level 5 verliert der aktuelle primitive Direktrush statt wie in der historischen Baseline zu gewinnen; im isolierten Produktionslauf sind die Guardian-Routen 15–29 % schneller als der direkte HQ-Weg. Auf Level 6 gewinnt der Doomstack weiterhin, benötigt aktuell aber 103,6 statt historisch 43,5 Sekunden; isoliert ist die Guardian-Route rund 16 % schneller.
+2. **Nicht belegt und nicht implementiert:** Guardians verhindern keine allgemeine Truppenkonzentration. Der maximale Frontstack-Anteil erreicht weiterhin 100 %. Ein Spieler darf also weiterhin eine große Armee auf einer Route bilden; nur die direkte HQ-Abkürzung erhält einen endlichen wirtschaftlichen Preis.
+
+Die historischen Vorherwerte wurden teilweise vor der späteren AI-Korrektur gemessen und sind deshalb Richtungsbelege, keine exakte isolierte Effektgröße. Für eine weitere Karte ist ein aktueller A/B-Lauf mit identischer AI, identischem Seed und identischen Profilen ohne/mit Guardian erforderlich.
+
+Folgerung: Level 7–10 erhalten **nicht automatisch** Guardians. Level 7/8 besitzen bereits Relay-Entscheidungen, Level 9 drei Passrollen und Level 10 ist für die Profile bereits sehr schwer. Weitere Guardians wären nur gerechtfertigt, wenn ein aktueller mapweiser A/B-Test zeigt, dass der Direktweg dominant bleibt, eine Guardian-Platzierung eine echte alternative Route erzeugt und die Matchdauer nicht nur pauschal anwächst.
 
 ## Level 6: technischer und ökonomischer Befund
 

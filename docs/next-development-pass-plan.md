@@ -2,7 +2,7 @@
 
 **Dokumentstatus:** Lebende Arbeitsgrundlage; Bulks 0–2 abgeschlossen, Bulks 3–5 in Review
 **Stand:** 19. September 2026  
-**Aktueller nächster Schritt:** Bulk 5 – die automatisch belegte Ostpräferenz und den symmetrischen Level-6-Timeout untersuchen, Level-5-Balance weiter prüfen und danach über den nächsten Rollout entscheiden; Bulk 6 startet erst nach dem Bulk-5-Gate. Der physische Mobile-60-FPS-Test aus Bulk 3 bleibt parallel offen.
+**Aktueller nächster Schritt:** Bulk 5 bleibt für Matchgefühl und Guardian-Tuning in `REVIEW`; der technische Timeout ist behoben. Um sichtbaren Produktfortschritt ohne voreiliges Node- oder Guardian-Rollout zu erzielen, wird der begrenzte visuelle Teilbulk **8A – Pipeline-Generalisation + Level-7-PoC** vor Bulk 6 gezogen. Der vollständige Multi-Map-Rollout und das physische Mobile-60-FPS-Gate bleiben weiterhin kontrollierte Gates.
 **Pflegeprinzip:** Dieses Dokument wird nach jedem Bulk mit Status, Evidenz, Entscheidungen und offenen Risiken aktualisiert.
 
 ## 1. Zweck und Arbeitsregeln
@@ -180,6 +180,7 @@ Ein pauschaler Atmosphere-Pass über Grid und Structures wird verworfen, weil er
 | 5 – Guardian-Rollout und Map-Rebalance | `REVIEW` | strukturell größer | mapweise belegte strategische Mehrtiefe |
 | 6 – Upgrade-Node-Experiment | `OPEN` | mittel bis strukturell größer | Investitionsentscheidung erzeugt echten Trade-off |
 | 7 – Structure-/Special-Tile-Art und Lesbarkeit | `OPEN` | mittel bis strukturell größer | Mechaniken ohne Kleinglyphen sofort unterscheidbar |
+| 8A – Pipeline-Generalisation + Level-7-PoC | `READY` | mittel | Level-1-Sondercode wird mapfähig; zweite strukturell andere Karte beweist Wiederholbarkeit |
 | 8 – Map-Pipeline-Rollout | `OPEN` | strukturell größer | weitere Maps nur über bewiesene Pipeline migriert |
 | 9 – Performance-, Accessibility- und Kongregate-Hardening | `OPEN` | mittel | Release-Budget und Plattformmatrix erfüllt |
 
@@ -582,6 +583,25 @@ Ein pauschaler Atmosphere-Pass über Grid und Structures wird verworfen, weil er
 **Einstufung:** strukturell größer  
 **Ziel / Problem:** Die bewiesene Level-1-Pipeline kontrolliert auf weitere Karten übertragen, ohne Layout und Art gleichzeitig unkontrolliert zu verändern.
 
+#### Vorgezogener Teilbulk 8A – Pipeline-Generalisation + Level-7-PoC
+
+**Status:** `READY`
+
+Die technische Grundlage existiert bereits und wird nicht neu geschrieben: drei Canvas-Schichten, uniformer World Transform, statischer Core, 15-Hz-Environment, Code-Grid, Ownership und Fallback-Landscape bleiben erhalten. Noch nicht wiederverwendbar sind jedoch `MapArtManifest`, `MapArtRenderer` und der Guide-Exporter: Sie referenzieren derzeit direkt `LEVEL_ONE_MAP_ART`, laden genau ein Bild und akzeptieren nur Levelindex 0.
+
+Deshalb wird nicht sofort Art für neun Karten produziert. Zuerst wird der Level-1-Sonderfall in eine kleine Registry/Manifest-Pipeline überführt:
+
+- Manifest per Level-ID/-Index statt einzelner `LEVEL_ONE_MAP_ART`-Konstante;
+- Core-Asset, Quellgröße, World-Rect, Backdrop-/Fog-Farben und optionale Wasserparameter pro Map;
+- Safe Areas aus HQs und vorhandenen Structures sowie reservierbare zukünftige HQ-nahe Node-Zonen;
+- generischer Guide-Export `level → exakte Geometrie/Terrain/Structures/Safe Areas`;
+- `MapArtRenderer` wählt das Manifest der aktiven Map und behält für alle nicht migrierten Levels den bisherigen Landscape-Fallback;
+- bestehende World-Transform-, Grid-, Ownership- und Environment-Pfade werden nicht dupliziert.
+
+Als zweite Beweiskarte wird **Level 7 – Relay Island** empfohlen: Sie ist gameplayseitig guardianfrei und stabil, besitzt eine deutlich andere spielbare Silhouette, zusammenhängende Wasserbereiche/Ufer und ein zentrales Relay. Damit testet sie mehr Pipelineannahmen als eine optisch ähnliche Wiesenkarte, ohne die noch offene Level-5/6-Guardianbalance in die Artentscheidung einzubauen.
+
+**8A-Gate:** Level 1 bleibt pixelidentisch ausgerichtet; Level 7 besitzt exakten Guide, Core-Art, sichtbares Code-Grid, korrekte Relay-Safe-Area, Wasser/Shore/Fog, responsive Bleed und stabile Desktop-/Mobile-Geometrie. Erst danach werden weitere Maps in kleinen Gruppen authoriert. Finale Relay-/Guardian-/Node-Grafiken dürfen später aus Bulk 7 kommen; sie bleiben separate transparente Structure-Layer und werden nicht in den Core gebacken.
+
 **Konkrete Änderungen:**
 
 - Gameplaylayouts nach Bulk 5/6 einfrieren;
@@ -618,7 +638,7 @@ Ein pauschaler Atmosphere-Pass über Grid und Structures wird verworfen, weil er
 - Kontaktbogen aller Maps zur Stil-/Perspektivkonsistenz;
 - Paketgröße und Kongregate-Uploadgrenzen.
 
-**Abhängigkeit:** bestandenes Bulk-3-Gate; stabile Gameplaylayouts aus Bulks 5/6; Assetstandard aus Bulk 7.  
+**Abhängigkeit:** Teilbulk 8A darf auf der implementierten Bulk-3-Geometrie parallel zum offenen physischen Performancegate und zum Bulk-5-Review beginnen. Der breite Rollout wartet weiterhin auf das bestandene 8A-Gate, stabile betroffene Gameplaylayouts und den Assetstandard aus Bulk 7.
 **Exit Gate:** Jede migrierte Map erfüllt dieselben Geometrie-, Lesbarkeits-, Stil- und Performancebudgets; nicht bestandene Maps bleiben auf der alten Pipeline statt den Release zu destabilisieren.
 
 ### Bulk 9 – Performance-, Accessibility- und Kongregate-Hardening
@@ -731,6 +751,7 @@ Diese Fragen werden nicht vorzeitig durch Implementierung beantwortet:
 | 2026-09-19 | 5 | `OPEN` → `REVIEW` | Alle Levelrollen geprüft; ein einzelner Level-6-Guardian testet eine andere Zwei-Front-Ökonomie. Route, AI-Profile und Kampagnendauer gemessen; Human-Test und spätere Kartenbalance offen. Bulk 6 noch nicht begonnen. |
 | 2026-09-19 | 5 | `REVIEW` | Spielerprofile um reale Flanken- und Guardian-Capture-Metriken ergänzt. Gegenprobe ohne Guardian und mit Ost-/West-Platzierung verwirft Ost als Verstärker der vorhandenen Schieflage; West liefert den besten der drei automatisierten Level-6-Vergleiche. Der zunächst offene Timeout wurde anschließend separat diagnostiziert. |
 | 2026-09-19 | 5 | `REVIEW` | Headless-Feld-/Combat-/Send-Diagnose identifiziert den Timeout als globalen Sechs-Hex-HQ-Fehlalarm: 84/84 späte Aktionen waren Rücktransporte ohne Kampf. Notfallradius auf echte Nahgefahr (≤3) plus direkte HQ-Incomings begrenzt; identischer Lauf endet nun nach 239,2 s. Guardian-Dauer und Human-Abnahme bleiben offen. |
+| 2026-09-19 | 8A | `OPEN` → `READY` | Visuelle Arbeit kontrolliert vorgezogen: vorhandene Level-1-Pipeline zuerst von den Hardcodings lösen und an Level 7 als andersartiger Relay-/Wasserkarte beweisen; noch kein unkontrollierter Neun-Map-Artrollout. |
 
 ## 12. Decision Log
 
@@ -758,9 +779,10 @@ Diese Fragen werden nicht vorzeitig durch Implementierung beantwortet:
 | D-020 | 2026-09-19 | Guardian-Capture entfernt den Restschild dauerhaft; keine Regeneration im ersten Slice | Verhindert Rückeroberungsloops und hält Zustand, Combat und visuelle Kommunikation kompakt. |
 | D-021 | 2026-09-19 | Kontrollierter Bulk-4-Vertikalschnitt trotz offenem physischem Mobile-Gate aus Bulk 3 | Die offene Prüfung betrifft ausschließlich den visuellen Level-1-Rollout; der Level-5-Regelslice nutzt keine neue Map-Art und wird nicht auf weitere Karten verteilt. Bulk 3 und 4 bleiben bis zu ihren separaten Exit-Gates in `REVIEW`. |
 | D-022 | 2026-09-19 | Level 6 erhält als zweiter kontrollierter Regelslice genau einen Guardian | Die getrennten West-/Ostkorridore erlauben eine Timing-vs-Reserve-Wahl; Level 1–4 und die Relay-Karten behalten ihre Lern-/Kartenrolle. Bulk 4 bleibt bis zur wiederholten Human-Abnahme in `REVIEW`; dies ist kein Kampagnen-Go. |
-| D-023 | 2026-09-19 | Level 10 erhält vorerst keinen Guardian; Bulk 6 bleibt nach dem Level-6-Slice geschlossen | Alle 15 Spielerprofil-Läufe verlieren im Finale bereits ohne zusätzlichen Schutz. Shield-Rollout und Upgrade-Node würden eine ungelöste Grundbalance überdecken. |
-| D-024 | 2026-09-19 | Level-6-Guardian von Ost nach West verschoben; Bulk 5 bleibt `REVIEW` | Die drei Spielerprofile zeigen bereits ohne Guardian Ostpräferenz. Der Ost-Guardian verstärkte sie; West verbesserte die schwächere Route. Der symmetrische Timeout und häufige spätere Guardian-Captures nach Ost-Eröffnung verhindern ein voreiliges Go. |
+| D-023 | 2026-09-19 | Level 10 erhält vorerst keinen Guardian; Bulk 6 bleibt nach dem Level-6-Slice geschlossen | Zum Entscheidungszeitpunkt verloren 15/15 Spielerprofile; nach der späteren AI-Korrektur bleiben 14/15 Niederlagen. Shield-Rollout und Upgrade-Node würden weiterhin eine ungelöste Grundbalance überdecken. |
+| D-024 | 2026-09-19 | Level-6-Guardian von Ost nach West verschoben; Bulk 5 bleibt `REVIEW` | Die drei Spielerprofile zeigen bereits ohne Guardian Ostpräferenz. Der Ost-Guardian verstärkte sie; West verbesserte die schwächere Route. Der damalige Timeout wurde später durch D-025 technisch gelöst; Matchdauer und häufige Guardian-Captures nach Ost-Eröffnung bleiben Reviewgründe. |
 | D-025 | 2026-09-19 | HQ-`counter` reagiert auf direkte Incomings oder starke Gegner bis drei statt pauschal sechs Hex Entfernung | Der breite Alarm entleerte auf Level 6 beide Fronten dauerhaft ins eigene HQ. Die engere Regel bewahrt echte Basisverteidigung, beendet den deterministischen Stillstand und lässt entfernte Fronten bei Attack/Breakout/Logistics. |
+| D-026 | 2026-09-19 | Visuelle Pipeline-Generalisation mit Level 7 wird vor das Upgrade-Node-Experiment gezogen | Die Level-1-Pipeline ist technisch vorhanden, aber noch hart auf eine Map verdrahtet. Eine zweite andersartige Karte liefert mehr Erkenntnis und sichtbaren Nutzen als ein voreiliger Node-Slice; neun Art-Cores vor dieser Generalisierung würden unnötiges Rework riskieren. |
 
 ### Vorgemerktes Visual Polish nach Bulk 3
 
