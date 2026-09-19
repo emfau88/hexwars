@@ -7,7 +7,7 @@ export interface MapArtManifest {
   core: MapArtAsset;
   worldRect: { x: number; y: number; width: number; height: number };
   landscapeOverlays?: readonly PositionedMapArtAsset[];
-  structureSafeAreas: readonly { kind: 'hq' | 'guardian' | 'relay' | 'node'; col: number; row: number; radius: number }[];
+  structureSafeAreas: readonly { kind: 'hq' | 'guardian' | 'relay' | 'node' | 'hill'; col: number; row: number; radius: number }[];
   backdrop: readonly [string, string, string, string];
   fog: string;
   waterFrames?: readonly MapArtAsset[];
@@ -170,6 +170,25 @@ export const LEVEL_SEVEN_MAP_ART = Object.freeze({
   fog: '218,233,219',
 } as const satisfies MapArtManifest);
 
+export const LEVEL_EIGHT_MAP_ART = Object.freeze({
+  levelIndex: 7,
+  core: {
+    source: `${ASSET_BASE}assets/maps/level08-core-v1.webp`,
+    sourceWidth: 1438,
+    sourceHeight: 1093,
+  },
+  worldRect: { x: 0, y: 0, width: REFERENCE_WORLD_WIDTH, height: REFERENCE_WORLD_HEIGHT },
+  structureSafeAreas: [
+    { kind: 'hq', col: 3, row: 1, radius: 35 },
+    { kind: 'relay', col: 1, row: 6, radius: 30 },
+    { kind: 'hill', col: 3, row: 6, radius: 30 },
+    { kind: 'relay', col: 5, row: 6, radius: 30 },
+    { kind: 'hq', col: 3, row: 11, radius: 35 },
+  ],
+  backdrop: ['#45644f', '#829565', '#b0a96f', '#536d53'],
+  fog: '227,234,216',
+} as const satisfies MapArtManifest);
+
 export const MAP_ART_MANIFESTS: readonly MapArtManifest[] = Object.freeze([
   LEVEL_ONE_MAP_ART,
   LEVEL_TWO_MAP_ART,
@@ -178,6 +197,7 @@ export const MAP_ART_MANIFESTS: readonly MapArtManifest[] = Object.freeze([
   LEVEL_FIVE_MAP_ART,
   LEVEL_SIX_MAP_ART,
   LEVEL_SEVEN_MAP_ART,
+  LEVEL_EIGHT_MAP_ART,
 ]);
 
 export function mapArtForLevel(levelIndex: number): MapArtManifest | null {
