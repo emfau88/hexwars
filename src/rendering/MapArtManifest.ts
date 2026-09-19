@@ -81,10 +81,27 @@ export const LEVEL_THREE_MAP_ART = Object.freeze({
   fog: '224,231,210',
 } as const satisfies MapArtManifest);
 
+export const LEVEL_FOUR_MAP_ART = Object.freeze({
+  levelIndex: 3,
+  core: {
+    source: `${ASSET_BASE}assets/maps/level04-core-v1.webp`,
+    sourceWidth: 1438,
+    sourceHeight: 1093,
+  },
+  worldRect: { x: 0, y: 0, width: REFERENCE_WORLD_WIDTH, height: REFERENCE_WORLD_HEIGHT },
+  structureSafeAreas: [
+    { kind: 'hq', col: 3, row: 1, radius: 35 },
+    { kind: 'hq', col: 3, row: 11, radius: 35 },
+  ],
+  backdrop: ['#3d5e49', '#7e8754', '#a3925b', '#53634b'],
+  fog: '224,226,211',
+} as const satisfies MapArtManifest);
+
 export const MAP_ART_MANIFESTS: readonly MapArtManifest[] = Object.freeze([
   LEVEL_ONE_MAP_ART,
   LEVEL_TWO_MAP_ART,
   LEVEL_THREE_MAP_ART,
+  LEVEL_FOUR_MAP_ART,
 ]);
 
 export function mapArtForLevel(levelIndex: number): MapArtManifest | null {
