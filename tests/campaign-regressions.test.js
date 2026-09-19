@@ -86,6 +86,13 @@ test('campaign atlas art remains decorative and within its mobile budget', () =>
   assert.match(atlas, /preserveAspectRatio:'xMidYMid slice'/);
 });
 
+test('unfinished maps stay visible but cannot be launched from campaign UI', () => {
+  assert.match(atlas, /RELEASED_CAMPAIGN_LEVELS = 8/);
+  assert.match(atlas, /comingSoon = levelIndex >= RELEASED_CAMPAIGN_LEVELS/);
+  assert.match(campaignUi, /available = !comingSoon && unlocked/);
+  assert.match(campaignUi, /nextButton\.hidden = !victory \|\| finalLevel \|\| !hasReleasedNextLevel/);
+});
+
 test('map previews composite positioned landscape overlays over their core art', () => {
   assert.match(campaignUi, /mapArt\?\.landscapeOverlays/);
   assert.match(campaignUi, /rect\.x \/ REFERENCE_WORLD_WIDTH \* width/);

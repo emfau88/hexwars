@@ -5,6 +5,7 @@ import { LEVELS } from '../levels';
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const HTML_NS = 'http://www.w3.org/1999/xhtml';
 const ATLAS_ASPECT = 1468 / 1096;
+export const RELEASED_CAMPAIGN_LEVELS = 8;
 
 type AtlasPoint = { x: number; y: number };
 type AtlasStation = AtlasPoint & { levelIndex: number };
@@ -74,15 +75,16 @@ export class CampaignAtlas {
         x:x - layout.size * .94, y:y - layout.size * .94, width:layout.size * 1.88, height:layout.size * 1.88,
       });
       const button = document.createElementNS(HTML_NS, 'button') as HTMLButtonElement;
-      const available = unlocked(levelIndex); const complete = progress.completed[levelIndex];
+      const comingSoon = levelIndex >= RELEASED_CAMPAIGN_LEVELS;
+      const available = !comingSoon && unlocked(levelIndex); const complete = !comingSoon && progress.completed[levelIndex];
       button.type = 'button'; button.dataset.level = String(levelIndex); button.dataset.act = String(levelIndex < 3 ? 0 : levelIndex < 6 ? 1 : 2);
-      button.className = `mapNode ${available ? 'unlocked' : 'locked'}${complete ? ' completed' : ''}${selected === levelIndex ? ' current' : ''}`;
+      button.className = `mapNode ${available ? 'unlocked' : 'locked'}${comingSoon ? ' comingSoon' : ''}${complete ? ' completed' : ''}${selected === levelIndex ? ' current' : ''}`;
       button.setAttribute('aria-label', this.i18n.t('campaign.levelAria', {
         level: levelIndex + 1,
         name: this.i18n.text(LEVELS[levelIndex].short),
-        locked: available ? '' : this.i18n.t('campaign.levelLockedSuffix'),
+        locked: available ? '' : this.i18n.t(comingSoon ? 'campaign.levelComingSoonSuffix' : 'campaign.levelLockedSuffix'),
       }));
-      button.innerHTML = `<span class="atlasLevelNumber">${String(levelIndex + 1).padStart(2, '0')}</span><span class="atlasLevelState" aria-hidden="true">${complete ? '✓' : available ? '•' : '·'}</span>`;
+      button.innerHTML = `<span class="atlasLevelNumber">${String(levelIndex + 1).padStart(2, '0')}</span><span class="atlasLevelState" aria-hidden="true">${complete ? '✓' : available ? '•' : '·'}</span>${comingSoon ? `<span class="atlasComingSoon" aria-hidden="true">${this.i18n.t('campaign.nodeComingSoon')}</span>` : ''}`;
       button.addEventListener('click', () => onSelect(levelIndex));
       foreign.append(button); nodes.append(foreign);
     }

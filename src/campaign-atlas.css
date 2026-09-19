@@ -98,6 +98,7 @@
 #campaignAtlasSvg .mapNode[data-act="1"] { background:#a89563; }
 #campaignAtlasSvg .mapNode[data-act="2"] { background:#b86f49; }
 #campaignAtlasSvg .mapNode.locked { cursor:pointer; opacity:.66; filter:saturate(.55); }
+#campaignAtlasSvg .mapNode.comingSoon { opacity:.78; filter:saturate(.42); }
 #campaignAtlasSvg .mapNode.completed { background:#658862; opacity:1; filter:none; }
 #campaignAtlasSvg .mapNode.completed::before { background:#bed3aa; }
 #campaignAtlasSvg .mapNode.current { transform:none; background:#c66535; color:#4c2a19; filter:none; }
@@ -116,6 +117,11 @@
 }
 #campaignAtlasSvg .mapNode.completed .atlasLevelState { color:#f5f3df; background:#658862; }
 #campaignAtlasSvg .mapNode.current .atlasLevelState { color:#6a361d; }
+#campaignAtlasSvg .atlasComingSoon {
+  position:absolute; z-index:3; left:50%; bottom:6%; transform:translateX(-50%); min-width:40px; padding:4px 7px;
+  color:#fff9e8; border:1px solid rgba(255,249,232,.52); border-radius:5px; background:rgba(28,37,32,.92);
+  box-shadow:0 2px 5px rgba(12,18,15,.24); font:850 11px/1 var(--font-ui); letter-spacing:.5px; white-space:nowrap;
+}
 
 #campaignMenu #mapCenter {
   position:relative; inset:auto; width:auto; max-width:none; padding:0; transform:none;
@@ -246,6 +252,7 @@
   #campaignMenu .atlasHint { display:none; }
   #campaignAtlasSvg .atlasLevelNumber { font-size:16px; }
   #campaignAtlasSvg .atlasLevelState { width:11px; height:11px; font-size:7px; }
+  #campaignAtlasSvg .atlasComingSoon { min-width:36px; padding:4px 5px; font-size:10px; }
   #campaignMenu #mapCenter { order:2; display:grid; border-radius:16px; scroll-margin-top:64px; }
   #campaignMenu .dossierHeader { min-height:66px; padding:14px 13px 10px; }
   #campaignMenu .missionLaunch { gap:7px; padding:0 13px 12px; }

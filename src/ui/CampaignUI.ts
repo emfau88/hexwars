@@ -11,7 +11,7 @@ import { LandscapeRenderer } from '../rendering/LandscapeRenderer';
 import { OWNER_COLORS } from '../rendering/palette';
 import { centeredAspectCrop, mapArtForLevel } from '../rendering/MapArtManifest';
 import { REFERENCE_WORLD_HEIGHT, REFERENCE_WORLD_WIDTH } from '../rendering/WorldGeometry';
-import { CampaignAtlas } from './CampaignAtlas';
+import { CampaignAtlas, RELEASED_CAMPAIGN_LEVELS } from './CampaignAtlas';
 
 const required = <T extends Element = HTMLElement>(id: string): T => {
   const element = document.getElementById(id);
@@ -184,13 +184,16 @@ export class CampaignUI {
     required('menuLevelRule').textContent = this.i18n.text(level.rule);
     required('menuDifficulty').textContent = this.i18n.text(act.difficulty);
     required('menuPreviewLabel').textContent = this.i18n.t('campaign.preview', { level: String(this.selectedMenuLevel + 1).padStart(2, '0') });
-    const done = progress.completed[this.selectedMenuLevel]; const available = unlocked(this.selectedMenuLevel); const state = required('menuLevelState');
-    state.textContent = this.i18n.t(done ? 'campaign.state.completed' : available ? 'campaign.state.ready' : 'campaign.state.locked');
+    const comingSoon = this.selectedMenuLevel >= RELEASED_CAMPAIGN_LEVELS;
+    const done = progress.completed[this.selectedMenuLevel]; const available = !comingSoon && unlocked(this.selectedMenuLevel); const state = required('menuLevelState');
+    state.textContent = this.i18n.t(comingSoon ? 'campaign.state.comingSoon' : done ? 'campaign.state.completed' : available ? 'campaign.state.ready' : 'campaign.state.locked');
     state.classList.toggle('ready', available); state.classList.toggle('locked', !available);
     required('menuBestTime').textContent = done && progress.best[this.selectedMenuLevel]
       ? this.i18n.t('campaign.bestTime', { time:this.time(progress.best[this.selectedMenuLevel]) })
       : this.i18n.t(done ? 'campaign.state.completed' : 'campaign.notCompleted');
-    required('menuLockHint').hidden = available; const play = required<HTMLButtonElement>('playLevelBtn'); play.disabled = !available;
+    const lockHint = required('menuLockHint');
+    lockHint.hidden = available; lockHint.textContent = this.i18n.t(comingSoon ? 'campaign.comingSoonHint' : 'campaign.lockHint');
+    const play = required<HTMLButtonElement>('playLevelBtn'); play.disabled = !available;
     const introducesFullSend = this.selectedMenuLevel === 1 && available && !done && !progress.fullSendUsed;
     const introducesGroupSend = this.selectedMenuLevel === 3 && available && !done;
     const featureUnlock = required('menuFeatureUnlock');
@@ -198,7 +201,9 @@ export class CampaignUI {
     featureUnlock.textContent = introducesFullSend
       ? this.i18n.t('campaign.unlock.allBadge')
       : introducesGroupSend ? this.i18n.t('campaign.unlock.groupBadge') : '';
-    play.textContent = this.i18n.t(done
+    play.textContent = this.i18n.t(comingSoon
+      ? 'campaign.play.comingSoon'
+      : done
       ? 'campaign.play.again'
       : !available
         ? 'campaign.play.locked'
@@ -285,6 +290,7 @@ export class CampaignUI {
     this.lastProgress = progress;
     const victory = state.result === 'victory';
     const finalLevel = state.currentLevel >= LEVELS.length - 1;
+    const hasReleasedNextLevel = state.currentLevel + 1 < RELEASED_CAMPAIGN_LEVELS;
     const fullSendUnlock = victory && state.currentLevel === 0 && showFullSendUnlock;
     this.fullSendUnlockVisible = fullSendUnlock;
     required('verdict').textContent = this.i18n.t(state.result === 'victory' ? 'result.victory' : 'result.defeat');
@@ -296,7 +302,7 @@ export class CampaignUI {
     const best = progress.best[state.currentLevel];
     required('resultBest').textContent = best ? this.time(best) : '—';
     const advance = required('resultAdvance');
-    advance.hidden = !victory;
+    advance.hidden = !victory || (!finalLevel && !hasReleasedNextLevel);
     advance.classList.toggle('commandUnlock', fullSendUnlock);
     required('resultUnlockVisual').toggleAttribute('hidden', !fullSendUnlock);
     if (fullSendUnlock) {
@@ -315,7 +321,7 @@ export class CampaignUI {
       required('resultAdvanceRule').textContent = this.i18n.text(next.rule);
     }
     const nextButton = required<HTMLButtonElement>('nextLevelBtn');
-    nextButton.hidden = !victory || finalLevel;
+    nextButton.hidden = !victory || finalLevel || !hasReleasedNextLevel;
     nextButton.textContent = this.i18n.t(fullSendUnlock ? 'result.unlock.continue' : 'result.next');
     this.overlay.classList.toggle('victory', victory);
     this.overlay.classList.toggle('defeat', !victory);
