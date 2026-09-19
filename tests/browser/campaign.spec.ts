@@ -239,6 +239,18 @@ test('all ten campaign levels start with a valid board in this viewport', async 
   }
 });
 
+test('Level 5 exposes two active guardians and their finite HQ shield', async ({ page }, testInfo) => {
+  await page.goto('/?autostart=1&level=4');
+  await expect(page.locator('#legendGuardian')).not.toHaveAttribute('hidden');
+  if (testInfo.project.name === 'mobile-portrait') await expect(page.locator('#hint')).toContainText('48 HQ shield');
+  else await expect(page.locator('#legendGuardian')).toBeVisible();
+  await expect(page.locator('#ruleText')).toContainText('48 HQ shield');
+  const structures = await page.evaluate(() => window.__HEXFRONT__?.getStructures());
+  const guardians = structures?.filter(({ type }) => type === 'guardian') ?? [];
+  expect(guardians).toHaveLength(2);
+  expect(guardians.every(({ owner, status, shield, linkedTo }) => owner === 2 && status === 'active' && shield === 48 && linkedTo === 'enemy-hq')).toBe(true);
+});
+
 test('campaign start, restart and direct next level keep identical board geometry', async ({ page }) => {
   await page.getByRole('button', { name: 'BEGIN CAMPAIGN' }).click();
   await page.evaluate(() => window.__HEXFRONT__?.setOpponentEnabled(false));

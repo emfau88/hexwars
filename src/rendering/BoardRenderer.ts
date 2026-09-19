@@ -1,7 +1,8 @@
 import type { GameState } from '../core/GameState';
 import { isPlayable } from '../core/hex';
-import { Owner, Terrain, type HexState, type Point, type SendMode, type VisualVariant } from '../core/types';
+import { Owner, Terrain, type HexState, type Point, type SendMode, type StructureState, type VisualVariant } from '../core/types';
 import { terrainCapacity } from '../systems/GrowthSystem';
+import { hqShield } from '../systems/StructureSystem';
 import { EffectsRenderer } from './EffectsRenderer';
 import { LandscapeRenderer } from './LandscapeRenderer';
 import { LEVEL_ONE_RENDER_LAYERS, MapArtRenderer } from './MapArtRenderer';
@@ -24,6 +25,7 @@ export class BoardRenderer {
   dragPosition: Point | null = null;
   sendMode: SendMode = 'half';
   sendLabel = 'SEND';
+  shieldLabel = 'SHIELD';
   readonly effects = new EffectsRenderer();
   private runtimeGeometry: WorldGeometry = calculateWorldGeometry(1, 1);
   private worldTransform: WorldTransform = transformBetween(REFERENCE_WORLD_GEOMETRY, this.runtimeGeometry);
@@ -167,6 +169,7 @@ export class BoardRenderer {
       for (const hex of state.hexes) this.drawLegacyHex(state, hex, reachable);
       this.landscape.drawWaterShores(this.context, state.hexes, this.radius, state.level.landscapeStyle, BoardRenderer.path, phase);
     }
+    this.drawStrategicStructures(state, phase);
     for (const army of state.armies) {
       this.context.save(); this.context.globalAlpha = army.kind === 'supply' ? .24 : .18; this.context.strokeStyle = army.kind === 'supply' ? '#e8c07d' : OWNER_COLORS[army.owner].edge;
       this.context.lineWidth = army.kind === 'supply' ? 2 : 1.5; this.context.beginPath(); this.context.moveTo(army.x0, army.y0); this.context.lineTo(army.cx, army.cy); this.context.stroke(); this.context.restore();
@@ -218,9 +221,11 @@ export class BoardRenderer {
       this.context.fillStyle = 'rgba(213,106,97,.12)'; this.context.fill();
     }
     if (this.selected === hex) { BoardRenderer.path(this.context, hex.x, hex.y, this.radius * .99); this.context.strokeStyle = '#e5a33d'; this.context.lineWidth = 3; this.context.stroke(); }
-    this.terrainGlyph(hex);
-    this.context.fillStyle = colors.text; this.context.font = `700 ${Math.max(11, Math.floor(this.radius * .52))}px system-ui,sans-serif`;
-    this.context.textAlign = 'center'; this.context.textBaseline = 'middle'; this.context.fillText(String(Math.floor(hex.units)), hex.x, hex.y - this.radius * .04);
+    if (state.structureAt(hex.col, hex.row)?.type !== 'guardian') {
+      this.terrainGlyph(hex);
+      this.context.fillStyle = colors.text; this.context.font = `700 ${Math.max(11, Math.floor(this.radius * .52))}px system-ui,sans-serif`;
+      this.context.textAlign = 'center'; this.context.textBaseline = 'middle'; this.context.fillText(String(Math.floor(hex.units)), hex.x, hex.y - this.radius * .04);
+    }
   }
 
   private drawGrid(hexes: readonly HexState[]): void {
@@ -305,6 +310,75 @@ export class BoardRenderer {
     this.context.beginPath(); this.context.arc(0, -size * .035, size * .16, 0, Math.PI * 2);
     this.context.fillStyle = '#aab1a4'; this.context.fill();
     this.context.strokeStyle = 'rgba(244,240,221,.7)'; this.context.lineWidth = 1.2; this.context.stroke();
+    this.context.restore();
+  }
+
+  private drawStrategicStructures(state: GameState, phase: number): void {
+    const byId = new Map(state.structures.map((structure) => [structure.id, structure]));
+    const byCell = new Map(state.hexes.map((hex) => [`${hex.col},${hex.row}`, hex]));
+    this.context.save();
+    for (const guardian of state.structures.filter((structure) => structure.type === 'guardian')) {
+      if (!guardian.linkedTo) continue;
+      const hq = byId.get(guardian.linkedTo); const from = byCell.get(`${guardian.col},${guardian.row}`); const to = hq && byCell.get(`${hq.col},${hq.row}`);
+      if (!from || !to) continue;
+      const active = guardian.status === 'active' && guardian.shield > 0;
+      this.context.beginPath(); this.context.moveTo(from.x, from.y); this.context.lineTo(to.x, to.y);
+      this.context.strokeStyle = active ? OWNER_COLORS[guardian.owner].high : 'rgba(111,119,112,.55)';
+      this.context.globalAlpha = active ? .46 + Math.sin(phase * 2.1 + guardian.col) * .08 : .28;
+      this.context.lineWidth = active ? 2.2 : 1.3; this.context.setLineDash(active ? [7, 6] : [3, 7]); this.context.stroke();
+    }
+    this.context.setLineDash([]); this.context.globalAlpha = 1;
+    for (const structure of state.structures) {
+      const hex = byCell.get(`${structure.col},${structure.row}`);
+      if (!hex) continue;
+      if (structure.type === 'guardian') {
+        this.drawGuardian(structure, hex, phase);
+        this.drawNumberBadge(hex.owner, Math.floor(hex.units), hex.x, hex.y + this.radius * .62);
+      } else if (structure.type === 'hq') {
+        const shield = hqShield(state.structures, structure.id);
+        if (shield.current > 0) this.drawHqShield(hex, structure, shield.current, shield.maximum, phase);
+      }
+    }
+    this.context.restore();
+  }
+
+  private drawGuardian(structure: StructureState, hex: HexState, phase: number): void {
+    const colors = OWNER_COLORS[structure.owner]; const size = this.radius; const active = structure.status === 'active' && structure.shield > 0;
+    this.context.save(); this.context.translate(hex.x, hex.y - size * .04);
+    this.context.fillStyle = 'rgba(13,20,18,.38)'; this.context.beginPath(); this.context.ellipse(0, size * .18, size * .4, size * .22, 0, 0, Math.PI * 2); this.context.fill();
+    this.context.beginPath();
+    for (let index = 0; index < 6; index += 1) {
+      const angle = (index * Math.PI) / 3 - Math.PI / 2; const radius = size * .33;
+      const x = Math.cos(angle) * radius; const y = Math.sin(angle) * radius * .72;
+      if (index) this.context.lineTo(x, y); else this.context.moveTo(x, y);
+    }
+    this.context.closePath(); this.context.fillStyle = '#46514e'; this.context.fill();
+    this.context.strokeStyle = active ? colors.edge : '#788079'; this.context.lineWidth = active ? 3 : 1.8; this.context.stroke();
+    this.context.fillStyle = '#89918a'; this.context.fillRect(-size * .13, -size * .28, size * .26, size * .39);
+    this.context.strokeStyle = '#303a37'; this.context.lineWidth = 1.2; this.context.strokeRect(-size * .13, -size * .28, size * .26, size * .39);
+    this.context.beginPath(); this.context.arc(0, -size * .24, size * .11, 0, Math.PI * 2);
+    this.context.fillStyle = active ? colors.high : '#69716b'; this.context.fill();
+    if (active) {
+      this.context.beginPath(); this.context.arc(0, 0, size * (.41 + Math.sin(phase * 2.4 + structure.col) * .018), 0, Math.PI * 2);
+      this.context.strokeStyle = colors.high; this.context.globalAlpha = .58; this.context.lineWidth = 2; this.context.stroke(); this.context.globalAlpha = 1;
+    } else {
+      this.context.strokeStyle = '#d9c8a7'; this.context.lineWidth = 2;
+      this.context.beginPath(); this.context.moveTo(-size * .1, -size * .08); this.context.lineTo(size * .1, size * .09);
+      this.context.moveTo(size * .1, -size * .08); this.context.lineTo(-size * .1, size * .09); this.context.stroke();
+    }
+    this.context.restore();
+  }
+
+  private drawHqShield(hex: HexState, structure: StructureState, current: number, maximum: number, phase: number): void {
+    const colors = OWNER_COLORS[structure.owner]; const ratio = maximum > 0 ? current / maximum : 0;
+    this.context.save();
+    this.context.beginPath(); this.context.arc(hex.x, hex.y, this.radius * (1.02 + Math.sin(phase * 1.8) * .012), 0, Math.PI * 2);
+    this.context.fillStyle = colors.low; this.context.globalAlpha = .1 + ratio * .08; this.context.fill();
+    this.context.strokeStyle = colors.high; this.context.globalAlpha = .62 + ratio * .2; this.context.lineWidth = 2.8; this.context.stroke();
+    const label = `${this.shieldLabel} ${Math.ceil(current)}`; this.context.font = `800 ${Math.max(9, Math.floor(this.radius * .24))}px ui-monospace,monospace`;
+    const width = this.context.measureText(label).width + 12; const y = hex.y - this.radius * 1.04;
+    this.context.globalAlpha = .94; this.context.fillStyle = 'rgba(17,24,22,.92)'; this.context.fillRect(hex.x - width / 2, y - 9, width, 18);
+    this.context.fillStyle = '#eef4ed'; this.context.textAlign = 'center'; this.context.textBaseline = 'middle'; this.context.fillText(label, hex.x, y);
     this.context.restore();
   }
 

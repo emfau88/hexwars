@@ -1,5 +1,5 @@
 import type { GameState } from '../core/GameState';
-import { Owner, type HexState } from '../core/types';
+import { Owner, type HexState, type StructureState } from '../core/types';
 import type { WorldGeometry, WorldTransform } from '../rendering/WorldGeometry';
 import type { BoardRenderer } from '../rendering/BoardRenderer';
 
@@ -10,6 +10,7 @@ export interface HexfrontDebugApi {
   setOpponentEnabled(value: boolean): void;
   getState(): ReturnType<GameState['snapshot']> & { progress: unknown };
   getBoard(): Array<Pick<HexState, 'col' | 'row' | 'owner' | 'units' | 'terrain' | 'decor' | 'x' | 'y'>>;
+  getStructures(): StructureState[];
   getGeometry(): { reference: WorldGeometry; runtime: WorldGeometry; transform: WorldTransform; pixelRatio: number };
   getRenderProfile(): ReturnType<BoardRenderer['renderSnapshot']>;
   measureRenderCost(samples?: number): { samples: number; averageMs: number; medianMs: number; p95Ms: number; frameBudgetMs: number };

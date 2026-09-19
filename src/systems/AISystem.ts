@@ -1,13 +1,15 @@
 import { cellKey, hexDistance, neighborsOf } from '../core/hex';
-import { Owner, Terrain, type HexState, type LevelDefinition } from '../core/types';
+import { Owner, Terrain, type HexState, type LevelDefinition, type StructureState } from '../core/types';
 import type { RandomSource } from '../core/random';
 import { defenseMultiplier } from './CombatSystem';
+import { hqShield, structureAt } from './StructureSystem';
 
 export interface AIContext {
   owner: Owner;
   elapsed: number;
   endgameStage: number;
   hexes: HexState[];
+  structures?: readonly StructureState[];
   level: LevelDefinition;
   random: RandomSource;
   canSend(from: HexState, to: HexState): boolean;
@@ -29,6 +31,8 @@ function threatened(context: AIContext, hex: HexState): number {
     if (neighbor.owner === enemy) score += 45 + Math.max(0, neighbor.units - hex.units) * 2;
   }
   if (hex.terrain === Terrain.Base) score += 90;
+  const structure = structureAt(context.structures ?? [], hex);
+  if (structure?.type === 'guardian' && structure.status === 'active') score += 85;
   return score;
 }
 
@@ -54,7 +58,14 @@ function frontDistances(context: AIContext): Map<string, number> {
 
 function strategicValue(context: AIContext, target: HexState): number {
   let value = target.owner === Owner.Neutral ? 18 : 60;
-  if (target.terrain === Terrain.Base) value += 1500;
+  const structure = structureAt(context.structures ?? [], target);
+  if (target.terrain === Terrain.Base) {
+    const shield = structure?.type === 'hq' ? hqShield(context.structures ?? [], structure.id).current : 0;
+    value += shield > 0 ? 420 : 1500;
+  }
+  if (structure?.type === 'guardian' && structure.owner === opposing(context.owner) && structure.status === 'active') {
+    value += 1050 + structure.shield * 2;
+  }
   if (target.terrain === Terrain.Relay) value += context.level.features.relay ? 180 : 15;
   if (target.terrain === Terrain.Hill) value += 35;
   const enemyBase = context.hexes.find((hex) => hex.owner === opposing(context.owner) && hex.terrain === Terrain.Base);
@@ -97,7 +108,8 @@ export function chooseAIAction(context: AIContext, skill: number): AIAction | nu
   const approach = baseApproach(context);
   const trailing = needsBreakout(context);
   const actions: AIAction[] = [];
-  for (const source of context.hexes.filter((hex) => hex.owner === context.owner && hex.units >= 4)) {
+  for (const source of context.hexes.filter((hex) => hex.owner === context.owner && hex.units >= 4
+    && structureAt(context.structures ?? [], hex, 'guardian') === null)) {
     const sourceThreat = threatened(context, source);
     const sourceDistance = distances?.get(cellKey(source));
     if (approach && source !== approach.base && context.canSend(source, approach.base) && sourceThreat < 120) {

@@ -73,5 +73,11 @@ export function buildLevel(
     if (hex.terrain === Terrain.Relay && hex.fixedUnits === null) hex.units += 2;
     mirroredUnits.set(cellKey(hex), hex.units);
   }
+  level.structures?.forEach((structure) => {
+    const hex = at(structure.col, structure.row);
+    if (!hex || !isPlayable(hex)) throw new Error(`Structure ${structure.id} in ${level.id} needs a playable cell.`);
+    if (structure.owner !== undefined) hex.owner = structure.owner;
+    if (structure.units !== undefined) { hex.units = structure.units; hex.fixedUnits = structure.units; }
+  });
   return state;
 }

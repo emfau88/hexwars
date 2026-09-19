@@ -138,6 +138,7 @@ export class CampaignUI {
     this.app.classList.toggle('groupSendCoach', state.currentLevel === 3);
     required('legendHill').hidden = state.currentLevel < 3;
     required('legendRelay').hidden = !state.level.features.relay;
+    required('legendGuardian').hidden = !state.level.structures?.some(({ type }) => type === 'guardian');
     this.applyMissionCopy(state);
     this.hint.style.opacity = '1'; clearTimeout(this.hintTimer);
     if (state.currentLevel !== 0 && !this.app.classList.contains('fullSendCoach') && !this.app.classList.contains('groupSendCoach')) {

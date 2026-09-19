@@ -1,8 +1,9 @@
 import { GAME_CONFIG, SUPPLY_CONFIG } from '../core/config';
 import { cellKey, findOwnedPath, hexDistance, neighborsOf } from '../core/hex';
-import { Owner, Terrain, type ArmyMovement, type HexState } from '../core/types';
+import { Owner, Terrain, type ArmyMovement, type HexState, type StructureState } from '../core/types';
 import { terrainCapacity } from './GrowthSystem';
 import { createMovement } from './MovementSystem';
+import { isGuardianCell } from './StructureSystem';
 
 export interface SupplyDispatch {
   owner: Owner;
@@ -16,6 +17,7 @@ export interface SupplyContext {
   hexes: HexState[];
   armies: ArmyMovement[];
   owners?: Owner[];
+  structures?: readonly StructureState[];
 }
 
 export function isFrontHex(hexes: readonly HexState[], hex: HexState, owner = hex.owner): boolean {
@@ -56,9 +58,9 @@ export function isForwardSupplyPath(path: readonly HexState[], targetBase: HexSt
   return true;
 }
 
-function supplySources(hexes: readonly HexState[], owner: Owner): HexState[] {
+function supplySources(hexes: readonly HexState[], owner: Owner, structures: readonly StructureState[] = []): HexState[] {
   return hexes
-    .filter((hex) => hex.owner === owner)
+    .filter((hex) => hex.owner === owner && !isGuardianCell(structures, hex))
     .sort((first, second) => {
       const firstFront = isFrontHex(hexes, first, owner);
       const secondFront = isFrontHex(hexes, second, owner);
@@ -78,12 +80,13 @@ export function chooseSupplyRoute(
   owner: Owner,
 ): { target: HexState; path: HexState[] } | null {
   const targetBase = enemyBase(context.hexes, owner);
+  const structures = context.structures ?? [];
   const incoming = new Map<string, number>();
   for (const army of context.armies) {
     if (army.owner === owner && army.kind === 'supply') incoming.set(army.toKey, (incoming.get(army.toKey) ?? 0) + army.units);
   }
   const candidates = context.hexes
-    .filter((target) => target.owner === owner)
+    .filter((target) => target.owner === owner && !isGuardianCell(structures, target))
     .filter((target) => target !== source)
     .map((target) => ({ target, path: findOwnedPath(context.hexes, source, target) }))
     .filter((candidate): candidate is { target: HexState; path: HexState[] } => Boolean(candidate.path && candidate.path.length > 1))
@@ -114,7 +117,7 @@ export class SupplySystem {
       const accumulated = (this.accumulators[owner] ?? 0) + deltaSeconds;
       if (accumulated < interval) { this.accumulators[owner] = accumulated; continue; }
       this.accumulators[owner] = accumulated % interval;
-      for (const source of supplySources(context.hexes, owner)) {
+      for (const source of supplySources(context.hexes, owner, context.structures)) {
         const reserve = supplyReserveFor(source, isFrontHex(context.hexes, source, owner));
         const surplus = Math.floor(source.units - reserve);
         if (surplus < SUPPLY_CONFIG.dispatchThreshold) continue;

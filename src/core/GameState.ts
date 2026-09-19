@@ -1,7 +1,7 @@
 import { GAME_CONFIG } from './config';
 import { cellKey, findOwnedPath, hexDistance, isPlayable, neighborsOf } from './hex';
 import { createSeededRandom, type RandomSource } from './random';
-import { Owner, Terrain, type ArmyMovement, type GameEvent, type GameSnapshot, type HexState, type MissionResult, type Point, type ResultReason } from './types';
+import { Owner, Terrain, type ArmyMovement, type GameEvent, type GameSnapshot, type HexState, type MissionResult, type Point, type ResultReason, type StructureState } from './types';
 import { buildLevel } from '../levels/buildLevel';
 import { LEVELS } from '../levels';
 import { runAI, type AIContext } from '../systems/AISystem';
@@ -10,6 +10,7 @@ import { updateGrowth } from '../systems/GrowthSystem';
 import { createMovement, updateMovements } from '../systems/MovementSystem';
 import { frontHexes, SupplySystem } from '../systems/SupplySystem';
 import { evaluateVictory } from '../systems/VictorySystem';
+import { absorbHqShield, buildStructures, hqShield, structureAt, syncStructureCapture } from '../systems/StructureSystem';
 
 export class GameState {
   currentLevel = 0;
@@ -21,6 +22,7 @@ export class GameState {
   result: MissionResult | null = null;
   resultReason: ResultReason | null = null;
   hexes: HexState[] = [];
+  structures: StructureState[] = [];
   armies: ArmyMovement[] = [];
   autoplay = false;
   opponentEnabled = true;
@@ -37,6 +39,7 @@ export class GameState {
     this.currentLevel = Math.max(0, Math.min(LEVELS.length - 1, levelIndex));
     this.random = createSeededRandom(this.level.seed);
     this.hexes = buildLevel(this.currentLevel, this.random, positionFor);
+    this.structures = buildStructures(this.level, this.hexes);
     this.armies = [];
     this.elapsed = 0; this.actions = 0; this.captures = 0; this.endgameStage = 0;
     this.aiTimerMs = 0; this.playerAiTimerMs = 0;
@@ -47,6 +50,14 @@ export class GameState {
 
   hexAt(col: number, row: number): HexState | null {
     return this.hexes.find((hex) => hex.col === col && hex.row === row) ?? null;
+  }
+
+  structureAt(col: number, row: number): StructureState | null {
+    return structureAt(this.structures, { col, row });
+  }
+
+  shieldFor(hqId: string): ReturnType<typeof hqShield> {
+    return hqShield(this.structures, hqId);
   }
 
   canSend(from: HexState | null, to: HexState | null): boolean {
@@ -122,7 +133,7 @@ export class GameState {
 
   think(owner: Owner, skill: number, count = 1): number {
     const context: AIContext = {
-      owner, elapsed: this.elapsed, endgameStage: this.endgameStage, hexes: this.hexes,
+      owner, elapsed: this.elapsed, endgameStage: this.endgameStage, hexes: this.hexes, structures: this.structures,
       level: this.level, random: this.random,
       canSend: (from, to) => this.canSend(from, to),
       incomingTo: (target, candidate) => this.incomingTo(target, candidate),
@@ -142,17 +153,18 @@ export class GameState {
       this.events.push({ type: 'endgame', detail: { stage: nextStage } });
     }
     const growthMultiplier = this.level.growthMultiplier ?? 1;
-    updateGrowth(this.hexes, this.elapsed, deltaSeconds, growthMultiplier, this.level.enemyGrowthMultiplier ?? growthMultiplier);
+    updateGrowth(this.hexes, this.elapsed, deltaSeconds, growthMultiplier, this.level.enemyGrowthMultiplier ?? growthMultiplier, this.structures);
     if (this.level.features.supply) {
       const owners = this.playerSupplyEnabled ? [Owner.Player, Owner.Enemy] : [Owner.Enemy];
-      for (const dispatch of this.supplySystem.update({ hexes: this.hexes, armies: this.armies, owners }, deltaSeconds)) {
+      for (const dispatch of this.supplySystem.update({ hexes: this.hexes, armies: this.armies, owners, structures: this.structures }, deltaSeconds)) {
         this.events.push({ type: 'supply', detail: dispatch });
       }
     }
     updateCombat(this.hexes, deltaSeconds, this.random, (target, oldOwner, newOwner) => {
+      syncStructureCapture(this.structures, target, newOwner);
       if (newOwner === Owner.Player) this.captures += 1;
       this.events.push({ type: 'capture', detail: { oldOwner, newOwner, target } });
-    });
+    }, (target, defendingOwner, requested) => absorbHqShield(this.structures, target, defendingOwner, requested));
     updateMovements(this.armies, this.hexes, deltaSeconds, (movement, target) => {
       resolveArrival(movement, target);
       if (target) this.events.push({ type: 'arrival', detail: { owner: movement.owner, target, kind: movement.kind } });

@@ -48,6 +48,7 @@ export class HexfrontApp {
     this.progress = this.progressStore.load();
     this.renderer = new BoardRenderer(canvas, stage, this.visualVariant);
     this.renderer.sendLabel = this.i18n.t('drag.send');
+    this.renderer.shieldLabel = this.i18n.t('guardian.shield');
     this.ui = new CampaignUI({
       startLevel: (index) => this.startLevel(index), showMap: (focus) => this.showMap(focus),
       setMode: (mode) => this.setMode(mode), toggleSound: () => this.toggleSound(),
@@ -78,6 +79,7 @@ export class HexfrontApp {
         getBoard: () => this.state.hexes.map(({ col, row, owner, units, terrain, decor, x, y }) => ({
           col, row, owner, units, terrain, decor, ...this.renderer.screenPositionFor({ x, y }),
         })),
+        getStructures: () => this.state.structures.map((structure) => ({ ...structure })),
         getGeometry: () => this.renderer.geometrySnapshot(),
         getRenderProfile: () => this.renderer.renderSnapshot(this.state.currentLevel),
         measureRenderCost: (samples = 60) => {
@@ -203,6 +205,7 @@ export class HexfrontApp {
   private setLocale(locale: Locale): void {
     this.i18n.setLocale(locale);
     this.renderer.sendLabel = this.i18n.t('drag.send');
+    this.renderer.shieldLabel = this.i18n.t('guardian.shield');
     this.ui.refreshLanguage(this.state, this.audio.enabled);
   }
 

@@ -26,6 +26,7 @@ export function updateCombat(
   deltaSeconds: number,
   random: RandomSource,
   onCapture: (hex: HexState, oldOwner: Owner, newOwner: Owner) => void,
+  absorbShield: (hex: HexState, defendingOwner: Owner, requested: number) => number = () => 0,
 ): void {
   for (const hex of hexes) {
     if (!hex.siege) continue;
@@ -39,6 +40,14 @@ export function updateCombat(
       }
       if (attackingUnits <= 0.001) {
         delete hex.siege[attacker];
+        continue;
+      }
+      const shieldClash = Math.min(attackingUnits, GAME_CONFIG.battleRate * deltaSeconds);
+      const shieldAbsorbed = absorbShield(hex, hex.owner, shieldClash);
+      if (shieldAbsorbed > 0) {
+        attackingUnits -= shieldAbsorbed;
+        hex.siege[attacker] = attackingUnits;
+        if (attackingUnits <= .001) delete hex.siege[attacker];
         continue;
       }
       if (hex.units <= 0.001) {

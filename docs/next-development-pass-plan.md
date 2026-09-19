@@ -1,8 +1,8 @@
 # HEXFRONT – Living Plan für den nächsten Entwicklungs-Pass
 
-**Dokumentstatus:** Lebende Arbeitsgrundlage; Bulks 0–2 abgeschlossen, Bulk 3 in Review  
+**Dokumentstatus:** Lebende Arbeitsgrundlage; Bulks 0–2 abgeschlossen, Bulks 3–4 in Review
 **Stand:** 19. September 2026  
-**Aktueller nächster Schritt:** Bulk 3 – physischer Mobile-60-FPS-Test und visuelle Abnahme  
+**Aktueller nächster Schritt:** Bulk 4 – weitere Level-5-Spieltests und gezielte AI-/Balance-Korrektur; parallel bleibt der physische Mobile-60-FPS-Test aus Bulk 3 offen
 **Pflegeprinzip:** Dieses Dokument wird nach jedem Bulk mit Status, Evidenz, Entscheidungen und offenen Risiken aktualisiert.
 
 ## 1. Zweck und Arbeitsregeln
@@ -175,8 +175,8 @@ Ein pauschaler Atmosphere-Pass über Grid und Structures wird verworfen, weil er
 | 0 – Baseline und Release-Identität | `DONE` | Quick Win | reproduzierbarer, eindeutig dokumentierter Ausgangspunkt |
 | 1 – World Geometry und Resize-Invarianz | `DONE` | Quick Win bis mittel | kein Board-Sprung zwischen Start, Restart und Levelwechsel |
 | 2 – Doomstack-/Guardian-Regellabor | `DONE` | mittel | endlicher Shield-Pool pro aktivem Guardian ausgewählt |
-| 3 – vollständiger Level-1-Visual-PoC | `READY` | strukturell größer | Pipeline, Lesbarkeit, Alignment und 60-FPS-Ziel bewiesen |
-| 4 – Structure-Domain und Guardian-Vertikalschnitt | `OPEN` | strukturell größer | ein vollständig integrierter Guardian-Slice |
+| 3 – vollständiger Level-1-Visual-PoC | `REVIEW` | strukturell größer | Pipeline, Lesbarkeit, Alignment und 60-FPS-Ziel bewiesen |
+| 4 – Structure-Domain und Guardian-Vertikalschnitt | `REVIEW` | strukturell größer | ein vollständig integrierter Guardian-Slice |
 | 5 – Guardian-Rollout und Map-Rebalance | `OPEN` | strukturell größer | mapweise belegte strategische Mehrtiefe |
 | 6 – Upgrade-Node-Experiment | `OPEN` | mittel bis strukturell größer | Investitionsentscheidung erzeugt echten Trade-off |
 | 7 – Structure-/Special-Tile-Art und Lesbarkeit | `OPEN` | mittel bis strukturell größer | Mechaniken ohne Kleinglyphen sofort unterscheidbar |
@@ -332,7 +332,7 @@ Ein pauschaler Atmosphere-Pass über Grid und Structures wird verworfen, weil er
 
 ### Bulk 3 – Vollständiger Level-1-Visual-PoC
 
-**Status:** `REVIEW`  
+**Status:** `REVIEW`
 **Einstufung:** strukturell größer  
 **Ziel / Problem:** Die gesamte neue Map-Pipeline auf genau einer Karte beweisen, bevor Assets oder Renderer für alle zehn Levels umgebaut werden.
 
@@ -388,7 +388,7 @@ Ein pauschaler Atmosphere-Pass über Grid und Structures wird verworfen, weil er
 
 ### Bulk 4 – Structure-Domain und Guardian-Vertikalschnitt
 
-**Status:** `OPEN`  
+**Status:** `REVIEW`
 **Einstufung:** strukturell größer  
 **Ziel / Problem:** Terrain und strategische Structures sauber trennen und die in Bulk 2 ausgewählte Anti-Doomstack-Regel in einem vollständigen Gameplay-Slice beweisen.
 
@@ -434,6 +434,8 @@ Ein pauschaler Atmosphere-Pass über Grid und Structures wird verworfen, weil er
 
 **Abhängigkeit:** Bulks 1–3  
 **Exit Gate:** Ein Level spielt vollständig mit Guardian-System, verständlicher visueller Rückmeldung, AI und stabiler Balance; kein Rollout vor Human-Playtest.
+
+**Zwischenstand 19. September 2026:** Level 5 besitzt den vollständigen technischen Slice mit zwei 48-Punkte-Guardians, endlichem HQ-Shield, Zuständen, Growth-/Supply-Ausschluss, stationärer Guardian-Garnison für die AI, Guardian-aware AI-Scoring, Visualisierung, Legende, Debugvertrag und Produktionsharness. Die isolierte Route über einen Guardian ist 15–29 % schneller als der weiterhin mögliche direkte HQ-Weg. Der reproduzierbare AI-vs-AI-Lauf endet nach der Garnisonskorrektur mit Spieler-Niederlage nach 131,1 s. Ein erster manueller Spielerbericht bestätigt die deutlich höhere Schwierigkeit als gewünschte Richtung; mehrere Spieltests und gezielte AI-/Balance-Abnahme bleiben Exit-Gate. Evidenz: [`docs/bulk-4-guardian-vertical-slice.md`](bulk-4-guardian-vertical-slice.md).
 
 ### Bulk 5 – Guardian-Rollout und Map-Rebalance
 
@@ -723,6 +725,7 @@ Diese Fragen werden nicht vorzeitig durch Implementierung beantwortet:
 | 2026-09-19 | 2 | `READY` → `DONE` | Endlicher Guardian-Shield-Pool ausgewählt; Multiplikator und Network Defense als Standard verworfen; Supply-/AI-Abhängigkeiten dokumentiert. Bulk 3 ist `READY`. |
 | 2026-09-19 | 3 | `READY` → `REVIEW` | Level-1-Core-Art, Drei-Canvas-Layering, Grid/Ownership, Wasser/Shore/Fog, Art-Guide-Export und Viewport-/Reduced-Motion-/Renderbudgettests implementiert. Physischer Mobile-60-FPS-Test bleibt offen. |
 | 2026-09-19 | 3 | `REVIEW` | Lesbarkeits-Pass aus visueller Abnahme umgesetzt: zweistufiges Vollraster, Playable-Wash, stärkere Team-Tints, Zahlenplaketten, separates HQ-Label und Reachability-Ring; Desktop/Mobile visuell geprüft und Regressionen grün. |
+| 2026-09-19 | 4 | `OPEN` → `REVIEW` | Level-5-Guardian-Slice über Structure-Domain, Combat, Supply, Growth, AI, Victory, Rendering, UI und Debug integriert. Direkte und Guardian-Routen bestehen den isolierten Ökonomietest; stationäre Guardian-AI korrigiert. Erster Human-Test bestätigt gewünschte höhere Schwierigkeit; wiederholte Balance-Abnahme bleibt offen. |
 
 ## 12. Decision Log
 
@@ -745,6 +748,10 @@ Diese Fragen werden nicht vorzeitig durch Implementierung beantwortet:
 | D-015 | 2026-09-19 | Umweltanimation läuft mit höchstens 15 Hz, Gameplay bleibt im 60-FPS-Loop | Wasser, Shore und Randnebel sollen lebendig, aber unaufdringlich und mobil günstig sein. |
 | D-016 | 2026-09-19 | Kein Multi-Map-Rollout vor physischem Mobile-Test und zweiter Generalisierungskarte | Der Headless-CPU-Smoke ist stark, ersetzt aber weder reales Frame-Pacing noch den Beweis, dass das Manifest für weitere Karten trägt. |
 | D-017 | 2026-09-19 | Zweistufiges Vollraster und terrainunabhängige Zahlenplaketten sind der Level-1-Lesbarkeitsstandard | Das ruhige Vollraster erhält die Board-Identität; Playable-Kontur und Wash zeigen den Regelraum. Dunkle Plaketten sichern Zahlenkontrast unabhängig von Art und Structure. |
+| D-018 | 2026-09-19 | Level 5 ist die erste Guardian-Testkarte; Level 1, 2 und 4 bleiben unverändert in ihrer Lernrolle | Zwei Pässe geben zwei Guardians einen kartenspezifischen Grund, ohne frühe Steuerungs-Tutorials zu überladen. |
+| D-019 | 2026-09-19 | Der Produktionsslice startet mit 48 endlichen Shieldpunkten und 8 Garnison pro Guardian | 48 war im Labor der Level-5-Break-even; der Wert bleibt bis zum Human-Playtest ausdrücklich Testtuning. |
+| D-020 | 2026-09-19 | Guardian-Capture entfernt den Restschild dauerhaft; keine Regeneration im ersten Slice | Verhindert Rückeroberungsloops und hält Zustand, Combat und visuelle Kommunikation kompakt. |
+| D-021 | 2026-09-19 | Kontrollierter Bulk-4-Vertikalschnitt trotz offenem physischem Mobile-Gate aus Bulk 3 | Die offene Prüfung betrifft ausschließlich den visuellen Level-1-Rollout; der Level-5-Regelslice nutzt keine neue Map-Art und wird nicht auf weitere Karten verteilt. Bulk 3 und 4 bleiben bis zu ihren separaten Exit-Gates in `REVIEW`. |
 
 ### Vorgemerktes Visual Polish nach Bulk 3
 
