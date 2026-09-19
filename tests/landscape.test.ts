@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { Terrain, type HexState } from '../src/core/types';
 import { exposedWaterShoreEdges, fitSpriteSize } from '../src/rendering/LandscapeRenderer';
-import { centeredAspectCrop, LEVEL_ONE_MAP_ART, LEVEL_TWO_MAP_ART, mapArtForLevel } from '../src/rendering/MapArtManifest';
+import { centeredAspectCrop, LEVEL_ONE_MAP_ART, LEVEL_THREE_MAP_ART, LEVEL_TWO_MAP_ART, mapArtForLevel } from '../src/rendering/MapArtManifest';
 import { MAP_ART_RENDER_LAYERS } from '../src/rendering/MapArtRenderer';
 
 const water = (col: number, row: number): HexState => ({
@@ -48,6 +48,17 @@ test('Level 2 map art keeps the same canonical world and supplies two asset wate
   assert.equal(LEVEL_TWO_MAP_ART.waterFrames.length, 2);
   assert.deepEqual(
     LEVEL_TWO_MAP_ART.structureSafeAreas.filter(({ kind }) => kind === 'hq').map(({ col, row }) => [col, row]),
+    [[3, 1], [3, 11]],
+  );
+});
+
+test('Level 3 map art is a static core with clear HQ safe areas', () => {
+  assert.equal(mapArtForLevel(2), LEVEL_THREE_MAP_ART);
+  assert.equal(LEVEL_THREE_MAP_ART.worldRect.width, LEVEL_ONE_MAP_ART.worldRect.width);
+  assert.equal(LEVEL_THREE_MAP_ART.worldRect.height, LEVEL_ONE_MAP_ART.worldRect.height);
+  assert.equal('waterFrames' in LEVEL_THREE_MAP_ART, false);
+  assert.deepEqual(
+    LEVEL_THREE_MAP_ART.structureSafeAreas.map(({ col, row }) => [col, row]),
     [[3, 1], [3, 11]],
   );
 });

@@ -94,6 +94,11 @@ test('Level 2 map core and water phases stay within the visual PoC budget', () =
   assert.ok(assets.reduce((sum, asset) => sum + statSync(asset).size, 0) < 4_300_000, 'Level 2 visual stack stays below 4.3 MB');
 });
 
+test('Level 3 static map core stays within the rollout budget', () => {
+  const core = new URL('../public/assets/maps/level03-core-v1.webp', import.meta.url);
+  assert.ok(statSync(core).size < 1_600_000, 'Level 3 static core stays below 1.6 MB');
+});
+
 test('production assets support GitHub Pages sub-path hosting', () => {
   assert.match(vite, /base: '\.\/'/);
   assert.match(landscape, /import\.meta\.env\.BASE_URL/);
