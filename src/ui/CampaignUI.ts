@@ -10,7 +10,7 @@ import { BoardRenderer } from '../rendering/BoardRenderer';
 import { LandscapeRenderer } from '../rendering/LandscapeRenderer';
 import { OWNER_COLORS } from '../rendering/palette';
 import { centeredAspectCrop, mapArtForLevel } from '../rendering/MapArtManifest';
-import { mapArtImage } from '../rendering/MapArtAssetStore';
+import { mapArtImage, type MapArtImageRecord } from '../rendering/MapArtAssetStore';
 import type { MapStyleMode } from '../rendering/MapArtRenderer';
 import { REFERENCE_WORLD_HEIGHT, REFERENCE_WORLD_WIDTH } from '../rendering/WorldGeometry';
 import { CampaignAtlas, RELEASED_CAMPAIGN_LEVELS } from './CampaignAtlas';
@@ -40,7 +40,7 @@ export class CampaignUI {
   private toastTimer = 0; private hintTimer = 0;
   private readonly previewLandscape: LandscapeRenderer;
   private readonly atlas: CampaignAtlas;
-  private readonly previewMapImages = new Map<string, HTMLImageElement>();
+  private readonly previewMapSubscriptions = new Set<string>();
 
   constructor(private readonly callbacks: UICallbacks, private readonly i18n: I18n, visualVariant: VisualVariant = 'production', private readonly mapStyle: MapStyleMode = 'auto') {
     this.previewLandscape = new LandscapeRenderer(() => this.renderPreview(this.selectedMenuLevel), visualVariant);
@@ -367,17 +367,25 @@ export class CampaignUI {
   }
 
   private renderPreview(levelIndex: number): void {
-    const canvas = required<HTMLCanvasElement>('levelPreview'); const bounds = canvas.getBoundingClientRect(); const width = Math.max(260, Math.round(bounds.width)); const height = Math.max(170, Math.round(bounds.height));
+    const frame = required('levelPreviewFrame'); const canvas = required<HTMLCanvasElement>('levelPreview'); const bounds = canvas.getBoundingClientRect(); const width = Math.max(260, Math.round(bounds.width)); const height = Math.max(170, Math.round(bounds.height));
     const ratio = Math.min(devicePixelRatio || 1, 2); canvas.width = width * ratio; canvas.height = height * ratio;
     const context = canvas.getContext('2d'); if (!context) return; context.setTransform(ratio, 0, 0, ratio, 0, 0); context.fillStyle = '#d7e3cf'; context.fillRect(0, 0, width, height);
-    const mapArt = this.mapStyle === 'classic' ? null : mapArtForLevel(levelIndex); const mapImage = mapArt ? this.previewMapImage(mapArt.core.source) : null;
-    const hasMapArt = Boolean(mapImage?.complete && mapImage.naturalWidth);
+    const mapArt = this.mapStyle === 'classic' ? null : mapArtForLevel(levelIndex);
+    const assets = mapArt
+      ? [this.previewMapAsset(mapArt.core.source), ...(mapArt.landscapeOverlays ?? []).map(({ source }) => this.previewMapAsset(source))]
+      : [];
+    const hasMapArt = Boolean(mapArt && assets.length && assets.every(({ loaded }) => loaded));
+    const mapArtFailed = assets.some(({ failed }) => failed);
+    const mapArtPending = Boolean(mapArt && !hasMapArt && !mapArtFailed);
+    frame.classList.toggle('previewLoading', mapArtPending);
+    frame.classList.toggle('previewFailed', mapArtFailed);
+    if (mapArtPending) return;
+    const mapImage = assets[0]?.image ?? null;
     if (hasMapArt && mapImage) {
       const crop = centeredAspectCrop(mapImage.naturalWidth, mapImage.naturalHeight, width, height);
       context.drawImage(mapImage, crop.x, crop.y, crop.width, crop.height, 0, 0, width, height);
       for (const overlay of mapArt?.landscapeOverlays ?? []) {
-        const image = this.previewMapImage(overlay.source);
-        if (!image.complete || !image.naturalWidth) continue;
+        const image = mapArtImage(overlay.source).image;
         const rect = overlay.worldRect;
         context.drawImage(
           image, 0, 0, image.naturalWidth, image.naturalHeight,
@@ -408,13 +416,15 @@ export class CampaignUI {
     if (!hasMapArt) this.previewLandscape.drawWaterShores(context, hexes, radius, level.landscapeStyle, BoardRenderer.path);
   }
 
-  private previewMapImage(source: string): HTMLImageElement {
-    const cached = this.previewMapImages.get(source); if (cached) return cached;
-    const asset = mapArtImage(source); const image = asset.image;
-    void asset.ready.then(() => {
-      if (this.menu.classList.contains('show')) this.renderPreview(this.selectedMenuLevel);
-    });
-    this.previewMapImages.set(source, image); return image;
+  private previewMapAsset(source: string): MapArtImageRecord {
+    const asset = mapArtImage(source);
+    if (!this.previewMapSubscriptions.has(source)) {
+      this.previewMapSubscriptions.add(source);
+      void asset.ready.then(() => {
+        if (this.menu.classList.contains('show')) this.renderPreview(this.selectedMenuLevel);
+      });
+    }
+    return asset;
   }
 
   private time(seconds: number): string { return `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`; }

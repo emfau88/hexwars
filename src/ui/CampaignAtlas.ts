@@ -48,8 +48,16 @@ function layoutForMobile(mobile: boolean): AtlasLayout {
 
 export class CampaignAtlas {
   private mobile: boolean | null = null;
+  private readonly backdrop = svgNode('image', { class:'atlasBackdrop' });
+  private readonly body: HTMLElement | null;
+  private backdropStarted = false;
 
-  constructor(private readonly svg: SVGSVGElement, private readonly i18n: I18n) {}
+  constructor(private readonly svg: SVGSVGElement, private readonly i18n: I18n) {
+    this.body = svg.parentElement;
+    this.body?.classList.add('atlasLoading');
+    this.backdrop.addEventListener('load', () => this.finishBackdrop(true), { once:true });
+    this.backdrop.addEventListener('error', () => this.finishBackdrop(false), { once:true });
+  }
 
   needsLayoutUpdate(): boolean {
     return this.mobile !== matchMedia('(max-width:900px), (max-height:620px)').matches;
@@ -61,13 +69,18 @@ export class CampaignAtlas {
     this.svg.replaceChildren();
     this.svg.setAttribute('viewBox', `0 0 ${layout.width} ${layout.height}`);
 
+    for (const [attribute, value] of Object.entries({
+      x:0, y:0, width:layout.width, height:layout.height, preserveAspectRatio:'xMidYMid slice',
+    })) this.backdrop.setAttribute(attribute, String(value));
+
     this.svg.append(
-      svgNode('image', {
-        href:`${import.meta.env.BASE_URL}assets/ui/campaign-atlas-v2.webp`, x:0, y:0,
-        width:layout.width, height:layout.height, preserveAspectRatio:'xMidYMid slice', class:'atlasBackdrop',
-      }),
+      this.backdrop,
       svgNode('rect', { x:0, y:0, width:layout.width, height:layout.height, class:'atlasBackdropVeil', 'aria-hidden':'true' }),
     );
+    if (!this.backdropStarted) {
+      this.backdropStarted = true;
+      this.backdrop.setAttribute('href', `${import.meta.env.BASE_URL}assets/ui/campaign-atlas-v2.webp`);
+    }
 
     const nodes = svgNode('g', { id:'mapNodes', 'aria-label':this.i18n.t('campaign.atlasGroupAria') });
     for (const { x, y, levelIndex } of layout.stations) {
@@ -89,6 +102,17 @@ export class CampaignAtlas {
       foreign.append(button); nodes.append(foreign);
     }
     this.svg.append(nodes);
+  }
+
+  private finishBackdrop(loaded: boolean): void {
+    // Keep the neutral veil for at least one paint even when the preload is
+    // already cached. This prevents a one-frame classic/empty atlas flash.
+    const settle = () => {
+      this.svg.classList.add('atlasReady');
+      this.body?.classList.remove('atlasLoading');
+      this.body?.classList.toggle('atlasFailed', !loaded);
+    };
+    if (loaded) requestAnimationFrame(settle); else settle();
   }
 
 }

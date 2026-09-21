@@ -74,6 +74,42 @@ test('campaign map, unlock state and real pointer drag work', async ({ page }) =
   await expect.poll(async () => page.locator('#captureStatus').textContent()).toBe('1');
 });
 
+test('campaign atlas stays behind a neutral placeholder until its backdrop is ready', async ({ page }) => {
+  // Leave the initial campaign navigation before installing the route so the
+  // document preload cannot satisfy the asset from the first-page cache.
+  await page.goto('about:blank');
+  await page.route('**/assets/ui/campaign-atlas-v2.webp', async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 650));
+    await route.continue();
+  });
+  await page.goto('/?atlasLoadingProbe=1', { waitUntil:'domcontentloaded' });
+  const loadingObserved = await page.locator('.atlasBody').evaluate((element) => element.classList.contains('atlasLoading'));
+  if (loadingObserved) await expect(page.locator('#campaignAtlasSvg')).toHaveCSS('opacity', '0');
+  await expect(page.locator('.atlasBody')).not.toHaveClass(/atlasLoading/);
+  await expect(page.locator('#campaignAtlasSvg')).toHaveClass(/atlasReady/);
+  await expect(page.getByRole('button', { name:'Level 1: THE PATH' })).toBeVisible();
+});
+
+test('campaign atlas keeps its level controls available when the backdrop fails', async ({ page }) => {
+  await page.route('**/assets/ui/campaign-atlas-v2.webp', (route) => route.abort());
+  await page.reload();
+  await expect(page.locator('.atlasBody')).toHaveClass(/atlasFailed/);
+  await expect(page.locator('#campaignAtlasSvg')).toHaveCSS('opacity', '1');
+  await expect(page.getByRole('button', { name:'Level 1: THE PATH' })).toBeEnabled();
+});
+
+test('mission preview waits for its illustrated core instead of flashing the classic preview', async ({ page }) => {
+  await page.route('**/assets/maps/level01-core-v1.png', async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 650));
+    await route.continue();
+  });
+  await page.reload({ waitUntil:'domcontentloaded' });
+  await expect(page.locator('#levelPreviewFrame')).toHaveClass(/previewLoading/);
+  await expect(page.locator('#levelPreview')).toHaveCSS('opacity', '0');
+  await expect(page.locator('#levelPreviewFrame')).not.toHaveClass(/previewLoading/);
+  await expect(page.locator('#levelPreview')).toHaveCSS('opacity', '1');
+});
+
 test('enemy acts and a completed mission persists its unlock after reload', async ({ page }) => {
   await page.goto('/?autostart=1&level=0&speed=20');
   await expect.poll(async () => {

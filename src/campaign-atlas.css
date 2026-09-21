@@ -71,10 +71,20 @@
 #campaignMenu .atlasActLegend i { width:8px; height:8px; border-radius:50%; background:#7f9d6f; }
 #campaignMenu .atlasActLegend span:nth-child(2) i { background:#b7a86d; }
 #campaignMenu .atlasActLegend span:nth-child(3) i { background:#c47b4c; }
-#campaignMenu .atlasBody { position:relative; flex:1; min-height:0; overflow:hidden; }
-#campaignAtlasSvg { display:block; width:100%; height:100%; overflow:visible; }
+#campaignMenu .atlasBody { position:relative; flex:1; min-height:0; overflow:hidden; background:#496554; }
+#campaignMenu .atlasBody::before {
+  content:''; position:absolute; inset:0; z-index:2; opacity:0; pointer-events:none;
+  background:linear-gradient(105deg,#496554 20%,#617b68 42%,#496554 64%); background-size:220% 100%;
+  transition:opacity .15s ease;
+}
+#campaignMenu .atlasBody.atlasLoading::before { opacity:1; animation:atlasLoadingSweep 1.35s ease-in-out infinite; }
+#campaignMenu .atlasBody.atlasLoading .atlasHint { opacity:0; }
+#campaignAtlasSvg { display:block; width:100%; height:100%; overflow:visible; opacity:0; transition:opacity .15s ease; }
+#campaignAtlasSvg.atlasReady { opacity:1; }
 #campaignAtlasSvg .atlasBackdrop { filter:saturate(.94) contrast(.96) brightness(.93); }
 #campaignAtlasSvg .atlasBackdropVeil { fill:rgba(228,232,203,.05); }
+@keyframes atlasLoadingSweep { from { background-position:100% 0; } to { background-position:-100% 0; } }
+@media (prefers-reduced-motion:reduce) { #campaignMenu .atlasBody.atlasLoading::before { animation:none; } }
 #campaignMenu .atlasHint {
   position:absolute; left:18px; bottom:16px; z-index:3; margin:0; padding:8px 11px;
   color:#edf3ed; background:rgba(24,40,32,.84); border-radius:10px; font-size:12px; font-weight:600;
@@ -167,6 +177,15 @@
   position:relative; min-height:230px; margin:0 20px; overflow:hidden; border:1px solid #acb996;
   border-radius:16px; background:#cedcb4; box-shadow:inset 0 1px 10px rgba(64,83,65,.08);
 }
+#campaignMenu .previewFrame::before {
+  content:''; position:absolute; inset:0; z-index:1; opacity:0; pointer-events:none;
+  background:linear-gradient(105deg,#cedcb4 20%,#dce7c8 42%,#cedcb4 64%); background-size:220% 100%;
+  transition:opacity .15s ease;
+}
+#campaignMenu .previewFrame.previewLoading::before { opacity:1; animation:atlasLoadingSweep 1.35s ease-in-out infinite; }
+#campaignMenu .previewFrame.previewLoading #levelPreview { opacity:0; }
+#campaignMenu .previewFrame #levelPreview { opacity:1; transition:opacity .15s ease; }
+@media (prefers-reduced-motion:reduce) { #campaignMenu .previewFrame.previewLoading::before { animation:none; } }
 #campaignMenu .previewFrame::after { box-shadow:inset 0 -26px 38px rgba(64,83,65,.08); }
 #campaignMenu .previewTopline { color:#34443a; }
 #campaignMenu .previewTopline,#campaignMenu .previewLegend { font-family:var(--font-display); font-weight:700; }

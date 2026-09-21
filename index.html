@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#101614" />
   <meta name="description" content="HEXFRONT — a real-time tactics game about territory control on a hex grid." data-i18n-content="meta.description" />
+  <link rel="preload" as="image" href="./assets/ui/campaign-atlas-v2.webp" type="image/webp" />
   <title>HEXFRONT</title>
   <script src="https://cdn1.kongregate.com/javascripts/kongregate_api.js"></script>
 </head>
@@ -111,7 +112,7 @@
                 <span><i></i><b data-i18n="campaign.section.finale">FINALE</b></span>
               </div>
             </div>
-            <div class="atlasBody">
+            <div class="atlasBody atlasLoading">
               <svg id="campaignAtlasSvg" role="group" aria-label="Campaign map on a continuous hex grid" data-i18n-aria-label="campaign.atlasAria"></svg>
               <p class="atlasHint" data-i18n="campaign.atlasHint">Every station occupies exactly one grid cell.</p>
             </div>
@@ -133,7 +134,7 @@
               <p class="menuLockHint" id="menuLockHint" hidden data-i18n="campaign.lockHint">Complete the previous level first.</p>
             </div>
 
-            <div class="previewFrame" id="levelPreviewFrame">
+            <div class="previewFrame previewLoading" id="levelPreviewFrame">
               <div class="previewTopline"><span id="menuPreviewLabel">LEVEL 01 · MAP PREVIEW</span><span data-i18n="campaign.startLayout">STARTING LAYOUT</span></div>
               <canvas id="levelPreview" width="720" height="460" aria-label="Preview of the selected level map" data-i18n-aria-label="campaign.previewAria"></canvas>
               <div class="previewLegend" aria-hidden="true"><span><i class="previewDot player"></i><b data-i18n="campaign.player">YOU</b></span><span><i class="previewDot neutral"></i><b data-i18n="campaign.neutral">NEUTRAL</b></span><span><i class="previewDot enemy"></i><b data-i18n="campaign.rival">RIVAL</b></span></div>

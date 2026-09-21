@@ -97,7 +97,9 @@ test('map previews composite positioned landscape overlays over their core art',
   assert.match(campaignUi, /mapArt\?\.landscapeOverlays/);
   assert.match(campaignUi, /rect\.x \/ REFERENCE_WORLD_WIDTH \* width/);
   assert.match(campaignUi, /rect\.y \/ REFERENCE_WORLD_HEIGHT \* height/);
-  assert.match(campaignUi, /new Map<string, HTMLImageElement>/);
+  assert.match(campaignUi, /previewMapSubscriptions = new Set<string>/);
+  assert.match(campaignUi, /mapArtImage\(source\)/);
+  assert.match(campaignUi, /previewLoading/);
   assert.match(campaignUi, /this\.renderPreview\(this\.selectedMenuLevel\)/);
 });
 
