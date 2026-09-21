@@ -8,6 +8,7 @@ import { InputController, type InputError } from '../input/InputController';
 import { CampaignProgressStore } from '../persistence/CampaignProgressStore';
 import { KongregateStats } from '../platform/KongregateStats';
 import { BoardRenderer } from '../rendering/BoardRenderer';
+import type { MapStyleMode } from '../rendering/MapArtRenderer';
 import { OWNER_COLORS } from '../rendering/palette';
 import { CampaignUI } from '../ui/CampaignUI';
 import { LEVELS } from '../levels';
@@ -22,6 +23,10 @@ const DEBUG_LEVEL = Number(DEBUG_PARAMETERS?.get('level'));
 const REQUESTED_VISUAL = DEBUG_PARAMETERS?.get('visual');
 const VISUAL_VARIANT: VisualVariant = REQUESTED_VISUAL === 'production' || REQUESTED_VISUAL === 'decor-p1'
   || REQUESTED_VISUAL === 'decor-p2' || REQUESTED_VISUAL === 'decor-v2' ? REQUESTED_VISUAL : 'decor-v2';
+const REQUESTED_MAP_STYLE = /(?:^|[?&])mapStyle=(classic|modern)(?:&|$)/.exec(location.search)?.[1];
+const MAP_STYLE: MapStyleMode = REQUESTED_MAP_STYLE === 'classic' || REQUESTED_MAP_STYLE === 'modern'
+  ? REQUESTED_MAP_STYLE
+  : 'auto';
 
 export class HexfrontApp {
   readonly state = new GameState();
@@ -39,6 +44,7 @@ export class HexfrontApp {
   private resizeFrame = 0;
   private lastFrame = performance.now();
   private animationFrame = 0;
+  private levelStartRequest = 0;
 
   constructor() {
     const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement | null;
@@ -46,7 +52,7 @@ export class HexfrontApp {
     if (!canvas || !stage) throw new Error('HEXFRONT canvas shell is incomplete.');
     this.state.autoplay = DEBUG_AUTOPLAY;
     this.progress = this.progressStore.load();
-    this.renderer = new BoardRenderer(canvas, stage, this.visualVariant);
+    this.renderer = new BoardRenderer(canvas, stage, this.visualVariant, MAP_STYLE);
     this.renderer.sendLabel = this.i18n.t('drag.send');
     this.renderer.shieldLabel = this.i18n.t('guardian.shield');
     this.ui = new CampaignUI({
@@ -55,7 +61,7 @@ export class HexfrontApp {
       togglePlayerSupply: () => this.togglePlayerSupply(),
       toggleFullscreen: () => void this.toggleFullscreen(), resetProgress: () => this.resetProgress(), activate: () => this.audio.activate(),
       setLocale: (locale) => this.setLocale(locale),
-    }, this.i18n, this.visualVariant);
+    }, this.i18n, this.visualVariant, MAP_STYLE);
     this.input = new InputController(canvas, this.state, this.renderer, {
       getMode: () => this.sendMode,
       onCommand: () => {
@@ -115,7 +121,20 @@ export class HexfrontApp {
   }
 
   startLevel(index = this.state.currentLevel): void {
+    void this.prepareAndStartLevel(index);
+  }
+
+  private async prepareAndStartLevel(index: number): Promise<void> {
+    const request = ++this.levelStartRequest;
     this.audio.activate();
+    this.ui.setMapLoading(true);
+    const prepared = await this.renderer.prepareLevel(index);
+    if (request !== this.levelStartRequest) return;
+    this.ui.setMapLoading(false);
+    if (prepared === 'failed') {
+      this.ui.showToast(this.i18n.t('toast.mapLoadFailed'));
+      return;
+    }
     this.state.start(index, (col, row) => this.renderer.positionFor(col, row));
     this.sendMode = 'half'; this.renderer.sendMode = this.sendMode;
     this.ui.startMission(this.state, this.progress); this.ui.setMode(this.sendMode, this.state); this.ui.syncPlayerSupply(this.state.playerSupplyEnabled); this.audio.play('confirm');
@@ -124,7 +143,9 @@ export class HexfrontApp {
   }
 
   showMap(focus = this.state.currentLevel): void {
+    this.levelStartRequest += 1;
     this.state.running = false;
+    this.ui.setMapLoading(false);
     this.ui.showMap(this.progress, (index) => this.progressStore.isUnlocked(this.progress, index, DEBUG_UNLOCK), focus);
     this.resizeLayout();
   }

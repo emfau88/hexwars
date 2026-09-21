@@ -323,6 +323,42 @@ test('Level 1 map art shares the canonical uniform world transform with its game
   expect(result.canvas.height).toBeCloseTo(result.geometry.runtime.height * result.geometry.pixelRatio, 0);
 });
 
+test('illustrated levels remain behind the campaign screen until required map art is decoded', async ({ page }) => {
+  await page.route('**/assets/maps/level01-core-v1.png', async (route) => {
+    await new Promise((resolve) => setTimeout(resolve, 650));
+    await route.continue();
+  });
+  await page.goto('/?autostart=1&level=0&mapStyle=modern', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('#campaignMenu')).toHaveClass(/show/);
+  await expect(page.locator('#playLevelBtn')).toHaveText('LOADING MAP…');
+  expect(await page.evaluate(() => window.__HEXFRONT__?.getState().running)).toBe(false);
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getState().running)).toBe(true);
+  await expect(page.locator('#campaignMenu')).not.toHaveClass(/show/);
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getRenderProfile())).toMatchObject({
+    mapArt: { enabled: true, loaded: true, mode: 'modern', activeStyle: 'modern' },
+  });
+});
+
+test('classic map style starts without requesting illustrated level assets', async ({ page }) => {
+  let mapRequests = 0;
+  page.on('request', (request) => { if (request.url().includes('/assets/maps/')) mapRequests += 1; });
+  await page.goto('/?autostart=1&level=0&mapStyle=classic');
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getState().running)).toBe(true);
+  expect(await page.evaluate(() => window.__HEXFRONT__?.getRenderProfile().mapArt)).toMatchObject({
+    enabled: false, loaded: false, mode: 'classic', activeStyle: 'classic',
+  });
+  expect(mapRequests).toBe(0);
+});
+
+test('auto map style falls back atomically to the classic renderer after an asset error', async ({ page }) => {
+  await page.route('**/assets/maps/level01-core-v1.png', (route) => route.abort());
+  await page.goto('/?autostart=1&level=0&mapStyle=auto');
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getState().running)).toBe(true);
+  expect(await page.evaluate(() => window.__HEXFRONT__?.getRenderProfile().mapArt)).toMatchObject({
+    enabled: false, loaded: false, mode: 'auto', activeStyle: 'classic',
+  });
+});
+
 test('Level 1 core art decodes and reduced motion freezes environment phases', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/?autostart=1&level=0');

@@ -192,6 +192,8 @@
   background:linear-gradient(#f1bc70,#eaa052); box-shadow:0 7px 14px rgba(122,69,33,.17);
   font-family:var(--font-display); font-size:13.5px; font-weight:750; letter-spacing:.65px;
 }
+#campaignMenu.mapLoading .mapNode { pointer-events:none; }
+#campaignMenu .playButton.loading { cursor:wait; }
 #campaignMenu .playButton::after { content:'  ›'; font-size:18px; line-height:0; }
 #campaignMenu .missionControlHint { margin:9px 1px 0; color:#5d6a60; font-size:12px; font-weight:550; line-height:1.4; }
 #campaignMenu .controlArrow { color:#a95b34; background:rgba(217,119,66,.10); }

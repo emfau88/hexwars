@@ -80,6 +80,7 @@ export const EN_TRANSLATIONS = {
   'campaign.play.again': 'PLAY AGAIN',
   'campaign.play.locked': 'COMPLETE PREVIOUS LEVEL',
   'campaign.play.comingSoon': 'COMING SOON',
+  'campaign.play.loading': 'LOADING MAP…',
   'campaign.play.tryAll': 'START · TRY 100% SEND',
   'campaign.play.tryGroup': 'START · TRY GROUP SEND',
   'campaign.unlock.allBadge': 'NEW · 100% SEND',
@@ -157,6 +158,7 @@ export const EN_TRANSLATIONS = {
   'toast.endgame.decline': 'Decline: growth is slowing down.',
   'toast.endgame.decision': 'Decision: cells no longer grow.',
   'toast.fullscreenFailed': 'Fullscreen could not be started here.',
+  'toast.mapLoadFailed': 'The illustrated map could not be loaded. Reload or use classic map style.',
 } as const;
 
 export type TranslationKey = keyof typeof EN_TRANSLATIONS;
@@ -241,6 +243,7 @@ export const DE_TRANSLATIONS: Record<TranslationKey, string> = {
   'campaign.play.again': 'NOCH EINMAL SPIELEN',
   'campaign.play.locked': 'VORHERIGES LEVEL ABSCHLIESSEN',
   'campaign.play.comingSoon': 'BALD VERFÜGBAR',
+  'campaign.play.loading': 'KARTE WIRD GELADEN…',
   'campaign.play.tryAll': 'START · 100 % TESTEN',
   'campaign.play.tryGroup': 'START · GRUPPE TESTEN',
   'campaign.unlock.allBadge': 'NEU · 100 % SENDEN',
@@ -318,6 +321,7 @@ export const DE_TRANSLATIONS: Record<TranslationKey, string> = {
   'toast.endgame.decline': 'Ausklang: Das Wachstum nimmt ab.',
   'toast.endgame.decision': 'Entscheidung: Felder wachsen nicht mehr.',
   'toast.fullscreenFailed': 'Vollbild konnte hier nicht gestartet werden.',
+  'toast.mapLoadFailed': 'Die illustrierte Karte konnte nicht geladen werden. Lade neu oder nutze den klassischen Kartenstil.',
 };
 
 export const TRANSLATIONS: Record<Locale, Readonly<Record<TranslationKey, string>>> = {

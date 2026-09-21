@@ -1,6 +1,10 @@
 import { hash01 } from '../core/random';
+import { mapArtImage, type MapArtImageRecord } from './MapArtAssetStore';
 import { centeredAspectCrop, mapArtForLevel, type MapArtAsset, type MapArtManifest, type PositionedMapArtAsset } from './MapArtManifest';
 import type { WorldGeometry, WorldTransform } from './WorldGeometry';
+
+export type MapStyleMode = 'auto' | 'classic' | 'modern';
+export type PreparedMapStyle = 'classic' | 'modern' | 'failed';
 
 export const MAP_ART_RENDER_LAYERS = Object.freeze([
   'backdrop-bleed', 'map-core', 'water', 'shore', 'atmosphere', 'grid',
@@ -10,6 +14,8 @@ export const MAP_ART_RENDER_LAYERS = Object.freeze([
 export interface MapArtStatus {
   enabled: boolean;
   loaded: boolean;
+  mode: MapStyleMode;
+  activeStyle: 'classic' | 'modern';
   sourceWidth: number;
   sourceHeight: number;
   sourceCrop: { x: number; y: number; width: number; height: number };
@@ -17,10 +23,8 @@ export interface MapArtStatus {
   loadedWaterFrames: number;
 }
 
-interface LoadedAsset {
+interface LoadedAsset extends MapArtImageRecord {
   definition: MapArtAsset;
-  image: HTMLImageElement;
-  loaded: boolean;
 }
 
 interface LoadedMapArt {
@@ -36,15 +40,44 @@ interface LoadedPositionedAsset extends LoadedAsset {
 
 export class MapArtRenderer {
   private readonly loaded = new Map<number, LoadedMapArt>();
+  private readonly classicFallbackLevels = new Set<number>();
 
-  constructor(private readonly onAssetReady?: () => void) {}
+  constructor(private readonly mode: MapStyleMode = 'auto', private readonly onAssetReady?: () => void) {}
 
-  supports(levelIndex: number): boolean { return mapArtForLevel(levelIndex) !== null; }
+  supports(levelIndex: number): boolean {
+    return this.mode !== 'classic' && !this.classicFallbackLevels.has(levelIndex) && mapArtForLevel(levelIndex) !== null;
+  }
+
+  async prepare(levelIndex: number, timeoutMs = 20_000): Promise<PreparedMapStyle> {
+    if (!this.supports(levelIndex)) return 'classic';
+    const entry = this.ensure(levelIndex);
+    const required = [entry.core, ...entry.landscapeOverlays, ...entry.water];
+    const ready = new Promise<boolean>((resolve) => {
+      let remaining = required.length;
+      if (!remaining) { resolve(true); return; }
+      for (const asset of required) void asset.ready.then((loaded) => {
+        if (!loaded) { resolve(false); return; }
+        remaining -= 1;
+        if (!remaining) resolve(true);
+      });
+    });
+    let timeout = 0;
+    const timed = new Promise<boolean>((resolve) => { timeout = window.setTimeout(() => resolve(false), timeoutMs); });
+    const loaded = await Promise.race([ready, timed]);
+    window.clearTimeout(timeout);
+    if (loaded) return 'modern';
+    if (this.mode === 'auto') {
+      this.classicFallbackLevels.add(levelIndex);
+      this.onAssetReady?.();
+      return 'classic';
+    }
+    return 'failed';
+  }
 
   status(levelIndex: number): MapArtStatus {
     const manifest = mapArtForLevel(levelIndex);
-    if (!manifest) return {
-      enabled: false, loaded: false, sourceWidth: 0, sourceHeight: 0,
+    if (!manifest || !this.supports(levelIndex)) return {
+      enabled: false, loaded: false, mode: this.mode, activeStyle: 'classic', sourceWidth: 0, sourceHeight: 0,
       sourceCrop: { x: 0, y: 0, width: 0, height: 0 }, waterFrames: 0, loadedWaterFrames: 0,
     };
     const loaded = this.ensure(levelIndex);
@@ -52,6 +85,7 @@ export class MapArtRenderer {
     const height = loaded.core.image.naturalHeight || manifest.core.sourceHeight;
     return {
       enabled: true, loaded: loaded.core.loaded && loaded.landscapeOverlays.every(({ loaded: ready }) => ready),
+      mode: this.mode, activeStyle: 'modern',
       sourceWidth: width, sourceHeight: height,
       sourceCrop: centeredAspectCrop(width, height, manifest.worldRect.width, manifest.worldRect.height),
       waterFrames: loaded.water.length,
@@ -198,12 +232,13 @@ export class MapArtRenderer {
   }
 
   private loadAsset(definition: MapArtAsset): LoadedAsset {
-    const asset: LoadedAsset = { definition, image: new Image(), loaded: false };
-    asset.image.addEventListener('load', () => {
-      asset.loaded = asset.image.naturalWidth > 0;
+    const shared = mapArtImage(definition.source);
+    const asset: LoadedAsset = { definition, ...shared };
+    void asset.ready.then((loaded) => {
+      asset.loaded = loaded;
+      asset.failed = !loaded;
       this.onAssetReady?.();
-    }, { once: true });
-    asset.image.src = definition.source;
+    });
     return asset;
   }
 

@@ -5,7 +5,7 @@ import { terrainCapacity } from '../systems/GrowthSystem';
 import { hqShield } from '../systems/StructureSystem';
 import { EffectsRenderer } from './EffectsRenderer';
 import { LandscapeRenderer } from './LandscapeRenderer';
-import { MAP_ART_RENDER_LAYERS, MapArtRenderer } from './MapArtRenderer';
+import { MAP_ART_RENDER_LAYERS, MapArtRenderer, type MapStyleMode, type PreparedMapStyle } from './MapArtRenderer';
 import { mix, OWNER_COLORS } from './palette';
 import { StructureAssetRenderer } from './StructureAssetRenderer';
 import {
@@ -45,7 +45,7 @@ export class BoardRenderer {
   private lastEnvironmentFrame = -Infinity;
   private lastMapArtLevel = -1;
 
-  constructor(readonly canvas: HTMLCanvasElement, readonly stage: HTMLElement, visualVariant: VisualVariant = 'production') {
+  constructor(readonly canvas: HTMLCanvasElement, readonly stage: HTMLElement, visualVariant: VisualVariant = 'production', mapStyle: MapStyleMode = 'auto') {
     const context = canvas.getContext('2d', { alpha: true });
     if (!context) throw new Error('Canvas 2D is unavailable.');
     this.context = context;
@@ -58,10 +58,17 @@ export class BoardRenderer {
     this.environmentContext = environmentContext;
     canvas.before(this.mapCanvas, this.environmentCanvas);
     this.landscape = new LandscapeRenderer(undefined, visualVariant);
-    this.mapArt = new MapArtRenderer(() => {
+    this.mapArt = new MapArtRenderer(mapStyle, () => {
       this.mapLayerDirty = true;
       this.environmentLayerDirty = true;
     });
+  }
+
+  async prepareLevel(levelIndex: number): Promise<PreparedMapStyle> {
+    const style = await this.mapArt.prepare(levelIndex);
+    this.mapLayerDirty = true;
+    this.environmentLayerDirty = true;
+    return style;
   }
 
   private createLayerCanvas(className: string): HTMLCanvasElement {
@@ -199,7 +206,6 @@ export class BoardRenderer {
       this.mapContext.save();
       this.mapContext.transform(this.worldTransform.scale, 0, 0, this.worldTransform.scale, this.worldTransform.translateX, this.worldTransform.translateY);
       const coreLoaded = this.mapArt.drawCore(this.mapContext, state.currentLevel);
-      if (!coreLoaded) for (const hex of state.hexes) if (hex.terrain === Terrain.Decor) this.landscape.drawHex(this.mapContext, hex, this.radius, state.level.landscapeStyle, state.level.seed, BoardRenderer.path);
       this.mapContext.restore();
       this.mapLayerDirty = !coreLoaded;
     }

@@ -10,6 +10,8 @@ import { BoardRenderer } from '../rendering/BoardRenderer';
 import { LandscapeRenderer } from '../rendering/LandscapeRenderer';
 import { OWNER_COLORS } from '../rendering/palette';
 import { centeredAspectCrop, mapArtForLevel } from '../rendering/MapArtManifest';
+import { mapArtImage } from '../rendering/MapArtAssetStore';
+import type { MapStyleMode } from '../rendering/MapArtRenderer';
 import { REFERENCE_WORLD_HEIGHT, REFERENCE_WORLD_WIDTH } from '../rendering/WorldGeometry';
 import { CampaignAtlas, RELEASED_CAMPAIGN_LEVELS } from './CampaignAtlas';
 
@@ -40,7 +42,7 @@ export class CampaignUI {
   private readonly atlas: CampaignAtlas;
   private readonly previewMapImages = new Map<string, HTMLImageElement>();
 
-  constructor(private readonly callbacks: UICallbacks, private readonly i18n: I18n, visualVariant: VisualVariant = 'production') {
+  constructor(private readonly callbacks: UICallbacks, private readonly i18n: I18n, visualVariant: VisualVariant = 'production', private readonly mapStyle: MapStyleMode = 'auto') {
     this.previewLandscape = new LandscapeRenderer(() => this.renderPreview(this.selectedMenuLevel), visualVariant);
     this.atlas = new CampaignAtlas(required<SVGSVGElement>('campaignAtlasSvg'), i18n);
     required('playLevelBtn').addEventListener('click', () => callbacks.startLevel(this.selectedMenuLevel));
@@ -150,6 +152,21 @@ export class CampaignUI {
     this.updateEndgame(state); this.updateHUD(state);
   }
 
+  setMapLoading(loading: boolean): void {
+    const play = required<HTMLButtonElement>('playLevelBtn');
+    play.classList.toggle('loading', loading);
+    play.setAttribute('aria-busy', String(loading));
+    this.menu.classList.toggle('mapLoading', loading);
+    if (loading) {
+      play.disabled = true;
+      play.textContent = this.i18n.t('campaign.play.loading');
+      return;
+    }
+    if (this.menu.classList.contains('show')) {
+      this.selectLevel(this.selectedMenuLevel, this.lastProgress, this.lastUnlocked, false);
+    }
+  }
+
   acknowledgeCommand(state: GameState, mode: SendMode, progress: CampaignProgress): void {
     this.lastProgress = progress;
     if (state.currentLevel === 1 && this.app.classList.contains('fullSendCoach') && mode !== 'all') return;
@@ -173,6 +190,7 @@ export class CampaignUI {
   }
 
   selectLevel(index: number, progress: CampaignProgress, unlocked: (index: number) => boolean, reveal = true): void {
+    if (required('playLevelBtn').classList.contains('loading')) return;
     this.selectedMenuLevel = Math.max(0, Math.min(LEVELS.length - 1, index));
     const level = LEVELS[this.selectedMenuLevel]; const actIndex = campaignActForLevel(this.selectedMenuLevel); const act = CAMPAIGN_ACTS[actIndex];
     if (this.atlas.needsLayoutUpdate()) this.renderAtlas(this.selectedMenuLevel);
@@ -352,7 +370,7 @@ export class CampaignUI {
     const canvas = required<HTMLCanvasElement>('levelPreview'); const bounds = canvas.getBoundingClientRect(); const width = Math.max(260, Math.round(bounds.width)); const height = Math.max(170, Math.round(bounds.height));
     const ratio = Math.min(devicePixelRatio || 1, 2); canvas.width = width * ratio; canvas.height = height * ratio;
     const context = canvas.getContext('2d'); if (!context) return; context.setTransform(ratio, 0, 0, ratio, 0, 0); context.fillStyle = '#d7e3cf'; context.fillRect(0, 0, width, height);
-    const mapArt = mapArtForLevel(levelIndex); const mapImage = mapArt ? this.previewMapImage(mapArt.core.source) : null;
+    const mapArt = this.mapStyle === 'classic' ? null : mapArtForLevel(levelIndex); const mapImage = mapArt ? this.previewMapImage(mapArt.core.source) : null;
     const hasMapArt = Boolean(mapImage?.complete && mapImage.naturalWidth);
     if (hasMapArt && mapImage) {
       const crop = centeredAspectCrop(mapImage.naturalWidth, mapImage.naturalHeight, width, height);
@@ -392,10 +410,10 @@ export class CampaignUI {
 
   private previewMapImage(source: string): HTMLImageElement {
     const cached = this.previewMapImages.get(source); if (cached) return cached;
-    const image = new Image(); image.decoding = 'async'; image.src = source;
-    image.addEventListener('load', () => {
+    const asset = mapArtImage(source); const image = asset.image;
+    void asset.ready.then(() => {
       if (this.menu.classList.contains('show')) this.renderPreview(this.selectedMenuLevel);
-    }, { once:true });
+    });
     this.previewMapImages.set(source, image); return image;
   }
 
