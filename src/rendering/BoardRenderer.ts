@@ -24,7 +24,7 @@ export class BoardRenderer {
   readonly radius = REFERENCE_WORLD_GEOMETRY.radius;
   selected: HexState | null = null;
   dragPosition: Point | null = null;
-  sendMode: SendMode = 'half';
+  sendMode: SendMode = 'all';
   sendLabel = 'SEND';
   shieldLabel = 'SHIELD';
   readonly effects = new EffectsRenderer();

@@ -169,7 +169,7 @@ class MemoryStorage implements Storage {
 test('progress unlocks sequentially and survives a reload', () => {
   const storage = new MemoryStorage(); const store = new CampaignProgressStore(storage);
   let progress = store.load();
-  assert.equal(progress.fullSendUsed, false);
+  assert.equal(progress.halfSendUsed, false);
   assert.equal(store.isUnlocked(progress, 0), true);
   assert.equal(store.isUnlocked(progress, 1), false);
   progress = store.complete(progress, 0, 72.5);
@@ -177,7 +177,7 @@ test('progress unlocks sequentially and survives a reload', () => {
   const reloaded = new CampaignProgressStore(storage).load();
   assert.equal(reloaded.completed[0], true);
   assert.equal(reloaded.best[0], 72.5);
-  assert.equal(reloaded.fullSendUsed, false);
-  progress = store.markFullSendUsed(reloaded);
-  assert.equal(new CampaignProgressStore(storage).load().fullSendUsed, true);
+  assert.equal(reloaded.halfSendUsed, false);
+  progress = store.markHalfSendUsed(reloaded);
+  assert.equal(new CampaignProgressStore(storage).load().halfSendUsed, true);
 });

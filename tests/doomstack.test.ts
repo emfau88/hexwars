@@ -4,10 +4,10 @@ import { runDoomstack } from '../scripts/doomstack';
 import { guardianCells, runGuardianLab } from '../scripts/guardian-lab';
 import { GameState } from '../src/core/GameState';
 
-test('doomstack strategy respects the Level 1 100 percent lock', () => {
+test('doomstack strategy can execute the Level 1 100 percent command', () => {
   const result = runDoomstack(0);
-  assert.equal(result.skipped, true);
-  assert.equal(result.actions, 0);
+  assert.equal(result.skipped, false);
+  assert.ok(result.actions > 0);
   assert.equal(result.groupActions, 0);
 });
 

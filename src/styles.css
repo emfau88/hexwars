@@ -846,27 +846,27 @@ body.campaignOpen { touch-action:pan-y; }
     #sidePanel .utilityBtn { min-height:38px; }
   }
 
-  .fullSendCoach .modeBtn[data-mode="all"].newlyUnlocked,
+  .halfSendCoach .modeBtn[data-mode="half"].newlyUnlocked,
   .groupSendCoach .modeBtn[data-mode="group"].newlyUnlocked {
     position:relative; overflow:visible; border-color:#e58a43; box-shadow:0 0 0 3px rgba(229,138,67,.25),0 0 22px rgba(229,138,67,.28);
     animation:fullSendPulse 1.35s ease-in-out infinite;
   }
-  .fullSendCoach .modeBtn[data-mode="all"].newlyUnlocked::after,
+  .halfSendCoach .modeBtn[data-mode="half"].newlyUnlocked::after,
   .groupSendCoach .modeBtn[data-mode="group"].newlyUnlocked::after {
     content:attr(data-new-label); position:absolute; top:-10px; right:-5px; display:block; margin:0; padding:3px 5px;
     color:#fff7e8; border:1px solid rgba(255,255,255,.4); border-radius:999px; background:#b95f2f;
     font:800 7px/1 var(--font-ui); letter-spacing:.7px;
   }
-  .fullSendCoach #commandDock .modeBtn[data-mode="all"].newlyUnlocked::before {
+  .halfSendCoach #commandDock .modeBtn[data-mode="half"].newlyUnlocked::before {
     content:''; position:absolute; z-index:-1; inset:-12px; border:2px solid #ed6d55; border-radius:50%;
     box-shadow:0 0 0 4px rgba(237,109,85,.12),0 0 24px rgba(237,109,85,.45);
     animation:fullSendBeacon 1.65s ease-out infinite; pointer-events:none;
   }
-  .fullSendCoach #commandDock .modeBtn[data-mode="all"].newlyUnlocked::after {
+  .halfSendCoach #commandDock .modeBtn[data-mode="half"].newlyUnlocked::after {
     top:-16px; right:-12px; padding:5px 7px; color:#fff6e9; border-color:rgba(255,236,215,.8); background:#c84e42;
     font-size:9px; letter-spacing:.55px; white-space:nowrap;
   }
-  .fullSendCoach #hint,.groupSendCoach #hint { color:#fff4df; border-color:#dc8b4e; box-shadow:0 5px 20px rgba(76,45,24,.24); }
+  .halfSendCoach #hint,.groupSendCoach #hint { color:#fff4df; border-color:#dc8b4e; box-shadow:0 5px 20px rgba(76,45,24,.24); }
   @keyframes fullSendPulse {
     0%,100% { box-shadow:0 0 0 3px rgba(229,138,67,.22),0 0 16px rgba(229,138,67,.22); }
     50% { box-shadow:0 0 0 4px rgba(229,138,67,.34),0 0 26px rgba(229,138,67,.38); }
@@ -879,4 +879,82 @@ body.campaignOpen { touch-action:pan-y; }
 
   @media (prefers-reduced-motion:reduce) {
     *,*::before,*::after { scroll-behavior:auto !important; transition-duration:.01ms !important; animation-duration:.01ms !important; animation-iteration-count:1 !important; }
+  }
+
+  /* Level 1 pointer tutorial. Assets are loaded only when the mission starts. */
+  .levelOneTutorial {
+    position:absolute; inset:0; z-index:6; overflow:hidden; pointer-events:none;
+  }
+  .levelOneTutorial[hidden] { display:none; }
+  .levelOneTutorial img {
+    position:absolute; display:block; max-width:none; user-select:none; pointer-events:none;
+    will-change:transform,opacity,filter;
+  }
+  .tutorialOrigin,.tutorialTarget {
+    transform:translate(-50%,-50%); object-fit:contain;
+  }
+  .tutorialOrigin { z-index:1; opacity:0; filter:drop-shadow(0 5px 12px rgba(71,39,18,.28)); }
+  .tutorialArrow { z-index:2; opacity:0; object-fit:fill; transform-origin:50% 100%; filter:drop-shadow(0 5px 10px rgba(75,40,16,.25)); }
+  .tutorialTarget { z-index:3; opacity:0; filter:drop-shadow(0 5px 13px rgba(42,69,43,.28)); }
+  .tutorialGesture { z-index:4; height:auto; opacity:0; }
+  .tutorialTouchHand { display:none !important; }
+  .levelOneTutorial[data-pointer="touch"] .tutorialDesktopPointer { display:none !important; }
+  .levelOneTutorial[data-pointer="touch"] .tutorialTouchHand { display:block !important; }
+
+  .levelOneTutorial.ready .tutorialOrigin { animation:tutorialOriginPulse 1.65s ease-in-out infinite; }
+  .levelOneTutorial.ready .tutorialTarget { animation:tutorialTargetIdle 1.65s ease-in-out infinite; }
+  .levelOneTutorial.ready .tutorialArrow { animation:tutorialArrowGuide 2.7s ease-in-out infinite; }
+  .levelOneTutorial.ready .tutorialDesktopPointer { animation:tutorialPointerDrag 2.7s cubic-bezier(.55,.04,.32,1) infinite; }
+  .levelOneTutorial.ready .tutorialTouchHand { animation:tutorialHandDrag 2.7s cubic-bezier(.55,.04,.32,1) infinite; }
+  .levelOneTutorial.dragging .tutorialTarget { opacity:.82; animation:tutorialTargetIdle 1.15s ease-in-out infinite; }
+  .levelOneTutorial.release .tutorialTarget { opacity:1; animation:tutorialTargetConfirm .72s ease-in-out infinite alternate; }
+  .levelOneTutorial.complete .tutorialTarget { animation:tutorialTargetComplete .7s ease-out both; }
+
+  @keyframes tutorialOriginPulse {
+    0%,100% { opacity:.68; transform:translate(-50%,-50%) scale(.91); }
+    50% { opacity:1; transform:translate(-50%,-50%) scale(1.04); }
+  }
+  @keyframes tutorialTargetIdle {
+    0%,100% { opacity:.54; transform:translate(-50%,-50%) scale(.92) rotate(-2deg); }
+    50% { opacity:.86; transform:translate(-50%,-50%) scale(1.01) rotate(2deg); }
+  }
+  @keyframes tutorialArrowGuide {
+    0%,13%,100% { opacity:0; filter:drop-shadow(0 5px 10px rgba(75,40,16,.22)) brightness(.92); }
+    27%,72% { opacity:.9; filter:drop-shadow(0 5px 12px rgba(75,40,16,.3)) brightness(1.08); }
+    86% { opacity:0; }
+  }
+  @keyframes tutorialPointerDrag {
+    0%,13% { opacity:0; transform:translate(-14%,-9%) scale(.92); }
+    22%,34% { opacity:1; transform:translate(-14%,-9%) scale(1); }
+    65%,78% { opacity:1; transform:translate(calc(-14% + var(--tutorial-dx)),calc(-9% + var(--tutorial-dy))) scale(.96); }
+    92%,100% { opacity:0; transform:translate(calc(-14% + var(--tutorial-dx)),calc(-9% + var(--tutorial-dy))) scale(.96); }
+  }
+  @keyframes tutorialHandDrag {
+    0%,13% { opacity:0; transform:translate(-52%,-84%) scale(.92); }
+    22%,34% { opacity:1; transform:translate(-52%,-84%) scale(1); }
+    65%,78% { opacity:1; transform:translate(calc(-52% + var(--tutorial-dx)),calc(-84% + var(--tutorial-dy))) scale(.96); }
+    92%,100% { opacity:0; transform:translate(calc(-52% + var(--tutorial-dx)),calc(-84% + var(--tutorial-dy))) scale(.96); }
+  }
+  @keyframes tutorialTargetConfirm {
+    from { transform:translate(-50%,-50%) scale(.95); filter:drop-shadow(0 5px 11px rgba(42,69,43,.25)) brightness(1); }
+    to { transform:translate(-50%,-50%) scale(1.06); filter:drop-shadow(0 5px 18px rgba(84,137,74,.5)) brightness(1.13); }
+  }
+  @keyframes tutorialTargetComplete {
+    0% { opacity:1; transform:translate(-50%,-50%) scale(.98); }
+    55% { opacity:1; transform:translate(-50%,-50%) scale(1.18); filter:brightness(1.22); }
+    100% { opacity:0; transform:translate(-50%,-50%) scale(1.34); }
+  }
+
+  .introLevel #hint {
+    color:#fff4df; border-color:rgba(228,150,81,.7);
+    box-shadow:0 6px 22px rgba(72,42,22,.28),inset 0 1px rgba(255,255,255,.05);
+  }
+  @media (max-width:900px), (max-height:520px) {
+    .levelOneTutorial { z-index:6; }
+  }
+  @media (prefers-reduced-motion:reduce) {
+    .levelOneTutorial.ready .tutorialGesture { display:none !important; }
+    .levelOneTutorial.ready .tutorialOrigin { opacity:.88; transform:translate(-50%,-50%); }
+    .levelOneTutorial.ready .tutorialTarget { opacity:.74; transform:translate(-50%,-50%); }
+    .levelOneTutorial.ready .tutorialArrow { opacity:.82; }
   }

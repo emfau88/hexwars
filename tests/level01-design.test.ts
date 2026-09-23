@@ -37,7 +37,7 @@ test('Level 1 preserves the complete visible raster while adding optional latera
 });
 
 test('Level 1 retains active opposition with a smaller starting force and slightly slower production', () => {
-  assert.deepEqual(level01.features, { all: false, group: false, relay: false, supply: true });
+  assert.deepEqual(level01.features, { half: false, all: true, group: false, relay: false, supply: true });
   assert.equal(level01.aiDelaySeconds, .3);
   assert.equal(level01.aiThinkMs, 2500);
   assert.equal(level01.aiSkill, .4);

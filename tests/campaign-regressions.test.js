@@ -27,11 +27,11 @@ test('campaign runtime is split into typed modules without ts-nocheck', () => {
   assert.doesNotMatch(main, /CampaignGame/);
 });
 
-test('Level 1 teaches 50 percent and Level 2 unlocks 100 percent', () => {
-  assert.match(level1, /sendest jeweils 50 %|sendest du jeweils 50 %/);
-  assert.match(level1, /features: \{ all: false, group: false, relay: false \}/);
-  assert.match(level2, /100 % wird freigeschaltet/);
-  assert.match(level2, /features:\{all:true,group:false,relay:false\}/);
+test('Level 1 teaches 100 percent and Level 2 unlocks the 50 percent reserve command', () => {
+  assert.match(level1, /sendest jeweils 100 %|sendest du jeweils 100 %/);
+  assert.match(level1, /features: \{ half: false, all: true, group: false, relay: false \}/);
+  assert.match(level2, /50 % wird freigeschaltet/);
+  assert.match(level2, /features:\{half:true,all:true,group:false,relay:false\}/);
   assert.match(styles, /attr\(data-unlock-label\)/);
 });
 
@@ -110,6 +110,19 @@ test('Level 1 landscape assets stay within the mobile budget', () => {
   }
   const core = new URL('../public/assets/maps/level01-core-v1.png', import.meta.url);
   assert.ok(statSync(core).size < 3_200_000, 'Level 1 core art stays below the 3.2 MB PoC ceiling');
+});
+
+test('Level 1 tutorial art stays lazy-loadable and inside a compact runtime budget', () => {
+  const names = [
+    'tutorial-origin-beacon-v1.webp', 'tutorial-command-arrow-v1.webp', 'tutorial-target-marker-v1.webp',
+    'tutorial-desktop-pointer-v1.webp', 'tutorial-touch-hand-v1.webp',
+  ];
+  const assets = names.map((name) => new URL(`../public/assets/tutorial/${name}`, import.meta.url));
+  for (const asset of assets) assert.ok(statSync(asset).size < 110_000, `${asset.pathname} stays below 110 KB`);
+  assert.ok(assets.reduce((sum, asset) => sum + statSync(asset).size, 0) < 250_000, 'tutorial runtime art stays below 250 KB combined');
+  const tutorial = read('../src/ui/LevelOneTutorial.ts');
+  assert.match(tutorial, /private loadAssets\(\)/);
+  assert.doesNotMatch(read('../index.html'), /assets\/tutorial/);
 });
 
 test('Level 2 map core and water phases stay within the visual PoC budget', () => {

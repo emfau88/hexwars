@@ -2,19 +2,19 @@ import { SAVE_KEY } from '../core/config';
 import type { CampaignProgress } from '../core/types';
 import { LEVELS } from '../levels';
 
-const blank = (): CampaignProgress => ({ completed: LEVELS.map(() => false), best: LEVELS.map(() => 0), fullSendUsed: false });
+const blank = (): CampaignProgress => ({ completed: LEVELS.map(() => false), best: LEVELS.map(() => 0), halfSendUsed: false });
 
 export class CampaignProgressStore {
   constructor(private readonly storage: Storage | null = typeof localStorage === 'undefined' ? null : localStorage) {}
 
   load(): CampaignProgress {
     try {
-      const parsed = JSON.parse(this.storage?.getItem(SAVE_KEY) ?? 'null') as Partial<CampaignProgress> | null;
+      const parsed = JSON.parse(this.storage?.getItem(SAVE_KEY) ?? 'null') as (Partial<CampaignProgress> & { fullSendUsed?: boolean }) | null;
       if (parsed && Array.isArray(parsed.completed) && Array.isArray(parsed.best)) {
         return {
           completed: LEVELS.map((_, index) => Boolean(parsed.completed?.[index])),
           best: LEVELS.map((_, index) => Number(parsed.best?.[index]) || 0),
-          fullSendUsed: Boolean(parsed.fullSendUsed),
+          halfSendUsed: Boolean(parsed.halfSendUsed || parsed.completed?.[1]),
         };
       }
     } catch { /* A damaged save must never prevent the game from starting. */ }
@@ -33,9 +33,9 @@ export class CampaignProgressStore {
     return next;
   }
 
-  markFullSendUsed(progress: CampaignProgress): CampaignProgress {
-    if (progress.fullSendUsed) return progress;
-    const next = { ...progress, fullSendUsed: true };
+  markHalfSendUsed(progress: CampaignProgress): CampaignProgress {
+    if (progress.halfSendUsed) return progress;
+    const next = { ...progress, halfSendUsed: true };
     this.save(next);
     return next;
   }

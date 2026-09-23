@@ -11,6 +11,7 @@ import { BoardRenderer } from '../rendering/BoardRenderer';
 import type { MapStyleMode } from '../rendering/MapArtRenderer';
 import { OWNER_COLORS } from '../rendering/palette';
 import { CampaignUI } from '../ui/CampaignUI';
+import { LevelOneTutorial } from '../ui/LevelOneTutorial';
 import { LEVELS } from '../levels';
 
 const DEBUG_ENABLED = import.meta.env.DEV || import.meta.env.MODE === 'test';
@@ -32,12 +33,13 @@ export class HexfrontApp {
   readonly state = new GameState();
   readonly renderer: BoardRenderer;
   readonly ui: CampaignUI;
+  readonly tutorial: LevelOneTutorial;
   readonly audio = new AudioController();
   readonly i18n = new I18n();
   readonly progressStore = new CampaignProgressStore();
   readonly kongregateStats = new KongregateStats();
   progress: CampaignProgress;
-  sendMode: SendMode = 'half';
+  sendMode: SendMode = 'all';
   private readonly input: InputController;
   private readonly visualVariant = VISUAL_VARIANT;
   private stageResizeObserver: ResizeObserver | null = null;
@@ -62,16 +64,24 @@ export class HexfrontApp {
       toggleFullscreen: () => void this.toggleFullscreen(), resetProgress: () => this.resetProgress(), activate: () => this.audio.activate(),
       setLocale: (locale) => this.setLocale(locale),
     }, this.i18n, this.visualVariant, MAP_STYLE);
+    this.tutorial = new LevelOneTutorial(stage, this.renderer, this.i18n, {
+      showHint: (message) => this.ui.showTutorialHint(message),
+      hideHint: () => this.ui.hideTutorialHint(),
+      showSuccess: (message) => this.ui.showToast(message),
+    });
     this.input = new InputController(canvas, this.state, this.renderer, {
       getMode: () => this.sendMode,
       onCommand: () => {
-        if (this.state.currentLevel === 1 && this.sendMode === 'all') {
-          this.progress = this.progressStore.markFullSendUsed(this.progress);
+        if (this.state.currentLevel === 1 && this.sendMode === 'half') {
+          this.progress = this.progressStore.markHalfSendUsed(this.progress);
         }
         this.ui.acknowledgeCommand(this.state, this.sendMode, this.progress);
         navigator.vibrate?.(10); this.audio.play('send');
       },
       onInvalid: (error) => { this.audio.play('denied'); this.ui.showToast(this.i18n.t(this.inputErrorKey(error))); }, onActivate: () => this.audio.activate(),
+      onGestureStart: (source, pointerType) => this.tutorial.gestureStart(this.state, source, pointerType),
+      onGestureMove: (_source, target) => this.tutorial.gestureMove(this.state, target),
+      onGestureEnd: (sent) => this.tutorial.gestureEnd(this.state, sent),
     });
     this.showMap(this.progressStore.focus(this.progress));
     this.bindWindowEvents();
@@ -136,14 +146,16 @@ export class HexfrontApp {
       return;
     }
     this.state.start(index, (col, row) => this.renderer.positionFor(col, row));
-    this.sendMode = 'half'; this.renderer.sendMode = this.sendMode;
+    this.sendMode = this.state.level.features.half ? 'half' : 'all'; this.renderer.sendMode = this.sendMode;
     this.ui.startMission(this.state, this.progress); this.ui.setMode(this.sendMode, this.state); this.ui.syncPlayerSupply(this.state.playerSupplyEnabled); this.audio.play('confirm');
     this.resizeLayout();
+    this.tutorial.start(this.state);
     this.lastFrame = performance.now();
   }
 
   showMap(focus = this.state.currentLevel): void {
     this.levelStartRequest += 1;
+    this.tutorial.stop(false);
     this.state.running = false;
     this.ui.setMapLoading(false);
     this.ui.showMap(this.progress, (index) => this.progressStore.isUnlocked(this.progress, index, DEBUG_UNLOCK), focus);
@@ -152,7 +164,7 @@ export class HexfrontApp {
 
   setMode(mode: SendMode): void {
     const features = this.state.level.features;
-    if ((mode === 'all' && !features.all) || (mode === 'group' && !features.group)) return;
+    if ((mode === 'half' && !features.half) || (mode === 'all' && !features.all) || (mode === 'group' && !features.group)) return;
     this.sendMode = mode; this.renderer.sendMode = mode; this.ui.setMode(mode, this.state);
     this.audio.play('navigate');
     this.ui.showToast(this.i18n.t(mode === 'half' ? 'toast.mode.half' : mode === 'all' ? 'toast.mode.all' : 'toast.mode.group'));
@@ -171,7 +183,7 @@ export class HexfrontApp {
       this.state.update(delta * DEBUG_SPEED); this.renderer.effects.update(delta * DEBUG_SPEED); this.ui.updateHUD(this.state);
     }
     this.consumeEvents();
-    this.renderer.draw(this.state, time); this.animationFrame = requestAnimationFrame(this.frame);
+    this.renderer.draw(this.state, time); this.tutorial.updatePosition(); this.animationFrame = requestAnimationFrame(this.frame);
   };
 
   private consumeEvents(): void {
@@ -188,7 +200,8 @@ export class HexfrontApp {
     }
     if (event.type === 'endgame') { this.ui.updateEndgame(this.state); this.ui.showToast(this.i18n.t(event.detail.stage === 1 ? 'toast.endgame.decline' : 'toast.endgame.decision')); }
     if (event.type === 'result') {
-      const firstFullSendUnlock = event.detail.result === 'victory'
+      this.tutorial.stop(false);
+      const firstHalfSendUnlock = event.detail.result === 'victory'
         && this.state.currentLevel === 0
         && !this.progress.completed[0];
       if (event.detail.result === 'victory') {
@@ -196,7 +209,7 @@ export class HexfrontApp {
         this.submitCampaignStatistics();
         this.audio.play('victory');
       } else this.audio.play('defeat');
-      this.ui.showResult(this.state, this.progress, firstFullSendUnlock);
+      this.ui.showResult(this.state, this.progress, firstHalfSendUnlock);
     }
   }
 
@@ -228,6 +241,7 @@ export class HexfrontApp {
     this.renderer.sendLabel = this.i18n.t('drag.send');
     this.renderer.shieldLabel = this.i18n.t('guardian.shield');
     this.ui.refreshLanguage(this.state, this.audio.enabled);
+    this.tutorial.refreshCopy();
   }
 
   private inputErrorKey(error: InputError): 'toast.invalid.decor' | 'toast.invalid.target' {

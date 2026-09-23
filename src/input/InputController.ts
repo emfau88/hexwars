@@ -1,5 +1,5 @@
 import type { GameState } from '../core/GameState';
-import { Owner, type Point, type SendMode } from '../core/types';
+import { Owner, type HexState, type Point, type SendMode } from '../core/types';
 import type { BoardRenderer } from '../rendering/BoardRenderer';
 
 export type InputError = 'decor' | 'target';
@@ -9,6 +9,9 @@ export interface InputCallbacks {
   onCommand(sent: number): void;
   onInvalid(error: InputError): void;
   onActivate(): void;
+  onGestureStart?(source: HexState, pointerType: string): void;
+  onGestureMove?(source: HexState, target: HexState | null): void;
+  onGestureEnd?(sent: number): void;
 }
 
 export class InputController {
@@ -45,12 +48,14 @@ export class InputController {
     if (hex?.owner === Owner.Player && hex.units >= 2) {
       this.renderer.selected = hex; this.renderer.dragPosition = point; this.pointerDown = true;
       this.canvas.setPointerCapture?.(event.pointerId);
+      this.callbacks.onGestureStart?.(hex, event.pointerType);
     }
   };
 
   private onMove = (event: PointerEvent): void => {
     if (!this.pointerDown || !this.renderer.selected) return;
     event.preventDefault(); this.renderer.dragPosition = this.point(event);
+    this.callbacks.onGestureMove?.(this.renderer.selected, this.renderer.findHex(this.state, this.renderer.dragPosition));
   };
 
   private onUp = (event: PointerEvent): void => {
@@ -71,10 +76,17 @@ export class InputController {
         ? 'decor'
         : 'target');
     }
-    this.cancel();
+    this.callbacks.onGestureEnd?.(sent);
+    this.reset();
   };
 
   private cancel = (): void => {
-    this.pointerDown = false; this.renderer.selected = null; this.renderer.dragPosition = null;
+    const active = this.pointerDown && Boolean(this.renderer.selected);
+    this.reset();
+    if (active) this.callbacks.onGestureEnd?.(0);
   };
+
+  private reset(): void {
+    this.pointerDown = false; this.renderer.selected = null; this.renderer.dragPosition = null;
+  }
 }

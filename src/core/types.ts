@@ -57,6 +57,7 @@ export interface StructureState extends Cell {
 }
 
 export interface FeatureFlags {
+  half: boolean;
   all: boolean;
   group: boolean;
   relay: boolean;
@@ -136,7 +137,7 @@ export interface Particle extends Point {
 export interface CampaignProgress {
   completed: boolean[];
   best: number[];
-  fullSendUsed: boolean;
+  halfSendUsed: boolean;
 }
 
 export interface GameSnapshot {

@@ -56,12 +56,14 @@ test('campaign map, unlock state and real pointer drag work', async ({ page }) =
   await expect(page.getByRole('button', { name: /Level 2: TWO ROUTES/ })).toHaveAttribute('aria-label', /locked/);
   await page.getByRole('button', { name: 'BEGIN CAMPAIGN' }).click();
   await page.evaluate(() => window.__HEXFRONT__?.setOpponentEnabled(false));
-  await expect(page.locator('#commandDock .modeBtn[data-mode="half"]')).toBeEnabled();
-  await expect(page.locator('#commandDock .modeBtn[data-mode="all"]')).toBeDisabled();
+  await expect(page.locator('#commandDock .modeBtn[data-mode="half"]')).toBeDisabled();
+  await expect(page.locator('#commandDock .modeBtn[data-mode="all"]')).toBeEnabled();
   await expect(page.locator('#commandDock .modeBtn[data-mode="group"]')).toBeDisabled();
-  await expect(page.locator('#commandDock .modeBtn[data-mode="all"]')).toHaveAttribute('data-unlock-label', 'LOCKED → LEVEL 2');
+  await expect(page.locator('#commandDock .modeBtn[data-mode="half"]')).toHaveAttribute('data-unlock-label', 'LOCKED → LEVEL 2');
   await expect(page.locator('#commandDock .modeBtn[data-mode="group"]')).toHaveAttribute('data-unlock-label', 'LOCKED → LEVEL 4');
-  await expect(page.locator('#unlockPanel')).toContainText('The 100% send unlocks in Mission II.');
+  await expect(page.locator('#unlockPanel')).toContainText('The 50% reserve send unlocks in Mission II.');
+  await expect(page.locator('#levelOneTutorial')).toBeVisible();
+  await expect(page.locator('#levelOneTutorial')).toHaveClass(/ready/);
   await page.waitForTimeout(3_800);
   await expect(page.locator('#hint')).toHaveCSS('opacity', '1');
 
@@ -71,6 +73,7 @@ test('campaign map, unlock state and real pointer drag work', async ({ page }) =
   await dragBetween(page, source, target);
   await expect(page.locator('#actionStatus')).toHaveText('1');
   await expect(page.locator('#hint')).toHaveCSS('opacity', '0');
+  await expect(page.locator('#toast')).toContainText('100% are moving');
   await expect.poll(async () => page.locator('#captureStatus').textContent()).toBe('1');
 });
 
@@ -142,10 +145,10 @@ test('enemy acts and a completed mission persists its unlock after reload', asyn
   await expect(page.locator('.resultStats')).toBeVisible();
   await expect(page.locator('#resultAdvance')).toHaveClass(/commandUnlock/);
   await expect(page.locator('#resultUnlockVisual')).toBeVisible();
-  await expect(page.locator('#resultUnlockVisual')).toContainText('100 %');
+  await expect(page.locator('#resultUnlockVisual')).toContainText('50 %');
   await expect(page.locator('#resultAdvanceLabel')).toHaveText('NEW COMMAND UNLOCKED');
-  await expect(page.locator('#resultAdvanceName')).toHaveText('100% SEND');
-  await expect(page.locator('#resultAdvanceRule')).toContainText('The source is left empty.');
+  await expect(page.locator('#resultAdvanceName')).toHaveText('50% SEND');
+  await expect(page.locator('#resultAdvanceRule')).toContainText('keep the other half');
   await expect(page.getByRole('button', { name: 'CONTINUE TO LEVEL 2', exact: true })).toBeVisible();
   const unlockMetrics = await page.locator('.modalBox').evaluate((modal) => {
     const box = modal.getBoundingClientRect();
@@ -157,37 +160,33 @@ test('enemy acts and a completed mission persists its unlock after reload', asyn
   await page.getByRole('button', { name: 'CAMPAIGN MAP', exact: true }).click();
   await expect(page.getByRole('button', { name: 'Level 2: TWO ROUTES' })).toBeEnabled();
   await page.getByRole('button', { name: 'Level 2: TWO ROUTES' }).click();
-  await expect(page.locator('#menuFeatureUnlock')).toHaveText('NEW · 100% SEND');
-  await expect(page.getByRole('button', { name: 'START · TRY 100% SEND' })).toBeVisible();
-  await page.getByRole('button', { name: 'START · TRY 100% SEND' }).click();
+  await expect(page.locator('#menuFeatureUnlock')).toHaveText('NEW · 50% SEND');
+  await expect(page.getByRole('button', { name: 'START · TRY 50% SEND' })).toBeVisible();
+  await page.getByRole('button', { name: 'START · TRY 50% SEND' }).click();
   await page.evaluate(() => window.__HEXFRONT__?.setOpponentEnabled(false));
-  await expect(page.locator('#app')).toHaveClass(/fullSendCoach/);
-  await expect(page.locator('.modeBtn[data-mode="all"]:visible')).toHaveClass(/newlyUnlocked/);
-  await expect(page.locator('#hint')).toContainText('choose 100%');
-  await expect(page.locator('.modeBtn[data-mode="all"]:visible')).toHaveAttribute('data-new-label', 'NEW · 100% SEND');
+  await expect(page.locator('#app')).toHaveClass(/halfSendCoach/);
+  await expect(page.locator('.modeBtn[data-mode="half"]:visible')).toHaveClass(/newlyUnlocked/);
+  await expect(page.locator('#hint')).toContainText('choose 50%');
+  await expect(page.locator('.modeBtn[data-mode="half"]:visible')).toHaveAttribute('data-new-label', 'NEW · 50% SEND');
   const levelTwoBoard = await page.evaluate(() => window.__HEXFRONT__?.getBoard()) as DebugBoard;
   const levelTwoSource = levelTwoBoard.find((hex) => hex.col === 3 && hex.row === 11)!;
   const levelTwoTarget = levelTwoBoard.find((hex) => hex.col === 3 && hex.row === 10)!;
   await dragBetween(page, levelTwoSource, levelTwoTarget);
-  await expect(page.locator('#app')).toHaveClass(/fullSendCoach/);
-  await expect(page.locator('#hint')).toHaveCSS('opacity', '1');
-  await page.locator('.modeBtn[data-mode="all"]:visible').click();
-  await dragBetween(page, levelTwoSource, levelTwoTarget);
-  await expect(page.locator('#app')).not.toHaveClass(/fullSendCoach/);
+  await expect(page.locator('#app')).not.toHaveClass(/halfSendCoach/);
   await expect(page.locator('#hint')).toHaveCSS('opacity', '0');
-  await expect.poll(async () => page.evaluate(() => JSON.parse(localStorage.getItem('hexfront_campaign_progress_v2') ?? '{}').fullSendUsed)).toBe(true);
+  await expect.poll(async () => page.evaluate(() => JSON.parse(localStorage.getItem('hexfront_campaign_progress_v2') ?? '{}').halfSendUsed)).toBe(true);
   await page.goto('/');
   await expect(page.getByRole('button', { name: 'Level 2: TWO ROUTES' })).toBeEnabled();
   await expect(page.getByText('1 / 10', { exact: true })).toBeVisible();
 });
 
-test('the full-send unlock is localized in German', async ({ page }) => {
+test('the half-send unlock is localized in German', async ({ page }) => {
   await page.evaluate(() => localStorage.setItem('hexfront_locale_v1', 'de'));
   await page.goto('/?autostart=1&level=0');
   await page.evaluate(() => window.__HEXFRONT__?.debugWin());
   await expect(page.locator('#resultAdvanceLabel')).toHaveText('NEUER BEFEHL FREIGESCHALTET');
-  await expect(page.locator('#resultAdvanceName')).toHaveText('100 % SENDEN');
-  await expect(page.locator('#resultAdvanceRule')).toContainText('Das Ausgangsfeld bleibt leer.');
+  await expect(page.locator('#resultAdvanceName')).toHaveText('50 % SENDEN');
+  await expect(page.locator('#resultAdvanceRule')).toContainText('andere Hälfte als Reserve');
   await expect(page.locator('#resultUnlockMode')).toHaveText('SENDEN');
   await expect(page.getByRole('button', { name: 'WEITER ZU LEVEL 2' })).toBeVisible();
 });

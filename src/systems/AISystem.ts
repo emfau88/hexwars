@@ -132,7 +132,7 @@ export function chooseAIAction(context: AIContext, skill: number): AIAction | nu
         const defense = target.units / defenseMultiplier(target);
         const needed = Math.max(1, defense - incoming + 1.5);
         const strategic = strategicValue(context, target);
-        let amount = half;
+        let amount = context.level.features.half ? half : all;
         if (context.level.features.all && (needed > half * 0.9 || strategic > 300)) amount = all;
         const margin = amount + incoming - defense;
         const late = Math.max(0, Math.min(1, (context.elapsed - 45) / 100));
