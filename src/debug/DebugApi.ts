@@ -8,7 +8,7 @@ export interface HexfrontDebugApi {
   showMap(): void;
   setAutoplay(value: boolean): void;
   setOpponentEnabled(value: boolean): void;
-  getState(): ReturnType<GameState['snapshot']> & { progress: unknown };
+  getState(): ReturnType<GameState['snapshot']> & { progress: unknown; waitingForFirstMove: boolean };
   getBoard(): Array<Pick<HexState, 'col' | 'row' | 'owner' | 'units' | 'terrain' | 'decor' | 'x' | 'y'>>;
   getStructures(): StructureState[];
   getGeometry(): { reference: WorldGeometry; runtime: WorldGeometry; transform: WorldTransform; pixelRatio: number };

@@ -47,6 +47,7 @@ export class HexfrontApp {
   private lastFrame = performance.now();
   private animationFrame = 0;
   private levelStartRequest = 0;
+  private waitingForFirstMove = false;
 
   constructor() {
     const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement | null;
@@ -72,6 +73,7 @@ export class HexfrontApp {
     this.input = new InputController(canvas, this.state, this.renderer, {
       getMode: () => this.sendMode,
       onCommand: () => {
+        this.beginLevelOneBattle();
         if (this.state.currentLevel === 1 && this.sendMode === 'half') {
           this.progress = this.progressStore.markHalfSendUsed(this.progress);
         }
@@ -89,9 +91,12 @@ export class HexfrontApp {
     this.kongregateStats.initialize(() => this.submitCampaignStatistics());
     if (DEBUG_ENABLED) {
       installDebugApi({
-        startLevel: (index) => this.startLevel(index), showMap: () => this.showMap(), setAutoplay: (value) => { this.state.autoplay = value; },
+        startLevel: (index) => this.startLevel(index), showMap: () => this.showMap(), setAutoplay: (value) => {
+          this.state.autoplay = value;
+          if (value) this.beginLevelOneBattle();
+        },
         setOpponentEnabled: (value) => { this.state.opponentEnabled = value; },
-        getState: () => ({ ...this.state.snapshot(), progress: this.progress }),
+        getState: () => ({ ...this.state.snapshot(), progress: this.progress, waitingForFirstMove: this.waitingForFirstMove }),
         getBoard: () => this.state.hexes.map(({ col, row, owner, units, terrain, decor, x, y }) => ({
           col, row, owner, units, terrain, decor, ...this.renderer.screenPositionFor({ x, y }),
         })),
@@ -118,10 +123,15 @@ export class HexfrontApp {
         },
         send: (fromCol, fromRow, toCol, toRow, fraction = .5) => {
           const from = this.state.hexAt(fromCol, fromRow); const to = this.state.hexAt(toCol, toRow);
-          return Boolean(from && to && this.state.send(from, to, from.owner, Math.floor(from.units * fraction)));
+          const sent = Boolean(from && to && this.state.send(from, to, from.owner, Math.floor(from.units * fraction), from.owner === Owner.Player));
+          if (sent && from?.owner === Owner.Player) this.beginLevelOneBattle();
+          return sent;
         },
         think: (owner = Owner.Enemy) => this.state.think(owner, .9),
-        simulate: (seconds = 300, step = .05) => { for (let index = 0; index < Math.ceil(seconds / step) && this.state.running; index += 1) this.state.update(step); this.consumeEvents(); return this.state.snapshot(); },
+        simulate: (seconds = 300, step = .05) => {
+          for (let index = 0; index < Math.ceil(seconds / step) && this.state.running && !this.waitingForFirstMove; index += 1) this.state.update(step);
+          this.consumeEvents(); return this.state.snapshot();
+        },
         debugWin: () => { this.state.end('victory', 'debugVictory'); this.consumeEvents(); }, resetProgress: () => this.resetProgress(true),
       });
       if (DEBUG_AUTOSTART) this.startLevel(Number.isFinite(DEBUG_LEVEL) ? DEBUG_LEVEL : 0);
@@ -146,6 +156,7 @@ export class HexfrontApp {
       return;
     }
     this.state.start(index, (col, row) => this.renderer.positionFor(col, row));
+    this.waitingForFirstMove = this.state.currentLevel === 0 && !this.state.autoplay;
     this.sendMode = this.state.level.features.half ? 'half' : 'all'; this.renderer.sendMode = this.sendMode;
     this.ui.startMission(this.state, this.progress); this.ui.setMode(this.sendMode, this.state); this.ui.syncPlayerSupply(this.state.playerSupplyEnabled); this.audio.play('confirm');
     this.resizeLayout();
@@ -157,6 +168,7 @@ export class HexfrontApp {
     this.levelStartRequest += 1;
     this.tutorial.stop(false);
     this.state.running = false;
+    this.waitingForFirstMove = false;
     this.ui.setMapLoading(false);
     this.ui.showMap(this.progress, (index) => this.progressStore.isUnlocked(this.progress, index, DEBUG_UNLOCK), focus);
     this.resizeLayout();
@@ -180,7 +192,8 @@ export class HexfrontApp {
   private frame = (time: number): void => {
     const delta = Math.min(.05, (time - this.lastFrame) / 1000); this.lastFrame = time;
     if (this.state.running) {
-      this.state.update(delta * DEBUG_SPEED); this.renderer.effects.update(delta * DEBUG_SPEED); this.ui.updateHUD(this.state);
+      if (!this.waitingForFirstMove) this.state.update(delta * DEBUG_SPEED);
+      this.renderer.effects.update(delta * DEBUG_SPEED); this.ui.updateHUD(this.state);
     }
     this.consumeEvents();
     this.renderer.draw(this.state, time); this.tutorial.updatePosition(); this.animationFrame = requestAnimationFrame(this.frame);
@@ -188,6 +201,10 @@ export class HexfrontApp {
 
   private consumeEvents(): void {
     for (const event of this.state.drainEvents()) this.handleEvent(event);
+  }
+
+  private beginLevelOneBattle(): void {
+    if (this.state.currentLevel === 0) this.waitingForFirstMove = false;
   }
 
   private handleEvent(event: GameEvent): void {

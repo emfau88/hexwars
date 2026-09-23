@@ -113,13 +113,28 @@ test('mission preview waits for its illustrated core instead of flashing the cla
   await expect(page.locator('#levelPreview')).toHaveCSS('opacity', '1');
 });
 
-test('enemy acts and a completed mission persists its unlock after reload', async ({ page }) => {
+test('Level 1 battle waits for the first valid drag and a completed mission persists its unlock after reload', async ({ page }) => {
   await page.goto('/?autostart=1&level=0&speed=20');
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getState())).toMatchObject({
+    running: true,
+    elapsed: 0,
+    waitingForFirstMove: true,
+  });
+  await page.waitForTimeout(400);
+  await expect(page.locator('#hint')).toContainText('first move starts the battle');
+  const openingBoard = await page.evaluate(() => window.__HEXFRONT__?.getBoard()) as DebugBoard;
+  const openingSource = openingBoard.find((hex) => hex.col === 3 && hex.row === 9)!;
+  const openingTarget = openingBoard.find((hex) => hex.col === 3 && hex.row === 8)!;
+  expect(await page.evaluate(() => window.__HEXFRONT__?.getState().elapsed)).toBe(0);
+  expect(openingBoard.find((hex) => hex.owner === 2 && hex.terrain === 4)?.units).toBe(12);
+  await dragBetween(page, openingSource, openingTarget);
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getState().waitingForFirstMove)).toBe(false);
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getState().elapsed ?? 0)).toBeGreaterThan(0);
   await expect.poll(async () => {
     const board = await page.evaluate(() => window.__HEXFRONT__?.getBoard()) as DebugBoard;
     const enemyBase = board.find((hex) => hex.owner === 2 && hex.terrain === 4);
-    return enemyBase?.units ?? 23;
-  }).toBeLessThan(23);
+    return enemyBase?.units ?? 12;
+  }).toBeLessThan(12);
 
   await page.reload();
   await page.evaluate(() => {
