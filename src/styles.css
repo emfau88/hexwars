@@ -1022,3 +1022,84 @@ body.campaignOpen { touch-action:pan-y; }
   @media (prefers-reduced-motion:reduce) {
     .guardianBriefingMarker,.guardianBriefingArrow { animation:none; opacity:.9; }
   }
+
+  /* Combat HUD polish: stronger hierarchy with lightweight transparent ornament art. */
+  .commandDockOrnament,.sideDossierOrnament { display:block; object-fit:contain; pointer-events:none; user-select:none; }
+  .commandDockOrnament { width:100%; height:30px; margin:-3px 0 9px; opacity:.68; filter:drop-shadow(0 2px 5px rgba(0,0,0,.25)); }
+  .sideDossierOrnament { width:min(100%,230px); height:54px; margin:-8px auto 0; opacity:.77; filter:drop-shadow(0 3px 7px rgba(73,49,24,.16)); }
+  @media (min-width:901px) and (min-height:521px) {
+    #commandDock {
+      border-color:rgba(237,205,145,.36);
+      background:
+        radial-gradient(circle at 50% -10%,rgba(232,192,125,.13),transparent 37%),
+        linear-gradient(155deg,rgba(21,31,26,.97),rgba(10,17,14,.96));
+      box-shadow:0 16px 42px rgba(3,9,6,.32),inset 0 1px rgba(255,245,220,.07);
+    }
+    .commandDockTopline { padding-bottom:9px; border-bottom:1px solid rgba(237,205,145,.16); }
+    #commandDock .modeBtn {
+      position:relative; min-height:68px; padding:10px 11px; overflow:hidden;
+      border-color:rgba(233,226,203,.26); border-radius:12px;
+      background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.035));
+      transition:transform .15s ease,border-color .15s ease,background .15s ease,box-shadow .15s ease;
+    }
+    #commandDock .modeBtn:not(:disabled):hover { transform:translateX(2px); border-color:rgba(238,192,119,.58); background:rgba(255,255,255,.11); }
+    #commandDock .modeBtn.active {
+      border-color:#c87b43; background:linear-gradient(140deg,#f5c77d,#df8b43);
+      box-shadow:0 8px 18px rgba(118,63,27,.24),inset 0 1px rgba(255,255,255,.5);
+    }
+    #commandDock .modeButtonText b { font-size:19px; }
+    #commandDock .modeButtonText small { color:inherit; opacity:.76; font-size:9px; letter-spacing:.8px; }
+    #commandDock .modeShortcut { border-radius:7px; }
+    #commandDock .supplyControl { margin-top:10px; padding:12px; border:1px solid rgba(226,220,194,.14); border-radius:12px; background:rgba(255,255,255,.035); }
+    #commandDock .supplyControl.commandDockSection + .commandDockSection { border-top:0; }
+
+    #sidePanel .sideDossier {
+      position:relative; border-color:rgba(236,222,185,.72);
+      background:
+        radial-gradient(circle at 50% 0,rgba(255,251,232,.64),transparent 24%),
+        linear-gradient(160deg,#f3ecd8,#e4dcc3);
+      box-shadow:0 20px 58px rgba(3,9,6,.34),inset 0 0 0 4px rgba(111,91,55,.045),inset 0 1px rgba(255,255,255,.78);
+    }
+    #sidePanel .panel { padding:16px 5px; border-bottom-color:#c9bea4; }
+    #sidePanel #missionPanel { padding-top:7px; }
+    #sidePanel #missionName { margin-bottom:10px; color:#203229; font:850 19px/1.18 var(--font-display); letter-spacing:.4px; }
+    #sidePanel .eyebrow { margin-bottom:7px; color:#7c684c; font:850 10px/1 var(--font-mono); letter-spacing:1.45px; }
+    #sidePanel #missionText,#sidePanel #ruleText { max-width:34ch; color:#34483d; font-size:14px; font-weight:630; line-height:1.55; }
+    #sidePanel #rulePanel { position:relative; padding-left:16px; }
+    #sidePanel #rulePanel::before { content:''; position:absolute; left:4px; top:18px; bottom:18px; width:3px; border-radius:3px; background:linear-gradient(#d69b58,#9caf86); }
+    #sidePanel #statusPanel { margin:10px 0; padding:13px; border:1px solid rgba(128,116,86,.28); border-radius:13px; background:rgba(255,255,255,.24); }
+    #sidePanel .infoGrid { gap:8px 12px; color:#52645a; font-size:13px; }
+    #sidePanel .infoGrid b { color:#1d3327; font:800 13px/1 var(--font-mono); }
+    #sidePanel .legend { gap:8px; color:#43564b; font-size:12px; line-height:1.38; }
+    #sidePanel .legendIcon { color:#8e5433; border-color:#b6a786; border-radius:6px; background:rgba(255,255,255,.32); }
+    #sidePanel .utilityBtn { border-color:#b6aa8e; background:rgba(255,255,255,.3); }
+  }
+  @media (min-width:901px) and (min-height:521px) and (max-height:760px) {
+    .commandDockOrnament,.sideDossierOrnament { display:none; }
+    #commandDock .modeBtn { min-height:52px; }
+    #sidePanel .sideDossier { padding:10px 12px; }
+    #sidePanel .panel { padding:8px 2px; }
+    #sidePanel #missionPanel { padding-top:1px; }
+    #sidePanel #missionName { margin-bottom:4px; font:850 14px/1.18 var(--font-display); }
+    #sidePanel .eyebrow { margin-bottom:4px; font-size:9px; }
+    #sidePanel #missionText,#sidePanel #ruleText { font-size:11px; line-height:1.35; }
+    #sidePanel #rulePanel { padding-left:11px; }
+    #sidePanel #rulePanel::before { left:2px; top:10px; bottom:10px; width:2px; }
+    #sidePanel #statusPanel { margin:4px 0; padding:7px 8px; }
+    #sidePanel .infoGrid { gap:5px 9px; font-size:10px; }
+    #sidePanel .infoGrid b { font-size:10px; }
+    #sidePanel .legend { gap:4px; font-size:10px; line-height:1.25; }
+    #sidePanel .sideUtilityDock { padding-top:8px; }
+    #sidePanel .utilityBtn { min-height:38px; }
+  }
+  @media (max-width:900px), (max-height:520px) {
+    .commandDockOrnament,.sideDossierOrnament { display:none; }
+    #mobileBar {
+      border-top:1px solid rgba(235,205,146,.28);
+      background:linear-gradient(180deg,rgba(25,35,30,.97),rgba(13,21,17,.98));
+      box-shadow:0 -10px 30px rgba(3,9,6,.2);
+    }
+    #mobileBar .modeBtn { border-radius:9px; border-color:rgba(231,224,201,.24); background:rgba(255,255,255,.055); }
+    #mobileBar .modeBtn.active { border-color:#c87b43; background:linear-gradient(#f2bf73,#df8d45); box-shadow:0 5px 12px rgba(100,53,23,.2); }
+    #mobileBar .utilityBtn { border-radius:9px; border-color:rgba(231,224,201,.2); background:rgba(255,255,255,.055); }
+  }
