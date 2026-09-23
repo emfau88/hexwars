@@ -313,6 +313,20 @@ test('all ten campaign levels start with a valid board in this viewport', async 
 
 test('Level 5 exposes two active guardians and their finite HQ shield', async ({ page }, testInfo) => {
   await page.goto('/?autostart=1&level=4');
+  await expect(page.locator('#guardianBriefing')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'GUARDIAN NETWORK' })).toBeVisible();
+  await expect(page.locator('.guardianBriefingMarker')).toHaveCount(2);
+  await expect(page.locator('.guardianBriefingShield')).toContainText('TOTAL HQ SHIELD · 96');
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getState())).toMatchObject({ elapsed: 0, waitingForBriefing: true });
+  await page.waitForTimeout(350);
+  expect(await page.evaluate(() => window.__HEXFRONT__?.getState().elapsed)).toBe(0);
+  await page.getByRole('button', { name: 'START MISSION' }).click();
+  await expect(page.locator('#guardianBriefing')).toBeHidden();
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getState().elapsed ?? 0)).toBeGreaterThan(0);
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('hexfront_campaign_progress_v2') ?? '{}').guardianBriefingSeen)).toBe(true);
+  await page.locator('#guardianHelpBtn').click();
+  await expect(page.getByRole('button', { name: 'RETURN TO BATTLE' })).toBeVisible();
+  await page.getByRole('button', { name: 'RETURN TO BATTLE' }).click();
   await expect(page.locator('#legendGuardian')).not.toHaveAttribute('hidden');
   if (testInfo.project.name === 'mobile-portrait') await expect(page.locator('#hint')).toContainText('48 HQ shield');
   else await expect(page.locator('#legendGuardian')).toBeVisible();

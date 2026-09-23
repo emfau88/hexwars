@@ -170,6 +170,7 @@ test('progress unlocks sequentially and survives a reload', () => {
   const storage = new MemoryStorage(); const store = new CampaignProgressStore(storage);
   let progress = store.load();
   assert.equal(progress.halfSendUsed, false);
+  assert.equal(progress.guardianBriefingSeen, false);
   assert.equal(store.isUnlocked(progress, 0), true);
   assert.equal(store.isUnlocked(progress, 1), false);
   progress = store.complete(progress, 0, 72.5);
@@ -180,4 +181,6 @@ test('progress unlocks sequentially and survives a reload', () => {
   assert.equal(reloaded.halfSendUsed, false);
   progress = store.markHalfSendUsed(reloaded);
   assert.equal(new CampaignProgressStore(storage).load().halfSendUsed, true);
+  progress = store.markGuardianBriefingSeen(progress);
+  assert.equal(new CampaignProgressStore(storage).load().guardianBriefingSeen, true);
 });

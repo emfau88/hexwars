@@ -958,3 +958,67 @@ body.campaignOpen { touch-action:pan-y; }
     .levelOneTutorial.ready .tutorialTarget { opacity:.74; transform:translate(-50%,-50%); }
     .levelOneTutorial.ready .tutorialArrow { opacity:.82; }
   }
+
+  /* Guardian mechanic briefing: the board stays visible while simulation is paused. */
+  .guardianBriefing {
+    position:absolute; inset:0; z-index:50; display:grid; place-items:center; padding:clamp(16px,4vw,42px);
+    background:radial-gradient(circle at 50% 28%,rgba(238,190,111,.05),transparent 32%),rgba(7,13,10,.58);
+    backdrop-filter:blur(2px) saturate(.78);
+  }
+  .guardianBriefing[hidden] { display:none; }
+  .guardianBriefingVisuals { position:absolute; inset:0; overflow:hidden; pointer-events:none; }
+  .guardianBriefingMarker,.guardianBriefingArrow { position:absolute; z-index:1; display:block; max-width:none; pointer-events:none; }
+  .guardianBriefingMarker {
+    transform:translate(-50%,-50%); object-fit:contain;
+    filter:drop-shadow(0 0 15px rgba(237,168,82,.65)); animation:guardianMarkerPulse 1.45s ease-in-out infinite;
+  }
+  .guardianBriefingArrow {
+    object-fit:fill; transform:translate(-50%,-100%) rotate(180deg); transform-origin:50% 100%;
+    filter:drop-shadow(0 4px 10px rgba(55,27,13,.38)); animation:guardianArrowPulse 1.45s ease-in-out infinite;
+  }
+  .guardianBriefingCard {
+    position:relative; z-index:3; width:min(94vw,520px); max-height:min(86vh,680px); overflow:auto; padding:28px;
+    color:#26342c; border:1px solid rgba(244,226,184,.82); border-radius:22px;
+    background:linear-gradient(155deg,rgba(246,239,218,.98),rgba(226,221,196,.98));
+    box-shadow:0 28px 75px rgba(3,9,6,.48),inset 0 1px rgba(255,255,255,.78);
+    animation:resultCardIn .25s ease-out both;
+  }
+  .guardianBriefingCard::after {
+    content:'⬡'; position:absolute; right:22px; top:17px; color:rgba(131,92,49,.18); font-size:78px; line-height:1; pointer-events:none;
+  }
+  .guardianBriefingKicker { margin-bottom:8px; color:#8f6840; font:850 10px/1 var(--font-mono); letter-spacing:1.5px; }
+  .guardianBriefingCard h2 { position:relative; margin:0 72px 10px 0; color:#18261f; font:800 clamp(27px,5vw,40px)/1 var(--font-display); letter-spacing:.8px; }
+  .guardianBriefingSummary { max-width:43ch; color:#4a5b50; font-size:14px; font-weight:620; line-height:1.5; }
+  .guardianBriefingShield {
+    display:block; margin:17px 0; padding:11px 13px; color:#5d361f; border:1px solid #d3a264; border-radius:11px;
+    background:linear-gradient(135deg,#f3d6a4,#e7dfc3); font:800 12px/1.35 var(--font-mono);
+  }
+  .guardianBriefingCard ul { display:grid; gap:10px; margin:0 0 20px; list-style:none; }
+  .guardianBriefingCard li { position:relative; padding-left:27px; color:#415147; font-size:13px; font-weight:590; line-height:1.45; }
+  .guardianBriefingCard li::before { content:'◆'; position:absolute; left:3px; top:1px; color:#b96f3f; font-size:12px; }
+  .guardianBriefingConfirm { width:100%; }
+  .guardianHelpBtn {
+    position:absolute; z-index:18; right:13px; bottom:13px; min-height:38px; padding:8px 11px; cursor:pointer;
+    color:#fff1d6; border:1px solid rgba(244,193,116,.62); border-radius:9px; background:rgba(24,34,29,.9);
+    box-shadow:0 7px 20px rgba(6,12,9,.22); font:850 9px/1 var(--font-mono); letter-spacing:.55px;
+  }
+  .guardianHelpBtn[hidden] { display:none; }
+  @keyframes guardianMarkerPulse {
+    0%,100% { opacity:.72; transform:translate(-50%,-50%) scale(.93); }
+    50% { opacity:1; transform:translate(-50%,-50%) scale(1.08); }
+  }
+  @keyframes guardianArrowPulse { 0%,100% { opacity:.55; } 50% { opacity:1; } }
+  @media (max-width:600px), (max-height:620px) {
+    .guardianBriefing { place-items:end center; padding:10px 9px max(10px,env(safe-area-inset-bottom)); }
+    .guardianBriefingCard { width:100%; max-height:min(72vh,620px); padding:21px 18px 17px; border-radius:20px; }
+    .guardianBriefingCard::after { right:16px; top:13px; font-size:58px; }
+    .guardianBriefingCard h2 { margin-right:54px; font-size:27px; }
+    .guardianBriefingSummary { font-size:13px; }
+    .guardianBriefingShield { margin:13px 0; font-size:11px; }
+    .guardianBriefingCard ul { gap:8px; margin-bottom:14px; }
+    .guardianBriefingCard li { font-size:12px; }
+    .guardianHelpBtn { right:8px; bottom:8px; min-height:44px; }
+  }
+  @media (prefers-reduced-motion:reduce) {
+    .guardianBriefingMarker,.guardianBriefingArrow { animation:none; opacity:.9; }
+  }

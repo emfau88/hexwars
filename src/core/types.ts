@@ -138,6 +138,7 @@ export interface CampaignProgress {
   completed: boolean[];
   best: number[];
   halfSendUsed: boolean;
+  guardianBriefingSeen: boolean;
 }
 
 export interface GameSnapshot {

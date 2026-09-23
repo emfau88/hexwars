@@ -2,7 +2,7 @@ import { SAVE_KEY } from '../core/config';
 import type { CampaignProgress } from '../core/types';
 import { LEVELS } from '../levels';
 
-const blank = (): CampaignProgress => ({ completed: LEVELS.map(() => false), best: LEVELS.map(() => 0), halfSendUsed: false });
+const blank = (): CampaignProgress => ({ completed: LEVELS.map(() => false), best: LEVELS.map(() => 0), halfSendUsed: false, guardianBriefingSeen: false });
 
 export class CampaignProgressStore {
   constructor(private readonly storage: Storage | null = typeof localStorage === 'undefined' ? null : localStorage) {}
@@ -15,6 +15,7 @@ export class CampaignProgressStore {
           completed: LEVELS.map((_, index) => Boolean(parsed.completed?.[index])),
           best: LEVELS.map((_, index) => Number(parsed.best?.[index]) || 0),
           halfSendUsed: Boolean(parsed.halfSendUsed || parsed.completed?.[1]),
+          guardianBriefingSeen: Boolean(parsed.guardianBriefingSeen || parsed.completed?.[4]),
         };
       }
     } catch { /* A damaged save must never prevent the game from starting. */ }
@@ -36,6 +37,13 @@ export class CampaignProgressStore {
   markHalfSendUsed(progress: CampaignProgress): CampaignProgress {
     if (progress.halfSendUsed) return progress;
     const next = { ...progress, halfSendUsed: true };
+    this.save(next);
+    return next;
+  }
+
+  markGuardianBriefingSeen(progress: CampaignProgress): CampaignProgress {
+    if (progress.guardianBriefingSeen) return progress;
+    const next = { ...progress, guardianBriefingSeen: true };
     this.save(next);
     return next;
   }

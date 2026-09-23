@@ -12,6 +12,7 @@ import type { MapStyleMode } from '../rendering/MapArtRenderer';
 import { OWNER_COLORS } from '../rendering/palette';
 import { CampaignUI } from '../ui/CampaignUI';
 import { LevelOneTutorial } from '../ui/LevelOneTutorial';
+import { GuardianBriefing } from '../ui/GuardianBriefing';
 import { LEVELS } from '../levels';
 
 const DEBUG_ENABLED = import.meta.env.DEV || import.meta.env.MODE === 'test';
@@ -34,6 +35,7 @@ export class HexfrontApp {
   readonly renderer: BoardRenderer;
   readonly ui: CampaignUI;
   readonly tutorial: LevelOneTutorial;
+  readonly guardianBriefing: GuardianBriefing;
   readonly audio = new AudioController();
   readonly i18n = new I18n();
   readonly progressStore = new CampaignProgressStore();
@@ -48,6 +50,7 @@ export class HexfrontApp {
   private animationFrame = 0;
   private levelStartRequest = 0;
   private waitingForFirstMove = false;
+  private waitingForBriefing = false;
 
   constructor() {
     const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement | null;
@@ -69,6 +72,13 @@ export class HexfrontApp {
       showHint: (message) => this.ui.showTutorialHint(message),
       hideHint: () => this.ui.hideTutorialHint(),
       showSuccess: (message) => this.ui.showToast(message),
+    });
+    this.guardianBriefing = new GuardianBriefing(stage, this.renderer, this.i18n, {
+      onOpen: () => { this.waitingForBriefing = true; },
+      onClose: (introduction) => {
+        this.waitingForBriefing = false;
+        if (introduction) this.progress = this.progressStore.markGuardianBriefingSeen(this.progress);
+      },
     });
     this.input = new InputController(canvas, this.state, this.renderer, {
       getMode: () => this.sendMode,
@@ -96,7 +106,7 @@ export class HexfrontApp {
           if (value) this.beginLevelOneBattle();
         },
         setOpponentEnabled: (value) => { this.state.opponentEnabled = value; },
-        getState: () => ({ ...this.state.snapshot(), progress: this.progress, waitingForFirstMove: this.waitingForFirstMove }),
+        getState: () => ({ ...this.state.snapshot(), progress: this.progress, waitingForFirstMove: this.waitingForFirstMove, waitingForBriefing: this.waitingForBriefing }),
         getBoard: () => this.state.hexes.map(({ col, row, owner, units, terrain, decor, x, y }) => ({
           col, row, owner, units, terrain, decor, ...this.renderer.screenPositionFor({ x, y }),
         })),
@@ -129,7 +139,7 @@ export class HexfrontApp {
         },
         think: (owner = Owner.Enemy) => this.state.think(owner, .9),
         simulate: (seconds = 300, step = .05) => {
-          for (let index = 0; index < Math.ceil(seconds / step) && this.state.running && !this.waitingForFirstMove; index += 1) this.state.update(step);
+          for (let index = 0; index < Math.ceil(seconds / step) && this.state.running && !this.simulationPaused(); index += 1) this.state.update(step);
           this.consumeEvents(); return this.state.snapshot();
         },
         debugWin: () => { this.state.end('victory', 'debugVictory'); this.consumeEvents(); }, resetProgress: () => this.resetProgress(true),
@@ -157,18 +167,22 @@ export class HexfrontApp {
     }
     this.state.start(index, (col, row) => this.renderer.positionFor(col, row));
     this.waitingForFirstMove = this.state.currentLevel === 0 && !this.state.autoplay;
+    this.waitingForBriefing = false;
     this.sendMode = this.state.level.features.half ? 'half' : 'all'; this.renderer.sendMode = this.sendMode;
     this.ui.startMission(this.state, this.progress); this.ui.setMode(this.sendMode, this.state); this.ui.syncPlayerSupply(this.state.playerSupplyEnabled); this.audio.play('confirm');
     this.resizeLayout();
     this.tutorial.start(this.state);
+    this.guardianBriefing.start(this.state, !this.progress.guardianBriefingSeen);
     this.lastFrame = performance.now();
   }
 
   showMap(focus = this.state.currentLevel): void {
     this.levelStartRequest += 1;
     this.tutorial.stop(false);
+    this.guardianBriefing.stop();
     this.state.running = false;
     this.waitingForFirstMove = false;
+    this.waitingForBriefing = false;
     this.ui.setMapLoading(false);
     this.ui.showMap(this.progress, (index) => this.progressStore.isUnlocked(this.progress, index, DEBUG_UNLOCK), focus);
     this.resizeLayout();
@@ -192,11 +206,11 @@ export class HexfrontApp {
   private frame = (time: number): void => {
     const delta = Math.min(.05, (time - this.lastFrame) / 1000); this.lastFrame = time;
     if (this.state.running) {
-      if (!this.waitingForFirstMove) this.state.update(delta * DEBUG_SPEED);
+      if (!this.simulationPaused()) this.state.update(delta * DEBUG_SPEED);
       this.renderer.effects.update(delta * DEBUG_SPEED); this.ui.updateHUD(this.state);
     }
     this.consumeEvents();
-    this.renderer.draw(this.state, time); this.tutorial.updatePosition(); this.animationFrame = requestAnimationFrame(this.frame);
+    this.renderer.draw(this.state, time); this.tutorial.updatePosition(); this.guardianBriefing.updatePosition(); this.animationFrame = requestAnimationFrame(this.frame);
   };
 
   private consumeEvents(): void {
@@ -205,6 +219,10 @@ export class HexfrontApp {
 
   private beginLevelOneBattle(): void {
     if (this.state.currentLevel === 0) this.waitingForFirstMove = false;
+  }
+
+  private simulationPaused(): boolean {
+    return this.waitingForFirstMove || this.waitingForBriefing;
   }
 
   private handleEvent(event: GameEvent): void {
@@ -218,6 +236,7 @@ export class HexfrontApp {
     if (event.type === 'endgame') { this.ui.updateEndgame(this.state); this.ui.showToast(this.i18n.t(event.detail.stage === 1 ? 'toast.endgame.decline' : 'toast.endgame.decision')); }
     if (event.type === 'result') {
       this.tutorial.stop(false);
+      this.guardianBriefing.stop();
       const firstHalfSendUnlock = event.detail.result === 'victory'
         && this.state.currentLevel === 0
         && !this.progress.completed[0];
@@ -259,6 +278,7 @@ export class HexfrontApp {
     this.renderer.shieldLabel = this.i18n.t('guardian.shield');
     this.ui.refreshLanguage(this.state, this.audio.enabled);
     this.tutorial.refreshCopy();
+    this.guardianBriefing.refreshCopy();
   }
 
   private inputErrorKey(error: InputError): 'toast.invalid.decor' | 'toast.invalid.target' {
