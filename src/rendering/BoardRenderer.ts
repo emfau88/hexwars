@@ -163,7 +163,9 @@ export class BoardRenderer {
   }
 
   draw(state: GameState, time = performance.now()): void {
-    const mapArtEnabled = this.mapArt.supports(state.currentLevel);
+    // An unopened campaign has no board to paint. Avoid starting battle-art
+    // downloads behind the campaign menu, where they compete with thumbnails.
+    const mapArtEnabled = state.hexes.length > 0 && this.mapArt.supports(state.currentLevel);
     if (this.lastMapArtLevel !== state.currentLevel) {
       this.lastMapArtLevel = state.currentLevel;
       this.mapLayerDirty = true;

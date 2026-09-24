@@ -102,7 +102,11 @@ test('campaign atlas keeps its level controls available when the backdrop fails'
 });
 
 test('mission preview waits for its illustrated core instead of flashing the classic preview', async ({ page }) => {
-  await page.route('**/assets/maps/level01-core-v1.png', async (route) => {
+  const requestedMapAssets: string[] = [];
+  page.on('request', (request) => {
+    if (request.url().includes('/assets/map')) requestedMapAssets.push(request.url());
+  });
+  await page.route('**/assets/map-previews/level01-preview-v1.webp', async (route) => {
     await new Promise((resolve) => setTimeout(resolve, 650));
     await route.continue();
   });
@@ -111,6 +115,8 @@ test('mission preview waits for its illustrated core instead of flashing the cla
   await expect(page.locator('#levelPreview')).toHaveCSS('opacity', '0');
   await expect(page.locator('#levelPreviewFrame')).not.toHaveClass(/previewLoading/);
   await expect(page.locator('#levelPreview')).toHaveCSS('opacity', '1');
+  expect(requestedMapAssets.some((url) => url.includes('/assets/map-previews/level01-preview-v1.webp'))).toBe(true);
+  expect(requestedMapAssets.some((url) => url.includes('/assets/maps/level01-core-v1.png'))).toBe(false);
 });
 
 test('Level 1 battle waits for the first valid drag and a completed mission persists its unlock after reload', async ({ page }) => {
@@ -560,6 +566,7 @@ test('responsive shell has no page overflow and mobile controls meet the touch f
     expect(Math.min(...menuMetrics.atlasNodes.map(({ height }) => height))).toBeGreaterThanOrEqual(44);
   }
   await page.getByRole('button', { name: 'BEGIN CAMPAIGN' }).click();
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getBoard().length ?? 0)).toBeGreaterThan(0);
   const gameMetrics = await page.evaluate(() => ({
     viewport: innerWidth,
     body: document.body.scrollWidth,

@@ -81,6 +81,7 @@ test('Level 5 map art reserves both HQs and both guardian stations', () => {
   assert.equal('waterFrames' in LEVEL_FIVE_MAP_ART, false);
   assert.deepEqual(LEVEL_FIVE_MAP_ART.landscapeOverlays, [{
     source: './assets/maps/level05-central-massif-v1.webp',
+    previewSource: './assets/map-previews/level05-central-massif-preview-v1.webp',
     sourceWidth: 1024,
     sourceHeight: 1536,
     worldRect: { x: 418, y: 235, width: 241, height: 371 },
@@ -97,6 +98,7 @@ test('Level 6 map art reserves the two corridors and maps its wetland barrier to
   assert.equal(LEVEL_SIX_MAP_ART.worldRect.height, LEVEL_ONE_MAP_ART.worldRect.height);
   assert.deepEqual(LEVEL_SIX_MAP_ART.landscapeOverlays, [{
     source: './assets/maps/level06-central-wetland-v3.webp',
+    previewSource: './assets/map-previews/level06-central-wetland-preview-v1.webp',
     sourceWidth: 1108,
     sourceHeight: 842,
     worldRect: { x: 0, y: 0, width: 1108, height: 842 },

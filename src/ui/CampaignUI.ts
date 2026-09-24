@@ -41,6 +41,7 @@ export class CampaignUI {
   private readonly previewLandscape: LandscapeRenderer;
   private readonly atlas: CampaignAtlas;
   private readonly previewMapSubscriptions = new Set<string>();
+  private readonly warmedPreviewLevels = new Set<number>();
 
   constructor(private readonly callbacks: UICallbacks, private readonly i18n: I18n, visualVariant: VisualVariant = 'production', private readonly mapStyle: MapStyleMode = 'auto') {
     this.previewLandscape = new LandscapeRenderer(() => this.renderPreview(this.selectedMenuLevel), visualVariant);
@@ -383,7 +384,7 @@ export class CampaignUI {
     const context = canvas.getContext('2d'); if (!context) return; context.setTransform(ratio, 0, 0, ratio, 0, 0); context.fillStyle = '#d7e3cf'; context.fillRect(0, 0, width, height);
     const mapArt = this.mapStyle === 'classic' ? null : mapArtForLevel(levelIndex);
     const assets = mapArt
-      ? [this.previewMapAsset(mapArt.core.source), ...(mapArt.landscapeOverlays ?? []).map(({ source }) => this.previewMapAsset(source))]
+      ? [this.previewMapAsset(mapArt.core.previewSource ?? mapArt.core.source), ...(mapArt.landscapeOverlays ?? []).map((asset) => this.previewMapAsset(asset.previewSource ?? asset.source))]
       : [];
     const hasMapArt = Boolean(mapArt && assets.length && assets.every(({ loaded }) => loaded));
     const mapArtFailed = assets.some(({ failed }) => failed);
@@ -395,8 +396,8 @@ export class CampaignUI {
     if (hasMapArt && mapImage) {
       const crop = centeredAspectCrop(mapImage.naturalWidth, mapImage.naturalHeight, width, height);
       context.drawImage(mapImage, crop.x, crop.y, crop.width, crop.height, 0, 0, width, height);
-      for (const overlay of mapArt?.landscapeOverlays ?? []) {
-        const image = mapArtImage(overlay.source).image;
+      for (const [index, overlay] of (mapArt?.landscapeOverlays ?? []).entries()) {
+        const image = assets[index + 1].image;
         const rect = overlay.worldRect;
         context.drawImage(
           image, 0, 0, image.naturalWidth, image.naturalHeight,
@@ -425,10 +426,11 @@ export class CampaignUI {
       context.lineWidth = hex.terrain === Terrain.Base ? 2 : .8; context.stroke();
     }
     if (!hasMapArt) this.previewLandscape.drawWaterShores(context, hexes, radius, level.landscapeStyle, BoardRenderer.path);
+    if (hasMapArt) this.warmAdjacentPreviews(levelIndex);
   }
 
   private previewMapAsset(source: string): MapArtImageRecord {
-    const asset = mapArtImage(source);
+    const asset = mapArtImage(source, 'high');
     if (!this.previewMapSubscriptions.has(source)) {
       this.previewMapSubscriptions.add(source);
       void asset.ready.then(() => {
@@ -436,6 +438,19 @@ export class CampaignUI {
       });
     }
     return asset;
+  }
+
+  private warmAdjacentPreviews(levelIndex: number): void {
+    const warm = (): void => {
+      for (const neighbor of [levelIndex - 1, levelIndex + 1]) {
+        if (neighbor < 0 || neighbor >= RELEASED_CAMPAIGN_LEVELS || this.warmedPreviewLevels.has(neighbor)) continue;
+        this.warmedPreviewLevels.add(neighbor);
+        const art = mapArtForLevel(neighbor); if (!art) continue;
+        mapArtImage(art.core.previewSource ?? art.core.source, 'low');
+        for (const overlay of art.landscapeOverlays ?? []) mapArtImage(overlay.previewSource ?? overlay.source, 'low');
+      }
+    };
+    window.setTimeout(warm, 180);
   }
 
   private time(seconds: number): string { return `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`; }

@@ -100,7 +100,7 @@ test('map previews composite positioned landscape overlays over their core art',
   assert.match(campaignUi, /rect\.x \/ REFERENCE_WORLD_WIDTH \* width/);
   assert.match(campaignUi, /rect\.y \/ REFERENCE_WORLD_HEIGHT \* height/);
   assert.match(campaignUi, /previewMapSubscriptions = new Set<string>/);
-  assert.match(campaignUi, /mapArtImage\(source\)/);
+  assert.match(campaignUi, /mapArtImage\(source, 'high'\)/);
   assert.match(campaignUi, /previewLoading/);
   assert.match(campaignUi, /this\.renderPreview\(this\.selectedMenuLevel\)/);
 });
@@ -132,6 +132,24 @@ test('combat UI polish art stays compact enough for browser deployment', () => {
   const assets = names.map((name) => new URL(`../public/assets/ui-polish/${name}`, import.meta.url));
   for (const asset of assets) assert.ok(statSync(asset).size < 80_000, `${asset.pathname} stays below 80 KB`);
   assert.ok(assets.reduce((sum, asset) => sum + statSync(asset).size, 0) < 150_000, 'combat UI polish art stays below 150 KB combined');
+});
+
+test('campaign previews use compact derivatives instead of loading battle-resolution map art', () => {
+  const names = [
+    'level01-preview-v1.webp', 'level02-preview-v1.webp', 'level03-preview-v1.webp', 'level04-preview-v1.webp',
+    'level05-preview-v1.webp', 'level05-central-massif-preview-v1.webp',
+    'level06-preview-v1.webp', 'level06-central-wetland-preview-v1.webp',
+    'level07-preview-v1.webp', 'level08-preview-v1.webp',
+  ];
+  const assets = names.map((name) => new URL(`../public/assets/map-previews/${name}`, import.meta.url));
+  for (const asset of assets) assert.ok(statSync(asset).size < 200_000, `${asset.pathname} stays below 200 KB`);
+  assert.ok(assets.reduce((sum, asset) => sum + statSync(asset).size, 0) < 1_200_000, 'all campaign preview art stays below 1.2 MB combined');
+  const manifest = read('../src/rendering/MapArtManifest.ts');
+  for (const name of names) assert.match(manifest, new RegExp(name.replace('.', '\\.')));
+  assert.match(campaignUi, /previewSource \?\?/);
+  assert.match(campaignUi, /warmAdjacentPreviews/);
+  const boardRenderer = read('../src/rendering/BoardRenderer.ts');
+  assert.match(boardRenderer, /state\.hexes\.length > 0 && this\.mapArt\.supports/);
 });
 
 test('Level 2 map core and water phases stay within the visual PoC budget', () => {

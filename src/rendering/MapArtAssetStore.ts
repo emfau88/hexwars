@@ -11,12 +11,16 @@ const records = new Map<string, MapArtImageRecord>();
  * One decoded image per URL, shared by the campaign preview and board renderer.
  * Sharing the record avoids a second decode when a player starts the selected map.
  */
-export function mapArtImage(source: string): MapArtImageRecord {
+export function mapArtImage(source: string, fetchPriority: 'auto' | 'high' | 'low' = 'auto'): MapArtImageRecord {
   const cached = records.get(source);
-  if (cached) return cached;
+  if (cached) {
+    if (fetchPriority === 'high') cached.image.fetchPriority = 'high';
+    return cached;
+  }
 
   const image = new Image();
   image.decoding = 'async';
+  image.fetchPriority = fetchPriority;
   let settle: (loaded: boolean) => void = () => undefined;
   const record: MapArtImageRecord = {
     image,

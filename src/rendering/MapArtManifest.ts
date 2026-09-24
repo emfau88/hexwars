@@ -17,6 +17,8 @@ export interface MapArtManifest {
 
 export interface MapArtAsset {
   source: string;
+  /** Compact campaign-menu derivative. Full-resolution art remains battle-only. */
+  previewSource?: string;
   sourceWidth: number;
   sourceHeight: number;
 }
@@ -36,6 +38,7 @@ export const LEVEL_ONE_MAP_ART = Object.freeze({
   levelIndex: 0,
   core: {
     source: `${ASSET_BASE}assets/maps/level01-core-v1.png`,
+    previewSource: `${ASSET_BASE}assets/map-previews/level01-preview-v1.webp`,
     sourceWidth: 1438,
     sourceHeight: 1093,
   },
@@ -52,6 +55,7 @@ export const LEVEL_TWO_MAP_ART = Object.freeze({
   levelIndex: 1,
   core: {
     source: `${ASSET_BASE}assets/maps/level02-core-v5.png`,
+    previewSource: `${ASSET_BASE}assets/map-previews/level02-preview-v1.webp`,
     sourceWidth: 1438,
     sourceHeight: 1093,
   },
@@ -74,6 +78,7 @@ export const LEVEL_THREE_MAP_ART = Object.freeze({
   levelIndex: 2,
   core: {
     source: `${ASSET_BASE}assets/maps/level03-core-v1.webp`,
+    previewSource: `${ASSET_BASE}assets/map-previews/level03-preview-v1.webp`,
     sourceWidth: 1438,
     sourceHeight: 1093,
   },
@@ -90,6 +95,7 @@ export const LEVEL_FOUR_MAP_ART = Object.freeze({
   levelIndex: 3,
   core: {
     source: `${ASSET_BASE}assets/maps/level04-core-v1.webp`,
+    previewSource: `${ASSET_BASE}assets/map-previews/level04-preview-v1.webp`,
     sourceWidth: 1438,
     sourceHeight: 1093,
   },
@@ -106,12 +112,14 @@ export const LEVEL_FIVE_MAP_ART = Object.freeze({
   levelIndex: 4,
   core: {
     source: `${ASSET_BASE}assets/maps/level05-core-v1.webp`,
+    previewSource: `${ASSET_BASE}assets/map-previews/level05-preview-v1.webp`,
     sourceWidth: 1438,
     sourceHeight: 1093,
   },
   worldRect: { x: 0, y: 0, width: REFERENCE_WORLD_WIDTH, height: REFERENCE_WORLD_HEIGHT },
   landscapeOverlays: [{
     source: `${ASSET_BASE}assets/maps/level05-central-massif-v1.webp`,
+    previewSource: `${ASSET_BASE}assets/map-previews/level05-central-massif-preview-v1.webp`,
     sourceWidth: 1024,
     sourceHeight: 1536,
     // The opaque content maps exactly across the seven central decor cells:
@@ -132,12 +140,14 @@ export const LEVEL_SIX_MAP_ART = Object.freeze({
   levelIndex: 5,
   core: {
     source: `${ASSET_BASE}assets/maps/level06-core-v1.webp`,
+    previewSource: `${ASSET_BASE}assets/map-previews/level06-preview-v1.webp`,
     sourceWidth: 1438,
     sourceHeight: 1093,
   },
   worldRect: { x: 0, y: 0, width: REFERENCE_WORLD_WIDTH, height: REFERENCE_WORLD_HEIGHT },
   landscapeOverlays: [{
     source: `${ASSET_BASE}assets/maps/level06-central-wetland-v3.webp`,
+    previewSource: `${ASSET_BASE}assets/map-previews/level06-central-wetland-preview-v1.webp`,
     sourceWidth: 1108,
     sourceHeight: 842,
     // Six central decor cells, staggered with the odd rows:
@@ -157,6 +167,7 @@ export const LEVEL_SEVEN_MAP_ART = Object.freeze({
   levelIndex: 6,
   core: {
     source: `${ASSET_BASE}assets/maps/level07-core-v2.webp`,
+    previewSource: `${ASSET_BASE}assets/map-previews/level07-preview-v1.webp`,
     sourceWidth: 1438,
     sourceHeight: 1093,
   },
@@ -174,6 +185,7 @@ export const LEVEL_EIGHT_MAP_ART = Object.freeze({
   levelIndex: 7,
   core: {
     source: `${ASSET_BASE}assets/maps/level08-core-v1.webp`,
+    previewSource: `${ASSET_BASE}assets/map-previews/level08-preview-v1.webp`,
     sourceWidth: 1438,
     sourceHeight: 1093,
   },
