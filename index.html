@@ -57,10 +57,17 @@
 
       <div id="resultOverlay">
         <div class="modalBox">
-          <div class="resultMark" aria-hidden="true">◆</div>
-          <div class="resultKicker" id="resultKicker"></div>
-          <div class="verdict" id="verdict"></div>
-          <div class="sub" id="verdictSub"></div>
+          <div class="resultHero">
+            <div class="resultHeroCopy">
+              <div class="resultKicker" id="resultKicker"></div>
+              <div class="verdict" id="verdict"></div>
+              <div class="sub" id="verdictSub"></div>
+            </div>
+            <div class="resultMark" aria-hidden="true">
+              <img class="resultEmblem resultVictoryEmblem" src="./assets/ui-polish/result-victory-emblem-v1.webp" alt="" />
+              <img class="resultEmblem resultDefeatEmblem" src="./assets/ui-polish/result-defeat-emblem-v1.webp" alt="" />
+            </div>
+          </div>
           <div class="resultStats">
             <div><span data-i18n="result.stat.time">TIME</span><strong id="resultTime">0:00</strong></div>
             <div><span data-i18n="result.stat.captures">CAPTURES</span><strong id="resultCaptures">0</strong></div>

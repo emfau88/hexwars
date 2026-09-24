@@ -125,6 +125,13 @@ test('Level 1 tutorial art stays lazy-loadable and inside a compact runtime budg
   assert.doesNotMatch(read('../index.html'), /assets\/tutorial/);
 });
 
+test('combat UI polish art stays compact enough for browser deployment', () => {
+  const names = ['combat-dossier-ornament-v1.webp', 'result-victory-emblem-v1.webp', 'result-defeat-emblem-v1.webp'];
+  const assets = names.map((name) => new URL(`../public/assets/ui-polish/${name}`, import.meta.url));
+  for (const asset of assets) assert.ok(statSync(asset).size < 80_000, `${asset.pathname} stays below 80 KB`);
+  assert.ok(assets.reduce((sum, asset) => sum + statSync(asset).size, 0) < 150_000, 'combat UI polish art stays below 150 KB combined');
+});
+
 test('Level 2 map core and water phases stay within the visual PoC budget', () => {
   const names = ['level02-core-v5.png', 'level02-water-low-v3.png', 'level02-water-high-v3.png'];
   const assets = names.map((name) => new URL(`../public/assets/maps/${name}`, import.meta.url));

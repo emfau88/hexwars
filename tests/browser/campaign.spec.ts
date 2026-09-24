@@ -206,6 +206,34 @@ test('the half-send unlock is localized in German', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'WEITER ZU LEVEL 2' })).toBeVisible();
 });
 
+test('victory and defeat results use responsive illustrated states', async ({ page }) => {
+  await page.goto('/?autostart=1&level=0');
+  await page.evaluate(() => window.__HEXFRONT__?.debugWin());
+  await expect(page.locator('#resultOverlay')).toHaveClass(/victory/);
+  await expect(page.locator('.resultVictoryEmblem')).toBeVisible();
+  await expect(page.locator('.resultDefeatEmblem')).toBeHidden();
+  await expect.poll(() => page.locator('.resultVictoryEmblem').evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  const metrics = await page.locator('#resultOverlay .modalBox').evaluate((modal) => {
+    const box = modal.getBoundingClientRect();
+    const buttons = [...modal.querySelectorAll<HTMLButtonElement>('button')].filter((button) => !button.hidden).map((button) => button.getBoundingClientRect().height);
+    return { left:box.left, right:box.right, top:box.top, bottom:box.bottom, viewportWidth:innerWidth, viewportHeight:innerHeight, buttons };
+  });
+  expect(metrics.left).toBeGreaterThanOrEqual(0);
+  expect(metrics.right).toBeLessThanOrEqual(metrics.viewportWidth);
+  expect(metrics.top).toBeGreaterThanOrEqual(0);
+  expect(metrics.bottom).toBeLessThanOrEqual(metrics.viewportHeight);
+  expect(Math.min(...metrics.buttons)).toBeGreaterThanOrEqual(44);
+
+  await page.getByRole('button', { name: 'TRY AGAIN' }).click();
+  await expect(page.locator('#resultOverlay')).toBeHidden();
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getState().running)).toBe(true);
+  await page.evaluate(() => window.__HEXFRONT__?.debugDefeat());
+  await expect(page.locator('#resultOverlay')).toHaveClass(/defeat/);
+  await expect(page.locator('.resultVictoryEmblem')).toBeHidden();
+  await expect(page.locator('.resultDefeatEmblem')).toBeVisible();
+  await expect.poll(() => page.locator('.resultDefeatEmblem').evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+});
+
 test('group send is introduced in Level 4 with a visible coach', async ({ page }) => {
   await page.goto('/?unlock=1');
   await page.getByRole('button', { name: 'Level 4: HIGHLANDS' }).click();

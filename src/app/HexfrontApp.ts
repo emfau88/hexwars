@@ -133,7 +133,7 @@ export class HexfrontApp {
         },
         send: (fromCol, fromRow, toCol, toRow, fraction = .5) => {
           const from = this.state.hexAt(fromCol, fromRow); const to = this.state.hexAt(toCol, toRow);
-          const sent = Boolean(from && to && this.state.send(from, to, from.owner, Math.floor(from.units * fraction), from.owner === Owner.Player));
+          const sent = Boolean(from && to && this.state.send(from, to, from.owner, Math.floor(from.units * fraction)));
           if (sent && from?.owner === Owner.Player) this.beginLevelOneBattle();
           return sent;
         },
@@ -142,7 +142,9 @@ export class HexfrontApp {
           for (let index = 0; index < Math.ceil(seconds / step) && this.state.running && !this.simulationPaused(); index += 1) this.state.update(step);
           this.consumeEvents(); return this.state.snapshot();
         },
-        debugWin: () => { this.state.end('victory', 'debugVictory'); this.consumeEvents(); }, resetProgress: () => this.resetProgress(true),
+        debugWin: () => { this.state.end('victory', 'debugVictory'); this.consumeEvents(); },
+        debugDefeat: () => { this.state.end('defeat', 'playerBaseCaptured'); this.consumeEvents(); },
+        resetProgress: () => this.resetProgress(true),
       });
       if (DEBUG_AUTOSTART) this.startLevel(Number.isFinite(DEBUG_LEVEL) ? DEBUG_LEVEL : 0);
     }

@@ -18,6 +18,7 @@ export interface HexfrontDebugApi {
   think(owner?: Owner): number;
   simulate(seconds?: number, step?: number): ReturnType<GameState['snapshot']>;
   debugWin(): void;
+  debugDefeat(): void;
   resetProgress(): void;
 }
 

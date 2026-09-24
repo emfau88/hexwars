@@ -1103,3 +1103,72 @@ body.campaignOpen { touch-action:pan-y; }
     #mobileBar .modeBtn.active { border-color:#c87b43; background:linear-gradient(#f2bf73,#df8d45); box-shadow:0 5px 12px rgba(100,53,23,.2); }
     #mobileBar .utilityBtn { border-radius:9px; border-color:rgba(231,224,201,.2); background:rgba(255,255,255,.055); }
   }
+
+  /* Responsive mission result presentation. */
+  #resultOverlay.victory {
+    background:radial-gradient(circle at 58% 28%,rgba(232,178,88,.24),transparent 34%),rgba(8,16,12,.88);
+  }
+  #resultOverlay.defeat {
+    background:radial-gradient(circle at 58% 28%,rgba(103,128,116,.2),transparent 34%),rgba(8,14,12,.9);
+  }
+  #resultOverlay .modalBox {
+    width:min(94vw,640px); max-height:calc(100vh - 32px); padding:30px 32px; overflow:auto;
+    border-color:rgba(243,226,184,.78); background:
+      linear-gradient(90deg,rgba(255,255,255,.3),transparent 2px) 21px 0/44px 100% no-repeat,
+      linear-gradient(155deg,#f5edd8,#e5dcc1);
+    box-shadow:0 34px 95px rgba(1,7,4,.58),inset 0 0 0 4px rgba(104,84,49,.05),inset 0 1px rgba(255,255,255,.82);
+  }
+  #resultOverlay.defeat .modalBox { border-color:rgba(181,194,179,.72); background:linear-gradient(155deg,#e7e7d9,#d7dccd); }
+  #resultOverlay .modalBox::before {
+    content:''; position:absolute; left:0; top:0; bottom:0; width:7px; pointer-events:none;
+    background:linear-gradient(#e6b468,#b96b3c);
+  }
+  #resultOverlay.defeat .modalBox::before { background:linear-gradient(#829589,#53695d); }
+  #resultOverlay .modalBox::after { opacity:.09; width:240px; height:240px; }
+  .resultHero { position:relative; z-index:1; display:grid; grid-template-columns:minmax(0,1fr) 150px; gap:19px; align-items:center; min-height:142px; margin-bottom:18px; }
+  .resultHeroCopy { min-width:0; }
+  #resultOverlay .resultKicker { margin-bottom:8px; color:#7c6749; font-size:10px; letter-spacing:1.7px; }
+  #resultOverlay.defeat .resultKicker { color:#65746b; }
+  #resultOverlay .verdict { margin-bottom:10px; color:#17281f; font-size:clamp(38px,6vw,54px); letter-spacing:1px; }
+  #resultOverlay .sub { max-width:37ch; min-height:0; margin:0; color:#48594f; font-size:14px; font-weight:620; }
+  #resultOverlay .resultMark {
+    position:relative; width:150px; height:150px; margin:0; color:inherit; background:none; clip-path:none;
+  }
+  .resultEmblem { position:absolute; inset:0; display:none; width:100%; height:100%; object-fit:contain; filter:drop-shadow(0 9px 14px rgba(77,45,20,.2)); }
+  #resultOverlay.victory .resultVictoryEmblem,#resultOverlay.defeat .resultDefeatEmblem { display:block; }
+  #resultOverlay.defeat .resultEmblem { filter:drop-shadow(0 8px 13px rgba(25,40,32,.22)); }
+  #resultOverlay .resultStats { position:relative; z-index:1; gap:10px; margin-bottom:15px; }
+  #resultOverlay .resultStats div { padding:12px 13px; border-color:#c4b89d; background:rgba(255,255,255,.32); box-shadow:inset 0 1px rgba(255,255,255,.48); }
+  #resultOverlay .resultStats strong { font-size:20px; }
+  #resultOverlay .resultAdvance { position:relative; z-index:1; margin-bottom:18px; border-radius:14px; }
+  #resultOverlay .modalActions { position:relative; z-index:1; }
+  #resultOverlay .primaryBtn,#resultOverlay .secondaryBtn { min-height:48px; transition:transform .15s ease,filter .15s ease; }
+  #resultOverlay .primaryBtn:hover,#resultOverlay .secondaryBtn:hover { transform:translateY(-1px); filter:brightness(1.03); }
+  @media (max-width:560px) {
+    #resultOverlay .modalBox { width:100%; max-height:calc(100vh - 20px); padding:21px 17px 16px 21px; }
+    .resultHero { grid-template-columns:minmax(0,1fr) 94px; gap:8px; min-height:96px; margin-bottom:13px; }
+    #resultOverlay .resultMark { width:94px; height:94px; }
+    #resultOverlay .resultKicker { font-size:8px; }
+    #resultOverlay .verdict { margin-bottom:7px; font-size:34px; }
+    #resultOverlay .sub { font-size:12px; line-height:1.35; }
+    #resultOverlay .resultStats { gap:6px; margin-bottom:10px; }
+    #resultOverlay .resultStats div { padding:9px 8px; }
+    #resultOverlay .resultStats span { font-size:8px; }
+    #resultOverlay .resultStats strong { font-size:16px; }
+    #resultOverlay .resultAdvance { margin-bottom:11px; }
+    #resultOverlay .modalActions { gap:7px; }
+    #resultOverlay .primaryBtn,#resultOverlay .secondaryBtn { min-height:45px; padding:9px 10px; font-size:10px; }
+  }
+  @media (max-height:560px) and (orientation:landscape) {
+    #resultOverlay { padding:8px; }
+    #resultOverlay .modalBox { max-height:calc(100vh - 16px); padding:15px 20px 14px 24px; }
+    .resultHero { grid-template-columns:minmax(0,1fr) 78px; min-height:74px; margin-bottom:8px; }
+    #resultOverlay .resultMark { width:78px; height:78px; }
+    #resultOverlay .verdict { font-size:30px; }
+    #resultOverlay .sub { font-size:11px; }
+    #resultOverlay .resultStats { margin-bottom:8px; }
+    #resultOverlay .resultStats div { padding:7px 9px; }
+    #resultOverlay .resultAdvance { margin-bottom:8px; padding:8px 10px; }
+    #resultOverlay .resultAdvance.commandUnlock { min-height:66px; }
+    #resultOverlay .primaryBtn,#resultOverlay .secondaryBtn { min-height:40px; padding:7px 10px; }
+  }
