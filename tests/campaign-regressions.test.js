@@ -152,6 +152,15 @@ test('campaign previews use compact derivatives instead of loading battle-resolu
   assert.match(boardRenderer, /state\.hexes\.length > 0 && this\.mapArt\.supports/);
 });
 
+test('owned territory keeps a saturated high-contrast identity over illustrated maps', () => {
+  const palette = read('../src/rendering/palette.ts');
+  const boardRenderer = read('../src/rendering/BoardRenderer.ts');
+  assert.match(palette, /low: '#db712b', high: '#f19a43', edge: '#aa4f1e'/);
+  assert.match(palette, /low: '#338dcc', high: '#64b5e8', edge: '#246f9f'/);
+  assert.match(boardRenderer, /Owner\.Neutral \? \.18 : \.54 \+ load \* \.12/);
+  assert.match(campaignUi, /Owner\.Neutral \? \.18 : \.6/);
+});
+
 test('Level 2 map core and water phases stay within the visual PoC budget', () => {
   const names = ['level02-core-v5.png', 'level02-water-low-v3.png', 'level02-water-high-v3.png'];
   const assets = names.map((name) => new URL(`../public/assets/maps/${name}`, import.meta.url));

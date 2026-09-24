@@ -419,7 +419,7 @@ export class CampaignUI {
         continue;
       } else {
         const colors = OWNER_COLORS[hex.owner];
-        context.globalAlpha = hasMapArt ? (hex.owner === Owner.Neutral ? .18 : .41) : 1;
+        context.globalAlpha = hasMapArt ? (hex.owner === Owner.Neutral ? .18 : .6) : 1;
         context.fillStyle = hex.owner === Owner.Neutral ? '#eee9d5' : colors.high; context.fill(); context.globalAlpha = 1;
         context.strokeStyle = hasMapArt && hex.owner === Owner.Neutral ? 'rgba(245,239,211,.78)' : colors.edge;
       }

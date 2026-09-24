@@ -278,7 +278,7 @@ export class BoardRenderer {
     const load = hex.owner === Owner.Neutral ? .36 : Math.max(0, Math.min(1, hex.units / terrainCapacity(hex)));
     BoardRenderer.path(this.context, hex.x, hex.y, this.radius * .91);
     this.context.save();
-    this.context.globalAlpha = hex.owner === Owner.Neutral ? .18 : .36 + load * .096;
+    this.context.globalAlpha = hex.owner === Owner.Neutral ? .18 : .54 + load * .12;
     this.context.fillStyle = mix(colors.low, colors.high, load);
     this.context.fill();
     this.context.restore();
