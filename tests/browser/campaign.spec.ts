@@ -249,9 +249,9 @@ test('desktop exposes keyboard shortcuts and advances straight to the next level
   test.skip(testInfo.project.name !== 'desktop-chromium');
   await page.goto('/?autostart=1&level=1');
   await expect(page.locator('#commandDock .modeShortcut')).toHaveText(['1', '2', '3']);
-  await page.keyboard.press('2');
-  await expect(page.locator('#commandDock .modeBtn[data-mode="all"]')).toHaveClass(/active/);
   await page.keyboard.press('1');
+  await expect(page.locator('#commandDock .modeBtn[data-mode="all"]')).toHaveClass(/active/);
+  await page.keyboard.press('2');
   await expect(page.locator('#commandDock .modeBtn[data-mode="half"]')).toHaveClass(/active/);
 
   await page.goto('/?autostart=1&level=0');
@@ -631,7 +631,7 @@ test('large desktop keeps the board complete and exposes the command dock', asyn
   expect(metrics.dockWidth).toBeGreaterThanOrEqual(300);
   expect(metrics.buttonHeight).toBeGreaterThanOrEqual(64);
   expect(metrics.shortcutFontSize).toBeGreaterThanOrEqual(12);
-  expect(metrics.guide).toContain('1→50');
+  expect(metrics.guide).toContain('1→100');
   expect(metrics.radius).toBeGreaterThanOrEqual(41);
 });
 

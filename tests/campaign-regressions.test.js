@@ -11,6 +11,7 @@ const ai = read('../src/systems/AISystem.ts');
 const victory = read('../src/systems/VictorySystem.ts');
 const input = read('../src/input/InputController.ts');
 const state = read('../src/core/GameState.ts');
+const index = read('../index.html');
 const main = read('../src/main.ts');
 const app = read('../src/app/HexfrontApp.ts');
 const audio = read('../src/audio/AudioController.ts');
@@ -33,6 +34,7 @@ test('Level 1 teaches 100 percent and Level 2 unlocks the 50 percent reserve com
   assert.match(level2, /50 % wird freigeschaltet/);
   assert.match(level2, /features:\{half:true,all:true,group:false,relay:false\}/);
   assert.match(styles, /attr\(data-unlock-label\)/);
+  assert.ok(index.indexOf('data-mode="all"') < index.indexOf('data-mode="half"'), '100 percent precedes 50 percent in the command menu');
 });
 
 test('Group send unlocks in Level 4 before the two-pass tactics mission', () => {

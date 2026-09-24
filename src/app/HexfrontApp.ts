@@ -296,7 +296,7 @@ export class HexfrontApp {
       this.stageResizeObserver.observe(this.renderer.stage);
     }
     window.addEventListener('keydown', (event) => {
-      if (event.key === '1') this.setMode('half'); if (event.key === '2') this.setMode('all'); if (event.key === '3') this.setMode('group');
+      if (event.key === '1') this.setMode('all'); if (event.key === '2') this.setMode('half'); if (event.key === '3') this.setMode('group');
       if (event.key.toLowerCase() === 'r') this.startLevel(); if (event.key === 'Escape') this.showMap();
     });
   }

@@ -31,15 +31,15 @@
         <div class="commandDockBody">
           <img class="commandDockOrnament" src="./assets/ui-polish/combat-dossier-ornament-v1.webp" alt="" aria-hidden="true" />
           <div class="modeKeyboardDiagram" aria-hidden="true">
-            <span><kbd>1</kbd><i>→</i><b>50 %</b></span>
-            <span><kbd>2</kbd><i>→</i><b>100 %</b></span>
+            <span><kbd>1</kbd><i>→</i><b>100 %</b></span>
+            <span><kbd>2</kbd><i>→</i><b>50 %</b></span>
             <span><kbd>3</kbd><i>→</i><b data-i18n="mode.group">GROUP</b></span>
           </div>
           <div class="commandDockSection" id="sendPanel">
             <div class="eyebrow" data-i18n="panel.send">SEND</div>
             <div class="modeRow">
-              <button class="modeBtn active" data-mode="half"><kbd class="modeShortcut" aria-hidden="true">1</kbd><span class="modeButtonText"><b>50 %</b><small data-i18n="mode.halfAction">50% SEND</small></span></button>
-              <button class="modeBtn" data-mode="all"><kbd class="modeShortcut" aria-hidden="true">2</kbd><span class="modeButtonText"><b>100 %</b><small data-i18n="mode.allAction">100% SEND</small></span></button>
+              <button class="modeBtn active" data-mode="all"><kbd class="modeShortcut" aria-hidden="true">1</kbd><span class="modeButtonText"><b>100 %</b><small data-i18n="mode.allAction">100% SEND</small></span></button>
+              <button class="modeBtn" data-mode="half"><kbd class="modeShortcut" aria-hidden="true">2</kbd><span class="modeButtonText"><b>50 %</b><small data-i18n="mode.halfAction">50% SEND</small></span></button>
               <button class="modeBtn" data-mode="group"><kbd class="modeShortcut" aria-hidden="true">3</kbd><span class="modeButtonText"><b data-i18n="mode.group">GROUP</b><small data-i18n="mode.groupAction">GROUP SEND</small></span></button>
             </div>
           </div>
@@ -228,8 +228,8 @@
   </div>
 
   <div id="mobileBar">
-    <button class="modeBtn active" data-mode="half"><span>50 %</span><kbd class="modeShortcut" aria-hidden="true">1</kbd></button>
-    <button class="modeBtn" data-mode="all"><span>100 %</span><kbd class="modeShortcut" aria-hidden="true">2</kbd></button>
+    <button class="modeBtn active" data-mode="all"><span>100 %</span><kbd class="modeShortcut" aria-hidden="true">1</kbd></button>
+    <button class="modeBtn" data-mode="half"><span>50 %</span><kbd class="modeShortcut" aria-hidden="true">2</kbd></button>
     <button class="modeBtn" data-mode="group"><span data-i18n="mode.group">GROUP</span><kbd class="modeShortcut" aria-hidden="true">3</kbd></button>
     <button class="utilityBtn" id="mobileRestartBtn" aria-label="Restart level" title="Restart level" data-i18n-aria-label="utility.restartAria" data-i18n-title="utility.restartAria">↻</button>
     <button class="utilityBtn" id="mobileLevelsBtn" aria-label="Open campaign map" title="Open campaign map" data-i18n-aria-label="utility.mapAria" data-i18n-title="utility.mapAria">☰</button>
