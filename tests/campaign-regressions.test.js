@@ -89,10 +89,12 @@ test('campaign atlas art remains decorative and within its mobile budget', () =>
 });
 
 test('unfinished maps stay visible but cannot be launched from campaign UI', () => {
-  assert.match(atlas, /RELEASED_CAMPAIGN_LEVELS = 8/);
+  assert.match(atlas, /RELEASED_CAMPAIGN_LEVELS = 9/);
   assert.match(atlas, /comingSoon = levelIndex >= RELEASED_CAMPAIGN_LEVELS/);
   assert.match(campaignUi, /available = !comingSoon && unlocked/);
   assert.match(campaignUi, /nextButton\.hidden = !victory \|\| finalLevel \|\| !hasReleasedNextLevel/);
+  assert.match(campaignUi, /victory && !hasReleasedNextLevel/);
+  assert.match(campaignUi, /campaign\.state\.comingSoon/);
 });
 
 test('map previews composite positioned landscape overlays over their core art', () => {
@@ -134,16 +136,43 @@ test('combat UI polish art stays compact enough for browser deployment', () => {
   assert.ok(assets.reduce((sum, asset) => sum + statSync(asset).size, 0) < 150_000, 'combat UI polish art stays below 150 KB combined');
 });
 
+test('relay structure art is compact, lazy-loaded and paired with exact range-two feedback', () => {
+  const asset = new URL('../public/assets/structures/relay-neutral-v2.png', import.meta.url);
+  assert.ok(statSync(asset).size < 300_000, 'relay structure sprite stays below 300 KB');
+  const structureRenderer = read('../src/rendering/StructureAssetRenderer.ts');
+  const boardRenderer = read('../src/rendering/BoardRenderer.ts');
+  assert.match(structureRenderer, /relay: null/);
+  assert.match(structureRenderer, /this\.sprites\.relay \?\?= this\.load/);
+  assert.match(boardRenderer, /hexDistance\(source, target\) === GAME_CONFIG\.relayRange/);
+  assert.match(boardRenderer, /drawRelayRange\(state, phase\)/);
+  assert.match(boardRenderer, /this\.context\.globalAlpha = 1;\s*const assetDrawn = this\.structureAssets\.drawRelay/);
+  assert.match(index, /relayLegendIcon/);
+  assert.match(index, /assets\/structures\/hq-orange-v1\.png/);
+  assert.match(index, /assets\/structures\/guardian-neutral-v1\.png/);
+  assert.match(campaignUi, /terrain\.has\(Terrain\.Hill\)/);
+  assert.match(campaignUi, /terrain\.has\(Terrain\.Relay\)/);
+  assert.match(campaignUi, /syncLegendEntry\('legendGuardian'/);
+});
+
+test('illustrated maps draw grid contours only for playable cells', () => {
+  const boardRenderer = read('../src/rendering/BoardRenderer.ts');
+  assert.match(boardRenderer, /for \(const hex of hexes\) \{\s*if \(!isPlayable\(hex\)\) continue;/);
+  assert.doesNotMatch(boardRenderer, /const inactive = !isPlayable\(hex\)/);
+  assert.match(boardRenderer, /this\.mapArt\.drawWaterMotion/);
+  assert.doesNotMatch(boardRenderer, /if \(!assetWater\)/);
+});
+
 test('campaign previews use compact derivatives instead of loading battle-resolution map art', () => {
   const names = [
     'level01-preview-v1.webp', 'level02-preview-v1.webp', 'level03-preview-v1.webp', 'level04-preview-v1.webp',
     'level05-preview-v1.webp', 'level05-central-massif-preview-v1.webp',
     'level06-preview-v1.webp', 'level06-central-wetland-preview-v1.webp',
     'level07-preview-v1.webp', 'level08-preview-v1.webp',
+    'level09-preview-v1.webp', 'level09-mountain-block-preview-v1.webp',
   ];
   const assets = names.map((name) => new URL(`../public/assets/map-previews/${name}`, import.meta.url));
   for (const asset of assets) assert.ok(statSync(asset).size < 200_000, `${asset.pathname} stays below 200 KB`);
-  assert.ok(assets.reduce((sum, asset) => sum + statSync(asset).size, 0) < 1_200_000, 'all campaign preview art stays below 1.2 MB combined');
+  assert.ok(assets.reduce((sum, asset) => sum + statSync(asset).size, 0) < 1_400_000, 'all campaign preview art stays below 1.4 MB combined');
   const manifest = read('../src/rendering/MapArtManifest.ts');
   for (const name of names) assert.match(manifest, new RegExp(name.replace('.', '\\.')));
   assert.match(campaignUi, /previewSource \?\?/);
@@ -200,6 +229,12 @@ test('Level 7 island map core stays within the rollout budget', () => {
 test('Level 8 garden map core stays within the rollout budget', () => {
   const core = new URL('../public/assets/maps/level08-core-v1.webp', import.meta.url);
   assert.ok(statSync(core).size < 1_600_000, 'Level 8 static core stays below 1.6 MB');
+});
+
+test('Level 9 alpine map layers stay within the rollout budget', () => {
+  const core = new URL('../public/assets/maps/level09-core-v1.webp', import.meta.url);
+  const mountain = new URL('../public/assets/maps/level09-mountain-block-v1.webp', import.meta.url);
+  assert.ok(statSync(core).size + statSync(mountain).size < 1_600_000, 'Level 9 static map layers stay below 1.6 MB combined');
 });
 
 test('production assets support GitHub Pages sub-path hosting', () => {

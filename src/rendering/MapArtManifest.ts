@@ -201,6 +201,56 @@ export const LEVEL_EIGHT_MAP_ART = Object.freeze({
   fog: '227,234,216',
 } as const satisfies MapArtManifest);
 
+export const LEVEL_NINE_MAP_ART = Object.freeze({
+  levelIndex: 8,
+  core: {
+    source: `${ASSET_BASE}assets/maps/level09-core-v1.webp`,
+    previewSource: `${ASSET_BASE}assets/map-previews/level09-preview-v1.webp`,
+    sourceWidth: 1438,
+    sourceHeight: 1093,
+  },
+  worldRect: { x: 0, y: 0, width: REFERENCE_WORLD_WIDTH, height: REFERENCE_WORLD_HEIGHT },
+  landscapeOverlays: [
+    {
+      source: `${ASSET_BASE}assets/maps/level09-mountain-block-v1.webp`,
+      previewSource: `${ASSET_BASE}assets/map-previews/level09-mountain-block-preview-v1.webp`,
+      sourceWidth: 1374,
+      sourceHeight: 1145,
+      worldRect: { x: 275.14, y: 368, width: 104, height: 88 },
+    },
+    {
+      source: `${ASSET_BASE}assets/maps/level09-mountain-block-v1.webp`,
+      previewSource: `${ASSET_BASE}assets/map-previews/level09-mountain-block-preview-v1.webp`,
+      sourceWidth: 1374,
+      sourceHeight: 1145,
+      worldRect: { x: 412.75, y: 365.5, width: 108, height: 91 },
+    },
+    {
+      source: `${ASSET_BASE}assets/maps/level09-mountain-block-v1.webp`,
+      previewSource: `${ASSET_BASE}assets/map-previews/level09-mountain-block-preview-v1.webp`,
+      sourceWidth: 1374,
+      sourceHeight: 1145,
+      worldRect: { x: 553.85, y: 367, width: 105, height: 89 },
+    },
+    {
+      source: `${ASSET_BASE}assets/maps/level09-mountain-block-v1.webp`,
+      previewSource: `${ASSET_BASE}assets/map-previews/level09-mountain-block-preview-v1.webp`,
+      sourceWidth: 1374,
+      sourceHeight: 1145,
+      worldRect: { x: 692.45, y: 366, width: 107, height: 90 },
+    },
+  ],
+  structureSafeAreas: [
+    { kind: 'hq', col: 3, row: 1, radius: 35 },
+    { kind: 'hill', col: 1, row: 6, radius: 30 },
+    { kind: 'relay', col: 3, row: 6, radius: 30 },
+    { kind: 'hill', col: 5, row: 6, radius: 30 },
+    { kind: 'hq', col: 3, row: 11, radius: 35 },
+  ],
+  backdrop: ['#415e5f', '#718b67', '#a4a76d', '#53634f'],
+  fog: '228,235,224',
+} as const satisfies MapArtManifest);
+
 export const MAP_ART_MANIFESTS: readonly MapArtManifest[] = Object.freeze([
   LEVEL_ONE_MAP_ART,
   LEVEL_TWO_MAP_ART,
@@ -210,6 +260,7 @@ export const MAP_ART_MANIFESTS: readonly MapArtManifest[] = Object.freeze([
   LEVEL_SIX_MAP_ART,
   LEVEL_SEVEN_MAP_ART,
   LEVEL_EIGHT_MAP_ART,
+  LEVEL_NINE_MAP_ART,
 ]);
 
 export function mapArtForLevel(levelIndex: number): MapArtManifest | null {

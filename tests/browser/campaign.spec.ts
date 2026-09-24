@@ -362,6 +362,7 @@ test('Level 5 exposes two active guardians and their finite HQ shield', async ({
   await expect(page.getByRole('button', { name: 'RETURN TO BATTLE' })).toBeVisible();
   await page.getByRole('button', { name: 'RETURN TO BATTLE' }).click();
   await expect(page.locator('#legendGuardian')).not.toHaveAttribute('hidden');
+  await expect.poll(() => page.locator('#legendGuardian img').evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
   if (testInfo.project.name === 'mobile-portrait') await expect(page.locator('#hint')).toContainText('48 HQ shield');
   else await expect(page.locator('#legendGuardian')).toBeVisible();
   await expect(page.locator('#ruleText')).toContainText('48 HQ shield');
@@ -733,4 +734,62 @@ test('decor variants decode their lazily loaded candidate assets', async ({ page
     expect(canvas.width).toBeGreaterThan(0);
     expect(canvas.height).toBeGreaterThan(0);
   }
+});
+
+test('relay structure art loads only when a relay mission starts', async ({ page }) => {
+  const relayRequests: string[] = [];
+  page.on('request', (request) => {
+    if (request.url().includes('/assets/structures/relay-neutral-v2.png')) relayRequests.push(request.url());
+  });
+  await page.goto('/?autostart=1&level=0');
+  await page.waitForTimeout(250);
+  expect(relayRequests).toEqual([]);
+
+  await page.goto('/?unlock=1&autostart=1&level=6');
+  await expect(page.locator('#legendRelay')).toContainText('only this cell can send up to 2 hexes away');
+  await expect(page.locator('#legendRelay')).not.toHaveAttribute('hidden');
+  await expect(page.locator('#legendHill')).toHaveAttribute('hidden');
+  await expect(page.locator('#legendGuardian')).toHaveAttribute('hidden');
+  await expect.poll(() => page.locator('#legendBase img').evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  await expect.poll(() => page.locator('#legendRelay img').evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBe(512);
+  await expect.poll(() => relayRequests.length).toBeGreaterThan(0);
+  const decoded = await page.evaluate(() => new Promise<boolean>((resolve) => {
+    const image = new Image();
+    image.addEventListener('load', () => resolve(image.naturalWidth === 512 && image.naturalHeight === 512), { once:true });
+    image.addEventListener('error', () => resolve(false), { once:true });
+    image.src = './assets/structures/relay-neutral-v2.png';
+  }));
+  expect(decoded).toBe(true);
+
+  await page.goto('/?unlock=1&autostart=1&level=3');
+  await expect(page.locator('#legendHill')).not.toHaveAttribute('hidden');
+  await expect(page.locator('#legendRelay')).toHaveAttribute('hidden');
+});
+
+test('Level 9 is released with three readable passes while Level 10 remains coming soon', async ({ page }) => {
+  await page.goto('/?unlock=1');
+  const levelNine = page.getByRole('button', { name: 'Level 9: THREE PASSES' });
+  await expect(levelNine).toBeEnabled();
+  await expect(page.getByRole('button', { name: /Level 10: THE RING/ })).toHaveAttribute('aria-label', /coming soon/);
+  await levelNine.click();
+  await expect(page.locator('#menuLevelName')).toHaveText('IX · THREE PASSES');
+  await expect(page.getByRole('button', { name: 'START LEVEL' })).toBeEnabled();
+  await expect.poll(() => page.locator('#levelPreview').evaluate((canvas) => (canvas as HTMLCanvasElement).width)).toBeGreaterThan(0);
+  await expect(page.locator('#levelPreviewFrame')).not.toHaveClass(/previewLoading|previewFailed/);
+  await expect(page.locator('#levelPreview')).toHaveCSS('opacity', '1');
+  await page.getByRole('button', { name: 'START LEVEL' }).click();
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getRenderProfile().mapArt.loaded)).toBe(true);
+  const passes = await page.evaluate(() => window.__HEXFRONT__?.getBoard()
+    .filter((hex) => hex.row === 6)
+    .map(({ col, terrain }) => ({ col, terrain })) ?? []);
+  expect(passes).toEqual([
+    { col:0, terrain:5 }, { col:1, terrain:2 }, { col:2, terrain:5 }, { col:3, terrain:3 },
+    { col:4, terrain:5 }, { col:5, terrain:2 }, { col:6, terrain:5 },
+  ]);
+  await page.evaluate(() => window.__HEXFRONT__?.debugWin());
+  await expect(page.locator('#resultAdvance')).toBeVisible();
+  await expect(page.locator('#resultAdvanceLabel')).toHaveText('COMING SOON');
+  await expect(page.locator('#resultAdvanceName')).toHaveText('X · THE RING');
+  await expect(page.locator('#resultAdvanceRule')).toContainText('still in development');
+  await expect(page.locator('#nextLevelBtn')).toBeHidden();
 });

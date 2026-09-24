@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { Terrain, type HexState } from '../src/core/types';
 import { exposedWaterShoreEdges, fitSpriteSize } from '../src/rendering/LandscapeRenderer';
-import { centeredAspectCrop, LEVEL_EIGHT_MAP_ART, LEVEL_FIVE_MAP_ART, LEVEL_FOUR_MAP_ART, LEVEL_ONE_MAP_ART, LEVEL_SEVEN_MAP_ART, LEVEL_SIX_MAP_ART, LEVEL_THREE_MAP_ART, LEVEL_TWO_MAP_ART, mapArtForLevel } from '../src/rendering/MapArtManifest';
+import { centeredAspectCrop, LEVEL_EIGHT_MAP_ART, LEVEL_FIVE_MAP_ART, LEVEL_FOUR_MAP_ART, LEVEL_NINE_MAP_ART, LEVEL_ONE_MAP_ART, LEVEL_SEVEN_MAP_ART, LEVEL_SIX_MAP_ART, LEVEL_THREE_MAP_ART, LEVEL_TWO_MAP_ART, mapArtForLevel } from '../src/rendering/MapArtManifest';
 import { MAP_ART_RENDER_LAYERS } from '../src/rendering/MapArtRenderer';
 
 const water = (col: number, row: number): HexState => ({
@@ -129,6 +129,22 @@ test('Level 8 map art reserves its two relays, central hill, and both headquarte
     LEVEL_EIGHT_MAP_ART.structureSafeAreas.map(({ kind, col, row }) => [kind, col, row]),
     [['hq', 3, 1], ['relay', 1, 6], ['hill', 3, 6], ['relay', 5, 6], ['hq', 3, 11]],
   );
+});
+
+test('Level 9 map art aligns four mountain blocks around three open passes', () => {
+  assert.equal(mapArtForLevel(8), LEVEL_NINE_MAP_ART);
+  assert.equal(LEVEL_NINE_MAP_ART.worldRect.width, LEVEL_ONE_MAP_ART.worldRect.width);
+  assert.equal(LEVEL_NINE_MAP_ART.worldRect.height, LEVEL_ONE_MAP_ART.worldRect.height);
+  assert.equal(LEVEL_NINE_MAP_ART.landscapeOverlays.length, 4);
+  assert.deepEqual(
+    LEVEL_NINE_MAP_ART.structureSafeAreas.map(({ kind, col, row }) => [kind, col, row]),
+    [['hq', 3, 1], ['hill', 1, 6], ['relay', 3, 6], ['hill', 5, 6], ['hq', 3, 11]],
+  );
+  const mountainCenters = LEVEL_NINE_MAP_ART.landscapeOverlays.map(({ worldRect }) =>
+    Number((worldRect.x + worldRect.width / 2).toFixed(2)));
+  assert.deepEqual(mountainCenters, [327.14, 466.75, 606.35, 745.95]);
+  assert.ok(LEVEL_NINE_MAP_ART.landscapeOverlays.every(({ worldRect }) =>
+    worldRect.y < 421 && worldRect.y + worldRect.height > 421));
 });
 
 test('map-art render layers keep atmosphere below all gameplay information', () => {

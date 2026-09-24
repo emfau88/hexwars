@@ -142,15 +142,26 @@ export class CampaignUI {
     this.app.classList.toggle('introLevel', state.currentLevel === 0);
     this.app.classList.toggle('halfSendCoach', state.currentLevel === 1 && !progress.halfSendUsed);
     this.app.classList.toggle('groupSendCoach', state.currentLevel === 3);
-    required('legendHill').hidden = state.currentLevel < 3;
-    required('legendRelay').hidden = !state.level.features.relay;
-    required('legendGuardian').hidden = !state.level.structures?.some(({ type }) => type === 'guardian');
+    const terrain = new Set(state.hexes.map((hex) => hex.terrain));
+    this.syncLegendEntry('legendBase', terrain.has(Terrain.Base));
+    this.syncLegendEntry('legendHill', terrain.has(Terrain.Hill));
+    this.syncLegendEntry('legendRelay', state.level.features.relay && terrain.has(Terrain.Relay));
+    this.syncLegendEntry('legendGuardian', Boolean(state.level.structures?.some(({ type }) => type === 'guardian')));
+    this.syncLegendEntry('legendLandscape', terrain.has(Terrain.Decor));
     this.applyMissionCopy(state);
     this.hint.style.opacity = '1'; clearTimeout(this.hintTimer);
     if (state.currentLevel !== 0 && !this.app.classList.contains('halfSendCoach') && !this.app.classList.contains('groupSendCoach')) {
       this.hintTimer = window.setTimeout(() => { this.hint.style.opacity = '0'; }, 3600);
     }
     this.updateEndgame(state); this.updateHUD(state);
+  }
+
+  private syncLegendEntry(id: string, visible: boolean): void {
+    const entry = required(id);
+    entry.hidden = !visible;
+    if (!visible) return;
+    const image = entry.querySelector<HTMLImageElement>('img[data-icon-src]');
+    if (image && !image.getAttribute('src')) image.src = image.dataset.iconSrc ?? '';
   }
 
   setMapLoading(loading: boolean): void {
@@ -332,7 +343,7 @@ export class CampaignUI {
     const best = progress.best[state.currentLevel];
     required('resultBest').textContent = best ? this.time(best) : '—';
     const advance = required('resultAdvance');
-    advance.hidden = !victory || (!finalLevel && !hasReleasedNextLevel);
+    advance.hidden = !victory;
     advance.classList.toggle('commandUnlock', halfSendUnlock);
     required('resultUnlockVisual').toggleAttribute('hidden', !halfSendUnlock);
     if (halfSendUnlock) {
@@ -344,6 +355,11 @@ export class CampaignUI {
       required('resultAdvanceLabel').textContent = this.i18n.t('result.campaignComplete');
       required('resultAdvanceName').textContent = 'HEXFRONT';
       required('resultAdvanceRule').textContent = this.i18n.t('result.campaignCompleteSub');
+    } else if (victory && !hasReleasedNextLevel) {
+      const next = LEVELS[state.currentLevel + 1];
+      required('resultAdvanceLabel').textContent = this.i18n.t('campaign.state.comingSoon');
+      required('resultAdvanceName').textContent = this.i18n.text(next.name);
+      required('resultAdvanceRule').textContent = this.i18n.t('campaign.comingSoonHint');
     } else if (victory) {
       const next = LEVELS[state.currentLevel + 1];
       required('resultAdvanceLabel').textContent = this.i18n.t('result.advance');

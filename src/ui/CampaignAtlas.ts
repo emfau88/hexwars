@@ -5,7 +5,7 @@ import { LEVELS } from '../levels';
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const HTML_NS = 'http://www.w3.org/1999/xhtml';
 const ATLAS_ASPECT = 1468 / 1096;
-export const RELEASED_CAMPAIGN_LEVELS = 8;
+export const RELEASED_CAMPAIGN_LEVELS = 9;
 
 type AtlasPoint = { x: number; y: number };
 type AtlasStation = AtlasPoint & { levelIndex: number };

@@ -1,5 +1,6 @@
 import type { GameState } from '../core/GameState';
-import { isPlayable } from '../core/hex';
+import { GAME_CONFIG } from '../core/config';
+import { hexDistance, isPlayable } from '../core/hex';
 import { Owner, Terrain, type HexState, type Point, type SendMode, type StructureState, type VisualVariant } from '../core/types';
 import { terrainCapacity } from '../systems/GrowthSystem';
 import { hqShield } from '../systems/StructureSystem';
@@ -184,11 +185,13 @@ export class BoardRenderer {
     if (mapArtEnabled) {
       this.drawGrid(state.hexes);
       for (const hex of state.hexes) if (isPlayable(hex)) this.drawTerritory(hex, reachable, phase);
+      this.drawRelayRange(state, phase);
       for (const hex of state.hexes) if (isPlayable(hex)) this.drawStructure(hex);
-      for (const hex of state.hexes) if (isPlayable(hex)) this.drawGarrison(hex);
+      for (const hex of state.hexes) if (isPlayable(hex)) this.drawGarrison(hex, phase);
     } else {
-      for (const hex of state.hexes) this.drawLegacyHex(state, hex, reachable);
+      for (const hex of state.hexes) this.drawLegacyHex(state, hex, reachable, phase);
       this.landscape.drawWaterShores(this.context, state.hexes, this.radius, state.level.landscapeStyle, BoardRenderer.path, phase);
+      this.drawRelayRange(state, phase);
     }
     this.drawStrategicStructures(state, phase);
     for (const army of state.armies) {
@@ -217,17 +220,17 @@ export class BoardRenderer {
     this.environmentContext.clearRect(0, 0, this.width, this.height);
     this.environmentContext.save();
     this.environmentContext.transform(this.worldTransform.scale, 0, 0, this.worldTransform.scale, this.worldTransform.translateX, this.worldTransform.translateY);
-    const assetWater = this.mapArt.drawWaterMotion(this.environmentContext, state.currentLevel, phase);
-    if (!assetWater) {
-      this.landscape.drawWaterShores(this.environmentContext, state.hexes, this.radius, state.level.landscapeStyle, BoardRenderer.path, phase, true);
-    }
+    // Illustrated maps already contain their authored shorelines. Only an explicit
+    // animated water asset belongs on this layer; the legacy hex-shore fallback
+    // would expose decorative cells as seemingly playable hexes.
+    this.mapArt.drawWaterMotion(this.environmentContext, state.currentLevel, phase);
     this.environmentContext.restore();
     this.mapArt.drawAtmosphere(this.environmentContext, this.width, this.height, this.runtimeGeometry, phase, state.currentLevel);
     this.environmentLayerDirty = false;
     this.lastEnvironmentFrame = time;
   }
 
-  private drawLegacyHex(state: GameState, hex: HexState, reachable: Set<HexState> | null): void {
+  private drawLegacyHex(state: GameState, hex: HexState, reachable: Set<HexState> | null, phase: number): void {
     if (hex.terrain === Terrain.Decor) { this.landscape.drawHex(this.context, hex, this.radius, state.level.landscapeStyle, state.level.seed, BoardRenderer.path); return; }
     if (!isPlayable(hex)) return;
     const colors = OWNER_COLORS[hex.owner];
@@ -246,9 +249,14 @@ export class BoardRenderer {
     if (hex.terrain === Terrain.Base && this.structureAssets.drawHq(this.context, hex.owner, hex.x, hex.y, this.radius)) {
       this.drawNumberBadge(hex.owner, Math.floor(hex.units), hex.x, hex.y + this.radius * .58);
     } else if (state.structureAt(hex.col, hex.row)?.type !== 'guardian') {
-      this.terrainGlyph(hex);
-      this.context.fillStyle = colors.text; this.context.font = `700 ${Math.max(11, Math.floor(this.radius * .52))}px system-ui,sans-serif`;
-      this.context.textAlign = 'center'; this.context.textBaseline = 'middle'; this.context.fillText(String(Math.floor(hex.units)), hex.x, hex.y - this.radius * .04);
+      if (hex.terrain === Terrain.Relay) {
+        this.drawRelay(hex, phase);
+        this.drawNumberBadge(hex.owner, Math.floor(hex.units), hex.x, hex.y + this.radius * .62);
+      } else {
+        this.terrainGlyph(hex);
+        this.context.fillStyle = colors.text; this.context.font = `700 ${Math.max(11, Math.floor(this.radius * .52))}px system-ui,sans-serif`;
+        this.context.textAlign = 'center'; this.context.textBaseline = 'middle'; this.context.fillText(String(Math.floor(hex.units)), hex.x, hex.y - this.radius * .04);
+      }
     }
   }
 
@@ -256,19 +264,15 @@ export class BoardRenderer {
     this.context.save();
     this.context.lineJoin = 'round';
     for (const hex of hexes) {
+      if (!isPlayable(hex)) continue;
       BoardRenderer.path(this.context, hex.x, hex.y, this.radius * .955);
-      const inactive = !isPlayable(hex);
-      // Decorative and void cells never communicate an available move: keep their
-      // contour intentionally quieter than the inner playable-cell border.
-      this.context.strokeStyle = inactive ? 'rgba(29,52,43,.18)' : 'rgba(37,55,38,.28)';
-      this.context.lineWidth = inactive ? .9 : 1.2;
+      this.context.strokeStyle = 'rgba(37,55,38,.28)';
+      this.context.lineWidth = 1.2;
       this.context.stroke();
-      if (isPlayable(hex)) {
-        BoardRenderer.path(this.context, hex.x, hex.y, this.radius * .92);
-        this.context.strokeStyle = 'rgba(244,240,221,.68)';
-        this.context.lineWidth = 1.9;
-        this.context.stroke();
-      }
+      BoardRenderer.path(this.context, hex.x, hex.y, this.radius * .92);
+      this.context.strokeStyle = 'rgba(244,240,221,.68)';
+      this.context.lineWidth = 1.9;
+      this.context.stroke();
     }
     this.context.restore();
   }
@@ -431,10 +435,90 @@ export class BoardRenderer {
     this.context.restore();
   }
 
-  private drawGarrison(hex: HexState): void {
-    if (hex.terrain !== Terrain.Base) this.terrainGlyph(hex);
-    const centerY = hex.y + (hex.terrain === Terrain.Base ? this.radius * .58 : -this.radius * .04);
+  private drawGarrison(hex: HexState, phase: number): void {
+    if (hex.terrain === Terrain.Relay) this.drawRelay(hex, phase);
+    else if (hex.terrain !== Terrain.Base) this.terrainGlyph(hex);
+    const centerY = hex.y + (hex.terrain === Terrain.Base
+      ? this.radius * .58
+      : hex.terrain === Terrain.Relay
+        ? this.radius * .62
+        : -this.radius * .04);
     this.drawNumberBadge(hex.owner, Math.floor(hex.units), hex.x, centerY);
+  }
+
+  private drawRelayRange(state: GameState, phase: number): void {
+    const source = this.selected;
+    if (!source || source.terrain !== Terrain.Relay || source.owner === Owner.Neutral || !state.level.features.relay) return;
+    const targets = state.hexes.filter((target) => isPlayable(target)
+      && hexDistance(source, target) === GAME_CONFIG.relayRange
+      && state.canSend(source, target));
+    if (!targets.length) return;
+    const colors = OWNER_COLORS[source.owner];
+    const pulse = .5 + Math.sin(phase * 4.2) * .5;
+    this.context.save();
+    this.context.setLineDash([4, 7]);
+    this.context.lineWidth = 1.4;
+    this.context.strokeStyle = colors.high;
+    this.context.globalAlpha = .2 + pulse * .08;
+    for (const target of targets) {
+      this.context.beginPath(); this.context.moveTo(source.x, source.y); this.context.lineTo(target.x, target.y); this.context.stroke();
+    }
+    this.context.setLineDash([]);
+    for (const target of targets) {
+      BoardRenderer.path(this.context, target.x, target.y, this.radius * (.79 + pulse * .025));
+      this.context.fillStyle = colors.high; this.context.globalAlpha = .08 + pulse * .035; this.context.fill();
+      this.context.strokeStyle = colors.high; this.context.globalAlpha = .72 + pulse * .18;
+      this.context.lineWidth = 2.4 + pulse * .55; this.context.stroke();
+      BoardRenderer.path(this.context, target.x, target.y, this.radius * .68);
+      this.context.strokeStyle = '#fff0bd'; this.context.globalAlpha = .42 + pulse * .16;
+      this.context.lineWidth = 1.15; this.context.stroke();
+    }
+    this.context.restore();
+  }
+
+  private drawRelay(hex: HexState, phase: number): void {
+    const colors = OWNER_COLORS[hex.owner];
+    const controlled = hex.owner !== Owner.Neutral;
+    const selected = this.selected === hex;
+    const pulse = .5 + Math.sin(phase * 3.2 + hex.col) * .5;
+    this.context.save();
+    if (controlled) {
+      const glow = this.context.createRadialGradient(hex.x, hex.y, this.radius * .16, hex.x, hex.y, this.radius * .74);
+      glow.addColorStop(0, colors.high);
+      glow.addColorStop(1, 'rgba(0,0,0,0)');
+      this.context.fillStyle = glow;
+      this.context.globalAlpha = (selected ? .2 : .1) + pulse * .05;
+      this.context.beginPath(); this.context.arc(hex.x, hex.y, this.radius * .74, 0, Math.PI * 2); this.context.fill();
+    }
+    this.context.globalAlpha = 1;
+    const assetDrawn = this.structureAssets.drawRelay(this.context, hex.x, hex.y, this.radius);
+    if (!assetDrawn) this.drawRelayFallback(hex);
+    this.context.globalAlpha = selected ? .95 : controlled ? .72 : .48;
+    this.context.strokeStyle = controlled ? colors.high : '#c7aa6b';
+    this.context.lineWidth = selected ? 3.1 : 2.1;
+    this.context.beginPath(); this.context.arc(hex.x, hex.y + this.radius * .05, this.radius * (.43 + pulse * .018), 0, Math.PI * 2); this.context.stroke();
+    if (controlled) {
+      const transmitterY = hex.y - this.radius * .39;
+      this.context.globalAlpha = selected ? .9 : .48 + pulse * .18;
+      this.context.lineWidth = selected ? 2.2 : 1.45;
+      for (const scale of [.2, .31]) {
+        this.context.beginPath();
+        this.context.arc(hex.x, transmitterY, this.radius * scale, Math.PI * 1.08, Math.PI * 1.92);
+        this.context.stroke();
+      }
+    }
+    this.context.restore();
+  }
+
+  private drawRelayFallback(hex: HexState): void {
+    const colors = OWNER_COLORS[hex.owner];
+    this.context.save(); this.context.translate(hex.x, hex.y - this.radius * .05);
+    this.context.fillStyle = '#e4dcc9'; this.context.strokeStyle = '#313a37'; this.context.lineWidth = 2;
+    this.context.beginPath(); this.context.arc(0, this.radius * .08, this.radius * .34, 0, Math.PI * 2); this.context.fill(); this.context.stroke();
+    this.context.fillStyle = '#454e4b'; this.context.fillRect(-this.radius * .08, -this.radius * .34, this.radius * .16, this.radius * .42);
+    this.context.beginPath(); this.context.arc(0, -this.radius * .35, this.radius * .13, 0, Math.PI * 2);
+    this.context.fillStyle = colors.high; this.context.fill(); this.context.stroke();
+    this.context.restore();
   }
 
   private drawNumberBadge(owner: Owner, value: number, centerX: number, centerY: number): void {

@@ -6,6 +6,7 @@ interface StructureSprites {
   orangeHq: HTMLImageElement;
   blueHq: HTMLImageElement;
   guardian: HTMLImageElement;
+  relay: HTMLImageElement | null;
 }
 
 export class StructureAssetRenderer {
@@ -16,6 +17,7 @@ export class StructureAssetRenderer {
       orangeHq: this.load(`${ASSET_BASE}assets/structures/hq-orange-v1.png`),
       blueHq: this.load(`${ASSET_BASE}assets/structures/hq-blue-v1.png`),
       guardian: this.load(`${ASSET_BASE}assets/structures/guardian-neutral-v1.png`),
+      relay: null,
     };
   }
 
@@ -44,6 +46,18 @@ export class StructureAssetRenderer {
   ): boolean {
     if (!this.ready(this.sprites.guardian)) return false;
     this.drawCentered(context, this.sprites.guardian, x, y - radius * .05, radius * 2.02);
+    return true;
+  }
+
+  drawRelay(
+    context: CanvasRenderingContext2D,
+    x: number,
+    y: number,
+    radius: number,
+  ): boolean {
+    this.sprites.relay ??= this.load(`${ASSET_BASE}assets/structures/relay-neutral-v2.png`);
+    if (!this.ready(this.sprites.relay)) return false;
+    this.drawCentered(context, this.sprites.relay, x, y - radius * .06, radius * 1.82);
     return true;
   }
 
