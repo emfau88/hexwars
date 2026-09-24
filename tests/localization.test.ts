@@ -21,6 +21,8 @@ test('German gameplay labels use concise player-facing wording', () => {
   assert.equal(DE_TRANSLATIONS['mode.group'], 'GRUPPE');
   assert.equal(DE_TRANSLATIONS['stats.rival'], 'GEGNER · FELDER / TRUPPEN');
   assert.equal(DE_TRANSLATIONS['stats.mobileMetrics'], 'FELDER / TRUPPEN');
+  assert.equal(EN_TRANSLATIONS['result.unlock.label'], 'NEW COMMAND UNLOCKED');
+  assert.equal(DE_TRANSLATIONS['result.unlock.label'], 'NEUER BEFEHL FREIGESCHALTET');
   assert.equal(EN_TRANSLATIONS['drag.send'], 'SEND');
   assert.equal(DE_TRANSLATIONS['drag.send'], 'SENDEN');
 });

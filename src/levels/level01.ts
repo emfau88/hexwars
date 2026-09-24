@@ -5,13 +5,13 @@ import { defineLevel } from './levelFactory';
 export default defineLevel({
   id: 'path', name: localized('I · THE PATH', 'I · DER PFAD'), short: localized('THE PATH', 'DER PFAD'), seed: 101,
   blurb: localized('A short first map for learning the rhythm of moving, capturing and advancing.', 'Eine kurze erste Karte, um den Rhythmus aus Bewegen, Erobern und Vorrücken zu lernen.'),
-  objective: localized('Capture the blue base. Choose a numbered neighbor, send 50% and keep the front moving.', 'Erobere die blaue Basis. Wähle ein benachbartes Zahlenfeld, sende 50 % und halte die Front in Bewegung.'),
-  rule: localized('Every move sends 50%. Numbered cells are playable; landscape without a number is not.', 'Du sendest jeweils 50 %. Zahlen sind spielbare Felder; Landschaft ohne Zahl ist nicht spielbar.'),
-  aiThinkMs: 2500, aiDelaySeconds: 6.5, aiSkill: 0.4, aiActions: 1,
+  objective: localized('Capture the blue base. Drag from your orange base to a numbered neighbor and keep advancing.', 'Erobere die blaue Basis. Ziehe von deiner orangefarbenen Basis zu einem benachbarten Zahlenfeld und rücke weiter vor.'),
+  rule: localized('Every move sends 100%. Numbered cells are playable; landscape without a number is not.', 'Du sendest jeweils 100 %. Zahlen sind spielbare Felder; Landschaft ohne Zahl ist nicht spielbar.'),
+  aiThinkMs: 2500, aiDelaySeconds: 0.3, aiSkill: 0.4, aiActions: 1,
   neutralUnits: [1, 2], growthMultiplier: 2.2, enemyGrowthMultiplier: 1.85,
   bases: { player: { col: 3, row: 9 }, enemy: { col: 3, row: 3 } },
   baseUnits: { player: 23, enemy: 12 },
-  features: { all: false, group: false, relay: false }, theme: 'meadow', landscapeStyle: 'meadow-v1',
+  features: { half: false, all: true, group: false, relay: false }, theme: 'meadow', landscapeStyle: 'meadow-v1',
   activeRows: [[], [], [], [3], [2, 3], [3, 4], [2, 3], [3, 4], [3, 4], [3], [], [], []],
   cells: [
     { col: 2, row: 4, units: 1 }, { col: 3, row: 4, units: 1 },

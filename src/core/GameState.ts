@@ -1,15 +1,16 @@
 import { GAME_CONFIG } from './config';
 import { cellKey, findOwnedPath, hexDistance, isPlayable, neighborsOf } from './hex';
 import { createSeededRandom, type RandomSource } from './random';
-import { Owner, Terrain, type ArmyMovement, type GameEvent, type GameSnapshot, type HexState, type MissionResult, type Point, type ResultReason } from './types';
+import { Owner, Terrain, type ArmyMovement, type GameEvent, type GameSnapshot, type HexState, type MissionResult, type Point, type ResultReason, type StructureState } from './types';
 import { buildLevel } from '../levels/buildLevel';
 import { LEVELS } from '../levels';
-import { runAI, type AIContext } from '../systems/AISystem';
-import { resolveArrival, updateCombat } from '../systems/CombatSystem';
+import { runAI, type AIAction, type AIContext } from '../systems/AISystem';
+import { resolveArrival, updateCombat, type CombatExchange } from '../systems/CombatSystem';
 import { updateGrowth } from '../systems/GrowthSystem';
 import { createMovement, updateMovements } from '../systems/MovementSystem';
-import { frontHexes, isFrontHex, SupplySystem } from '../systems/SupplySystem';
+import { frontHexes, SupplySystem } from '../systems/SupplySystem';
 import { evaluateVictory } from '../systems/VictorySystem';
+import { absorbHqShield, buildStructures, hqShield, structureAt, syncStructureCapture } from '../systems/StructureSystem';
 
 export class GameState {
   currentLevel = 0;
@@ -21,15 +22,19 @@ export class GameState {
   result: MissionResult | null = null;
   resultReason: ResultReason | null = null;
   hexes: HexState[] = [];
+  structures: StructureState[] = [];
   armies: ArmyMovement[] = [];
   autoplay = false;
   opponentEnabled = true;
+  playerSupplyEnabled = true;
+  onCombatExchange: ((exchange: CombatExchange) => void) | null = null;
+  onGrowth: ((hex: HexState, owner: Owner, units: number) => void) | null = null;
+  onAIAction: ((owner: Owner, action: AIAction) => void) | null = null;
   private random: RandomSource = Math.random;
   private aiTimerMs = 0;
   private playerAiTimerMs = 0;
   private events: GameEvent[] = [];
   private readonly supplySystem = new SupplySystem();
-  private readonly supplyFocus: Partial<Record<Owner, string | null>> = { [Owner.Player]: null, [Owner.Enemy]: null };
 
   get level() { return LEVELS[this.currentLevel] ?? LEVELS[0]; }
 
@@ -37,21 +42,25 @@ export class GameState {
     this.currentLevel = Math.max(0, Math.min(LEVELS.length - 1, levelIndex));
     this.random = createSeededRandom(this.level.seed);
     this.hexes = buildLevel(this.currentLevel, this.random, positionFor);
+    this.structures = buildStructures(this.level, this.hexes);
     this.armies = [];
     this.elapsed = 0; this.actions = 0; this.captures = 0; this.endgameStage = 0;
     this.aiTimerMs = 0; this.playerAiTimerMs = 0;
     this.result = null; this.resultReason = null; this.events = [];
-    this.opponentEnabled = true; this.supplySystem.reset();
-    this.supplyFocus[Owner.Player] = null; this.supplyFocus[Owner.Enemy] = null;
+    this.opponentEnabled = true; this.playerSupplyEnabled = true; this.supplySystem.reset();
     this.running = true;
-  }
-
-  setPositions(positionFor: (col: number, row: number) => Point): void {
-    for (const hex of this.hexes) Object.assign(hex, positionFor(hex.col, hex.row));
   }
 
   hexAt(col: number, row: number): HexState | null {
     return this.hexes.find((hex) => hex.col === col && hex.row === row) ?? null;
+  }
+
+  structureAt(col: number, row: number): StructureState | null {
+    return structureAt(this.structures, { col, row });
+  }
+
+  shieldFor(hqId: string): ReturnType<typeof hqShield> {
+    return hqShield(this.structures, hqId);
   }
 
   canSend(from: HexState | null, to: HexState | null): boolean {
@@ -119,27 +128,22 @@ export class GameState {
 
   fronts(owner: Owner): HexState[] { return frontHexes(this.hexes, owner); }
 
-  focusedFront(owner: Owner): HexState | null {
-    const key = this.supplyFocus[owner];
-    return key ? this.hexes.find((hex) => cellKey(hex) === key) ?? null : null;
-  }
-
-  toggleSupplyFocus(hex: HexState, owner: Owner): boolean {
-    if (!this.level.features.focus || hex.owner !== owner || !isFrontHex(this.hexes, hex, owner)) return false;
-    const key = cellKey(hex);
-    this.supplyFocus[owner] = this.supplyFocus[owner] === key ? null : key;
-    return true;
+  togglePlayerSupply(): boolean {
+    if (!this.level.features.supply) return this.playerSupplyEnabled;
+    this.playerSupplyEnabled = !this.playerSupplyEnabled;
+    return this.playerSupplyEnabled;
   }
 
   think(owner: Owner, skill: number, count = 1): number {
     const context: AIContext = {
-      owner, elapsed: this.elapsed, endgameStage: this.endgameStage, hexes: this.hexes,
+      owner, elapsed: this.elapsed, endgameStage: this.endgameStage, hexes: this.hexes, structures: this.structures,
       level: this.level, random: this.random,
       canSend: (from, to) => this.canSend(from, to),
       incomingTo: (target, candidate) => this.incomingTo(target, candidate),
       send: (from, to, candidate, units) => this.send(from, to, candidate, units),
       groupPotential: (target, candidate, preferred) => this.groupPotential(target, candidate, preferred),
       sendGroup: (target, candidate, preferred) => this.sendGroup(target, candidate, false, preferred),
+      onAction: (action) => this.onAIAction?.(owner, action),
     };
     return runAI(context, skill, count);
   }
@@ -153,16 +157,20 @@ export class GameState {
       this.events.push({ type: 'endgame', detail: { stage: nextStage } });
     }
     const growthMultiplier = this.level.growthMultiplier ?? 1;
-    updateGrowth(this.hexes, this.elapsed, deltaSeconds, growthMultiplier, this.level.enemyGrowthMultiplier ?? growthMultiplier);
+    updateGrowth(this.hexes, this.elapsed, deltaSeconds, growthMultiplier, this.level.enemyGrowthMultiplier ?? growthMultiplier, this.structures,
+      this.onGrowth ?? undefined);
     if (this.level.features.supply) {
-      for (const dispatch of this.supplySystem.update({ hexes: this.hexes, armies: this.armies, focus: this.supplyFocus }, deltaSeconds)) {
+      const owners = this.playerSupplyEnabled ? [Owner.Player, Owner.Enemy] : [Owner.Enemy];
+      for (const dispatch of this.supplySystem.update({ hexes: this.hexes, armies: this.armies, owners, structures: this.structures }, deltaSeconds)) {
         this.events.push({ type: 'supply', detail: dispatch });
       }
     }
     updateCombat(this.hexes, deltaSeconds, this.random, (target, oldOwner, newOwner) => {
+      syncStructureCapture(this.structures, target, newOwner);
       if (newOwner === Owner.Player) this.captures += 1;
       this.events.push({ type: 'capture', detail: { oldOwner, newOwner, target } });
-    });
+    }, (target, defendingOwner, requested) => absorbHqShield(this.structures, target, defendingOwner, requested),
+    this.onCombatExchange ?? undefined);
     updateMovements(this.armies, this.hexes, deltaSeconds, (movement, target) => {
       resolveArrival(movement, target);
       if (target) this.events.push({ type: 'arrival', detail: { owner: movement.owner, target, kind: movement.kind } });

@@ -1,8 +1,15 @@
 import { GAME_CONFIG, SUPPLY_CONFIG } from '../core/config';
-import { cellKey, findOwnedPath, parseCellKey } from '../core/hex';
-import type { ArmyMovement, HexState, Owner } from '../core/types';
+import { cellKey, findOwnedPath, hexDistance, parseCellKey } from '../core/hex';
+import { Owner, Terrain, type ArmyMovement, type HexState } from '../core/types';
 
 let movementId = 0;
+
+function rerouteMovesForward(path: readonly HexState[], targetBase: HexState): boolean {
+  for (let index = 1; index < path.length; index += 1) {
+    if (hexDistance(path[index], targetBase) > hexDistance(path[index - 1], targetBase)) return false;
+  }
+  return true;
+}
 
 export function createMovement(
   from: HexState,
@@ -52,10 +59,13 @@ export function updateMovements(
       if (protectedRoute && reached && (!next || next.owner !== army.owner)) {
         const goal = byKey.get(army.toKey);
         const reroute = goal?.owner === army.owner ? findOwnedPath(hexes, reached, goal) : null;
-        if (reroute && reroute.length > 1) {
-          army.path = reroute.map(cellKey); army.pathIndex = 1;
+        const opponent = army.owner === Owner.Player ? Owner.Enemy : Owner.Player;
+        const targetBase = hexes.find((hex) => hex.owner === opponent && hex.terrain === Terrain.Base);
+        const validReroute = reroute && (army.kind !== 'supply' || !targetBase || rerouteMovesForward(reroute, targetBase)) ? reroute : null;
+        if (validReroute && validReroute.length > 1) {
+          army.path = validReroute.map(cellKey); army.pathIndex = 1;
           army.x0 = reached.x; army.y0 = reached.y; army.cx = reached.x; army.cy = reached.y;
-          army.tx = reroute[1].x; army.ty = reroute[1].y;
+          army.tx = validReroute[1].x; army.ty = validReroute[1].y;
           army.dist = Math.max(1, Math.hypot(army.tx - reached.x, army.ty - reached.y)); army.traveled = 0;
           continue;
         }

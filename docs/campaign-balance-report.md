@@ -25,9 +25,10 @@ Aufruf: `npm run balance`
 
 ## Entscheidungen
 
+- **Gestaffelter Progressions-Pass (September 2026):** Die schwache Route in Level 2 hat jetzt 5 statt 4 Einheiten. Der gegnerische Wachstumsfaktor steigt von `1.005` in Level 2 in 0,5-%-Schritten bis `1.04` in Level 9; Level 5 bleibt bei `1.02`, Level 10 unverändert.
 - Kein pauschales Absenken später KI-Werte anhand von Bot-vs-KI-Ergebnissen. Ein menschlicher Frontfokus und bewusstes 100-%-Timing sind genau die Fähigkeiten, die das Modell nur unzureichend abbildet.
 - Level 6 und 8 sind priorisierte Human-Playtest-Kandidaten: Level 6 geht über 180 Sekunden, Level 8 ist der erste reproduzierbare Modellverlust.
 - Endgame bleibt unverändert bei 180 Sekunden Ausklang und 240 Sekunden Wachstumsende.
 - Alle symmetrischen Kampagnenkarten verwenden gespiegelte Neutralstärken. Dadurch entsteht keine unsichtbare Startbevorzugung durch den Level-Seed; Level 9 behält seine bereits korrigierte Spiegelung.
-- Level 2 besitzt nun zwei symmetrische Startziele: 4 Einheiten für den sicheren 50-%-Aufbau und 12 Einheiten für den sofortigen 100-%-Durchbruch bei leerer Basis.
+- Level 2 besitzt nun zwei symmetrische Startziele: 5 Einheiten für den sicheren 50-%-Aufbau und 12 Einheiten für den sofortigen 100-%-Durchbruch bei leerer Basis.
 - Alle zehn Levels müssen zusätzlich in beiden Browser-Viewports startbar bleiben; dies ist Teil der Playwright-Suite.

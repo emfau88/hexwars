@@ -31,13 +31,37 @@ export type MissionResult = 'victory' | 'defeat';
 export type ResultReason = 'enemyBaseCaptured' | 'playerBaseCaptured' | 'playerEliminated' | 'enemyEliminated' | 'debugVictory';
 export type Point = { x: number; y: number };
 export type Cell = { col: number; row: number };
+export type StructureType = 'hq' | 'relay' | 'guardian';
+export type StructureStatus = 'active' | 'captured' | 'disabled';
+
+export interface StructureDefinition extends Cell {
+  id: string;
+  type: StructureType;
+  owner?: Owner;
+  units?: number;
+  linkedTo?: string;
+  shield?: number;
+  footprint?: number;
+}
+
+export interface StructureState extends Cell {
+  id: string;
+  type: StructureType;
+  owner: Owner;
+  initialOwner: Owner;
+  status: StructureStatus;
+  linkedTo: string | null;
+  shield: number;
+  maxShield: number;
+  footprint: number;
+}
 
 export interface FeatureFlags {
+  half: boolean;
   all: boolean;
   group: boolean;
   relay: boolean;
   supply: boolean;
-  focus: boolean;
 }
 
 export interface CellDefinition extends Cell {
@@ -71,6 +95,7 @@ export interface LevelDefinition {
   landscapeStyle: LandscapeStyle;
   activeRows: readonly (readonly number[])[];
   cells?: readonly CellDefinition[];
+  structures?: readonly StructureDefinition[];
 }
 
 export interface HexState extends Cell, Point {
@@ -112,6 +137,8 @@ export interface Particle extends Point {
 export interface CampaignProgress {
   completed: boolean[];
   best: number[];
+  halfSendUsed: boolean;
+  guardianBriefingSeen: boolean;
 }
 
 export interface GameSnapshot {

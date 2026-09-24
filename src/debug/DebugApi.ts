@@ -1,17 +1,24 @@
 import type { GameState } from '../core/GameState';
-import { Owner, type HexState } from '../core/types';
+import { Owner, type HexState, type StructureState } from '../core/types';
+import type { WorldGeometry, WorldTransform } from '../rendering/WorldGeometry';
+import type { BoardRenderer } from '../rendering/BoardRenderer';
 
 export interface HexfrontDebugApi {
   startLevel(index?: number): void;
   showMap(): void;
   setAutoplay(value: boolean): void;
   setOpponentEnabled(value: boolean): void;
-  getState(): ReturnType<GameState['snapshot']> & { progress: unknown };
+  getState(): ReturnType<GameState['snapshot']> & { progress: unknown; waitingForFirstMove: boolean; waitingForBriefing: boolean };
   getBoard(): Array<Pick<HexState, 'col' | 'row' | 'owner' | 'units' | 'terrain' | 'decor' | 'x' | 'y'>>;
+  getStructures(): StructureState[];
+  getGeometry(): { reference: WorldGeometry; runtime: WorldGeometry; transform: WorldTransform; pixelRatio: number };
+  getRenderProfile(): ReturnType<BoardRenderer['renderSnapshot']>;
+  measureRenderCost(samples?: number): { samples: number; averageMs: number; medianMs: number; p95Ms: number; frameBudgetMs: number };
   send(fromCol: number, fromRow: number, toCol: number, toRow: number, fraction?: number): boolean;
   think(owner?: Owner): number;
   simulate(seconds?: number, step?: number): ReturnType<GameState['snapshot']>;
   debugWin(): void;
+  debugDefeat(): void;
   resetProgress(): void;
 }
 

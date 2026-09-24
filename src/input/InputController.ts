@@ -8,13 +8,14 @@ export interface InputCallbacks {
   getMode(): SendMode;
   onCommand(sent: number): void;
   onInvalid(error: InputError): void;
-  onFocus(hex: HexState): void;
   onActivate(): void;
+  onGestureStart?(source: HexState, pointerType: string): void;
+  onGestureMove?(source: HexState, target: HexState | null): void;
+  onGestureEnd?(sent: number): void;
 }
 
 export class InputController {
   private pointerDown = false;
-  private origin: Point | null = null;
 
   constructor(
     private readonly canvas: HTMLCanvasElement,
@@ -37,7 +38,7 @@ export class InputController {
 
   private point(event: PointerEvent): Point {
     const bounds = this.canvas.getBoundingClientRect();
-    return { x: event.clientX - bounds.left, y: event.clientY - bounds.top };
+    return this.renderer.worldPositionFor({ x: event.clientX - bounds.left, y: event.clientY - bounds.top });
   }
 
   private onDown = (event: PointerEvent): void => {
@@ -46,14 +47,15 @@ export class InputController {
     const point = this.point(event); const hex = this.renderer.findHex(this.state, point);
     if (hex?.owner === Owner.Player && hex.units >= 2) {
       this.renderer.selected = hex; this.renderer.dragPosition = point; this.pointerDown = true;
-      this.origin = point;
       this.canvas.setPointerCapture?.(event.pointerId);
+      this.callbacks.onGestureStart?.(hex, event.pointerType);
     }
   };
 
   private onMove = (event: PointerEvent): void => {
     if (!this.pointerDown || !this.renderer.selected) return;
     event.preventDefault(); this.renderer.dragPosition = this.point(event);
+    this.callbacks.onGestureMove?.(this.renderer.selected, this.renderer.findHex(this.state, this.renderer.dragPosition));
   };
 
   private onUp = (event: PointerEvent): void => {
@@ -61,10 +63,7 @@ export class InputController {
     event.preventDefault();
     const target = this.renderer.findHex(this.state, this.point(event)); const source = this.renderer.selected;
     let sent = 0;
-    const end = this.point(event);
-    if (target === source && this.origin && Math.hypot(end.x - this.origin.x, end.y - this.origin.y) < 10) {
-      this.callbacks.onFocus(source);
-    } else if (target && target !== source && this.state.canSend(source, target)) {
+    if (target && target !== source && this.state.canSend(source, target)) {
       const mode = this.callbacks.getMode();
       if (mode === 'group') sent = this.state.sendGroup(target, Owner.Player, true, source);
       else {
@@ -77,10 +76,17 @@ export class InputController {
         ? 'decor'
         : 'target');
     }
-    this.cancel();
+    this.callbacks.onGestureEnd?.(sent);
+    this.reset();
   };
 
   private cancel = (): void => {
-    this.pointerDown = false; this.origin = null; this.renderer.selected = null; this.renderer.dragPosition = null;
+    const active = this.pointerDown && Boolean(this.renderer.selected);
+    this.reset();
+    if (active) this.callbacks.onGestureEnd?.(0);
   };
+
+  private reset(): void {
+    this.pointerDown = false; this.renderer.selected = null; this.renderer.dragPosition = null;
+  }
 }

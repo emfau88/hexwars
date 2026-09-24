@@ -58,6 +58,18 @@ Production builds ignore development query parameters and do not expose the `win
 
 Before a commercial release, the remaining priorities are human playtesting and balance evidence, keyboard/tap accessibility, a commercially cleared product name, final audio mix validation on physical devices and validation inside the target distribution portal.
 
+## Kongregate package
+
+Create a fresh portal build with:
+
+```bash
+npm run package:kongregate
+```
+
+The recommended artifact is `dist/kongregate-upload/hexfront-kongregate-complete.zip`. Upload it in the **WebGL/HTML5 File** field and leave **Additional Files** empty. The ZIP has `index.html` and `assets/` at its root, so the relative production paths stay together.
+
+For an upload form that requires split files, the same command also creates `dist/kongregate-upload/index.html` and `dist/kongregate-upload/hexfront-additional-files.zip`.
+
 ## Local development
 
 Requires Node.js 20 or newer.
@@ -74,10 +86,13 @@ npm run typecheck
 npm test
 npm run test:browser
 npm run balance
+npm run balance:profiles
 npm run verify:production
 ```
 
 `npm run dev` exposes development-only inspection and review tools. `npm run verify:production` creates the player-facing release build and fails if a development entry point leaked into it; the browser suite builds in an isolated test mode so it can exercise the same diagnostics without publishing them.
+
+`npm run balance:profiles` compares cautious, aggressive and tactical human-paced deterministic player models against every campaign level. Each profile runs five reproducible variants with small timing and route-priority differences, so the report gives a win rate as well as individual outcomes. They make slower decisions and estimate combat in rounded values; their available target scan is deliberately bounded but still covers a normal local board view. It is a balance-regression indicator, not a substitute for human playtests.
 
 ## Documentation
 

@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#101614" />
   <meta name="description" content="HEXFRONT — a real-time tactics game about territory control on a hex grid." data-i18n-content="meta.description" />
+  <link rel="preload" as="image" href="./assets/ui/campaign-atlas-v2.webp" type="image/webp" />
   <title>HEXFRONT</title>
+  <script src="https://cdn1.kongregate.com/javascripts/kongregate_api.js"></script>
 </head>
 <body>
 <div id="app">
@@ -24,27 +26,64 @@
   <div id="layout">
     <div id="stage">
       <canvas id="gameCanvas"></canvas>
+      <section id="commandDock" aria-label="Command controls" data-i18n-aria-label="command.aria">
+        <div class="commandDockTopline"><span data-i18n="command.title">COMMAND</span><div class="commandDockTools"><span data-i18n="command.shortcuts">KEYS 1 · 2 · 3</span><button id="commandDockToggle" class="commandDockToggle" type="button" aria-expanded="true">−</button></div></div>
+        <div class="commandDockBody">
+          <img class="commandDockOrnament" src="./assets/ui-polish/combat-dossier-ornament-v1.webp" alt="" aria-hidden="true" />
+          <div class="modeKeyboardDiagram" aria-hidden="true">
+            <span><kbd>1</kbd><i>→</i><b>100 %</b></span>
+            <span><kbd>2</kbd><i>→</i><b>50 %</b></span>
+            <span><kbd>3</kbd><i>→</i><b data-i18n="mode.group">GROUP</b></span>
+          </div>
+          <div class="commandDockSection" id="sendPanel">
+            <div class="eyebrow" data-i18n="panel.send">SEND</div>
+            <div class="modeRow">
+              <button class="modeBtn active" data-mode="all"><kbd class="modeShortcut" aria-hidden="true">1</kbd><span class="modeButtonText"><b>100 %</b><small data-i18n="mode.allAction">100% SEND</small></span></button>
+              <button class="modeBtn" data-mode="half"><kbd class="modeShortcut" aria-hidden="true">2</kbd><span class="modeButtonText"><b>50 %</b><small data-i18n="mode.halfAction">50% SEND</small></span></button>
+              <button class="modeBtn" data-mode="group"><kbd class="modeShortcut" aria-hidden="true">3</kbd><span class="modeButtonText"><b data-i18n="mode.group">GROUP</b><small data-i18n="mode.groupAction">GROUP SEND</small></span></button>
+            </div>
+          </div>
+          <div class="commandDockSection supplyControl">
+            <div class="supplyControlTopline">
+              <div><div class="eyebrow" data-i18n="supply.title">AUTO SUPPLY</div><strong id="autoSupplyStatus">ON</strong></div>
+              <button id="autoSupplyBtn" class="autoSupplyToggle active" type="button" aria-pressed="true">ON</button>
+            </div>
+            <p id="autoSupplyDescription" data-i18n="supply.description.on">Surplus moves toward the rival. Rear cells keep 20%; fronts keep 36%. Tap a front cell to redirect it.</p>
+          </div>
+        </div>
+      </section>
       <div id="hint" data-i18n="hint.default">Drag from an orange cell to a reachable target.</div>
       <div id="toast"></div>
 
       <div id="resultOverlay">
         <div class="modalBox">
-          <div class="resultMark" aria-hidden="true">◆</div>
-          <div class="resultKicker" id="resultKicker"></div>
-          <div class="verdict" id="verdict"></div>
-          <div class="sub" id="verdictSub"></div>
+          <div class="resultHero">
+            <div class="resultHeroCopy">
+              <div class="resultKicker" id="resultKicker"></div>
+              <div class="verdict" id="verdict"></div>
+              <div class="sub" id="verdictSub"></div>
+            </div>
+            <div class="resultMark" aria-hidden="true">
+              <img class="resultEmblem resultVictoryEmblem" src="./assets/ui-polish/result-victory-emblem-v1.webp" alt="" />
+              <img class="resultEmblem resultDefeatEmblem" src="./assets/ui-polish/result-defeat-emblem-v1.webp" alt="" />
+            </div>
+          </div>
           <div class="resultStats">
             <div><span data-i18n="result.stat.time">TIME</span><strong id="resultTime">0:00</strong></div>
             <div><span data-i18n="result.stat.captures">CAPTURES</span><strong id="resultCaptures">0</strong></div>
             <div><span data-i18n="result.stat.best">BEST</span><strong id="resultBest">—</strong></div>
           </div>
           <div class="resultAdvance" id="resultAdvance">
+            <div class="resultUnlockVisual" id="resultUnlockVisual" hidden aria-hidden="true">
+              <b>50 %</b>
+              <em id="resultUnlockMode">SEND</em>
+            </div>
             <span id="resultAdvanceLabel"></span>
             <strong id="resultAdvanceName"></strong>
             <small id="resultAdvanceRule"></small>
           </div>
           <div class="modalActions">
-            <button class="primaryBtn" id="nextLevelBtn" data-i18n="result.next">NEXT MAP</button>
+            <button class="primaryBtn" id="nextLevelBtn" data-i18n="result.next">NEXT LEVEL</button>
             <button class="secondaryBtn" id="retryBtn" data-i18n="result.retry">TRY AGAIN</button>
             <button class="secondaryBtn" id="mapBtn" data-i18n="result.map">CAMPAIGN MAP</button>
           </div>
@@ -81,7 +120,7 @@
                 <span><i></i><b data-i18n="campaign.section.finale">FINALE</b></span>
               </div>
             </div>
-            <div class="atlasBody">
+            <div class="atlasBody atlasLoading">
               <svg id="campaignAtlasSvg" role="group" aria-label="Campaign map on a continuous hex grid" data-i18n-aria-label="campaign.atlasAria"></svg>
               <p class="atlasHint" data-i18n="campaign.atlasHint">Every station occupies exactly one grid cell.</p>
             </div>
@@ -97,12 +136,13 @@
             </div>
 
             <div class="missionLaunch">
+              <p class="featureUnlockBadge" id="menuFeatureUnlock" hidden></p>
               <p class="launchObjective"><span data-i18n="campaign.objective">OBJECTIVE</span><strong id="menuLevelObjective">Capture the blue base.</strong></p>
               <button class="playButton" id="playLevelBtn">BEGIN CAMPAIGN</button>
               <p class="menuLockHint" id="menuLockHint" hidden data-i18n="campaign.lockHint">Complete the previous level first.</p>
             </div>
 
-            <div class="previewFrame" id="levelPreviewFrame">
+            <div class="previewFrame previewLoading" id="levelPreviewFrame">
               <div class="previewTopline"><span id="menuPreviewLabel">LEVEL 01 · MAP PREVIEW</span><span data-i18n="campaign.startLayout">STARTING LAYOUT</span></div>
               <canvas id="levelPreview" width="720" height="460" aria-label="Preview of the selected level map" data-i18n-aria-label="campaign.previewAria"></canvas>
               <div class="previewLegend" aria-hidden="true"><span><i class="previewDot player"></i><b data-i18n="campaign.player">YOU</b></span><span><i class="previewDot neutral"></i><b data-i18n="campaign.neutral">NEUTRAL</b></span><span><i class="previewDot enemy"></i><b data-i18n="campaign.rival">RIVAL</b></span></div>
@@ -134,6 +174,7 @@
           </div>
           <button class="secondaryBtn" id="menuFullscreenBtn" data-i18n="settings.fullscreen">FULLSCREEN</button>
           <button class="secondaryBtn" id="soundBtn">SOUND ON</button>
+          <p class="keyboardHint" data-i18n="settings.shortcuts">KEYS · 1/2/3 SEND · R RESTART · ESC MAP</p>
           <button class="secondaryBtn danger" id="resetProgressBtn" data-i18n="settings.reset">RESET PROGRESS</button>
         </div>
       </div>
@@ -141,6 +182,7 @@
 
     <aside id="sidePanel">
       <div class="sideDossier">
+        <img class="sideDossierOrnament" src="./assets/ui-polish/combat-dossier-ornament-v1.webp" alt="" aria-hidden="true" />
         <div class="panel" id="missionPanel">
           <div class="eyebrow" data-i18n="panel.round">MAP</div>
           <div id="missionName">—</div>
@@ -149,14 +191,6 @@
         <div class="panel" id="rulePanel">
           <div class="eyebrow" data-i18n="panel.rule">RULE FOR THIS LEVEL</div>
           <div id="ruleText">—</div>
-        </div>
-        <div class="panel" id="sendPanel">
-          <div class="eyebrow" data-i18n="panel.send">SEND</div>
-          <div class="modeRow">
-            <button class="modeBtn active" data-mode="half">50 %</button>
-            <button class="modeBtn" data-mode="all">100 %</button>
-            <button class="modeBtn" data-mode="group" data-i18n="mode.group">GROUP</button>
-          </div>
         </div>
         <div class="panel nextTactic" id="unlockPanel" hidden>
           <div class="eyebrow" data-i18n="panel.nextTactic">NEXT TACTIC</div>
@@ -174,10 +208,11 @@
         </div>
         <div class="panel legend" id="terrainPanel">
           <div class="eyebrow" data-i18n="panel.terrain">CELL TYPES</div>
-          <div><span class="legendIcon">◆</span><span data-i18n="terrain.base">Base: starting point and victory target</span></div>
-          <div id="legendHill"><span class="legendIcon">⌃</span><span data-i18n="terrain.hill">Hill: takes less damage</span></div>
-          <div id="legendRelay"><span class="legendIcon">◎</span><span data-i18n="terrain.relay">Relay: reaches targets up to distance 2</span></div>
-          <div><span class="legendIcon">✿</span><span data-i18n="terrain.landscape">Landscape: decorative, not playable</span></div>
+          <div id="legendBase"><span class="legendIcon legendArtIcon"><img alt="" data-icon-src="./assets/structures/hq-orange-v1.png"></span><span data-i18n="terrain.base">Base: starting point and victory target</span></div>
+          <div id="legendHill"><span class="legendIcon legendVectorIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2.5 18.5 9.5 8l4.1 5.7 2.5-3.2 5.4 8H2.5Z"/></svg></span><span data-i18n="terrain.hill">Hill: takes less damage</span></div>
+          <div id="legendRelay"><span class="legendIcon legendArtIcon relayLegendIcon"><img alt="" data-icon-src="./assets/structures/relay-neutral-v2.png"></span><span data-i18n="terrain.relay">Relay: only this cell can send up to 2 hexes away</span></div>
+          <div id="legendGuardian" hidden><span class="legendIcon legendArtIcon"><img alt="" data-icon-src="./assets/structures/guardian-neutral-v1.png"></span><span data-i18n="terrain.guardian">Guardian: contributes a finite shield to its linked HQ</span></div>
+          <div id="legendLandscape"><span class="legendIcon legendVectorIcon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m12 2.7 8 4.6v9.4l-8 4.6-8-4.6V7.3L12 2.7Z"/><path d="m6.2 17.8 11.6-11.6"/></svg></span><span data-i18n="terrain.landscape">Landscape: decorative, not playable</span></div>
         </div>
         <div class="sideUtilityDock">
           <div class="utilityRow utilityRowTriple">
@@ -193,9 +228,9 @@
   </div>
 
   <div id="mobileBar">
-    <button class="modeBtn active" data-mode="half">50 %</button>
-    <button class="modeBtn" data-mode="all">100 %</button>
-    <button class="modeBtn" data-mode="group" data-i18n="mode.group">GROUP</button>
+    <button class="modeBtn active" data-mode="all"><span>100 %</span><kbd class="modeShortcut" aria-hidden="true">1</kbd></button>
+    <button class="modeBtn" data-mode="half"><span>50 %</span><kbd class="modeShortcut" aria-hidden="true">2</kbd></button>
+    <button class="modeBtn" data-mode="group"><span data-i18n="mode.group">GROUP</span><kbd class="modeShortcut" aria-hidden="true">3</kbd></button>
     <button class="utilityBtn" id="mobileRestartBtn" aria-label="Restart level" title="Restart level" data-i18n-aria-label="utility.restartAria" data-i18n-title="utility.restartAria">↻</button>
     <button class="utilityBtn" id="mobileLevelsBtn" aria-label="Open campaign map" title="Open campaign map" data-i18n-aria-label="utility.mapAria" data-i18n-title="utility.mapAria">☰</button>
     <button class="utilityBtn" id="mobileFullscreenBtn" aria-label="Fullscreen" title="Fullscreen" data-i18n-aria-label="campaign.fullscreen" data-i18n-title="campaign.fullscreen">⛶</button>

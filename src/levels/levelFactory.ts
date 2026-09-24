@@ -1,11 +1,11 @@
 import type { FeatureFlags, LevelDefinition } from '../core/types';
 
 const defaultFeatures: FeatureFlags = {
+  half: true,
   all: true,
   group: true,
   relay: true,
   supply: true,
-  focus: false,
 };
 
 export function defineLevel(
