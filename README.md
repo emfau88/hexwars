@@ -89,6 +89,16 @@ The recommended artifact is `dist/kongregate-upload/hexfront-kongregate-complete
 
 For an upload form that requires split files, the same command also creates `dist/kongregate-upload/index.html` and `dist/kongregate-upload/hexfront-additional-files.zip`.
 
+## Y8 package
+
+Create the isolated Y8 build with:
+
+```bash
+npm run package:y8
+```
+
+The upload-ready artifact is `dist-y8/hexfront-y8.zip`. Only this build loads and initializes the Y8 SDK; the regular production and Kongregate packages remain Y8-free. Its `index.html` and `assets/` directory are stored at the ZIP root for a self-contained HTML5 upload.
+
 ## Local development
 
 Requires Node.js 20 or newer.

@@ -8,6 +8,7 @@ import { InputController, type InputError } from '../input/InputController';
 import { CampaignProgressStore } from '../persistence/CampaignProgressStore';
 import { SendModePreferenceStore } from '../persistence/SendModePreferenceStore';
 import { KongregateStats } from '../platform/KongregateStats';
+import { NOOP_PORTAL_ADAPTER, type PortalAdapter } from '../platform/PortalAdapter';
 import { BoardRenderer } from '../rendering/BoardRenderer';
 import type { MapStyleMode } from '../rendering/MapArtRenderer';
 import { OWNER_COLORS } from '../rendering/palette';
@@ -56,8 +57,9 @@ export class HexfrontApp {
   private levelStartRequest = 0;
   private waitingForFirstMove = false;
   private waitingForBriefing = false;
+  private portalPaused = false;
 
-  constructor() {
+  constructor(private readonly portal: PortalAdapter = NOOP_PORTAL_ADAPTER) {
     const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement | null;
     const stage = document.getElementById('stage');
     if (!canvas || !stage) throw new Error('HEXFRONT canvas shell is incomplete.');
@@ -130,6 +132,10 @@ export class HexfrontApp {
     this.showMap(this.progressStore.focus(this.progress));
     this.bindWindowEvents();
     this.resizeLayout();
+    this.portal.initialize({
+      pauseForAd: () => this.setPortalPaused(true),
+      resumeAfterAd: () => this.setPortalPaused(false),
+    });
     this.kongregateStats.initialize(() => this.submitCampaignStatistics());
     if (DEBUG_ENABLED) {
       installDebugApi({
@@ -264,7 +270,7 @@ export class HexfrontApp {
   }
 
   private simulationPaused(): boolean {
-    return this.waitingForFirstMove || this.waitingForBriefing;
+    return this.waitingForFirstMove || this.waitingForBriefing || this.portalPaused;
   }
 
   private handleEvent(event: GameEvent): void {
@@ -290,7 +296,18 @@ export class HexfrontApp {
         this.audio.play('victory');
       } else this.audio.play('defeat');
       this.ui.showResult(this.state, this.progress, firstHalfSendUnlock);
+      this.portal.missionCompleted({
+        result:event.detail.result,
+        levelIndex:this.state.currentLevel,
+        elapsedSeconds:this.state.elapsed,
+      });
     }
+  }
+
+  private setPortalPaused(paused: boolean): void {
+    this.portalPaused = paused;
+    this.audio.setSuspended(paused);
+    this.lastFrame = performance.now();
   }
 
   private toggleSound(): void { this.ui.syncSound(this.audio.toggle()); }
@@ -339,6 +356,7 @@ export class HexfrontApp {
       this.stageResizeObserver.observe(this.renderer.stage);
     }
     window.addEventListener('keydown', (event) => {
+      if (this.portalPaused) return;
       if (event.key === '1') this.setMode('all'); if (event.key === '2') this.setMode('half'); if (event.key === '3') this.setMode('group');
       if (event.key.toLowerCase() === 'r') this.startLevel(); if (event.key === 'Escape') this.showMap();
     });

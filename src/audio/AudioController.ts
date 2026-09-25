@@ -25,6 +25,7 @@ const CUES: Record<AudioCue, CueConfig> = {
 export class AudioController {
   enabled = this.loadEnabled();
   activated = false;
+  private suspended = false;
   private context: AudioContext | null = null;
   private readonly pools = new Map<AudioCue, HTMLAudioElement[]>();
   private readonly cursors = new Map<AudioCue, number>();
@@ -44,7 +45,7 @@ export class AudioController {
 
   activate(): void {
     this.activated = true;
-    if (this.context?.state === 'suspended') void this.context.resume();
+    if (!this.suspended && this.context?.state === 'suspended') void this.context.resume();
   }
 
   toggle(): boolean {
@@ -56,8 +57,20 @@ export class AudioController {
     return this.enabled;
   }
 
+  setSuspended(suspended: boolean): void {
+    this.suspended = suspended;
+    if (suspended) {
+      for (const pool of this.pools.values()) {
+        for (const audio of pool) if (!audio.paused) audio.pause();
+      }
+      if (this.context?.state === 'running') void this.context.suspend();
+    } else if (this.activated && this.context?.state === 'suspended') {
+      void this.context.resume();
+    }
+  }
+
   play(cue: AudioCue): void {
-    if (!this.enabled || !this.activated) return;
+    if (!this.enabled || !this.activated || this.suspended) return;
     const config = CUES[cue];
     const now = performance.now();
     if (now - (this.lastPlayed.get(cue) ?? -Infinity) < config.cooldownMs) return;
@@ -76,7 +89,7 @@ export class AudioController {
   }
 
   beep(frequency: number, duration = .05, volume = .04): void {
-    if (!this.enabled || !this.activated) return;
+    if (!this.enabled || !this.activated || this.suspended) return;
     const now = performance.now();
     if (now - this.lastBeepAt < 32) return;
     this.lastBeepAt = now;
