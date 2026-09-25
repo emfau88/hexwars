@@ -10,6 +10,25 @@ HEXFRONT is a compact real-time tactics game for desktop browsers and mobile por
 
 ## Current screenshots
 
+These captures show the current campaign presentation, the compact desktop command panel, guardian shields and the dual-relay battlefield.
+
+### Current campaign and battles
+
+![Current HEXFRONT campaign map with cleared, open and coming-soon mission states](./docs/readme/campaign-map-current.png)
+
+<table>
+  <tr>
+    <th>V · Two Passes — guardians</th>
+    <th>VIII · Signal Gardens — relays</th>
+  </tr>
+  <tr>
+    <td width="50%"><img src="./docs/readme/level-05-guardians-midgame.png" alt="HEXFRONT Level 5 in progress with guardian structures and a visible HQ shield"></td>
+    <td width="50%"><img src="./docs/readme/level-08-relays-midgame.png" alt="HEXFRONT Level 8 in progress with two relay structures"></td>
+  </tr>
+</table>
+
+### Earlier release comparison
+
 ### Campaign atlas
 
 ![HEXFRONT campaign atlas and English mission briefing](./docs/portal/kongregate/01-campaign-map.png)
@@ -32,15 +51,15 @@ The upload-ready portal package contains one 1000 × 800 icon and three 1600 × 
 [Play the current GitHub Pages build](https://emfau88.github.io/hexwars/)
 
 - Drag from an orange field to a reachable target.
-- `50%` sends half of the available force and keeps a reserve.
-- Later levels unlock full sends, grouped sends and manual reinforcement.
+- `100%` is the immediate default; your chosen send mode persists between missions and reloads.
+- Level II unlocks the tactical `50%` reserve send, while later missions add grouped sends and automatic supply.
 - Capture the blue base to win the mission.
 
 ## Current state
 
 HEXFRONT is a public, playable vertical slice and browser-portal release candidate with a production-safe build and upload artwork. It is not yet a finished commercial release.
 
-- Ten deterministic campaign levels with sequential unlocks and best-time persistence
+- Nine playable deterministic campaign levels plus a tenth coming-soon mission, with sequential unlocks and best-time persistence
 - Real-time AI, combat, supply, reinforcement and visible endgame systems
 - Production terrain-atlas campaign menu with responsive mission dossiers and map previews
 - Desktop and mobile-portrait layouts with mouse, touch-drag and fullscreen support
@@ -48,7 +67,7 @@ HEXFRONT is a public, playable vertical slice and browser-portal release candida
 - Campaign-aligned victory, defeat, retry and next-mission flows
 - Connected water and shore rendering plus a restrained 16-asset environment set
 - Compact CC0 sound palette for commands, UI, captures and results with a persistent in-game sound toggle
-- 43 logic, simulation, localization and regression tests
+- Broad logic, simulation, localization and regression coverage, including persistent command preferences
 - Playwright coverage for wide desktop, compact 1100 × 700 desktop and mobile campaign behavior
 - Deterministic ten-level balance smoke test
 

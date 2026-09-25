@@ -464,7 +464,7 @@ export class BoardRenderer {
     const width = Math.max(104, this.radius * 2.78); const height = Math.max(30, this.radius * .76);
     let left = hex.x - width / 2; const top = hex.y - this.radius * 2.08;
     if (matchMedia('(min-width:901px) and (min-height:521px)').matches) {
-      const commandDockClearance = this.worldPositionFor({ x: 354, y: 0 }).x;
+      const commandDockClearance = this.worldPositionFor({ x: 278, y: 0 }).x;
       left = Math.max(left, commandDockClearance);
     }
     const iconX = left + 16; const centerY = top + height * .46;

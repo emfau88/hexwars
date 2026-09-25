@@ -189,6 +189,8 @@ test('Level 1 battle waits for the first valid drag and a completed mission pers
   await expect(page.locator('.modeBtn[data-mode="half"]:visible')).toHaveClass(/newlyUnlocked/);
   await expect(page.locator('#hint')).toContainText('choose 50%');
   await expect(page.locator('.modeBtn[data-mode="half"]:visible')).toHaveAttribute('data-new-label', 'NEW · 50% SEND');
+  await expect(page.locator('.modeBtn[data-mode="all"]:visible')).toHaveClass(/active/);
+  await page.locator('.modeBtn[data-mode="half"]:visible').click();
   const levelTwoBoard = await page.evaluate(() => window.__HEXFRONT__?.getBoard()) as DebugBoard;
   const levelTwoSource = levelTwoBoard.find((hex) => hex.col === 3 && hex.row === 11)!;
   const levelTwoTarget = levelTwoBoard.find((hex) => hex.col === 3 && hex.row === 10)!;
@@ -199,6 +201,28 @@ test('Level 1 battle waits for the first valid drag and a completed mission pers
   await page.goto('/');
   await expect(page.getByRole('button', { name: 'Level 2: TWO ROUTES' })).toBeEnabled();
   await expect(page.getByText('1 / 10', { exact: true })).toBeVisible();
+});
+
+test('send mode preference survives restarts and uses 100 percent as a safe fallback', async ({ page }) => {
+  await page.goto('/?unlock=1&autostart=1&level=1');
+  const activeMode = page.locator('.modeBtn.active:visible');
+  await expect(activeMode).toHaveAttribute('data-mode', 'all');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('hexfront:preferred-send-mode'))).toBeNull();
+
+  await page.locator('.modeBtn[data-mode="half"]:visible').click();
+  await expect(activeMode).toHaveAttribute('data-mode', 'half');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('hexfront:preferred-send-mode'))).toBe('half');
+
+  await page.evaluate(() => window.__HEXFRONT__?.startLevel(1));
+  await expect(activeMode).toHaveAttribute('data-mode', 'half');
+  await page.evaluate(() => window.__HEXFRONT__?.startLevel(0));
+  await expect(activeMode).toHaveAttribute('data-mode', 'all');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('hexfront:preferred-send-mode'))).toBe('half');
+
+  await page.evaluate(() => window.__HEXFRONT__?.startLevel(1));
+  await expect(activeMode).toHaveAttribute('data-mode', 'half');
+  await page.reload();
+  await expect(activeMode).toHaveAttribute('data-mode', 'half');
 });
 
 test('the half-send unlock is localized in German', async ({ page }) => {
@@ -750,16 +774,19 @@ test('large desktop keeps the board complete and exposes the command dock', asyn
     const lower = window.__HEXFRONT__?.getBoard().find((hex) => hex.col === 3 && hex.row === 9);
     return {
       dockWidth: dock.width,
+      dockHeight: dock.height,
       buttonHeight: button.height,
       shortcutFontSize: Number.parseFloat(getComputedStyle(shortcut).fontSize),
-      guide: document.querySelector('#commandDock .modeKeyboardDiagram')?.textContent?.replace(/\s+/g, ''),
+      duplicateGuide: Boolean(document.querySelector('#commandDock .modeKeyboardDiagram')),
       radius: upper && lower ? Math.abs(lower.y - upper.y) / 1.5 : 0,
     };
   });
-  expect(metrics.dockWidth).toBeGreaterThanOrEqual(300);
-  expect(metrics.buttonHeight).toBeGreaterThanOrEqual(64);
-  expect(metrics.shortcutFontSize).toBeGreaterThanOrEqual(12);
-  expect(metrics.guide).toContain('1→100');
+  expect(metrics.dockWidth).toBeGreaterThanOrEqual(230);
+  expect(metrics.dockWidth).toBeLessThanOrEqual(260);
+  expect(metrics.dockHeight).toBeLessThanOrEqual(360);
+  expect(metrics.buttonHeight).toBeGreaterThanOrEqual(48);
+  expect(metrics.shortcutFontSize).toBeGreaterThanOrEqual(10);
+  expect(metrics.duplicateGuide).toBe(false);
   expect(metrics.radius).toBeGreaterThanOrEqual(41);
 });
 

@@ -6,6 +6,7 @@ import { I18n } from '../i18n/I18n';
 import type { Locale } from '../i18n/types';
 import { InputController, type InputError } from '../input/InputController';
 import { CampaignProgressStore } from '../persistence/CampaignProgressStore';
+import { SendModePreferenceStore } from '../persistence/SendModePreferenceStore';
 import { KongregateStats } from '../platform/KongregateStats';
 import { BoardRenderer } from '../rendering/BoardRenderer';
 import type { MapStyleMode } from '../rendering/MapArtRenderer';
@@ -41,9 +42,11 @@ export class HexfrontApp {
   readonly audio = new AudioController();
   readonly i18n = new I18n();
   readonly progressStore = new CampaignProgressStore();
+  readonly sendModeStore = new SendModePreferenceStore();
   readonly kongregateStats = new KongregateStats();
   progress: CampaignProgress;
   sendMode: SendMode = 'all';
+  private preferredSendMode: SendMode;
   private readonly input: InputController;
   private readonly visualVariant = VISUAL_VARIANT;
   private stageResizeObserver: ResizeObserver | null = null;
@@ -60,6 +63,7 @@ export class HexfrontApp {
     if (!canvas || !stage) throw new Error('HEXFRONT canvas shell is incomplete.');
     this.state.autoplay = DEBUG_AUTOPLAY;
     this.progress = this.progressStore.load();
+    this.preferredSendMode = this.sendModeStore.load();
     this.renderer = new BoardRenderer(canvas, stage, this.visualVariant, MAP_STYLE);
     this.renderer.sendLabel = this.i18n.t('drag.send');
     this.renderer.shieldLabel = this.i18n.t('guardian.shield');
@@ -198,7 +202,7 @@ export class HexfrontApp {
     this.state.start(index, (col, row) => this.renderer.positionFor(col, row));
     this.waitingForFirstMove = this.state.currentLevel === 0 && !this.state.autoplay;
     this.waitingForBriefing = false;
-    this.sendMode = this.state.level.features.half ? 'half' : 'all'; this.renderer.sendMode = this.sendMode;
+    this.sendMode = this.sendModeStore.resolve(this.preferredSendMode, this.state.level.features); this.renderer.sendMode = this.sendMode;
     this.ui.startMission(this.state, this.progress); this.ui.setMode(this.sendMode, this.state); this.ui.syncPlayerSupply(this.state.playerSupplyEnabled); this.audio.play('confirm');
     this.resizeLayout();
     this.tutorial.start(this.state);
@@ -228,6 +232,7 @@ export class HexfrontApp {
   setMode(mode: SendMode): void {
     const features = this.state.level.features;
     if ((mode === 'half' && !features.half) || (mode === 'all' && !features.all) || (mode === 'group' && !features.group)) return;
+    this.preferredSendMode = mode; this.sendModeStore.save(mode);
     this.sendMode = mode; this.renderer.sendMode = mode; this.ui.setMode(mode, this.state);
     this.audio.play('navigate');
     this.ui.showToast(this.i18n.t(mode === 'half' ? 'toast.mode.half' : mode === 'all' ? 'toast.mode.all' : 'toast.mode.group'));
