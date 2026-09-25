@@ -19,6 +19,8 @@
     "balance:guardian-rollout": "tsx scripts/balance-guardian-rollout.ts",
     "balance:guardian-profiles": "tsx scripts/balance-guardian-player-profiles.ts",
     "balance:level6-diagnostic": "tsx scripts/diagnose-level6-stalemate.ts",
+    "balance:relay-island": "tsx scripts/relay-island-lab.ts",
+    "balance:signal-gardens": "tsx scripts/signal-gardens-lab.ts",
     "balance:profiles": "tsx scripts/profile-balance.ts",
     "artguide:level1": "tsx scripts/export-level1-art-guide.ts",
     "artguide:level2": "tsx scripts/export-map-art-guide.ts 2",

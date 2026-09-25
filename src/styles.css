@@ -1028,6 +1028,140 @@ body.campaignOpen { touch-action:pan-y; }
     .guardianBriefingMarker,.guardianBriefingArrow { animation:none; opacity:.9; }
   }
 
+  /* Relay tutorial: a distinct signal-language layer, separate from guardians. */
+  .relayBriefing {
+    position:absolute; inset:0; z-index:50; display:grid; place-items:center start; padding:clamp(16px,3vw,34px);
+    background:
+      radial-gradient(circle at 50% 35%,rgba(99,184,188,.12),transparent 34%),
+      linear-gradient(rgba(5,18,18,.58),rgba(5,12,10,.66));
+    backdrop-filter:blur(2px) saturate(.82);
+  }
+  .relayBriefing[hidden] { display:none; }
+  .relayBriefingVisuals { position:absolute; inset:0; overflow:hidden; pointer-events:none; }
+  .relayBriefingRelay,.relayBriefingTarget,.relayBriefingArrow,
+  .relayCoachRelay,.relayCoachTarget,.relayCoachArrow {
+    position:absolute; display:block; max-width:none; user-select:none; pointer-events:none;
+  }
+  .relayBriefingRelay,.relayCoachRelay {
+    z-index:2; transform:translate(-50%,-50%); object-fit:contain;
+    filter:drop-shadow(0 0 11px rgba(84,210,208,.85)) drop-shadow(0 7px 13px rgba(9,34,30,.52));
+    animation:relaySignalPulse 1.55s ease-in-out infinite;
+  }
+  .relayBriefingTarget,.relayCoachTarget {
+    z-index:2; transform:translate(-50%,-50%); object-fit:contain;
+    filter:hue-rotate(112deg) saturate(.72) drop-shadow(0 0 12px rgba(83,204,195,.72));
+    animation:relayTargetPulse 1.55s ease-in-out infinite;
+  }
+  .relayBriefingArrow,.relayCoachArrow {
+    z-index:1; object-fit:fill; transform-origin:50% 50%;
+    filter:hue-rotate(118deg) saturate(.7) drop-shadow(0 4px 10px rgba(9,40,37,.5));
+    animation:relayArrowPulse 1.55s ease-in-out infinite;
+  }
+  .relayBriefingCard {
+    position:relative; z-index:4; width:min(92vw,420px); max-height:min(88vh,700px); overflow:auto; padding:29px;
+    color:#213b38; border:1px solid rgba(183,230,213,.88); border-radius:22px;
+    background:
+      radial-gradient(circle at 90% 8%,rgba(129,204,192,.22),transparent 28%),
+      linear-gradient(150deg,rgba(242,241,218,.99),rgba(218,231,211,.99));
+    box-shadow:0 28px 75px rgba(3,15,13,.5),inset 0 1px rgba(255,255,255,.82);
+    animation:resultCardIn .25s ease-out both;
+  }
+  .relayBriefingEmblem {
+    position:absolute; top:18px; right:20px; width:82px; height:82px; object-fit:contain; opacity:.3;
+    filter:saturate(.72) hue-rotate(118deg); pointer-events:none;
+  }
+  .relayBriefingKicker { margin-bottom:8px; color:#377b78; font:850 10px/1 var(--font-mono); letter-spacing:1.55px; }
+  .relayBriefingCard h2 { position:relative; margin:0 88px 10px 0; color:#122d2b; font:800 clamp(27px,5vw,40px)/1 var(--font-display); letter-spacing:.8px; }
+  .relayBriefingSummary { max-width:43ch; color:#405d55; font-size:14px; font-weight:630; line-height:1.5; }
+  .relayBriefingRange {
+    display:block; margin:17px 0; padding:11px 13px; color:#174d4b; border:1px solid #72aaa0; border-radius:11px;
+    background:linear-gradient(135deg,#cce2ce,#dce5c6); font:850 12px/1.35 var(--font-mono); letter-spacing:.25px;
+  }
+  .relayBriefingCard ul { display:grid; gap:10px; margin:0 0 20px; list-style:none; }
+  .relayBriefingCard li { position:relative; padding-left:28px; color:#3d584f; font-size:13px; font-weight:600; line-height:1.45; }
+  .relayBriefingCard li::before { content:'⌁'; position:absolute; left:2px; top:-2px; color:#277e7b; font-size:21px; font-weight:900; }
+  .relayBriefingConfirm { width:100%; }
+  .relayBriefing[data-mission="mastery"] {
+    background:
+      radial-gradient(circle at 25% 38%,rgba(72,196,192,.13),transparent 29%),
+      radial-gradient(circle at 75% 38%,rgba(72,196,192,.13),transparent 29%),
+      linear-gradient(rgba(5,18,18,.61),rgba(5,12,10,.7));
+  }
+  .relayBriefing[data-mission="mastery"] .relayBriefingCard {
+    width:min(32vw,280px); padding:20px;
+    border-color:rgba(151,224,210,.94);
+    background:
+      linear-gradient(90deg,rgba(69,167,159,.08),transparent 28%,transparent 72%,rgba(69,167,159,.08)),
+      linear-gradient(150deg,rgba(241,242,218,.99),rgba(213,232,214,.99));
+  }
+  .relayBriefing[data-mission="mastery"] .relayBriefingRange {
+    color:#124a47; border-color:#50a89f;
+    background:linear-gradient(90deg,#c5e4d1,#e1e8c8,#c5e4d1);
+  }
+  .relayBriefing[data-mission="mastery"] .relayBriefingCard h2 { margin-right:60px; font-size:28px; }
+  .relayBriefing[data-mission="mastery"] .relayBriefingSummary { font-size:12px; }
+  .relayBriefing[data-mission="mastery"] .relayBriefingRange { padding:9px 10px; font-size:9px; }
+  .relayBriefing[data-mission="mastery"] .relayBriefingCard li { padding-left:23px; font-size:11px; }
+  .relayCoach[data-mission="mastery"] .relayCoachRelay {
+    filter:drop-shadow(0 0 14px rgba(70,225,216,.95)) drop-shadow(0 7px 13px rgba(9,34,30,.52));
+  }
+  .relayHelpBtn {
+    position:absolute; z-index:18; right:13px; bottom:58px; min-height:38px; padding:8px 11px; cursor:pointer;
+    color:#dffff8; border:1px solid rgba(119,217,205,.68); border-radius:9px; background:rgba(18,47,43,.93);
+    box-shadow:0 7px 20px rgba(3,18,16,.28),inset 0 1px rgba(255,255,255,.07); font:850 9px/1 var(--font-mono); letter-spacing:.55px;
+  }
+  .relayHelpBtn[hidden] { display:none; }
+
+  .relayCoach { position:absolute; inset:0; z-index:7; overflow:hidden; pointer-events:none; }
+  .relayCoach[hidden] { display:none; }
+  .relayCoach[data-phase="drag"] .relayCoachTarget { animation-duration:1s; }
+  .relayCoach[data-phase="release"] .relayCoachTarget {
+    opacity:1; filter:hue-rotate(112deg) saturate(.9) brightness(1.14) drop-shadow(0 0 19px rgba(83,226,211,.96));
+    animation:relayReleasePulse .62s ease-in-out infinite alternate;
+  }
+  .relayCoach[data-phase="release"] .relayCoachArrow { opacity:1; filter:hue-rotate(118deg) brightness(1.14) drop-shadow(0 4px 14px rgba(41,205,193,.78)); }
+
+  @keyframes relaySignalPulse {
+    0%,100% { opacity:.72; transform:translate(-50%,-50%) scale(.94); }
+    50% { opacity:1; transform:translate(-50%,-50%) scale(1.08); }
+  }
+  @keyframes relayTargetPulse {
+    0%,100% { opacity:.52; transform:translate(-50%,-50%) scale(.92); }
+    50% { opacity:.9; transform:translate(-50%,-50%) scale(1.04); }
+  }
+  @keyframes relayArrowPulse { 0%,100% { opacity:.45; } 50% { opacity:.94; } }
+  @keyframes relayReleasePulse {
+    from { transform:translate(-50%,-50%) scale(.96); }
+    to { transform:translate(-50%,-50%) scale(1.1); }
+  }
+  @media (max-width:600px) {
+    .relayBriefing { place-items:end center; padding:10px 9px max(10px,env(safe-area-inset-bottom)); }
+    .relayBriefingCard { width:100%; max-height:min(72vh,620px); padding:21px 18px 17px; border-radius:20px; }
+    .relayBriefingEmblem { top:12px; right:13px; width:64px; height:64px; }
+    .relayBriefingCard h2 { margin-right:65px; font-size:27px; }
+    .relayBriefingSummary { font-size:13px; }
+    .relayBriefingRange { margin:13px 0; font-size:10px; }
+    .relayBriefingCard ul { gap:8px; margin-bottom:14px; }
+    .relayBriefingCard li { font-size:12px; }
+    .relayHelpBtn { right:8px; bottom:58px; min-height:44px; }
+    .relayBriefing[data-mission="mastery"] .relayBriefingCard { width:100%; padding:21px 18px 17px; }
+    .relayBriefing[data-mission="mastery"] .relayBriefingCard h2 { font-size:27px; }
+  }
+  @media (min-width:601px) and (max-height:620px) {
+    .relayBriefing { padding:10px; }
+    .relayBriefingCard { width:min(42vw,390px); max-height:calc(100% - 20px); padding:18px 20px; }
+    .relayBriefingEmblem { top:11px; right:13px; width:62px; height:62px; }
+    .relayBriefingCard h2 { margin-right:64px; font-size:27px; }
+    .relayBriefingSummary { font-size:12px; line-height:1.4; }
+    .relayBriefingRange { margin:10px 0; padding:8px 10px; font-size:9px; }
+    .relayBriefingCard ul { gap:6px; margin-bottom:10px; }
+    .relayBriefingCard li { font-size:11px; line-height:1.35; }
+  }
+  @media (prefers-reduced-motion:reduce) {
+    .relayBriefingRelay,.relayBriefingTarget,.relayBriefingArrow,
+    .relayCoachRelay,.relayCoachTarget,.relayCoachArrow { animation:none; opacity:.9; }
+  }
+
   /* Combat HUD polish: stronger hierarchy with lightweight transparent ornament art. */
   .commandDockOrnament,.sideDossierOrnament { display:block; object-fit:contain; pointer-events:none; user-select:none; }
   .commandDockOrnament { width:100%; height:30px; margin:-3px 0 9px; opacity:.68; filter:drop-shadow(0 2px 5px rgba(0,0,0,.25)); }

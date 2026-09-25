@@ -72,7 +72,11 @@ export class CampaignUI {
     this.applyStaticTranslations(); this.syncLocaleControls(); this.syncCommandDockToggle();
   }
 
-  private lastProgress: CampaignProgress = { completed: LEVELS.map(() => false), best: LEVELS.map(() => 0), halfSendUsed: false, guardianBriefingSeen: false };
+  private lastProgress: CampaignProgress = {
+    completed: LEVELS.map(() => false), best: LEVELS.map(() => 0), halfSendUsed: false,
+    guardianBriefingSeen: false, relayBriefingSeen: false, relaySendUsed: false,
+    relayMasteryBriefingSeen: false, relayMasteryUsed: false,
+  };
   private lastUnlocked = (_index: number) => false;
   private halfSendUnlockVisible = false;
 

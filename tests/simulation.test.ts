@@ -171,6 +171,10 @@ test('progress unlocks sequentially and survives a reload', () => {
   let progress = store.load();
   assert.equal(progress.halfSendUsed, false);
   assert.equal(progress.guardianBriefingSeen, false);
+  assert.equal(progress.relayBriefingSeen, false);
+  assert.equal(progress.relaySendUsed, false);
+  assert.equal(progress.relayMasteryBriefingSeen, false);
+  assert.equal(progress.relayMasteryUsed, false);
   assert.equal(store.isUnlocked(progress, 0), true);
   assert.equal(store.isUnlocked(progress, 1), false);
   progress = store.complete(progress, 0, 72.5);
@@ -183,4 +187,12 @@ test('progress unlocks sequentially and survives a reload', () => {
   assert.equal(new CampaignProgressStore(storage).load().halfSendUsed, true);
   progress = store.markGuardianBriefingSeen(progress);
   assert.equal(new CampaignProgressStore(storage).load().guardianBriefingSeen, true);
+  progress = store.markRelayBriefingSeen(progress);
+  assert.equal(new CampaignProgressStore(storage).load().relayBriefingSeen, true);
+  progress = store.markRelaySendUsed(progress);
+  assert.equal(new CampaignProgressStore(storage).load().relaySendUsed, true);
+  progress = store.markRelayMasteryBriefingSeen(progress);
+  assert.equal(new CampaignProgressStore(storage).load().relayMasteryBriefingSeen, true);
+  progress = store.markRelayMasteryUsed(progress);
+  assert.equal(new CampaignProgressStore(storage).load().relayMasteryUsed, true);
 });

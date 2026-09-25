@@ -383,6 +383,126 @@ test('Level 6 exposes one western guardian and its smaller HQ shield', async ({ 
   expect(guardians[0]).toMatchObject({ id: 'enemy-guardian-west', owner: 2, col: 2, row: 4, status: 'active', shield: 36, linkedTo: 'enemy-hq' });
 });
 
+test('Level 7 pauses for a relay briefing and coaches a real range-2 drag', async ({ page }) => {
+  await page.goto('/?unlock=1&autostart=1&level=6');
+  await expect(page.locator('#relayBriefing')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'SIGNAL RELAY' })).toBeVisible();
+  await expect(page.locator('.relayBriefingRelay')).toHaveCount(1);
+  await expect(page.locator('.relayBriefingTarget')).toHaveCount(2);
+  await expect(page.locator('.relayBriefingRange')).toContainText('2 HEXES');
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getState())).toMatchObject({ elapsed: 0, waitingForBriefing: true });
+  await page.waitForTimeout(350);
+  expect(await page.evaluate(() => window.__HEXFRONT__?.getState().elapsed)).toBe(0);
+
+  await page.getByRole('button', { name: 'START MISSION' }).click();
+  await expect(page.locator('#relayBriefing')).toBeHidden();
+  await expect(page.locator('#relayCoach')).toBeVisible();
+  await expect(page.locator('#hint')).toContainText('Capture the central relay');
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('hexfront_campaign_progress_v2') ?? '{}').relayBriefingSeen)).toBe(true);
+
+  await page.evaluate(() => {
+    const api = window.__HEXFRONT__!;
+    api.setOpponentEnabled(false);
+    for (let wave = 0; wave < 80; wave += 1) {
+      const board = api.getBoard();
+      for (let row = 11; row >= 7; row -= 1) {
+        const source = board.find((hex) => hex.col === 3 && hex.row === row && hex.owner === 1 && hex.units >= 2);
+        const target = board.find((hex) => hex.col === 3 && hex.row === row - 1);
+        if (source && target) api.send(source.col, source.row, target.col, target.row, .9);
+      }
+      api.simulate(2, .05);
+      const relay = api.getBoard().find((hex) => hex.col === 3 && hex.row === 6);
+      if (relay?.owner === 1 && relay.units >= 4) break;
+    }
+    api.simulate(8, .05);
+  });
+  await expect.poll(async () => {
+    const board = await page.evaluate(() => window.__HEXFRONT__!.getBoard()) as DebugBoard;
+    return board.find((hex) => hex.col === 3 && hex.row === 6)?.owner;
+  }).toBe(1);
+  await expect(page.locator('#hint')).toContainText('Hold your relay');
+  await expect(page.locator('.relayCoachTarget')).toHaveCount(2);
+
+  const board = await page.evaluate(() => window.__HEXFRONT__!.getBoard()) as DebugBoard;
+  const relay = board.find((hex) => hex.col === 3 && hex.row === 6)!;
+  const landing = board.find((hex) => hex.col === 2 && hex.row === 4)!;
+  await dragBetween(page, relay, landing);
+  await expect(page.locator('#toast')).toContainText('crossed two hexes');
+  await expect(page.locator('#relayCoach')).toBeHidden();
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('hexfront_campaign_progress_v2') ?? '{}').relaySendUsed)).toBe(true);
+
+  await page.locator('#relayHelpBtn').click();
+  await expect(page.getByRole('button', { name: 'RETURN TO BATTLE' })).toBeVisible();
+});
+
+test('Level 8 teaches both relay lanes and requires one range-2 drag from each', async ({ page }) => {
+  await page.goto('/?unlock=1&autostart=1&level=7');
+  await expect(page.locator('#relayBriefing')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'DUAL RELAY NETWORK' })).toBeVisible();
+  await expect(page.locator('.relayBriefingRelay')).toHaveCount(2);
+  await expect(page.locator('.relayBriefingTarget')).toHaveCount(2);
+  const arrowTransforms = await page.locator('.relayBriefingArrow').evaluateAll((arrows) =>
+    arrows.map((arrow) => (arrow as HTMLElement).style.transform));
+  expect(arrowTransforms).toHaveLength(2);
+  expect(arrowTransforms.every((transform) => transform.includes('rotate(0deg)'))).toBe(true);
+  await expect(page.locator('.relayBriefingRange')).toContainText('TWO RANGE-2 LAUNCH LANES');
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getState())).toMatchObject({ elapsed: 0, waitingForBriefing: true });
+  await page.waitForTimeout(300);
+  expect(await page.evaluate(() => window.__HEXFRONT__?.getState().elapsed)).toBe(0);
+
+  await page.getByRole('button', { name: 'START MISSION' }).click();
+  await expect(page.locator('#relayBriefing')).toBeHidden();
+  await expect(page.locator('#relayCoach')).toBeVisible();
+  await expect(page.locator('#hint')).toContainText('Capture both flank relays');
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('hexfront_campaign_progress_v2') ?? '{}').relayMasteryBriefingSeen)).toBe(true);
+
+  await page.evaluate(() => {
+    const api = window.__HEXFRONT__!;
+    api.setOpponentEnabled(false);
+    const routes = [
+      [[3,11],[3,10],[2,9],[2,8],[1,7],[1,6]],
+      [[3,11],[3,10],[3,9],[4,8],[4,7],[5,6]],
+    ];
+    for (const route of routes) {
+      for (let wave = 0; wave < 100; wave += 1) {
+        const board = api.getBoard();
+        for (let index = route.length - 2; index >= 0; index -= 1) {
+          const [sourceCol, sourceRow] = route[index]; const [targetCol, targetRow] = route[index + 1];
+          const source = board.find((hex) => hex.col === sourceCol && hex.row === sourceRow && hex.owner === 1 && hex.units >= 2);
+          if (source) api.send(sourceCol, sourceRow, targetCol, targetRow, .9);
+        }
+        api.simulate(1.5, .05);
+        const [relayCol, relayRow] = route[route.length - 1];
+        if (api.getBoard().find((hex) => hex.col === relayCol && hex.row === relayRow)?.owner === 1) break;
+      }
+    }
+    api.simulate(8, .05);
+  });
+  await expect.poll(async () => {
+    const board = await page.evaluate(() => window.__HEXFRONT__!.getBoard()) as DebugBoard;
+    return [[1,6],[5,6]].filter(([col,row]) => board.find((hex) => hex.col === col && hex.row === row)?.owner === 1).length;
+  }).toBe(2);
+  await expect(page.locator('#hint')).toContainText('Both relays are online');
+  await expect(page.locator('.relayCoachTarget')).toHaveCount(2);
+
+  let board = await page.evaluate(() => window.__HEXFRONT__!.getBoard()) as DebugBoard;
+  await dragBetween(page, board.find((hex) => hex.col === 1 && hex.row === 6)!, board.find((hex) => hex.col === 1 && hex.row === 4)!);
+  await expect(page.locator('#toast')).toContainText('First relay linked');
+  await expect(page.locator('#relayCoach')).toBeVisible();
+  await expect(page.locator('.relayCoachTarget')).toHaveCount(1);
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('hexfront_campaign_progress_v2') ?? '{}').relayMasteryUsed ?? false)).toBe(false);
+
+  board = await page.evaluate(() => window.__HEXFRONT__!.getBoard()) as DebugBoard;
+  await dragBetween(page, board.find((hex) => hex.col === 5 && hex.row === 6)!, board.find((hex) => hex.col === 5 && hex.row === 4)!);
+  await expect(page.locator('#toast')).toContainText('both flanks are advancing');
+  await expect(page.locator('#relayCoach')).toBeHidden();
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('hexfront_campaign_progress_v2') ?? '{}').relayMasteryUsed)).toBe(true);
+
+  await page.locator('#relayHelpBtn').click();
+  await expect(page.getByRole('heading', { name: 'DUAL RELAY NETWORK' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'RETURN TO BATTLE' })).toBeVisible();
+});
+
 test('campaign start, restart and direct next level keep identical board geometry', async ({ page }) => {
   await page.getByRole('button', { name: 'BEGIN CAMPAIGN' }).click();
   await page.evaluate(() => window.__HEXFRONT__?.setOpponentEnabled(false));

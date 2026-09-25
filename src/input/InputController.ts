@@ -11,7 +11,7 @@ export interface InputCallbacks {
   onActivate(): void;
   onGestureStart?(source: HexState, pointerType: string): void;
   onGestureMove?(source: HexState, target: HexState | null): void;
-  onGestureEnd?(sent: number): void;
+  onGestureEnd?(sent: number, source: HexState | null, target: HexState | null): void;
 }
 
 export class InputController {
@@ -76,14 +76,14 @@ export class InputController {
         ? 'decor'
         : 'target');
     }
-    this.callbacks.onGestureEnd?.(sent);
+    this.callbacks.onGestureEnd?.(sent, source, target);
     this.reset();
   };
 
   private cancel = (): void => {
     const active = this.pointerDown && Boolean(this.renderer.selected);
     this.reset();
-    if (active) this.callbacks.onGestureEnd?.(0);
+    if (active) this.callbacks.onGestureEnd?.(0, null, null);
   };
 
   private reset(): void {

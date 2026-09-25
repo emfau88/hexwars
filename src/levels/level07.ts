@@ -12,6 +12,10 @@ export default defineLevel({
   activeRows:[[],[3],[2,3,4],[1,2,3,4,5],[1,2,3,4,5],[2,3,4],[2,3,4],[2,3,4],[1,2,3,4,5],[1,2,3,4,5],[2,3,4],[3],[]],
   cells:[
     {col:3,row:6,terrain:Terrain.Relay,units:12},
+    // The relay offers two deliberately softer range-2 landings. The central
+    // route remains viable, but concentrating everything there is less efficient.
+    {col:2,row:4,units:4}, {col:4,row:4,units:4}, {col:3,row:4,units:11},
+    {col:2,row:8,units:4}, {col:4,row:8,units:4}, {col:3,row:8,units:11},
     ...([[0,5],[1,5],[5,5],[6,5],[0,6],[1,6],[5,6],[6,6],[0,7],[1,7],[5,7],[6,7]] as const).map(([col,row])=>({col,row,terrain:Terrain.Decor,decor:'water' as const})),
   ],
 });

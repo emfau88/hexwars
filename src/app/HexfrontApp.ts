@@ -13,6 +13,7 @@ import { OWNER_COLORS } from '../rendering/palette';
 import { CampaignUI } from '../ui/CampaignUI';
 import { LevelOneTutorial } from '../ui/LevelOneTutorial';
 import { GuardianBriefing } from '../ui/GuardianBriefing';
+import { RelayTutorial } from '../ui/RelayTutorial';
 import { LEVELS } from '../levels';
 
 const DEBUG_ENABLED = import.meta.env.DEV || import.meta.env.MODE === 'test';
@@ -36,6 +37,7 @@ export class HexfrontApp {
   readonly ui: CampaignUI;
   readonly tutorial: LevelOneTutorial;
   readonly guardianBriefing: GuardianBriefing;
+  readonly relayTutorial: RelayTutorial;
   readonly audio = new AudioController();
   readonly i18n = new I18n();
   readonly progressStore = new CampaignProgressStore();
@@ -80,6 +82,23 @@ export class HexfrontApp {
         if (introduction) this.progress = this.progressStore.markGuardianBriefingSeen(this.progress);
       },
     });
+    this.relayTutorial = new RelayTutorial(stage, this.renderer, this.i18n, {
+      onOpen: () => { this.waitingForBriefing = true; },
+      onClose: (introduction, levelId) => {
+        this.waitingForBriefing = false;
+        if (introduction) this.progress = levelId === 'signal-gardens'
+          ? this.progressStore.markRelayMasteryBriefingSeen(this.progress)
+          : this.progressStore.markRelayBriefingSeen(this.progress);
+      },
+      onComplete: (levelId) => {
+        this.progress = levelId === 'signal-gardens'
+          ? this.progressStore.markRelayMasteryUsed(this.progress)
+          : this.progressStore.markRelaySendUsed(this.progress);
+      },
+      showHint: (message) => this.ui.showTutorialHint(message),
+      hideHint: () => this.ui.hideTutorialHint(),
+      showSuccess: (message) => this.ui.showToast(message),
+    });
     this.input = new InputController(canvas, this.state, this.renderer, {
       getMode: () => this.sendMode,
       onCommand: () => {
@@ -91,9 +110,18 @@ export class HexfrontApp {
         navigator.vibrate?.(10); this.audio.play('send');
       },
       onInvalid: (error) => { this.audio.play('denied'); this.ui.showToast(this.i18n.t(this.inputErrorKey(error))); }, onActivate: () => this.audio.activate(),
-      onGestureStart: (source, pointerType) => this.tutorial.gestureStart(this.state, source, pointerType),
-      onGestureMove: (_source, target) => this.tutorial.gestureMove(this.state, target),
-      onGestureEnd: (sent) => this.tutorial.gestureEnd(this.state, sent),
+      onGestureStart: (source, pointerType) => {
+        this.tutorial.gestureStart(this.state, source, pointerType);
+        this.relayTutorial.gestureStart(this.state, source);
+      },
+      onGestureMove: (source, target) => {
+        this.tutorial.gestureMove(this.state, target);
+        this.relayTutorial.gestureMove(this.state, source, target);
+      },
+      onGestureEnd: (sent, source, target) => {
+        this.tutorial.gestureEnd(this.state, sent);
+        this.relayTutorial.gestureEnd(this.state, sent, source, target);
+      },
     });
     this.showMap(this.progressStore.focus(this.progress));
     this.bindWindowEvents();
@@ -175,6 +203,12 @@ export class HexfrontApp {
     this.resizeLayout();
     this.tutorial.start(this.state);
     this.guardianBriefing.start(this.state, !this.progress.guardianBriefingSeen);
+    const relayMastery = this.state.level.id === 'signal-gardens';
+    this.relayTutorial.start(
+      this.state,
+      relayMastery ? !this.progress.relayMasteryBriefingSeen : !this.progress.relayBriefingSeen,
+      relayMastery ? this.progress.relayMasteryUsed : this.progress.relaySendUsed,
+    );
     this.lastFrame = performance.now();
   }
 
@@ -182,6 +216,7 @@ export class HexfrontApp {
     this.levelStartRequest += 1;
     this.tutorial.stop(false);
     this.guardianBriefing.stop();
+    this.relayTutorial.stop(false);
     this.state.running = false;
     this.waitingForFirstMove = false;
     this.waitingForBriefing = false;
@@ -212,7 +247,7 @@ export class HexfrontApp {
       this.renderer.effects.update(delta * DEBUG_SPEED); this.ui.updateHUD(this.state);
     }
     this.consumeEvents();
-    this.renderer.draw(this.state, time); this.tutorial.updatePosition(); this.guardianBriefing.updatePosition(); this.animationFrame = requestAnimationFrame(this.frame);
+    this.renderer.draw(this.state, time); this.tutorial.updatePosition(); this.guardianBriefing.updatePosition(); this.relayTutorial.updatePosition(); this.animationFrame = requestAnimationFrame(this.frame);
   };
 
   private consumeEvents(): void {
@@ -234,11 +269,13 @@ export class HexfrontApp {
       this.renderer.effects.burst(event.detail.target, OWNER_COLORS[event.detail.newOwner].edge, 14);
       if (event.detail.newOwner === Owner.Player) this.audio.play('capture');
       else if (event.detail.oldOwner === Owner.Player) this.audio.play('loss');
+      this.relayTutorial.capture(this.state, event.detail.target);
     }
     if (event.type === 'endgame') { this.ui.updateEndgame(this.state); this.ui.showToast(this.i18n.t(event.detail.stage === 1 ? 'toast.endgame.decline' : 'toast.endgame.decision')); }
     if (event.type === 'result') {
       this.tutorial.stop(false);
       this.guardianBriefing.stop();
+      this.relayTutorial.stop(false);
       const firstHalfSendUnlock = event.detail.result === 'victory'
         && this.state.currentLevel === 0
         && !this.progress.completed[0];
@@ -281,6 +318,7 @@ export class HexfrontApp {
     this.ui.refreshLanguage(this.state, this.audio.enabled);
     this.tutorial.refreshCopy();
     this.guardianBriefing.refreshCopy();
+    this.relayTutorial.refreshCopy();
   }
 
   private inputErrorKey(error: InputError): 'toast.invalid.decor' | 'toast.invalid.target' {
