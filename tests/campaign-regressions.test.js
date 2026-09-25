@@ -88,6 +88,17 @@ test('campaign atlas art remains decorative and within its mobile budget', () =>
   assert.match(atlas, /preserveAspectRatio:'xMidYMid slice'/);
 });
 
+test('campaign state emblems stay compact and distinguish cleared, open and locked missions', () => {
+  const names = ['campaign-state-cleared-v1.png', 'campaign-state-available-v1.png', 'campaign-state-locked-v1.png'];
+  const assets = names.map((name) => new URL(`../public/assets/ui/${name}`, import.meta.url));
+  for (const asset of assets) assert.ok(statSync(asset).size < 40_000, `${asset.pathname} stays below 40 KB`);
+  assert.ok(assets.reduce((sum, asset) => sum + statSync(asset).size, 0) < 90_000, 'campaign state art stays below 90 KB combined');
+  for (const name of names) assert.match(atlas, new RegExp(name.replace('.', '\\.')));
+  assert.match(atlasStyles, /\.mapNode\.completed/);
+  assert.match(atlas, /available \? 'unlocked' : 'locked'/);
+  assert.match(atlasStyles, /\.mapNode\.comingSoon/);
+});
+
 test('unfinished maps stay visible but cannot be launched from campaign UI', () => {
   assert.match(atlas, /RELEASED_CAMPAIGN_LEVELS = 9/);
   assert.match(atlas, /comingSoon = levelIndex >= RELEASED_CAMPAIGN_LEVELS/);
@@ -105,6 +116,10 @@ test('map previews composite positioned landscape overlays over their core art',
   assert.match(campaignUi, /mapArtImage\(source, 'high'\)/);
   assert.match(campaignUi, /previewLoading/);
   assert.match(campaignUi, /this\.renderPreview\(this\.selectedMenuLevel\)/);
+  assert.match(campaignUi, /buildStructures\(level, hexes\)/);
+  assert.match(campaignUi, /this\.previewStructures\.drawHq/);
+  assert.match(campaignUi, /this\.previewStructures\.drawGuardian/);
+  assert.match(campaignUi, /this\.previewStructures\.drawRelay/);
 });
 
 test('Level 1 landscape assets stay within the mobile budget', () => {
@@ -152,6 +167,18 @@ test('relay structure art is compact, lazy-loaded and paired with exact range-tw
   assert.match(campaignUi, /terrain\.has\(Terrain\.Hill\)/);
   assert.match(campaignUi, /terrain\.has\(Terrain\.Relay\)/);
   assert.match(campaignUi, /syncLegendEntry\('legendGuardian'/);
+});
+
+test('guardian shields use compact state art and keep their readable status above the dome', () => {
+  const names = ['guardian-shield-idle-v1.png', 'guardian-shield-impact-v1.png', 'guardian-shield-depleted-v1.png'];
+  const assets = names.map((name) => new URL(`../public/assets/structures/${name}`, import.meta.url));
+  for (const asset of assets) assert.ok(statSync(asset).size < 260_000, `${asset.pathname} stays below 260 KB`);
+  assert.ok(assets.reduce((sum, asset) => sum + statSync(asset).size, 0) < 550_000, 'guardian shield art stays below 550 KB combined');
+  const structureRenderer = read('../src/rendering/StructureAssetRenderer.ts');
+  const boardRenderer = read('../src/rendering/BoardRenderer.ts');
+  for (const name of names) assert.match(structureRenderer, new RegExp(name.replace('.', '\\.')));
+  assert.match(boardRenderer, /hex\.y - this\.radius \* 2\.08/);
+  assert.match(boardRenderer, /commandDockClearance/);
 });
 
 test('illustrated maps draw grid contours only for playable cells', () => {

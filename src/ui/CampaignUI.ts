@@ -6,9 +6,11 @@ import type { Locale } from '../i18n/types';
 import { buildLevel } from '../levels/buildLevel';
 import { CAMPAIGN_ACTS, campaignActForLevel, LEVELS } from '../levels';
 import { createSeededRandom } from '../core/random';
+import { buildStructures } from '../systems/StructureSystem';
 import { BoardRenderer } from '../rendering/BoardRenderer';
 import { LandscapeRenderer } from '../rendering/LandscapeRenderer';
 import { OWNER_COLORS } from '../rendering/palette';
+import { StructureAssetRenderer } from '../rendering/StructureAssetRenderer';
 import { centeredAspectCrop, mapArtForLevel } from '../rendering/MapArtManifest';
 import { mapArtImage, type MapArtImageRecord } from '../rendering/MapArtAssetStore';
 import type { MapStyleMode } from '../rendering/MapArtRenderer';
@@ -39,12 +41,16 @@ export class CampaignUI {
   selectedMenuLevel = 0;
   private toastTimer = 0; private hintTimer = 0;
   private readonly previewLandscape: LandscapeRenderer;
+  private readonly previewStructures: StructureAssetRenderer;
   private readonly atlas: CampaignAtlas;
   private readonly previewMapSubscriptions = new Set<string>();
   private readonly warmedPreviewLevels = new Set<number>();
 
   constructor(private readonly callbacks: UICallbacks, private readonly i18n: I18n, visualVariant: VisualVariant = 'production', private readonly mapStyle: MapStyleMode = 'auto') {
     this.previewLandscape = new LandscapeRenderer(() => this.renderPreview(this.selectedMenuLevel), visualVariant);
+    this.previewStructures = new StructureAssetRenderer(() => {
+      if (this.menu.classList.contains('show')) this.renderPreview(this.selectedMenuLevel);
+    });
     this.atlas = new CampaignAtlas(required<SVGSVGElement>('campaignAtlasSvg'), i18n);
     required('playLevelBtn').addEventListener('click', () => callbacks.startLevel(this.selectedMenuLevel));
     for (const id of ['restartBtn', 'mobileRestartBtn', 'retryBtn']) required(id).addEventListener('click', () => callbacks.startLevel());
@@ -446,6 +452,14 @@ export class CampaignUI {
       context.lineWidth = hex.terrain === Terrain.Base ? 2 : .8; context.stroke();
     }
     if (!hasMapArt) this.previewLandscape.drawWaterShores(context, hexes, radius, level.landscapeStyle, BoardRenderer.path);
+    const structures = buildStructures(level, hexes);
+    for (const structure of structures) {
+      const hex = hexes.find(({ col, row }) => col === structure.col && row === structure.row);
+      if (!hex) continue;
+      if (structure.type === 'hq') this.previewStructures.drawHq(context, structure.owner, hex.x, hex.y, radius);
+      else if (structure.type === 'guardian') this.previewStructures.drawGuardian(context, hex.x, hex.y, radius);
+      else if (structure.type === 'relay') this.previewStructures.drawRelay(context, hex.x, hex.y, radius);
+    }
     if (hasMapArt) this.warmAdjacentPreviews(levelIndex);
   }
 

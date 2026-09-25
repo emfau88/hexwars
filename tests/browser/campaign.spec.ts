@@ -856,14 +856,14 @@ test('decor variants decode their lazily loaded candidate assets', async ({ page
   }
 });
 
-test('relay structure art loads only when a relay mission starts', async ({ page }) => {
+test('relay structure art is available in its campaign preview and relay missions', async ({ page }) => {
   const relayRequests: string[] = [];
   page.on('request', (request) => {
     if (request.url().includes('/assets/structures/relay-neutral-v2.png')) relayRequests.push(request.url());
   });
-  await page.goto('/?autostart=1&level=0');
-  await page.waitForTimeout(250);
-  expect(relayRequests).toEqual([]);
+  await page.goto('/?unlock=1');
+  await page.getByRole('button', { name: 'Level 7: RELAY ISLAND' }).click();
+  await expect.poll(() => relayRequests.length).toBeGreaterThan(0);
 
   await page.goto('/?unlock=1&autostart=1&level=6');
   await expect(page.locator('#legendRelay')).toContainText('only this cell can send up to 2 hexes away');
@@ -872,7 +872,6 @@ test('relay structure art loads only when a relay mission starts', async ({ page
   await expect(page.locator('#legendGuardian')).toHaveAttribute('hidden');
   await expect.poll(() => page.locator('#legendBase img').evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
   await expect.poll(() => page.locator('#legendRelay img').evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBe(512);
-  await expect.poll(() => relayRequests.length).toBeGreaterThan(0);
   const decoded = await page.evaluate(() => new Promise<boolean>((resolve) => {
     const image = new Image();
     image.addEventListener('load', () => resolve(image.naturalWidth === 512 && image.naturalHeight === 512), { once:true });

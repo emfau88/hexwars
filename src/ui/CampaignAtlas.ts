@@ -83,6 +83,7 @@ export class CampaignAtlas {
     }
 
     const nodes = svgNode('g', { id:'mapNodes', 'aria-label':this.i18n.t('campaign.atlasGroupAria') });
+    const assetRoot = `${import.meta.env.BASE_URL}assets/ui/`;
     for (const { x, y, levelIndex } of layout.stations) {
       const foreign = svgNode('foreignObject', {
         x:x - layout.size * .94, y:y - layout.size * .94, width:layout.size * 1.88, height:layout.size * 1.88,
@@ -97,7 +98,19 @@ export class CampaignAtlas {
         name: this.i18n.text(LEVELS[levelIndex].short),
         locked: available ? '' : this.i18n.t(comingSoon ? 'campaign.levelComingSoonSuffix' : 'campaign.levelLockedSuffix'),
       }));
-      button.innerHTML = `<span class="atlasLevelNumber">${String(levelIndex + 1).padStart(2, '0')}</span><span class="atlasLevelState" aria-hidden="true">${complete ? '✓' : available ? '•' : '·'}</span>${comingSoon ? `<span class="atlasComingSoon" aria-hidden="true">${this.i18n.t('campaign.nodeComingSoon')}</span>` : ''}`;
+      const icon = complete
+        ? 'campaign-state-cleared-v1.png'
+        : available
+          ? 'campaign-state-available-v1.png'
+          : 'campaign-state-locked-v1.png';
+      const status = this.i18n.t(comingSoon
+        ? 'campaign.nodeComingSoon'
+        : complete
+          ? 'campaign.nodeCompleted'
+          : available
+            ? 'campaign.nodeAvailable'
+            : 'campaign.nodeLocked');
+      button.innerHTML = `<img class="atlasStateAsset" src="${assetRoot}${icon}" alt="" aria-hidden="true" draggable="false"><span class="atlasLevelNumber">${String(levelIndex + 1).padStart(2, '0')}</span><span class="atlasNodeStatus" aria-hidden="true">${status}</span>`;
       button.addEventListener('click', () => onSelect(levelIndex));
       foreign.append(button); nodes.append(foreign);
     }
