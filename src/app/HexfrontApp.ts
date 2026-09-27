@@ -219,6 +219,7 @@ export class HexfrontApp {
       relayMastery ? !this.progress.relayMasteryBriefingSeen : !this.progress.relayBriefingSeen,
       relayMastery ? this.progress.relayMasteryUsed : this.progress.relaySendUsed,
     );
+    this.portal.missionStarted(this.state.currentLevel);
     this.lastFrame = performance.now();
   }
 

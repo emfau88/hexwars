@@ -50,6 +50,8 @@ export class Y8PortalAdapter implements PortalAdapter {
     this.host.y8?.emitReadyEvent?.();
   }
 
+  missionStarted(_levelIndex: number): void {}
+
   missionCompleted(_result: PortalMissionResult): void {
     if (!this.sdk || this.adInFlight) return;
     this.adInFlight = true;

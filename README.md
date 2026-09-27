@@ -99,6 +99,16 @@ npm run package:y8
 
 The upload-ready artifact is `dist-y8/hexfront-y8.zip`. Only this build loads and initializes the Y8 SDK; the regular production and Kongregate packages remain Y8-free. Its `index.html` and `assets/` directory are stored at the ZIP root for a self-contained HTML5 upload.
 
+## GameMonetize package
+
+Create the isolated GameMonetize build with:
+
+```bash
+npm run package:gamemonetize
+```
+
+The upload-ready artifact is `dist-gamemonetize/hexfront-gamemonetize.zip`. Only this build loads the GameMonetize SDK and requests one ad at the first mission start of a browser session. It does not request ads after victories or defeats. Main, Kongregate and Y8 builds remain GameMonetize-free.
+
 ## Local development
 
 Requires Node.js 20 or newer.
