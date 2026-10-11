@@ -6,6 +6,8 @@ Ein isolierter, tatsächlich spielbarer 3D-Vertical-Slice mit **einem Level**, 3
 
 **Kamera-Update:** Standard ist jetzt eine orthografische **70°-Taktikansicht**, ergänzt um eine feste 55°-Dioramaansicht. Framing, begrenzter Zoom und Verschieben richten sich nach der tatsächlichen projizierten Geometrie. [Vorher/60°/70°/80°-Vergleich und Eingabetests](docs/CAMERA.md).
 
+**Felder und Besitz:** Deutliche Hexkonturen bleiben ständig sichtbar. Eroberte Bodenflächen und ihre äußeren Ränder werden orange beziehungsweise blau eingefärbt. Eine zusätzliche helle Innenkontur markiert Auswahl und erreichbare Ziele, ohne die Teamfarbe zu ersetzen. Bodenstruktur, Schatten und echte Höhen bleiben erkennbar.
+
 **Veröffentlichungsstand:** Das Kamera-Update ist lokal auf dem Experiment-Branch gespeichert. Push und erneutes Deployment sind auf Wunsch zurückgestellt. Der obige Testlink zeigt noch die frühere Kamera; die folgenden Screenshots zeigen den neuen, lokal geprüften Produktions-Build. Der GitHub-Branch-Link ist erst nach einem erfolgreichen Push verfügbar.
 
 Eigenständiges Vercel-Projekt ohne Verbindung zum bisherigen Pages-Deployment. Hosting-Status: READY. Der externe Browseraufruf konnte wegen Netzwerk-/DNS-Beschränkungen dieser Arbeitsumgebung nicht verifiziert werden; der identische Produktions-Build wurde lokal geprüft. Details stehen im [QA-Bericht](docs/QA.md).
@@ -73,6 +75,7 @@ npm install --no-save --package-lock=false playwright@1.62.1
 npx playwright install chromium
 npm run test:browser
 npm run test:camera
+node tests/territory.mjs
 ```
 
 `node tests/hosted.mjs` prüft die öffentliche Produktions-URL mit echten Maus-/Touchbefehlen und nimmt die Abgabe-Screenshots auf. Mit `PREVIEW_URL=local` startet der Test selbst einen Produktionsserver auf Port 4178; alternativ akzeptiert die Variable eine eigene URL. In PowerShell: `$env:PREVIEW_URL='local'; node tests/hosted.mjs`. In dieser Umgebung war nur dieser lokale Durchlauf möglich.

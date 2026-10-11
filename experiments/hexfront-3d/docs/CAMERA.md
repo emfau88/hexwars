@@ -43,7 +43,15 @@ Die Aussage ist ausdrücklich **nicht**, dass alle 37 Flächen vollständig frei
 
 Die projizierte Begrenzung der spielbaren Bodenflächen wächst auf Desktop von rund **646 × 458 auf 660 × 642 Pixel**, auf Mobile von **290 × 224 auf 354 × 345 Pixel**. Das sind etwa **43 % beziehungsweise 88 % mehr Fläche des Begrenzungsrechtecks**. Es handelt sich nicht um gezählte Landschaftspixel. Die finale Canvas-Fläche beträgt 1165 × 678 beziehungsweise 390 × 447 Pixel. Die ganze spielbare Geometrie passt mit Rand in die Standardansicht; der dekorative Umgebungsrand ist kein Teil dieser Messung.
 
-Die verbleibenden Seitenwände, Schatten und geneigten Aufstiege sind bei 70° gut zu sehen. Zahlen liegen über ihrer tatsächlichen Oberfläche; bei Kollisionen verbinden feine Linien eine versetzte Anzeige mit ihrem Feld. Die bestehende neutrale Hexkontur wurde leicht verstärkt. Farben, Typografie, Befehlsablauf und Assets bleiben erhalten.
+Die verbleibenden Seitenwände, Schatten und geneigten Aufstiege sind bei 70° gut zu sehen. Zahlen liegen über ihrer tatsächlichen Oberfläche; bei Kollisionen verbinden feine Linien eine versetzte Anzeige mit ihrem Feld. Typografie, Befehlsablauf und Assets bleiben erhalten.
+
+## Hexkonturen und Teamfarben
+
+Nach dem Kameraabgleich wurde die Lesbarkeit des Besitzes gezielt an die ursprüngliche 2D-Version angeglichen: `src/rendering/BoardRenderer.ts` trennt dort ebenfalls Besitzfüllung, Außenkontur und helle Befehlsmarkierung. Im 3D-Experiment waren die Bodenfarben zuvor mit 4,5 % Deckkraft zu schwach und die Konturen zu schmal.
+
+Jetzt haben alle 37 Felder eine dauerhaft sichtbare, breitere Kontur. Besetzte Flächen und Außenränder verwenden die vorhandene Orange-/Blau-Palette. Die transparente Bodenfüllung hat 28 % Deckkraft, bei Auswahl 34 %; Texturen und Schatten bleiben darunter sichtbar. Ein separater heller Innenring zeigt Auswahl und erreichbare Ziele. Er ersetzt weder die Besitzfüllung noch den Teamrand. Die Ringe und Füllflächen liegen auf der tatsächlichen geneigten Hexoberfläche; Felsen und Gebäude werden nicht pauschal eingefärbt.
+
+Die sechs Winkelbilder und die finalen Produktionsbilder wurden mit dieser abschließenden Darstellung neu aufgenommen. Die unveränderten Vorher-Aufnahmen dokumentieren weiterhin den ursprünglichen Stand. [Desktop nach Eroberungen und mit Auswahl](camera/territory-desktop.png) und [Mobile mit derselben Situation](camera/territory-mobile.png) zeigen die zusätzlichen Befehlsringe im laufenden Spiel.
 
 ## Framing und Eingabe
 
@@ -58,7 +66,7 @@ Die verbleibenden Seitenwände, Schatten und geneigten Aufstiege sind bei 70° g
 
 ## Prüfungen
 
-`npm test`: **15 Tests bestanden**, einschließlich Winkeldefinition, Geometrie-Fit über verschiedene Seitenverhältnisse, Pan-Grenzen sowie aller bestehenden Navigations-, Kampf- und Matchtests. `npm run build`: **29 lokale Laufzeitdateien, 1,52 MiB**, Diagnose-API im Produktions-Build deaktiviert.
+`npm test`: **15 Tests bestanden**, einschließlich Winkeldefinition, Geometrie-Fit über verschiedene Seitenverhältnisse, Pan-Grenzen sowie aller bestehenden Navigations-, Kampf- und Matchtests. `npm run build`: **29 lokale Laufzeitdateien, 1,53 MiB**, Diagnose-API im Produktions-Build deaktiviert.
 
 Der Eingabetest verwendet echte Chromium-Mausklicks und Touch-Ereignisse. Er kontrolliert die empfangene logische Feld-ID, ohne Feldbesitz oder Einheiten zum Testen zu verändern. Geprüfte Auflösungen: **1440 × 900, 390 × 844, 320 × 568, 375 × 667 und 430 × 932**. Alle 37 Felder werden im jeweiligen Viewport tatsächlich angetippt, bei Bedarf mit Detailzoom. Dabei kommen alle drei Höhenstufen und die Felder direkt an Felswänden vor. Zusätzlich: beide HQ-Dächer und sichtbare zentrale Felswände bei 70° und 55°, Ansichtwechsel mit bestehender Auswahl, Mausrad/Pinch, Drag, Zoomgrenzen, Reset, HUD-Abstände und ein Größenwechsel bei bestehender Auswahl. Die genauen Ergebnisse stehen in [input-report.json](camera/input-report.json).
 
@@ -78,11 +86,14 @@ Der abschließende lokale **Produktions-Build** wird unabhängig davon mit laufe
 
 Die vollständigen Matchläufe verwendeten bereits die neue Kamera. Die danach abschließend korrigierten HUD-Abstände und Chromes Touch-Zielkorrektur wurden mit der obigen Eingabesuite, dem gezielten Regressionstest und dem Produktionsablauf erneut geprüft; ein weiterer kompletter Match wurde nach diesen letzten Korrekturen nicht wiederholt.
 
+Die letzte Anpassung der Hexkonturen und Teamflächen wurde zusätzlich mit `tests/territory.mjs` auf Desktop und Mobile geprüft: echter Maus-/Touchbefehl, erfolgreiche Eroberung durch Orange und selbstständige Eroberungen durch Blau, passende Boden-, Rand- und Zahlenfarben, separate Auswahl-/Erreichbarkeitsringe, Perspektivwechsel, Zoom und Fit. Anschließend spielt die KI bis zur tatsächlichen Niederlage weiter; der normale Neustart stellt die ursprünglichen Besitzer und Farben wieder her. Die Spielzustände werden dabei nicht umgeschrieben. [Besitzfarben-Testbericht](camera/territory-report.json). Produktionsablauf, Winkelaufnahmen und die 15 Logik-/Kameratests wurden nach dieser reinen Darstellungsänderung ebenfalls erneut ausgeführt; die umfangreiche Eingabesuite blieb unverändert.
+
 Reproduzieren, nach Installation des in der README genannten Playwright:
 
 ```powershell
 npm test
 npm run test:camera
+node tests/territory.mjs
 npm run test:browser
 npm run build
 $env:PREVIEW_URL = 'local'
@@ -95,6 +106,6 @@ node tests/hosted.mjs --camera
 
 Die 3D-Materialien und Modelle werden mit diesem Auftrag nicht aufgewertet; die ursprüngliche Distanz zu Tacticus' Environment-Art-Qualität bleibt bestehen. Der Gewinn ist eine besser lesbare, tatsächlich räumliche Taktikansicht. 55° bleibt absichtlich die stärker verdeckte Betrachtungsansicht. Sehr kleine Displays benötigen Detailzoom für dicht belegte Felder. Mobile Tests sind Browseremulation, keine Prüfung mit echten Android-/iOS-Geräten.
 
-Die verfügbare Browserumgebung rendert über **SwiftShader**. Der Matchtest erfasst Median-Framezeiten von etwa 167 ms auf Desktop und 133 ms im mobilen Viewport. Damit sind **60 FPS nicht nachgewiesen**; diese Software-Rendering-Zahlen sind kein verlässlicher Hardware-Benchmark. Der Kamerawechsel fügt keine GPU-Drawcalls hinzu. Ein Geräte-Performance-Pass bleibt nötig.
+Die verfügbare Browserumgebung rendert über **SwiftShader**. Der Matchtest erfasst Median-Framezeiten von etwa 167 ms auf Desktop und 133 ms im mobilen Viewport. Damit sind **60 FPS nicht nachgewiesen**; diese Software-Rendering-Zahlen sind kein verlässlicher Hardware-Benchmark. Der Kamerawechsel fügt keine GPU-Drawcalls hinzu. Die abschließend ergänzten Innenkonturen erzeugen während der Befehlswahl je ein kleines zusätzliches Mesh pro markiertem Feld; in der Übersicht sind sie ausgeblendet. Ein Geräte-Performance-Pass bleibt nötig.
 
 Code, Vergleichsbilder und Prüfergebnisse werden lokal auf dem bestehenden Experiment-Branch committed und separat archiviert. GitHub-Push und neues Hosting bleiben wie gewünscht zurückgestellt. **Die bisherige Vercel-URL zeigt weiterhin den vorherigen Kamerastand.** Main und das bestehende GitHub-Pages-Spiel wurden nicht verändert.

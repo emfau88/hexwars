@@ -223,11 +223,14 @@ export class Diorama {
   buildMarkers(){
     this.leaderLines=document.createElementNS('http://www.w3.org/2000/svg','svg');this.leaderLines.classList.add('label-leaders');this.leaderLines.setAttribute('aria-hidden','true');this.labels.append(this.leaderLines);
     for(const c of this.game.cells){
-      const mat=new T.MeshBasicMaterial({color:COLORS[c.owner],transparent:true,opacity:.30,depthWrite:false,side:T.DoubleSide});
-      const marker=mesh(this.scene,ringGeometry(c,this.game.cells,.92,.012),mat);marker.castShadow=false;marker.receiveShadow=false;
+      const mat=new T.MeshBasicMaterial({color:COLORS[c.owner],transparent:true,opacity:.9,depthWrite:false,side:T.DoubleSide,toneMapped:false});
+      const marker=mesh(this.scene,ringGeometry(c,this.game.cells,.94,.035),mat);marker.castShadow=false;marker.receiveShadow=false;marker.renderOrder=2;
       const fillGeo=this.picks.find(p=>p.userData.cellId===c.id).geometry.clone();fillGeo.translate(0,.018,0);
-      const fill=new T.Mesh(fillGeo,new T.MeshBasicMaterial({color:COLORS[c.owner],transparent:true,opacity:0,depthWrite:false,side:T.DoubleSide}));this.scene.add(fill);
-      this.markers.set(c.id,{marker,fill});
+      const fill=new T.Mesh(fillGeo,new T.MeshBasicMaterial({color:COLORS[c.owner],transparent:true,opacity:0,depthWrite:false,side:T.DoubleSide,toneMapped:false}));fill.renderOrder=1;this.scene.add(fill);
+      // Keep territory colour independent of orders, as in the original board.
+      // A separate inset contour marks selection/reachability on the real slope.
+      const action=new T.Mesh(ringGeometry(c,this.game.cells,.80,.025),new T.MeshBasicMaterial({color:0xf2d9a4,transparent:true,opacity:.85,depthWrite:false,side:T.DoubleSide,toneMapped:false}));action.visible=false;action.renderOrder=3;this.scene.add(action);
+      this.markers.set(c.id,{marker,fill,action});
       const el=document.createElement('button');el.className='garrison '+c.owner;el.dataset.cell=c.id;el.type='button';el.innerHTML='<span class="count"></span><span class="cell-symbol"></span>';el.addEventListener('click',e=>{e.stopPropagation();this.onSelect(c.id);});el.addEventListener('pointerenter',()=>this.onHover(c.id));el.addEventListener('focus',()=>this.onHover(c.id));this.labels.append(el);this.labelsById.set(c.id,el);
     }
     this.pathLine=new T.Line(new T.BufferGeometry(),new T.LineDashedMaterial({color:0xe8d6a7,dashSize:.18,gapSize:.12,transparent:true,opacity:.8}));this.pathLine.frustumCulled=false;this.scene.add(this.pathLine);
@@ -339,10 +342,11 @@ export class Diorama {
     if(this.disposed)return;
     const selected=this.game.cell(this.selected),labelEntries=[];
     for(const c of this.game.cells){
-      const {marker,fill}=this.markers.get(c.id),isSelected=c.id===this.selected,reachable=selected&&selected.owner==='orange'&&!!this.game.path(selected,c),hover=c.id===this.hovered;
-      marker.material.color.setHex(isSelected?0xf2d9a4:reachable?0xe0d5ac:COLORS[c.owner]);marker.material.opacity=isSelected?.95:reachable?.7:c.owner==='neutral'?.38:.56;
-      fill.material.color.setHex(isSelected?COLORS.orange:reachable?0xcbce9e:COLORS[c.owner]);fill.material.opacity=isSelected?.16:reachable?.08:c.owner!=='neutral'?.045:0;
-      if(hover)fill.material.opacity+=.055;fill.visible=fill.material.opacity>.001;
+      const {marker,fill,action}=this.markers.get(c.id),isSelected=c.id===this.selected,reachable=selected&&selected.owner==='orange'&&!!this.game.path(selected,c),hover=c.id===this.hovered,owned=c.owner!=='neutral';
+      marker.material.color.setHex(owned?COLORS[c.owner]:0xc9d0bb);marker.material.opacity=owned?.95:.62;
+      fill.material.color.setHex(owned?COLORS[c.owner]:0xcbce9e);fill.material.opacity=owned?(isSelected?.34:.28):reachable?.07:0;
+      if(hover)fill.material.opacity+=.045;fill.visible=fill.material.opacity>.001;
+      action.visible=!!(isSelected||reachable);action.material.opacity=isSelected?1:.78;
       const el=this.labelsById.get(c.id),anchorZ=c.z+(c.kind==='hq'?.82:c.kind==='relay'?.68:.38),pos=this.project(c.x,surfaceHeight(this.game.cells,c,c.x,anchorZ)+.24,anchorZ);
       el.className=`garrison ${c.owner}${isSelected?' selected':''}${reachable?' reachable':''}`;
       el.querySelector('.count').textContent=Math.floor(c.units);el.querySelector('.cell-symbol').textContent=c.kind==='hq'?'⌂':c.kind==='relay'?'⌁':c.height>0?'↑':'';

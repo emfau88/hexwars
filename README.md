@@ -10,6 +10,8 @@ One playable 37-hex battlefield with real elevation, two ramps, Orange vs Blue A
 
 **Camera update, saved locally:** 70° tactical view, optional 55° diorama view, geometry-based framing and corrected picking. [Angle comparison and camera QA](./experiments/hexfront-3d/docs/CAMERA.md). Push and redeployment are deferred at the owner's request: the online preview above still uses the previous camera; the screenshots below show the updated local production build.
 
+Persistent hex outlines and Orange/Blue territory fills now make ownership visible across the battlefield. A separate inset outline marks reachable targets without replacing team colours; the textured 3D terrain remains visible.
+
 The deployment is reported READY by Vercel. External browser verification was blocked by this workspace's network/DNS access; the identical production build was tested locally. The prototype does **not** yet match Tacticus's production art quality, and 60 FPS on real mobile devices is unverified.
 
 <table>
