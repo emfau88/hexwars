@@ -8,13 +8,15 @@ One playable 37-hex battlefield with real elevation, two ramps, Orange vs Blue A
 
 [Start instructions, controls and technical decisions](./experiments/hexfront-3d/README.md) · [QA and known limitations](./experiments/hexfront-3d/docs/QA.md) · [Asset licenses](./experiments/hexfront-3d/ASSET_LICENSES.md)
 
+**Camera update, saved locally:** 70° tactical view, optional 55° diorama view, geometry-based framing and corrected picking. [Angle comparison and camera QA](./experiments/hexfront-3d/docs/CAMERA.md). Push and redeployment are deferred at the owner's request: the online preview above still uses the previous camera; the screenshots below show the updated local production build.
+
 The deployment is reported READY by Vercel. External browser verification was blocked by this workspace's network/DNS access; the identical production build was tested locally. The prototype does **not** yet match Tacticus's production art quality, and 60 FPS on real mobile devices is unverified.
 
 <table>
-  <tr><th>Desktop · 1366 × 768</th><th>Mobile portrait · 390 × 844</th></tr>
+  <tr><th>Desktop · 1440 × 900</th><th>Mobile portrait · 390 × 844</th></tr>
   <tr>
-    <td width="75%"><img src="./experiments/hexfront-3d/docs/screenshots/desktop.png" alt="Final HEXFRONT 3D experiment on desktop, with central rock plateau, ramps and HQs"></td>
-    <td width="25%"><img src="./experiments/hexfront-3d/docs/screenshots/mobile.png" alt="Final HEXFRONT 3D experiment in mobile portrait with touch controls"></td>
+    <td width="75%"><img src="./experiments/hexfront-3d/docs/camera/final-desktop.png" alt="Updated HEXFRONT 3D tactical camera at 70 degrees on desktop"></td>
+    <td width="25%"><img src="./experiments/hexfront-3d/docs/camera/final-mobile.png" alt="Updated HEXFRONT 3D tactical camera in mobile portrait with touch controls"></td>
   </tr>
 </table>
 

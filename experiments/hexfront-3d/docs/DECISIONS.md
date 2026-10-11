@@ -1,5 +1,7 @@
 # Technische Entscheidungen
 
+**Kamera-Nachtrag:** Die frühere Perspektive wurde durch 70° Taktik / 55° Diorama ersetzt. Kamera-Fit, Pan-Grenzen und Input-Korrekturen sowie der dokumentierte 60°/70°/80°-Vergleich stehen in [CAMERA.md](CAMERA.md). Spielregeln, KI, Leveldaten und Assets dieses Nachtrags bleiben identisch zum vorherigen Stand `622b485`.
+
 ## Ausgangspunkt
 
 Geprüfter Repository-Stand: `29ff12d6897db9b994b97be980efb0037e54d476` (`main`, 24.09.2026).
@@ -40,4 +42,4 @@ Der ursprüngliche Arbeitsordner war leer. Direktes Git-HTTPS scheiterte in der 
 
 Der Code und alle neuen Assets liegen ausschließlich unter `experiments/hexfront-3d/`. Auf ausdrücklichen Wunsch wird zusätzlich die Root-README auf dem Experiment-Branch um Testlink und Screenshots ergänzt. Der Veröffentlichungs-Workflow und das Hauptspiel werden weder modifiziert noch gemergt. Der eigenständige Produktionsordner wird in einem neuen Vercel-Projekt ohne Git-Anbindung gehostet; dieses hat keine Verbindung zum bisherigen GitHub-Pages-Deployment.
 
-Der vollständige Touch-Test deckte überlagerte Feldanzeigen an Höhenkanten auf. Die finale Anzeige löst Kollisionen im Bildschirmraum einschließlich der vergrößerten Touch-Flächen. Feine Verbindungslinien ordnen verschobene Anzeigen weiterhin ihrer tatsächlichen Oberfläche zu. Raycasting, Spielpositionen und Navigation bleiben unverändert.
+Der ursprüngliche vollständige Touch-Test deckte überlagerte Feldanzeigen an Höhenkanten auf. Die Anzeige löst Kollisionen im Bildschirmraum einschließlich der vergrößerten Touch-Flächen. Feine Verbindungslinien ordnen verschobene Anzeigen weiterhin ihrer tatsächlichen Oberfläche zu. Im Kamera-Nachtrag wurden zusätzlich das Picking vor und hinter massiver Geometrie und die Projektion von Labels auf Rampen korrigiert. Spielpositionen und Navigation bleiben unverändert.

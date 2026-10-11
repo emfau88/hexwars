@@ -3,3 +3,4 @@ dist/
 test-results/
 .openai/
 *.log
+docs/camera/input-failure.png

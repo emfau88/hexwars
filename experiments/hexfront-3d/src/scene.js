@@ -2,6 +2,7 @@ import * as T from 'three';
 import {GLTFLoader} from '../vendor/loaders/GLTFLoader.js';
 import {mergeGeometries} from '../vendor/utils/BufferGeometryUtils.js';
 import {RADIUS,STEP,corner,cornerHeight,surfaceHeight,neighbors,traversable,edgeKey,RAMPS} from './map.js';
+import {CAMERA_VIEWS,MAX_ZOOM,cameraBasis,projectedBounds,frameBattlefield} from './camera.js';
 
 const COLORS={orange:0xd59a59,blue:0x70a5bd,neutral:0x9eaa96};
 const fract=n=>n-Math.floor(n);
@@ -42,7 +43,8 @@ function ringGeometry(cell,cells,scale=.91,width=.012){
 
 export class Diorama {
   constructor(container,labels,game,onSelect,onHover){
-    this.container=container;this.labels=labels;this.game=game;this.onSelect=onSelect;this.onHover=onHover;this.selected=null;this.hovered=null;this.zoom=1;this.pan=new T.Vector3();this.quality='high';this.animations=[];this.markers=new Map();this.labelsById=new Map();this.picks=[];this.disposed=false;this.reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.container=container;this.labels=labels;this.game=game;this.onSelect=onSelect;this.onHover=onHover;this.selected=null;this.hovered=null;this.zoom=1;this.quality='high';this.animations=[];this.markers=new Map();this.labelsById=new Map();this.picks=[];this.disposed=false;this.reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.view='tactical';this.angle=CAMERA_VIEWS.tactical;this.viewPan={u:0,v:0};this.boundsCache=new Map();this.occluders=[];
     this.scene=new T.Scene();this.scene.background=new T.Color(0x192321);this.scene.fog=new T.Fog(0x192321,28,63);
     this.camera=new T.OrthographicCamera(-10,10,10,-10,.1,100);
     this.renderer=new T.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});
@@ -68,7 +70,7 @@ export class Diorama {
     this.contact=new T.MeshBasicMaterial({map:shadowTexture(),transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2});
     this.buildTerrain();this.buildStructures();this.buildMarkers();this.buildRovers();this.bind();this.resize();
     this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(container);
-    this.ready=this.loadAssets().then(()=>{this.batchStatic();this.render(0);});
+    this.ready=this.loadAssets().then(()=>{this.captureBattlefieldGeometry();this.batchStatic();this.resize();this.render(0);});
   }
   contactAt(x,z,y,sx,sz){const m=mesh(this.static,new T.PlaneGeometry(sx,sz),this.contact,x,y+.018,z);m.rotation.x=-Math.PI/2;m.castShadow=false;m.receiveShadow=false;}
   buildTerrain(){
@@ -102,7 +104,7 @@ export class Diorama {
       }
     }
     for(const [pos,uv,colors,mat] of [[tops,topUV,topColors,this.materials.soil],[walls,wallUV,wallColors,this.materials.rock]]){
-      const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(pos,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setAttribute('color',new T.Float32BufferAttribute(colors,3));g.computeVertexNormals();mesh(this.static,g,mat);
+      const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(pos,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setAttribute('color',new T.Float32BufferAttribute(colors,3));g.computeVertexNormals();const terrain=mesh(this.static,g,mat);terrain.userData.pickKind=mat===this.materials.rock?'cliff':'ground';
     }
     const floor=mesh(this.static,new T.PlaneGeometry(200,200),new T.ShadowMaterial({color:0x07110c,opacity:.22}),0,-1.3,0);floor.rotation.x=-Math.PI/2;floor.castShadow=false;
     // Worn inset pavers and raised guard strips give the two ramps physical direction.
@@ -118,7 +120,7 @@ export class Diorama {
   buildStructures(){
     const m=this.materials;
     for(const c of this.game.cells.filter(c=>c.kind==='hq')){
-      const g=new T.Group();g.position.set(c.x,c.height*STEP,c.z-.12);if(c.hq==='blue')g.rotation.y=Math.PI;this.static.add(g);
+      const g=new T.Group();g.userData.pickCell=c.id;g.position.set(c.x,c.height*STEP,c.z-.12);if(c.hq==='blue')g.rotation.y=Math.PI;this.static.add(g);
       this.contactAt(c.x,c.z,c.height*STEP,2.4,2.3);
       mesh(g,bevel(1.7,1.32,.13),m.concrete);mesh(g,bevel(1.3,1.02,.48,.19),m.olive,0,.13,0);
       mesh(g,bevel(1.35,1.07,.11,.16),m.dark,0,.64,0);mesh(g,bevel(1.2,.93,.07,.15),m.steel,0,.76,0);
@@ -136,7 +138,7 @@ export class Diorama {
       // Segmented conduit and a service hatch give a readable miniature silhouette.
       for(let i=0;i<3;i++)cylinder(g,m.steel,.07,.07,.3,.57,.3,-.2-i*.2,8);
     }
-    const c=this.game.cell('0,0'),g=new T.Group();g.position.set(c.x,STEP*2,c.z-.16);this.static.add(g);this.contactAt(c.x,c.z,STEP*2,2,2);
+    const c=this.game.cell('0,0'),g=new T.Group();g.userData.pickCell=c.id;g.position.set(c.x,STEP*2,c.z-.16);this.static.add(g);this.contactAt(c.x,c.z,STEP*2,2,2);
     cylinder(g,m.concrete,.67,.75,.13,0,.06,0,6);cylinder(g,m.dark,.38,.48,.25,0,.23,0,8);
     cylinder(g,m.olive,.24,.32,.95,0,.8,0,8);cylinder(g,m.steel,.45,.36,.12,0,1.2,0,8);
     cylinder(g,m.light,.13,.13,.72,0,.82,0,12);
@@ -167,7 +169,7 @@ export class Diorama {
       }}});
       this.assets[name]=wrap;
     }));
-    const place=(name,x,z,width,y=0,rotation=0)=>{const g=this.assets[name].clone(true),scale=width/g.userData.width;g.scale.setScalar(scale);g.position.set(x,y,z);g.rotation.y=rotation;this.static.add(g);this.contactAt(x,z,y,width*1.3,width*.9);return g;};
+    const place=(name,x,z,width,y=0,rotation=0)=>{const g=this.assets[name].clone(true),scale=width/g.userData.width;g.userData.pickCell=this.cellAt(x,z)?.id??null;g.scale.setScalar(scale);g.position.set(x,y,z);g.rotation.y=rotation;this.static.add(g);this.contactAt(x,z,y,width*1.3,width*.9);return g;};
     for(let i=0;i<this.land.length;i++){
       const c=this.land[i],rim=c.kind==='rim',seed=hash(c.q+11,c.r+8);
       if(rim){
@@ -198,6 +200,25 @@ export class Diorama {
     });
     for(const o of remove)o.removeFromParent();
     for(const g of groups.values()){const merged=mergeGeometries(g.geos);if(!merged)throw Error('Static scenery batching failed');const m=mesh(this.scene,merged,g.material);m.castShadow=g.cast;m.receiveShadow=g.receive;for(const geo of g.geos)geo.dispose();}
+  }
+  cellAt(x,z){
+    // Pointy hex half-planes; logical IDs remain independent of the camera.
+    return this.game.cells.find(c=>{const dx=Math.abs(x-c.x),dz=Math.abs(z-c.z);return dx<=Math.sqrt(3)*RADIUS/2+.001&&dz<=RADIUS+.001&&dx/Math.sqrt(3)+dz<=RADIUS+.001;});
+  }
+  captureBattlefieldGeometry(){
+    this.static.updateMatrixWorld(true);const points=[],tacticalPoints=[],v=new T.Vector3();this.occluders=[];
+    this.static.traverse(o=>{
+      if(!o.isMesh||o.material.isShadowMaterial||o.material===this.contact)return;
+      let owner=o;while(owner&&!Object.hasOwn(owner.userData,'pickCell'))owner=owner.parent;
+      const attr=o.geometry.attributes.position;for(let i=0;i<attr.count;i++){v.fromBufferAttribute(attr,i).applyMatrix4(o.matrixWorld);points.push(v.x,v.y,v.z);if(owner?.userData.pickCell||this.cellAt(v.x,v.z))tacticalPoints.push(v.x,v.y,v.z);}
+      const materials=Array.isArray(o.material)?o.material:[o.material];if(materials.some(m=>m.transparent||m.alphaTest))return;
+      o.userData.pickCell=owner?.userData.pickCell??null;
+      // Keep the unbatched meshes only as frozen CPU hit surfaces. Rendering
+      // still uses the original material batches; no extra draw calls.
+      this.occluders.push(o);
+    });
+    this.relayRing.updateMatrixWorld(true);const attr=this.relayRing.geometry.attributes.position;for(let i=0;i<attr.count;i++){v.fromBufferAttribute(attr,i).applyMatrix4(this.relayRing.matrixWorld);points.push(v.x,v.y,v.z);}
+    this.fitPoints=new Float32Array(points);this.tacticalFitPoints=new Float32Array(tacticalPoints);this.boundsCache.clear();
   }
   buildMarkers(){
     this.leaderLines=document.createElementNS('http://www.w3.org/2000/svg','svg');this.leaderLines.classList.add('label-leaders');this.leaderLines.setAttribute('aria-hidden','true');this.labels.append(this.leaderLines);
@@ -232,15 +253,27 @@ export class Diorama {
   select(id){this.selected=id;}
   hover(id){this.hovered=id;}
   setQuality(mode){this.quality=mode;this.renderer.setPixelRatio(mode==='low'?1:Math.min(devicePixelRatio,1.6));this.sun.shadow.mapSize.setScalar(mode==='low'?1024:2048);if(this.sun.shadow.map){this.sun.shadow.map.dispose();this.sun.shadow.map=null;}this.sun.shadow.needsUpdate=true;this.resize();}
-  fit(){this.zoom=1;this.pan.set(0,0,0);this.resize();}
-  zoomBy(factor){this.zoom=T.MathUtils.clamp(this.zoom*factor,1,1.85);this.resize();}
+  setView(view){this.view=view;this.setAngle(CAMERA_VIEWS[view]);this.onViewChange?.(this.view);}
+  setAngle(angle){this.angle=T.MathUtils.clamp(angle,50,85);this.zoom=1;this.viewPan={u:0,v:0};this.resize();}
+  fit(){this.setView('tactical');}
+  zoomBy(factor,anchor){
+    const old=this.framing;if(!old)return;
+    const x=(anchor?.x??this.width/2)-this.width/2,y=this.height/2-(anchor?.y??this.height/2);
+    const worldU=old.centerU+x/old.scale,worldV=old.centerV+y/old.scale;
+    this.zoom=T.MathUtils.clamp(this.zoom*factor,1,MAX_ZOOM);this.resize();
+    this.viewPan.u+=worldU-this.framing.centerU-x/this.framing.scale;this.viewPan.v+=worldV-this.framing.centerV-y/this.framing.scale;this.resize();
+  }
   resize(){
     const w=this.container.clientWidth,h=this.container.clientHeight;if(!w||!h)return;
-    this.renderer.setSize(w,h,false);const aspect=w/h;
-    const halfHeight=Math.max(6.7,9.3/aspect)/this.zoom;
-    this.camera.left=-halfHeight*aspect;this.camera.right=halfHeight*aspect;this.camera.top=halfHeight;this.camera.bottom=-halfHeight;
-    const target=new T.Vector3(this.pan.x,.65,this.pan.z);this.camera.position.copy(target).add(new T.Vector3(7.5,w<640?24:20,20));this.camera.lookAt(target);this.camera.updateProjectionMatrix();this.camera.updateMatrixWorld();
+    this.renderer.setSize(w,h,false);
+    if(!this.fitPoints)this.captureBattlefieldGeometry();
+    const basis=cameraBasis(this.angle),key=`${this.view}:${this.angle}`;let bounds=this.boundsCache.get(key);if(!bounds){bounds=projectedBounds(this.view==='diorama'?this.fitPoints:this.tacticalFitPoints,basis);this.boundsCache.set(key,bounds);}
+    const f=frameBattlefield(bounds,w,h,this.zoom,this.viewPan);this.framing=f;this.projectedWorldBounds=bounds;this.viewPan={u:f.u,v:f.v};
+    this.camera.position.fromArray(basis.out).multiplyScalar(30);this.camera.lookAt(0,0,0);
+    this.camera.left=f.centerU-f.halfW;this.camera.right=f.centerU+f.halfW;this.camera.top=f.centerV+f.halfH;this.camera.bottom=f.centerV-f.halfH;this.camera.updateProjectionMatrix();this.camera.updateMatrixWorld();
     this.width=w;this.height=h;
+    this.container.dataset.zoomed=String(this.zoom>1.01);
+    this.onFrameChange?.({zoom:this.zoom,small:Math.sqrt(3)*RADIUS*f.fitScale*Math.sin(this.angle*Math.PI/180)<44});
   }
   project(x,y,z){const v=new T.Vector3(x,y,z).project(this.camera);return {x:(v.x*.5+.5)*this.width,y:(-.5*v.y+.5)*this.height};}
   layoutLabels(entries){
@@ -263,20 +296,36 @@ export class Diorama {
     }
     this.leaderLines.innerHTML=lines.join('');
   }
-  screenCell(id){const c=this.game.cell(id),p=this.project(c.x,c.height*STEP+.24,c.z+.36);const rect=this.container.getBoundingClientRect();return {x:p.x+rect.left,y:p.y+rect.top};}
-  pick(event){const rect=this.renderer.domElement.getBoundingClientRect();const pointer=new T.Vector2((event.clientX-rect.left)/rect.width*2-1,-(event.clientY-rect.top)/rect.height*2+1),ray=new T.Raycaster();ray.setFromCamera(pointer,this.camera);return ray.intersectObjects(this.picks)[0]?.object.userData.cellId||null;}
+  screenCell(id){const c=this.game.cell(id),x=c.x,z=c.z+.36,p=this.project(x,surfaceHeight(this.game.cells,c,x,z)+.015,z);const rect=this.container.getBoundingClientRect();return {x:p.x+rect.left,y:p.y+rect.top};}
+  pick(event){
+    const rect=this.renderer.domElement.getBoundingClientRect(),pointer=new T.Vector2((event.clientX-rect.left)/rect.width*2-1,-(event.clientY-rect.top)/rect.height*2+1),ray=new T.Raycaster();ray.setFromCamera(pointer,this.camera);
+    const ground=ray.intersectObjects(this.picks,false)[0],object=ray.intersectObjects(this.occluders,false)[0];this.lastPick={kind:'ground',id:ground?.object.userData.cellId??null};
+    if(object&&(!ground||object.distance<ground.distance-.045)){
+      const id=object.object.userData.pickCell;this.lastPick={kind:object.object.userData.pickKind==='cliff'?'cliff':'object',id:id??null};return id??null;
+    }
+    return this.lastPick.id;
+  }
   bind(){
-    const canvas=this.renderer.domElement;this.pointers=new Map();
-    canvas.addEventListener('pointerdown',e=>{canvas.setPointerCapture(e.pointerId);this.pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});this.down={x:e.clientX,y:e.clientY,pan:this.pan.clone(),moved:false};if(this.pointers.size===2){const p=[...this.pointers.values()];this.pinch={distance:Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y),zoom:this.zoom};}});
-    canvas.addEventListener('pointermove',e=>{
-      if(this.pointers.has(e.pointerId))this.pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
-      if(this.pointers.size===2&&this.pinch){const p=[...this.pointers.values()];this.zoom=T.MathUtils.clamp(this.pinch.zoom*Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y)/this.pinch.distance,1,1.85);this.down.moved=true;this.resize();return;}
-      if(this.pointers.size===1&&this.down){const dx=e.clientX-this.down.x,dy=e.clientY-this.down.y;if(Math.hypot(dx,dy)>8)this.down.moved=true;if(this.down.moved&&this.zoom>1){const scale=(this.camera.right-this.camera.left)/this.width;this.pan.x=T.MathUtils.clamp(this.down.pan.x-dx*scale*.92+dy*scale*.4,-5,5);this.pan.z=T.MathUtils.clamp(this.down.pan.z+dx*scale*.4+dy*scale*.92,-5,5);this.resize();}return;}
-      this.onHover(this.pick(e));
+    const canvas=this.renderer.domElement,input=this.container;this.pointers=new Map();
+    input.addEventListener('click',e=>{if((this.suppressNextClick&&e.detail>0)||performance.now()<(this.suppressClickUntil||0)){this.suppressNextClick=false;e.preventDefault();e.stopImmediatePropagation();}},true);
+    input.addEventListener('pointerdown',e=>{
+      if(!this.pointers.size)this.suppressNextClick=false;
+      // Chrome may retarget a touch on visible canvas to a nearby HTML button.
+      // Use the actual hit at the unchanged pointer coordinates instead.
+      const label=document.elementFromPoint(e.clientX,e.clientY)?.closest('.garrison'),retargeted=label!==e.target.closest('.garrison');
+      if(!label||retargeted)input.setPointerCapture(e.pointerId);this.pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+      if(this.pointers.size===1)this.down={x:e.clientX,y:e.clientY,pan:{...this.viewPan},moved:false,label:label?.dataset.cell,retargeted};
+      else{this.down.moved=true;for(const id of this.pointers.keys())input.setPointerCapture(id);const p=[...this.pointers.values()];this.pinch={distance:Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y)};}
     });
-    canvas.addEventListener('pointerup',e=>{if(this.pointers.size===1&&this.down&&!this.down.moved)this.onSelect(this.pick(e));this.pointers.delete(e.pointerId);this.pinch=null;});
-    canvas.addEventListener('pointercancel',e=>{this.pointers.delete(e.pointerId);this.pinch=null;this.down=null;});
-    canvas.addEventListener('wheel',e=>{e.preventDefault();this.zoomBy(e.deltaY>0?.92:1.08);},{passive:false});
+    input.addEventListener('pointermove',e=>{
+      if(this.pointers.has(e.pointerId))this.pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+      if(this.pointers.size===2&&this.pinch){const p=[...this.pointers.values()],distance=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y),rect=canvas.getBoundingClientRect();this.zoomBy(distance/Math.max(1,this.pinch.distance),{x:(p[0].x+p[1].x)/2-rect.left,y:(p[0].y+p[1].y)/2-rect.top});this.pinch.distance=distance;return;}
+      if(this.pointers.size===1&&this.down){const dx=e.clientX-this.down.x,dy=e.clientY-this.down.y;if(Math.hypot(dx,dy)>8){this.down.moved=true;input.setPointerCapture(e.pointerId);}if(this.down.moved&&this.zoom>1&&!this.pinch){this.viewPan={u:this.down.pan.u-dx/this.framing.scale,v:this.down.pan.v+dy/this.framing.scale};this.resize();}return;}
+      this.onHover(e.target.closest('.garrison')?.dataset.cell||this.pick(e));
+    });
+    input.addEventListener('pointerup',e=>{if(this.down?.moved)this.suppressClickUntil=performance.now()+350;if(this.down?.retargeted)this.suppressNextClick=true;if(this.pointers.size===1&&this.down&&!this.down.moved){if(!this.down.label){const id=this.pick(e);this.onSelect(id,this.lastPick.kind==='cliff'?'cliff':null);}else if(this.down.retargeted)this.onSelect(this.down.label);}this.pointers.delete(e.pointerId);if(!this.pointers.size){this.pinch=null;this.down=null;}});
+    input.addEventListener('pointercancel',()=>{this.pointers.clear();this.pinch=null;this.down=null;this.suppressClickUntil=performance.now()+350;});
+    input.addEventListener('wheel',e=>{e.preventDefault();const rect=canvas.getBoundingClientRect();this.zoomBy(e.deltaY>0?.92:1.08,{x:e.clientX-rect.left,y:e.clientY-rect.top});},{passive:false});
   }
   effect(event){if(!event.id)return;const c=this.game.cell(event.id);if(!c)return;const m=new T.Mesh(new T.RingGeometry(.1,.14,32),new T.MeshBasicMaterial({color:COLORS[event.owner],transparent:true,opacity:.7,side:T.DoubleSide,depthWrite:false}));m.rotation.x=-Math.PI/2;m.position.set(c.x,c.height*STEP+.1,c.z);this.scene.add(m);this.animations.push({mesh:m,start:performance.now()});}
   updateRovers(time){
@@ -291,10 +340,10 @@ export class Diorama {
     const selected=this.game.cell(this.selected),labelEntries=[];
     for(const c of this.game.cells){
       const {marker,fill}=this.markers.get(c.id),isSelected=c.id===this.selected,reachable=selected&&selected.owner==='orange'&&!!this.game.path(selected,c),hover=c.id===this.hovered;
-      marker.material.color.setHex(isSelected?0xf2d9a4:reachable?0xe0d5ac:COLORS[c.owner]);marker.material.opacity=isSelected?.95:reachable?.7:c.owner==='neutral'?.24:.56;
+      marker.material.color.setHex(isSelected?0xf2d9a4:reachable?0xe0d5ac:COLORS[c.owner]);marker.material.opacity=isSelected?.95:reachable?.7:c.owner==='neutral'?.38:.56;
       fill.material.color.setHex(isSelected?COLORS.orange:reachable?0xcbce9e:COLORS[c.owner]);fill.material.opacity=isSelected?.16:reachable?.08:c.owner!=='neutral'?.045:0;
       if(hover)fill.material.opacity+=.055;fill.visible=fill.material.opacity>.001;
-      const el=this.labelsById.get(c.id),pos=this.project(c.x,c.height*STEP+.24,c.z+(c.kind==='hq'?.82:c.kind==='relay'?.68:.38));
+      const el=this.labelsById.get(c.id),anchorZ=c.z+(c.kind==='hq'?.82:c.kind==='relay'?.68:.38),pos=this.project(c.x,surfaceHeight(this.game.cells,c,c.x,anchorZ)+.24,anchorZ);
       el.className=`garrison ${c.owner}${isSelected?' selected':''}${reachable?' reachable':''}`;
       el.querySelector('.count').textContent=Math.floor(c.units);el.querySelector('.cell-symbol').textContent=c.kind==='hq'?'⌂':c.kind==='relay'?'⌁':c.height>0?'↑':'';
       el.setAttribute('aria-label',`${c.name}, ${c.owner==='orange'?'Orange':c.owner==='blue'?'Blau':'neutral'}, ${Math.floor(c.units)} Truppen, Höhe ${c.height}`);el.setAttribute('aria-pressed',String(isSelected));

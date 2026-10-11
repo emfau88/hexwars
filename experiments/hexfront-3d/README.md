@@ -4,13 +4,15 @@ Ein isolierter, tatsächlich spielbarer 3D-Vertical-Slice mit **einem Level**, 3
 
 **[▶ Testversion im Browser öffnen](https://hexfront-3d-diorama.vercel.app/)** · [Experiment-Branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama)
 
-**Repository-Status:** Der Experiment-Branch und die README sind lokal vorbereitet. GitHub verweigert aktuell das Veröffentlichen mit HTTP 403; der Branch-Link funktioniert erst nach einem erfolgreichen Push mit erneuertem Schreibzugriff.
+**Kamera-Update:** Standard ist jetzt eine orthografische **70°-Taktikansicht**, ergänzt um eine feste 55°-Dioramaansicht. Framing, begrenzter Zoom und Verschieben richten sich nach der tatsächlichen projizierten Geometrie. [Vorher/60°/70°/80°-Vergleich und Eingabetests](docs/CAMERA.md).
+
+**Veröffentlichungsstand:** Das Kamera-Update ist lokal auf dem Experiment-Branch gespeichert. Push und erneutes Deployment sind auf Wunsch zurückgestellt. Der obige Testlink zeigt noch die frühere Kamera; die folgenden Screenshots zeigen den neuen, lokal geprüften Produktions-Build. Der GitHub-Branch-Link ist erst nach einem erfolgreichen Push verfügbar.
 
 Eigenständiges Vercel-Projekt ohne Verbindung zum bisherigen Pages-Deployment. Hosting-Status: READY. Der externe Browseraufruf konnte wegen Netzwerk-/DNS-Beschränkungen dieser Arbeitsumgebung nicht verifiziert werden; der identische Produktions-Build wurde lokal geprüft. Details stehen im [QA-Bericht](docs/QA.md).
 
-![Finale Desktop-Version, 1366 × 768](docs/screenshots/desktop.png)
+![70°-Taktikansicht, Desktop 1440 × 900](docs/camera/final-desktop.png)
 
-<img src="docs/screenshots/mobile.png" alt="Finale Mobile-Portrait-Version, 390 × 844" width="390">
+<img src="docs/camera/final-mobile.png" alt="70°-Taktikansicht, Mobile Portrait 390 × 844" width="390">
 
 ## Starten
 
@@ -53,7 +55,7 @@ Dann die LAN-Adresse des Computers mit Port 4174 öffnen. Eine entsprechende lok
 4. `50 %` teilt eine Garnison; `Alle − 1` lässt eine Einheit zurück. Eigene Zwischenfelder dürfen durchquert werden. Wird eine Route erobert, trifft der Konvoi dort auf den Gegner.
 5. Das gegnerische HQ einnehmen. Bei Sieg oder Niederlage lässt sich das identische Level neu starten.
 
-Maus und Touch verwenden denselben Ablauf mit expliziter Befehlsbestätigung. Mausrad, Pinch oder +/− zoomen; die vergrößerte Karte lässt sich ziehen. Die Kamera bleibt in einer festen orthografischen Perspektive. `⌖` setzt die Ansicht zurück. `?` öffnet die kurze Anleitung. Die Leertaste pausiert, wenn kein Steuerelement fokussiert ist. Die Partie pausiert auch beim Verlassen des Tabs; nach Rückkehr bewusst fortsetzen.
+Maus und Touch verwenden denselben Ablauf mit expliziter Befehlsbestätigung. **Taktik/Diorama** wechselt zwischen zwei festen orthografischen Perspektiven (70°/55° über dem Boden). Mausrad, Pinch oder +/− zoomen zwischen Übersicht und 2,2-facher Vergrößerung; die vergrößerte Karte lässt sich begrenzt ziehen. `⌖` stellt die vollständige taktische Übersicht wieder her. Auf sehr kurzen Smartphones nutzt du **+ für Details** und ziehst den Ausschnitt zum gewünschten Feld. Sichtbare Gebäude wählen ihre eigene logische Zelle; Felswände melden eine ungültige Auswahl. `?` öffnet die kurze Anleitung. Die Leertaste pausiert, wenn kein Steuerelement fokussiert ist. Die Partie pausiert auch beim Verlassen des Tabs; nach Rückkehr bewusst fortsetzen.
 
 **Taktik:** Die beiden schmalen Aufstiege sind Engpässe. Bergauf besitzt der Verteidiger +30 % Stärke, bergab der Angreifer +15 %. Das HQ bietet +20 % Verteidigung. Es gilt nur der größere Verteidigungsbonus; es wird kein zusätzlicher alter Hill-Bonus angewendet. Das Relais erhöht die eigene Produktion um 30 %. Ein Angriff kann sich während der Anreise durch gegnerische Verstärkungen verändern.
 
@@ -70,9 +72,12 @@ Für die optionalen Chromium-Tests:
 npm install --no-save --package-lock=false playwright@1.62.1
 npx playwright install chromium
 npm run test:browser
+npm run test:camera
 ```
 
 `node tests/hosted.mjs` prüft die öffentliche Produktions-URL mit echten Maus-/Touchbefehlen und nimmt die Abgabe-Screenshots auf. Mit `PREVIEW_URL=local` startet der Test selbst einen Produktionsserver auf Port 4178; alternativ akzeptiert die Variable eine eigene URL. In PowerShell: `$env:PREVIEW_URL='local'; node tests/hosted.mjs`. In dieser Umgebung war nur dieser lokale Durchlauf möglich.
+
+Für die aktuellen Kamera-Abgabebilder: `$env:PREVIEW_URL='local'; node tests/hosted.mjs --camera`. Der Winkelvergleich und die Eingabetests speichern ihre Belege in `docs/camera/`. `docs/screenshots/` und `docs/QA.md` dokumentieren zusätzlich die ursprüngliche Prototype-Abnahme vor dem Kamera-Update.
 
 Der Browsertest startet eigene lokale Server, testet Desktop und Touch-Portrait, schreibt Screenshots und einen maschinenlesbaren Bericht nach `test-results/` und beendet die von ihm gestarteten Prozesse. Eine vorhandene Playwright-Installation lässt sich alternativ über `PLAYWRIGHT_MODULE` angeben; `PLAYWRIGHT_BROWSERS_PATH` wird von Playwright unterstützt.
 

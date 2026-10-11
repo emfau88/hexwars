@@ -3,11 +3,16 @@ import {Diorama} from './scene.js';
 const ALLOW_QA = true;
 const MANUAL_CLOCK = ALLOW_QA && new URLSearchParams(location.search).get('clock')==='manual';
 const $=id=>document.getElementById(id),game=new Battle();
+// Reserve the actual command panel height, including wrapped text on phones.
+// ResizeObserver then lets the camera fit its remaining visible canvas.
+const fitHUD=()=>{document.querySelector('main').style.setProperty('--battle-bottom',`${Math.ceil(innerHeight-document.querySelector('.command-panel').getBoundingClientRect().top+20)}px`);};
+new ResizeObserver(fitHUD).observe(document.querySelector('.command-panel'));window.addEventListener('resize',fitHUD);fitHUD();
 let scene,selected=null,pending=null,fraction=1,loaded=false,last=0,accumulator=0,lastUI=0,toastTimer,autoPaused=false,helpWasPaused=false;
 const time=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(Math.floor(s%60)).padStart(2,'0')}`;
 function toast(text){$('toast').textContent=text;$('toast').classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('visible'),4200);}
-function select(id){
+function select(id,blocked){
   if(!loaded)return;
+  if(blocked==='cliff'){toast('Felswand. Wähle die sichtbare Feldoberfläche oder ihre Truppenzahl.');return;}
   if(!game.running||game.paused){if(game.paused)toast('Die Schlacht pausiert. Mit ▶ fortsetzen.');else if(!game.result)toast('Starte die Operation, um Befehle zu geben.');return;}
   const c=game.cell(id);
   if(!c){selected=null;pending=null;}
@@ -67,11 +72,14 @@ const closeHelp=()=>{$('help-dialog').close();};$('close-help').addEventListener
 $('help-dialog').addEventListener('close',()=>{if(game.running&&!autoPaused)game.paused=helpWasPaused;updateUI();});
 $('restart').addEventListener('click',restart);$('inspect').addEventListener('click',()=>$('result-dialog').close());
 $('zoom-in').addEventListener('click',()=>scene?.zoomBy(1.15));$('zoom-out').addEventListener('click',()=>scene?.zoomBy(1/1.15));$('fit').addEventListener('click',()=>scene?.fit());
+$('camera-view').addEventListener('click',()=>scene?.setView(scene.view==='tactical'?'diorama':'tactical'));
 $('quality').addEventListener('click',()=>{if(!scene)return;const low=scene.quality==='high';scene.setQuality(low?'low':'high');$('quality').textContent=low?'LQ':'HQ';$('quality').setAttribute('aria-label',`Grafikqualität: ${low?'Reduziert':'Hoch'}`);toast(low?'Reduzierte Auflösung und Schattenqualität aktiviert.':'Hohe Grafikqualität aktiviert.');});
 document.addEventListener('keydown',e=>{if(e.code==='Space'&&e.target===document.body){e.preventDefault();togglePause();}if(e.key==='Escape'&&!$('help-dialog').open&&!$('result-dialog').open){selected=null;pending=null;scene?.select(null);updateUI();}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&game.running&&!game.paused){game.paused=true;autoPaused=true;updateUI();}last=performance.now();accumulator=0;});
 try {
   scene=new Diorama($('stage'),$('labels'),game,select,hover);
+  scene.onFrameChange=({zoom,small})=>{const hint=$('camera-guidance');hint.hidden=!small&&zoom<=1.01;hint.querySelector('b').textContent=zoom>1.01?'Ausschnitt':'Übersicht';hint.querySelector('span').textContent=zoom>1.01?'Ziehen · ⌖ zurück':'+ für Details';};
+  scene.onViewChange=view=>{$('camera-view').textContent=view==='tactical'?'Taktik':'Diorama';$('camera-view').setAttribute('aria-pressed',String(view==='diorama'));$('camera-view').setAttribute('aria-label',view==='tactical'?'Taktikansicht. Zur Dioramaansicht wechseln':'Dioramaansicht. Zur Taktikansicht wechseln');};
   scene.renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();game.paused=true;toast('Grafikverbindung verloren. Bitte die Seite neu laden.');updateUI();});
   await scene.ready;loaded=true;$('loading').hidden=true;updateUI();
   const frame=now=>{const dt=last?Math.min((now-last)/1000,.2):0;last=now;if(!document.hidden){accumulator+=dt;while(accumulator>=.05){if(!MANUAL_CLOCK)game.update(.05);accumulator-=.05;}processEvents();if(now-lastUI>130){updateUI();lastUI=now;}scene.render(now);}requestAnimationFrame(frame);};requestAnimationFrame(frame);

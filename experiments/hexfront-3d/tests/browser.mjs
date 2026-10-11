@@ -43,23 +43,25 @@ try{
     assert.match(await page.locator('#toast').innerText(),/Kein begehbarer Weg|Felswände/);assert.equal((await snapshot()).commands,0);
     await click('#clear');
     const initial=await snapshot();assert.equal(initial.cells.length,37);assert.equal(initial.cells.find(c=>c.hq==='orange').units,40);
-    await advance(5.05);let turn=0,captured=false;
+    await advance(5.05);let turn=0,captured=false;const selectedHeights=new Set();
     while(!(await snapshot()).result&&turn<120){
       const action=await page.evaluate(()=>window.__HEXFRONT3D__.suggest());
       if(action){
         if(await page.locator('#clear').isVisible())await click('#clear');
         await click(`[data-cell="${action.from}"]`);
+        assert.equal(await page.locator(`[data-cell="${action.from}"]`).getAttribute('aria-pressed'),'true');selectedHeights.add((await snapshot()).cells.find(c=>c.id===action.from).height);
         await click(action.fraction<.65?'#half':'#all');
         await click(`[data-cell="${action.to}"]`);
         assert.equal(await page.locator('#primary').isEnabled(),true);
         if(turn===20){await page.screenshot({path:path.join(output,`${name}-battle.png`)});captured=true;}
         const old=(await snapshot()).commands;await click('#primary');assert.equal((await snapshot()).commands,old+1);
+        if(turn===9){await click('#camera-view');assert.match(await page.locator('#camera-view').innerText(),/Diorama/);assert.equal(await page.locator(`[data-cell="${action.from}"]`).getAttribute('aria-pressed'),'true');await click('#fit');assert.match(await page.locator('#camera-view').innerText(),/Taktik/);}
       }
       await advance(5.05);turn++;if(turn%15===0)console.log(`${name}: ${turn} human UI decisions, ${(await snapshot()).time.toFixed(1)} simulated seconds`);
     }
     let state=await snapshot();assert.equal(state.result,'victory',`${name}: complete UI match must win (time ${state.time})`);assert.ok(state.aiCommands>15);assert.ok(captured);
     await page.screenshot({path:path.join(output,`${name}-victory.png`)});
-    const victory={seconds:Number(state.time.toFixed(2)),commands:state.commands,aiCommands:state.aiCommands};
+    assert.deepEqual([...selectedHeights].sort(),[0,1,2]);const victory={seconds:Number(state.time.toFixed(2)),commands:state.commands,aiCommands:state.aiCommands,selectedHeights:[...selectedHeights].sort()};
     await click('#restart');state=await snapshot();assert.equal(state.time,0);assert.equal(state.result,null);assert.equal(state.commands,0);assert.equal(state.cells.find(c=>c.hq==='orange').units,40);
     await advance(400);state=await snapshot();assert.equal(state.result,'defeat');assert.equal(state.cells.find(c=>c.hq==='orange').owner,'blue');
     await page.screenshot({path:path.join(output,`${name}-defeat.png`)});const defeat={seconds:Number(state.time.toFixed(2)),aiCommands:state.aiCommands};

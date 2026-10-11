@@ -9,3 +9,19 @@
 @media(max-height:740px) and (max-width:640px){.topbar{height:57px}main{height:calc(100dvh - 57px)}.mission{top:14px}.battle-status{top:73px}#stage{top:125px;bottom:164px}.map-hint{bottom:145px}.command-panel{min-height:125px;padding:12px}.command-copy p{font-size:9px}.map-tools{top:139px}.objective strong{font-size:9px}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 .label-leaders{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;stroke:#b9bc97;stroke-width:1;fill:#d9cfaa;opacity:.65}.label-leaders path{fill:none}.garrison{min-width:34px}.garrison.neutral{min-width:28px}
+/* Camera framing: keep the existing visual language, reclaim HUD spacing. */
+.map-tools{flex-direction:row;top:18px;right:22px;gap:4px}.map-tools #camera-view{width:65px;font-size:10px}.map-tools button{min-height:36px;min-width:36px}#stage[data-zoomed=true] canvas{cursor:grab}#stage[data-zoomed=true] canvas:active{cursor:grabbing}
+@media(min-width:641px){.header-center{display:none}.battle-status{position:fixed;top:11px;left:calc(50% + 90px);z-index:11}#stage{top:10px;bottom:112px}.map-tools{top:12px}.map-hint{bottom:111px}.map-title{bottom:116px}}
+.garrison{touch-action:none}
+.camera-guidance{display:none;pointer-events:none}
+.time-status>strong{display:block;line-height:1.15}.time-status>small{display:block;line-height:1.4}
+@media(max-width:640px){
+  .mission{top:13px}.battle-status{top:67px}#stage{top:164px;bottom:165px}.map-tools{top:125px;right:12px}.map-hint{bottom:148px}#toast{top:169px}
+  .camera-guidance{display:block;position:absolute;left:20px;top:130px;font-size:8px;line-height:1.5;color:var(--muted);z-index:3}.camera-guidance b,.camera-guidance span{display:block}.camera-guidance b{font-weight:500;color:#c2cbbb}
+}
+@media(max-height:740px) and (max-width:640px){
+  .mission{top:10px;gap:8px}h1,h1 span{font-size:14px;letter-spacing:-.4px}h1 span:before{display:inline}.objective{gap:4px}.objective-icon{font-size:19px}.objective small{display:none}.objective strong{font-size:8px}
+  .battle-status{top:35px}.faction strong{font-size:21px}.faction em{display:none}.faction-mark{height:29px}.time-status>span{margin-bottom:2px}.time-status strong{font-size:14px}.territory-track{margin:4px 0 2px}
+  .map-tools{top:83px}#stage{top:122px;bottom:139px}.camera-guidance{top:87px}.map-hint{bottom:124px}.command-panel{min-height:113px;padding:10px;gap:8px}#toast{top:125px}
+}
+#stage{bottom:var(--battle-bottom,165px)}.map-hint{bottom:calc(var(--battle-bottom,165px) - 16px)}.map-title{bottom:calc(var(--battle-bottom,165px) - 6px)}
