@@ -8,7 +8,7 @@ const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),requi
 const server=spawn(process.execPath,['scripts/serve.mjs'],{cwd:root,env:{...process.env,PORT:'4181'},stdio:['ignore','pipe','pipe'],windowsHide:true});
 await new Promise((resolve,reject)=>{server.stdout.on('data',d=>{if(String(d).includes('http://'))resolve();});server.on('error',reject);});
 const browser=await chromium.launch({headless:true,args:['--disable-gpu-sandbox']}),report={runs:[],errors:[]};let page;
-const out=path.join(root,'docs/camera');await fs.mkdir(out,{recursive:true});
+const out=path.join(root,process.env.TEST_OUTPUT||'docs/camera');await fs.mkdir(out,{recursive:true});
 try{
  for(const [width,height] of [[1440,900],[390,844],[320,568],[375,667],[430,932]]){
   const mobile=width<640,context=await browser.newContext({viewport:{width,height},deviceScaleFactor:1,isMobile:mobile,hasTouch:mobile});page=await context.newPage();page.on('pageerror',e=>report.errors.push(e.message));

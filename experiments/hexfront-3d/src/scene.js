@@ -1,28 +1,10 @@
 import * as T from 'three';
-import {GLTFLoader} from '../vendor/loaders/GLTFLoader.js';
+import {createArtMaterials,buildArtTerrain,buildArtStructures,loadArtAssets} from './art.js';
 import {mergeGeometries} from '../vendor/utils/BufferGeometryUtils.js';
-import {RADIUS,STEP,corner,cornerHeight,surfaceHeight,neighbors,traversable,edgeKey,RAMPS} from './map.js';
+import {RADIUS,STEP,corner,surfaceHeight} from './map.js';
 import {CAMERA_VIEWS,MAX_ZOOM,cameraBasis,projectedBounds,frameBattlefield} from './camera.js';
 
 const COLORS={orange:0xd59a59,blue:0x70a5bd,neutral:0x9eaa96};
-const fract=n=>n-Math.floor(n);
-const hash=(x,y)=>fract(Math.sin(x*127.1+y*311.7)*43758.5453);
-const smooth=t=>t*t*(3-2*t);
-function noise(x,y){const a=Math.floor(x),b=Math.floor(y),u=smooth(fract(x)),v=smooth(fract(y));return T.MathUtils.lerp(T.MathUtils.lerp(hash(a,b),hash(a+1,b),u),T.MathUtils.lerp(hash(a,b+1),hash(a+1,b+1),u),v);}
-function texture(kind) {
-  const canvas=document.createElement('canvas');canvas.width=canvas.height=512;
-  const ctx=canvas.getContext('2d'),data=ctx.createImageData(512,512);
-  for(let y=0;y<512;y++)for(let x=0;x<512;x++){
-    const n=noise(x/70,y/70)*.5+noise(x/19,y/19)*.3+noise(x/4,y/4)*.2;
-    const grit=hash(x,y)*14;
-    let rgb;
-    if(kind==='soil'){const moss=Math.max(0,noise(x/97+14,y/97)-.52)*90;rgb=[111+n*62-moss,108+n*48+moss*.12,83+n*40-moss*.25];}
-    else if(kind==='rock'){const strata=Math.sin(y*.06+noise(x/18,y/26)*9)*4;rgb=[103+n*70+strata,111+n*68+strata,102+n*66+strata];}
-    else {const scratch=hash(x,Math.floor(y/20))>.992?35:0;rgb=[110+n*56+scratch,116+n*52+scratch,107+n*49+scratch];}
-    const i=(y*512+x)*4;for(let k=0;k<3;k++)data.data[i+k]=rgb[k]+grit;data.data[i+3]=255;
-  }
-  ctx.putImageData(data,0,0);const map=new T.CanvasTexture(canvas);map.colorSpace=T.SRGBColorSpace;map.wrapS=map.wrapT=T.RepeatWrapping;map.anisotropy=4;return map;
-}
 function shadowTexture(){const c=document.createElement('canvas');c.width=c.height=128;const ctx=c.getContext('2d'),g=ctx.createRadialGradient(64,64,4,64,64,64);g.addColorStop(0,'rgba(10,15,12,.56)');g.addColorStop(.4,'rgba(10,15,12,.25)');g.addColorStop(1,'rgba(10,15,12,0)');ctx.fillStyle=g;ctx.fillRect(0,0,128,128);return new T.CanvasTexture(c);}
 function bevel(width,depth,height,r=.09){
   const s=new T.Shape(),w=width/2,d=depth/2;
@@ -48,146 +30,22 @@ export class Diorama {
     this.scene=new T.Scene();this.scene.background=new T.Color(0x192321);this.scene.fog=new T.Fog(0x192321,28,63);
     this.camera=new T.OrthographicCamera(-10,10,10,-10,.1,100);
     this.renderer=new T.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});
-    this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.14;container.append(this.renderer.domElement);
+    this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFShadowMap;this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.10;container.append(this.renderer.domElement);
     this.renderer.domElement.setAttribute('aria-label','Dreidimensionales Schlachtfeld. Wähle eine orange Garnison und danach ein Ziel.');
-    this.scene.add(new T.HemisphereLight(0xd5e2df,0x414736,2.05));
-    this.sun=new T.DirectionalLight(0xffe5bb,3.25);this.sun.position.set(-9,17,8);this.sun.castShadow=true;this.sun.shadow.mapSize.set(2048,2048);Object.assign(this.sun.shadow.camera,{left:-12,right:12,top:12,bottom:-12,near:1,far:50});this.sun.shadow.bias=-.00025;this.sun.shadow.normalBias=.025;this.sun.shadow.radius=3;this.scene.add(this.sun);
-    const fill=new T.DirectionalLight(0xabc9da,.75);fill.position.set(9,8,-12);this.scene.add(fill);
+    this.scene.add(new T.HemisphereLight(0xdce5e7,0x727367,1.9));
+    this.sun=new T.DirectionalLight(0xffecd3,2.7);this.sun.position.set(-8,18,6);this.sun.castShadow=true;this.sun.shadow.mapSize.set(2048,2048);Object.assign(this.sun.shadow.camera,{left:-12,right:12,top:12,bottom:-12,near:1,far:50});this.sun.shadow.bias=-.00025;this.sun.shadow.normalBias=.018;this.sun.shadow.radius=3;this.scene.add(this.sun);
+    const fill=new T.DirectionalLight(0xb9cbd7,.50);fill.position.set(9,8,-12);this.scene.add(fill);
     this.static=new T.Group();this.scene.add(this.static);
-    const soil=texture('soil'),rock=texture('rock'),metal=texture('metal');
-    this.materials={
-      soil:new T.MeshStandardMaterial({map:soil,bumpMap:soil,bumpScale:.055,roughness:.95,vertexColors:true}),
-      rock:new T.MeshStandardMaterial({map:rock,bumpMap:rock,bumpScale:.10,roughness:.94,vertexColors:true}),
-      olive:new T.MeshStandardMaterial({color:0x778071,map:metal,bumpMap:metal,bumpScale:.015,roughness:.72,metalness:.36}),
-      steel:new T.MeshStandardMaterial({color:0x697574,map:metal,roughness:.54,metalness:.65}),
-      dark:new T.MeshStandardMaterial({color:0x293532,roughness:.75,metalness:.45}),
-      concrete:new T.MeshStandardMaterial({color:0xb3b19d,map:rock,roughness:.9}),
-      copper:new T.MeshStandardMaterial({color:0x976b42,roughness:.65,metalness:.65}),
-      light:new T.MeshStandardMaterial({color:0xb3ccad,emissive:0x81977a,emissiveIntensity:.7,roughness:.4}),
-      orange:new T.MeshStandardMaterial({color:COLORS.orange,roughness:.58,metalness:.3}),
-      blue:new T.MeshStandardMaterial({color:COLORS.blue,roughness:.58,metalness:.3}),
-    };
+    this.materials=createArtMaterials(game);
     this.contact=new T.MeshBasicMaterial({map:shadowTexture(),transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2});
     this.buildTerrain();this.buildStructures();this.buildMarkers();this.buildRovers();this.bind();this.resize();
     this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(container);
     this.ready=this.loadAssets().then(()=>{this.captureBattlefieldGeometry();this.batchStatic();this.resize();this.render(0);});
   }
   contactAt(x,z,y,sx,sz){const m=mesh(this.static,new T.PlaneGeometry(sx,sz),this.contact,x,y+.018,z);m.rotation.x=-Math.PI/2;m.castShadow=false;m.receiveShadow=false;}
-  buildTerrain(){
-    const playable=this.game.cells,all=[...playable];
-    for(let r=-4;r<=4;r++)for(let q=-4;q<=4;q++)if(Math.max(Math.abs(q),Math.abs(r),Math.abs(q+r))===4)all.push({id:`rim${q},${r}`,q,r,x:Math.sqrt(3)*RADIUS*(q+r/2),z:1.5*RADIUS*r,height:0,kind:'rim'});
-    this.land=all;const tops=[],topUV=[],topColors=[],walls=[],wallUV=[],wallColors=[];
-    const col=new T.Color();
-    const add=(pos,uv,colors,points,color,wall=false)=>{for(const [x,y,z] of points){pos.push(x,y,z);uv.push(wall?(x+z)*.7:x*.42,wall?y*.85:z*.42);col.set(color);const tint=.93+noise(x*2,z*2)*.13;col.multiplyScalar(tint);colors.push(col.r,col.g,col.b);}};
-    for(const c of all){
-      for(let i=0;i<6;i++){
-        const a=corner(c,i),b=corner(c,(i+1)%6),ah=c.kind==='rim'?0:cornerHeight(playable,c,i),bh=c.kind==='rim'?0:cornerHeight(playable,c,(i+1)%6);
-        // Clockwise in XZ is upward-facing in Three.js.
-        add(tops,topUV,topColors,[[c.x,c.height*STEP,c.z],[b.x,bh,b.z],[a.x,ah,a.z]],c.height===2?0xc6c5a1:c.kind==='rim'?0x8a926d:0xabb489);
-        const mid={x:(a.x+b.x)/2,z:(a.z+b.z)/2};const other=all.find(n=>n!==c&&Math.hypot(n.x-mid.x,n.z-mid.z)<RADIUS*.89);
-        let lowA=-1.25,lowB=-1.25;
-        if(other){lowA=other.kind==='rim'?0:surfaceHeight(playable,other,a.x,a.z);lowB=other.kind==='rim'?0:surfaceHeight(playable,other,b.x,b.z);}
-        if(ah<=lowA+.005&&bh<=lowB+.005)continue;
-        // Stratified connected cliff faces, split into three irregular rock bands.
-        for(let layer=0;layer<3;layer++){
-          const t0=layer/3,t1=(layer+1)/3;
-          const a0=lowA+(ah-lowA)*t0,a1=lowA+(ah-lowA)*t1,b0=lowB+(bh-lowB)*t0,b1=lowB+(bh-lowB)*t1;
-          const bulge0=Math.sin(t0*Math.PI)*.065,bulge1=Math.sin(t1*Math.PI)*.065;
-          const dx0=(mid.x-c.x)*bulge0,dz0=(mid.z-c.z)*bulge0,dx1=(mid.x-c.x)*bulge1,dz1=(mid.z-c.z)*bulge1;
-          add(walls,wallUV,wallColors,[[a.x+dx0,a0,a.z+dz0],[a.x+dx1,a1,a.z+dz1],[b.x+dx0,b0,b.z+dz0],[b.x+dx0,b0,b.z+dz0],[a.x+dx1,a1,a.z+dz1],[b.x+dx1,b1,b.z+dz1]],layer===0?0x788172:layer===1?0xadb29f:0xc2c2aa,true);
-        }
-      }
-      if(c.kind!=='rim'){
-        const p=[];for(let i=0;i<6;i++){const a=corner(c,i),b=corner(c,(i+1)%6);p.push(c.x,c.height*STEP,c.z,b.x,cornerHeight(playable,c,(i+1)%6),b.z,a.x,cornerHeight(playable,c,i),a.z);}
-        const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));g.computeVertexNormals();
-        const pick=new T.Mesh(g,new T.MeshBasicMaterial({visible:false,side:T.DoubleSide}));pick.userData.cellId=c.id;this.scene.add(pick);this.picks.push(pick);
-      }
-    }
-    for(const [pos,uv,colors,mat] of [[tops,topUV,topColors,this.materials.soil],[walls,wallUV,wallColors,this.materials.rock]]){
-      const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(pos,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setAttribute('color',new T.Float32BufferAttribute(colors,3));g.computeVertexNormals();const terrain=mesh(this.static,g,mat);terrain.userData.pickKind=mat===this.materials.rock?'cliff':'ground';
-    }
-    const floor=mesh(this.static,new T.PlaneGeometry(200,200),new T.ShadowMaterial({color:0x07110c,opacity:.22}),0,-1.3,0);floor.rotation.x=-Math.PI/2;floor.castShadow=false;
-    // Worn inset pavers and raised guard strips give the two ramps physical direction.
-    for(const c of playable.filter(c=>c.kind==='ramp')){
-      const ends=neighbors(playable,c).filter(n=>RAMPS.has(edgeKey(c,n)));
-      for(const n of ends){const dx=n.x-c.x,dz=n.z-c.z;for(let j=1;j<=7;j++){
-        const t=j/8,x=c.x+dx*t,z=c.z+dz*t,y=t<.5?surfaceHeight(playable,c,x,z):surfaceHeight(playable,n,x,z);
-        const plank=mesh(this.static,bevel(.065,.75,.025,.012),this.materials.steel,x,y+.026,z);plank.rotation.z=Math.atan2((n.height-c.height)*STEP,Math.hypot(dx,dz));
-      }}
-      for(const s of [-1,1]){const bolt=cylinder(this.static,this.materials.copper,.065,.075,.25,c.x,c.height*STEP+.13,c.z+s*.55,8);bolt.castShadow=true;}
-    }
-  }
-  buildStructures(){
-    const m=this.materials;
-    for(const c of this.game.cells.filter(c=>c.kind==='hq')){
-      const g=new T.Group();g.userData.pickCell=c.id;g.position.set(c.x,c.height*STEP,c.z-.12);if(c.hq==='blue')g.rotation.y=Math.PI;this.static.add(g);
-      this.contactAt(c.x,c.z,c.height*STEP,2.4,2.3);
-      mesh(g,bevel(1.7,1.32,.13),m.concrete);mesh(g,bevel(1.3,1.02,.48,.19),m.olive,0,.13,0);
-      mesh(g,bevel(1.35,1.07,.11,.16),m.dark,0,.64,0);mesh(g,bevel(1.2,.93,.07,.15),m.steel,0,.76,0);
-      mesh(g,bevel(.72,.12,.3,.02),m.dark,0,.22,.525);mesh(g,bevel(.61,.05,.035,.01),m[c.hq],0,.54,.607);
-      for(const x of [-.58,.58]){
-        mesh(g,bevel(.18,.38,.63,.04),m.concrete,x,.1,.21);
-        for(let j=0;j<4;j++)mesh(g,new T.BoxGeometry(.125,.03,.016),m.dark,x,.26+j*.08,.414);
-        cylinder(g,m.copper,.025,.025,.09,x,.81,-.3,6);
-      }
-      mesh(g,bevel(.6,.4,.06,.03),m[c.hq],.05,.86,0);
-      for(let i=0;i<6;i++)mesh(g,new T.BoxGeometry(.38,.015,.026),m.dark,.05,.929,-.13+i*.05);
-      cylinder(g,m.dark,.08,.13,.16,-.39,.95,-.3);cylinder(g,m.steel,.019,.028,.85,-.39,1.41,-.3,8);
-      const dish=mesh(g,new T.SphereGeometry(.24,12,6,0,Math.PI*2,0,Math.PI*.45),m.concrete,-.39,1.6,-.3);dish.rotation.z=-.7;
-      cylinder(g,m.light,.028,.028,.055,.46,.87,.32,8);
-      // Segmented conduit and a service hatch give a readable miniature silhouette.
-      for(let i=0;i<3;i++)cylinder(g,m.steel,.07,.07,.3,.57,.3,-.2-i*.2,8);
-    }
-    const c=this.game.cell('0,0'),g=new T.Group();g.userData.pickCell=c.id;g.position.set(c.x,STEP*2,c.z-.16);this.static.add(g);this.contactAt(c.x,c.z,STEP*2,2,2);
-    cylinder(g,m.concrete,.67,.75,.13,0,.06,0,6);cylinder(g,m.dark,.38,.48,.25,0,.23,0,8);
-    cylinder(g,m.olive,.24,.32,.95,0,.8,0,8);cylinder(g,m.steel,.45,.36,.12,0,1.2,0,8);
-    cylinder(g,m.light,.13,.13,.72,0,.82,0,12);
-    for(let i=0;i<4;i++){const a=i*Math.PI/2;mesh(g,bevel(.15,.17,1.01,.025),m.concrete,Math.cos(a)*.32,.24,Math.sin(a)*.32);}
-    cylinder(g,m.copper,.035,.06,.65,0,1.55,0,8);
-    this.relayRing=new T.Mesh(new T.TorusGeometry(.30,.014,5,32),m.light);this.relayRing.position.set(0,STEP*2+1.59,-.16);this.relayRing.rotation.x=Math.PI/2;this.scene.add(this.relayRing);
-    // Fractured flagstones across the plateau; inset, never separate hex columns.
-    for(const tile of this.game.cells.filter(c=>c.height===2&&c.kind!=='relay')){
-      for(let i=0;i<3;i++){const s=mesh(this.static,bevel(.39,.47,.018,.06),m.concrete,tile.x-.48+i*.45,STEP*2+.006,tile.z-.35+(i%2)*.13);s.rotation.y=.08*(i-1);}
-    }
-  }
-  async loadAssets(){
-    const loader=new GLTFLoader(),specs=[['rockA','nature/Rock_Medium_1.gltf'],['rockB','nature/Rock_Medium_2.gltf'],['bush','nature/Bush_Common.gltf'],['fern','nature/Fern_1.gltf'],['wall','scifi/WallAstra_Straight_Broken.gltf'],['console','scifi/Prop_AccessPoint.gltf']];
-    this.assets={};
-    await Promise.all(specs.map(async([name,file])=>{
-      const gltf=await loader.loadAsync(new URL(`../public/assets/${file}`,import.meta.url).href),s=gltf.scene;
-      const box=new T.Box3().setFromObject(s),size=box.getSize(new T.Vector3()),center=box.getCenter(new T.Vector3());
-      s.position.set(-center.x,-box.min.y,-center.z);const wrap=new T.Group();wrap.add(s);wrap.userData.width=Math.max(size.x,size.z);
-      s.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;const mats=Array.isArray(o.material)?o.material:[o.material];for(const mat of mats){
-        mat.roughness=Math.max(mat.roughness,.75);if(mat.map)mat.map.anisotropy=4;
-        if(name==='fern'||name==='bush'){mat.vertexColors=false;mat.color.setHex(0xb3bc97);o.geometry.deleteAttribute('color');}
-        if(name==='bush'){
-          // Quaternius _C is a packed color mask, not a finished red leaf albedo.
-          mat.onBeforeCompile=shader=>{shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`\n#ifdef USE_MAP\nvec4 foliage = texture2D(map, vMapUv);\nfloat variation = max(foliage.r, max(foliage.g, foliage.b));\ndiffuseColor *= vec4(mix(vec3(.16,.23,.09),vec3(.43,.54,.24),variation),foliage.a);\n#endif\n`);};
-          mat.customProgramCacheKey=()=> 'hexfront-olive-foliage-v1';
-        }
-        if(name==='wall'||name==='console'){mat.map=this.materials.olive.map;mat.bumpMap=mat.map;mat.bumpScale=.015;}
-      }}});
-      this.assets[name]=wrap;
-    }));
-    const place=(name,x,z,width,y=0,rotation=0)=>{const g=this.assets[name].clone(true),scale=width/g.userData.width;g.userData.pickCell=this.cellAt(x,z)?.id??null;g.scale.setScalar(scale);g.position.set(x,y,z);g.rotation.y=rotation;this.static.add(g);this.contactAt(x,z,y,width*1.3,width*.9);return g;};
-    for(let i=0;i<this.land.length;i++){
-      const c=this.land[i],rim=c.kind==='rim',seed=hash(c.q+11,c.r+8);
-      if(rim){
-        if(i%3!==1){const rock=place(i%2?'rockA':'rockB',c.x+(seed-.5)*.5,c.z,.85+seed*1.25,-.04,seed*6.28);rock.scale.y*=.65+seed*.55;rock.scale.x*=1.15;}
-        if(i%2===0)place('bush',c.x+.48,c.z-.38,.85+seed*.4,.01,seed*9);
-        if(i%3!==0)place('fern',c.x-.47,c.z+.34,.82,.02,seed*7);
-      } else if(c.kind==='field'){
-        const x=c.x+.67,z=c.z-.33,y=surfaceHeight(this.game.cells,c,x,z);
-        if(c.height===0){place(i%3?'fern':'bush',x,z,.48+seed*.16,y,seed*7);if(i%3===0)place('rockB',c.x-.65,c.z-.30,.46,c.height*STEP,seed*7);}
-      }
-    }
-    // Fortification pieces sit along the rim of the contiguous upper plateau.
-    place('wall',-1.06,-2.18,2.0,0,-.45);place('wall',1.1,2.2,1.8,0,2.7);
-    place('wall',-.9,-1.28,1.3,STEP*2,Math.PI/2);place('wall',1.05,1.35,1.18,STEP*2,Math.PI/2);
-    place('console',-1.65,.05,.46,STEP*2,.6);place('console',1.70,-.14,.44,STEP*2,-2.5);
-    // Scree clusters at cliff feet anchor the stepped land into the lower plain.
-    for(let i=0;i<15;i++){const a=i/15*Math.PI*2;const x=Math.cos(a)*3.22,z=Math.sin(a)*3.10;if(Math.abs(z)<1.25)continue;const stone=place(i%2?'rockA':'rockB',x,z,.7+hash(i,7)*.75,-.03,a);stone.scale.y*=1.15;stone.scale.z*=.75;if(i%3===0)place('fern',x+.23,z+.15,.6,.015,a);}
-  }
+  buildTerrain(){buildArtTerrain(this);}
+  buildStructures(){buildArtStructures(this);}
+  async loadAssets(){await Promise.all([loadArtAssets(this),this.materials.ready]);}
   batchStatic(){
     this.static.updateMatrixWorld(true);const groups=new Map(),remove=[];
     this.static.traverse(o=>{

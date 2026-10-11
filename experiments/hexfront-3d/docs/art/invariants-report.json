@@ -1,0 +1,36 @@
+{
+  "base": "8cfb89c448029f0e81a7c70fc20b17cd1cc4fdae",
+  "protectedFiles": [
+    {
+      "file": "experiments/hexfront-3d/src/map.js",
+      "sha256": "330774b1eeff32c0258915f3f86542a057d1bb5a6e3f986691cb192888b60458",
+      "unchanged": true
+    },
+    {
+      "file": "experiments/hexfront-3d/src/game.js",
+      "sha256": "b2c9ae4bff9d367a0fb63d0b4ad6c321937f7bbf6e6eb27ee025b20e6a0e6de7",
+      "unchanged": true
+    },
+    {
+      "file": "experiments/hexfront-3d/src/camera.js",
+      "sha256": "17fac1f5720fcbedc89cce549a05616018d44883abb1f328c809c3a639243c9b",
+      "unchanged": true
+    },
+    {
+      "file": "experiments/hexfront-3d/src/main.js",
+      "sha256": "b6ae3d28c2d92a6d853f8aa45f5aa8c3b16926340326a3c3b36d8e737a1e4e7c",
+      "unchanged": true
+    },
+    {
+      "file": "experiments/hexfront-3d/src/style.css",
+      "sha256": "598ea42e174a90cfb786e504081d0762d759cef7086c02e0c8c7b874799b1ee6",
+      "unchanged": true
+    },
+    {
+      "file": "experiments/hexfront-3d/index.html",
+      "sha256": "73dda691a4761c37fa432811ccecac460be6a911e372e2111e17bb377d26867c",
+      "unchanged": true
+    }
+  ],
+  "changesOnlyInExperimentAndReadme": true
+}

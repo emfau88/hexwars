@@ -3,6 +3,10 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import crypto from 'node:crypto';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),out=path.join(root,'dist');
+// dist is generated output within this isolated experiment. Remove stale
+// assets only after validating the exact resolved output directory.
+if(out!==path.resolve(root,'dist')||!out.startsWith(root+path.sep))throw Error('Unsafe build output path');
+await fs.rm(out,{recursive:true,force:true});
 await fs.mkdir(out,{recursive:true});
 for(const name of ['index.html','src','public','vendor'])await fs.cp(path.join(root,name),path.join(out,name),{recursive:true});
 const main=path.join(out,'src/main.js');await fs.writeFile(main,(await fs.readFile(main,'utf8')).replace('const ALLOW_QA = true;','const ALLOW_QA = false;'));

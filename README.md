@@ -6,19 +6,21 @@
 
 One playable 37-hex battlefield with real elevation, two ramps, Orange vs Blue AI, victory/defeat and restart. Hosted separately from the existing GitHub Pages game. This link and the experiment are on `experiment/hexfront-3d-diorama`; no main-branch deployment was changed.
 
-[Start instructions, controls and technical decisions](./experiments/hexfront-3d/README.md) · [QA and known limitations](./experiments/hexfront-3d/docs/QA.md) · [Asset licenses](./experiments/hexfront-3d/ASSET_LICENSES.md)
+[Start instructions, controls and technical decisions](./experiments/hexfront-3d/README.md) · [Current art verification and limitations](./experiments/hexfront-3d/docs/ART.md) · [Asset licenses](./experiments/hexfront-3d/ASSET_LICENSES.md)
 
-**Camera update, saved locally:** 70° tactical view, optional 55° diorama view, geometry-based framing and corrected picking. [Angle comparison and camera QA](./experiments/hexfront-3d/docs/CAMERA.md). Push and redeployment are deferred at the owner's request: the online preview above still uses the previous camera; the screenshots below show the updated local production build.
+**Art pass, saved locally:** Authored fractured rock formations, layered cliff faces, command bunkers and a three-panel relay; restrained vegetation, quiet paths and five optimized CC0 material textures. [Before/after screenshots, art decisions and verification](./experiments/hexfront-3d/docs/ART.md). Gameplay, all 37 sectors and camera controls are preserved.
+
+**Camera update, saved locally:** 70° tactical view, optional 55° diorama view, geometry-based framing and corrected picking. [Angle comparison and camera QA](./experiments/hexfront-3d/docs/CAMERA.md). Push and redeployment are deferred at the owner's request: the online preview above still uses the previous camera; the screenshots below show the new art pass in the local production build.
 
 Persistent hex outlines and Orange/Blue territory fills now make ownership visible across the battlefield. A separate inset outline marks reachable targets without replacing team colours; the textured 3D terrain remains visible.
 
-The deployment is reported READY by Vercel. External browser verification was blocked by this workspace's network/DNS access; the identical production build was tested locally. The prototype does **not** yet match Tacticus's production art quality, and 60 FPS on real mobile devices is unverified.
+The earlier deployment was reported READY by Vercel; external browser verification was blocked by this workspace's network/DNS access. The new art build has been tested locally and has not been uploaded. The prototype does **not** yet match Tacticus's production art quality, and 60 FPS on real mobile devices is unverified.
 
 <table>
   <tr><th>Desktop · 1440 × 900</th><th>Mobile portrait · 390 × 844</th></tr>
   <tr>
-    <td width="75%"><img src="./experiments/hexfront-3d/docs/camera/final-desktop.png" alt="Updated HEXFRONT 3D tactical camera at 70 degrees on desktop"></td>
-    <td width="25%"><img src="./experiments/hexfront-3d/docs/camera/final-mobile.png" alt="Updated HEXFRONT 3D tactical camera in mobile portrait with touch controls"></td>
+    <td width="75%"><img src="./experiments/hexfront-3d/docs/art/final-desktop.png" alt="HEXFRONT 3D art pass with the preserved tactical camera at 70 degrees on desktop"></td>
+    <td width="25%"><img src="./experiments/hexfront-3d/docs/art/final-mobile.png" alt="HEXFRONT 3D art pass with the preserved tactical camera in mobile portrait with touch controls"></td>
   </tr>
 </table>
 

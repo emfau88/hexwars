@@ -1,67 +1,42 @@
-# HEXFRONT prototype asset sources
+# HEXFRONT 3D – asset sources and licenses
 
-Verified on 2026-10-11.
+Verified 2026-10-12 for the material/art overhaul. Only the following third-party art is used by the current playable build. No Tacticus/Warhammer model, texture, logo or screenshot is redistributed.
 
-All third-party art in this subset was created by **Quaternius** and released under **CC0 1.0 Universal (Public Domain Dedication)**. Commercial use, modification, and redistribution are permitted. Attribution is not required; these notices are retained for provenance.
+## Poly Haven – CC0 material subset
 
-License: https://creativecommons.org/publicdomain/zero/1.0/
+[Official asset license](https://polyhaven.com/license): all downloadable assets are CC0; commercial use, modification and redistribution are allowed. [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/).
 
-## Stylized Nature MegaKit — Standard (July 2024)
+| Resource | Original authors | Files retained | Role |
+|---|---|---|---|
+| [Rock Boulder Dry](https://polyhaven.com/a/rock_boulder_dry) | Dimitrios Savva (photography), Rico Cilliers (processing) | Diffuse 1024² WebP, OpenGL normal 512² WebP, roughness 512² WebP | Felsfamilie und Felswände; ruhige Felsanteile des Bodenatlas |
+| [Rock Wall 02](https://polyhaven.com/a/rock_wall_02) | Rob Tuytel | Diffuse 1024² WebP, roughness 512² WebP | Detailquelle für den Bodenatlas; raue Cliff-Oberfläche |
 
-Official source and license statement:
-https://quaternius.com/packs/stylizednaturemegakit.html
+Only five selected texture files, **1,124,878 bytes in total**, are retained. Original 1K JPEG sources were inspected, then re-encoded; normal/roughness maps were reduced to 512² and encoded losslessly. Albedo uses WebP quality 82. No generated image stands in for 3D geometry. Runtime color treatment, atlas blending and conservative normal intensity unify the two sources with the authored scene.
 
-The official page explicitly identifies CC0 and commercial use. The original Standard license notice is preserved as `public/assets/nature/LICENSE-Quaternius.txt`.
+`public/assets/materials/material-provenance.json` contains exact download URLs, authors, original and delivered SHA-256 hashes, dimensions, transformations and byte sizes. `scripts/prepare-materials.py SOURCE_DIRECTORY` reproduces the optimized maps using Pillow. The original JPGs remain only in the local staging archive outside Git. A notice is retained in `public/assets/materials/LICENSE-PolyHaven.txt`.
 
-Selected files:
+## Quaternius – CC0 fern
 
-| Model | Triangles | Supporting texture |
-| --- | ---: | --- |
-| Rock_Medium_1.gltf + .bin | 342 | Rocks_Diffuse.jpg |
-| Rock_Medium_2.gltf + .bin | 244 | Rocks_Diffuse.jpg |
-| Bush_Common.gltf + .bin | 900 | Leaves_TwistedTree_C.png |
-| Fern_1.gltf + .bin | 288 | Leaves.png |
+[Stylized Nature MegaKit — Standard](https://quaternius.com/packs/stylizednaturemegakit.html), Quaternius, July 2024. The official page identifies CC0 and commercial use. The original notice is retained in `public/assets/nature/LICENSE-Quaternius.txt`.
 
-Delivery mirror:
-https://github.com/anandin/the-wild-between/tree/main/assets/quaternius-nature
+Retained: `Fern_1.gltf`, `Fern_1.bin`, `Leaves.png`; the fern has 288 triangles and the leaf texture is 512². Four restrained fern instances are placed beside rock groups. Materials are muted and source wind-control vertex colours are disabled. Geometry remains unchanged. The prior prototype's texture resizing is retained.
 
-The mirror includes the same Quaternius Standard CC0 notice and native mesh buffers. Only the selected art files are used; no game code is copied.
+Delivery mirror: [anandin/the-wild-between, quaternius-nature](https://github.com/anandin/the-wild-between/tree/main/assets/quaternius-nature). `public/assets/asset-provenance.json` records the original repository paths and Git blob SHAs for retained files.
 
-Changes for HEXFRONT: all three textures reduced to 512 x 512 for a small mobile footprint; JPEG MIME declaration corrected; mesh geometry unchanged. Rock color and moss are supplied by the source texture. Foliage preserves alpha-masked leaves. The bush's red-channel color mask is translated to an olive palette in the material shader; source wind-control vertex colors are not used as visible colors.
+The earlier two boulders, bush, sci-fi wall and access console have been replaced and are no longer shipped. Their original files and notices remain recoverable from commit `8cfb89c448029f0e81a7c70fc20b17cd1cc4fdae` and the previous prototype archive. No complete pack is included.
 
-## Modular Sci-Fi MegaKit — Standard (September 2024)
+## Authored geometry and surface treatment
 
-Official source and license statement:
-https://quaternius.com/packs/modularscifimegakit.html
+`src/art.js` implements the integrated cliff profiles, seven angular rock footprints, attached fracture shoulders, HQs, three-panel relay, damaged concrete barriers, curved-leaf scrub and grass clusters. These are genuine meshes with material slots, bevels, normals and UVs, authored for this experiment. Terrain collision/picking tops use the unmodified heights and coordinates from `src/map.js`.
 
-The official page explicitly identifies CC0 and commercial use. The original Standard license notice is preserved as `public/assets/scifi/LICENSE-Quaternius.txt`.
+Concrete/metal weathering, the world-space soil/grass/path/rock atlas, contact shadows, building stencils, UI and tracked rovers are original experiment work. No external font or hidden CDN is required. The soil atlas incorporates the two CC0 photographic sources listed above; it is not a pre-rendered battlefield.
 
-Selected files:
+## Research and reference only
 
-| Model | Triangles | Purpose |
-| --- | ---: | --- |
-| Prop_AccessPoint.gltf + .bin | 738 | Command-console prop |
-| WallAstra_Straight_Broken.gltf + .bin | 5,176 | Damaged fortress wall with exposed cables |
+- [Kenney Nature Kit](https://kenney.nl/assets/nature-kit), CC0: researched but too simplified for this direction; not included.
+- [Quaternius Modular Sci-Fi MegaKit](https://quaternius.com/packs/modularscifimegakit.html), CC0: researched, formerly used, replaced by architecture shaped to the existing tactical footprint.
+- Tacticus gameplay screenshots from [Multiplayer.it](https://multiplayer.it/recensioni/warhammer-40000-tacticus-recensione-strategico-ios-android.html) were visually inspected as design references only. They belong to their respective rights holders and are not included in the repository, playable build or delivery images.
 
-Delivery mirror:
-https://github.com/agentkaerf/FreeModels/tree/main/Modular%20SciFi%20MegaKit%5BStandard%5D
+## Runtime
 
-Changes for HEXFRONT: native geometry is preserved. The mirror omitted referenced source textures; unresolved references and unused material extensions were removed. Material slots now use a restrained steel/olive/rust palette with distinct roughness and metalness. No absent textures or source shading are claimed to have been imported. Further weathering/detail maps can be supplied by the prototype renderer.
-
-## Provenance and integration
-
-`public/assets/asset-provenance.json` records each fetched file's repository, source path, and source Git blob SHA. Source hashes describe downloaded originals before the changes listed above.
-
-Only six models and their required buffers/textures were retained. No complete asset pack, paid-only model, Warhammer material, or Tacticus content is included.
-
-All glTF buffer byte lengths and image/buffer references were checked locally. Textures were opened and their dimensions checked. The integrated models, foliage masks and materials were inspected in actual desktop and portrait browser screenshots.
-
-Models have arbitrary original origins, especially the sci-fi wall and access console. Normalize with a Three.js Box3, center horizontally, place `min.y` on the ground, and then scale by the desired footprint. Preserve foliage alphaTest and DoubleSide. Clone materials before tinting an instance.
-
-The nature material/geometry is suitable for a consistent stylized diorama. The sci-fi meshes provide useful authored forms and separate material surfaces; the missing original maps mean their final quality depends on the prototype lighting and additional material treatment. These six meshes alone do not establish Tacticus-level visual quality.
-
-## Original work and runtime
-
-Terrain, ramp geometry, HQs, relay, tracked rovers, surface weathering/noise maps, UI and effects were authored in this experiment. They contain no generated background image or third-party Warhammer/Tacticus content. No paid asset pack was purchased. The alternative CC0 sources Poly Haven and Kenney, plus Quaternius' Sci-Fi Essentials kit, were considered but are not bundled.
-
-`vendor/three.module.min.js`, `vendor/loaders/GLTFLoader.js` and `vendor/utils/BufferGeometryUtils.js` come from [Three.js r169](https://github.com/mrdoob/three.js/tree/r169), distributed under the **MIT license**. The complete notice is retained in `vendor/THREE-LICENSE.txt`. The browser-test dependency Playwright is optional and is not bundled with the playable build.
+Three.js r169 and its local loader/utilities retain their MIT notice in `vendor/THREE-LICENSE.txt`. Playwright and Pillow are optional authoring/test tools, not playable-build dependencies.
