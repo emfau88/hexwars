@@ -1,0 +1,92 @@
+[
+  {
+    "local": "nature/Rock_Medium_1.gltf",
+    "repository": "anandin/the-wild-between",
+    "path": "assets/quaternius-nature/Rock_Medium_1.gltf",
+    "sourceBlobSha": "10896291ed3b58a2c51fe2e9cb8f912705e5b239"
+  },
+  {
+    "local": "nature/Rock_Medium_2.gltf",
+    "repository": "anandin/the-wild-between",
+    "path": "assets/quaternius-nature/Rock_Medium_2.gltf",
+    "sourceBlobSha": "353d1d80729226b73ac5bc22b227da7d50dfdc8a"
+  },
+  {
+    "local": "nature/Bush_Common.gltf",
+    "repository": "anandin/the-wild-between",
+    "path": "assets/quaternius-nature/Bush_Common.gltf",
+    "sourceBlobSha": "46023123dbdfe3e0b47f4e9408c070ffa79f3f3d"
+  },
+  {
+    "local": "nature/Fern_1.gltf",
+    "repository": "anandin/the-wild-between",
+    "path": "assets/quaternius-nature/Fern_1.gltf",
+    "sourceBlobSha": "2be91c742acf0c19f6b5a5195ac5070e9dbd56b2"
+  },
+  {
+    "local": "scifi/Prop_AccessPoint.gltf",
+    "repository": "agentkaerf/FreeModels",
+    "path": "Modular SciFi MegaKit[Standard]/glTF/Props/Prop_AccessPoint.gltf",
+    "sourceBlobSha": "9eb916c973d09252ddc9cacf6aea271d7c2788fa"
+  },
+  {
+    "local": "scifi/WallAstra_Straight_Broken.gltf",
+    "repository": "agentkaerf/FreeModels",
+    "path": "Modular SciFi MegaKit[Standard]/glTF/Walls/WallAstra_Straight_Broken.gltf",
+    "sourceBlobSha": "174862c8b295b472621b0f169766d44836aced7c"
+  },
+  {
+    "local": "nature/Rock_Medium_1.bin",
+    "repository": "anandin/the-wild-between",
+    "path": "assets/quaternius-nature/Rock_Medium_1.bin",
+    "sourceBlobSha": "3b8d132a71b30b62787e206ee6b517097370267a"
+  },
+  {
+    "local": "nature/Rock_Medium_2.bin",
+    "repository": "anandin/the-wild-between",
+    "path": "assets/quaternius-nature/Rock_Medium_2.bin",
+    "sourceBlobSha": "064074dca1028d3eb965b93be24da19710f44b55"
+  },
+  {
+    "local": "nature/Bush_Common.bin",
+    "repository": "anandin/the-wild-between",
+    "path": "assets/quaternius-nature/Bush_Common.bin",
+    "sourceBlobSha": "c594b0091a4644b0236e287cf43cb1c94a8825c7"
+  },
+  {
+    "local": "nature/Fern_1.bin",
+    "repository": "anandin/the-wild-between",
+    "path": "assets/quaternius-nature/Fern_1.bin",
+    "sourceBlobSha": "8712382dcdcf5a335e0bba000060acf285e918a0"
+  },
+  {
+    "local": "nature/Rocks_Diffuse.jpg",
+    "repository": "anandin/the-wild-between",
+    "path": "assets/quaternius-nature/Rocks_Diffuse.jpg",
+    "sourceBlobSha": "9a2c80b7254d6b2368f82d0b8e9e708f2b947d2e"
+  },
+  {
+    "local": "nature/Leaves_TwistedTree_C.png",
+    "repository": "anandin/the-wild-between",
+    "path": "assets/quaternius-nature/Leaves_TwistedTree_C.png",
+    "sourceBlobSha": "eece07b927065865226efbbe871078a8be56b5f6"
+  },
+  {
+    "local": "nature/Leaves.png",
+    "repository": "anandin/the-wild-between",
+    "path": "assets/quaternius-nature/Leaves.png",
+    "sourceBlobSha": "4c9072464b9bdaf10798806cadd207d83fe2c321"
+  },
+  {
+    "local": "scifi/Prop_AccessPoint.bin",
+    "repository": "agentkaerf/FreeModels",
+    "path": "Modular SciFi MegaKit[Standard]/glTF/Props/Prop_AccessPoint.bin",
+    "sourceBlobSha": "3bed21291c55a4b23a0fb402078807b44daccd87"
+  },
+  {
+    "local": "scifi/WallAstra_Straight_Broken.bin",
+    "repository": "agentkaerf/FreeModels",
+    "path": "Modular SciFi MegaKit[Standard]/glTF/Walls/WallAstra_Straight_Broken.bin",
+    "sourceBlobSha": "990a3a038a2099e485c2e4eaa1dc4dd004635f05"
+  }
+]

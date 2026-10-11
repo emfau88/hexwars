@@ -1,5 +1,23 @@
 # HEXFRONT
 
+## 3D-Diorama experiment — play the isolated prototype
+
+**[▶ Test HEXFRONT: Bastion Morgenwacht](https://hexfront-3d-diorama.vercel.app/)**
+
+One playable 37-hex battlefield with real elevation, two ramps, Orange vs Blue AI, victory/defeat and restart. Hosted separately from the existing GitHub Pages game. This link and the experiment are on `experiment/hexfront-3d-diorama`; no main-branch deployment was changed.
+
+[Start instructions, controls and technical decisions](./experiments/hexfront-3d/README.md) · [QA and known limitations](./experiments/hexfront-3d/docs/QA.md) · [Asset licenses](./experiments/hexfront-3d/ASSET_LICENSES.md)
+
+The deployment is reported READY by Vercel. External browser verification was blocked by this workspace's network/DNS access; the identical production build was tested locally. The prototype does **not** yet match Tacticus's production art quality, and 60 FPS on real mobile devices is unverified.
+
+<table>
+  <tr><th>Desktop · 1366 × 768</th><th>Mobile portrait · 390 × 844</th></tr>
+  <tr>
+    <td width="75%"><img src="./experiments/hexfront-3d/docs/screenshots/desktop.png" alt="Final HEXFRONT 3D experiment on desktop, with central rock plateau, ramps and HQs"></td>
+    <td width="25%"><img src="./experiments/hexfront-3d/docs/screenshots/mobile.png" alt="Final HEXFRONT 3D experiment in mobile portrait with touch controls"></td>
+  </tr>
+</table>
+
 [![Verify and deploy](https://github.com/emfau88/hexwars/actions/workflows/pages.yml/badge.svg)](https://github.com/emfau88/hexwars/actions/workflows/pages.yml)
 
 HEXFRONT is a compact real-time tactics game for desktop browsers and mobile portrait screens. Expand across a hex grid, distribute growing forces and capture the opposing base.

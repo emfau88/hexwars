@@ -1,0 +1,85 @@
+{
+  "date": "2026-10-11T21:03:21.703Z",
+  "browser": "Chromium / Playwright",
+  "runs": [
+    {
+      "name": "desktop",
+      "viewport": "1366 × 768",
+      "readyMs": 2419,
+      "victory": {
+        "seconds": 238.3,
+        "commands": 47,
+        "aiCommands": 35
+      },
+      "defeat": {
+        "seconds": 239.55,
+        "aiCommands": 37
+      },
+      "medianFrameMs": 166.7,
+      "p95FrameMs": 183.4,
+      "metrics": {
+        "calls": 119,
+        "triangles": 74134,
+        "pixelRatio": 1,
+        "quality": "high"
+      },
+      "layout": {
+        "overflow": false,
+        "primary": true,
+        "canvas": {
+          "x": 265,
+          "y": 158,
+          "width": 1091,
+          "height": 495,
+          "top": 158,
+          "right": 1356,
+          "bottom": 653,
+          "left": 265
+        }
+      }
+    },
+    {
+      "name": "mobile",
+      "viewport": "390 × 844",
+      "readyMs": 2164,
+      "victory": {
+        "seconds": 238.3,
+        "commands": 47,
+        "aiCommands": 35
+      },
+      "defeat": {
+        "seconds": 239.55,
+        "aiCommands": 37
+      },
+      "medianFrameMs": 133.3,
+      "p95FrameMs": 133.4,
+      "metrics": {
+        "calls": 119,
+        "triangles": 74134,
+        "pixelRatio": 1,
+        "quality": "high"
+      },
+      "layout": {
+        "overflow": false,
+        "primary": true,
+        "canvas": {
+          "x": 0,
+          "y": 213,
+          "width": 390,
+          "height": 454,
+          "top": 213,
+          "right": 390,
+          "bottom": 667,
+          "left": 0
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "browserVersion": "151.0.7922.34",
+  "production": {
+    "loads": true,
+    "qaApiAbsent": true,
+    "realClockAdvances": true
+  }
+}

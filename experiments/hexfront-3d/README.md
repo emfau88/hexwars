@@ -1,0 +1,98 @@
+# HEXFRONT — Bastion Morgenwacht
+
+Ein isolierter, tatsächlich spielbarer 3D-Vertical-Slice mit **einem Level**, 37 spielbaren Hexfeldern, zwei HQs, zwei Aufstiegen und einer gegnerischen KI. Orange erobert das blaue HQ; der Verlust des eigenen HQs beendet die Partie.
+
+**[▶ Testversion im Browser öffnen](https://hexfront-3d-diorama.vercel.app/)** · [Experiment-Branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama)
+
+**Repository-Status:** Der Experiment-Branch und die README sind lokal vorbereitet. GitHub verweigert aktuell das Veröffentlichen mit HTTP 403; der Branch-Link funktioniert erst nach einem erfolgreichen Push mit erneuertem Schreibzugriff.
+
+Eigenständiges Vercel-Projekt ohne Verbindung zum bisherigen Pages-Deployment. Hosting-Status: READY. Der externe Browseraufruf konnte wegen Netzwerk-/DNS-Beschränkungen dieser Arbeitsumgebung nicht verifiziert werden; der identische Produktions-Build wurde lokal geprüft. Details stehen im [QA-Bericht](docs/QA.md).
+
+![Finale Desktop-Version, 1366 × 768](docs/screenshots/desktop.png)
+
+<img src="docs/screenshots/mobile.png" alt="Finale Mobile-Portrait-Version, 390 × 844" width="390">
+
+## Starten
+
+Node.js 20 oder neuer. Das Experiment hat keine zur Laufzeit zu installierenden npm-Abhängigkeiten: Three.js und die benötigten Asset-Dateien sind versioniert und liegen lokal vor.
+
+Im bereits vorhandenen Arbeitsordner direkt mit `cd hexwars/experiments/hexfront-3d`, `npm ci` und `npm run dev` starten. Nach Veröffentlichung des Branches lässt sich ein eigener Checkout so anlegen:
+
+```sh
+git clone --branch experiment/hexfront-3d-diorama https://github.com/emfau88/hexwars.git
+cd hexwars/experiments/hexfront-3d
+npm ci
+npm run dev
+```
+
+Öffnen: **http://127.0.0.1:4174**
+
+Separater Produktions-Build:
+
+```sh
+npm run build
+npm run preview
+```
+
+`dev` und `preview` verwenden denselben Port; den vorherigen Server zuerst mit Strg+C beenden. Der Build entsteht ausschließlich in `experiments/hexfront-3d/dist/`. Diesen Ordner kann jeder statische Webserver auch in einem Unterverzeichnis ausliefern. Es werden weder externe CDNs noch Portaldienste oder Konten für das Spiel benötigt. Nicht als `file://` öffnen: glTF-Dateien werden über HTTP geladen.
+
+Für ein Smartphone im selben lokalen Netz kann der Server ausdrücklich freigegeben werden:
+
+```powershell
+$env:HOST = '0.0.0.0'
+npm run dev
+```
+
+Dann die LAN-Adresse des Computers mit Port 4174 öffnen. Eine entsprechende lokale Firewall-Freigabe ist gegebenenfalls nötig. Standardmäßig bindet der Server nur an Loopback.
+
+## Spielen
+
+1. **Operation starten**. Orange ist die südliche Fraktion.
+2. Eine orange Truppenzahl auswählen. Helle Konturen markieren erreichbare Ziele.
+3. Ein Ziel wählen, Stärke und momentane Kampfprognose prüfen und **Befehl geben**.
+4. `50 %` teilt eine Garnison; `Alle − 1` lässt eine Einheit zurück. Eigene Zwischenfelder dürfen durchquert werden. Wird eine Route erobert, trifft der Konvoi dort auf den Gegner.
+5. Das gegnerische HQ einnehmen. Bei Sieg oder Niederlage lässt sich das identische Level neu starten.
+
+Maus und Touch verwenden denselben Ablauf mit expliziter Befehlsbestätigung. Mausrad, Pinch oder +/− zoomen; die vergrößerte Karte lässt sich ziehen. Die Kamera bleibt in einer festen orthografischen Perspektive. `⌖` setzt die Ansicht zurück. `?` öffnet die kurze Anleitung. Die Leertaste pausiert, wenn kein Steuerelement fokussiert ist. Die Partie pausiert auch beim Verlassen des Tabs; nach Rückkehr bewusst fortsetzen.
+
+**Taktik:** Die beiden schmalen Aufstiege sind Engpässe. Bergauf besitzt der Verteidiger +30 % Stärke, bergab der Angreifer +15 %. Das HQ bietet +20 % Verteidigung. Es gilt nur der größere Verteidigungsbonus; es wird kein zusätzlicher alter Hill-Bonus angewendet. Das Relais erhöht die eigene Produktion um 30 %. Ein Angriff kann sich während der Anreise durch gegnerische Verstärkungen verändern.
+
+## Prüfungen
+
+```sh
+npm test
+npm run build
+```
+
+Für die optionalen Chromium-Tests:
+
+```sh
+npm install --no-save --package-lock=false playwright@1.62.1
+npx playwright install chromium
+npm run test:browser
+```
+
+`node tests/hosted.mjs` prüft die öffentliche Produktions-URL mit echten Maus-/Touchbefehlen und nimmt die Abgabe-Screenshots auf. Mit `PREVIEW_URL=local` startet der Test selbst einen Produktionsserver auf Port 4178; alternativ akzeptiert die Variable eine eigene URL. In PowerShell: `$env:PREVIEW_URL='local'; node tests/hosted.mjs`. In dieser Umgebung war nur dieser lokale Durchlauf möglich.
+
+Der Browsertest startet eigene lokale Server, testet Desktop und Touch-Portrait, schreibt Screenshots und einen maschinenlesbaren Bericht nach `test-results/` und beendet die von ihm gestarteten Prozesse. Eine vorhandene Playwright-Installation lässt sich alternativ über `PLAYWRIGHT_MODULE` angeben; `PLAYWRIGHT_BROWSERS_PATH` wird von Playwright unterstützt.
+
+Die Testseite `?qa=1&clock=manual` stellt ausschließlich im Entwicklungs-Build eine **manuell fortschaltbare Uhr und lesbare Diagnosen** bereit. Matchtests benutzen normale Maus-/Touch-Befehle und verändern keine Garnisonen oder Gewinner. Die Produktionsvariante deaktiviert die Diagnose-API und die manuelle Uhr.
+
+## Umsetzung und Isolation
+
+- Eigenständiges ES-Modul-Projekt, eigener Lockfile, eigener Node-HTTP-Server und Build. Kein Import aus der bisherigen Kampagne.
+- Three.js r169 mit WebGL 2, orthografischer Kamera, PBR-Materialien, Schatten, Kontaktschatten, Weltkoordinaten-Texturen und gebündelter statischer Geometrie.
+- Durchgehende, geschlossene Geländeoberfläche; Seitenflächen werden nur an tatsächlichen Höhenunterschieden und am äußeren Diorama-Rand erzeugt. Keine schwebenden Einzel-Hexblöcke.
+- Hex-Höhen 0/1/2 sind Daten. Die vier expliziten Übergangskanten der zwei Rampen bestimmen Navigation, KI, sichtbare Rampengeometrie und Bewegungsanimation.
+- Kleine CC0-Auswahl von Quaternius: zwei Felsen, Busch, Farn, beschädigte Festungsmauer und Konsole. Ergänzt durch eigene modellierte HQs, Relais und kleine Kettenfahrzeuge. Keine KI-Hintergrundgrafik und keine Tacticus-Assets.
+- Statische Modelle werden nach Material gebündelt; Fahrzeuge werden instanziert. `HQ/LQ` schaltet Renderauflösung und Schattenauflösung um.
+
+Die bestehende 2D-Version, `legacy/`, Root-Scripts, Portalpakete und `.github/workflows/pages.yml` bleiben unverändert. Die vorhandene Pages-Pipeline veröffentlicht nur `main`; dieses Experiment ändert keine Veröffentlichung und wird nicht automatisch gemergt.
+
+Weitere Details: [Entscheidungen und Repository-Analyse](docs/DECISIONS.md), [Asset-Quellen und Lizenzen](ASSET_LICENSES.md), [QA-Bericht und Grenzen](docs/QA.md).
+
+## Ehrliche visuelle Einordnung
+
+Das Ergebnis zeigt einen zusammenhängenden, materialisierten 3D-Ansatz mit echter spielbarer Topografie. **Das visuelle Produktionsniveau von Tacticus wird noch nicht erreicht.** Vor allem die Felskonturen sind noch zu regelmäßig, das Terrain könnte gezielter bemalt und modelliert sein, und Figuren, Kampfanimationen sowie handgesetzte Umgebungsdetails sind wesentlich einfacher. Die kleine konsistente Asset-Auswahl und das Licht tragen das Diorama; sie ersetzen kein abschließendes Environment-Art-Pass.
+
+Die automatisierten Partien belegen Spielbarkeit und realistische Gewinn-/Verlustmöglichkeiten, aber keine langfristig belastbare Balance. Die Zielspanne von 3–6 Minuten ist ein Richtwert; schnelle Angriffe, langsame Entscheidungen und Verteidigung können davon abweichen. Für eine Produktentscheidung sollten mehrere Menschen auf echten Android-/iOS-Geräten spielen. Mobile Emulation belegt weder echte Geräte-FPS noch thermische Stabilität.
