@@ -1,4 +1,6 @@
 import {createMap,neighbors,traversable,route,graphDistance} from './map.js';
+import {ECONOMY_MODE,ECONOMY_MODES,PRODUCTION_CAP,economyState,localProduction} from './economy.js';
+export {ECONOMY_MODE} from './economy.js';
 export const TRANSPORT_SECONDS_PER_HEX = 1.1;
 export const opposite = owner => owner==='orange'?'blue':'orange';
 /** A single height bonus, never multiplied by an inherited Hill bonus. */
@@ -9,9 +11,14 @@ export function forecast(from,to,amount) {
   return {effective,win:effective>to.units,remaining:Math.abs(effective-to.units),defense:defenseFactor(from,to),attack:attackFactor(from,to)};
 }
 export class Battle {
-  constructor(){this.reset();}
-  reset(){this.cells=createMap();this.time=0;this.orders=[];this.events=[];this.result=null;this.running=false;this.paused=false;this.nextAI=10;this.serial=0;this.commands=0;this.captures=0;this.aiCommands=0;}
+  constructor({economyMode=ECONOMY_MODE}={}){if(!ECONOMY_MODES.includes(economyMode))throw Error('Unknown economy mode');this.economyMode=economyMode;this.reset();}
+  reset(){this.economyCache=new Map();this.cells=createMap();this.time=0;this.orders=[];this.events=[];this.result=null;this.running=false;this.paused=false;this.nextAI=10;this.serial=0;this.commands=0;this.captures=0;this.aiCommands=0;}
   cell(id){return this.cells.find(c=>c.id===id);}
+  economy(owner){
+    const key=this.cells.map(c=>c.owner[0]).join(''),cached=this.economyCache.get(owner);
+    if(cached?.key===key)return cached.value;
+    const value=economyState(this.cells,owner,this.economyMode);this.economyCache.set(owner,{key,value});return value;
+  }
   start(){this.running=true;}
   strength(owner){return Math.floor(this.cells.filter(c=>c.owner===owner).reduce((n,c)=>n+c.units,0)+this.orders.filter(o=>o.owner===owner).reduce((n,o)=>n+o.units,0));}
   fields(owner){return this.cells.filter(c=>c.owner===owner).length;}
@@ -45,10 +52,12 @@ export class Battle {
   update(dt) {
     if(!this.running||this.paused||this.result)return;
     dt=Math.min(Math.max(dt,0),.1);this.time+=dt;
-    const relay=this.cell('0,0').owner;
-    for(const c of this.cells)if(c.owner!=='neutral') {
-      const rate=c.kind==='hq'?.68:c.kind==='relay'?.36:.075;
-      if(c.units<99)c.units=Math.min(99,c.units+rate*dt*.70*(relay===c.owner?1.3:1));
+    if(this.economyMode==='legacy-local'){
+      const relay=this.cell('0,0').owner;
+      for(const c of this.cells)if(c.owner!=='neutral'&&c.units<PRODUCTION_CAP)c.units=Math.min(PRODUCTION_CAP,c.units+localProduction(c,relay)*dt);
+    }else for(const owner of ['orange','blue']){
+      const economy=this.economy(owner),hq=this.cell(economy.hqId);
+      if(hq&&hq.units<PRODUCTION_CAP)hq.units=Math.min(PRODUCTION_CAP,hq.units+economy.rate*dt);
     }
     for(const o of [...this.orders]) {
       const from=this.cell(o.path[o.segment]),to=this.cell(o.path[o.segment+1]);
@@ -62,7 +71,7 @@ export class Battle {
     }
     if(!this.result&&this.time>=this.nextAI){const action=chooseOrder(this,'blue');if(action)this.send(action.from,action.to,action.fraction,'blue');this.nextAI=this.time+6.3;}
   }
-  snapshot(){return {time:this.time,result:this.result,running:this.running,paused:this.paused,cells:this.cells.map(c=>({...c})),orders:this.orders.map(o=>({...o,path:[...o.path]})),commands:this.commands,aiCommands:this.aiCommands,captures:this.captures};}
+  snapshot(){return {economyMode:this.economyMode,time:this.time,result:this.result,running:this.running,paused:this.paused,cells:this.cells.map(c=>({...c})),orders:this.orders.map(o=>({...o,path:[...o.path]})),commands:this.commands,aiCommands:this.aiCommands,captures:this.captures};}
   drainEvents(){return this.events.splice(0);}
 }
 /** Honest deterministic opponent: identical graph, units, production and combat. */

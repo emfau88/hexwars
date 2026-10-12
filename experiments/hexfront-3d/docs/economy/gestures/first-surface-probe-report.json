@@ -1,0 +1,23 @@
+{
+  "runs": [
+    {
+      "name": "desktop",
+      "idleDrag": true,
+      "stableFraming": true,
+      "exactlyOneOrder": true,
+      "capture": true,
+      "halfSend": true,
+      "surfacePicking": true,
+      "clickFallback": true,
+      "invalidAndCliffBlocked": true,
+      "outsideAndSelfCancelled": true,
+      "nativeCancellation": true,
+      "secondFingerCancels": false,
+      "backgroundPan": true,
+      "zoomedDrag": true,
+      "pausedNoSend": true
+    }
+  ],
+  "errors": [],
+  "failure": "page.evaluate: Error: No exposed surface -2,3\n    at eval (eval at evaluate (:311:30), <anonymous>:1:466)\n    at async <anonymous>:337:30\n    at surface (C:\\Users\\madde\\Documents\\Codex\\2026-10-11\\entwicklungsauftrag-hexfront-premium-3d-hex-battlefield\\hexwars-art-publish\\experiments\\hexfront-3d\\tests\\drag-input.mjs:23:26)\n    at C:\\Users\\madde\\Documents\\Codex\\2026-10-11\\entwicklungsauftrag-hexfront-premium-3d-hex-battlefield\\hexwars-art-publish\\experiments\\hexfront-3d\\tests\\drag-input.mjs:34:22"
+}

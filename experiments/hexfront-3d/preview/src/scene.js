@@ -1,8 +1,9 @@
 import * as T from 'three';
+import {reachability} from './tactics.js';
 import {buildDrones,buildEffects,updateTechnology,technologyEffect,clearTechnology} from './technology.js';
 import {createArtMaterials,buildArtTerrain,buildArtStructures,loadArtAssets} from './art.js';
 import {mergeGeometries} from '../vendor/utils/BufferGeometryUtils.js';
-import {RADIUS,STEP,corner,surfaceHeight,neighbors,traversable} from './map.js';
+import {RADIUS,STEP,corner,surfaceHeight} from './map.js';
 import {CAMERA_VIEWS,MAX_ZOOM,cameraBasis,projectedBounds,frameBattlefield} from './camera.js';
 
 const COLORS={orange:0xd59a59,blue:0x70a5bd,neutral:0x9eaa96};
@@ -74,7 +75,6 @@ export class Diorama {
     this.fitPoints=new Float32Array(points);this.tacticalFitPoints=new Float32Array(tacticalPoints);this.boundsCache.clear();
   }
   buildMarkers(){
-    this.leaderLines=document.createElementNS('http://www.w3.org/2000/svg','svg');this.leaderLines.classList.add('label-leaders');this.leaderLines.setAttribute('aria-hidden','true');this.labels.append(this.leaderLines);
     for(const c of this.game.cells){
       const mat=new T.MeshBasicMaterial({color:COLORS[c.owner],transparent:true,opacity:.9,depthWrite:false,side:T.DoubleSide,toneMapped:false});
       const marker=mesh(this.scene,ringGeometry(c,this.game.cells,.94,.035),mat);marker.castShadow=false;marker.receiveShadow=false;marker.renderOrder=2;
@@ -84,7 +84,7 @@ export class Diorama {
       // A separate inset contour marks selection/reachability on the real slope.
       const action=new T.Mesh(ringGeometry(c,this.game.cells,.80,.025),new T.MeshBasicMaterial({color:0xf2d9a4,transparent:true,opacity:.85,depthWrite:false,side:T.DoubleSide,toneMapped:false}));action.visible=false;action.renderOrder=3;this.scene.add(action);
       this.markers.set(c.id,{marker,fill,action});
-      const el=document.createElement('button');el.className='garrison '+c.owner;el.dataset.cell=c.id;el.type='button';el.innerHTML='<span class="badge-face"><span class="count"></span><span class="cell-symbol"></span></span>';el.addEventListener('click',e=>{e.stopPropagation();this.onSelect(c.id);});el.addEventListener('pointerenter',()=>this.onHover(c.id));el.addEventListener('focus',()=>this.onHover(c.id));this.labels.append(el);this.labelsById.set(c.id,el);
+      const el=document.createElement('button');el.className='garrison '+c.owner;el.dataset.cell=c.id;el.type='button';el.innerHTML='<span class="badge-face"><span class="count"></span><span class="cell-symbol"></span></span>';el.addEventListener('click',e=>{e.stopPropagation();const hit=e.detail?this.hitAt(e):{id:c.id};this.onSelect(hit.id,hit.reason);});el.addEventListener('pointerenter',e=>this.onHover(this.hitAt(e).id));el.addEventListener('focus',()=>this.onHover(c.id));this.labels.append(el);this.labelsById.set(c.id,el);
     }
     this.pathLine=new T.Line(new T.BufferGeometry(),new T.LineDashedMaterial({color:0xe8d6a7,dashSize:.18,gapSize:.12,transparent:true,opacity:.8}));this.pathLine.frustumCulled=false;this.scene.add(this.pathLine);
   }
@@ -115,28 +115,41 @@ export class Diorama {
   }
   project(x,y,z){const v=new T.Vector3(x,y,z).project(this.camera);return {x:(v.x*.5+.5)*this.width,y:(-.5*v.y+.5)*this.height};}
   layoutLabels(entries){
-    const key=entries.map(e=>`${e.id}:${e.pos.x.toFixed(1)},${e.pos.y.toFixed(1)}:${e.width}`).join('|');
-    if(key===this.labelLayoutKey)return;this.labelLayoutKey=key;
-    // Match circular hit areas, preserving HQ/relay anchors before other values.
-    // Displaced labels remain connected to
-    // their exact projected surface, even where different heights overlap.
-    const placed=[],lines=[],offsets=[{x:0,y:0}];this.labelPositions=new Map();
-    for(const radius of [12,24,36,48,60,72])for(let j=0;j<12;j++)offsets.push({x:Math.cos(j*Math.PI/6)*radius,y:Math.sin(j*Math.PI/6)*radius});
-    for(const e of entries.sort((a,b)=>Number(this.drag?.labelPositions.has(b.id)||false)-Number(this.drag?.labelPositions.has(a.id)||false)||b.strategic-a.strategic||a.pos.y-b.pos.y||a.id.localeCompare(b.id))){
-      const locked=this.drag?.labelPositions.get(e.id);
-      let best=locked||null,bestScore=Infinity;
-      for(const o of locked?[]:offsets){
-        const x=T.MathUtils.clamp(e.pos.x+o.x,e.width/2+6,this.width-e.width/2-6),y=T.MathUtils.clamp(e.pos.y+o.y,e.width/2+2,this.height-e.width/2-2);
-        let score=(x-e.pos.x)**2+(y-e.pos.y)**2;
-        for(const p of placed){const overlap=(e.width+p.width)/2+2-Math.hypot(x-p.x,y-p.y);if(overlap>0)score+=100000+overlap*overlap*1000;}
-        if(score<bestScore){bestScore=score;best={x,y,width:e.width};}
-      }
-      placed.push(best);this.labelPositions.set(e.id,best);e.el.style.transform=`translate(${best.x}px,${best.y}px) translate(-50%, -50%)`;
-      if(Math.hypot(best.x-e.pos.x,best.y-e.pos.y)>6)lines.push(`<path d="M${e.pos.x},${e.pos.y} L${best.x},${best.y}"/><circle cx="${e.pos.x}" cy="${e.pos.y}" r="2"/>`);
-    }
-    this.leaderLines.innerHTML=lines.join('');
+    // Anchors are the exact projected hex surface centers. Never displace,
+    // clamp or selectively hide a value to solve a collision; zoom instead.
+    const previous=this.labelPositions;this.labelPositions=new Map();
+    for(const {id,el,pos} of entries){this.labelPositions.set(id,pos);const old=previous?.get(id);if(!old||old.x!==pos.x||old.y!==pos.y)el.style.transform=`translate(${pos.x}px,${pos.y}px) translate(-50%, -50%)`;}
   }
-  screenCell(id){const c=this.game.cell(id),x=c.x,z=c.z+.36,p=this.project(x,surfaceHeight(this.game.cells,c,x,z)+.015,z);const rect=this.container.getBoundingClientRect();return {x:p.x+rect.left,y:p.y+rect.top};}
+  screenCell(id){const c=this.game.cell(id),p=this.project(c.x,surfaceHeight(this.game.cells,c,c.x,c.z),c.z);const rect=this.container.getBoundingClientRect();return {x:p.x+rect.left,y:p.y+rect.top};}
+  labelAt(event){
+    // Overlapping invisible hit areas choose the closest fixed anchor, never
+    // DOM stacking order. A visible pill takes precedence over a hit halo.
+    let best=null,bestScore=Infinity;
+    const rect=this.container.getBoundingClientRect(),x=event.clientX-rect.left,y=event.clientY-rect.top;
+    for(const [id,p] of this.labelPositions||[]){
+      const el=this.labelsById.get(id),dx=Math.abs(x-p.x),dy=Math.abs(y-p.y),half=el.offsetWidth/2;
+      if(dx>half||dy>el.offsetHeight/2)continue;
+      const face=el.firstElementChild,visible=dx<=face.offsetWidth/2&&dy<=face.offsetHeight/2;
+      const score=dx*dx+dy*dy+(visible?0:10000);
+      if(score<bestScore){bestScore=score;best=el;}
+    }
+    return best;
+  }
+  positionDragTip(){
+    // Move only the transient instruction, never the fixed field values.
+    const w=this.dragTip.offsetWidth,h=this.dragTip.offsetHeight,pad=4,rect=this.container.getBoundingClientRect();
+    // The HUD grows during a held gesture while camera framing is deliberately
+    // frozen. Its new rectangle can cover part of the old canvas: exclude it.
+    const hud=document.querySelector('.command-panel').getBoundingClientRect(),safeHeight=Math.min(this.height,hud.top-rect.top-8);
+    const labels=[...this.labelPositions].map(([id,p])=>{const face=this.labelsById.get(id).firstElementChild;return {x:p.x-face.offsetWidth/2,y:p.y-face.offsetHeight/2,w:face.offsetWidth,h:face.offsetHeight};});
+    for(const el of document.querySelectorAll('.map-tools,.economy-readout')){const b=el.getBoundingClientRect();labels.push({x:b.x-rect.x,y:b.y-rect.y,w:b.width,h:b.height});}
+    const near={x:T.MathUtils.clamp(this.drag.x-w/2,pad,this.width-w-pad),y:T.MathUtils.clamp(this.drag.y-h-20,pad,safeHeight-h-pad)};
+    const candidates=[near];for(const x of [pad,(this.width-w)/2,this.width-w-pad])for(const y of [pad,safeHeight-h-pad])candidates.push({x,y});
+    const overlap=p=>labels.reduce((n,b)=>n+Math.max(0,Math.min(p.x+w+3,b.x+b.w)-Math.max(p.x-3,b.x))*Math.max(0,Math.min(p.y+h+3,b.y+b.h)-Math.max(p.y-3,b.y)),0);
+    candidates.sort((a,b)=>overlap(a)-overlap(b)||Math.hypot(a.x-near.x,a.y-near.y)-Math.hypot(b.x-near.x,b.y-near.y));
+    const best=candidates[0];this.dragTip.style.visibility=overlap(best)>0?'hidden':'visible';this.dragTip.style.left=`${best.x}px`;this.dragTip.style.top=`${best.y}px`;
+  }
+  reject(id){this.invalid={id,until:performance.now()+900};}
   pick(event){
     const rect=this.renderer.domElement.getBoundingClientRect(),pointer=new T.Vector2((event.clientX-rect.left)/rect.width*2-1,-(event.clientY-rect.top)/rect.height*2+1),ray=new T.Raycaster();ray.setFromCamera(pointer,this.camera);
     const ground=ray.intersectObjects(this.picks,false)[0],object=ray.intersectObjects(this.occluders,false)[0];this.lastPick={kind:'ground',id:ground?.object.userData.cellId??null};
@@ -150,7 +163,7 @@ export class Diorama {
     // including badges, HQ roofs and occluding cliff faces.
     const element=document.elementFromPoint(event.clientX,event.clientY);
     if(!element||!this.container.contains(element))return {id:null,reason:'outside'};
-    const label=element.closest('.garrison');
+    const label=this.labelAt(event);
     if(label)return {id:label.dataset.cell,reason:null};
     if(element!==this.renderer.domElement)return {id:null,reason:'outside'};
     const id=this.pick(event);
@@ -167,7 +180,7 @@ export class Diorama {
   }
   endDrag(cancel=false){
     if(!this.drag)return;
-    const {target,reason}=this.drag;this.drag=null;this.labelLayoutKey=null;
+    const {target,reason}=this.drag;this.drag=null;
     this.container.removeAttribute('data-dragging');this.dragTip.hidden=true;
     this.onDrag?.(cancel?'cancel':'end',target,reason);
   }
@@ -185,7 +198,7 @@ export class Diorama {
     input.addEventListener('pointerdown',e=>{
       if(e.button!==0)e.preventDefault();
       if(!this.pointers.size){this.suppressNextClick=false;this.suppressClickUntil=0;}
-      const label=document.elementFromPoint(e.clientX,e.clientY)?.closest('.garrison'),retargeted=label!==e.target.closest('.garrison');
+      const label=this.labelAt(e),retargeted=label!==e.target.closest('.garrison');
       if(!label||retargeted||e.button!==0)input.setPointerCapture(e.pointerId);
       this.pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
       if(this.pointers.size===1){
@@ -212,7 +225,7 @@ export class Diorama {
         if(!this.down.moved&&Math.hypot(dx,dy)>8){
           this.down.moved=true;input.setPointerCapture(e.pointerId);
           if(this.down.from){
-            this.drag={from:this.down.from,target:null,reason:null,labelPositions:new Map(this.labelPositions)};
+            this.drag={from:this.down.from,target:null,reason:null};
             input.dataset.dragging='true';this.onDrag?.('start',this.down.from);
           }
         }
@@ -220,7 +233,7 @@ export class Diorama {
         else if(this.down.moved&&this.zoom>1&&!this.pinch){this.viewPan={u:this.down.pan.u-dx/this.framing.scale,v:this.down.pan.v+dy/this.framing.scale};this.resize();}
         return;
       }
-      this.onHover(e.target.closest('.garrison')?.dataset.cell||this.pick(e));
+      this.onHover(this.hitAt(e).id);
     });
     input.addEventListener('pointerup',e=>{
       if(this.down?.moved){this.suppressClickUntil=performance.now()+350;this.suppressNextClick=true;}
@@ -246,22 +259,23 @@ export class Diorama {
     const selected=this.game.cell(this.selected),labelEntries=[],movingFrom=new Set(this.game.orders.map(o=>o.path[0])),movingTo=new Set(this.game.orders.map(o=>o.path.at(-1)));
     const touch=matchMedia('(max-width:640px)').matches;
     for(const c of this.game.cells){
-      const {marker,fill,action}=this.markers.get(c.id),isSelected=c.id===this.selected,reachable=selected&&selected.owner==='orange'&&!!this.game.path(selected,c),hover=c.id===this.hovered,owned=c.owner!=='neutral',isTarget=c.id===this.pending;
-      const moving=movingFrom.has(c.id)||movingTo.has(c.id),key=c.kind==='hq'||c.kind==='relay',front=owned&&neighbors(this.game.cells,c).some(n=>n.owner!=='neutral'&&n.owner!==c.owner&&traversable(c,n));
-      const priority=isSelected||isTarget||key||moving||c.units>=30?'important':reachable||hover||front?'normal':selected||!owned?'quiet':'normal';
+      const {marker,fill,action}=this.markers.get(c.id),isSelected=c.id===this.selected,access=reachability(this.game,selected,c),reachable=access==='direct'||access==='indirect',hover=c.id===this.hovered,owned=c.owner!=='neutral',isTarget=c.id===this.pending;
+      const moving=movingFrom.has(c.id)||movingTo.has(c.id),invalid=this.invalid?.id===c.id&&time<this.invalid.until;
       marker.material.color.setHex(owned?COLORS[c.owner]:0xc9d0bb);marker.material.opacity=owned?.95:.62;
       fill.material.color.setHex(owned?COLORS[c.owner]:0xcbce9e);fill.material.opacity=owned?(isSelected?.34:.28):reachable?.025:0;
       if(hover)fill.material.opacity+=.045;fill.visible=fill.material.opacity>.001;
-      action.visible=!!(isSelected||isTarget||reachable);action.material.color.setHex(isTarget&&this.drag&&!reachable?0xd49079:isTarget?0xf4efe0:isSelected?0xf2d9a4:0xd1c9a9);action.material.opacity=(isSelected||isTarget)?.98:hover?.68:.40;
-      const el=this.labelsById.get(c.id),anchorZ=c.z+(c.kind==='hq'?.82:c.kind==='relay'?.68:.38),pos=this.project(c.x,surfaceHeight(this.game.cells,c,c.x,anchorZ)+.24,anchorZ);
+      action.visible=!!(isSelected||reachable||invalid||(isTarget&&this.drag));
+      action.material.color.setHex(invalid||(isTarget&&this.drag&&!reachable)?0xdf826b:isTarget?0xf4efe0:isSelected?0xf2d9a4:0xeee7cc);
+      action.material.opacity=(invalid||isSelected||isTarget)? .98 : access==='direct'? .85 : .28;
+      const el=this.labelsById.get(c.id),pos=this.project(c.x,surfaceHeight(this.game.cells,c,c.x,c.z),c.z);
+      if(el.dataset.access!==access)el.dataset.access=access;
       const classes=`garrison ${c.owner}${isSelected?' selected':''}${reachable?' reachable':''}${moving?' in-transit':''}`;if(el.className!==classes)el.className=classes;
-      if(el.dataset.priority!==priority)el.dataset.priority=priority;const role=isSelected?'source':isTarget?'target':movingTo.has(c.id)?'incoming':movingFrom.has(c.id)?'outgoing':'field';if(el.dataset.role!==role)el.dataset.role=role;
+      const role=isSelected?'source':isTarget?'target':movingTo.has(c.id)?'incoming':movingFrom.has(c.id)?'outgoing':'field';if(el.dataset.role!==role)el.dataset.role=role;
       const count=String(Math.floor(c.units)),symbol=c.kind==='hq'?'⌂':c.kind==='relay'?'⌁':'';if(el.querySelector('.count').textContent!==count)el.querySelector('.count').textContent=count;if(el.querySelector('.cell-symbol').textContent!==symbol)el.querySelector('.cell-symbol').textContent=symbol;
       el.setAttribute('aria-label',`${isSelected?'Quelle, ':isTarget?'Ziel, ':''}${c.name}, ${c.owner==='orange'?'Orange':c.owner==='blue'?'Blau':'neutral'}, ${Math.floor(c.units)} Truppen, Höhe ${c.height}`);el.setAttribute('aria-pressed',String(isSelected));
-      const show=c.owner!=='neutral'||c.kind==='relay'||reachable||hover||moving;
-      el.style.visibility=!show||pos.x<12||pos.x>this.width-12||pos.y<12||pos.y>this.height-12?'hidden':'visible';
-      const hitWidth=Math.max(touch?44:38,count.length*8+16);if(el.style.width!==`${hitWidth}px`)el.style.width=`${hitWidth}px`;
-      if(el.style.visibility==='visible')labelEntries.push({id:c.id,el,pos,width:hitWidth,strategic:key?1:0});
+      el.style.visibility='visible';
+      const hitWidth=touch?44:38;if(el.style.width!==`${hitWidth}px`)el.style.width=`${hitWidth}px`;
+      labelEntries.push({id:c.id,el,pos});
     }
     this.layoutLabels(labelEntries);
     const target=this.game.cell(this.pending||this.hovered),path=selected&&target?this.game.path(selected,target):null;
@@ -271,11 +285,10 @@ export class Diorama {
     if(this.drag){
       const amount=Math.max(0,Math.min(Math.floor(selected?.units||0)-1,Math.floor((selected?.units||0)*(this.orderFraction??1))));
       const valid=!!path&&target?.id!==selected?.id&&amount>0&&selected?.owner==='orange'&&this.game.running&&!this.game.paused;
-      const text=valid?`Loslassen · ${amount} Truppen`:this.drag.reason==='cliff'?'Felswand · kein Ziel':!target?'Außerhalb · Abbrechen':target===selected?'Zum Zielfeld ziehen':amount<1?'Mindestens 2 Truppen nötig':'Kein begehbarer Weg';
+      const text=valid?`Loslassen · ${amount} Truppen`:this.drag.reason==='cliff'?'Felswand · Aufstieg benutzen':!target?'Außerhalb · Abbrechen':target===selected?'Zum Zielfeld ziehen':amount<1?'Mindestens 2 Truppen nötig':'Kein begehbarer Weg';
       this.dragTip.hidden=false;this.dragTip.dataset.valid=String(valid);
       if(this.dragTip.textContent!==text)this.dragTip.textContent=text;
-      this.dragTip.style.left=`${T.MathUtils.clamp(this.drag.x,100,this.width-100)}px`;
-      this.dragTip.style.top=`${T.MathUtils.clamp(this.drag.y-48,12,this.height-48)}px`;
+      this.positionDragTip();
     }
     updateTechnology(this,time);this.renderer.render(this.scene,this.camera);
   }

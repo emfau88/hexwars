@@ -1,0 +1,51 @@
+{
+  "date": "2026-10-12T16:57:23.955Z",
+  "browser": "Chromium / Playwright",
+  "runs": [
+    {
+      "name": "desktop",
+      "input": "drag-and-drop",
+      "viewport": "1440 × 900",
+      "readyMs": 4020,
+      "victory": {
+        "seconds": 187.1,
+        "commands": 37,
+        "aiCommands": 24,
+        "selectedHeights": [
+          0,
+          1,
+          2
+        ]
+      },
+      "defeat": {
+        "seconds": 276.45,
+        "aiCommands": 43
+      },
+      "medianFrameMs": 133.3,
+      "p95FrameMs": 150,
+      "metrics": {
+        "calls": 120,
+        "triangles": 47133,
+        "pixelRatio": 1,
+        "quality": "high"
+      },
+      "layout": {
+        "overflow": false,
+        "primary": true,
+        "canvas": {
+          "x": 265,
+          "y": 93,
+          "width": 1165,
+          "height": 678,
+          "top": 93,
+          "right": 1430,
+          "bottom": 771,
+          "left": 265
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "browserVersion": "151.0.7922.34",
+  "failure": "AssertionError [ERR_ASSERTION]: Unoccluded target: #understood\n    at click (file:///C:/Users/madde/Documents/Codex/2026-10-11/entwicklungsauftrag-hexfront-premium-3d-hex-battlefield/hexwars-art-publish/experiments/hexfront-3d/tests/browser.mjs:34:176)\n    at async file:///C:/Users/madde/Documents/Codex/2026-10-11/entwicklungsauftrag-hexfront-premium-3d-hex-battlefield/hexwars-art-publish/experiments/hexfront-3d/tests/browser.mjs:40:92"
+}

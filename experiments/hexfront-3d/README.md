@@ -1,26 +1,22 @@
 # HEXFRONT — Bastion Morgenwacht
 
-Ein isolierter, tatsächlich spielbarer 3D-Vertical-Slice mit **einem Level**, 37 spielbaren Hexfeldern, zwei HQs, zwei Aufstiegen und einer gegnerischen KI. Orange erobert das blaue HQ; der Verlust des eigenen HQs beendet die Partie.
+Ein isolierter 3D-Vertical-Slice: ein Level, 37 Hexfelder, drei Höhenstufen, zwei HQs und eine gegnerische KI. Orange gewinnt durch Eroberung des blauen HQs.
 
-**Neue Technologie-Fassung veröffentlicht:** Schwebedrohnen, eine gemeinsame HQ-Familie, aktivierbares Relais, weich animierte Transporte mit **1,1 Sekunden pro Hex** und kurze Kampf-/Eroberungseffekte. Karte, Rampen, 70°/55°-Kamera, Drag-and-drop und das kompakte HUD bleiben erhalten. [Gestaltung, Vorher/Nachher, Bewegung und Prüfnachweise](docs/TECHNOLOGY.md).
+**Neue Vergleichsfassung:** Zentrale HQ-Produktion mit begehbar verbundenen Gebieten, dauerhaft zentrierte Zahlen auf allen 37 Feldern und genaue Höhen-/Angriffsprognosen. Die bisherige lokale Produktion bleibt über `?economy=legacy-local` verfügbar. Kamera, Landschaft, Drohnen, 1,1-s-Transporte und Maus-/Touch-Drag-and-drop bleiben erhalten.
 
-**Öffentlich geprüft am 12.10.2026:** Der Link öffnet Produktions-Commit `6605d24b344ac985de9543e56dd85ed34d6c646d` mit den neuen Drohnen, HQs und dem Relais. Start, echte Maus-/Touch-Ziehbefehle, Uhr und Pause bestehen auf Desktop und Mobile. [Öffentlicher Prüfbericht](docs/technology/live/production-report.json).
+[Formel, 62 Strategieläufe, Vorher/Nachher und Tests](docs/ECONOMY.md). Die neue Variante erzeugt weniger automatisch wachsende Nebengarnisonen, aber die Simulationen belegen **noch keine geringere Befehlszahl oder mehr Spielspaß**.
 
-**[▶ HEXFRONT 3D spielen — neue Drohnen & Technologie](https://rawcdn.githack.com/emfau88/hexwars/6605d24b344ac985de9543e56dd85ed34d6c646d/experiments/hexfront-3d/preview/index.html)** · [Experiment-Branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama)
+**Veröffentlichung der neuen Vergleichsfassung wird vorbereitet.** Bis zum aktualisierten Link ist die [bisherige Drohnen-/Technologiefassung](https://rawcdn.githack.com/emfau88/hexwars/6605d24b344ac985de9543e56dd85ed34d6c646d/experiments/hexfront-3d/preview/index.html) ausdrücklich der ältere Stand. Die aktuelle Fassung lässt sich mit den Startbefehlen unten lokal testen. [Veröffentlichungsstatus](docs/PUBLISH.md).
 
-Die Vorschau verwendet [raw.githack.com](https://raw.githack.com/). Beim ersten Besuch **Open the page** bestätigen. Keine Anmeldung oder Vercel-Verbindung nötig. Die bestehenden Pages-/Portalversionen bleiben unverändert. [Veröffentlichungsstatus](docs/PUBLISH.md).
+**Steuerung:** Eigenes Feld greifen → Ziel → loslassen. Alternativ Quelle und Ziel antippen, dann Befehl geben. Helle Innenkonturen zeigen direkte Nachbarn; schwächere Konturen zeigen Fernziele über eigene Felder. Ungültige Felswandziele melden kurz rot den benötigten Aufstieg. [Details](docs/DRAG.md).
 
-**Steuerung:** Eigenes Feld greifen → zum Ziel ziehen → loslassen und sofort senden. Alternativ Quelle und Ziel antippen und Befehl geben. [Gestentrennung und Prüfungen](docs/DRAG.md).
+Aktuelle lokale Runtime-Aufnahmen (gleiche Standardkamera und Startzeit):
 
-**Lesbarkeit:** Deutliche Hexkonturen und orange/blaue Besitzflächen bleiben erhalten. Helle Innenkonturen kennzeichnen erreichbare Ziele; Truppenzahlen folgen ihren Feldern. [HUD](docs/HUD.md), [Kamera](docs/CAMERA.md), [vorheriger Landschafts-Art-Pass](docs/ART.md).
+![Desktop 1440 × 900 mit allen 37 Feldzahlen](docs/economy/1440-after-selection.png)
 
-Aktuelle Version, echte Runtime-Aufnahmen:
+<img src="docs/economy/390-after-selection.png" alt="Mobile 390 × 844 mit festen Feldzahlen und HQ-Informationen" width="390">
 
-![Desktop 1440 × 900, neuer Drohnentransport](docs/technology/desktop-after-transport.png)
-
-<img src="docs/technology/mobile-after-transport.png" alt="Mobile 390 × 844, neuer Drohnentransport" width="390">
-
-[Bewegungsclip](docs/technology/action.webm) · [Bildsequenz](docs/technology/action-sequence.jpg) · [Reine Landschaft](docs/technology/landscape.png) · [HQ-Nahaufnahme](docs/technology/hq-detail.png)
+[Mobile Kampfprognose](docs/economy/390-uphill-forecast.png) · [Vorher/Nachher](docs/ECONOMY.md#bilder-und-nachweise) · [Bisherige Technologie und Animationen](docs/TECHNOLOGY.md) · [Assets und Lizenzen](ASSET_LICENSES.md)
 
 ## Starten
 
@@ -65,7 +61,7 @@ Dann die LAN-Adresse des Computers mit Port 4174 öffnen. Eine entsprechende lok
 
 Maus und Touch unterstützen Drag-and-drop und zusätzlich die bisherige Klick-/Tippsteuerung. Die gewählte Stärke (`50 %` / `Alle − 1`) gilt für beide. **Ziehen von einem eigenen Feld gibt einen Befehl; Ziehen am Hintergrund verschiebt die vergrößerte Karte.** Zwei Finger navigieren und zoomen immer; die Maus kann auch mit rechter oder mittlerer Taste auf jedem Feld verschieben. Escape, Touch-Abbruch und ein zweiter Finger brechen einen begonnenen Truppenzug ab. **Taktik/Diorama** wechselt zwischen zwei festen orthografischen Perspektiven (70°/55° über dem Boden). Mausrad, Pinch oder +/− zoomen zwischen Übersicht und 2,2-facher Vergrößerung; die vergrößerte Karte lässt sich begrenzt ziehen. `⌖` stellt die vollständige taktische Übersicht wieder her. Auf sehr kurzen Smartphones nutzt du **+ für Details** und ziehst den Ausschnitt zum gewünschten Feld. Sichtbare Gebäude wählen ihre eigene logische Zelle; Felswände melden eine ungültige Auswahl. `?` öffnet die kurze Anleitung. Die Leertaste pausiert, wenn kein Steuerelement fokussiert ist. Die Partie pausiert auch beim Verlassen des Tabs; nach Rückkehr bewusst fortsetzen.
 
-**Taktik:** Die beiden schmalen Aufstiege sind Engpässe. Bergauf besitzt der Verteidiger +30 % Stärke, bergab der Angreifer +15 %. Das HQ bietet +20 % Verteidigung. Es gilt nur der größere Verteidigungsbonus; es wird kein zusätzlicher alter Hill-Bonus angewendet. Das Relais erhöht die eigene Produktion um 30 %. Ein Angriff kann sich während der Anreise durch gegnerische Verstärkungen verändern.
+**Taktik:** Die beiden schmalen Aufstiege sind Engpässe. Bergauf besitzt der Verteidiger +30 % Stärke, bergab der Angreifer +15 %. Das HQ bietet +20 % Verteidigung. Es gilt nur der größere Verteidigungsbonus; es wird kein zusätzlicher alter Hill-Bonus angewendet. In der neuen Testvariante produziert nur das HQ: verbundene Sektoren erhöhen seine Rate, das verbundene Relais bringt +20 %. Die Vergleichsvariante `?economy=legacy-local` erhält die alte lokale Produktion samt +30-%-Relaisbonus. Ein Angriff kann sich während der Anreise durch gegnerische Verstärkungen verändern.
 
 ## Prüfungen
 
@@ -85,6 +81,7 @@ node tests/territory.mjs
 npm run test:art
 npm run test:overlay
 npm run test:drag
+npm run test:economy
 ```
 
 `node tests/hosted.mjs` prüft eine über `PREVIEW_URL` angegebene Produktions-URL mit echten Maus-/Touchbefehlen und nimmt die Abgabe-Screenshots auf. Mit `PREVIEW_URL=local` startet der Test selbst einen Produktionsserver auf Port 4178; alternativ akzeptiert die Variable eine eigene URL. In PowerShell: `$env:PREVIEW_URL='local'; node tests/hosted.mjs`. Den aktuellen Testlink dazu ausdrücklich als `PREVIEW_URL` angeben. Die öffentliche Vorschau und der lokale Aufruf im Unterverzeichnis sind geprüft. Der Test bestätigt bei raw.githack.com zunächst den angezeigten Link auf genau dieses Repository und diesen Commit. `--art --match --drag` prüft die Ziehsteuerung; `--mobile` beschränkt einen Wiederholungslauf auf Touch. Fehlgeschlagene Requests werden erfasst; blockierte Drittanbieterwerbung der Hosting-Bestätigungsseite steht separat unter `hostWarnings`.
@@ -97,7 +94,7 @@ Für die historischen Kamera-Abgabebilder: `$env:PREVIEW_URL='local'; node tests
 
 Der Browsertest startet eigene lokale Server, testet Desktop und Touch-Portrait, schreibt Screenshots und einen maschinenlesbaren Bericht nach `test-results/` und beendet die von ihm gestarteten Prozesse. Eine vorhandene Playwright-Installation lässt sich alternativ über `PLAYWRIGHT_MODULE` angeben; `PLAYWRIGHT_BROWSERS_PATH` wird von Playwright unterstützt.
 
-Die Testseite `?qa=1&clock=manual` stellt ausschließlich im Entwicklungs-Build eine **manuell fortschaltbare Uhr und lesbare Diagnosen** bereit. Matchtests benutzen normale Maus-/Touch-Befehle und verändern keine Garnisonen oder Gewinner. Die Produktionsvariante deaktiviert die Diagnose-API und die manuelle Uhr.
+Die Testseite `?qa=1&clock=manual` stellt ausschließlich im Entwicklungs-Build eine **manuell fortschaltbare Uhr und lesbare Diagnosen** bereit. Vollständige Matchtests benutzen normale Maus-/Touch-Befehle und verändern keine Garnisonen oder Gewinner. Die separat gekennzeichneten taktischen Integrationsszenen arrangieren Besitz und Truppenwerte zum Prüfen seltener Fälle. Die Produktionsvariante deaktiviert die Diagnose-API und die manuelle Uhr.
 
 ## Umsetzung und Isolation
 
@@ -110,7 +107,7 @@ Die Testseite `?qa=1&clock=manual` stellt ausschließlich im Entwicklungs-Build 
 
 Die bestehende 2D-Version, `legacy/`, Root-Scripts, Portalpakete und `.github/workflows/pages.yml` bleiben unverändert. Die vorhandene Pages-Pipeline veröffentlicht nur `main`; dieses Experiment ändert keine Veröffentlichung und wird nicht automatisch gemergt.
 
-Weitere Details: [Entscheidungen und Repository-Analyse](docs/DECISIONS.md), [Asset-Quellen und Lizenzen](ASSET_LICENSES.md), [Aktuelle Art-Qualität und Tests](docs/ART.md), [historischer Prototyp-QA-Bericht](docs/QA.md).
+Weitere Details: [Entscheidungen und Repository-Analyse](docs/DECISIONS.md), [Asset-Quellen und Lizenzen](ASSET_LICENSES.md), [Wirtschaft und taktische Lesbarkeit](docs/ECONOMY.md), [Art-Qualität und Tests](docs/ART.md), [historischer Prototyp-QA-Bericht](docs/QA.md).
 
 ## Ehrliche visuelle Einordnung
 

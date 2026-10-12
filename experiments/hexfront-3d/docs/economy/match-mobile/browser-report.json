@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-12T17:05:28.674Z",
+  "browser": "Chromium / Playwright",
+  "runs": [
+    {
+      "name": "mobile",
+      "input": "drag-and-drop",
+      "viewport": "390 × 844",
+      "readyMs": 3903,
+      "victory": {
+        "seconds": 187.1,
+        "commands": 37,
+        "aiCommands": 24,
+        "selectedHeights": [
+          0,
+          1,
+          2
+        ]
+      },
+      "defeat": {
+        "seconds": 276.45,
+        "aiCommands": 43
+      },
+      "medianFrameMs": 66.7,
+      "p95FrameMs": 83.3,
+      "metrics": {
+        "calls": 120,
+        "triangles": 47133,
+        "pixelRatio": 1,
+        "quality": "high"
+      },
+      "layout": {
+        "overflow": false,
+        "primary": true,
+        "canvas": {
+          "x": 0,
+          "y": 149,
+          "width": 390,
+          "height": 553,
+          "top": 149,
+          "right": 390,
+          "bottom": 702,
+          "left": 0
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "browserVersion": "151.0.7922.34",
+  "production": {
+    "loads": true,
+    "qaApiAbsent": true,
+    "realClockAdvances": true
+  }
+}

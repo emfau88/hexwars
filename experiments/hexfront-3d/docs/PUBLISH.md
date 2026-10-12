@@ -1,6 +1,12 @@
 # Isolierte Veröffentlichung – 12.10.2026
 
-## Aktuell veröffentlicht: Drohnen und Technologie
+## Neue Vergleichsfassung: Vorbereitung
+
+Zentrale HQ-Produktion, alte lokale Vergleichswirtschaft, fest zentrierte Zahlen und taktische Hinweise. [Änderungen, Formel, Strategievergleich und Bilder](ECONOMY.md). Der neue Produktionslink wird nach Push und öffentlicher Prüfung eingesetzt; der Technologie-Link im folgenden historischen Abschnitt bezeichnet ausdrücklich den vorherigen Stand.
+
+GitHub war zunächst wegen fehlender Namensauflösung nicht erreichbar. Nach erneuter Verbindung des PCs mit dem Mobilfunk-Hotspot konnten die Referenzen abgerufen werden. Der Experiment-Branch steht vor diesem Update bei `a1ffaa93993797c7b651cb0d310bc4f3faa7e89e`. `main` steht inzwischen unabhängig davon bei `9e673c4a245661c6513b342980b3f5c316cb2b94`; es wird hier weder ausgecheckt noch gemergt oder gepusht. Nur der Experiment-Branch wird fortgeschrieben. Bestehende Hosting-Workflows werden nicht gestartet oder geändert.
+
+## Vorheriger veröffentlichter Stand: Drohnen und Technologie
 
 **[HEXFRONT 3D jetzt spielen](https://rawcdn.githack.com/emfau88/hexwars/6605d24b344ac985de9543e56dd85ed34d6c646d/experiments/hexfront-3d/preview/index.html)** — beim ersten Besuch **Open the page** bestätigen. Keine Anmeldung und kein Vercel-Konto nötig.
 
