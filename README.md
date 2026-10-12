@@ -2,19 +2,19 @@
 
 ## 3D-Diorama experiment — play the isolated prototype
 
-**[▶ Test HEXFRONT: Bastion Morgenwacht](https://hexfront-3d-diorama.vercel.app/)**
+**[▶ Test HEXFRONT: Bastion Morgenwacht](https://rawcdn.githack.com/emfau88/hexwars/e9330f8388f6048b60d6b704ebde1e1b82ae28ac/experiments/hexfront-3d/preview/index.html)**
 
 One playable 37-hex battlefield with real elevation, two ramps, Orange vs Blue AI, victory/defeat and restart. Hosted separately from the existing GitHub Pages game. This link and the experiment are on `experiment/hexfront-3d-diorama`; no main-branch deployment was changed.
 
 [Start instructions, controls and technical decisions](./experiments/hexfront-3d/README.md) · [Current art verification and limitations](./experiments/hexfront-3d/docs/ART.md) · [Asset licenses](./experiments/hexfront-3d/ASSET_LICENSES.md)
 
-**Art pass, saved locally:** Authored fractured rock formations, layered cliff faces, command bunkers and a three-panel relay; restrained vegetation, quiet paths and five optimized CC0 material textures. [Before/after screenshots, art decisions and verification](./experiments/hexfront-3d/docs/ART.md). Gameplay, all 37 sectors and camera controls are preserved.
+**Art pass:** Authored fractured rock formations, layered cliff faces, command bunkers and a three-panel relay; restrained vegetation, quiet paths and five optimized CC0 material textures. [Before/after screenshots, art decisions and verification](./experiments/hexfront-3d/docs/ART.md). Gameplay, all 37 sectors and camera controls are preserved.
 
-**Camera update, saved locally:** 70° tactical view, optional 55° diorama view, geometry-based framing and corrected picking. [Angle comparison and camera QA](./experiments/hexfront-3d/docs/CAMERA.md). Push and redeployment are deferred at the owner's request: the online preview above still uses the previous camera; the screenshots below show the new art pass in the local production build.
+**Camera update:** 70° tactical view, optional 55° diorama view, geometry-based framing and corrected picking. [Angle comparison and camera QA](./experiments/hexfront-3d/docs/CAMERA.md). The play link is pinned to the production build of this art pass, including the clean ramps, camera update and territory outlines. It is prepared for publication with this branch.
 
 Persistent hex outlines and Orange/Blue territory fills now make ownership visible across the battlefield. A separate inset outline marks reachable targets without replacing team colours; the textured 3D terrain remains visible.
 
-The earlier deployment was reported READY by Vercel; external browser verification was blocked by this workspace's network/DNS access. The new art build has been tested locally and has not been uploaded. The prototype does **not** yet match Tacticus's production art quality, and 60 FPS on real mobile devices is unverified.
+The preview is served from this isolated branch through [raw.githack.com](https://raw.githack.com/), without a Vercel account. Its first visit may ask you to confirm opening the repository. Local desktop/mobile production checks passed; GitHub upload and live verification are still pending because the publishing computer lost IPv4 connectivity. See the [publication status and reproducible checks](./experiments/hexfront-3d/docs/PUBLISH.md). The prototype does **not** yet match Tacticus's production art quality, and 60 FPS on real mobile devices is unverified.
 
 <table>
   <tr><th>Desktop · 1440 × 900</th><th>Mobile portrait · 390 × 844</th></tr>

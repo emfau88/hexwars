@@ -2,29 +2,29 @@
   "sourceArtCommit": "c66de31b2d1ea3dc69f26eb299e7e7e3056a6b8f",
   "changesSinceArtCommit": "Only the ramp help sentence was corrected in runtime files; ramp crossbars remain removed.",
   "fileCount": 24,
-  "bytes": 2302471,
+  "bytes": 2295210,
   "qaEnabled": false,
   "matchesProductionBuild": true,
   "files": [
     {
       "path": "index.html",
-      "bytes": 7347,
-      "sha256": "e599f028f653cc86ea368835b99e763a75e23e9c268dc699282e9b15d347f1dc"
+      "bytes": 7298,
+      "sha256": "42c7a03a079c68e090cff938328a790e73f3a7a257673936ee0ffeaaab31472d"
     },
     {
       "path": "public/assets/asset-provenance.json",
-      "bytes": 637,
-      "sha256": "28c7cbe1fb9fdd31e1cd2fd8d3e827ddfbc47bb0a58d34bfea0fef50a8be997a"
+      "bytes": 617,
+      "sha256": "0afeb610ce5f0fa54f31cacf688f3fdf5bb2b5eb2708a6c84e4683f9fb6bd396"
     },
     {
       "path": "public/assets/materials/LICENSE-PolyHaven.txt",
-      "bytes": 542,
-      "sha256": "c99cfb4334a390b4bf4a1d9c8b8a85fe9209c057c89de34ad57392f7ca74dcf4"
+      "bytes": 530,
+      "sha256": "64ce0db5d2dca65d540d5b01d48b3ce420c9a991eb72f9dbf6031a645b98389a"
     },
     {
       "path": "public/assets/materials/material-provenance.json",
-      "bytes": 3552,
-      "sha256": "559f58b8b719ec73d3ce33dcd46981ecab64154f870d91422203613bab6e5968"
+      "bytes": 3457,
+      "sha256": "2b302f44bc8646d315409a274c00b19a52cccb074e39669a1098d87601b4d567"
     },
     {
       "path": "public/assets/materials/rock_boulder_dry_diff.webp",
@@ -58,8 +58,8 @@
     },
     {
       "path": "public/assets/nature/Fern_1.gltf",
-      "bytes": 2699,
-      "sha256": "fa6b5d0cf7e40bdde851c89cdc133c54dc4e8cad826270ad52c9392c4dd960f7"
+      "bytes": 2546,
+      "sha256": "b47c30638913fa68cf7acf4ef40e61479ef211f8060b7aa6d4cd98494deb9b7c"
     },
     {
       "path": "public/assets/nature/Leaves.png",
@@ -68,63 +68,66 @@
     },
     {
       "path": "public/assets/nature/LICENSE-Quaternius.txt",
-      "bytes": 854,
-      "sha256": "209fd597c1837037fe13a160c628ef9fd9ccce9337256e21447110ba5ba3e025"
+      "bytes": 831,
+      "sha256": "077b35b9e00ecff7f44d9b58e120e1b4bc8f2b94f90731dcb60809fd8a59618c"
     },
     {
       "path": "src/art.js",
-      "bytes": 25950,
-      "sha256": "38aa00b5dbec7d600d0bb9363d6fd3c6243935e75c291e7d305bff4a0cf17e76"
+      "bytes": 25682,
+      "sha256": "772842a1d7f75f3aeaa601d26167183919430271dcd1c809100b804993a3d269"
     },
     {
       "path": "src/camera.js",
-      "bytes": 1583,
-      "sha256": "f3461e9afe2dbd2af7152dcd169fec1ded6c6b00ccd1d5edc3232fde630c4907"
+      "bytes": 1562,
+      "sha256": "17fac1f5720fcbedc89cce549a05616018d44883abb1f328c809c3a639243c9b"
     },
     {
       "path": "src/game.js",
-      "bytes": 6916,
-      "sha256": "10ace2b80303ce1df5494e0ba0dd3cf98da0f360e12f35ce714acf0daf2a2c4b"
+      "bytes": 6815,
+      "sha256": "b2c9ae4bff9d367a0fb63d0b4ad6c321937f7bbf6e6eb27ee025b20e6a0e6de7"
     },
     {
       "path": "src/main.js",
-      "bytes": 12117,
-      "sha256": "ab4b3c64ebe0c046fe8a4dd7a55048d0ae3ff464c5c7c8b2bc693858febb8da5"
+      "bytes": 12025,
+      "sha256": "c38d74759248c51acfd52ff40fe53f3279f2ec128d10f338600fdcd2f6bce3e8"
     },
     {
       "path": "src/map.js",
-      "bytes": 3701,
-      "sha256": "b67dbd7b7a45c95518d19e7a3f7b54ffaa508d91b905ca139484d16363bf2caa"
+      "bytes": 3629,
+      "sha256": "330774b1eeff32c0258915f3f86542a057d1bb5a6e3f986691cb192888b60458"
     },
     {
       "path": "src/scene.js",
-      "bytes": 22919,
-      "sha256": "f5783547cdb84c376b696a36754183c531c7d34216d0ec30e7e360579bce96c2"
+      "bytes": 22694,
+      "sha256": "402fb85173186f0f5197e7030ca3e98290364ad85573be814df62d648c3e7f2f"
     },
     {
       "path": "src/style.css",
-      "bytes": 17660,
-      "sha256": "598ea42e174a90cfb786e504081d0762d759cef7086c02e0c8c7b874799b1ee6"
+      "bytes": 17659,
+      "sha256": "901fd64c0cfdd17c059d660a2869ed3d2bba9b04a548a179b765fcc5ad11b300"
     },
     {
       "path": "vendor/loaders/GLTFLoader.js",
-      "bytes": 114756,
-      "sha256": "535673d5725a336607631e8d519aba234dc9eca58616fa02ea705601c9828948"
+      "bytes": 110030,
+      "sha256": "177080cdb974170701cb4ee6d1f4e05b08a9c4a6a3bb2793b455584aabf3b835"
     },
     {
       "path": "vendor/THREE-LICENSE.txt",
-      "bytes": 1104,
-      "sha256": "3c344bc3e9582186b9e0d4185c3fd01ba8f8753a51fc2736a57afdc1f03928b4"
+      "bytes": 1082,
+      "sha256": "f8ea8e1b14776d862129c02e78297c1de103e958f8212c6c5d594ec07f78f7c9"
     },
     {
       "path": "vendor/three.module.min.js",
-      "bytes": 687466,
-      "sha256": "8a906f5fe66282d9704f807427c8811525c53e9f062db17513e5cdec1a2820ab"
+      "bytes": 687459,
+      "sha256": "c6fd70ab3ecf768e28c0332fd3f7cddb0ed273d6b1285d22e59caec26f0f01a5"
     },
     {
       "path": "vendor/utils/BufferGeometryUtils.js",
-      "bytes": 33143,
-      "sha256": "99f37be474f6ebeef7ff6632017cbdff517a696f188d023c5bc9a2a48fe6fda8"
+      "bytes": 31769,
+      "sha256": "366ff042b9078eb6db1d1f74a9f1182d0e48c4d05b1e35734b31d99caaa0b651"
     }
-  ]
+  ],
+  "workingTreeBytes": 2302471,
+  "previewCommit": "e9330f8388f6048b60d6b704ebde1e1b82ae28ac",
+  "representation": "Hashes and bytes below describe committed Git blobs (LF text). Windows working-tree text can use CRLF; local dist and preview were byte-identical."
 }

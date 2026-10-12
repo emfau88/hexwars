@@ -9,7 +9,8 @@ const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const local=process.env.PREVIEW_URL==='local';
 const camera=process.argv.includes('--camera'),art=process.argv.includes('--art'),shots=process.env.TEST_OUTPUT||(art?'docs/art':camera?'docs/camera':'docs/screenshots');
 if(!path.resolve(root,shots).startsWith(root+path.sep))throw Error('Test output must remain inside this experiment');
-const url=local?'http://127.0.0.1:4178/':process.env.PREVIEW_URL||'https://hexfront-3d-diorama.vercel.app/';
+const url=local?'http://127.0.0.1:4178/':process.env.PREVIEW_URL;
+if(!url)throw Error('Set PREVIEW_URL to local or the production URL documented in README.md');
 let server;
 if(local){server=spawn(process.execPath,['scripts/serve.mjs','--production'],{cwd:root,env:{...process.env,PORT:'4178'},stdio:['ignore','pipe','pipe'],windowsHide:true});await new Promise((resolve,reject)=>{server.stdout.on('data',d=>{if(String(d).includes('http://'))resolve();});server.on('error',reject);server.on('exit',code=>{if(code)reject(Error(`Server exit ${code}`));});});}
 const report={url,date:new Date().toISOString(),runs:[],errors:[]};

@@ -2,7 +2,7 @@
 
 Ein isolierter, tatsächlich spielbarer 3D-Vertical-Slice mit **einem Level**, 37 spielbaren Hexfeldern, zwei HQs, zwei Aufstiegen und einer gegnerischen KI. Orange erobert das blaue HQ; der Verlust des eigenen HQs beendet die Partie.
 
-**[▶ Testversion im Browser öffnen](https://hexfront-3d-diorama.vercel.app/)** · [Experiment-Branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama)
+**[▶ Testversion im Browser öffnen](https://rawcdn.githack.com/emfau88/hexwars/e9330f8388f6048b60d6b704ebde1e1b82ae28ac/experiments/hexfront-3d/preview/index.html)** · [Experiment-Branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama)
 
 **Art-Pass Morgenwacht:** Gebrochene, geschichtete Felsflanken, eine eigene Familie aus Kommandobunkern und Relais, ruhige Erdwege und CC0-Felsmaterialien ersetzen die bisherige gleichmäßige Low-Poly-Dekoration. [Vorher/Nachher, Referenzanalyse, Tests und ehrliche Bewertung](docs/ART.md).
 
@@ -10,9 +10,9 @@ Ein isolierter, tatsächlich spielbarer 3D-Vertical-Slice mit **einem Level**, 3
 
 **Felder und Besitz:** Deutliche Hexkonturen bleiben ständig sichtbar. Eroberte Bodenflächen und ihre äußeren Ränder werden orange beziehungsweise blau eingefärbt. Eine zusätzliche helle Innenkontur markiert Auswahl und erreichbare Ziele, ohne die Teamfarbe zu ersetzen. Bodenstruktur, Schatten und echte Höhen bleiben erkennbar.
 
-**Veröffentlichungsstand:** Kamera-Update und Art-Pass sind lokal auf dem Experiment-Branch gespeichert. Push und erneutes Deployment sind auf Wunsch zurückgestellt. Der obige Testlink zeigt noch die frühere Kamera; die folgenden Screenshots zeigen den neuen Art-Pass im lokal geprüften Produktions-Build. Der GitHub-Branch-Link ist erst nach einem erfolgreichen Push verfügbar.
+**Veröffentlichungsstand:** Der obige Testlink ist für den aktuellen Produktions-Build mit Art-Pass, 70°-Kamera, Teamflächen und Rampen ohne Querstreifen vorbereitet. GitHub-Push und Live-Prüfung stehen wegen der ausgefallenen IPv4-Verbindung des Veröffentlichungsrechners noch aus. Bis zum erfolgreichen Upload ist der Link nicht verfügbar. Der Build ist lokal auf Desktop und Mobile geprüft und auf dem Experiment-Branch committet.
 
-Der Link gehört zu einem eigenständigen Vercel-Projekt ohne Verbindung zum bisherigen Pages-Deployment. Die frühere Veröffentlichung wurde als READY gemeldet; ihr externer Browseraufruf war wegen Netzwerk-/DNS-Beschränkungen nicht verifizierbar. Der aktuelle Art-Build ist ausschließlich lokal geprüft und noch nicht hochgeladen. Historische Details stehen im [QA-Bericht](docs/QA.md).
+Die Vorschau verwendet [raw.githack.com](https://raw.githack.com/) als Auslieferungsdienst für die Dateien dieses öffentlichen Repositorys. Kein Vercel-Konto und keine Änderung am bisherigen Pages-Spiel sind nötig. Beim ersten Besuch kann eine Bestätigungsseite erscheinen; sie zeigt dieses Repository als Ziel. [Veröffentlichungsstand, Prüfnachweise und Aktualisierung des Testlinks](docs/PUBLISH.md).
 
 ![70°-Taktikansicht, Desktop 1440 × 900](docs/art/final-desktop.png)
 
@@ -22,7 +22,7 @@ Der Link gehört zu einem eigenständigen Vercel-Projekt ohne Verbindung zum bis
 
 Node.js 20 oder neuer. Das Experiment hat keine zur Laufzeit zu installierenden npm-Abhängigkeiten: Three.js und die benötigten Asset-Dateien sind versioniert und liegen lokal vor.
 
-Im bereits vorhandenen Arbeitsordner direkt mit `cd hexwars/experiments/hexfront-3d`, `npm ci` und `npm run dev` starten. Nach Veröffentlichung des Branches lässt sich ein eigener Checkout so anlegen:
+Im vorhandenen vollständigen Arbeitsordner direkt mit `cd hexwars-art-publish/experiments/hexfront-3d`, `npm ci` und `npm run dev` starten. Nach dem erfolgreichen Push lässt sich ein eigener Checkout so anlegen:
 
 ```sh
 git clone --branch experiment/hexfront-3d-diorama https://github.com/emfau88/hexwars.git
@@ -81,7 +81,7 @@ node tests/territory.mjs
 npm run test:art
 ```
 
-`node tests/hosted.mjs` prüft die öffentliche Produktions-URL mit echten Maus-/Touchbefehlen und nimmt die Abgabe-Screenshots auf. Mit `PREVIEW_URL=local` startet der Test selbst einen Produktionsserver auf Port 4178; alternativ akzeptiert die Variable eine eigene URL. In PowerShell: `$env:PREVIEW_URL='local'; node tests/hosted.mjs`. In dieser Umgebung war nur dieser lokale Durchlauf möglich.
+`node tests/hosted.mjs` prüft eine über `PREVIEW_URL` angegebene Produktions-URL mit echten Maus-/Touchbefehlen und nimmt die Abgabe-Screenshots auf. Mit `PREVIEW_URL=local` startet der Test selbst einen Produktionsserver auf Port 4178; alternativ akzeptiert die Variable eine eigene URL. In PowerShell: `$env:PREVIEW_URL='local'; node tests/hosted.mjs`. Den aktuellen Testlink dazu ausdrücklich als `PREVIEW_URL` angeben. Der öffentliche Aufruf wurde bisher nicht verifiziert; der lokale Test des Unterverzeichnisses `preview/index.html` ist bestanden.
 
 Für die aktuellen Art-Abgabebilder: `$env:PREVIEW_URL='local'; node tests/hosted.mjs --art`. Die reinen Landschaften und unveränderten Vorher-Aufnahmen liegen in `docs/art/`. Der 70°-Vergleich benutzt identischen Spielzustand und Viewport. Für die Eingabeprüfung ohne Überschreiben historischer Kameraberichte: `$env:TEST_OUTPUT='docs/art'; node tests/camera-input.mjs`.
 
