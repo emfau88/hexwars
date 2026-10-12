@@ -1,5 +1,29 @@
 # HEXFRONT
 
+## 3D-Diorama experiment — play the isolated prototype
+
+**New technology update:** hover drones, a shared command-station family, activated relay, 1.1-second transports and short capture/combat effects. The 37-sector map, 70°/55° cameras, mouse/touch drag-and-drop and compact HUD are retained. [Design, before/after, motion clip and tests](./experiments/hexfront-3d/docs/TECHNOLOGY.md).
+
+**Published and publicly tested on 12 October 2026.** The link below opens the new drone/technology build `6605d24`. Desktop and touch browser checks passed, including real drag orders, clock and pause. [Live evidence](./experiments/hexfront-3d/docs/technology/live/production-report.json).
+
+**[▶ Play HEXFRONT 3D — new drones & technology](https://rawcdn.githack.com/emfau88/hexwars/6605d24b344ac985de9543e56dd85ed34d6c646d/experiments/hexfront-3d/preview/index.html)** · [Experiment branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama) · [Start instructions](./experiments/hexfront-3d/README.md)
+
+The experiment lives in `experiments/hexfront-3d/`. Main, portal builds and GitHub Pages remain unchanged. The preview uses raw.githack.com; on the first visit, click **Open the page**. No Vercel account or sign-in is needed. [Publication status](./experiments/hexfront-3d/docs/PUBLISH.md).
+
+Current version, actual runtime captures:
+
+<table>
+  <tr><th>Desktop · 1440 × 900</th><th>Mobile · 390 × 844</th></tr>
+  <tr>
+    <td width="75%"><img src="./experiments/hexfront-3d/docs/technology/desktop-after-transport.png" alt="New hover-drone transport on the tactical battlefield"></td>
+    <td width="25%"><img src="./experiments/hexfront-3d/docs/technology/mobile-after-transport.png" alt="New hover-drone transport and compact touch HUD"></td>
+  </tr>
+</table>
+
+[Motion clip](./experiments/hexfront-3d/docs/technology/action.webm) · [Landscape without overlays](./experiments/hexfront-3d/docs/technology/landscape.png) · [Assets and licenses](./experiments/hexfront-3d/ASSET_LICENSES.md)
+
+This remains a prototype, below Tacticus's production art quality. Human balance testing and 60 FPS on real phones remain unverified.
+
 [![Verify and deploy](https://github.com/emfau88/hexwars/actions/workflows/pages.yml/badge.svg)](https://github.com/emfau88/hexwars/actions/workflows/pages.yml)
 
 HEXFRONT is a compact real-time tactics game for desktop browsers and mobile portrait screens. Expand across a hex grid, distribute growing forces and capture the opposing base.

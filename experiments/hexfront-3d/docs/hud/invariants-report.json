@@ -1,0 +1,105 @@
+{
+  "baseCommit": "df540de846540ed9a8c38a33de9e4afc38a9e190",
+  "unchanged": [
+    {
+      "path": "src/game.js",
+      "gitBlob": "094b361237783dd0e8efd25fada472ccdc87aa20",
+      "unchanged": true
+    },
+    {
+      "path": "src/map.js",
+      "gitBlob": "cd9af89d8a44c91158a02e738ffaa93c4cfc4bee",
+      "unchanged": true
+    },
+    {
+      "path": "src/camera.js",
+      "gitBlob": "ae946be9b112e12170044a8236d1337837433c16",
+      "unchanged": true
+    },
+    {
+      "path": "src/art.js",
+      "gitBlob": "e7250593c6eb69581c67a17fe173c83d8d51657d",
+      "unchanged": true
+    },
+    {
+      "path": "public/assets/asset-provenance.json",
+      "gitBlob": "f26efcd09e12f946ef168e3b2880415df81fc6c0",
+      "unchanged": true
+    },
+    {
+      "path": "public/assets/materials/LICENSE-PolyHaven.txt",
+      "gitBlob": "962e4eacef82aee7cd6f97333805e40d3da0e07b",
+      "unchanged": true
+    },
+    {
+      "path": "public/assets/materials/material-provenance.json",
+      "gitBlob": "4338efbd425ce053114d86cd766bc554d6a21852",
+      "unchanged": true
+    },
+    {
+      "path": "public/assets/materials/rock_boulder_dry_diff.webp",
+      "gitBlob": "08ca107d278f26b3820850b6c42d696d1c6155cf",
+      "unchanged": true
+    },
+    {
+      "path": "public/assets/materials/rock_boulder_dry_nor_gl.webp",
+      "gitBlob": "23af99c01c4f9ed990f1b8d699f383ebefc9e99e",
+      "unchanged": true
+    },
+    {
+      "path": "public/assets/materials/rock_boulder_dry_rough.webp",
+      "gitBlob": "b9cbe5b7cc35d7fc957a144d6feaa63df8260448",
+      "unchanged": true
+    },
+    {
+      "path": "public/assets/materials/rock_wall_02_diff.webp",
+      "gitBlob": "bf8689be9ee24c9ef34708ab0ec610a441eeb531",
+      "unchanged": true
+    },
+    {
+      "path": "public/assets/materials/rock_wall_02_rough.webp",
+      "gitBlob": "25b027cde1ec4f1f79d11f40b2e8cef6a12567a7",
+      "unchanged": true
+    },
+    {
+      "path": "public/assets/nature/Fern_1.bin",
+      "gitBlob": "8712382dcdcf5a335e0bba000060acf285e918a0",
+      "unchanged": true
+    },
+    {
+      "path": "public/assets/nature/Fern_1.gltf",
+      "gitBlob": "caeefce8e6103ab2efde8aed2efbb3c9bf532cf0",
+      "unchanged": true
+    },
+    {
+      "path": "public/assets/nature/Leaves.png",
+      "gitBlob": "1a5808f80aec2a9a382b92503f708c7fedc148f0",
+      "unchanged": true
+    },
+    {
+      "path": "public/assets/nature/LICENSE-Quaternius.txt",
+      "gitBlob": "ffd107c7f88db8f3d97186e5dad091cf2f979e7c",
+      "unchanged": true
+    },
+    {
+      "path": "vendor/THREE-LICENSE.txt",
+      "gitBlob": "bc825c59e9cbcac5ead6178434a77d7f8f4c969b",
+      "unchanged": true
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "gitBlob": "55910b8ad356e9c2cac8926db5f91eadc322b6e2",
+      "unchanged": true
+    },
+    {
+      "path": "vendor/loaders/GLTFLoader.js",
+      "gitBlob": "95a9a488ca75b4a189e779c940e54cc7fde503e8",
+      "unchanged": true
+    },
+    {
+      "path": "vendor/utils/BufferGeometryUtils.js",
+      "gitBlob": "4d4788237a0bf938b1af7354fd23815d31335769",
+      "unchanged": true
+    }
+  ]
+}

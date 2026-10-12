@@ -1,0 +1,24 @@
+{
+  "name": "hexfront-3d-diorama",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Isolated single-level HEXFRONT 3D vertical slice",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "build": "node scripts/build.mjs",
+    "preview": "node scripts/serve.mjs --production",
+    "test": "node --test tests/*.test.mjs",
+    "test:browser": "node tests/browser.mjs",
+    "test:camera": "node tests/camera.mjs && node tests/touch-target.mjs && node tests/camera-input.mjs",
+    "test:art": "node tests/art.mjs",
+    "preview:prepare": "node scripts/prepare-preview.mjs",
+    "test:overlay": "node tests/overlay.mjs",
+    "test:drag": "node tests/drag-input.mjs",
+    "test:technology": "node tests/technology.mjs && node tests/technology-mission.mjs",
+    "test:speeds": "node tests/speed-comparison.mjs && node tests/speed-visual.mjs"
+  }
+}

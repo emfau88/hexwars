@@ -1,0 +1,29 @@
+{
+  "url": "http://127.0.0.1:4178/",
+  "date": "2026-10-11T22:24:28.597Z",
+  "runs": [
+    {
+      "name": "desktop",
+      "title": "HEXFRONT — Bastion Morgenwacht",
+      "qa": "undefined",
+      "overflow": false,
+      "readyMs": 2541,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "commandAccepted": true,
+      "clockAdvances": true,
+      "pause": true
+    },
+    {
+      "name": "mobile",
+      "title": "HEXFRONT — Bastion Morgenwacht",
+      "qa": "undefined",
+      "overflow": false,
+      "readyMs": 2100,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "commandAccepted": true,
+      "clockAdvances": true,
+      "pause": true
+    }
+  ],
+  "errors": []
+}

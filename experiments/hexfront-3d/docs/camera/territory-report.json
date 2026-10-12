@@ -1,0 +1,60 @@
+{
+  "date": "2026-10-11T22:26:44.909Z",
+  "runs": [
+    {
+      "name": "desktop",
+      "seconds": 30.00000000000029,
+      "commands": 1,
+      "aiCommands": 4,
+      "captures": [
+        {
+          "id": "3,-2",
+          "owner": "blue",
+          "height": 0
+        },
+        {
+          "id": "3,-1",
+          "owner": "blue",
+          "height": 0
+        },
+        {
+          "id": "-3,3",
+          "owner": "orange",
+          "height": 0
+        }
+      ],
+      "teamColoursMatch": true,
+      "independentSelection": true,
+      "viewZoomFit": true,
+      "restart": true
+    },
+    {
+      "name": "mobile",
+      "seconds": 30.00000000000029,
+      "commands": 1,
+      "aiCommands": 4,
+      "captures": [
+        {
+          "id": "3,-2",
+          "owner": "blue",
+          "height": 0
+        },
+        {
+          "id": "3,-1",
+          "owner": "blue",
+          "height": 0
+        },
+        {
+          "id": "-3,3",
+          "owner": "orange",
+          "height": 0
+        }
+      ],
+      "teamColoursMatch": true,
+      "independentSelection": true,
+      "viewZoomFit": true,
+      "restart": true
+    }
+  ],
+  "errors": []
+}

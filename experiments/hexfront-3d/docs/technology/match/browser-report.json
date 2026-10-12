@@ -1,0 +1,97 @@
+{
+  "date": "2026-10-12T14:59:57.696Z",
+  "browser": "Chromium / Playwright",
+  "runs": [
+    {
+      "name": "desktop",
+      "input": "drag-and-drop",
+      "viewport": "1366 × 768",
+      "readyMs": 3235,
+      "victory": {
+        "seconds": 167.1,
+        "commands": 33,
+        "aiCommands": 25,
+        "selectedHeights": [
+          0,
+          1,
+          2
+        ]
+      },
+      "defeat": {
+        "seconds": 257.55,
+        "aiCommands": 40
+      },
+      "medianFrameMs": 99.9,
+      "p95FrameMs": 100.1,
+      "metrics": {
+        "calls": 120,
+        "triangles": 47133,
+        "pixelRatio": 1,
+        "quality": "high"
+      },
+      "layout": {
+        "overflow": false,
+        "primary": true,
+        "canvas": {
+          "x": 265,
+          "y": 93,
+          "width": 1091,
+          "height": 546,
+          "top": 93,
+          "right": 1356,
+          "bottom": 639,
+          "left": 265
+        }
+      }
+    },
+    {
+      "name": "mobile",
+      "input": "drag-and-drop",
+      "viewport": "390 × 844",
+      "readyMs": 2678,
+      "victory": {
+        "seconds": 167.1,
+        "commands": 33,
+        "aiCommands": 25,
+        "selectedHeights": [
+          0,
+          1,
+          2
+        ]
+      },
+      "defeat": {
+        "seconds": 257.55,
+        "aiCommands": 40
+      },
+      "medianFrameMs": 66.6,
+      "p95FrameMs": 66.8,
+      "metrics": {
+        "calls": 120,
+        "triangles": 47133,
+        "pixelRatio": 1,
+        "quality": "high"
+      },
+      "layout": {
+        "overflow": false,
+        "primary": true,
+        "canvas": {
+          "x": 0,
+          "y": 149,
+          "width": 390,
+          "height": 553,
+          "top": 149,
+          "right": 390,
+          "bottom": 702,
+          "left": 0
+        }
+      }
+    }
+  ],
+  "errors": [],
+  "browserVersion": "151.0.7922.34",
+  "production": {
+    "loads": true,
+    "qaApiAbsent": true,
+    "realClockAdvances": true
+  }
+}

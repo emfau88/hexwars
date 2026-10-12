@@ -1,0 +1,12 @@
+Poly Haven texture subset – CC0 1.0 Universal
+Commercial use, modification and redistribution permitted.
+License: https://creativecommons.org/publicdomain/zero/1.0/
+Official license statement: https://polyhaven.com/license
+
+Rock Boulder Dry – Dimitrios Savva and Rico Cilliers
+https://polyhaven.com/a/rock_boulder_dry
+Rock Wall 02 – Rob Tuytel
+https://polyhaven.com/a/rock_wall_02
+
+Exact source URLs, original/delivered hashes and local transformations are
+recorded in material-provenance.json beside these optimized files.

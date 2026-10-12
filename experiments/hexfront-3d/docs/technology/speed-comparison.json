@@ -1,0 +1,209 @@
+{
+  "method": "Deterministic half/all strategy, no initial-state edits; identical AI and production for all transport durations. Not human playtesting.",
+  "results": [
+    {
+      "secondsPerHex": 2,
+      "cadence": 5,
+      "result": "victory",
+      "seconds": 265,
+      "commands": 52,
+      "aiCommands": 37,
+      "relayOwners": [
+        "neutral",
+        "orange",
+        "blue"
+      ]
+    },
+    {
+      "secondsPerHex": 2,
+      "cadence": 6.3,
+      "result": "victory",
+      "seconds": 240.9,
+      "commands": 38,
+      "aiCommands": 37,
+      "relayOwners": [
+        "neutral",
+        "blue",
+        "orange"
+      ]
+    },
+    {
+      "secondsPerHex": 2,
+      "cadence": 7.5,
+      "result": "victory",
+      "seconds": 232.7,
+      "commands": 31,
+      "aiCommands": 36,
+      "relayOwners": [
+        "neutral",
+        "blue",
+        "orange"
+      ]
+    },
+    {
+      "secondsPerHex": 2,
+      "cadence": 0,
+      "result": "defeat",
+      "seconds": 239.55,
+      "commands": 0,
+      "aiCommands": 37,
+      "relayOwners": [
+        "neutral",
+        "blue"
+      ]
+    },
+    {
+      "secondsPerHex": 1.2,
+      "cadence": 5,
+      "result": "victory",
+      "seconds": 172.2,
+      "commands": 34,
+      "aiCommands": 26,
+      "relayOwners": [
+        "neutral",
+        "orange",
+        "blue"
+      ]
+    },
+    {
+      "secondsPerHex": 1.2,
+      "cadence": 6.3,
+      "result": "victory",
+      "seconds": 272.8,
+      "commands": 43,
+      "aiCommands": 41,
+      "relayOwners": [
+        "neutral",
+        "orange",
+        "blue"
+      ]
+    },
+    {
+      "secondsPerHex": 1.2,
+      "cadence": 7.5,
+      "result": "defeat",
+      "seconds": 191.65,
+      "commands": 23,
+      "aiCommands": 29,
+      "relayOwners": [
+        "neutral",
+        "orange",
+        "blue"
+      ]
+    },
+    {
+      "secondsPerHex": 1.2,
+      "cadence": 0,
+      "result": "defeat",
+      "seconds": 245.05,
+      "commands": 0,
+      "aiCommands": 38,
+      "relayOwners": [
+        "neutral",
+        "blue"
+      ]
+    },
+    {
+      "secondsPerHex": 1.1,
+      "cadence": 5,
+      "result": "victory",
+      "seconds": 167.1,
+      "commands": 33,
+      "aiCommands": 25,
+      "relayOwners": [
+        "neutral",
+        "orange",
+        "blue"
+      ]
+    },
+    {
+      "secondsPerHex": 1.1,
+      "cadence": 6.3,
+      "result": "victory",
+      "seconds": 265.2,
+      "commands": 42,
+      "aiCommands": 41,
+      "relayOwners": [
+        "neutral",
+        "orange",
+        "blue"
+      ]
+    },
+    {
+      "secondsPerHex": 1.1,
+      "cadence": 7.5,
+      "result": "defeat",
+      "seconds": 163.05,
+      "commands": 19,
+      "aiCommands": 25,
+      "relayOwners": [
+        "neutral",
+        "orange",
+        "blue"
+      ]
+    },
+    {
+      "secondsPerHex": 1.1,
+      "cadence": 0,
+      "result": "defeat",
+      "seconds": 257.55,
+      "commands": 0,
+      "aiCommands": 40,
+      "relayOwners": [
+        "neutral",
+        "blue"
+      ]
+    },
+    {
+      "secondsPerHex": 1,
+      "cadence": 5,
+      "result": "victory",
+      "seconds": 132.95,
+      "commands": 26,
+      "aiCommands": 17,
+      "relayOwners": [
+        "neutral",
+        "orange",
+        "blue"
+      ]
+    },
+    {
+      "secondsPerHex": 1,
+      "cadence": 6.3,
+      "result": "victory",
+      "seconds": 228.3,
+      "commands": 36,
+      "aiCommands": 34,
+      "relayOwners": [
+        "neutral",
+        "orange",
+        "blue"
+      ]
+    },
+    {
+      "secondsPerHex": 1,
+      "cadence": 7.5,
+      "result": "defeat",
+      "seconds": 162.95,
+      "commands": 21,
+      "aiCommands": 25,
+      "relayOwners": [
+        "neutral",
+        "orange",
+        "blue"
+      ]
+    },
+    {
+      "secondsPerHex": 1,
+      "cadence": 0,
+      "result": "defeat",
+      "seconds": 225.95,
+      "commands": 0,
+      "aiCommands": 35,
+      "relayOwners": [
+        "neutral",
+        "blue"
+      ]
+    }
+  ]
+}

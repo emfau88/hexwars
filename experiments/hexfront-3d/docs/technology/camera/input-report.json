@@ -1,0 +1,153 @@
+{
+  "runs": [
+    {
+      "width": 1440,
+      "height": 900,
+      "canvasTaps": 37,
+      "overviewTaps": 37,
+      "detailTaps": 0,
+      "heights": [
+        0,
+        2,
+        1
+      ],
+      "clippedCorners": 0,
+      "objectTests": [
+        {
+          "angle": 70,
+          "hqRoofs": 2,
+          "cliffPreservesSelection": true
+        },
+        {
+          "angle": 55,
+          "hqRoofs": 2,
+          "cliffPreservesSelection": true
+        }
+      ],
+      "viewSwitchPreservesSelection": true,
+      "gestureDoesNotSelect": true,
+      "zoomClamped": true,
+      "reset": true,
+      "overflow": false,
+      "footer": true,
+      "stageClearsCommands": true,
+      "scoreClearsTools": true,
+      "toolsClearMap": true
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "canvasTaps": 37,
+      "overviewTaps": 37,
+      "detailTaps": 0,
+      "heights": [
+        0,
+        2,
+        1
+      ],
+      "clippedCorners": 0,
+      "objectTests": [
+        {
+          "angle": 70,
+          "hqRoofs": 2,
+          "cliffPreservesSelection": true
+        },
+        {
+          "angle": 55,
+          "hqRoofs": 2,
+          "cliffPreservesSelection": true
+        }
+      ],
+      "viewSwitchPreservesSelection": true,
+      "gestureDoesNotSelect": true,
+      "zoomClamped": true,
+      "reset": true,
+      "overflow": false,
+      "footer": true,
+      "stageClearsCommands": true,
+      "scoreClearsTools": true,
+      "toolsClearMap": true
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "canvasTaps": 37,
+      "overviewTaps": 30,
+      "detailTaps": 7,
+      "heights": [
+        0,
+        2,
+        1
+      ],
+      "clippedCorners": 0,
+      "objectTests": [],
+      "viewSwitchPreservesSelection": true,
+      "gestureDoesNotSelect": true,
+      "zoomClamped": true,
+      "reset": true,
+      "overflow": false,
+      "footer": true,
+      "stageClearsCommands": true,
+      "scoreClearsTools": true,
+      "toolsClearMap": true
+    },
+    {
+      "width": 375,
+      "height": 667,
+      "canvasTaps": 37,
+      "overviewTaps": 36,
+      "detailTaps": 1,
+      "heights": [
+        0,
+        2,
+        1
+      ],
+      "clippedCorners": 0,
+      "objectTests": [],
+      "viewSwitchPreservesSelection": true,
+      "gestureDoesNotSelect": true,
+      "zoomClamped": true,
+      "reset": true,
+      "overflow": false,
+      "footer": true,
+      "stageClearsCommands": true,
+      "scoreClearsTools": true,
+      "toolsClearMap": true
+    },
+    {
+      "width": 430,
+      "height": 932,
+      "canvasTaps": 37,
+      "overviewTaps": 37,
+      "detailTaps": 0,
+      "heights": [
+        0,
+        2,
+        1
+      ],
+      "clippedCorners": 0,
+      "objectTests": [
+        {
+          "angle": 70,
+          "hqRoofs": 2,
+          "cliffPreservesSelection": true
+        },
+        {
+          "angle": 55,
+          "hqRoofs": 2,
+          "cliffPreservesSelection": true
+        }
+      ],
+      "viewSwitchPreservesSelection": true,
+      "gestureDoesNotSelect": true,
+      "zoomClamped": true,
+      "reset": true,
+      "overflow": false,
+      "footer": true,
+      "stageClearsCommands": true,
+      "scoreClearsTools": true,
+      "toolsClearMap": true
+    }
+  ],
+  "errors": []
+}

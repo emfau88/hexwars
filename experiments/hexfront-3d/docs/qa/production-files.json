@@ -1,0 +1,146 @@
+{
+  "deployment": "dpl_63mDCqc8J9HZeCJhTm1NYqZKXphh",
+  "url": "https://hexfront-3d-diorama.vercel.app/",
+  "files": [
+    {
+      "file": "index.html",
+      "sha1": "48957bb6622aac0e310aa4fd22dc417337a3af40",
+      "bytes": 6879
+    },
+    {
+      "file": "public/assets/asset-provenance.json",
+      "sha1": "f2a72427ae18a94751d2bf110403cfe136d9382f",
+      "bytes": 3365
+    },
+    {
+      "file": "public/assets/nature/Bush_Common.bin",
+      "sha1": "0bba6c8a4f0f7c7694ddae3a8c50897300a4649c",
+      "bytes": 91800
+    },
+    {
+      "file": "public/assets/nature/Bush_Common.gltf",
+      "sha1": "bd1285d23469f8708b6776585ad89d03f9d87dcd",
+      "bytes": 2585
+    },
+    {
+      "file": "public/assets/nature/Fern_1.bin",
+      "sha1": "213eec3ff533f585fd0f73064ce57eb2143a9f1b",
+      "bytes": 11448
+    },
+    {
+      "file": "public/assets/nature/Fern_1.gltf",
+      "sha1": "e72e1b018f40c9e0c96ba0e59f9c01c212d3859b",
+      "bytes": 2546
+    },
+    {
+      "file": "public/assets/nature/Leaves.png",
+      "sha1": "c9f2dcc333cbb4bd90c413c4d34e395e87fc370c",
+      "bytes": 223199
+    },
+    {
+      "file": "public/assets/nature/Leaves_TwistedTree_C.png",
+      "sha1": "b96f096f870d02e381c303488d60b63cf117bfe0",
+      "bytes": 60705
+    },
+    {
+      "file": "public/assets/nature/LICENSE-Quaternius.txt",
+      "sha1": "02767f6871b774d65039cb5a24d42f430826b3cd",
+      "bytes": 831
+    },
+    {
+      "file": "public/assets/nature/Rocks_Diffuse.jpg",
+      "sha1": "84858485b18af5dafe6248e2d84b28473c836f20",
+      "bytes": 52704
+    },
+    {
+      "file": "public/assets/nature/Rock_Medium_1.bin",
+      "sha1": "5fd0df3d358fae1b339dd6c25e94acb05099629b",
+      "bytes": 13284
+    },
+    {
+      "file": "public/assets/nature/Rock_Medium_1.gltf",
+      "sha1": "889fae9494e62899320f81089930f9ab7707dc48",
+      "bytes": 2261
+    },
+    {
+      "file": "public/assets/nature/Rock_Medium_2.bin",
+      "sha1": "0ede081db6b4e7964be45efc847eb49f6999e8ec",
+      "bytes": 9432
+    },
+    {
+      "file": "public/assets/nature/Rock_Medium_2.gltf",
+      "sha1": "90b99d33c1b3fb33366fde88819c5bffdcf1fce2",
+      "bytes": 2255
+    },
+    {
+      "file": "public/assets/scifi/LICENSE-Quaternius.txt",
+      "sha1": "a53c23e815859b2f839ccc3e9fc7240b42cb61e4",
+      "bytes": 816
+    },
+    {
+      "file": "public/assets/scifi/Prop_AccessPoint.bin",
+      "sha1": "a9dd19b05144581ab5e2f3ddd671de2a0f067a06",
+      "bytes": 34588
+    },
+    {
+      "file": "public/assets/scifi/Prop_AccessPoint.gltf",
+      "sha1": "b81e840e67ba4cd4d678252c8f3f1c91686a7ecb",
+      "bytes": 7712
+    },
+    {
+      "file": "public/assets/scifi/WallAstra_Straight_Broken.bin",
+      "sha1": "2f9bf8684fb23eb97b31aed495d619b9c2486217",
+      "bytes": 155764
+    },
+    {
+      "file": "public/assets/scifi/WallAstra_Straight_Broken.gltf",
+      "sha1": "1e9d71f9f077439c5def90872c83669e31d06c16",
+      "bytes": 9694
+    },
+    {
+      "file": "src/game.js",
+      "sha1": "98360f3763f3c64fa0463572c198e491b4e208bf",
+      "bytes": 6815
+    },
+    {
+      "file": "src/main.js",
+      "sha1": "d247a5e675cd4ff401f1050ba82b1e833a12c90f",
+      "bytes": 10739
+    },
+    {
+      "file": "src/map.js",
+      "sha1": "0c5e875389a1ee53d463cc25f02236db5833d8a9",
+      "bytes": 3629
+    },
+    {
+      "file": "src/scene.js",
+      "sha1": "2a828fda700602a2f8b0a734131e61d8e57d0318",
+      "bytes": 29739
+    },
+    {
+      "file": "src/style.css",
+      "sha1": "def1f6afd4defa8a88cf290e5c898c48db42ccaa",
+      "bytes": 15703
+    },
+    {
+      "file": "vendor/loaders/GLTFLoader.js",
+      "sha1": "dee20943caeeb76f1d98e254a9febded3e888864",
+      "bytes": 110030
+    },
+    {
+      "file": "vendor/THREE-LICENSE.txt",
+      "sha1": "5107541f174ff92677ad5925ff25199948f06324",
+      "bytes": 1082
+    },
+    {
+      "file": "vendor/three.module.min.js",
+      "sha1": "31ce39c654fcac39e4523deec7f5a18dea8427d3",
+      "bytes": 687459
+    },
+    {
+      "file": "vendor/utils/BufferGeometryUtils.js",
+      "sha1": "1e1ae4fec7f473d24f42925f62badfb80af57a2d",
+      "bytes": 31769
+    }
+  ]
+}
