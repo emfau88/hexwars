@@ -6,7 +6,7 @@ Ein isolierter 3D-Vertical-Slice: ein Level, 37 Hexfelder, drei Höhenstufen, zw
 
 [Formel, 62 Strategieläufe, Vorher/Nachher und Tests](docs/ECONOMY.md). Die neue Variante erzeugt weniger automatisch wachsende Nebengarnisonen, aber die Simulationen belegen **noch keine geringere Befehlszahl oder mehr Spielspaß**.
 
-**Veröffentlichung der neuen Vergleichsfassung wird vorbereitet.** Bis zum aktualisierten Link ist die [bisherige Drohnen-/Technologiefassung](https://rawcdn.githack.com/emfau88/hexwars/6605d24b344ac985de9543e56dd85ed34d6c646d/experiments/hexfront-3d/preview/index.html) ausdrücklich der ältere Stand. Die aktuelle Fassung lässt sich mit den Startbefehlen unten lokal testen. [Veröffentlichungsstatus](docs/PUBLISH.md).
+**[Jetzt spielen: zentrale HQ-Wirtschaft](https://rawcdn.githack.com/emfau88/hexwars/df722a6a8cf04c8c904f97c880115ce2ec0c4ee7/experiments/hexfront-3d/preview/index.html)** · **[Vergleich: bisherige lokale Wirtschaft](https://rawcdn.githack.com/emfau88/hexwars/df722a6a8cf04c8c904f97c880115ce2ec0c4ee7/experiments/hexfront-3d/preview/index.html?economy=legacy-local)**. Beim ersten Besuch **Open the page** bestätigen. Desktop und Touch am öffentlichen Produktionslink geprüft. [Veröffentlichungsstatus](docs/PUBLISH.md).
 
 **Steuerung:** Eigenes Feld greifen → Ziel → loslassen. Alternativ Quelle und Ziel antippen, dann Befehl geben. Helle Innenkonturen zeigen direkte Nachbarn; schwächere Konturen zeigen Fernziele über eigene Felder. Ungültige Felswandziele melden kurz rot den benötigten Aufstieg. [Details](docs/DRAG.md).
 

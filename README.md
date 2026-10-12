@@ -6,7 +6,7 @@
 
 [Production formula, 62 strategy runs, before/after and tests](./experiments/hexfront-3d/docs/ECONOMY.md). Central production eliminates automatically growing side garrisons; lower command count or greater human enjoyment is **not yet proven**.
 
-**The new build is being prepared for publication.** [Previously published drone/technology build](https://rawcdn.githack.com/emfau88/hexwars/6605d24b344ac985de9543e56dd85ed34d6c646d/experiments/hexfront-3d/preview/index.html) is explicitly the older version. [Local start instructions](./experiments/hexfront-3d/README.md) · [Experiment branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama).
+**[Play: central HQ economy](https://rawcdn.githack.com/emfau88/hexwars/df722a6a8cf04c8c904f97c880115ce2ec0c4ee7/experiments/hexfront-3d/preview/index.html)** · **[Compare: previous local economy](https://rawcdn.githack.com/emfau88/hexwars/df722a6a8cf04c8c904f97c880115ce2ec0c4ee7/experiments/hexfront-3d/preview/index.html?economy=legacy-local)**. On the host’s first visit, confirm **Open the page**. Desktop and touch commands verified against the public production build. [Local start instructions](./experiments/hexfront-3d/README.md) · [Experiment branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama).
 
 Only `experiments/hexfront-3d/` and this introductory README section change. Main, portal builds and GitHub Pages are not modified. [Publication status](./experiments/hexfront-3d/docs/PUBLISH.md).
 

@@ -1,0 +1,241 @@
+{
+  "date": "2026-10-12T17:31:11.133Z",
+  "commit": "df722a6a8cf04c8c904f97c880115ce2ec0c4ee7",
+  "base": "https://rawcdn.githack.com/emfau88/hexwars/df722a6a8cf04c8c904f97c880115ce2ec0c4ee7/experiments/hexfront-3d/preview/",
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 7707,
+      "sha256": "8673a59089e31793f3ad370f4ed513eb421f6f65767ab33d6430552a7fdde79a",
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "verified": true
+    },
+    {
+      "path": "public/assets/asset-provenance.json",
+      "bytes": 617,
+      "sha256": "0afeb610ce5f0fa54f31cacf688f3fdf5bb2b5eb2708a6c84e4683f9fb6bd396",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "verified": true
+    },
+    {
+      "path": "public/assets/materials/LICENSE-PolyHaven.txt",
+      "bytes": 530,
+      "sha256": "64ce0db5d2dca65d540d5b01d48b3ce420c9a991eb72f9dbf6031a645b98389a",
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "verified": true
+    },
+    {
+      "path": "public/assets/materials/material-provenance.json",
+      "bytes": 3457,
+      "sha256": "2b302f44bc8646d315409a274c00b19a52cccb074e39669a1098d87601b4d567",
+      "status": 200,
+      "contentType": "application/json; charset=utf-8",
+      "verified": true
+    },
+    {
+      "path": "public/assets/materials/rock_boulder_dry_diff.webp",
+      "bytes": 200812,
+      "sha256": "43d830111190552570fb5c4b0271c37b54b81b1d81451720cfac8baae1868504",
+      "status": 200,
+      "contentType": "image/webp",
+      "verified": true
+    },
+    {
+      "path": "public/assets/materials/rock_boulder_dry_nor_gl.webp",
+      "bytes": 359952,
+      "sha256": "a7de075a39f29231ba78162d0518ac07b658081a45ed2d5fff505307e65e6038",
+      "status": 200,
+      "contentType": "image/webp",
+      "verified": true
+    },
+    {
+      "path": "public/assets/materials/rock_boulder_dry_rough.webp",
+      "bytes": 152422,
+      "sha256": "5bb7dce29e032adb930e44bc178afc93188b5f89160bf7e27013b1f4f05488c7",
+      "status": 200,
+      "contentType": "image/webp",
+      "verified": true
+    },
+    {
+      "path": "public/assets/materials/rock_wall_02_diff.webp",
+      "bytes": 249310,
+      "sha256": "3d34688ebdd169c8989cec5746b58cc4b09893a6a21b1f31855566299ef58a42",
+      "status": 200,
+      "contentType": "image/webp",
+      "verified": true
+    },
+    {
+      "path": "public/assets/materials/rock_wall_02_rough.webp",
+      "bytes": 162382,
+      "sha256": "8e6c1fb1894dd9a0d5cc5b7ff34520df0852e7e718d8153010c36c64c7b7e77f",
+      "status": 200,
+      "contentType": "image/webp",
+      "verified": true
+    },
+    {
+      "path": "public/assets/nature/Fern_1.bin",
+      "bytes": 11448,
+      "sha256": "5e92b87a27f81a69fe15347a533df3c77d567b48298dceeef43168ccb7c22853",
+      "status": 200,
+      "contentType": "application/octet-stream",
+      "verified": true
+    },
+    {
+      "path": "public/assets/nature/Fern_1.gltf",
+      "bytes": 2546,
+      "sha256": "b47c30638913fa68cf7acf4ef40e61479ef211f8060b7aa6d4cd98494deb9b7c",
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "verified": true
+    },
+    {
+      "path": "public/assets/nature/LICENSE-Quaternius.txt",
+      "bytes": 831,
+      "sha256": "077b35b9e00ecff7f44d9b58e120e1b4bc8f2b94f90731dcb60809fd8a59618c",
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "verified": true
+    },
+    {
+      "path": "public/assets/nature/Leaves.png",
+      "bytes": 223199,
+      "sha256": "75835ee6a8fa9a65faf9c3ffaada7db8b9e1159407f6443846ea6db8f0defdc6",
+      "status": 200,
+      "contentType": "image/png",
+      "verified": true
+    },
+    {
+      "path": "src/art.js",
+      "bytes": 21706,
+      "sha256": "b62945d5facd813bf676c3e97ec821dea431a251eb7c949fba2956af57335a57",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "verified": true
+    },
+    {
+      "path": "src/camera.js",
+      "bytes": 1562,
+      "sha256": "17fac1f5720fcbedc89cce549a05616018d44883abb1f328c809c3a639243c9b",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "verified": true
+    },
+    {
+      "path": "src/economy.js",
+      "bytes": 1961,
+      "sha256": "0844d880154333bb9315578fb8fa96d35055655875d549566e4b84fb9573f438",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "verified": true
+    },
+    {
+      "path": "src/game.js",
+      "bytes": 7854,
+      "sha256": "1e8f7585b597412167a6634d0d9ce242f51edeaabd514c24de299dacca3e5b25",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "verified": true
+    },
+    {
+      "path": "src/main.js",
+      "bytes": 16200,
+      "sha256": "b9b2fde9bc9c03c3b762a5775d0d03ff866ae06ef29e5cf01b54011497d73559",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "verified": true
+    },
+    {
+      "path": "src/map.js",
+      "bytes": 3629,
+      "sha256": "330774b1eeff32c0258915f3f86542a057d1bb5a6e3f986691cb192888b60458",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "verified": true
+    },
+    {
+      "path": "src/overlays.css",
+      "bytes": 6531,
+      "sha256": "8e6ab025678b72c0bd2e2dc90f4b2a3852e1c7e48b3f655fa69e9911c7163609",
+      "status": 200,
+      "contentType": "text/css; charset=utf-8",
+      "verified": true
+    },
+    {
+      "path": "src/scene.js",
+      "bytes": 24865,
+      "sha256": "5e6aaf800c049e6c9d640607cdeb6e71684fa18893ebff679f8536120db6453c",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "verified": true
+    },
+    {
+      "path": "src/style.css",
+      "bytes": 17659,
+      "sha256": "901fd64c0cfdd17c059d660a2869ed3d2bba9b04a548a179b765fcc5ad11b300",
+      "status": 200,
+      "contentType": "text/css; charset=utf-8",
+      "verified": true
+    },
+    {
+      "path": "src/tactics.js",
+      "bytes": 1379,
+      "sha256": "eb523de6256b794318488ca69f51006e6e76d123bd4ff0050eefb74c3b78aa20",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "verified": true
+    },
+    {
+      "path": "src/technology.js",
+      "bytes": 16339,
+      "sha256": "8d87966883ab6a1a9c2ba3fccb918781c859221d65f7c533c9dbebf6b024f7db",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "verified": true
+    },
+    {
+      "path": "src/transport.js",
+      "bytes": 2619,
+      "sha256": "b4964547219b2fc45db11e85e6fc8d22aca6d50af4e1a3b4f96c65f2c6c7623f",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "verified": true
+    },
+    {
+      "path": "vendor/THREE-LICENSE.txt",
+      "bytes": 1082,
+      "sha256": "f8ea8e1b14776d862129c02e78297c1de103e958f8212c6c5d594ec07f78f7c9",
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "verified": true
+    },
+    {
+      "path": "vendor/loaders/GLTFLoader.js",
+      "bytes": 110030,
+      "sha256": "177080cdb974170701cb4ee6d1f4e05b08a9c4a6a3bb2793b455584aabf3b835",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "verified": true
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "bytes": 687459,
+      "sha256": "c6fd70ab3ecf768e28c0332fd3f7cddb0ed273d6b1285d22e59caec26f0f01a5",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "verified": true
+    },
+    {
+      "path": "vendor/utils/BufferGeometryUtils.js",
+      "bytes": 31769,
+      "sha256": "366ff042b9078eb6db1d1f74a9f1182d0e48c4d05b1e35734b31d99caaa0b651",
+      "status": 200,
+      "contentType": "application/javascript; charset=utf-8",
+      "verified": true
+    }
+  ],
+  "allVerified": true,
+  "totalBytes": 2327857
+}

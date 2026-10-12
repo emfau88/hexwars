@@ -1,10 +1,10 @@
 # Isolierte Veröffentlichung – 12.10.2026
 
-## Neue Vergleichsfassung: Vorbereitung
+## Veröffentlichte Wirtschaftsbasis für den folgenden Art-Pass
 
-Zentrale HQ-Produktion, alte lokale Vergleichswirtschaft, fest zentrierte Zahlen und taktische Hinweise. [Änderungen, Formel, Strategievergleich und Bilder](ECONOMY.md). Der neue Produktionslink wird nach Push und öffentlicher Prüfung eingesetzt; der Technologie-Link im folgenden historischen Abschnitt bezeichnet ausdrücklich den vorherigen Stand.
+Produktionscommit `df722a6a8cf04c8c904f97c880115ce2ec0c4ee7`, [spielbar](https://rawcdn.githack.com/emfau88/hexwars/df722a6a8cf04c8c904f97c880115ce2ec0c4ee7/experiments/hexfront-3d/preview/index.html), mit `?economy=legacy-local` als Vergleich. Öffentlicher Desktop- und Touchstart, Drag, Uhr und Pause bestanden; keine QA-API. Alle 29 öffentlichen Dateien / 2.327.857 Bytes stimmen mit den Git-Blobs überein. [Browserbericht](economy/live/production-report.json), [Dateiprüfung](economy/live/assets-report.json). Aufnahmen wurden betrachtet.
 
-GitHub war zunächst wegen fehlender Namensauflösung nicht erreichbar. Nach erneuter Verbindung des PCs mit dem Mobilfunk-Hotspot konnten die Referenzen abgerufen werden. Der Experiment-Branch steht vor diesem Update bei `a1ffaa93993797c7b651cb0d310bc4f3faa7e89e`. `main` steht inzwischen unabhängig davon bei `9e673c4a245661c6513b342980b3f5c316cb2b94`; es wird hier weder ausgecheckt noch gemergt oder gepusht. Nur der Experiment-Branch wird fortgeschrieben. Bestehende Hosting-Workflows werden nicht gestartet oder geändert.
+Main steht unabhängig bei `9e673c4a245661c6513b342980b3f5c316cb2b94`; dieser Auftrag pusht ausschließlich den Experiment-Branch, ohne Merge oder Pages-Workflow. [Wirtschaftsbericht](ECONOMY.md).
 
 ## Vorheriger veröffentlichter Stand: Drohnen und Technologie
 
