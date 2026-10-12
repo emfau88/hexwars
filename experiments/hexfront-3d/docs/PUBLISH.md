@@ -1,3 +1,17 @@
+# Charming Frontier und Referenzdrohne — Veröffentlichungsstand
+
+Produktionscommit: `c49d8a2eb7fc78e6864c91f8b766e54b86aac898`. Branch: `experiment/hexfront-3d-diorama`. Der gesamte Art-Pass ist als `55d7047be2b888860d05a23314518b17f4d8970c` getrennt gesichert; der Folgecommit ersetzt ausschließlich die Drohne und ihre Darstellung.
+
+**Aktuell lokal vollständig gespeichert, Push noch nicht bestätigt.** Am 12.10.2026 scheitert der Push außerhalb der Sandbox an der Namensauflösung. Windows meldet auf allen Verbindungen selbst vergebene 169.254-Adressen und kein IPv4-Standardgateway. Der alternative GitHub-Connector kann das Repository lesen, lehnt aber das Schreiben eines Git-Blobs mit `403 Resource not accessible by integration` ab. Das ist keine fehlende Freigabe des Nutzers. Keine Netzwerkeinstellungen wurden verändert.
+
+Vorbereiteter fester [Play-Link](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/preview/index.html) und [Drohnenvergleich](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/docs/drone-reference/compare.html); noch kein bestätigter öffentlicher Nachweis für diesen Commit. Beide Links werden nach dem erfolgreichen Push im Browser geprüft. Der bisherige Wirtschaftsteststand unten bleibt die zuletzt bestätigte öffentliche Version.
+
+33 Produktionsdateien / 3.264.987 Bytes, bytegleich mit dem lokal geprüften Build, QA deaktiviert. Beide Wirtschaftsmodi starten lokal. Desktop/Mobile-Vergleich und native Befehle, Effekte, Rampen/Ruinen sowie 32 Logiktests bestanden. [Drohnenbericht](DRONE.md), [Build-/Viewerprüfung](drone-reference/delivery-report.json). Keine Clips.
+
+Es wird ausschließlich der Experiment-Branch gepusht. Main wurde zuletzt unabhängig bei `c22b6830533f88161483ed22d01cba88c7e2dfc7` gelesen; der Auftrag verändert weder Main noch den Pages-Workflow. Die ursprüngliche Root-README bleibt unter dem Experiment-Intro unverändert.
+
+---
+
 # Isolierte Veröffentlichung – 12.10.2026
 
 ## Veröffentlichte Wirtschaftsbasis für den folgenden Art-Pass

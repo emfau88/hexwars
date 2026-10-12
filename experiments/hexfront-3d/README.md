@@ -1,22 +1,22 @@
-# HEXFRONT — Bastion Morgenwacht
+# HEXFRONT — Charming Sci-Fi Frontier
 
-Ein isolierter 3D-Vertical-Slice: ein Level, 37 Hexfelder, drei Höhenstufen, zwei HQs und eine gegnerische KI. Orange gewinnt durch Eroberung des blauen HQs.
+Ein eigenständig startbares 3D-Experiment: 37 Hexfelder, drei Höhenstufen, zwei HQs und eine gegnerische KI. Die neue PIP-Drohne basiert auf den vier gemeinsam ausgewerteten Nutzerreferenzen: kompakter Körper, eingefasster Sensor, zwei abgesetzte Hovergondeln, helle Keramik und kleine Teamakzente. Der vorangegangene Art-Pass mit Haven-HQs, Seed-Relais und freundlicherer Landschaft ist vollständig enthalten. Für die anschließende Drohnenüberarbeitung bleiben Gebäude, Umgebung, Kamera und Gameplay unverändert.
 
-**Neue Vergleichsfassung:** Zentrale HQ-Produktion mit begehbar verbundenen Gebieten, dauerhaft zentrierte Zahlen auf allen 37 Feldern und genaue Höhen-/Angriffsprognosen. Die bisherige lokale Produktion bleibt über `?economy=legacy-local` verfügbar. Kamera, Landschaft, Drohnen, 1,1-s-Transporte und Maus-/Touch-Drag-and-drop bleiben erhalten.
+**Veröffentlichung ausstehend:** Der vollständige Stand ist lokal committet. Dem PC fehlt aktuell die Internetroute; die vorbereiteten festen Links funktionieren nach dem isolierten Branch-Push.
 
-[Formel, 62 Strategieläufe, Vorher/Nachher und Tests](docs/ECONOMY.md). Die neue Variante erzeugt weniger automatisch wachsende Nebengarnisonen, aber die Simulationen belegen **noch keine geringere Befehlszahl oder mehr Spielspaß**.
+**[Jetzt spielen](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/preview/index.html)** · **[Vergleich: bisherige lokale Wirtschaft](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/preview/index.html?economy=legacy-local)**. Beim ersten Besuch **Open the page** bestätigen. [Veröffentlichungsstatus](docs/PUBLISH.md).
 
-**[Jetzt spielen: zentrale HQ-Wirtschaft](https://rawcdn.githack.com/emfau88/hexwars/df722a6a8cf04c8c904f97c880115ce2ec0c4ee7/experiments/hexfront-3d/preview/index.html)** · **[Vergleich: bisherige lokale Wirtschaft](https://rawcdn.githack.com/emfau88/hexwars/df722a6a8cf04c8c904f97c880115ce2ec0c4ee7/experiments/hexfront-3d/preview/index.html?economy=legacy-local)**. Beim ersten Besuch **Open the page** bestätigen. Desktop und Touch am öffentlichen Produktionslink geprüft. [Veröffentlichungsstatus](docs/PUBLISH.md).
+**[Drohne Vorher/Nachher — Desktop, Mobile und Nahaufnahme](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/docs/drone-reference/compare.html)** · [Herstellung und Tests](docs/DRONE.md) · [Vorangegangener gesamter Art-Pass](docs/FRONTIER.md) · [Wirtschaftsvergleich](docs/ECONOMY.md) · [Assets/Lizenzen](ASSET_LICENSES.md).
 
-**Steuerung:** Eigenes Feld greifen → Ziel → loslassen. Alternativ Quelle und Ziel antippen, dann Befehl geben. Helle Innenkonturen zeigen direkte Nachbarn; schwächere Konturen zeigen Fernziele über eigene Felder. Ungültige Felswandziele melden kurz rot den benötigten Aufstieg. [Details](docs/DRAG.md).
+**Steuerung:** Eigenes Feld greifen → Ziel → loslassen. Alternativ Quelle/Ziel antippen und bestätigen. Kamera: feste 70°-Taktikansicht, optionale 55°-Dioramaansicht, Zoom und Fit. Die beiden Wirtschaftssysteme bleiben verfügbar.
 
-Aktuelle lokale Runtime-Aufnahmen (gleiche Standardkamera und Startzeit):
+![Desktop 1440 × 900: neue Drohne im regulären Transport](docs/drone-reference/desktop-after.png)
 
-![Desktop 1440 × 900 mit allen 37 Feldzahlen](docs/economy/1440-after-selection.png)
+<img src="docs/drone-reference/mobile-after.png" alt="Mobile 390 × 844: normale Taktikansicht" width="390">
 
-<img src="docs/economy/390-after-selection.png" alt="Mobile 390 × 844 mit festen Feldzahlen und HQ-Informationen" width="390">
+[Neue Drohne im Detail](docs/drone-reference/detail-after.png) · [Alte Drohne](docs/drone-reference/detail-before.png) · [Reine Landschaft](docs/drone-reference/integration/landscape.png).
 
-[Mobile Kampfprognose](docs/economy/390-uphill-forecast.png) · [Vorher/Nachher](docs/ECONOMY.md#bilder-und-nachweise) · [Bisherige Technologie und Animationen](docs/TECHNOLOGY.md) · [Assets und Lizenzen](ASSET_LICENSES.md)
+Geprüft: 32 Logiktests, Maus/Touch, beide Teams, Eroberung/verlorener Angriff, Rampen/Ruinen, stabile Effektpools, HQ/LQ und Produktions-Build. Vollständige Partien mit Sieg, Niederlage und Neustart sind aus dem unmittelbar vorausgehenden Art-Pass dokumentiert. Keine Änderung am Simulationscode. Keine Clips. Echte Smartphone-Performance, Safari und 60 FPS sind nicht nachgewiesen; das Ergebnis erreicht noch nicht die Materialfülle der Referenztafeln.
 
 ## Starten
 

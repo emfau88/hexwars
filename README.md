@@ -1,28 +1,25 @@
 # HEXFRONT
 
-## 3D-Diorama experiment — isolated economy comparison
+## Charming Sci-Fi Frontier — isolated 3D experiment
 
-**New comparison build:** central HQ production through connected territory, fixed troop pills on all 37 hexes, direct/distant target contours and exact height-aware combat previews. The previous local economy remains playable through `?economy=legacy-local`. Terrain, drones, camera, 1.1-second transports and mouse/touch drag-and-drop are retained.
+New Blender-authored PIP drones with a compact ceramic body, a central articulated optic and two distinct hover nacelles. The complete Charming Frontier art pass adds the Haven HQ family, Seed relay and warmer landscape. The subsequent four-reference drone pass changes **only the drone and its rendering**; gameplay, economy comparison, controls, camera and all 37 sectors are retained.
 
-[Production formula, 62 strategy runs, before/after and tests](./experiments/hexfront-3d/docs/ECONOMY.md). Central production eliminates automatically growing side garrisons; lower command count or greater human enjoyment is **not yet proven**.
+**Publication pending:** the complete build is committed locally; the PC currently has no Internet gateway. The links below are pinned to the prepared production commit and become available after the isolated branch push.
 
-**[Play: central HQ economy](https://rawcdn.githack.com/emfau88/hexwars/df722a6a8cf04c8c904f97c880115ce2ec0c4ee7/experiments/hexfront-3d/preview/index.html)** · **[Compare: previous local economy](https://rawcdn.githack.com/emfau88/hexwars/df722a6a8cf04c8c904f97c880115ce2ec0c4ee7/experiments/hexfront-3d/preview/index.html?economy=legacy-local)**. On the host’s first visit, confirm **Open the page**. Desktop and touch commands verified against the public production build. [Local start instructions](./experiments/hexfront-3d/README.md) · [Experiment branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama).
+**[Play HEXFRONT 3D](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/preview/index.html)** · **[Compare the previous local economy](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/preview/index.html?economy=legacy-local)**. On the host's first visit, confirm **Open the page**. [Experiment branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama) · [Start locally](./experiments/hexfront-3d/README.md) · [Publication status](./experiments/hexfront-3d/docs/PUBLISH.md).
 
-Only `experiments/hexfront-3d/` and this introductory README section change. Main, portal builds and GitHub Pages are not modified. [Publication status](./experiments/hexfront-3d/docs/PUBLISH.md).
-
-Current local runtime captures:
+**[Interactive drone before/after: desktop, mobile and close-up](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/docs/drone-reference/compare.html)** · [Art process and technical tests](./experiments/hexfront-3d/docs/DRONE.md) · [Full art-pass comparison](./experiments/hexfront-3d/docs/FRONTIER.md) · [Asset sources/licenses](./experiments/hexfront-3d/ASSET_LICENSES.md).
 
 <table>
-  <tr><th>Desktop · 1440 × 900</th><th>Mobile · 390 × 844</th></tr>
-  <tr>
-    <td width="75%"><img src="./experiments/hexfront-3d/docs/economy/1440-after-selection.png" alt="37 centered troop pills and selected HQ supply information"></td>
-    <td width="25%"><img src="./experiments/hexfront-3d/docs/economy/390-after-selection.png" alt="Fixed troop pills and compact mobile supply HUD"></td>
-  </tr>
+<tr><th>Desktop · 1440 × 900</th><th>Mobile · 390 × 844</th></tr>
+<tr><td width="75%"><img src="./experiments/hexfront-3d/docs/drone-reference/desktop-after.png" alt="Reference-led PIP drone in normal tactical gameplay"></td><td width="25%"><img src="./experiments/hexfront-3d/docs/drone-reference/mobile-after.png" alt="Mobile tactical view with the new drone"></td></tr>
 </table>
 
-[Before/after and tactical captures](./experiments/hexfront-3d/docs/ECONOMY.md#bilder-und-nachweise) · [Existing drone animations](./experiments/hexfront-3d/docs/TECHNOLOGY.md) · [Asset licenses](./experiments/hexfront-3d/ASSET_LICENSES.md).
+[Drone close-up](./experiments/hexfront-3d/docs/drone-reference/detail-after.png) · [Pure landscape](./experiments/hexfront-3d/docs/drone-reference/integration/landscape.png). All images are actual runtime captures. No video clips were produced for this delivery.
 
-Human balance testing and 60 FPS on real phones remain unverified. On very small displays, use the existing zoom/navigation for detail commands; fixed values are never moved to fake separation.
+32 logic tests, desktop/touch commands, combat effects, ramp/ruin clearance probes, model/resource checks and production build pass. Full win/loss/restart matches were completed in the preceding art pass; the simulation is unchanged. Physical smartphone performance and 60 FPS are unverified. The art is visibly more characterful, but does not claim the reference boards' studio-render quality or Tacticus production quality.
+
+Only the isolated experiment and this introductory README section are edited; no main merge, portal build or GitHub Pages deployment is triggered.
 
 [![Verify and deploy](https://github.com/emfau88/hexwars/actions/workflows/pages.yml/badge.svg)](https://github.com/emfau88/hexwars/actions/workflows/pages.yml)
 
