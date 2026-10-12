@@ -1,22 +1,18 @@
-# HEXFRONT — Bastion Morgenwacht
+# HEXFRONT — Command HQ
 
-Ein isolierter 3D-Vertical-Slice: ein Level, 37 Hexfelder, drei Höhenstufen, zwei HQs und eine gegnerische KI. Orange gewinnt durch Eroberung des blauen HQs.
+Neues Blender-HQ: gestaffelte Keramikarchitektur, erhöhter Kommandobereich, beleuchteter Hangar und bewegliche Parabolschüssel. Orange und Blau nutzen dieselbe Modellfamilie. Drohnen, Relais, Gelände, Kamera und Gameplay bleiben unverändert.
 
-**Neue Vergleichsfassung:** Zentrale HQ-Produktion mit begehbar verbundenen Gebieten, dauerhaft zentrierte Zahlen auf allen 37 Feldern und genaue Höhen-/Angriffsprognosen. Die bisherige lokale Produktion bleibt über `?economy=legacy-local` verfügbar. Kamera, Landschaft, Drohnen, 1,1-s-Transporte und Maus-/Touch-Drag-and-drop bleiben erhalten.
+**[Jetzt mit dem neuen HQ spielen](https://rawcdn.githack.com/emfau88/hexwars/2815c40a426ee05daab22715caedbce60faf0b57/experiments/hexfront-3d/preview/index.html)** · [Bisherige Wirtschaft](https://rawcdn.githack.com/emfau88/hexwars/2815c40a426ee05daab22715caedbce60faf0b57/experiments/hexfront-3d/preview/index.html?economy=legacy-local). Beim ersten Besuch gegebenenfalls **Open the page** bestätigen.
 
-[Formel, 62 Strategieläufe, Vorher/Nachher und Tests](docs/ECONOMY.md). Die neue Variante erzeugt weniger automatisch wachsende Nebengarnisonen, aber die Simulationen belegen **noch keine geringere Befehlszahl oder mehr Spielspaß**.
+Spielstand: `2815c40a426ee05daab22715caedbce60faf0b57`. Kein weiterer öffentlicher Spieltest auf ausdrücklichen Nutzerwunsch.
 
-**Veröffentlichung der neuen Vergleichsfassung wird vorbereitet.** Bis zum aktualisierten Link ist die [bisherige Drohnen-/Technologiefassung](https://rawcdn.githack.com/emfau88/hexwars/6605d24b344ac985de9543e56dd85ed34d6c646d/experiments/hexfront-3d/preview/index.html) ausdrücklich der ältere Stand. Die aktuelle Fassung lässt sich mit den Startbefehlen unten lokal testen. [Veröffentlichungsstatus](docs/PUBLISH.md).
+[HQ-Dokumentation und Prüfstand](docs/HQ_COMMAND.md) · [HQ Orange](docs/hq-command/hq-orange.png) · [HQ Blau](docs/hq-command/hq-blue.png) · [GLB](public/assets/command-hq/command-hq.glb) · [Blender-Quelle](scripts/command-hq-source.blend)
 
-**Steuerung:** Eigenes Feld greifen → Ziel → loslassen. Alternativ Quelle und Ziel antippen, dann Befehl geben. Helle Innenkonturen zeigen direkte Nachbarn; schwächere Konturen zeigen Fernziele über eigene Felder. Ungültige Felswandziele melden kurz rot den benötigten Aufstieg. [Details](docs/DRAG.md).
+![Desktop-Spielansicht](docs/hq-command/desktop-after.png)
 
-Aktuelle lokale Runtime-Aufnahmen (gleiche Standardkamera und Startzeit):
+<img src="docs/hq-command/mobile-after.png" width="390" alt="Mobile-Spielansicht mit beiden HQs">
 
-![Desktop 1440 × 900 mit allen 37 Feldzahlen](docs/economy/1440-after-selection.png)
-
-<img src="docs/economy/390-after-selection.png" alt="Mobile 390 × 844 mit festen Feldzahlen und HQ-Informationen" width="390">
-
-[Mobile Kampfprognose](docs/economy/390-uphill-forecast.png) · [Vorher/Nachher](docs/ECONOMY.md#bilder-und-nachweise) · [Bisherige Technologie und Animationen](docs/TECHNOLOGY.md) · [Assets und Lizenzen](ASSET_LICENSES.md)
+35 Logiktests bestanden; Desktop/Mobile-Aufnahmen geprüft. Weiterführende Browser-Tests wurden auf Nutzerwunsch beendet. Details und offene Prüfungen stehen im HQ-Bericht.
 
 ## Starten
 

@@ -98,7 +98,7 @@ function showResult(){
   $('result-time').textContent=time(game.time);$('result-captures').textContent=game.captures;$('result-commands').textContent=game.commands;
   if($('help-dialog').open)$('help-dialog').close();$('result-dialog').showModal();updateUI();
 }
-function processEvents(){for(const e of game.drainEvents()){if(e.type==='capture'||e.type==='combat'||e.type==='reinforce')scene.effect(e);if(e.type==='capture'&&e.id==='0,0')toast(`${e.owner==='orange'?'Relais gesichert':'Blau kontrolliert das Relais'}. ${central?(game.economy(e.owner).relayConnected?'Verbunden · HQ-Nachschub +20 %.':'Abgeschnitten · noch kein HQ-Bonus.'):'Nachschub +30 %.'}`);if(e.type==='result')showResult();}}
+function processEvents(){for(const e of game.drainEvents()){if(e.type==='send'||e.type==='capture'||e.type==='combat'||e.type==='reinforce')scene.effect(e);if(e.type==='capture'&&e.id==='0,0')toast(`${e.owner==='orange'?'Relais gesichert':'Blau kontrolliert das Relais'}. ${central?(game.economy(e.owner).relayConnected?'Verbunden · HQ-Nachschub +20 %.':'Abgeschnitten · noch kein HQ-Bonus.'):'Nachschub +30 %.'}`);if(e.type==='result'){if(scene.finishHQCapture)scene.finishHQCapture(showResult);else showResult();}}}
 $('primary').addEventListener('click',()=>{
   if(game.result){restart();return;}if(game.paused){game.paused=false;autoPaused=false;updateUI();return;}if(!game.running){game.start();toast('Ziehe von Orange zum Ziel. Loslassen sendet die Truppen.');updateUI();return;}
   if(selected&&pending)issueOrder();

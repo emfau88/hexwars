@@ -1,0 +1,31 @@
+{
+  "source": "C:\\Users\\madde\\Documents\\Codex\\2026-10-11\\entwicklungsauftrag-hexfront-premium-3d-hex-battlefield\\hexwars-art-publish\\experiments\\hexfront-3d\\public\\assets\\command-hq\\command-hq.glb",
+  "sha256": "00107a25f29a6fa27cfbcdcf80801584a7fe70dc76de66d65142c6ded2261601",
+  "images": [
+    {
+      "asset": "CommandHQ",
+      "file": "hq-orange.png",
+      "cameraElevation": 32,
+      "cameraAzimuth": 32,
+      "samples": 48,
+      "render": "Cycles CPU"
+    },
+    {
+      "asset": "CommandHQ",
+      "file": "hq-blue.png",
+      "cameraElevation": 32,
+      "cameraAzimuth": 32,
+      "samples": 48,
+      "render": "Cycles CPU"
+    },
+    {
+      "asset": "CommandHQ",
+      "file": "hq-tactical.png",
+      "cameraElevation": 70,
+      "cameraAzimuth": 32,
+      "samples": 48,
+      "render": "Cycles CPU"
+    }
+  ],
+  "note": "New HQ GLB, isolated studio inspection. Orange/blue are material variants of identical meshes. Studio light differs from gameplay; not yet published."
+}

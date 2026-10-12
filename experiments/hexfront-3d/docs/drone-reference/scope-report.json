@@ -1,0 +1,13 @@
+{
+  "baseline": "55d7047",
+  "method": "Canonical sorted triangle vertex attributes rounded to 5 decimals; unchanged material and node transforms",
+  "before": {
+    "Haven": "d8f9c05b8a49bd1abf5f2362361f70d3b2de098246d6ccab4111c6603ec07f3b",
+    "Seed": "54d43c7228991db56fdff4a34fb8b33599cb6b6f39137a9ad70a63da13328899"
+  },
+  "after": {
+    "Haven": "d8f9c05b8a49bd1abf5f2362361f70d3b2de098246d6ccab4111c6603ec07f3b",
+    "Seed": "54d43c7228991db56fdff4a34fb8b33599cb6b6f39137a9ad70a63da13328899"
+  },
+  "unchanged": true
+}

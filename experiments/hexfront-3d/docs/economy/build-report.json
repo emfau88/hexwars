@@ -6,86 +6,6 @@
       "sha256": "ce3e8134d0dc891374f75afb91d9060ce18d5e10deec6a4989c9c3c4e8a20042"
     },
     {
-      "path": "src/art.js",
-      "bytes": 21928,
-      "sha256": "f55baad6fa924ad07a9cf05bdb244a6d0ab4d670b2037f4d094222c79823e78c"
-    },
-    {
-      "path": "src/camera.js",
-      "bytes": 1583,
-      "sha256": "f3461e9afe2dbd2af7152dcd169fec1ded6c6b00ccd1d5edc3232fde630c4907"
-    },
-    {
-      "path": "src/economy.js",
-      "bytes": 1992,
-      "sha256": "6a87cccb52a733b968f86d5cdb026f10d2bce0146657d9d88d76612b76906e07"
-    },
-    {
-      "path": "src/game.js",
-      "bytes": 7966,
-      "sha256": "e5df72d18b93c29abc59e0da371cbd6730a3301998488e444d0db64a974a9ef4"
-    },
-    {
-      "path": "src/main.js",
-      "bytes": 16335,
-      "sha256": "758130b42a73d6c67add2839260fc17196142da61604c991b60f4fa2ec7279cd"
-    },
-    {
-      "path": "src/map.js",
-      "bytes": 3701,
-      "sha256": "b67dbd7b7a45c95518d19e7a3f7b54ffaa508d91b905ca139484d16363bf2caa"
-    },
-    {
-      "path": "src/overlays.css",
-      "bytes": 6616,
-      "sha256": "76fca03c238e77026a16e17fda7f987f2549804ad99fbfc89f4f431473ca25b2"
-    },
-    {
-      "path": "src/scene.js",
-      "bytes": 24581,
-      "sha256": "36c0ea675a668111febd22aa7520770fd2a0e9e3ce6bd5f3331c17f8bc027fc2"
-    },
-    {
-      "path": "src/style.css",
-      "bytes": 17660,
-      "sha256": "598ea42e174a90cfb786e504081d0762d759cef7086c02e0c8c7b874799b1ee6"
-    },
-    {
-      "path": "src/tactics.js",
-      "bytes": 1379,
-      "sha256": "eb523de6256b794318488ca69f51006e6e76d123bd4ff0050eefb74c3b78aa20"
-    },
-    {
-      "path": "src/technology.js",
-      "bytes": 16527,
-      "sha256": "bc50e8bd71be8048459ca24eae510013dbfec2d8bd2b8993e6479a0766fabed4"
-    },
-    {
-      "path": "src/transport.js",
-      "bytes": 2619,
-      "sha256": "b4964547219b2fc45db11e85e6fc8d22aca6d50af4e1a3b4f96c65f2c6c7623f"
-    },
-    {
-      "path": "vendor/THREE-LICENSE.txt",
-      "bytes": 1104,
-      "sha256": "3c344bc3e9582186b9e0d4185c3fd01ba8f8753a51fc2736a57afdc1f03928b4"
-    },
-    {
-      "path": "vendor/three.module.min.js",
-      "bytes": 687466,
-      "sha256": "8a906f5fe66282d9704f807427c8811525c53e9f062db17513e5cdec1a2820ab"
-    },
-    {
-      "path": "vendor/loaders/GLTFLoader.js",
-      "bytes": 114756,
-      "sha256": "535673d5725a336607631e8d519aba234dc9eca58616fa02ea705601c9828948"
-    },
-    {
-      "path": "vendor/utils/BufferGeometryUtils.js",
-      "bytes": 33143,
-      "sha256": "99f37be474f6ebeef7ff6632017cbdff517a696f188d023c5bc9a2a48fe6fda8"
-    },
-    {
       "path": "public/assets/asset-provenance.json",
       "bytes": 637,
       "sha256": "28c7cbe1fb9fdd31e1cd2fd8d3e827ddfbc47bb0a58d34bfea0fef50a8be997a"
@@ -144,10 +64,89 @@
       "path": "public/assets/nature/LICENSE-Quaternius.txt",
       "bytes": 854,
       "sha256": "209fd597c1837037fe13a160c628ef9fd9ccce9337256e21447110ba5ba3e025"
+    },
+    {
+      "path": "src/art.js",
+      "bytes": 21928,
+      "sha256": "f55baad6fa924ad07a9cf05bdb244a6d0ab4d670b2037f4d094222c79823e78c"
+    },
+    {
+      "path": "src/camera.js",
+      "bytes": 1583,
+      "sha256": "f3461e9afe2dbd2af7152dcd169fec1ded6c6b00ccd1d5edc3232fde630c4907"
+    },
+    {
+      "path": "src/economy.js",
+      "bytes": 1992,
+      "sha256": "6a87cccb52a733b968f86d5cdb026f10d2bce0146657d9d88d76612b76906e07"
+    },
+    {
+      "path": "src/game.js",
+      "bytes": 7966,
+      "sha256": "e5df72d18b93c29abc59e0da371cbd6730a3301998488e444d0db64a974a9ef4"
+    },
+    {
+      "path": "src/main.js",
+      "bytes": 16335,
+      "sha256": "758130b42a73d6c67add2839260fc17196142da61604c991b60f4fa2ec7279cd"
+    },
+    {
+      "path": "src/map.js",
+      "bytes": 3701,
+      "sha256": "b67dbd7b7a45c95518d19e7a3f7b54ffaa508d91b905ca139484d16363bf2caa"
+    },
+    {
+      "path": "src/overlays.css",
+      "bytes": 6616,
+      "sha256": "76fca03c238e77026a16e17fda7f987f2549804ad99fbfc89f4f431473ca25b2"
+    },
+    {
+      "path": "src/scene.js",
+      "bytes": 25160,
+      "sha256": "b112ad82d43ff28988af8859490f1b3a12bbd02c18c1dbae74428fda029dee06"
+    },
+    {
+      "path": "src/style.css",
+      "bytes": 17660,
+      "sha256": "598ea42e174a90cfb786e504081d0762d759cef7086c02e0c8c7b874799b1ee6"
+    },
+    {
+      "path": "src/tactics.js",
+      "bytes": 1379,
+      "sha256": "eb523de6256b794318488ca69f51006e6e76d123bd4ff0050eefb74c3b78aa20"
+    },
+    {
+      "path": "src/technology.js",
+      "bytes": 16527,
+      "sha256": "bc50e8bd71be8048459ca24eae510013dbfec2d8bd2b8993e6479a0766fabed4"
+    },
+    {
+      "path": "src/transport.js",
+      "bytes": 2619,
+      "sha256": "b4964547219b2fc45db11e85e6fc8d22aca6d50af4e1a3b4f96c65f2c6c7623f"
+    },
+    {
+      "path": "vendor/loaders/GLTFLoader.js",
+      "bytes": 114756,
+      "sha256": "535673d5725a336607631e8d519aba234dc9eca58616fa02ea705601c9828948"
+    },
+    {
+      "path": "vendor/THREE-LICENSE.txt",
+      "bytes": 1104,
+      "sha256": "3c344bc3e9582186b9e0d4185c3fd01ba8f8753a51fc2736a57afdc1f03928b4"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "bytes": 687466,
+      "sha256": "8a906f5fe66282d9704f807427c8811525c53e9f062db17513e5cdec1a2820ab"
+    },
+    {
+      "path": "vendor/utils/BufferGeometryUtils.js",
+      "bytes": 33143,
+      "sha256": "99f37be474f6ebeef7ff6632017cbdff517a696f188d023c5bc9a2a48fe6fda8"
     }
   ],
-  "totalFiles": 29,
-  "bytes": 2334923,
-  "qaDisabled": true,
-  "previewEqualsDist": true
+  "totalBytes": 2335502,
+  "distMatchesPreview": true,
+  "qaDisabled": true
 }

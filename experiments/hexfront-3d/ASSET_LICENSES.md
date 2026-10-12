@@ -19,7 +19,7 @@ Only five selected texture files, **1,124,878 bytes in total**, are retained. Or
 
 [Stylized Nature MegaKit — Standard](https://quaternius.com/packs/stylizednaturemegakit.html), Quaternius, July 2024. The official page identifies CC0 and commercial use. The original notice is retained in `public/assets/nature/LICENSE-Quaternius.txt`.
 
-Retained: `Fern_1.gltf`, `Fern_1.bin`, `Leaves.png`; the fern has 288 triangles and the leaf texture is 512². Four restrained fern instances are placed beside rock groups. Materials are muted and source wind-control vertex colours are disabled. Geometry remains unchanged. The prior prototype's texture resizing is retained.
+Retained: `Fern_1.gltf`, `Fern_1.bin`, `Leaves.png`; the fern has 288 triangles and the leaf texture is 512². Four restrained fern instances are placed beside rock groups. Materials are harmonized to the current green palette and source wind-control vertex colours are disabled. Geometry remains unchanged. The prior prototype's texture resizing is retained.
 
 Delivery mirror: [anandin/the-wild-between, quaternius-nature](https://github.com/anandin/the-wild-between/tree/main/assets/quaternius-nature). `public/assets/asset-provenance.json` records the original repository paths and Git blob SHAs for retained files.
 
@@ -31,17 +31,21 @@ The earlier two boulders, bush, sci-fi wall and access console have been replace
 
 Concrete/metal weathering, the world-space soil/grass/path/rock atlas, contact shadows, building stencils and UI are original experiment work. No external font or hidden CDN is required. The soil atlas incorporates the two CC0 photographic sources listed above; it is not a pre-rendered battlefield.
 
-## Futuristic technology pass — authored assets
+## Charming Frontier — original Blender assets
 
-`src/technology.js` replaces the former tracked rovers and architecture with one shared hover-drone model, a paired command-station family, and a suspended-core relay. Profile lofts have authored outlines, bevel sections, normals and UVs. Dark metal, armor and small team accents reuse the existing original weathering texture. No downloaded model is hidden behind these assets, no additional external art file was added, and no generated image substitutes for geometry.
+`public/assets/frontier/frontier.glb` contains the original PIP drone, Haven HQ and Seed relay. Authored and actually exported in Blender 5.2; reproducible source is `scripts/model-frontier.py`, editable project `scripts/frontier-source.blend`. There is no downloaded or image-reconstructed mesh in these models. Original experiment work under the repository's terms, with no additional third-party model license.
 
-Motion and bounded combat/capture effects are authored in `src/transport.js` and `src/technology.js`. These are original experiment work under the repository's existing terms, not falsely attributed to a third-party asset pack.
+The file is 634,036 bytes. PIP: 5,512 triangles; Haven: 7,149; Seed: 4,802. The GLB retains material slots, UVs and separate motion pivots. Runtime coating texture, motion, team materials and event reactions are original work in `src/frontier.js` / `src/technology.js`. The soil/cliff materials still use the CC0 sources above. No new external texture has been added.
 
-Official sources checked on 2026-10-12 before choosing the authored family:
+[Authoring, research, runtime evidence and limits](docs/FRONTIER.md). The prior authored Three.js technology family is preserved in comparison commit `4867c595a6d18e3f20340d7a7b283574adb7645c` and replaced in the current build.
 
-- [Kenney Space Kit](https://kenney.nl/assets/space-kit), CC0, 150 models: useful modular vocabulary, but authored silhouettes fit the existing hex footprint and shared material system better.
-- [Quaternius Sci-Fi Essentials Kit](https://quaternius.itch.io/sci-fi-essentials-kit), CC0, free Standard set: robots/props researched, no files imported.
-- [Quaternius Modular Sci-Fi MegaKit](https://quaternius.com/packs/modularscifimegakit.html), CC0: architecture researched, no new pack imports.
+Official sources and their preview images rechecked on 2026-10-12:
+
+- [Quaternius Ultimate Space Kit](https://quaternius.com/packs/ultimatespacekit.html): CC0, commercial use allowed; researched, no new files imported.
+- [Kenney Space Kit](https://kenney.nl/assets/space-kit): CC0; researched, no files imported.
+- [Poly Haven license](https://polyhaven.com/license): existing material subset remains CC0.
+
+The available to3D image-conversion tools were evaluated but not used. Blender supplied more controllable surfaces and articulated parts for the required footprints. No claim of external 3D generation is made.
 
 ## Research and reference only
 
@@ -52,3 +56,11 @@ Official sources checked on 2026-10-12 before choosing the authored family:
 ## Runtime
 
 Three.js r169 and its local loader/utilities retain their MIT notice in `vendor/THREE-LICENSE.txt`. Playwright and Pillow are optional authoring/test tools, not playable-build dependencies.
+
+### PIP-Referenzüberarbeitung
+
+Die PIP-Drohne wurde anschließend anhand der vier vom Nutzer bereitgestellten Konzepttafeln neu modelliert. Die Tafeln dienten gemeinsam als Form-/Materialreferenz und sind nicht Bestandteil von Repository oder Build. Keine Bildflächen ersetzen 3D-Geometrie. Eigenständig in Blender modellierte Schalen, optischer Sensor und profilierte Schwebegondeln; keine zusätzlichen externen Meshes oder Texturen. HQ/Relais entsprechen weiter dem Stand `55d7047`. Herstellung und genaue Referenznamen: [DRONE.md](docs/DRONE.md).
+
+### Command HQ – isolierter HQ-Art-Pass
+
+`public/assets/command-hq/command-hq.glb` ist ein neues, eigenständig in Blender 5.2 modelliertes HQ, im isolierten Experiment integriert. Grundlage ist die vom Nutzer bereitgestellte Architekturvorlage `79cab1a4-d284-4014-9621-049f9b353af9.png`; das Bild wird nicht mitverteilt. Meshes und kleine Roughness-Texturen sind eigens erstellt, keine zusätzlichen externen Assets. Bearbeitbare Quelle: `scripts/command-hq-source.blend`; Herstellung, Bilder und aktueller Integrationsstatus: [HQ_COMMAND.md](docs/HQ_COMMAND.md). Die bisherige gemeinsame HQ-/Drohnen-/Relais-Datei bleibt bytegleich; das neue HQ wird separat geladen.

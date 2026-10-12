@@ -1,0 +1,6 @@
+{
+  "date": "2026-10-12T20:34:50.934Z",
+  "runs": [],
+  "errors": [],
+  "failure": "AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:\n+ actual - expected\n\n  {\n    geometries: 161,\n+   textures: 16\n-   textures: 17\n  }\n\n    at file:///C:/Users/madde/Documents/Codex/2026-10-11/entwicklungsauftrag-hexfront-premium-3d-hex-battlefield/hexwars-art-publish/experiments/hexfront-3d/tests/hq-events.mjs:35:99"
+}

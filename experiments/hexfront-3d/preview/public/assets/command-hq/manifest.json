@@ -1,0 +1,13 @@
+{
+  "authoring": "Blender 5.2.0 LTS",
+  "triangles": 48344,
+  "meshes": 22,
+  "articulations": [
+    "Radar_Pivot",
+    "Dish_Tilt",
+    "Hangar_Door",
+    "HQ_EnergyCore"
+  ],
+  "source": "Original mesh architecture following the user-provided HQ reference; no third-party model.",
+  "bytes": 1782716
+}

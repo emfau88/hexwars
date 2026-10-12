@@ -1,28 +1,18 @@
 # HEXFRONT
 
-## 3D-Diorama experiment — isolated economy comparison
+## Isolated 3D experiment — new Command HQ
 
-**New comparison build:** central HQ production through connected territory, fixed troop pills on all 37 hexes, direct/distant target contours and exact height-aware combat previews. The previous local economy remains playable through `?economy=legacy-local`. Terrain, drones, camera, 1.1-second transports and mouse/touch drag-and-drop are retained.
+Blender-authored, articulated HQ with ceramic armour, raised command deck, hangar and offset radar dish. Orange/blue variants; original game, drones, relay, terrain, economy and camera retained.
 
-[Production formula, 62 strategy runs, before/after and tests](./experiments/hexfront-3d/docs/ECONOMY.md). Central production eliminates automatically growing side garrisons; lower command count or greater human enjoyment is **not yet proven**.
+**[Play the new HQ version](https://rawcdn.githack.com/emfau88/hexwars/2815c40a426ee05daab22715caedbce60faf0b57/experiments/hexfront-3d/preview/index.html)** · [Previous economy](https://rawcdn.githack.com/emfau88/hexwars/2815c40a426ee05daab22715caedbce60faf0b57/experiments/hexfront-3d/preview/index.html?economy=legacy-local) · [Experiment branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama). If the host shows a notice, click **Open the page**.
 
-**The new build is being prepared for publication.** [Previously published drone/technology build](https://rawcdn.githack.com/emfau88/hexwars/6605d24b344ac985de9543e56dd85ed34d6c646d/experiments/hexfront-3d/preview/index.html) is explicitly the older version. [Local start instructions](./experiments/hexfront-3d/README.md) · [Experiment branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama).
+Runtime commit: `2815c40a426ee05daab22715caedbce60faf0b57`. No further hosted gameplay test was run, as requested.
 
-Only `experiments/hexfront-3d/` and this introductory README section change. Main, portal builds and GitHub Pages are not modified. [Publication status](./experiments/hexfront-3d/docs/PUBLISH.md).
+[Experiment and local start](experiments/hexfront-3d/README.md) · [HQ images, source and test status](experiments/hexfront-3d/docs/HQ_COMMAND.md)
 
-Current local runtime captures:
+![Desktop](experiments/hexfront-3d/docs/hq-command/desktop-after.png)
 
-<table>
-  <tr><th>Desktop · 1440 × 900</th><th>Mobile · 390 × 844</th></tr>
-  <tr>
-    <td width="75%"><img src="./experiments/hexfront-3d/docs/economy/1440-after-selection.png" alt="37 centered troop pills and selected HQ supply information"></td>
-    <td width="25%"><img src="./experiments/hexfront-3d/docs/economy/390-after-selection.png" alt="Fixed troop pills and compact mobile supply HUD"></td>
-  </tr>
-</table>
-
-[Before/after and tactical captures](./experiments/hexfront-3d/docs/ECONOMY.md#bilder-und-nachweise) · [Existing drone animations](./experiments/hexfront-3d/docs/TECHNOLOGY.md) · [Asset licenses](./experiments/hexfront-3d/ASSET_LICENSES.md).
-
-Human balance testing and 60 FPS on real phones remain unverified. On very small displays, use the existing zoom/navigation for detail commands; fixed values are never moved to fake separation.
+Only the experiment branch is published; main and the original deployment remain untouched. Extended browser tests were stopped at the user's request; this is not a claim of complete UI acceptance.
 
 [![Verify and deploy](https://github.com/emfau88/hexwars/actions/workflows/pages.yml/badge.svg)](https://github.com/emfau88/hexwars/actions/workflows/pages.yml)
 

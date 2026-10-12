@@ -1,10 +1,40 @@
-# Isolierte Veröffentlichung – 12.10.2026
+# Command HQ — isolierte Veröffentlichung
 
-## Neue Vergleichsfassung: Vorbereitung
+**[Neues HQ spielen](https://rawcdn.githack.com/emfau88/hexwars/2815c40a426ee05daab22715caedbce60faf0b57/experiments/hexfront-3d/preview/index.html)** · [Bisherige Wirtschaft](https://rawcdn.githack.com/emfau88/hexwars/2815c40a426ee05daab22715caedbce60faf0b57/experiments/hexfront-3d/preview/index.html?economy=legacy-local)
 
-Zentrale HQ-Produktion, alte lokale Vergleichswirtschaft, fest zentrierte Zahlen und taktische Hinweise. [Änderungen, Formel, Strategievergleich und Bilder](ECONOMY.md). Der neue Produktionslink wird nach Push und öffentlicher Prüfung eingesetzt; der Technologie-Link im folgenden historischen Abschnitt bezeichnet ausdrücklich den vorherigen Stand.
+Runtime-Commit: `2815c40a426ee05daab22715caedbce60faf0b57`. Branch: `experiment/hexfront-3d-diorama`. 37 Produktionsdateien, 4,82 MiB; Diagnostik-API abgeschaltet. Modell, Gameplay-Ansichten, Blender-Quelle und Bildsequenzen sind im Commit enthalten. Main bleibt bei `c22b6830533f88161483ed22d01cba88c7e2dfc7`; kein Merge und kein Pages-Deployment.
 
-GitHub war zunächst wegen fehlender Namensauflösung nicht erreichbar. Nach erneuter Verbindung des PCs mit dem Mobilfunk-Hotspot konnten die Referenzen abgerufen werden. Der Experiment-Branch steht vor diesem Update bei `a1ffaa93993797c7b651cb0d310bc4f3faa7e89e`. `main` steht inzwischen unabhängig davon bei `9e673c4a245661c6513b342980b3f5c316cb2b94`; es wird hier weder ausgecheckt noch gemergt oder gepusht. Nur der Experiment-Branch wird fortgeschrieben. Bestehende Hosting-Workflows werden nicht gestartet oder geändert.
+35 Logiktests und visuelle Desktop-/Mobile-Prüfung wurden vor der letzten Nutzeranweisung abgeschlossen. Danach ausdrücklich keine weiteren Tests. Der lange UI-Matchlauf wurde beendet; die zusätzliche HQ-Animationsprüfung ist nicht vollständig bestanden (Speicherassertion bei sinkender Texturanzahl). Der neue öffentliche Link wurde nicht durchgespielt oder im Browser nachgetestet. [Genaue Abgrenzung](HQ_COMMAND.md).
+
+---
+
+# Charming Frontier und Referenzdrohne — veröffentlicht
+
+**[HEXFRONT 3D spielen](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/preview/index.html)** · **[Bisherige Wirtschaft](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/preview/index.html?economy=legacy-local)** · **[Drohne Vorher/Nachher](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/docs/drone-reference/compare.html)**. Beim ersten Besuch des Vorschauhosts **Open the page** bestätigen; kein Konto nötig.
+
+Produktionscommit: [`c49d8a2eb7fc78e6864c91f8b766e54b86aac898`](https://github.com/emfau88/hexwars/commit/c49d8a2eb7fc78e6864c91f8b766e54b86aac898). Branch: [`experiment/hexfront-3d-diorama`](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama). Der vollständige Charming-Art-Pass ist zusätzlich in `55d7047be2b888860d05a23314518b17f4d8970c` gesichert; der Folgecommit ersetzt gezielt die Drohne und ihre Darstellung. Spätere Dokumentationscommits ändern den fest verlinkten Build nicht.
+
+Am 12.10.2026 nach erneuter Hotspot-Verbindung erfolgreich gepusht. Der zuvor fehlende Standardgateway verhinderte den Push, nicht eine fehlende Freigabe des Nutzers. Keine Netzwerk-/Kontoeinstellungen wurden verändert. Main bleibt vor und nach diesem Push `c22b6830533f88161483ed22d01cba88c7e2dfc7`; keine Übernahme nach Main, kein Pages-Workflow und keine Änderung an bisherigen Veröffentlichungen.
+
+- Öffentlicher Produktionslauf bestanden: **Desktop 1440 × 900 und Touch-Mobile 390 × 844**, echte Drag-and-drop-Befehle, Uhr, Pause, QA-API entfernt, kein horizontaler Überlauf, keine Spiel-/Asset-/Browserfehler. [Bericht](drone-reference/live/production-report.json).
+- Vergleichsmodus `?economy=legacy-local` öffentlich auf Mobile geladen und mit echtem Ziehbefehl geprüft. [Bericht](drone-reference/live-legacy/production-report.json). Der Test akzeptiert jetzt die Query-Parameter in der vorgeschalteten Bestätigungsseite des Hosts; der Spielcode wurde dafür nicht geändert.
+- **33 öffentliche Dateien / 3.257.308 Bytes** geladen und per SHA-256 gegen die Git-Blobs geprüft: vollständig identisch mit `c49d8a2eb7fc78e6864c91f8b766e54b86aac898`. [Dateinachweis](drone-reference/live/assets-report.json). Das lokale Windows-Verzeichnis umfasst aufgrund normalisierter Textzeilenenden 3.264.987 Bytes; es sind keine unterschiedlichen Modellversionen.
+- Öffentliche Screenshots tatsächlich betrachtet: [Desktop](drone-reference/live/final-desktop.png), [Mobile](drone-reference/live/final-mobile.png), [Mobile-Ziehbefehl](drone-reference/live/mobile-drag.png), [Vergleichswirtschaft](drone-reference/live-legacy/final-mobile.png). Die direkten Drohnen-Vorher/Nachher-Bilder verwenden die exakt gleiche Kamera und den gleichen tatsächlich gespielten Transportzustand: [Bildvergleich](drone-reference/compare.html).
+- Lokal zusätzlich 32 Logiktests, Effekt-/Ressourcenprüfung, native Eingabe, Rampen/Ruinen und Produktions-Build bestanden. Vollständige Desktop-/Touch-Partien mit Sieg/Niederlage/Neustart im vorausgehenden Art-Pass; Gameplay bleibt danach unverändert. [Drohnenbericht](DRONE.md), [vorangegangener Art-Pass](FRONTIER.md).
+
+Die öffentlichen Einzelmessungen bis zur Bereitschaft lagen bei 10,88 s Desktop / 7,95 s Mobile sowie 4,66 s für den mobilen Wirtschaftsvergleich. Netzwerk, erstmalige Asset-Anfragen und Software-Rendering beeinflussen diese Werte; sie sind keine Ladezeitgarantie. Keine physischen Android-/iOS-Geräte, kein Safari-Test und kein 60-FPS-Nachweis. Keine Clips für diese Abgabe.
+
+Der Testlink liefert den isolierten statischen Build direkt aus diesem Experiment-Commit. Der vollständige Quellstand ist im Branch enthalten; die originale Root-README bleibt unter ihrem Experiment-Intro unverändert.
+
+---
+
+ Isolierte Veröffentlichung – 12.10.2026
+
+## Veröffentlichte Wirtschaftsbasis für den folgenden Art-Pass
+
+Produktionscommit `df722a6a8cf04c8c904f97c880115ce2ec0c4ee7`, [spielbar](https://rawcdn.githack.com/emfau88/hexwars/df722a6a8cf04c8c904f97c880115ce2ec0c4ee7/experiments/hexfront-3d/preview/index.html), mit `?economy=legacy-local` als Vergleich. Öffentlicher Desktop- und Touchstart, Drag, Uhr und Pause bestanden; keine QA-API. Alle 29 öffentlichen Dateien / 2.327.857 Bytes stimmen mit den Git-Blobs überein. [Browserbericht](economy/live/production-report.json), [Dateiprüfung](economy/live/assets-report.json). Aufnahmen wurden betrachtet.
+
+Main steht unabhängig bei `9e673c4a245661c6513b342980b3f5c316cb2b94`; dieser Auftrag pusht ausschließlich den Experiment-Branch, ohne Merge oder Pages-Workflow. [Wirtschaftsbericht](ECONOMY.md).
 
 ## Vorheriger veröffentlichter Stand: Drohnen und Technologie
 

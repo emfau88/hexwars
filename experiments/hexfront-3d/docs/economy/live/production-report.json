@@ -1,0 +1,34 @@
+{
+  "url": "https://rawcdn.githack.com/emfau88/hexwars/df722a6a8cf04c8c904f97c880115ce2ec0c4ee7/experiments/hexfront-3d/preview/index.html",
+  "date": "2026-10-12T17:30:26.624Z",
+  "runs": [
+    {
+      "name": "desktop",
+      "input": "drag-and-drop",
+      "title": "HEXFRONT — Bastion Morgenwacht",
+      "qa": "undefined",
+      "overflow": false,
+      "readyMs": 9781,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "repositoryNoticeConfirmed": true,
+      "commandAccepted": true,
+      "clockAdvances": true,
+      "pause": true
+    },
+    {
+      "name": "mobile",
+      "input": "drag-and-drop",
+      "title": "HEXFRONT — Bastion Morgenwacht",
+      "qa": "undefined",
+      "overflow": false,
+      "readyMs": 5427,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "repositoryNoticeConfirmed": true,
+      "commandAccepted": true,
+      "clockAdvances": true,
+      "pause": true
+    }
+  ],
+  "errors": [],
+  "hostWarnings": []
+}
