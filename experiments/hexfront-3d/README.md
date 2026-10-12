@@ -2,27 +2,25 @@
 
 Ein isolierter, tatsächlich spielbarer 3D-Vertical-Slice mit **einem Level**, 37 spielbaren Hexfeldern, zwei HQs, zwei Aufstiegen und einer gegnerischen KI. Orange erobert das blaue HQ; der Verlust des eigenen HQs beendet die Partie.
 
-**[▶ HEXFRONT 3D spielen — mit Drag-and-drop](https://rawcdn.githack.com/emfau88/hexwars/47f5d8b59d5f89de398397c8893bcc30d2030d31/experiments/hexfront-3d/preview/index.html)** · [Experiment-Branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama)
+**Neue Technologie-Fassung lokal fertig:** Schwebedrohnen, eine gemeinsame HQ-Familie, aktivierbares Relais, weich animierte Transporte mit **1,1 Sekunden pro Hex** und kurze Kampf-/Eroberungseffekte. Karte, Rampen, 70°/55°-Kamera, Drag-and-drop und das kompakte HUD bleiben erhalten. [Gestaltung, Vorher/Nachher, Bewegung und Prüfnachweise](docs/TECHNOLOGY.md).
 
-**Drag-and-drop-Fix veröffentlicht:** Produktions-Commit `47f5d8b59d5f89de398397c8893bcc30d2030d31`. Nach dem erneuten Hotspot-Verbindungsaufbau gelang der Push. Der Link oben enthält den Fix; Ziehbefehle wurden auch über diese öffentliche URL mit Maus und Touch geprüft.
+**Veröffentlichung ausstehend:** Dem PC fehlt derzeit die Internetroute. Der bestehende öffentliche Testlink öffnet noch den vorherigen Drag-and-drop-Build **ohne die neuen Drohnen**. Nach erfolgreichem Branch-Push wird er auf den neuen Produktions-Commit umgestellt.
 
-**Drag-and-drop wiederhergestellt:** Eigenes Feld greifen → zum Ziel ziehen → loslassen und senden, wie im Original. Die Klickbedienung bleibt zusätzlich verfügbar. [Steuerung, Gestentrennung und Prüfungen](docs/DRAG.md).
+**[▶ Bisher veröffentlichte HEXFRONT-3D-Version spielen](https://rawcdn.githack.com/emfau88/hexwars/47f5d8b59d5f89de398397c8893bcc30d2030d31/experiments/hexfront-3d/preview/index.html)** · [Experiment-Branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama)
 
-**Overlay-/HUD-Pass:** Ruhigere Zahlenplaketten mit klarer Priorität für Quelle, Ziel, HQs und Bewegungen. Teamfarben bleiben erhalten; mobile Antippflächen sind mindestens 44 Pixel groß. Der kompakte Match-HUD schafft bei 390 × 844 ohne Auswahl 168 Pixel zusätzliche Kartenhöhe, die sichtbare Plakettenfläche sinkt im gleichen Gefechtszustand um 42 %. Mehr Kartenbereich bedeutet wegen der begrenzten Portraitbreite nicht proportional größere Hexfelder. [Vorher/Nachher, Gestaltung und vollständige Spiel-/Eingabetests](docs/HUD.md). Gelände, Assets, Kameraregeln und Gameplay bleiben unverändert.
+Die Vorschau verwendet [raw.githack.com](https://raw.githack.com/). Beim ersten Besuch **Open the page** bestätigen. Keine Anmeldung oder Vercel-Verbindung nötig. Die bestehenden Pages-/Portalversionen bleiben unverändert. [Veröffentlichungsstatus](docs/PUBLISH.md).
 
-**Art-Pass Morgenwacht:** Gebrochene, geschichtete Felsflanken, eine eigene Familie aus Kommandobunkern und Relais, ruhige Erdwege und CC0-Felsmaterialien ersetzen die bisherige gleichmäßige Low-Poly-Dekoration. [Vorher/Nachher, Referenzanalyse, Tests und ehrliche Bewertung](docs/ART.md).
+**Steuerung:** Eigenes Feld greifen → zum Ziel ziehen → loslassen und sofort senden. Alternativ Quelle und Ziel antippen und Befehl geben. [Gestentrennung und Prüfungen](docs/DRAG.md).
 
-**Kamera-Update:** Standard ist jetzt eine orthografische **70°-Taktikansicht**, ergänzt um eine feste 55°-Dioramaansicht. Framing, begrenzter Zoom und Verschieben richten sich nach der tatsächlichen projizierten Geometrie. [Vorher/60°/70°/80°-Vergleich und Eingabetests](docs/CAMERA.md).
+**Lesbarkeit:** Deutliche Hexkonturen und orange/blaue Besitzflächen bleiben erhalten. Helle Innenkonturen kennzeichnen erreichbare Ziele; Truppenzahlen folgen ihren Feldern. [HUD](docs/HUD.md), [Kamera](docs/CAMERA.md), [vorheriger Landschafts-Art-Pass](docs/ART.md).
 
-**Felder und Besitz:** Deutliche Hexkonturen bleiben ständig sichtbar. Eroberte Bodenflächen und ihre äußeren Ränder werden orange beziehungsweise blau eingefärbt. Eine zusätzliche helle Innenkontur markiert Auswahl und erreichbare Ziele, ohne die Teamfarbe zu ersetzen. Bodenstruktur, Schatten und echte Höhen bleiben erkennbar.
+Neue lokale Version, echte Runtime-Aufnahmen:
 
-**Veröffentlicht und geprüft am 12.10.2026:** Der Testlink zeigt den aktuellen Produktions-Build mit Drag-and-drop, Overlay-/HUD-Pass, Art-Pass, 70°-Kamera, Teamflächen und Rampen ohne Querstreifen. Der Experiment-Branch ist auf GitHub. Start, Ziehbefehle, Uhr und Pause wurden über die öffentliche URL auf Desktop und Mobile geprüft. Alle 25 ausgelieferten Dateien stimmen bytegenau mit dem eingecheckten Produktionsstand überein. [Aktuelle Online-Nachweise und Hosting-Grenzen](docs/PUBLISH.md).
+![Desktop 1440 × 900, neuer Drohnentransport](docs/technology/desktop-after-transport.png)
 
-Die Vorschau verwendet [raw.githack.com](https://raw.githack.com/) als Auslieferungsdienst für dieses öffentliche Repository. **Beim ersten Öffnen auf „Open the page“ klicken.** Dafür sind weder Vercel-Konto noch Anmeldung nötig. Das bisherige Pages-Spiel bleibt unverändert. [Veröffentlichung, Prüfnachweise und Aktualisierung des Testlinks](docs/PUBLISH.md).
+<img src="docs/technology/mobile-after-transport.png" alt="Mobile 390 × 844, neuer Drohnentransport" width="390">
 
-![Öffentliche Vorschau während eines Ziehbefehls, Desktop 1440 × 900](docs/drag/live/desktop-drag.png)
-
-<img src="docs/drag/live/mobile-drag.png" alt="Öffentliche Vorschau während eines Touch-Ziehbefehls, Mobile Portrait 390 × 844" width="390">
+[Bewegungsclip](docs/technology/action.webm) · [Bildsequenz](docs/technology/action-sequence.jpg) · [Reine Landschaft](docs/technology/landscape.png) · [HQ-Nahaufnahme](docs/technology/hq-detail.png)
 
 ## Starten
 

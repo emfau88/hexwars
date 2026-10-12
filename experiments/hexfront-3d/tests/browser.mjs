@@ -66,7 +66,10 @@ try{
         assert.equal((await snapshot()).commands,old+1);
         if(turn===9){await click('#camera-view');assert.match(await page.locator('#camera-view').innerText(),/Diorama/);assert.equal(await page.locator(`[data-cell="${action.from}"]`).getAttribute('aria-pressed'),'true');await click('#fit');assert.match(await page.locator('#camera-view').innerText(),/Taktik/);}
       }
-      await advance(5.05);turn++;if(turn%15===0)console.log(`${name}: ${turn} human UI decisions, ${(await snapshot()).time.toFixed(1)} simulated seconds`);
+      // Mirror the unit strategy's strict deadline on the same 50 ms clock.
+      // A fixed 5.05 interval drifts to a different strategy with faster transports.
+      const now=(await snapshot()).time,deadline=now+5;let stepTime=now,steps=0;while(stepTime<=deadline){stepTime+=.05;steps++;}
+      await advance(steps*.05);turn++;if(turn%15===0)console.log(`${name}: ${turn} human UI decisions, ${(await snapshot()).time.toFixed(1)} simulated seconds`);
     }
     let state=await snapshot();assert.equal(state.result,'victory',`${name}: complete UI match must win (time ${state.time})`);assert.ok(state.aiCommands>15);assert.ok(captured);
     await page.screenshot({path:path.join(output,`${name}-victory.png`)});

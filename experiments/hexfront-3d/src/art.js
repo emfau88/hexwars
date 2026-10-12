@@ -1,4 +1,6 @@
 import * as T from 'three';
+import {buildTechnology} from './technology.js';
+import {RUINS} from './transport.js';
 import {GLTFLoader} from '../vendor/loaders/GLTFLoader.js';
 import {RADIUS,STEP,corner,cornerHeight,surfaceHeight} from './map.js';
 
@@ -172,57 +174,9 @@ function ruin(s,x,z,length,y,rotation){
 }
 
 export function buildArtStructures(s){
- const m=s.materials;
- for(const c of s.game.cells.filter(c=>c.kind==='hq')){
-  const g=new T.Group();frameTag(g,c.id);g.position.set(c.x,c.height*STEP,c.z-.12);g.rotation.y=c.hq==='blue'?Math.PI:0;s.static.add(g);s.contactAt(c.x,c.z,c.height*STEP,2.25,2.15);
-  box(g,m.concrete,1.82,.12,1.56,0,.015,0,.21);box(g,m.dark,1.52,.075,1.25,0,.135,0,.18);
-  box(g,m.olive,1.24,.58,.95,0,.21,-.08,.18);box(g,m.dark,1.30,.075,1.01,0,.78,-.08,.18);
-  box(g,m.concrete,1.40,.085,1.10,0,.85,-.08,.19);box(g,m.steel,1.18,.045,.87,0,.955,-.08,.14);
-  // Sloped structural cheeks flank a recessed door, separating load-bearing
-  // concrete, matte armour and deep service cavities in the silhouette.
-  for(const side of [-1,1]){
-   buttress(g,m.concrete,side*.68,.12,.88,side*.13);box(g,m.olive,.23,.10,.58,side*.65,.86,.02,.045);
-   box(g,m.dark,.12,.38,.03,side*.65,.32,.39,.02);
-   for(let j=0;j<5;j++)box(g,m.steel,.11,.018,.022,side*.65,.39+j*.05,.417,.005);
-   box(g,m[c.hq],.24,.018,.13,side*.65,.975,.19,.014);
-   for(const z of [-.30,.31])cylinder(g,m.steel,.024,.024,.025,side*.66,.98,z,8);
-  }
-  box(g,m.dark,.62,.46,.065,0,.20,.431,.05);box(g,m.steel,.47,.34,.020,0,.22,.48,.025);
-  for(const x of [-.115,.115])box(g,m.dark,.014,.29,.015,x,.24,.499,.003);
-  box(g,m.concrete,.74,.085,.25,0,.65,.44,.04);box(g,m[c.hq],.53,.027,.033,0,.673,.578,.006);
-  for(let j=0;j<3;j++)box(g,m.concrete,.68,.035,.12,0,.05+j*.035,.83-j*.115,.025);
-  // Off-axis command cupola and panel antenna, with visible frame and feed.
-  cylinder(g,m.dark,.31,.37,.095,-.17,1.06,-.12,10);cylinder(g,m.olive,.28,.32,.19,-.17,1.20,-.12,10);cylinder(g,m.concrete,.34,.29,.065,-.17,1.327,-.12,10);
-  const radar=new T.Group();radar.position.set(-.19,1.39,-.16);radar.rotation.z=-.23;radar.rotation.x=.22;g.add(radar);
-  box(radar,m.dark,.68,.047,.38,0,.0,0,.09);box(radar,m.steel,.59,.015,.30,0,.055,0,.07);
-  for(const x of [-.23,0,.23])box(radar,m.concrete,.025,.045,.31,x,.06,0,.005);
-  for(const z of [-.12,.12])box(radar,m.concrete,.60,.027,.022,0,.08,z,.004);
-  pipe(g,m.dark,[[.32,.96,-.34],[.43,1.10,-.34],[.43,1.41,-.34]],.025);cylinder(g,m.copper,.018,.018,.33,.43,1.50,-.34,8);box(g,m.light,.08,.035,.08,.43,1.67,-.34,.02);
-  for(let j=0;j<5;j++)box(g,m.dark,.24,.024,.043,.39,.995,-.13+j*.072,.006);
-  box(g,m[c.hq],.09,.013,.29,-.52,.984,-.10,.006);stencil(g,c.hq==='orange'?'01':'02',.38,.985,.30);
-  pipe(g,m.copper,[[-.70,.21,-.42],[-.70,.45,-.42],[-.49,.59,-.46]],.020);
- }
- const c=s.game.cell('0,0'),g=new T.Group();frameTag(g,c.id);g.position.set(c.x,STEP*2,c.z-.13);s.static.add(g);s.contactAt(c.x,c.z,STEP*2,1.95,1.95);
- cylinder(g,m.concrete,.72,.79,.13,0,.075,0,6);cylinder(g,m.dark,.48,.55,.10,0,.20,0,12);cylinder(g,m.steel,.33,.39,.72,0,.61,0,12);
- for(let i=0;i<3;i++){
-  const a=i*Math.PI*2/3,arm=new T.Group();arm.rotation.y=a;g.add(arm);
-  buttress(arm,m.concrete,0,.40,1.03);box(arm,m.olive,.25,.10,.30,0,1.04,.32,.03);
-  box(arm,m.dark,.13,.54,.028,0,.38,.62,.012);
-  for(let j=0;j<4;j++)box(arm,m.steel,.11,.025,.033,0,.48+j*.075,.639,.008);
-  box(arm,m.light,.11,.026,.08,0,1.15,.34,.012);
-  const fin=box(arm,m.concrete,.27,.39,.10,0,1.13,.28,.045);fin.rotation.x=-.27;
-  const array=new T.Group();array.position.set(0,1.36,.46);array.rotation.x=-.33;arm.add(array);
-  box(array,m.dark,.42,.045,.34,0,0,0,.05);box(array,m.steel,.35,.016,.27,0,.055,0,.035);
-  for(const px of [-.12,0,.12])box(array,m.concrete,.022,.025,.26,px,.075,0,.004);
-
- }
- cylinder(g,m.dark,.40,.34,.085,0,1.20,0,12);cylinder(g,m.copper,.29,.31,.045,0,1.275,0,12);cylinder(g,m.steel,.27,.18,.24,0,1.41,0,12);
- const dish=mesh(g,new T.SphereGeometry(.36,24,8,0,Math.PI*2,0,Math.PI*.45),m.concrete,0,1.47,0);dish.rotation.z=Math.PI;dish.scale.y=.5;
- cylinder(g,m.dark,.034,.042,.27,0,1.58,0,8);cylinder(g,m.light,.047,.047,.06,0,1.735,0,8);
- s.relayRing=new T.Mesh(new T.TorusGeometry(.29,.012,6,40),m.light);s.relayRing.position.set(c.x,STEP*2+1.29,c.z-.13);s.relayRing.rotation.x=Math.PI/2;s.scene.add(s.relayRing);
- // Only two skyline fragments on the plateau, plus two fallen lower walls.
- ruin(s,-.96,-1.25,1.22,STEP*2,-.20);ruin(s,1.22,1.20,.98,STEP*2,-.20);
- ruin(s,-1.13,-2.40,1.48,0,-.45);ruin(s,1.22,2.38,1.25,0,2.70);
+ buildTechnology(s);
+ // Keep the existing four ruin fragments and every landscape asset in place.
+ for(const args of RUINS)ruin(s,...args);
 }
 function grassGeometry(seed,leafy=false){
  const tri=[],colours=[],count=leafy?8:18;

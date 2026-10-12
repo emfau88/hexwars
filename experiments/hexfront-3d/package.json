@@ -17,6 +17,8 @@
     "test:art": "node tests/art.mjs",
     "preview:prepare": "node scripts/prepare-preview.mjs",
     "test:overlay": "node tests/overlay.mjs",
-    "test:drag": "node tests/drag-input.mjs"
+    "test:drag": "node tests/drag-input.mjs",
+    "test:technology": "node tests/technology.mjs && node tests/technology-mission.mjs",
+    "test:speeds": "node tests/speed-comparison.mjs && node tests/speed-visual.mjs"
   }
 }

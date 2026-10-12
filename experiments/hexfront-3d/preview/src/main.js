@@ -73,7 +73,7 @@ function updateUI(){
   } else if(source){$('command-label').textContent=`GARNISON · HÖHE ${source.height}`;$('command-title').textContent=`${source.name} · ${Math.floor(source.units)} Truppen`;$('command-detail').textContent='Zum Ziel ziehen und loslassen. Alternativ ein Ziel antippen.';$('primary').innerHTML='Ziel wählen <span>◇</span>';$('primary').disabled=true;}
   else{$('command-label').textContent='DEIN BEFEHL';$('command-title').textContent='Wähle eine orange Garnison.';$('command-detail').textContent='Truppen wachsen automatisch. Das Relais bringt +30 % Nachschub.';$('primary').innerHTML='Garnison wählen <span>◇</span>';$('primary').disabled=true;}
 }
-function restart(){scene.cancelGesture();game.reset();selected=null;pending=null;fraction=1;scene.select(null);scene.hover(null);scene.fit();$('half').setAttribute('aria-pressed','false');$('all').setAttribute('aria-pressed','true');$('result-dialog').close();game.start();toast('Neuer Einsatz. Beide Seiten beginnen mit frischen Truppen.');updateUI();}
+function restart(){scene.cancelGesture();scene.clearEffects();game.reset();selected=null;pending=null;fraction=1;scene.select(null);scene.hover(null);scene.fit();$('half').setAttribute('aria-pressed','false');$('all').setAttribute('aria-pressed','true');$('result-dialog').close();game.start();toast('Neuer Einsatz. Beide Seiten beginnen mit frischen Truppen.');updateUI();}
 function showResult(){
   scene.cancelGesture();
   $('result-label').textContent=game.result==='victory'?'OPERATION ERFOLGREICH':'OPERATION GESCHEITERT';$('result-title').textContent=game.result==='victory'?'Die Bastion gehört dir.':'Die Linie ist gebrochen.';
@@ -81,7 +81,7 @@ function showResult(){
   $('result-time').textContent=time(game.time);$('result-captures').textContent=game.captures;$('result-commands').textContent=game.commands;
   if($('help-dialog').open)$('help-dialog').close();$('result-dialog').showModal();updateUI();
 }
-function processEvents(){for(const e of game.drainEvents()){if(e.type==='capture'||e.type==='combat')scene.effect(e);if(e.type==='capture'&&e.id==='0,0')toast(e.owner==='orange'?'Relais gesichert. Dein Nachschub steigt um 30 %.':'Blau kontrolliert das Relais. Gegnerischer Nachschub +30 %.');if(e.type==='result')showResult();}}
+function processEvents(){for(const e of game.drainEvents()){if(e.type==='capture'||e.type==='combat'||e.type==='reinforce')scene.effect(e);if(e.type==='capture'&&e.id==='0,0')toast(e.owner==='orange'?'Relais gesichert. Dein Nachschub steigt um 30 %.':'Blau kontrolliert das Relais. Gegnerischer Nachschub +30 %.');if(e.type==='result')showResult();}}
 $('primary').addEventListener('click',()=>{
   if(game.result){restart();return;}if(game.paused){game.paused=false;autoPaused=false;updateUI();return;}if(!game.running){game.start();toast('Ziehe von Orange zum Ziel. Loslassen sendet die Truppen.');updateUI();return;}
   if(selected&&pending)issueOrder();
@@ -108,7 +108,7 @@ try {
   scene.onViewChange=view=>{$('camera-view').textContent=view==='tactical'?'Taktik':'Diorama';$('camera-view').setAttribute('aria-pressed',String(view==='diorama'));$('camera-view').setAttribute('aria-label',view==='tactical'?'Taktikansicht. Zur Dioramaansicht wechseln':'Dioramaansicht. Zur Taktikansicht wechseln');};
   scene.renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();game.paused=true;toast('Grafikverbindung verloren. Bitte die Seite neu laden.');updateUI();});
   await scene.ready;loaded=true;$('loading').hidden=true;updateUI();
-  const frame=now=>{const dt=last?Math.min((now-last)/1000,.2):0;last=now;if(!document.hidden){accumulator+=dt;while(accumulator>=.05){if(!MANUAL_CLOCK)game.update(.05);accumulator-=.05;}processEvents();if(now-lastUI>130){updateUI();lastUI=now;}scene.render(now);}requestAnimationFrame(frame);};requestAnimationFrame(frame);
+  const frame=now=>{const dt=last?Math.min((now-last)/1000,.2):0;last=now;if(!document.hidden){accumulator+=dt;while(accumulator>=.05){if(!MANUAL_CLOCK)game.update(.05);accumulator-=.05;}processEvents();if(now-lastUI>130){updateUI();lastUI=now;}scene.simulationRemainder=MANUAL_CLOCK?0:accumulator;scene.render(now);}requestAnimationFrame(frame);};requestAnimationFrame(frame);
   if(ALLOW_QA&&new URLSearchParams(location.search).has('qa'))window.__HEXFRONT3D__={
     snapshot:()=>game.snapshot(),point:id=>scene.screenCell(id),route:(a,b)=>game.path(game.cell(a),game.cell(b))?.map(c=>c.id),
     suggest:()=>chooseOrder(game,'orange'),

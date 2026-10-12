@@ -1,4 +1,5 @@
 import {createMap,neighbors,traversable,route,graphDistance} from './map.js';
+export const TRANSPORT_SECONDS_PER_HEX = 1.1;
 export const opposite = owner => owner==='orange'?'blue':'orange';
 /** A single height bonus, never multiplied by an inherited Hill bonus. */
 export function defenseFactor(from,to) {return 1+Math.max(to.height>from.height?.30:0,to.kind==='hq'?.20:0);}
@@ -30,14 +31,15 @@ export class Battle {
     this.events.push({type:'send',owner,from:a.id,to:b.id,units});return {ok:true,order};
   }
   arrive(order,from,to) {
-    if(to.owner===order.owner)to.units+=order.units;
+    const visual={id:to.id,from:from.id,owner:order.owner,orderId:order.id,units:order.units,previous:to.owner};
+    if(to.owner===order.owner){to.units+=order.units;this.events.push({type:'reinforce',...visual});}
     else {
       const f=forecast(from,to,order.units);const previous=to.owner;
       if(f.win) {
         to.owner=order.owner;to.units=Math.max(1,f.remaining);if(order.owner==='orange')this.captures++;
-        this.events.push({type:'capture',id:to.id,owner:order.owner,previous});
+        this.events.push({type:'capture',...visual,previous});
         if(to.hq&&to.hq!==order.owner){this.result=order.owner==='orange'?'victory':'defeat';this.running=false;this.events.push({type:'result',result:this.result});}
-      } else {to.units=f.remaining;this.events.push({type:'combat',id:to.id,owner:order.owner});}
+      } else {to.units=f.remaining;this.events.push({type:'combat',...visual});}
     }
   }
   update(dt) {
@@ -52,10 +54,10 @@ export class Battle {
       const from=this.cell(o.path[o.segment]),to=this.cell(o.path[o.segment+1]);
       // Every animated edge is checked against the same rule as the UI and AI.
       if(!traversable(from,to))throw Error('Invalid terrain edge in movement');
-      o.progress+=dt*.50;
-      if(o.progress<1)continue;
+      o.progress+=dt/TRANSPORT_SECONDS_PER_HEX;
+      if(o.progress<1-1e-9)continue;
       if(to.owner!==o.owner||o.segment===o.path.length-2){this.arrive(o,from,to);this.orders.splice(this.orders.indexOf(o),1);}
-      else {o.segment++;o.progress-=1;}
+      else {o.segment++;o.progress=Math.max(0,o.progress-1);}
       if(this.result)break;
     }
     if(!this.result&&this.time>=this.nextAI){const action=chooseOrder(this,'blue');if(action)this.send(action.from,action.to,action.fraction,'blue');this.nextAI=this.time+6.3;}

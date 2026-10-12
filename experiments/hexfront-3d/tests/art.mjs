@@ -34,7 +34,7 @@ try{
   }
 
   await page.screenshot({path:path.join(out,`${name}-${phase}.png`)});
-  await page.evaluate(()=>{window.__artCapture=true;const s=window.__artScene;s.render(0);for(const m of s.markers.values())for(const o of Object.values(m))o.visible=false;s.pathLine.visible=false;for(const p of [...s.roverParts,s.roverInsignia])p.visible=false;s.labels.hidden=true;document.querySelectorAll('.map-tools,.map-title,#toast,.map-hint,#camera-guidance').forEach(e=>e.style.visibility='hidden');s.renderer.render(s.scene,s.camera);});
+  await page.evaluate(()=>{window.__artCapture=true;const s=window.__artScene;s.render(0);for(const m of s.markers.values())for(const o of Object.values(m))o.visible=false;s.pathLine.visible=false;for(const p of [...s.droneParts,s.droneWake,s.droneShadow])p.visible=false;s.labels.hidden=true;document.querySelectorAll('.map-tools,.map-title,#toast,.map-hint,#camera-guidance').forEach(e=>e.style.visibility='hidden');s.renderer.render(s.scene,s.camera);});
   await page.locator('#stage canvas').screenshot({path:path.join(out,`${name}-${phase}-landscape.png`)});
   if(!mobile&&phase==='after'){
    await page.evaluate(()=>{const s=window.__artScene;s.setView('diorama');s.renderer.render(s.scene,s.camera);});

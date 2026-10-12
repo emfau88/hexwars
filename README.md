@@ -2,33 +2,27 @@
 
 ## 3D-Diorama experiment — play the isolated prototype
 
-**Drag-and-drop update published:** The link below includes the restored mouse and touch controls, verified with full local matches and public browser checks.
+**New technology update:** hover drones, a shared command-station family, activated relay, 1.1-second transports and short capture/combat effects. The 37-sector map, 70°/55° cameras, mouse/touch drag-and-drop and compact HUD are retained. [Design, before/after, motion clip and tests](./experiments/hexfront-3d/docs/TECHNOLOGY.md).
 
-**[▶ Play HEXFRONT 3D — with drag-and-drop](https://rawcdn.githack.com/emfau88/hexwars/47f5d8b59d5f89de398397c8893bcc30d2030d31/experiments/hexfront-3d/preview/index.html)**
+**Publication pending:** the new update is ready locally, but this workstation has no Internet route. The following public link still opens the previous drag-and-drop build, **without the new drones**. It will be updated after the isolated push succeeds.
 
-One playable 37-hex battlefield with real elevation, two ramps, Orange vs Blue AI, victory/defeat and restart. Hosted separately from the existing GitHub Pages game. This link and the experiment are on `experiment/hexfront-3d-diorama`; no main-branch deployment was changed.
+**[▶ Play the published HEXFRONT 3D build](https://rawcdn.githack.com/emfau88/hexwars/47f5d8b59d5f89de398397c8893bcc30d2030d31/experiments/hexfront-3d/preview/index.html)** · [Experiment branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama) · [Start instructions](./experiments/hexfront-3d/README.md)
 
-[Start instructions, controls and technical decisions](./experiments/hexfront-3d/README.md) · [Current art verification and limitations](./experiments/hexfront-3d/docs/ART.md) · [Asset licenses](./experiments/hexfront-3d/ASSET_LICENSES.md)
+The experiment lives in `experiments/hexfront-3d/`. Main, portal builds and GitHub Pages remain unchanged. The preview uses raw.githack.com; on the first visit, click **Open the page**. No Vercel account or sign-in is needed. [Publication status](./experiments/hexfront-3d/docs/PUBLISH.md).
 
-**Drag-and-drop restored:** Grab an owned cell, drag to a reachable target and release to send. Mouse and touch use the same rules; click-to-confirm remains available. Camera navigation is separated from troop commands. [Controls and verification](./experiments/hexfront-3d/docs/DRAG.md).
-
-**Overlay and mobile HUD update:** Quieter troop badges prioritize source, target, HQs and active movements while preserving team colours and 44-pixel mobile tap targets. The compact match HUD frees 168 pixels of map height at 390 × 844; visible badge area in the matched battle state falls by 42%. This is extra canvas space, not a promise of proportionally larger hexes. [Before/after comparisons and full-match/input tests](./experiments/hexfront-3d/docs/HUD.md). Terrain, assets, camera rules and gameplay are unchanged.
-
-**Art pass:** Authored fractured rock formations, layered cliff faces, command bunkers and a three-panel relay; restrained vegetation, quiet paths and five optimized CC0 material textures. [Before/after screenshots, art decisions and verification](./experiments/hexfront-3d/docs/ART.md). Gameplay, all 37 sectors and camera controls are preserved.
-
-**Camera update:** 70° tactical view, optional 55° diorama view, geometry-based framing and corrected picking. [Angle comparison and camera QA](./experiments/hexfront-3d/docs/CAMERA.md). The play link is pinned to production commit `47f5d8b`, including drag-and-drop, the overlay/HUD update, art pass, clean ramps and territory outlines. It is published with this branch and was verified in the browser on desktop and mobile.
-
-Persistent hex outlines and Orange/Blue territory fills now make ownership visible across the battlefield. A separate inset outline marks reachable targets without replacing team colours; the textured 3D terrain remains visible.
-
-The preview is served from this isolated branch through [raw.githack.com](https://raw.githack.com/), without a Vercel account. On the first visit, click **Open the page** to confirm this repository. GitHub publication and live desktop/mobile browser checks passed on 12 October 2026, including real commands, clock and pause; all 25 hosted files match the production commit byte for byte. See the [publication status and reproducible checks](./experiments/hexfront-3d/docs/PUBLISH.md). The prototype does **not** yet match Tacticus's production art quality, and 60 FPS on real mobile devices is unverified.
+New local version, actual runtime captures:
 
 <table>
-  <tr><th>Desktop · 1440 × 900</th><th>Mobile portrait · 390 × 844</th></tr>
+  <tr><th>Desktop · 1440 × 900</th><th>Mobile · 390 × 844</th></tr>
   <tr>
-    <td width="75%"><img src="./experiments/hexfront-3d/docs/drag/live/desktop-drag.png" alt="Live HEXFRONT 3D desktop preview: dragging troops from an owned sector to a reachable target"></td>
-    <td width="25%"><img src="./experiments/hexfront-3d/docs/drag/live/mobile-drag.png" alt="Live HEXFRONT 3D mobile preview: touch drag with route and troop count before release"></td>
+    <td width="75%"><img src="./experiments/hexfront-3d/docs/technology/desktop-after-transport.png" alt="New hover-drone transport on the tactical battlefield"></td>
+    <td width="25%"><img src="./experiments/hexfront-3d/docs/technology/mobile-after-transport.png" alt="New hover-drone transport and compact touch HUD"></td>
   </tr>
 </table>
+
+[Motion clip](./experiments/hexfront-3d/docs/technology/action.webm) · [Landscape without overlays](./experiments/hexfront-3d/docs/technology/landscape.png) · [Assets and licenses](./experiments/hexfront-3d/ASSET_LICENSES.md)
+
+This remains a prototype, below Tacticus's production art quality. Human balance testing and 60 FPS on real phones remain unverified.
 
 [![Verify and deploy](https://github.com/emfau88/hexwars/actions/workflows/pages.yml/badge.svg)](https://github.com/emfau88/hexwars/actions/workflows/pages.yml)
 

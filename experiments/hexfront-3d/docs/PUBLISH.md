@@ -1,6 +1,12 @@
 # Isolierte Veröffentlichung – 12.10.2026
 
-## Aktuell veröffentlicht: Drag-and-drop-Fix
+## Technologie-Fassung: lokal fertig, Push ausstehend
+
+Die neue Fassung wurde im isolierten Experiment implementiert. [Inhalt, Screenshots, Clip und Tests](TECHNOLOGY.md). Beide vollständigen Browserpartien (Maus und Touch) bestanden mit Sieg nach 167,1 s / 33 Befehlen, Niederlage bei Untätigkeit nach 257,55 s sowie Neustart. Der Produktions-Build enthält 27 Dateien und keine QA-API.
+
+Am 12.10.2026 schlug die erneute GitHub-Verbindungsprüfung mit `Could not resolve host: github.com` fehl. Die rein lesende Windows-Prüfung fand nur 169.254-Adressen ohne IPv4-Standardgateway; auch eine direkte HTTPS-Verbindung zu 1.1.1.1 scheiterte. Es wurden keine DNS-/Netzwerkeinstellungen verändert. Deshalb ist die neue Fassung noch nicht öffentlich geprüft oder als veröffentlicht ausgewiesen. Die README-Links verweisen bis zum erfolgreichen Push ausdrücklich auf den bisherigen Stand.
+
+## Bisher veröffentlicht: Drag-and-drop-Fix
 
 Produktions-Commit: `47f5d8b59d5f89de398397c8893bcc30d2030d31`, ausschließlich auf `experiment/hexfront-3d-diorama`. Maus/Touch, vollständige Partien, fünf Kamera-/Eingabe-Viewports und Produktions-Build bestanden. [Steuerung und Nachweise](DRAG.md).
 

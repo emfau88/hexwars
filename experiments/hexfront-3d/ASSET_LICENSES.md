@@ -27,9 +27,21 @@ The earlier two boulders, bush, sci-fi wall and access console have been replace
 
 ## Authored geometry and surface treatment
 
-`src/art.js` implements the integrated cliff profiles, seven angular rock footprints, attached fracture shoulders, HQs, three-panel relay, damaged concrete barriers, curved-leaf scrub and grass clusters. These are genuine meshes with material slots, bevels, normals and UVs, authored for this experiment. Terrain collision/picking tops use the unmodified heights and coordinates from `src/map.js`.
+`src/art.js` implements the integrated cliff profiles, seven angular rock footprints, attached fracture shoulders, damaged concrete barriers, curved-leaf scrub and grass clusters. These are genuine meshes with material slots, bevels, normals and UVs, authored for this experiment. Terrain collision/picking tops use the unmodified heights and coordinates from `src/map.js`.
 
-Concrete/metal weathering, the world-space soil/grass/path/rock atlas, contact shadows, building stencils, UI and tracked rovers are original experiment work. No external font or hidden CDN is required. The soil atlas incorporates the two CC0 photographic sources listed above; it is not a pre-rendered battlefield.
+Concrete/metal weathering, the world-space soil/grass/path/rock atlas, contact shadows, building stencils and UI are original experiment work. No external font or hidden CDN is required. The soil atlas incorporates the two CC0 photographic sources listed above; it is not a pre-rendered battlefield.
+
+## Futuristic technology pass — authored assets
+
+`src/technology.js` replaces the former tracked rovers and architecture with one shared hover-drone model, a paired command-station family, and a suspended-core relay. Profile lofts have authored outlines, bevel sections, normals and UVs. Dark metal, armor and small team accents reuse the existing original weathering texture. No downloaded model is hidden behind these assets, no additional external art file was added, and no generated image substitutes for geometry.
+
+Motion and bounded combat/capture effects are authored in `src/transport.js` and `src/technology.js`. These are original experiment work under the repository's existing terms, not falsely attributed to a third-party asset pack.
+
+Official sources checked on 2026-10-12 before choosing the authored family:
+
+- [Kenney Space Kit](https://kenney.nl/assets/space-kit), CC0, 150 models: useful modular vocabulary, but authored silhouettes fit the existing hex footprint and shared material system better.
+- [Quaternius Sci-Fi Essentials Kit](https://quaternius.itch.io/sci-fi-essentials-kit), CC0, free Standard set: robots/props researched, no files imported.
+- [Quaternius Modular Sci-Fi MegaKit](https://quaternius.com/packs/modularscifimegakit.html), CC0: architecture researched, no new pack imports.
 
 ## Research and reference only
 

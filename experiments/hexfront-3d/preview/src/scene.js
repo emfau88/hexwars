@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {buildDrones,buildEffects,updateTechnology,technologyEffect,clearTechnology} from './technology.js';
 import {createArtMaterials,buildArtTerrain,buildArtStructures,loadArtAssets} from './art.js';
 import {mergeGeometries} from '../vendor/utils/BufferGeometryUtils.js';
 import {RADIUS,STEP,corner,surfaceHeight,neighbors,traversable} from './map.js';
@@ -6,13 +7,7 @@ import {CAMERA_VIEWS,MAX_ZOOM,cameraBasis,projectedBounds,frameBattlefield} from
 
 const COLORS={orange:0xd59a59,blue:0x70a5bd,neutral:0x9eaa96};
 function shadowTexture(){const c=document.createElement('canvas');c.width=c.height=128;const ctx=c.getContext('2d'),g=ctx.createRadialGradient(64,64,4,64,64,64);g.addColorStop(0,'rgba(10,15,12,.56)');g.addColorStop(.4,'rgba(10,15,12,.25)');g.addColorStop(1,'rgba(10,15,12,0)');ctx.fillStyle=g;ctx.fillRect(0,0,128,128);return new T.CanvasTexture(c);}
-function bevel(width,depth,height,r=.09){
-  const s=new T.Shape(),w=width/2,d=depth/2;
-  s.moveTo(-w+r,-d);s.lineTo(w-r,-d);s.lineTo(w,-d+r);s.lineTo(w,d-r);s.lineTo(w-r,d);s.lineTo(-w+r,d);s.lineTo(-w,d-r);s.lineTo(-w,-d+r);s.closePath();
-  const g=new T.ExtrudeGeometry(s,{depth:height,bevelEnabled:true,bevelThickness:.025,bevelSize:.025,bevelSegments:1,curveSegments:1,steps:1});g.rotateX(-Math.PI/2);return g;
-}
 function mesh(parent,geo,mat,x=0,y=0,z=0){const m=new T.Mesh(geo,mat);m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;parent.add(m);return m;}
-function cylinder(parent,mat,r1,r2,h,x,y,z,n=10){return mesh(parent,new T.CylinderGeometry(r1,r2,h,n),mat,x,y,z);}
 function ringGeometry(cell,cells,scale=.91,width=.012){
   const p=[];for(let i=0;i<6;i++){
     const a=corner(cell,i),b=corner(cell,(i+1)%6);
@@ -25,8 +20,9 @@ function ringGeometry(cell,cells,scale=.91,width=.012){
 
 export class Diorama {
   constructor(container,labels,game,onSelect,onHover){
-    this.container=container;this.labels=labels;this.game=game;this.onSelect=onSelect;this.onHover=onHover;this.selected=null;this.hovered=null;this.zoom=1;this.quality='high';this.animations=[];this.markers=new Map();this.labelsById=new Map();this.picks=[];this.disposed=false;this.reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.container=container;this.labels=labels;this.game=game;this.onSelect=onSelect;this.onHover=onHover;this.selected=null;this.hovered=null;this.zoom=1;this.quality='high';this.markers=new Map();this.labelsById=new Map();this.picks=[];this.disposed=false;this.reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.view='tactical';this.angle=CAMERA_VIEWS.tactical;this.viewPan={u:0,v:0};this.boundsCache=new Map();this.occluders=[];
+    matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',e=>{this.reduced=e.matches;if(this.reduced)this.droneGhosts=[];});
     this.scene=new T.Scene();this.scene.background=new T.Color(0x192321);this.scene.fog=new T.Fog(0x192321,28,63);
     this.camera=new T.OrthographicCamera(-10,10,10,-10,.1,100);
     this.renderer=new T.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});
@@ -38,7 +34,7 @@ export class Diorama {
     this.static=new T.Group();this.scene.add(this.static);
     this.materials=createArtMaterials(game);
     this.contact=new T.MeshBasicMaterial({map:shadowTexture(),transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2});
-    this.buildTerrain();this.buildStructures();this.buildMarkers();this.buildRovers();this.bind();this.resize();
+    this.buildTerrain();this.buildStructures();this.buildMarkers();buildDrones(this);buildEffects(this);this.bind();this.resize();
     this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(container);
     this.ready=this.loadAssets().then(()=>{this.captureBattlefieldGeometry();this.batchStatic();this.resize();this.render(0);});
   }
@@ -75,7 +71,6 @@ export class Diorama {
       // still uses the original material batches; no extra draw calls.
       this.occluders.push(o);
     });
-    this.relayRing.updateMatrixWorld(true);const attr=this.relayRing.geometry.attributes.position;for(let i=0;i<attr.count;i++){v.fromBufferAttribute(attr,i).applyMatrix4(this.relayRing.matrixWorld);points.push(v.x,v.y,v.z);}
     this.fitPoints=new Float32Array(points);this.tacticalFitPoints=new Float32Array(tacticalPoints);this.boundsCache.clear();
   }
   buildMarkers(){
@@ -92,24 +87,6 @@ export class Diorama {
       const el=document.createElement('button');el.className='garrison '+c.owner;el.dataset.cell=c.id;el.type='button';el.innerHTML='<span class="badge-face"><span class="count"></span><span class="cell-symbol"></span></span>';el.addEventListener('click',e=>{e.stopPropagation();this.onSelect(c.id);});el.addEventListener('pointerenter',()=>this.onHover(c.id));el.addEventListener('focus',()=>this.onHover(c.id));this.labels.append(el);this.labelsById.set(c.id,el);
     }
     this.pathLine=new T.Line(new T.BufferGeometry(),new T.LineDashedMaterial({color:0xe8d6a7,dashSize:.18,gapSize:.12,transparent:true,opacity:.8}));this.pathLine.frustumCulled=false;this.scene.add(this.pathLine);
-  }
-  buildRovers(){
-    const m=this.materials,g=new T.Group();
-    mesh(g,bevel(.42,.58,.12,.10),m.olive,0,.11,0);
-    mesh(g,bevel(.28,.26,.095,.065),m.steel,0,.25,-.05);
-    for(const x of [-.21,.21]){
-      mesh(g,bevel(.09,.58,.11,.035),m.dark,x,.035,0);
-      for(let j=0;j<4;j++){const w=cylinder(g,m.copper,.055,.055,.025,x,.093,-.19+j*.125,8);w.rotation.z=Math.PI/2;}
-    }
-    mesh(g,new T.BoxGeometry(.05,.04,.30),m.dark,0,.31,-.24);
-    cylinder(g,m.dark,.006,.006,.26,-.13,.40,.15,4);
-    mesh(g,new T.BoxGeometry(.12,.025,.06),m.light,0,.19,.27);
-    g.updateMatrixWorld(true);const buckets=new Map();
-    g.traverse(o=>{if(o.isMesh){const id=o.material.uuid;if(!buckets.has(id))buckets.set(id,{mat:o.material,geos:[]});const geom=o.geometry.clone().applyMatrix4(o.matrixWorld);buckets.get(id).geos.push(geom.index?geom.toNonIndexed():geom);}});
-    this.roverParts=[];
-    for(const b of buckets.values()){const geo=mergeGeometries(b.geos);const inst=new T.InstancedMesh(geo,b.mat,128);inst.count=0;inst.castShadow=true;inst.receiveShadow=true;inst.instanceMatrix.setUsage(T.DynamicDrawUsage);this.scene.add(inst);this.roverParts.push(inst);}
-    this.roverInsignia=new T.InstancedMesh(new T.BoxGeometry(.16,.018,.16),new T.MeshStandardMaterial({roughness:.7}),128);this.roverInsignia.instanceMatrix.setUsage(T.DynamicDrawUsage);this.scene.add(this.roverInsignia);
-    this.dummy=new T.Object3D();
   }
   select(id){this.selected=id;}
   hover(id){this.hovered=id;}
@@ -262,14 +239,8 @@ export class Diorama {
     input.addEventListener('lostpointercapture',e=>{if(e.target===input&&this.pointers.has(e.pointerId))this.cancelGesture();});
     input.addEventListener('wheel',e=>{e.preventDefault();if(this.pointers.size)return;const rect=canvas.getBoundingClientRect();this.zoomBy(e.deltaY>0?.92:1.08,{x:e.clientX-rect.left,y:e.clientY-rect.top});},{passive:false});
   }
-  effect(event){if(!event.id)return;const c=this.game.cell(event.id);if(!c)return;const m=new T.Mesh(new T.RingGeometry(.1,.14,32),new T.MeshBasicMaterial({color:COLORS[event.owner],transparent:true,opacity:.7,side:T.DoubleSide,depthWrite:false}));m.rotation.x=-Math.PI/2;m.position.set(c.x,c.height*STEP+.1,c.z);this.scene.add(m);this.animations.push({mesh:m,start:performance.now()});}
-  updateRovers(time){
-    const units=[];
-    for(const c of this.game.cells)if(c.owner!=='neutral'&&c.units>=2){units.push({x:c.x-.22,y:c.height*STEP,z:c.z+.18,owner:c.owner,rot:c.owner==='orange'?Math.PI:0});if(c.units>24&&c.kind!=='hq')units.push({x:c.x+.27,y:c.height*STEP,z:c.z-.02,owner:c.owner,rot:c.owner==='orange'?Math.PI:0});}
-    for(const o of this.game.orders){const a=this.game.cell(o.path[o.segment]),b=this.game.cell(o.path[o.segment+1]),t=o.progress,x=T.MathUtils.lerp(a.x,b.x,t),z=T.MathUtils.lerp(a.z,b.z,t);units.push({x,y:surfaceHeight(this.game.cells,t<.5?a:b,x,z),z,owner:o.owner,rot:Math.atan2(a.x-b.x,a.z-b.z)});}
-    for(let i=0;i<Math.min(units.length,128);i++){const u=units[i];this.dummy.position.set(u.x,u.y+.028,u.z);this.dummy.rotation.set(0,u.rot,0);this.dummy.updateMatrix();for(const part of this.roverParts)part.setMatrixAt(i,this.dummy.matrix);this.dummy.position.y+=.36;this.dummy.updateMatrix();this.roverInsignia.setMatrixAt(i,this.dummy.matrix);this.roverInsignia.setColorAt(i,new T.Color(COLORS[u.owner]));}
-    for(const p of [...this.roverParts,this.roverInsignia]){p.count=Math.min(units.length,128);p.instanceMatrix.needsUpdate=true;}if(this.roverInsignia.instanceColor)this.roverInsignia.instanceColor.needsUpdate=true;
-  }
+  effect(event){technologyEffect(this,event);}
+  clearEffects(){clearTechnology(this);}
   render(time){
     if(this.disposed)return;
     const selected=this.game.cell(this.selected),labelEntries=[],movingFrom=new Set(this.game.orders.map(o=>o.path[0])),movingTo=new Set(this.game.orders.map(o=>o.path.at(-1)));
@@ -306,8 +277,6 @@ export class Diorama {
       this.dragTip.style.left=`${T.MathUtils.clamp(this.drag.x,100,this.width-100)}px`;
       this.dragTip.style.top=`${T.MathUtils.clamp(this.drag.y-48,12,this.height-48)}px`;
     }
-    if(!this.reduced)this.relayRing.rotation.z=time*.00025;
-    for(const a of [...this.animations]){const t=(time-a.start)/900;if(t>1){a.mesh.removeFromParent();a.mesh.geometry.dispose();a.mesh.material.dispose();this.animations.splice(this.animations.indexOf(a),1);}else{a.mesh.scale.setScalar(1+t*8);a.mesh.material.opacity=(1-t)*.7;}}
-    this.updateRovers(time);this.renderer.render(this.scene,this.camera);
+    updateTechnology(this,time);this.renderer.render(this.scene,this.camera);
   }
 }
