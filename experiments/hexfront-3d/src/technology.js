@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {updateCommandHQ,commandHQEvent,resetCommandHQ} from './command-hq.js';
 import {STEP,surfaceHeight} from './map.js';
 import {TRANSPORT_SECONDS_PER_HEX} from './game.js';
 import {transportPose,structureClearance} from './transport.js';
@@ -11,6 +12,7 @@ export function buildTechnology(s){s.technologyReady=prepareFrontier(s);}
 
 export function updateTechnology(s,time){
  const delta=s.visualLast===null?0:clamp(time-s.visualLast,0,80);s.visualLast=time;if(!s.game.paused)s.visualTime+=delta;const seconds=s.visualTime/1000;
+ updateCommandHQ(s,s.game.paused?0:delta);
  for(const node of s.techStructures){
   const owner=s.game.cell(node.cell).owner;
   if(owner!==node.owner){node.owner=owner;node.activation=s.visualTime;for(const [name,mat] of node.mats){mat.color.setHex(TEAM[owner]);if(name==='Optic')mat.emissive.setHex(TEAM[owner]);}}
@@ -58,6 +60,7 @@ export function buildEffects(s){
  }
 }
 export function technologyEffect(s,e){
+ commandHQEvent(s,e);
  const cell=s.game.cell(e.id);if(!cell)return;
  const limit=s.quality==='low'?8:MAX_EFFECTS,pool=s.effectPool.slice(0,limit),fx=pool.find(f=>!f.active)||pool.reduce((a,b)=>a.start<b.start?a:b);
  const from=s.game.cell(e.from)||cell,dx=cell.x-from.x,dz=cell.z-from.z,length=Math.hypot(dx,dz)||1;
@@ -87,4 +90,4 @@ function updateEffects(s){
   for(let k=0;k<count;k++){const a=k*2.399,r=(.15+t*.70)*(capture?.9:1),px=Math.cos(a)*r,pz=Math.sin(a)*r;dummy.position.set(px,surfaceHeight(s.game.cells,cell,x+px,z+pz)-y+roof+.18+Math.sin(t*Math.PI)*(.16+(k%3)*.075),pz);dummy.rotation.set(t*5,k,t*4);dummy.scale.setScalar((1-t)*(k%3===0?1.6:1));dummy.updateMatrix();f.chips.setMatrixAt(k,dummy.matrix);}if(count)f.chips.instanceMatrix.needsUpdate=true;
  }
 }
-export function clearTechnology(s){for(const f of s.effectPool){f.active=false;f.group.visible=false;}s.droneGhosts=[];s.visualLast=null;for(const node of s.techStructures)node.activation=-1000;}
+export function clearTechnology(s){resetCommandHQ(s);for(const f of s.effectPool){f.active=false;f.group.visible=false;}s.droneGhosts=[];s.visualLast=null;for(const node of s.techStructures)node.activation=-1000;}

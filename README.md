@@ -1,25 +1,16 @@
 # HEXFRONT
 
-## Charming Sci-Fi Frontier — isolated 3D experiment
+## Isolated 3D experiment — new Command HQ
 
-New Blender-authored PIP drones with a compact ceramic body, a central articulated optic and two distinct hover nacelles. The complete Charming Frontier art pass adds the Haven HQ family, Seed relay and warmer landscape. The subsequent four-reference drone pass changes **only the drone and its rendering**; gameplay, economy comparison, controls, camera and all 37 sectors are retained.
+Blender-authored, articulated HQ with ceramic armour, raised command deck, hangar and offset radar dish. Orange/blue variants; original game, drones, relay, terrain, economy and camera retained.
 
-**Published and verified:** desktop and touch drag-and-drop work at the public production link. All 33 hosted files match the pinned Git commit.
+**Publication being prepared.** The pinned play link follows in the documentation commit.
 
-**[Play HEXFRONT 3D](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/preview/index.html)** · **[Compare the previous local economy](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/preview/index.html?economy=legacy-local)**. On the host's first visit, confirm **Open the page**. [Experiment branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama) · [Start locally](./experiments/hexfront-3d/README.md) · [Publication status](./experiments/hexfront-3d/docs/PUBLISH.md).
+[Experiment and local start](experiments/hexfront-3d/README.md) · [HQ images, source and test status](experiments/hexfront-3d/docs/HQ_COMMAND.md)
 
-**[Interactive drone before/after: desktop, mobile and close-up](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/docs/drone-reference/compare.html)** · [Art process and technical tests](./experiments/hexfront-3d/docs/DRONE.md) · [Full art-pass comparison](./experiments/hexfront-3d/docs/FRONTIER.md) · [Asset sources/licenses](./experiments/hexfront-3d/ASSET_LICENSES.md).
+![Desktop](experiments/hexfront-3d/docs/hq-command/desktop-after.png)
 
-<table>
-<tr><th>Desktop · 1440 × 900</th><th>Mobile · 390 × 844</th></tr>
-<tr><td width="75%"><img src="./experiments/hexfront-3d/docs/drone-reference/desktop-after.png" alt="Reference-led PIP drone in normal tactical gameplay"></td><td width="25%"><img src="./experiments/hexfront-3d/docs/drone-reference/mobile-after.png" alt="Mobile tactical view with the new drone"></td></tr>
-</table>
-
-[Drone close-up](./experiments/hexfront-3d/docs/drone-reference/detail-after.png) · [Pure landscape](./experiments/hexfront-3d/docs/drone-reference/integration/landscape.png). All images are actual runtime captures. No video clips were produced for this delivery.
-
-32 logic tests, desktop/touch commands, combat effects, ramp/ruin clearance probes, model/resource checks and production build pass. Full win/loss/restart matches were completed in the preceding art pass; the simulation is unchanged. Physical smartphone performance and 60 FPS are unverified. The art is visibly more characterful, but does not claim the reference boards' studio-render quality or Tacticus production quality.
-
-Only the isolated experiment and this introductory README section are edited; no main merge, portal build or GitHub Pages deployment is triggered.
+Only the experiment branch is published; main and the original deployment remain untouched. Extended browser tests were stopped at the user's request; this is not a claim of complete UI acceptance.
 
 [![Verify and deploy](https://github.com/emfau88/hexwars/actions/workflows/pages.yml/badge.svg)](https://github.com/emfau88/hexwars/actions/workflows/pages.yml)
 

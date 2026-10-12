@@ -2,6 +2,7 @@ import * as T from 'three';
 import {GLTFLoader} from '../vendor/loaders/GLTFLoader.js';
 import {mergeGeometries} from '../vendor/utils/BufferGeometryUtils.js';
 import {STEP} from './map.js';
+import {buildCommandHQ} from './command-hq.js';
 
 export const TEAM={orange:0xe6a05c,blue:0x70b5cd,neutral:0x89a894};
 export const MAX_DRONES=64;
@@ -75,12 +76,13 @@ function drones(s,library){
 
 export function prepareFrontier(s){
  s.techStructures=[];s.droneParts=[];s.droneTeam=[];s.droneDummy=new T.Object3D();s.droneGhosts=[];s.visualTime=0;s.visualLast=null;s.dronePoses=[];
- return new GLTFLoader().loadAsync(new URL('../public/assets/frontier/frontier.glb',import.meta.url).href).then(gltf=>{
+ return Promise.all([new GLTFLoader().loadAsync(new URL('../public/assets/frontier/frontier.glb',import.meta.url).href),new GLTFLoader().loadAsync(new URL('../public/assets/command-hq/command-hq.glb',import.meta.url).href)]).then(([gltf,hq])=>{
   const map=coating(),seen=new Set();gltf.scene.traverse(o=>{
    if(!o.isMesh||seen.has(o.material))return;seen.add(o.material);
    if(['Porcelain','Jade','Alloy','Graphite'].includes(o.material.name)){o.material.map=map;o.material.bumpMap=map;o.material.bumpScale=o.material.name==='Porcelain'?.007:.011;o.material.needsUpdate=true;}
   });
-  for(const c of s.game.cells.filter(c=>c.hq||c.kind==='relay'))architecture(s,gltf.scene,c);
+  for(const c of s.game.cells.filter(c=>c.kind==='relay'))architecture(s,gltf.scene,c);
+  buildCommandHQ(s,hq.scene);
   drones(s,gltf.scene);
   // Clones retain geometry/material references. Only the loaded scene container
   // is discarded; no per-frame geometry allocation or texture downloads.

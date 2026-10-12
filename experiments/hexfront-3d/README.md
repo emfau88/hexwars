@@ -1,22 +1,16 @@
-# HEXFRONT — Charming Sci-Fi Frontier
+# HEXFRONT — Command HQ
 
-Ein eigenständig startbares 3D-Experiment: 37 Hexfelder, drei Höhenstufen, zwei HQs und eine gegnerische KI. Die neue PIP-Drohne basiert auf den vier gemeinsam ausgewerteten Nutzerreferenzen: kompakter Körper, eingefasster Sensor, zwei abgesetzte Hovergondeln, helle Keramik und kleine Teamakzente. Der vorangegangene Art-Pass mit Haven-HQs, Seed-Relais und freundlicherer Landschaft ist vollständig enthalten. Für die anschließende Drohnenüberarbeitung bleiben Gebäude, Umgebung, Kamera und Gameplay unverändert.
+Neues Blender-HQ: gestaffelte Keramikarchitektur, erhöhter Kommandobereich, beleuchteter Hangar und bewegliche Parabolschüssel. Orange und Blau nutzen dieselbe Modellfamilie. Drohnen, Relais, Gelände, Kamera und Gameplay bleiben unverändert.
 
-**Veröffentlicht und geprüft:** Öffentlicher Desktop-/Touchstart, Drag-and-drop, Uhr und Pause funktionieren. Alle 33 ausgelieferten Dateien stimmen mit dem festen Git-Commit überein; auch die bisherige Wirtschaftsvariante wurde öffentlich geprüft.
+**Veröffentlichung wird vorbereitet.** Der neue feste Play-Link wird im unmittelbar folgenden Dokumentationscommit gesetzt.
 
-**[Jetzt spielen](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/preview/index.html)** · **[Vergleich: bisherige lokale Wirtschaft](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/preview/index.html?economy=legacy-local)**. Beim ersten Besuch **Open the page** bestätigen. [Veröffentlichungsstatus](docs/PUBLISH.md).
+[HQ-Dokumentation und Prüfstand](docs/HQ_COMMAND.md) · [HQ Orange](docs/hq-command/hq-orange.png) · [HQ Blau](docs/hq-command/hq-blue.png) · [GLB](public/assets/command-hq/command-hq.glb) · [Blender-Quelle](scripts/command-hq-source.blend)
 
-**[Drohne Vorher/Nachher — Desktop, Mobile und Nahaufnahme](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/docs/drone-reference/compare.html)** · [Herstellung und Tests](docs/DRONE.md) · [Vorangegangener gesamter Art-Pass](docs/FRONTIER.md) · [Wirtschaftsvergleich](docs/ECONOMY.md) · [Assets/Lizenzen](ASSET_LICENSES.md).
+![Desktop-Spielansicht](docs/hq-command/desktop-after.png)
 
-**Steuerung:** Eigenes Feld greifen → Ziel → loslassen. Alternativ Quelle/Ziel antippen und bestätigen. Kamera: feste 70°-Taktikansicht, optionale 55°-Dioramaansicht, Zoom und Fit. Die beiden Wirtschaftssysteme bleiben verfügbar.
+<img src="docs/hq-command/mobile-after.png" width="390" alt="Mobile-Spielansicht mit beiden HQs">
 
-![Desktop 1440 × 900: neue Drohne im regulären Transport](docs/drone-reference/desktop-after.png)
-
-<img src="docs/drone-reference/mobile-after.png" alt="Mobile 390 × 844: normale Taktikansicht" width="390">
-
-[Neue Drohne im Detail](docs/drone-reference/detail-after.png) · [Alte Drohne](docs/drone-reference/detail-before.png) · [Reine Landschaft](docs/drone-reference/integration/landscape.png).
-
-Geprüft: 32 Logiktests, Maus/Touch, beide Teams, Eroberung/verlorener Angriff, Rampen/Ruinen, stabile Effektpools, HQ/LQ und Produktions-Build. Vollständige Partien mit Sieg, Niederlage und Neustart sind aus dem unmittelbar vorausgehenden Art-Pass dokumentiert. Keine Änderung am Simulationscode. Keine Clips. Echte Smartphone-Performance, Safari und 60 FPS sind nicht nachgewiesen; das Ergebnis erreicht noch nicht die Materialfülle der Referenztafeln.
+35 Logiktests bestanden; Desktop/Mobile-Aufnahmen geprüft. Weiterführende Browser-Tests wurden auf Nutzerwunsch beendet. Details und offene Prüfungen stehen im HQ-Bericht.
 
 ## Starten
 

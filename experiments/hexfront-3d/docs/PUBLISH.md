@@ -1,3 +1,9 @@
+# Command HQ — publication pending
+
+Integrated on the isolated experiment branch. The next documentation commit records the exact runtime SHA and play link. No further gameplay tests at the user’s explicit request.
+
+---
+
 # Charming Frontier und Referenzdrohne — veröffentlicht
 
 **[HEXFRONT 3D spielen](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/preview/index.html)** · **[Bisherige Wirtschaft](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/preview/index.html?economy=legacy-local)** · **[Drohne Vorher/Nachher](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/docs/drone-reference/compare.html)**. Beim ersten Besuch des Vorschauhosts **Open the page** bestätigen; kein Konto nötig.
