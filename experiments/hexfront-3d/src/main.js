@@ -21,7 +21,7 @@ function select(id,blocked){
   else {
     const source=game.cell(selected);
     if(source.owner!=='orange'){selected=c.owner==='orange'?id:null;pending=null;}
-    else if(!game.path(source,c)){toast('Kein begehbarer Weg. Felswände sind gesperrt – nutze die gestreiften Rampen.');pending=null;}
+    else if(!game.path(source,c)){toast('Kein begehbarer Weg. Felswände sind gesperrt – nutze die beiden Rampen.');pending=null;}
     else {pending=id;scene.hover(id);}
   }
   scene.select(selected);updateUI();
@@ -34,8 +34,12 @@ function updateUI(){
   $('phase').textContent=game.result?'EINSATZ BEENDET':game.paused?'PAUSIERT':game.running?'IM EINSATZ':'BEREIT';
   $('pause').disabled=!game.running;$('pause').textContent=game.paused?'▶':'Ⅱ';$('pause').setAttribute('aria-label',game.paused?'Fortsetzen':'Pausieren');document.body.classList.toggle('paused',game.paused);
   $('hint').style.opacity=game.commands>3?.55:1;
-  const source=game.cell(selected),target=game.cell(pending);
-  if(source&&source.owner!=='orange'){selected=null;pending=null;scene.select(null);toast('Deine ausgewählte Stellung wurde erobert.');}
+  let source=game.cell(selected),target=game.cell(pending);
+  if(source&&source.owner!=='orange'){selected=null;pending=null;source=null;target=null;scene.select(null);scene.hover(null);toast('Deine ausgewählte Stellung wurde erobert.');}
+  const match=game.running||game.result?'active':'intro',hud=game.result?'result':!game.running?'intro':game.paused?'paused':source&&target?'command':source?'selection':'idle';
+  if(document.body.dataset.match!==match)document.body.dataset.match=match;
+  if(document.body.dataset.hud!==hud)document.body.dataset.hud=hud;
+  if(scene)scene.pending=pending;
   $('command-options').hidden=!source||!game.running;
   if(game.result){$('command-label').textContent='EINSATZ BEENDET';$('command-title').textContent=game.result==='victory'?'Die Bastion ist gesichert.':'Das Hauptquartier ist gefallen.';$('command-detail').textContent='Ein neuer Anlauf beginnt mit derselben Ausgangslage.';$('primary').innerHTML='Erneut spielen <span>↻</span>';$('primary').disabled=false;}
   else if(!game.running){$('command-label').textContent='DEIN EINSATZ';$('command-title').textContent='Die Festung wartet.';$('command-detail').textContent='Wähle Orange. Sichere das Plateau. Erobere das blaue HQ.';$('primary').innerHTML=loaded?'Operation starten <span>→</span>':'Gelände laden <span>→</span>';$('primary').disabled=!loaded;}
@@ -74,7 +78,7 @@ $('restart').addEventListener('click',restart);$('inspect').addEventListener('cl
 $('zoom-in').addEventListener('click',()=>scene?.zoomBy(1.15));$('zoom-out').addEventListener('click',()=>scene?.zoomBy(1/1.15));$('fit').addEventListener('click',()=>scene?.fit());
 $('camera-view').addEventListener('click',()=>scene?.setView(scene.view==='tactical'?'diorama':'tactical'));
 $('quality').addEventListener('click',()=>{if(!scene)return;const low=scene.quality==='high';scene.setQuality(low?'low':'high');$('quality').textContent=low?'LQ':'HQ';$('quality').setAttribute('aria-label',`Grafikqualität: ${low?'Reduziert':'Hoch'}`);toast(low?'Reduzierte Auflösung und Schattenqualität aktiviert.':'Hohe Grafikqualität aktiviert.');});
-document.addEventListener('keydown',e=>{if(e.code==='Space'&&e.target===document.body){e.preventDefault();togglePause();}if(e.key==='Escape'&&!$('help-dialog').open&&!$('result-dialog').open){selected=null;pending=null;scene?.select(null);updateUI();}});
+document.addEventListener('keydown',e=>{if(e.code==='Space'&&e.target===document.body){e.preventDefault();togglePause();}if(e.key==='Escape'&&!$('help-dialog').open&&!$('result-dialog').open){selected=null;pending=null;scene?.select(null);scene?.hover(null);updateUI();}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&game.running&&!game.paused){game.paused=true;autoPaused=true;updateUI();}last=performance.now();accumulator=0;});
 try {
   scene=new Diorama($('stage'),$('labels'),game,select,hover);

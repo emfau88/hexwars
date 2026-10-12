@@ -15,6 +15,7 @@
     "test:browser": "node tests/browser.mjs",
     "test:camera": "node tests/camera.mjs && node tests/touch-target.mjs && node tests/camera-input.mjs",
     "test:art": "node tests/art.mjs",
-    "preview:prepare": "node scripts/prepare-preview.mjs"
+    "preview:prepare": "node scripts/prepare-preview.mjs",
+    "test:overlay": "node tests/overlay.mjs"
   }
 }

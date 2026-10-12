@@ -1,7 +1,7 @@
 import * as T from 'three';
 import {createArtMaterials,buildArtTerrain,buildArtStructures,loadArtAssets} from './art.js';
 import {mergeGeometries} from '../vendor/utils/BufferGeometryUtils.js';
-import {RADIUS,STEP,corner,surfaceHeight} from './map.js';
+import {RADIUS,STEP,corner,surfaceHeight,neighbors,traversable} from './map.js';
 import {CAMERA_VIEWS,MAX_ZOOM,cameraBasis,projectedBounds,frameBattlefield} from './camera.js';
 
 const COLORS={orange:0xd59a59,blue:0x70a5bd,neutral:0x9eaa96};
@@ -89,7 +89,7 @@ export class Diorama {
       // A separate inset contour marks selection/reachability on the real slope.
       const action=new T.Mesh(ringGeometry(c,this.game.cells,.80,.025),new T.MeshBasicMaterial({color:0xf2d9a4,transparent:true,opacity:.85,depthWrite:false,side:T.DoubleSide,toneMapped:false}));action.visible=false;action.renderOrder=3;this.scene.add(action);
       this.markers.set(c.id,{marker,fill,action});
-      const el=document.createElement('button');el.className='garrison '+c.owner;el.dataset.cell=c.id;el.type='button';el.innerHTML='<span class="count"></span><span class="cell-symbol"></span>';el.addEventListener('click',e=>{e.stopPropagation();this.onSelect(c.id);});el.addEventListener('pointerenter',()=>this.onHover(c.id));el.addEventListener('focus',()=>this.onHover(c.id));this.labels.append(el);this.labelsById.set(c.id,el);
+      const el=document.createElement('button');el.className='garrison '+c.owner;el.dataset.cell=c.id;el.type='button';el.innerHTML='<span class="badge-face"><span class="count"></span><span class="cell-symbol"></span></span>';el.addEventListener('click',e=>{e.stopPropagation();this.onSelect(c.id);});el.addEventListener('pointerenter',()=>this.onHover(c.id));el.addEventListener('focus',()=>this.onHover(c.id));this.labels.append(el);this.labelsById.set(c.id,el);
     }
     this.pathLine=new T.Line(new T.BufferGeometry(),new T.LineDashedMaterial({color:0xe8d6a7,dashSize:.18,gapSize:.12,transparent:true,opacity:.8}));this.pathLine.frustumCulled=false;this.scene.add(this.pathLine);
   }
@@ -140,16 +140,17 @@ export class Diorama {
   layoutLabels(entries){
     const key=entries.map(e=>`${e.id}:${e.pos.x.toFixed(1)},${e.pos.y.toFixed(1)}:${e.width}`).join('|');
     if(key===this.labelLayoutKey)return;this.labelLayoutKey=key;
-    // Include expanded touch hit areas. Displaced labels remain connected to
+    // Match circular hit areas, preserving HQ/relay anchors before other values.
+    // Displaced labels remain connected to
     // their exact projected surface, even where different heights overlap.
     const placed=[],lines=[],offsets=[{x:0,y:0}];
     for(const radius of [12,24,36,48,60,72])for(let j=0;j<12;j++)offsets.push({x:Math.cos(j*Math.PI/6)*radius,y:Math.sin(j*Math.PI/6)*radius});
-    for(const e of entries.sort((a,b)=>a.pos.y-b.pos.y||a.id.localeCompare(b.id))){
+    for(const e of entries.sort((a,b)=>b.strategic-a.strategic||a.pos.y-b.pos.y||a.id.localeCompare(b.id))){
       let best=null,bestScore=Infinity;
       for(const o of offsets){
-        const x=T.MathUtils.clamp(e.pos.x+o.x,e.width/2+6,this.width-e.width/2-6),y=T.MathUtils.clamp(e.pos.y+o.y,22,this.height-22);
+        const x=T.MathUtils.clamp(e.pos.x+o.x,e.width/2+6,this.width-e.width/2-6),y=T.MathUtils.clamp(e.pos.y+o.y,e.width/2+2,this.height-e.width/2-2);
         let score=(x-e.pos.x)**2+(y-e.pos.y)**2;
-        for(const p of placed){const dx=(e.width+p.width)/2+10-Math.abs(x-p.x),dy=38-Math.abs(y-p.y);if(dx>0&&dy>0)score+=100000+dx*dy*1000;}
+        for(const p of placed){const overlap=(e.width+p.width)/2+2-Math.hypot(x-p.x,y-p.y);if(overlap>0)score+=100000+overlap*overlap*1000;}
         if(score<bestScore){bestScore=score;best={x,y,width:e.width};}
       }
       placed.push(best);e.el.style.transform=`translate(${best.x}px,${best.y}px) translate(-50%, -50%)`;
@@ -185,6 +186,7 @@ export class Diorama {
       this.onHover(e.target.closest('.garrison')?.dataset.cell||this.pick(e));
     });
     input.addEventListener('pointerup',e=>{if(this.down?.moved)this.suppressClickUntil=performance.now()+350;if(this.down?.retargeted)this.suppressNextClick=true;if(this.pointers.size===1&&this.down&&!this.down.moved){if(!this.down.label){const id=this.pick(e);this.onSelect(id,this.lastPick.kind==='cliff'?'cliff':null);}else if(this.down.retargeted)this.onSelect(this.down.label);}this.pointers.delete(e.pointerId);if(!this.pointers.size){this.pinch=null;this.down=null;}});
+    input.addEventListener('pointerleave',()=>{if(!this.pointers.size)this.onHover(null);});
     input.addEventListener('pointercancel',()=>{this.pointers.clear();this.pinch=null;this.down=null;this.suppressClickUntil=performance.now()+350;});
     input.addEventListener('wheel',e=>{e.preventDefault();const rect=canvas.getBoundingClientRect();this.zoomBy(e.deltaY>0?.92:1.08,{x:e.clientX-rect.left,y:e.clientY-rect.top});},{passive:false});
   }
@@ -198,23 +200,28 @@ export class Diorama {
   }
   render(time){
     if(this.disposed)return;
-    const selected=this.game.cell(this.selected),labelEntries=[];
+    const selected=this.game.cell(this.selected),labelEntries=[],movingFrom=new Set(this.game.orders.map(o=>o.path[0])),movingTo=new Set(this.game.orders.map(o=>o.path.at(-1)));
+    const touch=matchMedia('(max-width:640px)').matches;
     for(const c of this.game.cells){
-      const {marker,fill,action}=this.markers.get(c.id),isSelected=c.id===this.selected,reachable=selected&&selected.owner==='orange'&&!!this.game.path(selected,c),hover=c.id===this.hovered,owned=c.owner!=='neutral';
+      const {marker,fill,action}=this.markers.get(c.id),isSelected=c.id===this.selected,reachable=selected&&selected.owner==='orange'&&!!this.game.path(selected,c),hover=c.id===this.hovered,owned=c.owner!=='neutral',isTarget=c.id===this.pending;
+      const moving=movingFrom.has(c.id)||movingTo.has(c.id),key=c.kind==='hq'||c.kind==='relay',front=owned&&neighbors(this.game.cells,c).some(n=>n.owner!=='neutral'&&n.owner!==c.owner&&traversable(c,n));
+      const priority=isSelected||isTarget||key||moving||c.units>=30?'important':reachable||hover||front?'normal':selected||!owned?'quiet':'normal';
       marker.material.color.setHex(owned?COLORS[c.owner]:0xc9d0bb);marker.material.opacity=owned?.95:.62;
-      fill.material.color.setHex(owned?COLORS[c.owner]:0xcbce9e);fill.material.opacity=owned?(isSelected?.34:.28):reachable?.07:0;
+      fill.material.color.setHex(owned?COLORS[c.owner]:0xcbce9e);fill.material.opacity=owned?(isSelected?.34:.28):reachable?.025:0;
       if(hover)fill.material.opacity+=.045;fill.visible=fill.material.opacity>.001;
-      action.visible=!!(isSelected||reachable);action.material.opacity=isSelected?1:.78;
+      action.visible=!!(isSelected||isTarget||reachable);action.material.color.setHex(isTarget?0xf4efe0:isSelected?0xf2d9a4:0xd1c9a9);action.material.opacity=(isSelected||isTarget)?.98:hover?.68:.40;
       const el=this.labelsById.get(c.id),anchorZ=c.z+(c.kind==='hq'?.82:c.kind==='relay'?.68:.38),pos=this.project(c.x,surfaceHeight(this.game.cells,c,c.x,anchorZ)+.24,anchorZ);
-      el.className=`garrison ${c.owner}${isSelected?' selected':''}${reachable?' reachable':''}`;
-      el.querySelector('.count').textContent=Math.floor(c.units);el.querySelector('.cell-symbol').textContent=c.kind==='hq'?'⌂':c.kind==='relay'?'⌁':c.height>0?'↑':'';
-      el.setAttribute('aria-label',`${c.name}, ${c.owner==='orange'?'Orange':c.owner==='blue'?'Blau':'neutral'}, ${Math.floor(c.units)} Truppen, Höhe ${c.height}`);el.setAttribute('aria-pressed',String(isSelected));
-      const show=c.owner!=='neutral'||c.kind==='relay'||reachable||hover;
+      const classes=`garrison ${c.owner}${isSelected?' selected':''}${reachable?' reachable':''}${moving?' in-transit':''}`;if(el.className!==classes)el.className=classes;
+      if(el.dataset.priority!==priority)el.dataset.priority=priority;const role=isSelected?'source':isTarget?'target':movingTo.has(c.id)?'incoming':movingFrom.has(c.id)?'outgoing':'field';if(el.dataset.role!==role)el.dataset.role=role;
+      const count=String(Math.floor(c.units)),symbol=c.kind==='hq'?'⌂':c.kind==='relay'?'⌁':'';if(el.querySelector('.count').textContent!==count)el.querySelector('.count').textContent=count;if(el.querySelector('.cell-symbol').textContent!==symbol)el.querySelector('.cell-symbol').textContent=symbol;
+      el.setAttribute('aria-label',`${isSelected?'Quelle, ':isTarget?'Ziel, ':''}${c.name}, ${c.owner==='orange'?'Orange':c.owner==='blue'?'Blau':'neutral'}, ${Math.floor(c.units)} Truppen, Höhe ${c.height}`);el.setAttribute('aria-pressed',String(isSelected));
+      const show=c.owner!=='neutral'||c.kind==='relay'||reachable||hover||moving;
       el.style.visibility=!show||pos.x<12||pos.x>this.width-12||pos.y<12||pos.y>this.height-12?'hidden':'visible';
-      if(el.style.visibility==='visible')labelEntries.push({id:c.id,el,pos,width:Math.floor(c.units)>99?44:38});
+      const hitWidth=Math.max(touch?44:38,count.length*8+16);if(el.style.width!==`${hitWidth}px`)el.style.width=`${hitWidth}px`;
+      if(el.style.visibility==='visible')labelEntries.push({id:c.id,el,pos,width:hitWidth,strategic:key?1:0});
     }
     this.layoutLabels(labelEntries);
-    const target=this.game.cell(this.hovered),path=selected&&target?this.game.path(selected,target):null;
+    const target=this.game.cell(this.pending||this.hovered),path=selected&&target?this.game.path(selected,target):null;
     this.pathLine.visible=!!path;
     const pathKey=path?.map(c=>c.id).join('|');
     if(path&&pathKey!==this.lastPathKey){const pts=[];for(let i=0;i<path.length-1;i++)for(let s=0;s<=8;s++){const a=path[i],b=path[i+1],t=s/8,x=T.MathUtils.lerp(a.x,b.x,t),z=T.MathUtils.lerp(a.z,b.z,t);pts.push(new T.Vector3(x,surfaceHeight(this.game.cells,t<.5?a:b,x,z)+.15,z));}this.pathLine.geometry.dispose();this.pathLine.geometry=new T.BufferGeometry().setFromPoints(pts);this.pathLine.computeLineDistances();}this.lastPathKey=pathKey;

@@ -1,0 +1,135 @@
+{
+  "baseCommit": "df540de846540ed9a8c38a33de9e4afc38a9e190",
+  "qaEnabled": false,
+  "matchesProductionBuild": true,
+  "representation": "Committed Git text uses LF; Windows working-tree line endings can differ.",
+  "fileCount": 25,
+  "bytes": 2303306,
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 7350,
+      "sha256": "b8a2751ffa664fefd527a8771c016c6e3c8ef519dcf8d120c9289b816b1ba3a2"
+    },
+    {
+      "path": "public/assets/asset-provenance.json",
+      "bytes": 617,
+      "sha256": "0afeb610ce5f0fa54f31cacf688f3fdf5bb2b5eb2708a6c84e4683f9fb6bd396"
+    },
+    {
+      "path": "public/assets/materials/LICENSE-PolyHaven.txt",
+      "bytes": 530,
+      "sha256": "64ce0db5d2dca65d540d5b01d48b3ce420c9a991eb72f9dbf6031a645b98389a"
+    },
+    {
+      "path": "public/assets/materials/material-provenance.json",
+      "bytes": 3457,
+      "sha256": "2b302f44bc8646d315409a274c00b19a52cccb074e39669a1098d87601b4d567"
+    },
+    {
+      "path": "public/assets/materials/rock_boulder_dry_diff.webp",
+      "bytes": 200812,
+      "sha256": "43d830111190552570fb5c4b0271c37b54b81b1d81451720cfac8baae1868504"
+    },
+    {
+      "path": "public/assets/materials/rock_boulder_dry_nor_gl.webp",
+      "bytes": 359952,
+      "sha256": "a7de075a39f29231ba78162d0518ac07b658081a45ed2d5fff505307e65e6038"
+    },
+    {
+      "path": "public/assets/materials/rock_boulder_dry_rough.webp",
+      "bytes": 152422,
+      "sha256": "5bb7dce29e032adb930e44bc178afc93188b5f89160bf7e27013b1f4f05488c7"
+    },
+    {
+      "path": "public/assets/materials/rock_wall_02_diff.webp",
+      "bytes": 249310,
+      "sha256": "3d34688ebdd169c8989cec5746b58cc4b09893a6a21b1f31855566299ef58a42"
+    },
+    {
+      "path": "public/assets/materials/rock_wall_02_rough.webp",
+      "bytes": 162382,
+      "sha256": "8e6c1fb1894dd9a0d5cc5b7ff34520df0852e7e718d8153010c36c64c7b7e77f"
+    },
+    {
+      "path": "public/assets/nature/Fern_1.bin",
+      "bytes": 11448,
+      "sha256": "5e92b87a27f81a69fe15347a533df3c77d567b48298dceeef43168ccb7c22853"
+    },
+    {
+      "path": "public/assets/nature/Fern_1.gltf",
+      "bytes": 2546,
+      "sha256": "b47c30638913fa68cf7acf4ef40e61479ef211f8060b7aa6d4cd98494deb9b7c"
+    },
+    {
+      "path": "public/assets/nature/Leaves.png",
+      "bytes": 223199,
+      "sha256": "75835ee6a8fa9a65faf9c3ffaada7db8b9e1159407f6443846ea6db8f0defdc6"
+    },
+    {
+      "path": "public/assets/nature/LICENSE-Quaternius.txt",
+      "bytes": 831,
+      "sha256": "077b35b9e00ecff7f44d9b58e120e1b4bc8f2b94f90731dcb60809fd8a59618c"
+    },
+    {
+      "path": "src/art.js",
+      "bytes": 25682,
+      "sha256": "772842a1d7f75f3aeaa601d26167183919430271dcd1c809100b804993a3d269"
+    },
+    {
+      "path": "src/camera.js",
+      "bytes": 1562,
+      "sha256": "17fac1f5720fcbedc89cce549a05616018d44883abb1f328c809c3a639243c9b"
+    },
+    {
+      "path": "src/game.js",
+      "bytes": 6815,
+      "sha256": "b2c9ae4bff9d367a0fb63d0b4ad6c321937f7bbf6e6eb27ee025b20e6a0e6de7"
+    },
+    {
+      "path": "src/main.js",
+      "bytes": 12434,
+      "sha256": "49f80c8d70a18096764cdff13a60c91d87660c246e7d68359aa79097de07a74d"
+    },
+    {
+      "path": "src/map.js",
+      "bytes": 3629,
+      "sha256": "330774b1eeff32c0258915f3f86542a057d1bb5a6e3f986691cb192888b60458"
+    },
+    {
+      "path": "src/overlays.css",
+      "bytes": 6101,
+      "sha256": "978d69bb93d62af41145ba8e3dd5b4f2ebb9d20dc54159777dc1eea1d49fc2ac"
+    },
+    {
+      "path": "src/scene.js",
+      "bytes": 24228,
+      "sha256": "383d19d14f82209ab94a611308256f3f466c4dae9ac1dbab66773a8f30990daa"
+    },
+    {
+      "path": "src/style.css",
+      "bytes": 17659,
+      "sha256": "901fd64c0cfdd17c059d660a2869ed3d2bba9b04a548a179b765fcc5ad11b300"
+    },
+    {
+      "path": "vendor/loaders/GLTFLoader.js",
+      "bytes": 110030,
+      "sha256": "177080cdb974170701cb4ee6d1f4e05b08a9c4a6a3bb2793b455584aabf3b835"
+    },
+    {
+      "path": "vendor/THREE-LICENSE.txt",
+      "bytes": 1082,
+      "sha256": "f8ea8e1b14776d862129c02e78297c1de103e958f8212c6c5d594ec07f78f7c9"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "bytes": 687459,
+      "sha256": "c6fd70ab3ecf768e28c0332fd3f7cddb0ed273d6b1285d22e59caec26f0f01a5"
+    },
+    {
+      "path": "vendor/utils/BufferGeometryUtils.js",
+      "bytes": 31769,
+      "sha256": "366ff042b9078eb6db1d1f74a9f1182d0e48c4d05b1e35734b31d99caaa0b651"
+    }
+  ]
+}

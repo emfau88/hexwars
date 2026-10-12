@@ -1,0 +1,76 @@
+/* Visual plates and hit targets are separate: quiet numbers, stable input. */
+.garrison,.garrison.orange,.garrison.blue,.garrison.neutral{width:38px;min-width:38px;height:38px;padding:0;border:0;border-radius:50%;background:none;box-shadow:none;opacity:1;font-size:13px;gap:0;z-index:1}
+.garrison::before{content:none}
+.garrison:hover,.garrison:active,.garrison.selected{background:none;box-shadow:none}
+.badge-face{display:inline-flex;align-items:center;justify-content:center;gap:2px;min-width:24px;height:20px;padding:0 5px;border:1px solid #c3cbb72b;border-radius:8px;background:#14201b73;color:#e5e9dc;font-size:13px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums;text-shadow:0 1px 2px #07100bed;box-shadow:0 1px 2px #08100a30;transition:background .12s,border-color .12s;pointer-events:none}
+.garrison.orange .badge-face{border-bottom-color:#d59a598a;color:#f5d4ad}
+.garrison.blue .badge-face{border-bottom-color:#80b1c58a;color:#cce3ee}
+.garrison.neutral .badge-face{color:#d5ddc9}
+.garrison[data-priority=quiet] .badge-face{background:#18221c38;border-color:#b8c1aa12;border-bottom-color:#b8c1aa45;box-shadow:none;color:#d6decd}
+.garrison.orange[data-priority=quiet] .badge-face{border-bottom-color:#d59a596b;color:#e5c7a2}
+.garrison.blue[data-priority=quiet] .badge-face{border-bottom-color:#80b1c56b;color:#bdd7e3}
+.garrison[data-priority=important]{z-index:2}
+.garrison[data-priority=important] .badge-face{height:22px;background:#182620b8;font-weight:650;border-color:#bbc5b34d}
+.garrison.orange[data-priority=important] .badge-face{border-bottom-color:#d59a59c4}
+.garrison.blue[data-priority=important] .badge-face{border-bottom-color:#80b1c5c4}
+.garrison.selected,.garrison[data-role=target]{z-index:4}
+.garrison.selected .badge-face{background:#3a3629e6;border-color:#edd19c;color:#fff0cc;box-shadow:0 0 0 2px #ecd09b29}
+.garrison[data-role=target] .badge-face{background:#25302ce6;border-color:#eee8d2;color:#fff7e1;box-shadow:0 0 0 2px #ece9d22b}
+.garrison:hover .badge-face,.garrison:focus-visible .badge-face{border-color:#e6dbbc;background:#293a2ade}
+.garrison:focus-visible{outline:1px solid #ead7aa;outline-offset:0;border-radius:10px}
+.cell-symbol{font-size:9px;opacity:.8}
+.label-leaders{opacity:.38;stroke-width:.85}
+body[data-match=active] .map-hint{display:none}
+body[data-match=active] #toast{top:auto;bottom:calc(var(--battle-bottom,165px) - 17px);padding:5px 11px;font-size:11px;line-height:1.4;border-color:#b7bc9d26;box-shadow:none;background:#192722e6;max-width:460px}
+/* Keep desktop composition; only quiet the idle command strip. */
+@media(min-width:641px){
+  body[data-hud=idle] .command-panel{min-height:64px;padding-block:10px}
+  body[data-hud=idle] .command-emblem{height:32px;width:32px;font-size:25px}
+  body[data-hud=idle] .command-copy small,body[data-hud=idle] .command-copy p,body[data-hud=idle] #primary{display:none}
+  body[data-hud=idle] .command-copy strong{font-size:14px}
+}
+@media(max-width:640px){
+  .garrison,.garrison.orange,.garrison.blue,.garrison.neutral{width:44px;min-width:44px;height:44px}
+  .badge-face{font-size:12px}
+  /* Briefing stays intact; compact layout starts only with the match. */
+  body[data-match=active] .topbar{height:48px;margin-inline:14px}
+  body[data-match=active] .brand{font-size:17px;gap:7px}
+  body[data-match=active] .brand svg{width:20px;height:26px}
+  body[data-match=active] .brand small{display:none}
+  body[data-match=active] .utility{gap:2px}
+  body[data-match=active] .utility button,body[data-match=active] .utility #pause{width:44px;height:44px}
+  body[data-match=active] main{height:calc(100dvh - 48px)}
+  body[data-match=active] .mission{display:none}
+  body[data-match=active] .battle-status{top:6px;left:17px;right:17px;height:42px}
+  body[data-match=active] .faction{gap:0}
+  body[data-match=active] .faction-mark,body[data-match=active] .faction em{display:none}
+  body[data-match=active] .faction strong{font-size:24px;line-height:1.15}
+  body[data-match=active] .faction small{font-size:7px;margin:0}
+  body[data-match=active] .time-status>span{font-size:6px;margin-bottom:2px;letter-spacing:1.3px}
+  body[data-match=active] .time-status strong{font-size:15px}
+  body[data-match=active] .territory-track{margin:4px 0 2px}
+  body[data-match=active] .time-status>small{font-size:6px}
+  body[data-match=active] .map-tools{top:53px;right:12px;gap:4px}
+  body[data-match=active] .map-tools button{width:44px;height:44px;min-height:44px}
+  body[data-match=active] .map-tools #camera-view{width:65px}
+  body[data-match=active] .camera-guidance{top:63px;left:17px}
+  body[data-match=active] #stage{top:101px}
+  body[data-match=active] .command-panel{left:10px;right:10px;bottom:max(8px,env(safe-area-inset-bottom));padding:9px 11px;gap:7px;min-height:0;grid-template-columns:1fr auto}
+  body[data-match=active] .command-copy small{font-size:6px;letter-spacing:1.3px;margin-bottom:2px}
+  body[data-match=active] .command-copy strong{font-size:13px;line-height:1.2}
+  body[data-match=active] .command-copy p{font-size:10px;line-height:1.35;min-height:0;margin:3px 0 0}
+  body[data-match=active] .command-panel .primary{height:44px;font-size:11px;padding:0 11px;gap:8px}
+  body[data-match=active] #command-options{gap:2px}
+  body[data-match=active] .fraction-control{height:44px}
+  body[data-match=active] .fraction-control button{min-width:44px;padding:0 6px;font-size:10px}
+  body[data-match=active] #clear{width:44px;height:44px}
+  body[data-hud=idle] .command-panel{display:flex;min-height:52px}
+  body[data-hud=idle] .command-copy small,body[data-hud=idle] .command-copy p,body[data-hud=idle] #primary{display:none}
+  body[data-hud=idle] .command-copy strong{font-size:12px;font-weight:500}
+  body[data-match=active] #toast{left:50%;width:max-content;max-width:calc(100% - 28px);font-size:10px;text-align:left}
+  /* Hover-less targets keep their role styling after a tap. */
+  .garrison:hover .badge-face{background:#18262099}
+  .garrison.selected:hover .badge-face{background:#3a3629e6}
+}
+
+@media(max-width:640px){.garrison[data-role=target]:hover .badge-face{background:#25302ce6}}

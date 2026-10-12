@@ -35,8 +35,13 @@ try{
   const info=await page.evaluate(()=>{const canvas=document.querySelector('canvas'),gl=canvas.getContext('webgl2'),extension=gl.getExtension('WEBGL_debug_renderer_info');return {title:document.title,qa:typeof window.__HEXFRONT3D__,overflow:document.documentElement.scrollWidth>innerWidth,readyMs:Math.round(performance.now()),renderer:extension?gl.getParameter(extension.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER)};});
   assert.equal(info.qa,'undefined');assert.equal(info.overflow,false);
   await page.screenshot({path:path.join(root,`${shots}/${camera||art?'final-':''}${name}.png`)});
-  const click=async s=>{const b=await page.locator(s).boundingBox();if(mobile)await page.touchscreen.tap(b.x+b.width/2,b.y+b.height/2);else await page.mouse.click(b.x+b.width/2,b.y+b.height/2);};
-  await click('#primary');await click('[data-cell="-2,3"]');await click('[data-cell="-3,3"]');assert.equal(await page.locator('#primary').isEnabled(),true);await click('#primary');await page.waitForFunction(()=>document.getElementById('timer').textContent!=='00:00');assert.match(await page.locator('#toast').innerText(),/unterwegs/);
+  const frame=()=>page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));
+  const click=async s=>{await frame();const b=await page.locator(s).boundingBox();if(mobile)await page.touchscreen.tap(b.x+b.width/2,b.y+b.height/2);else await page.mouse.click(b.x+b.width/2,b.y+b.height/2);};
+  await click('#primary');
+  if(process.argv.includes('--match')){await frame();await page.screenshot({path:path.join(root,`${shots}/${name}-running.png`)});}
+  await click('[data-cell="-2,3"]');await click('[data-cell="-3,3"]');assert.equal(await page.locator('#primary').isEnabled(),true);
+  if(process.argv.includes('--match')){await frame();await page.screenshot({path:path.join(root,`${shots}/${name}-command.png`)});}
+  await click('#primary');await page.waitForFunction(()=>document.getElementById('timer').textContent!=='00:00');assert.match(await page.locator('#toast').innerText(),/unterwegs/);
   await page.screenshot({path:path.join(root,`test-results/${name}-hosted-command.png`)});await click('#pause');assert.match(await page.locator('#phase').innerText(),/PAUSIERT/);
   report.runs.push({name,...info,repositoryNoticeConfirmed,commandAccepted:true,clockAdvances:true,pause:true});console.log(JSON.stringify(report.runs.at(-1)));await context.close();
  }
