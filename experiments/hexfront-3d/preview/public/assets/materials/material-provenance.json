@@ -1,0 +1,95 @@
+[
+  {
+    "file": "rock_boulder_dry_diff.webp",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_boulder_dry/rock_boulder_dry_diff_1k.jpg",
+    "assetPage": "https://polyhaven.com/a/rock_boulder_dry",
+    "license": "CC0-1.0",
+    "authors": [
+      "Dimitrios Savva",
+      "Rico Cilliers"
+    ],
+    "originalSha256": "20f653a42fb24f42aa40641663070d578678da49af18cc1049dbdd4ed8679f3c",
+    "sha256": "43d830111190552570fb5c4b0271c37b54b81b1d81451720cfac8baae1868504",
+    "dimensions": [
+      1024,
+      1024
+    ],
+    "bytes": 200812,
+    "modification": "WebP encoding; normal/roughness resized to 512; no painted or generated replacement",
+    "retrieved": "2026-10-12"
+  },
+  {
+    "file": "rock_boulder_dry_nor_gl.webp",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_boulder_dry/rock_boulder_dry_nor_gl_1k.jpg",
+    "assetPage": "https://polyhaven.com/a/rock_boulder_dry",
+    "license": "CC0-1.0",
+    "authors": [
+      "Dimitrios Savva",
+      "Rico Cilliers"
+    ],
+    "originalSha256": "5915fea28a97357c78a04fb31c2516f1f7ed1b3a9cef4ae25aa93e4655e6c595",
+    "sha256": "a7de075a39f29231ba78162d0518ac07b658081a45ed2d5fff505307e65e6038",
+    "dimensions": [
+      512,
+      512
+    ],
+    "bytes": 359952,
+    "modification": "WebP encoding; normal/roughness resized to 512; no painted or generated replacement",
+    "retrieved": "2026-10-12"
+  },
+  {
+    "file": "rock_boulder_dry_rough.webp",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_boulder_dry/rock_boulder_dry_rough_1k.jpg",
+    "assetPage": "https://polyhaven.com/a/rock_boulder_dry",
+    "license": "CC0-1.0",
+    "authors": [
+      "Dimitrios Savva",
+      "Rico Cilliers"
+    ],
+    "originalSha256": "cc5229dd6bbdc4e817cb647e60242224b8e4f0237473ac018861ea243f2e8130",
+    "sha256": "5bb7dce29e032adb930e44bc178afc93188b5f89160bf7e27013b1f4f05488c7",
+    "dimensions": [
+      512,
+      512
+    ],
+    "bytes": 152422,
+    "modification": "WebP encoding; normal/roughness resized to 512; no painted or generated replacement",
+    "retrieved": "2026-10-12"
+  },
+  {
+    "file": "rock_wall_02_diff.webp",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_wall_02/rock_wall_02_diff_1k.jpg",
+    "assetPage": "https://polyhaven.com/a/rock_wall_02",
+    "license": "CC0-1.0",
+    "authors": [
+      "Rob Tuytel"
+    ],
+    "originalSha256": "4f1d2f80c07e502f5a5ecb4e58388cbf7f4cb33f507e39d024a17ea6d24539b5",
+    "sha256": "3d34688ebdd169c8989cec5746b58cc4b09893a6a21b1f31855566299ef58a42",
+    "dimensions": [
+      1024,
+      1024
+    ],
+    "bytes": 249310,
+    "modification": "WebP encoding; normal/roughness resized to 512; no painted or generated replacement",
+    "retrieved": "2026-10-12"
+  },
+  {
+    "file": "rock_wall_02_rough.webp",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/rock_wall_02/rock_wall_02_rough_1k.jpg",
+    "assetPage": "https://polyhaven.com/a/rock_wall_02",
+    "license": "CC0-1.0",
+    "authors": [
+      "Rob Tuytel"
+    ],
+    "originalSha256": "5887a7f43a228aae2378cc2afee92012ef6a9f90d08bc7dfc9b7e3f6df14b60e",
+    "sha256": "8e6c1fb1894dd9a0d5cc5b7ff34520df0852e7e718d8153010c36c64c7b7e77f",
+    "dimensions": [
+      512,
+      512
+    ],
+    "bytes": 162382,
+    "modification": "WebP encoding; normal/roughness resized to 512; no painted or generated replacement",
+    "retrieved": "2026-10-12"
+  }
+]

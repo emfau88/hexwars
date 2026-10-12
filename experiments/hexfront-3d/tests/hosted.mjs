@@ -7,7 +7,8 @@ import {spawn} from 'node:child_process';
 const require=createRequire(import.meta.url),{chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const local=process.env.PREVIEW_URL==='local';
-const camera=process.argv.includes('--camera'),art=process.argv.includes('--art'),shots=art?'docs/art':camera?'docs/camera':'docs/screenshots';
+const camera=process.argv.includes('--camera'),art=process.argv.includes('--art'),shots=process.env.TEST_OUTPUT||(art?'docs/art':camera?'docs/camera':'docs/screenshots');
+if(!path.resolve(root,shots).startsWith(root+path.sep))throw Error('Test output must remain inside this experiment');
 const url=local?'http://127.0.0.1:4178/':process.env.PREVIEW_URL||'https://hexfront-3d-diorama.vercel.app/';
 let server;
 if(local){server=spawn(process.execPath,['scripts/serve.mjs','--production'],{cwd:root,env:{...process.env,PORT:'4178'},stdio:['ignore','pipe','pipe'],windowsHide:true});await new Promise((resolve,reject)=>{server.stdout.on('data',d=>{if(String(d).includes('http://'))resolve();});server.on('error',reject);server.on('exit',code=>{if(code)reject(Error(`Server exit ${code}`));});});}
@@ -29,4 +30,4 @@ try{
   report.runs.push({name,...info,commandAccepted:true,clockAdvances:true,pause:true});console.log(JSON.stringify(report.runs.at(-1)));await context.close();
  }
  assert.deepEqual(report.errors,[]);console.log('PASS: production build, desktop and touch, real commands, clock and screenshots.');
-}finally{await browser.close();server?.kill();await fs.writeFile(path.join(root,art?'docs/art/production-report.json':camera?'docs/camera/production-report.json':'test-results/hosted-report.json'),JSON.stringify(report,null,2));}
+}finally{await browser.close();server?.kill();await fs.writeFile(path.join(root,process.env.TEST_OUTPUT?`${shots}/production-report.json`:art?'docs/art/production-report.json':camera?'docs/camera/production-report.json':'test-results/hosted-report.json'),JSON.stringify(report,null,2));}

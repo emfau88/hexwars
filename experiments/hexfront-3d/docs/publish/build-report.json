@@ -1,0 +1,130 @@
+{
+  "sourceArtCommit": "c66de31b2d1ea3dc69f26eb299e7e7e3056a6b8f",
+  "changesSinceArtCommit": "Only the ramp help sentence was corrected in runtime files; ramp crossbars remain removed.",
+  "fileCount": 24,
+  "bytes": 2302471,
+  "qaEnabled": false,
+  "matchesProductionBuild": true,
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 7347,
+      "sha256": "e599f028f653cc86ea368835b99e763a75e23e9c268dc699282e9b15d347f1dc"
+    },
+    {
+      "path": "public/assets/asset-provenance.json",
+      "bytes": 637,
+      "sha256": "28c7cbe1fb9fdd31e1cd2fd8d3e827ddfbc47bb0a58d34bfea0fef50a8be997a"
+    },
+    {
+      "path": "public/assets/materials/LICENSE-PolyHaven.txt",
+      "bytes": 542,
+      "sha256": "c99cfb4334a390b4bf4a1d9c8b8a85fe9209c057c89de34ad57392f7ca74dcf4"
+    },
+    {
+      "path": "public/assets/materials/material-provenance.json",
+      "bytes": 3552,
+      "sha256": "559f58b8b719ec73d3ce33dcd46981ecab64154f870d91422203613bab6e5968"
+    },
+    {
+      "path": "public/assets/materials/rock_boulder_dry_diff.webp",
+      "bytes": 200812,
+      "sha256": "43d830111190552570fb5c4b0271c37b54b81b1d81451720cfac8baae1868504"
+    },
+    {
+      "path": "public/assets/materials/rock_boulder_dry_nor_gl.webp",
+      "bytes": 359952,
+      "sha256": "a7de075a39f29231ba78162d0518ac07b658081a45ed2d5fff505307e65e6038"
+    },
+    {
+      "path": "public/assets/materials/rock_boulder_dry_rough.webp",
+      "bytes": 152422,
+      "sha256": "5bb7dce29e032adb930e44bc178afc93188b5f89160bf7e27013b1f4f05488c7"
+    },
+    {
+      "path": "public/assets/materials/rock_wall_02_diff.webp",
+      "bytes": 249310,
+      "sha256": "3d34688ebdd169c8989cec5746b58cc4b09893a6a21b1f31855566299ef58a42"
+    },
+    {
+      "path": "public/assets/materials/rock_wall_02_rough.webp",
+      "bytes": 162382,
+      "sha256": "8e6c1fb1894dd9a0d5cc5b7ff34520df0852e7e718d8153010c36c64c7b7e77f"
+    },
+    {
+      "path": "public/assets/nature/Fern_1.bin",
+      "bytes": 11448,
+      "sha256": "5e92b87a27f81a69fe15347a533df3c77d567b48298dceeef43168ccb7c22853"
+    },
+    {
+      "path": "public/assets/nature/Fern_1.gltf",
+      "bytes": 2699,
+      "sha256": "fa6b5d0cf7e40bdde851c89cdc133c54dc4e8cad826270ad52c9392c4dd960f7"
+    },
+    {
+      "path": "public/assets/nature/Leaves.png",
+      "bytes": 223199,
+      "sha256": "75835ee6a8fa9a65faf9c3ffaada7db8b9e1159407f6443846ea6db8f0defdc6"
+    },
+    {
+      "path": "public/assets/nature/LICENSE-Quaternius.txt",
+      "bytes": 854,
+      "sha256": "209fd597c1837037fe13a160c628ef9fd9ccce9337256e21447110ba5ba3e025"
+    },
+    {
+      "path": "src/art.js",
+      "bytes": 25950,
+      "sha256": "38aa00b5dbec7d600d0bb9363d6fd3c6243935e75c291e7d305bff4a0cf17e76"
+    },
+    {
+      "path": "src/camera.js",
+      "bytes": 1583,
+      "sha256": "f3461e9afe2dbd2af7152dcd169fec1ded6c6b00ccd1d5edc3232fde630c4907"
+    },
+    {
+      "path": "src/game.js",
+      "bytes": 6916,
+      "sha256": "10ace2b80303ce1df5494e0ba0dd3cf98da0f360e12f35ce714acf0daf2a2c4b"
+    },
+    {
+      "path": "src/main.js",
+      "bytes": 12117,
+      "sha256": "ab4b3c64ebe0c046fe8a4dd7a55048d0ae3ff464c5c7c8b2bc693858febb8da5"
+    },
+    {
+      "path": "src/map.js",
+      "bytes": 3701,
+      "sha256": "b67dbd7b7a45c95518d19e7a3f7b54ffaa508d91b905ca139484d16363bf2caa"
+    },
+    {
+      "path": "src/scene.js",
+      "bytes": 22919,
+      "sha256": "f5783547cdb84c376b696a36754183c531c7d34216d0ec30e7e360579bce96c2"
+    },
+    {
+      "path": "src/style.css",
+      "bytes": 17660,
+      "sha256": "598ea42e174a90cfb786e504081d0762d759cef7086c02e0c8c7b874799b1ee6"
+    },
+    {
+      "path": "vendor/loaders/GLTFLoader.js",
+      "bytes": 114756,
+      "sha256": "535673d5725a336607631e8d519aba234dc9eca58616fa02ea705601c9828948"
+    },
+    {
+      "path": "vendor/THREE-LICENSE.txt",
+      "bytes": 1104,
+      "sha256": "3c344bc3e9582186b9e0d4185c3fd01ba8f8753a51fc2736a57afdc1f03928b4"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "bytes": 687466,
+      "sha256": "8a906f5fe66282d9704f807427c8811525c53e9f062db17513e5cdec1a2820ab"
+    },
+    {
+      "path": "vendor/utils/BufferGeometryUtils.js",
+      "bytes": 33143,
+      "sha256": "99f37be474f6ebeef7ff6632017cbdff517a696f188d023c5bc9a2a48fe6fda8"
+    }
+  ]
+}

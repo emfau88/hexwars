@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#17201e"><meta name="description" content="HEXFRONT: Ein spielbares 3D-Hex-Diorama. Erobere die überwucherte Felsenfestung gegen eine KI.">
+  <title>HEXFRONT — Bastion Morgenwacht</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath fill='%23d59a59' d='M20 2 36 11v18L20 38 4 29V11z'/%3E%3Cpath fill='%23192321' d='M12 11h5v7h6v-7h5v18h-5v-7h-6v7h-5z'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./src/style.css">
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.min.js"}}</script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="HEXFRONT Start"><svg viewBox="0 0 32 36" aria-hidden="true"><path d="M16 1 31 9.5v17L16 35 1 26.5v-17Z"/><path d="M10 11v14m12-14v14M10 18h12"/></svg><span>HEXFRONT<small>FIELD OPERATIONS</small></span></a>
+    <div class="header-center"><span class="status-dot"></span> DIORAMA EXPERIMENT <span class="slash">/</span> 01</div>
+    <nav class="utility" aria-label="Spieloptionen"><button id="help" title="Spielanleitung" aria-label="Spielanleitung">?</button><button id="quality" title="Grafikqualität ändern" aria-label="Grafikqualität: Hoch">HQ</button><button id="pause" title="Pausieren" aria-label="Pausieren" disabled>Ⅱ</button></nav>
+  </header>
+  <main>
+    <aside class="mission">
+      <div class="eyebrow"><span class="rule"></span> OPERATION 01</div>
+      <h1>Bastion<br><span>Morgenwacht</span></h1>
+      <p class="mission-description">Eine vergessene Festung.<br>Zwei Aufstiege. Eine Entscheidung.</p>
+      <div class="objective"><span class="objective-icon">◇</span><div><small>MISSIONSZIEL</small><strong>Blaues HQ erobern</strong></div></div>
+      <div class="briefing-details"><div><span>GELÄNDE</span><b>37 Sektoren · 3 Höhenstufen</b></div><div><span>TAKTIK</span><b>Plateau sichern. Kräfte bündeln.</b></div><p>Das Relais auf der Anhöhe steigert deinen Nachschub um 30 %. Die Felswände lassen sich nur über die beiden Rampen überwinden.</p></div>
+      <div class="legend"><div><i class="orange-dot"></i> Deine Truppen</div><div><i class="blue-dot"></i> Gegnerische KI</div><div><i class="hollow-dot"></i> Unbesetztes Gelände</div></div>
+      <div class="coordinate">SEKTOR 07 / 48° N<br><span>FELSENFESTUNG · FRÜHER MORGEN</span></div>
+    </aside>
+    <section class="battle-status" aria-label="Aktueller Spielstand">
+      <div class="faction orange"><span class="faction-mark">I</span><div><small>ORANGE <span>DU</span></small><strong id="orange-strength">50</strong><em>TRUPPEN</em></div></div>
+      <div class="time-status"><span id="phase">BEREIT</span><strong id="timer">00:00</strong><div class="territory-track"><i id="orange-territory"></i><i id="blue-territory"></i></div><small id="field-count">3 : 3 SEKTOREN</small></div>
+      <div class="faction blue"><div><small>BLAU <span>KI</span></small><strong id="blue-strength">46</strong><em>TRUPPEN</em></div><span class="faction-mark">II</span></div>
+    </section>
+    <section id="stage" aria-label="Schlachtfeld"><div id="labels"></div><div id="loading"><span class="spinner"></span><strong>Festung wird vorbereitet</strong><small>Gelände, Modelle und Materialien laden …</small></div></section>
+    <div class="map-title"><span>BASTION MORGENWACHT</span><small>TAKTISCHE ANSICHT / ORTHOGRAFISCH</small></div>
+    <div class="map-tools" aria-label="Kamera"><button id="camera-view" aria-label="Taktikansicht. Zur Dioramaansicht wechseln" aria-pressed="false" title="Feste Taktik- oder Dioramaansicht">Taktik</button><button id="zoom-out" aria-label="Herauszoomen">−</button><button id="fit" aria-label="Taktikansicht zentrieren" title="Taktikansicht zurücksetzen">⌖</button><button id="zoom-in" aria-label="Hineinzoomen">+</button></div>
+    <div id="camera-guidance" class="camera-guidance" hidden><b>Übersicht</b><span>+ für Details</span></div>
+    <div id="hint" class="map-hint"><span>01</span> Garnison wählen <i>›</i> <span>02</span> Ziel prüfen <i>›</i> <span>03</span> Befehl geben</div>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <footer class="command-panel">
+      <div class="command-emblem" id="command-emblem">◇</div>
+      <div class="command-copy"><small id="command-label">DEIN EINSATZ</small><strong id="command-title">Die Festung wartet.</strong><p id="command-detail">Erobere das gegnerische Hauptquartier. Dein HQ muss standhalten.</p></div>
+      <div id="command-options" hidden><div class="fraction-control" aria-label="Truppenauswahl"><button id="half" aria-pressed="false">50 %</button><button id="all" aria-pressed="true">Alle − 1</button></div><button id="clear" aria-label="Auswahl aufheben" title="Auswahl aufheben">×</button></div>
+      <button id="primary" class="primary" disabled>Gelände laden <span>→</span></button>
+    </footer>
+  </main>
+  <dialog id="help-dialog"><button class="dialog-close" id="close-help" aria-label="Anleitung schließen">×</button><div class="eyebrow">FELDHANDBUCH / 01</div><h2>Die Anhöhe entscheidet.</h2><p>Du spielst <b class="orange-text">Orange</b>. Erobere das blaue Hauptquartier und verteidige dein eigenes.</p><ol><li><strong>Garnison wählen</strong><span>Tippe auf eine orange Truppenzahl. Helle Ränder zeigen erreichbare Ziele.</span></li><li><strong>Ziel prüfen</strong><span>Tippe auf ein Ziel. Der Befehl zeigt Stärke, Route und die aktuelle Kampfprognose.</span></li><li><strong>Truppen senden</strong><span>Bestätige den Befehl. Eine Einheit bleibt zurück; der Rest bewegt sich sichtbar über begehbare Felder.</span></li></ol><div class="help-grid"><p><b>Höhenvorteil</b> Bergauf +30 % Verteidigung, bergab +15 % Angriff. Das HQ hat +20 % Verteidigung. Es gilt nur der größere Verteidigungsbonus.</p><p><b>Nachschub</b> Eigene Sektoren erzeugen Truppen. Das zentrale Relais erhöht die gesamte Produktion um 30 %.</p><p><b>Bewegung</b> Befehle können eigenes Gebiet durchqueren. Felswände sind gesperrt; die beiden Rampen verbinden die Höhenstufen.</p><p><b>Ansicht</b> Taktik zeigt die Übersicht, Diorama die Miniatur. Mausrad, +/− oder zwei Finger zoomen. Vergrößerte Karte ziehen; ⌖ setzt die Taktikansicht zurück. Auf kleinen Displays + für präzise Ziele. Leertaste pausiert.</p></div><button class="primary" id="understood">Verstanden <span>→</span></button></dialog>
+  <dialog id="result-dialog"><div class="result-sigil">◇</div><div class="eyebrow" id="result-label"></div><h2 id="result-title"></h2><p id="result-copy"></p><div class="result-stats"><div><strong id="result-time"></strong><small>EINSATZZEIT</small></div><div><strong id="result-captures"></strong><small>EROBERUNGEN</small></div><div><strong id="result-commands"></strong><small>BEFEHLE</small></div></div><button id="restart" class="primary">Erneut spielen <span>↻</span></button><button id="inspect" class="text-button">Schlachtfeld ansehen</button></dialog>
+  <noscript>Zum Spielen wird JavaScript mit WebGL 2 benötigt.</noscript>
+  <script type="module" src="./src/main.js"></script>
+</body></html>
