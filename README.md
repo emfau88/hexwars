@@ -2,25 +2,27 @@
 
 ## 3D-Diorama experiment — play the isolated prototype
 
-**[▶ Test HEXFRONT: Bastion Morgenwacht](https://rawcdn.githack.com/emfau88/hexwars/e9330f8388f6048b60d6b704ebde1e1b82ae28ac/experiments/hexfront-3d/preview/index.html)**
+**[▶ Test HEXFRONT: Bastion Morgenwacht](https://rawcdn.githack.com/emfau88/hexwars/2656632061cf3a538c7001bff8c74e2bb56a324c/experiments/hexfront-3d/preview/index.html)**
 
 One playable 37-hex battlefield with real elevation, two ramps, Orange vs Blue AI, victory/defeat and restart. Hosted separately from the existing GitHub Pages game. This link and the experiment are on `experiment/hexfront-3d-diorama`; no main-branch deployment was changed.
 
 [Start instructions, controls and technical decisions](./experiments/hexfront-3d/README.md) · [Current art verification and limitations](./experiments/hexfront-3d/docs/ART.md) · [Asset licenses](./experiments/hexfront-3d/ASSET_LICENSES.md)
 
+**Overlay and mobile HUD update:** Quieter troop badges prioritize source, target, HQs and active movements while preserving team colours and 44-pixel mobile tap targets. The compact match HUD frees 168 pixels of map height at 390 × 844; visible badge area in the matched battle state falls by 42%. This is extra canvas space, not a promise of proportionally larger hexes. [Before/after comparisons and full-match/input tests](./experiments/hexfront-3d/docs/HUD.md). Terrain, assets, camera rules and gameplay are unchanged.
+
 **Art pass:** Authored fractured rock formations, layered cliff faces, command bunkers and a three-panel relay; restrained vegetation, quiet paths and five optimized CC0 material textures. [Before/after screenshots, art decisions and verification](./experiments/hexfront-3d/docs/ART.md). Gameplay, all 37 sectors and camera controls are preserved.
 
-**Camera update:** 70° tactical view, optional 55° diorama view, geometry-based framing and corrected picking. [Angle comparison and camera QA](./experiments/hexfront-3d/docs/CAMERA.md). The play link is pinned to the production build of this art pass, including the clean ramps, camera update and territory outlines. It is published with this branch and was verified in the browser on desktop and mobile.
+**Camera update:** 70° tactical view, optional 55° diorama view, geometry-based framing and corrected picking. [Angle comparison and camera QA](./experiments/hexfront-3d/docs/CAMERA.md). The play link is pinned to the production build of the overlay/HUD update, including the art pass, clean ramps, camera update and territory outlines. It is published with this branch and was verified in the browser on desktop and mobile.
 
 Persistent hex outlines and Orange/Blue territory fills now make ownership visible across the battlefield. A separate inset outline marks reachable targets without replacing team colours; the textured 3D terrain remains visible.
 
-The preview is served from this isolated branch through [raw.githack.com](https://raw.githack.com/), without a Vercel account. On the first visit, click **Open the page** to confirm this repository. GitHub publication and live desktop/mobile browser checks passed on 12 October 2026, including real commands, clock and pause; all 24 hosted files match the production commit byte for byte. See the [publication status and reproducible checks](./experiments/hexfront-3d/docs/PUBLISH.md). The prototype does **not** yet match Tacticus's production art quality, and 60 FPS on real mobile devices is unverified.
+The preview is served from this isolated branch through [raw.githack.com](https://raw.githack.com/), without a Vercel account. On the first visit, click **Open the page** to confirm this repository. GitHub publication and live desktop/mobile browser checks passed on 12 October 2026, including real commands, clock and pause; all 25 hosted files match the production commit byte for byte. See the [publication status and reproducible checks](./experiments/hexfront-3d/docs/PUBLISH.md). The prototype does **not** yet match Tacticus's production art quality, and 60 FPS on real mobile devices is unverified.
 
 <table>
   <tr><th>Desktop · 1440 × 900</th><th>Mobile portrait · 390 × 844</th></tr>
   <tr>
-    <td width="75%"><img src="./experiments/hexfront-3d/docs/publish-live/final-desktop.png" alt="HEXFRONT 3D art pass with the preserved tactical camera at 70 degrees on desktop"></td>
-    <td width="25%"><img src="./experiments/hexfront-3d/docs/publish-live/final-mobile.png" alt="HEXFRONT 3D art pass with the preserved tactical camera in mobile portrait with touch controls"></td>
+    <td width="75%"><img src="./experiments/hexfront-3d/docs/hud-live/desktop-command.png" alt="Live HEXFRONT 3D preview on desktop: quiet troop badges and clear command source and target"></td>
+    <td width="25%"><img src="./experiments/hexfront-3d/docs/hud-live/mobile-command.png" alt="Live HEXFRONT 3D preview in mobile portrait: compact match HUD with touch controls"></td>
   </tr>
 </table>
 

@@ -1,6 +1,19 @@
 # Isolierte Veröffentlichung – 12.10.2026
 
-## Aktueller Status
+## Aktueller Stand: Overlay-/HUD-Pass
+
+- Branch: `experiment/hexfront-3d-diorama`; Produktions-Commit: `2656632061cf3a538c7001bff8c74e2bb56a324c`.
+- **[Aktuelle Version spielen](https://rawcdn.githack.com/emfau88/hexwars/2656632061cf3a538c7001bff8c74e2bb56a324c/experiments/hexfront-3d/preview/index.html)** – beim ersten Besuch „Open the page“ bestätigen.
+- Ruhigere Zahlen und Auswahlmarkierungen, kompakter mobiler Match-HUD; Art-Pass, Kamera, alle 37 Sektoren und Spielregeln bleiben erhalten. [Vorher/Nachher und vollständige Tests](HUD.md).
+- Öffentliche Browserprüfung nach dem Push bestanden: Desktop 1440 × 900 und Touch-Mobile 390 × 844, Start, Auswahl, Befehle, laufende Uhr und Pause; keine Browser-/HTTP-Fehler, kein horizontaler Überlauf und keine Produktions-QA-API. [Live-Bericht](hud-live/production-report.json).
+- Alle **25 Dateien / 2.303.306 Bytes** vom CDN abgerufen und bytegenau per SHA-256 geprüft. [Dateiprüfung](hud-live/assets-report.json), [Produktionsmanifest](hud/build-report.json).
+- Die öffentlichen Befehlsbilder wurden tatsächlich visuell geprüft: [Desktop](hud-live/desktop-command.png), [Mobile](hud-live/mobile-command.png). Weitere Start-/Matchbilder liegen unter `hud-live/`.
+- Vollständige Partien mit Sieg, Niederlage und Neustart auf Desktop/Mobile sowie Eingabeprüfungen auf fünf Viewports bestanden. Reale Mobilgeräte und Safari bleiben ungeprüft; keine 60-FPS-Zusage. Details in [HUD.md](HUD.md).
+- Nur der Experiment-Branch wird veröffentlicht. `main`, Pages-Workflow und bisherige Veröffentlichungen bleiben unverändert.
+
+## Historie: Veröffentlichung des Art-Passes vor dem HUD-Update
+
+Die folgenden Nachweise und Dateizahlen beschreiben ausdrücklich den früheren Stand `e9330f8`; der aktuelle Play-Link steht oben und in beiden READMEs.
 
 - Experiment: `experiment/hexfront-3d-diorama`.
 - Art-Commit: `c66de31b2d1ea3dc69f26eb299e7e7e3056a6b8f`.

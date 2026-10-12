@@ -51,7 +51,10 @@ Gleiche Klassen, Prioritäten und Zahlentexte werden nicht unnötig pro Frame ne
 - [Produktions-Build](hud/build-report.json): 25 Dateien einschließlich der neuen kleinen Overlay-CSS-Datei, keine neuen 3D-Assets, Diagnose-API deaktiviert. Statisches Vorschauverzeichnis und Build bytegleich geprüft; eingecheckte Textdateien nutzen LF.
 - [Vollständige Partien](hud/match-report.json): Desktop 1366 × 768 und Touch-Mobile 390 × 844 jeweils regulärer Sieg nach 238,30 Sekunden mit 47 UI-Befehlen und 35 KI-Befehlen, Neustart, Niederlage nach 239,55 Sekunden ohne Gegenwehr bei 37 KI-Befehlen und erneuter Neustart. Alle drei Höhen, Pause, ungültige Felswand-Route, Qualitätsschalter und Kamerazustände geprüft.
 - Der abschließende lokale Produktionslauf lädt ohne Diagnose-API und führt echte Befehle mit normal laufender Uhr aus. Keine Browserausnahmen oder fehlenden Assets. Unverändert 111 Zeichenaufrufe / 55.907 Dreiecke im gemessenen Zustand. Einzelner Software-Renderlauf: Median 83,4 ms Desktop / 66,6 ms Mobile; daraus wird keine reale Geräte-FPS-Zusage abgeleitet.
-- Ergebnisbilder: [Desktop-Sieg](hud/desktop-victory.png), [Mobile-Niederlage](hud/mobile-defeat.png). Die öffentliche Vorschau wird im anschließenden Veröffentlichungsschritt geprüft.
+- Ergebnisbilder: [Desktop-Sieg](hud/desktop-victory.png), [Mobile-Niederlage](hud/mobile-defeat.png).
+- **Öffentliche Vorschau bestanden:** [Build `2656632` spielen](https://rawcdn.githack.com/emfau88/hexwars/2656632061cf3a538c7001bff8c74e2bb56a324c/experiments/hexfront-3d/preview/index.html). Frische Desktop-/Mobile-Browserkontexte bestätigen den Repository-Hinweis und führen echte Auswahl, Befehle, laufende Uhr und Pause aus. Keine QA-API, Browserausnahmen, fehlenden Dateien oder horizontaler Überlauf. [Live-Bericht](hud-live/production-report.json).
+- **Dateiintegrität:** Alle 25 öffentlich ausgelieferten Dateien, zusammen 2.303.306 Bytes, stimmen per SHA-256 mit dem Produktionsstand überein; HTML, JavaScript und CSS besitzen passende MIME-Typen. [Dateiprüfung](hud-live/assets-report.json).
+- **Öffentliche Runtime-Screenshots:** [Desktop-Befehl](hud-live/desktop-command.png), [Mobile-Befehl](hud-live/mobile-command.png), [Desktop ohne Auswahl](hud-live/desktop-running.png), [Mobile ohne Auswahl](hud-live/mobile-running.png). Beide Befehlsbilder tatsächlich angesehen: Quelle/Ziel und beide HQs bleiben zuordenbar, die mobile Befehlsleiste passt vollständig in den Viewport. Ladebereitschaft im einzelnen Software-Renderlauf: 4,10 s Desktop / 3,45 s Mobile; keine allgemeine Ladezeitgarantie.
 
 Die Tests laufen in Chromium mit Software-Rendering. Physische Android-/iOS-Geräte, Safari, größere Systemschrift und Sonnenlicht-Lesbarkeit bleiben ungeprüft. Die großen Antippflächen und die unveränderte logische Zellzuordnung ersetzen diese Gerätetests nicht.
 
@@ -64,6 +67,9 @@ node tests/browser.mjs
 $env:TEST_OUTPUT='docs/hud'
 node tests/camera-input.mjs
 npm run preview:prepare
+$env:PREVIEW_URL='https://rawcdn.githack.com/emfau88/hexwars/2656632061cf3a538c7001bff8c74e2bb56a324c/experiments/hexfront-3d/preview/index.html'
+$env:TEST_OUTPUT='docs/hud-live'
+node tests/hosted.mjs --art --match
 ```
 
 Die optionale Playwright-Installation und Startbefehle stehen in der [Experiment-README](../README.md). `tests/overlay.mjs --baseline` verweigert das Überschreiben der bereits vorhandenen Ausgangsaufnahme. Die manuelle Uhr ist ausschließlich in Entwicklungs-/Testläufen verfügbar und bleibt im Produktions-Build deaktiviert.

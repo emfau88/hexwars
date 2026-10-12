@@ -2,7 +2,9 @@
 
 Ein isolierter, tatsächlich spielbarer 3D-Vertical-Slice mit **einem Level**, 37 spielbaren Hexfeldern, zwei HQs, zwei Aufstiegen und einer gegnerischen KI. Orange erobert das blaue HQ; der Verlust des eigenen HQs beendet die Partie.
 
-**[▶ Testversion im Browser öffnen](https://rawcdn.githack.com/emfau88/hexwars/e9330f8388f6048b60d6b704ebde1e1b82ae28ac/experiments/hexfront-3d/preview/index.html)** · [Experiment-Branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama)
+**[▶ Testversion im Browser öffnen](https://rawcdn.githack.com/emfau88/hexwars/2656632061cf3a538c7001bff8c74e2bb56a324c/experiments/hexfront-3d/preview/index.html)** · [Experiment-Branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama)
+
+**Overlay-/HUD-Pass:** Ruhigere Zahlenplaketten mit klarer Priorität für Quelle, Ziel, HQs und Bewegungen. Teamfarben bleiben erhalten; mobile Antippflächen sind mindestens 44 Pixel groß. Der kompakte Match-HUD schafft bei 390 × 844 ohne Auswahl 168 Pixel zusätzliche Kartenhöhe, die sichtbare Plakettenfläche sinkt im gleichen Gefechtszustand um 42 %. Mehr Kartenbereich bedeutet wegen der begrenzten Portraitbreite nicht proportional größere Hexfelder. [Vorher/Nachher, Gestaltung und vollständige Spiel-/Eingabetests](docs/HUD.md). Gelände, Assets, Kameraregeln und Gameplay bleiben unverändert.
 
 **Art-Pass Morgenwacht:** Gebrochene, geschichtete Felsflanken, eine eigene Familie aus Kommandobunkern und Relais, ruhige Erdwege und CC0-Felsmaterialien ersetzen die bisherige gleichmäßige Low-Poly-Dekoration. [Vorher/Nachher, Referenzanalyse, Tests und ehrliche Bewertung](docs/ART.md).
 
@@ -10,13 +12,13 @@ Ein isolierter, tatsächlich spielbarer 3D-Vertical-Slice mit **einem Level**, 3
 
 **Felder und Besitz:** Deutliche Hexkonturen bleiben ständig sichtbar. Eroberte Bodenflächen und ihre äußeren Ränder werden orange beziehungsweise blau eingefärbt. Eine zusätzliche helle Innenkontur markiert Auswahl und erreichbare Ziele, ohne die Teamfarbe zu ersetzen. Bodenstruktur, Schatten und echte Höhen bleiben erkennbar.
 
-**Veröffentlicht und geprüft am 12.10.2026:** Der Testlink zeigt den aktuellen Produktions-Build mit Art-Pass, 70°-Kamera, Teamflächen und Rampen ohne Querstreifen. Der Experiment-Branch ist auf GitHub. Start, Auswahl, Truppenbefehle, Uhr und Pause wurden über die öffentliche URL auf Desktop und Mobile geprüft. Alle 24 ausgelieferten Dateien stimmen bytegenau mit dem eingecheckten Produktionsstand überein.
+**Veröffentlicht und geprüft am 12.10.2026:** Der Testlink zeigt den aktuellen Produktions-Build mit Overlay-/HUD-Pass, Art-Pass, 70°-Kamera, Teamflächen und Rampen ohne Querstreifen. Der Experiment-Branch ist auf GitHub. Start, Auswahl, Truppenbefehle, Uhr und Pause wurden über die öffentliche URL auf Desktop und Mobile geprüft. Alle 25 ausgelieferten Dateien stimmen bytegenau mit dem eingecheckten Produktionsstand überein.
 
 Die Vorschau verwendet [raw.githack.com](https://raw.githack.com/) als Auslieferungsdienst für dieses öffentliche Repository. **Beim ersten Öffnen auf „Open the page“ klicken.** Dafür sind weder Vercel-Konto noch Anmeldung nötig. Das bisherige Pages-Spiel bleibt unverändert. [Veröffentlichung, Prüfnachweise und Aktualisierung des Testlinks](docs/PUBLISH.md).
 
-![Öffentliche Vorschau, Desktop 1440 × 900](docs/publish-live/final-desktop.png)
+![Öffentliche Vorschau mit Befehlsvorbereitung, Desktop 1440 × 900](docs/hud-live/desktop-command.png)
 
-<img src="docs/publish-live/final-mobile.png" alt="Öffentliche Vorschau, Mobile Portrait 390 × 844" width="390">
+<img src="docs/hud-live/mobile-command.png" alt="Öffentliche Vorschau mit kompaktem Match-HUD, Mobile Portrait 390 × 844" width="390">
 
 ## Starten
 
@@ -79,11 +81,14 @@ npm run test:browser
 npm run test:camera
 node tests/territory.mjs
 npm run test:art
+npm run test:overlay
 ```
 
 `node tests/hosted.mjs` prüft eine über `PREVIEW_URL` angegebene Produktions-URL mit echten Maus-/Touchbefehlen und nimmt die Abgabe-Screenshots auf. Mit `PREVIEW_URL=local` startet der Test selbst einen Produktionsserver auf Port 4178; alternativ akzeptiert die Variable eine eigene URL. In PowerShell: `$env:PREVIEW_URL='local'; node tests/hosted.mjs`. Den aktuellen Testlink dazu ausdrücklich als `PREVIEW_URL` angeben. Die öffentliche Vorschau und der lokale Aufruf im Unterverzeichnis sind geprüft. Der Test bestätigt bei raw.githack.com zunächst den angezeigten Link auf genau dieses Repository und diesen Commit.
 
 Für die aktuellen Art-Abgabebilder: `$env:PREVIEW_URL='local'; node tests/hosted.mjs --art`. Die reinen Landschaften und unveränderten Vorher-Aufnahmen liegen in `docs/art/`. Der 70°-Vergleich benutzt identischen Spielzustand und Viewport. Für die Eingabeprüfung ohne Überschreiben historischer Kameraberichte: `$env:TEST_OUTPUT='docs/art'; node tests/camera-input.mjs`.
+
+Der neue Overlay-Vergleich in `docs/hud/` enthält Start, laufendes Gefecht, Auswahl, Befehl und Bewegung bei exakt gleichen logischen Zuständen. `npm run test:overlay` vergleicht mit der geschützten Baseline. Aktuelle öffentliche Aufnahmen: `$env:TEST_OUTPUT='docs/hud-live'; node tests/hosted.mjs --art --match`, mit dem Play-Link als `PREVIEW_URL`. [Ergebnisse und Grenzen](docs/HUD.md).
 
 Für die historischen Kamera-Abgabebilder: `$env:PREVIEW_URL='local'; node tests/hosted.mjs --camera`. Der Winkelvergleich und die Eingabetests speichern ihre Belege in `docs/camera/`. `docs/screenshots/` und `docs/QA.md` dokumentieren zusätzlich die ursprüngliche Prototype-Abnahme vor dem Kamera-Update.
 
