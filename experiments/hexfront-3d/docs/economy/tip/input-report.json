@@ -1,0 +1,19 @@
+{
+  "runs": [
+    {
+      "name": "desktop",
+      "tipAvoidsAllPills": true,
+      "tipAvoidsHUD": true,
+      "stableFraming": true,
+      "exactlyOneOrder": true
+    },
+    {
+      "name": "mobile",
+      "tipAvoidsAllPills": true,
+      "tipAvoidsHUD": true,
+      "stableFraming": true,
+      "exactlyOneOrder": true
+    }
+  ],
+  "errors": []
+}

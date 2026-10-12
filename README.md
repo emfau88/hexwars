@@ -1,28 +1,28 @@
 # HEXFRONT
 
-## 3D-Diorama experiment — play the isolated prototype
+## 3D-Diorama experiment — isolated economy comparison
 
-**New technology update:** hover drones, a shared command-station family, activated relay, 1.1-second transports and short capture/combat effects. The 37-sector map, 70°/55° cameras, mouse/touch drag-and-drop and compact HUD are retained. [Design, before/after, motion clip and tests](./experiments/hexfront-3d/docs/TECHNOLOGY.md).
+**New comparison build:** central HQ production through connected territory, fixed troop pills on all 37 hexes, direct/distant target contours and exact height-aware combat previews. The previous local economy remains playable through `?economy=legacy-local`. Terrain, drones, camera, 1.1-second transports and mouse/touch drag-and-drop are retained.
 
-**Published and publicly tested on 12 October 2026.** The link below opens the new drone/technology build `6605d24`. Desktop and touch browser checks passed, including real drag orders, clock and pause. [Live evidence](./experiments/hexfront-3d/docs/technology/live/production-report.json).
+[Production formula, 62 strategy runs, before/after and tests](./experiments/hexfront-3d/docs/ECONOMY.md). Central production eliminates automatically growing side garrisons; lower command count or greater human enjoyment is **not yet proven**.
 
-**[▶ Play HEXFRONT 3D — new drones & technology](https://rawcdn.githack.com/emfau88/hexwars/6605d24b344ac985de9543e56dd85ed34d6c646d/experiments/hexfront-3d/preview/index.html)** · [Experiment branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama) · [Start instructions](./experiments/hexfront-3d/README.md)
+**The new build is being prepared for publication.** [Previously published drone/technology build](https://rawcdn.githack.com/emfau88/hexwars/6605d24b344ac985de9543e56dd85ed34d6c646d/experiments/hexfront-3d/preview/index.html) is explicitly the older version. [Local start instructions](./experiments/hexfront-3d/README.md) · [Experiment branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama).
 
-The experiment lives in `experiments/hexfront-3d/`. Main, portal builds and GitHub Pages remain unchanged. The preview uses raw.githack.com; on the first visit, click **Open the page**. No Vercel account or sign-in is needed. [Publication status](./experiments/hexfront-3d/docs/PUBLISH.md).
+Only `experiments/hexfront-3d/` and this introductory README section change. Main, portal builds and GitHub Pages are not modified. [Publication status](./experiments/hexfront-3d/docs/PUBLISH.md).
 
-Current version, actual runtime captures:
+Current local runtime captures:
 
 <table>
   <tr><th>Desktop · 1440 × 900</th><th>Mobile · 390 × 844</th></tr>
   <tr>
-    <td width="75%"><img src="./experiments/hexfront-3d/docs/technology/desktop-after-transport.png" alt="New hover-drone transport on the tactical battlefield"></td>
-    <td width="25%"><img src="./experiments/hexfront-3d/docs/technology/mobile-after-transport.png" alt="New hover-drone transport and compact touch HUD"></td>
+    <td width="75%"><img src="./experiments/hexfront-3d/docs/economy/1440-after-selection.png" alt="37 centered troop pills and selected HQ supply information"></td>
+    <td width="25%"><img src="./experiments/hexfront-3d/docs/economy/390-after-selection.png" alt="Fixed troop pills and compact mobile supply HUD"></td>
   </tr>
 </table>
 
-[Motion clip](./experiments/hexfront-3d/docs/technology/action.webm) · [Landscape without overlays](./experiments/hexfront-3d/docs/technology/landscape.png) · [Assets and licenses](./experiments/hexfront-3d/ASSET_LICENSES.md)
+[Before/after and tactical captures](./experiments/hexfront-3d/docs/ECONOMY.md#bilder-und-nachweise) · [Existing drone animations](./experiments/hexfront-3d/docs/TECHNOLOGY.md) · [Asset licenses](./experiments/hexfront-3d/ASSET_LICENSES.md).
 
-This remains a prototype, below Tacticus's production art quality. Human balance testing and 60 FPS on real phones remain unverified.
+Human balance testing and 60 FPS on real phones remain unverified. On very small displays, use the existing zoom/navigation for detail commands; fixed values are never moved to fake separation.
 
 [![Verify and deploy](https://github.com/emfau88/hexwars/actions/workflows/pages.yml/badge.svg)](https://github.com/emfau88/hexwars/actions/workflows/pages.yml)
 

@@ -1,0 +1,100 @@
+{
+  "date": "2026-10-12T17:05:28.674Z",
+  "runs": [
+    {
+      "name": "desktop",
+      "input": "drag-and-drop",
+      "viewport": "1440 \u00d7 900",
+      "readyMs": 4020,
+      "victory": {
+        "seconds": 187.1,
+        "commands": 37,
+        "aiCommands": 24,
+        "selectedHeights": [
+          0,
+          1,
+          2
+        ]
+      },
+      "defeat": {
+        "seconds": 276.45,
+        "aiCommands": 43
+      },
+      "medianFrameMs": 133.3,
+      "p95FrameMs": 150,
+      "metrics": {
+        "calls": 120,
+        "triangles": 47133,
+        "pixelRatio": 1,
+        "quality": "high"
+      },
+      "layout": {
+        "overflow": false,
+        "primary": true,
+        "canvas": {
+          "x": 265,
+          "y": 93,
+          "width": 1165,
+          "height": 678,
+          "top": 93,
+          "right": 1430,
+          "bottom": 771,
+          "left": 265
+        }
+      }
+    },
+    {
+      "name": "mobile",
+      "input": "drag-and-drop",
+      "viewport": "390 \u00d7 844",
+      "readyMs": 3903,
+      "victory": {
+        "seconds": 187.1,
+        "commands": 37,
+        "aiCommands": 24,
+        "selectedHeights": [
+          0,
+          1,
+          2
+        ]
+      },
+      "defeat": {
+        "seconds": 276.45,
+        "aiCommands": 43
+      },
+      "medianFrameMs": 66.7,
+      "p95FrameMs": 83.3,
+      "metrics": {
+        "calls": 120,
+        "triangles": 47133,
+        "pixelRatio": 1,
+        "quality": "high"
+      },
+      "layout": {
+        "overflow": false,
+        "primary": true,
+        "canvas": {
+          "x": 0,
+          "y": 149,
+          "width": 390,
+          "height": 553,
+          "top": 149,
+          "right": 390,
+          "bottom": 702,
+          "left": 0
+        }
+      }
+    }
+  ],
+  "production": {
+    "loads": true,
+    "qaApiAbsent": true,
+    "realClockAdvances": true
+  },
+  "errors": [],
+  "sources": [
+    "match-central/desktop-and-help-scroll-report.json",
+    "match-mobile/browser-report.json"
+  ],
+  "note": "Desktop match passed in first run; first mobile attempt stopped in scrollable help before match. Mobile rerun scrolls the existing dialog and completes. Raw first failure is preserved."
+}

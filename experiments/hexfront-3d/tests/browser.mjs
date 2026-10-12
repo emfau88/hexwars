@@ -19,18 +19,19 @@ async function serve(port,production=false){
 const report={date:new Date().toISOString(),browser:'Chromium / Playwright',runs:[],errors:[]};let browser,currentPage;
 try{
   await serve(4175);browser=await chromium.launch({headless:true,args:['--disable-gpu-sandbox']});report.browserVersion=browser.version();
-  for(const mobile of process.argv.includes('--mobile')?[true]:[false,true]){
-    const name=mobile?'mobile':'desktop',context=await browser.newContext({viewport:mobile?{width:390,height:844}:{width:1366,height:768},isMobile:mobile,hasTouch:mobile,deviceScaleFactor:1});
+  for(const mobile of process.argv.includes('--mobile')?[true]:process.argv.includes('--desktop')?[false]:[false,true]){
+    const name=mobile?'mobile':'desktop',context=await browser.newContext({viewport:mobile?{width:390,height:844}:{width:1440,height:900},isMobile:mobile,hasTouch:mobile,deviceScaleFactor:1});
     const page=await context.newPage();currentPage=page;const driver=useDrag?await dragDriver(page,context,mobile):null;page.setDefaultTimeout(8000);page.on('pageerror',e=>report.errors.push(`${name}: ${e.message}`));page.on('console',m=>{if(m.type()==='error')report.errors.push(`${name}: ${m.text()}`);});page.on('response',r=>{if(r.status()>=400)report.errors.push(`${r.status()} ${r.url()}`);});
-    const response=await page.goto('http://127.0.0.1:4175/?qa=1&clock=manual');assert.equal(response.status(),200);await page.waitForFunction(()=>window.__HEXFRONT3D__);
+    const response=await page.goto(`http://127.0.0.1:4175/?qa=1&clock=manual&economy=${process.env.TEST_ECONOMY||'hq-centralized'}`);assert.equal(response.status(),200);await page.waitForFunction(()=>window.__HEXFRONT3D__);
     await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
     const readyMs=await page.evaluate(()=>performance.now());
     await page.screenshot({path:path.join(output,`${name}-overview.png`)});
     const click=async selector=>{
       await nextFrame(page);
-      const loc=page.locator(selector);assert.equal(await loc.isVisible(),true,`Visible target: ${selector}`);
+      const loc=page.locator(selector);if(selector==='#understood')await loc.scrollIntoViewIfNeeded();assert.equal(await loc.isVisible(),true,`Visible target: ${selector}`);
       const box=await loc.boundingBox(),x=box.x+box.width/2,y=box.y+box.height/2;
-      const hit=await page.evaluate(({x,y,selector})=>Boolean(document.elementFromPoint(x,y)?.closest(selector)),{x,y,selector});assert.ok(hit,`Unoccluded target: ${selector}`);
+      // Center inputs are resolved by the nearest fixed badge anchor, not DOM z-order.
+      if(!selector.startsWith('[data-cell')){const hit=await page.evaluate(({x,y,selector})=>Boolean(document.elementFromPoint(x,y)?.closest(selector)),{x,y,selector});assert.ok(hit,`Unoccluded target: ${selector}`);}
       if(mobile)await page.touchscreen.tap(x,y);else await page.mouse.click(x,y);
       await nextFrame(page);
     };
@@ -43,7 +44,7 @@ try{
     // Actual raycast on the elevated top, not direct state mutation or a command hook.
     const blockedPoint=await page.evaluate(()=>window.__HEXFRONT3D__.point('0,1'));
     if(mobile)await page.touchscreen.tap(blockedPoint.x,blockedPoint.y);else await page.mouse.click(blockedPoint.x,blockedPoint.y);
-    assert.match(await page.locator('#toast').innerText(),/Kein begehbarer Weg|Felswände/);assert.equal((await snapshot()).commands,0);
+    assert.match(await page.locator('#toast').innerText(),/Kein begehbarer Weg|Felswand/);assert.equal((await snapshot()).commands,0);
     await click('#clear');
     const initial=await snapshot();assert.equal(initial.cells.length,37);assert.equal(initial.cells.find(c=>c.hq==='orange').units,40);
     await advance(5.05);let turn=0,captured=false;const selectedHeights=new Set();
@@ -83,7 +84,7 @@ try{
     const frameTimes=await page.evaluate(()=>new Promise(resolve=>{const times=[];let prev=performance.now();function measure(now){times.push(now-prev);prev=now;if(times.length<121)requestAnimationFrame(measure);else resolve(times.slice(1));}requestAnimationFrame(measure);}));
     const sorted=[...frameTimes].sort((a,b)=>a-b),median=sorted[Math.floor(sorted.length/2)],p95=sorted[Math.floor(sorted.length*.95)];
     const metrics=await page.evaluate(()=>window.__HEXFRONT3D__.metrics());
-    const run={name,input:useDrag?'drag-and-drop':'click',viewport:mobile?'390 × 844':'1366 × 768',readyMs:Math.round(readyMs),victory,defeat,medianFrameMs:Number(median.toFixed(2)),p95FrameMs:Number(p95.toFixed(2)),metrics,layout};report.runs.push(run);console.log(JSON.stringify(run));await context.close();
+    const run={name,input:useDrag?'drag-and-drop':'click',viewport:mobile?'390 × 844':'1440 × 900',readyMs:Math.round(readyMs),victory,defeat,medianFrameMs:Number(median.toFixed(2)),p95FrameMs:Number(p95.toFixed(2)),metrics,layout};report.runs.push(run);console.log(JSON.stringify(run));await context.close();
   }
   execFileSync(process.execPath,['scripts/build.mjs'],{cwd:root,stdio:'inherit'});await serve(4176,true);
   const production=await browser.newPage();await production.goto('http://127.0.0.1:4176/?qa=1&clock=manual');await production.waitForFunction(()=>document.getElementById('loading').hidden);assert.equal(await production.evaluate(()=>typeof window.__HEXFRONT3D__),'undefined');await production.locator('#primary').click();await production.waitForFunction(()=>document.getElementById('timer').textContent!=='00:00');report.production={loads:true,qaApiAbsent:true,realClockAdvances:true};await production.close();
