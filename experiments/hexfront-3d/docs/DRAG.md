@@ -39,7 +39,9 @@ Der fertige Build wurde lokal mit normal laufender Uhr geprüft: Drag-and-drop a
 
 Die finalen Produktionsbilder wurden tatsächlich angesehen: [Desktop](drag/production/desktop-drag.png), [Mobile](drag/production/mobile-drag.png). Der frühere Starthinweis wird während einer Ziehgeste ausgeblendet, damit er das Befehlsfeld nicht überdeckt.
 
-Der Fix ist lokal committet; der neue Upload scheiterte an der PC-Netzverbindung. Der aktuelle README-Online-Link zeigt weiterhin den vorherigen HUD-Stand. [Veröffentlichungsstatus und vorbereiteter Link](PUBLISH.md).
+Der Fix ist auf GitHub veröffentlicht. **[Aktuelle Version spielen](https://rawcdn.githack.com/emfau88/hexwars/47f5d8b59d5f89de398397c8893bcc30d2030d31/experiments/hexfront-3d/preview/index.html)**. Beide README-Dateien verlinken diesen Build. Die öffentliche Maus-/Touch-Prüfung bestätigt Ziehbefehl, Uhr und Pause; alle 25 Dateien stimmen per SHA-256 mit dem Produktions-Commit überein. [Online-Bericht](drag/live/production-report.json), [Dateiprüfung](drag/live/assets-report.json).
+
+Die finalen öffentlichen Ziehbilder wurden ebenfalls angesehen: [Desktop](drag/live/desktop-drag.png), [Mobile](drag/live/mobile-drag.png). Frühere Netzwerkabbrüche und eine blockierte Werbung auf der Hosting-Bestätigungsseite sind im [Veröffentlichungsbericht](PUBLISH.md) dokumentiert. Der abschließende Mobile-Test bestand; die Hosting-Warnung betrifft keine Spielressource.
 
 ## Reproduktion
 

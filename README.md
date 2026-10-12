@@ -2,9 +2,9 @@
 
 ## 3D-Diorama experiment — play the isolated prototype
 
-**Local drag-and-drop fix ready, upload pending:** commit `47f5d8b59d5f89de398397c8893bcc30d2030d31` passes mouse/touch and full-match tests. The current PC connection has no IPv4 default route; the push could not reach GitHub. The online link below still points to the prior HUD build. Run the updated experiment locally with the commands in its README.
+**Drag-and-drop update published:** The link below includes the restored mouse and touch controls, verified with full local matches and public browser checks.
 
-**[▶ Last published version — before drag-and-drop](https://rawcdn.githack.com/emfau88/hexwars/2656632061cf3a538c7001bff8c74e2bb56a324c/experiments/hexfront-3d/preview/index.html)**
+**[▶ Play HEXFRONT 3D — with drag-and-drop](https://rawcdn.githack.com/emfau88/hexwars/47f5d8b59d5f89de398397c8893bcc30d2030d31/experiments/hexfront-3d/preview/index.html)**
 
 One playable 37-hex battlefield with real elevation, two ramps, Orange vs Blue AI, victory/defeat and restart. Hosted separately from the existing GitHub Pages game. This link and the experiment are on `experiment/hexfront-3d-diorama`; no main-branch deployment was changed.
 
@@ -16,7 +16,7 @@ One playable 37-hex battlefield with real elevation, two ramps, Orange vs Blue A
 
 **Art pass:** Authored fractured rock formations, layered cliff faces, command bunkers and a three-panel relay; restrained vegetation, quiet paths and five optimized CC0 material textures. [Before/after screenshots, art decisions and verification](./experiments/hexfront-3d/docs/ART.md). Gameplay, all 37 sectors and camera controls are preserved.
 
-**Camera update:** 70° tactical view, optional 55° diorama view, geometry-based framing and corrected picking. [Angle comparison and camera QA](./experiments/hexfront-3d/docs/CAMERA.md). The play link is pinned to the production build of the overlay/HUD update, including the art pass, clean ramps, camera update and territory outlines. It is published with this branch and was verified in the browser on desktop and mobile.
+**Camera update:** 70° tactical view, optional 55° diorama view, geometry-based framing and corrected picking. [Angle comparison and camera QA](./experiments/hexfront-3d/docs/CAMERA.md). The play link is pinned to production commit `47f5d8b`, including drag-and-drop, the overlay/HUD update, art pass, clean ramps and territory outlines. It is published with this branch and was verified in the browser on desktop and mobile.
 
 Persistent hex outlines and Orange/Blue territory fills now make ownership visible across the battlefield. A separate inset outline marks reachable targets without replacing team colours; the textured 3D terrain remains visible.
 
@@ -25,8 +25,8 @@ The preview is served from this isolated branch through [raw.githack.com](https:
 <table>
   <tr><th>Desktop · 1440 × 900</th><th>Mobile portrait · 390 × 844</th></tr>
   <tr>
-    <td width="75%"><img src="./experiments/hexfront-3d/docs/hud-live/desktop-command.png" alt="Live HEXFRONT 3D preview on desktop: quiet troop badges and clear command source and target"></td>
-    <td width="25%"><img src="./experiments/hexfront-3d/docs/hud-live/mobile-command.png" alt="Live HEXFRONT 3D preview in mobile portrait: compact match HUD with touch controls"></td>
+    <td width="75%"><img src="./experiments/hexfront-3d/docs/drag/live/desktop-drag.png" alt="Live HEXFRONT 3D desktop preview: dragging troops from an owned sector to a reachable target"></td>
+    <td width="25%"><img src="./experiments/hexfront-3d/docs/drag/live/mobile-drag.png" alt="Live HEXFRONT 3D mobile preview: touch drag with route and troop count before release"></td>
   </tr>
 </table>
 

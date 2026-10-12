@@ -1,21 +1,24 @@
 # Isolierte Veröffentlichung – 12.10.2026
 
-## Aktueller lokaler Stand: Drag-and-drop-Fix, Upload offen
+## Aktuell veröffentlicht: Drag-and-drop-Fix
 
 Produktions-Commit: `47f5d8b59d5f89de398397c8893bcc30d2030d31`, ausschließlich auf `experiment/hexfront-3d-diorama`. Maus/Touch, vollständige Partien, fünf Kamera-/Eingabe-Viewports und Produktions-Build bestanden. [Steuerung und Nachweise](DRAG.md).
 
-Der neue Push scheiterte mit `Could not resolve host: github.com`. Die lokale Netzwerkprüfung findet eine selbst vergebene IPv4-Adresse im Bereich `169.254.*` und keine IPv4-Standardroute. Deshalb wurde die öffentliche Vorschau des Fixes noch nicht geprüft und der funktionierende alte README-Play-Link beibehalten. Es wurden keine Netzwerkeinstellungen geändert. Main/Pages bleiben unverändert.
+Nach erneutem Verbinden mit dem Mobilfunk-Hotspot gelang der Push am 12.10.2026. Beide README-Testlinks zeigen jetzt diesen Produktionsstand. Main/Pages bleiben unverändert.
 
-Vorbereitete URL nach erfolgreichem Push:
+**[Aktuelle Version mit Drag-and-drop spielen](https://rawcdn.githack.com/emfau88/hexwars/47f5d8b59d5f89de398397c8893bcc30d2030d31/experiments/hexfront-3d/preview/index.html)** — beim ersten Besuch „Open the page“ bestätigen.
 
-`https://rawcdn.githack.com/emfau88/hexwars/47f5d8b59d5f89de398397c8893bcc30d2030d31/experiments/hexfront-3d/preview/index.html`
+- Öffentliche Browserprüfung bestanden: Desktop 1440 × 900 und Touch-Mobile 390 × 844; Start, echter Ziehbefehl, laufende Uhr und Pause. Kein horizontaler Überlauf, keine Produktions-QA-API, keine Spiel-/Assetfehler. [Zusammengeführter Bericht](drag/live/production-report.json) mit den getrennten [Desktop-](drag/live/desktop-report.json) und [Mobile-Läufen](drag/live/mobile-report.json).
+- Alle **25 Dateien / 2.309.509 Bytes** vom CDN geladen und per SHA-256 gegen die Git-Blobs geprüft. [Öffentliche Dateiprüfung](drag/live/assets-report.json), [Produktionsmanifest](drag/build-report.json).
+- Öffentliche Aufnahmen während des Ziehens tatsächlich visuell geprüft: [Desktop](drag/live/desktop-drag.png), [Mobile](drag/live/mobile-drag.png). Quelle, Ziel, Weg und sendbare Stärke sind zugeordnet; der Hinweis überdeckt das mobile Befehlsfeld nicht.
+- Vollständige lokale Maus-/Touch-Partien mit Sieg, Niederlage und Neustart sowie fünf Kamera-/Eingabe-Viewports bestanden. [Details](DRAG.md). Das veröffentlichte Runtime-Paket ist bytegleich mit diesem geprüften Produktionsstand.
 
-Zum Fortsetzen: Experiment-Branch pushen, diese URL mit `tests/hosted.mjs --art --match --drag` prüfen und danach die beiden README-Testlinks aktualisieren. [Lokaler Produktionsbericht](drag/production/production-report.json), [Git-Blob-Manifest: 25 Dateien, 2.309.509 Bytes](drag/build-report.json).
+Die vorherigen Online-Versuche wurden durch einen Netzwerkwechsel und einen Lade-Timeout unterbrochen. Ein anschließender Mobile-Lauf führte den Spielbefehl erfolgreich aus, meldete aber eine blockierte Werbeanfrage der Hosting-Bestätigungsseite ([unveränderter Rohbericht](drag/live/mobile-host-warning-report.json)). Der Test protokolliert solche Anfragen jetzt getrennt als `hostWarnings`; echte Spielanfragen bleiben fehlerrelevant. Der abschließende Mobile-Lauf bestand. Die öffentlichen Einzelmessungen lagen bei 5,11 s Desktop bzw. 4,98 s Mobile bis zur Bereitschaft; ein früherer Versuch benötigte 23,25 s. Das ist keine Ladezeitgarantie. Software-Rendering und Touch-Emulation ersetzen keine Prüfung auf physischen Android-/iOS-Geräten oder in Safari; 60 FPS sind dort weiterhin nicht belegt.
 
-## Zuletzt veröffentlichter Stand: Overlay-/HUD-Pass
+## Vorheriger Stand: Overlay-/HUD-Pass
 
 - Branch: `experiment/hexfront-3d-diorama`; Produktions-Commit: `2656632061cf3a538c7001bff8c74e2bb56a324c`.
-- **[Aktuelle Version spielen](https://rawcdn.githack.com/emfau88/hexwars/2656632061cf3a538c7001bff8c74e2bb56a324c/experiments/hexfront-3d/preview/index.html)** – beim ersten Besuch „Open the page“ bestätigen.
+- **[Vorherigen HUD-Stand spielen](https://rawcdn.githack.com/emfau88/hexwars/2656632061cf3a538c7001bff8c74e2bb56a324c/experiments/hexfront-3d/preview/index.html)** – beim ersten Besuch „Open the page“ bestätigen.
 - Ruhigere Zahlen und Auswahlmarkierungen, kompakter mobiler Match-HUD; Art-Pass, Kamera, alle 37 Sektoren und Spielregeln bleiben erhalten. [Vorher/Nachher und vollständige Tests](HUD.md).
 - Öffentliche Browserprüfung nach dem Push bestanden: Desktop 1440 × 900 und Touch-Mobile 390 × 844, Start, Auswahl, Befehle, laufende Uhr und Pause; keine Browser-/HTTP-Fehler, kein horizontaler Überlauf und keine Produktions-QA-API. [Live-Bericht](hud-live/production-report.json).
 - Alle **25 Dateien / 2.303.306 Bytes** vom CDN abgerufen und bytegenau per SHA-256 geprüft. [Dateiprüfung](hud-live/assets-report.json), [Produktionsmanifest](hud/build-report.json).

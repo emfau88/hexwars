@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {dragDriver,dragOrder} from './drag-helpers.mjs';
 const useDrag=process.argv.includes('--drag');
+const mobileOnly=process.argv.includes('--mobile');
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {createRequire} from 'node:module';
@@ -15,13 +16,21 @@ const url=local?'http://127.0.0.1:4178/':process.env.PREVIEW_URL;
 if(!url)throw Error('Set PREVIEW_URL to local or the production URL documented in README.md');
 let server;
 if(local){server=spawn(process.execPath,['scripts/serve.mjs','--production'],{cwd:root,env:{...process.env,PORT:'4178'},stdio:['ignore','pipe','pipe'],windowsHide:true});await new Promise((resolve,reject)=>{server.stdout.on('data',d=>{if(String(d).includes('http://'))resolve();});server.on('error',reject);server.on('exit',code=>{if(code)reject(Error(`Server exit ${code}`));});});}
-const report={url,date:new Date().toISOString(),runs:[],errors:[]};
+const report={url,date:new Date().toISOString(),runs:[],errors:[],hostWarnings:[]};
 await fs.mkdir(path.join(root,shots),{recursive:true});await fs.mkdir(path.join(root,'test-results'),{recursive:true});
 const browser=await chromium.launch({headless:true,args:['--disable-gpu-sandbox']});
 try{
- for(const mobile of [false,true]){
+ for(const mobile of mobileOnly?[true]:[false,true]){
   const name=mobile?'mobile':'desktop',context=await browser.newContext({viewport:mobile?{width:390,height:844}:camera||art?{width:1440,height:900}:{width:1366,height:768},deviceScaleFactor:1,isMobile:mobile,hasTouch:mobile}),page=await context.newPage();
   page.on('pageerror',e=>report.errors.push(e.message));page.on('response',r=>{if(r.status()>=400)report.errors.push(`${r.status()} ${r.url()}`);});
+  page.on('requestfailed',r=>{
+   const detail=`${r.failure()?.errorText} ${r.url()}`;
+   // The host's repository confirmation screen loads a third-party advertisement.
+   // Keep its blocked request visible without mistaking it for a game asset failure.
+   if(new URL(url).hostname==='rawcdn.githack.com'&&new URL(r.url()).hostname==='server.ethicalads.io')report.hostWarnings.push(detail);
+   else report.errors.push(detail);
+  });
+  try{
   let response=await page.goto(url,{waitUntil:'domcontentloaded',timeout:45000});assert.equal(response.status(),200);
   let repositoryNoticeConfirmed=false;
   if(await page.title()==='External Content Notice | rawgit.hack'){
@@ -53,6 +62,11 @@ try{
   await page.waitForFunction(()=>document.getElementById('timer').textContent!=='00:00');assert.match(await page.locator('#toast').innerText(),/unterwegs/);
   await page.screenshot({path:path.join(root,`test-results/${name}-hosted-command.png`)});await click('#pause');assert.match(await page.locator('#phase').innerText(),/PAUSIERT/);
   report.runs.push({name,input:useDrag?'drag-and-drop':'click',...info,repositoryNoticeConfirmed,commandAccepted:true,clockAdvances:true,pause:true});console.log(JSON.stringify(report.runs.at(-1)));await context.close();
+  }catch(error){
+   report.failure={name,message:error.message,url:page.url(),loading:await page.locator('#loading').textContent({timeout:2000}).catch(()=>null)};
+   await page.screenshot({path:path.join(root,`${shots}/${name}-failure.png`),timeout:10000}).catch(()=>{});
+   throw error;
+  }
  }
- assert.deepEqual(report.errors,[]);console.log('PASS: production build, desktop and touch, real commands, clock and screenshots.');
+ assert.deepEqual(report.errors,[]);console.log(`PASS: production build, ${mobileOnly?'touch':'desktop and touch'}, real commands, clock and screenshots.`);
 }finally{await browser.close();server?.kill();await fs.writeFile(path.join(root,process.env.TEST_OUTPUT?`${shots}/production-report.json`:art?'docs/art/production-report.json':camera?'docs/camera/production-report.json':'test-results/hosted-report.json'),JSON.stringify(report,null,2));}
