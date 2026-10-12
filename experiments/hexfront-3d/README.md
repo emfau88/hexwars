@@ -10,19 +10,19 @@ Ein isolierter, tatsächlich spielbarer 3D-Vertical-Slice mit **einem Level**, 3
 
 **Felder und Besitz:** Deutliche Hexkonturen bleiben ständig sichtbar. Eroberte Bodenflächen und ihre äußeren Ränder werden orange beziehungsweise blau eingefärbt. Eine zusätzliche helle Innenkontur markiert Auswahl und erreichbare Ziele, ohne die Teamfarbe zu ersetzen. Bodenstruktur, Schatten und echte Höhen bleiben erkennbar.
 
-**Veröffentlichungsstand:** Der obige Testlink ist für den aktuellen Produktions-Build mit Art-Pass, 70°-Kamera, Teamflächen und Rampen ohne Querstreifen vorbereitet. GitHub-Push und Live-Prüfung stehen wegen der ausgefallenen IPv4-Verbindung des Veröffentlichungsrechners noch aus. Bis zum erfolgreichen Upload ist der Link nicht verfügbar. Der Build ist lokal auf Desktop und Mobile geprüft und auf dem Experiment-Branch committet.
+**Veröffentlicht und geprüft am 12.10.2026:** Der Testlink zeigt den aktuellen Produktions-Build mit Art-Pass, 70°-Kamera, Teamflächen und Rampen ohne Querstreifen. Der Experiment-Branch ist auf GitHub. Start, Auswahl, Truppenbefehle, Uhr und Pause wurden über die öffentliche URL auf Desktop und Mobile geprüft. Alle 24 ausgelieferten Dateien stimmen bytegenau mit dem eingecheckten Produktionsstand überein.
 
-Die Vorschau verwendet [raw.githack.com](https://raw.githack.com/) als Auslieferungsdienst für die Dateien dieses öffentlichen Repositorys. Kein Vercel-Konto und keine Änderung am bisherigen Pages-Spiel sind nötig. Beim ersten Besuch kann eine Bestätigungsseite erscheinen; sie zeigt dieses Repository als Ziel. [Veröffentlichungsstand, Prüfnachweise und Aktualisierung des Testlinks](docs/PUBLISH.md).
+Die Vorschau verwendet [raw.githack.com](https://raw.githack.com/) als Auslieferungsdienst für dieses öffentliche Repository. **Beim ersten Öffnen auf „Open the page“ klicken.** Dafür sind weder Vercel-Konto noch Anmeldung nötig. Das bisherige Pages-Spiel bleibt unverändert. [Veröffentlichung, Prüfnachweise und Aktualisierung des Testlinks](docs/PUBLISH.md).
 
-![70°-Taktikansicht, Desktop 1440 × 900](docs/art/final-desktop.png)
+![Öffentliche Vorschau, Desktop 1440 × 900](docs/publish-live/final-desktop.png)
 
-<img src="docs/art/final-mobile.png" alt="70°-Taktikansicht, Mobile Portrait 390 × 844" width="390">
+<img src="docs/publish-live/final-mobile.png" alt="Öffentliche Vorschau, Mobile Portrait 390 × 844" width="390">
 
 ## Starten
 
 Node.js 20 oder neuer. Das Experiment hat keine zur Laufzeit zu installierenden npm-Abhängigkeiten: Three.js und die benötigten Asset-Dateien sind versioniert und liegen lokal vor.
 
-Im vorhandenen vollständigen Arbeitsordner direkt mit `cd hexwars-art-publish/experiments/hexfront-3d`, `npm ci` und `npm run dev` starten. Nach dem erfolgreichen Push lässt sich ein eigener Checkout so anlegen:
+Im vorhandenen vollständigen Arbeitsordner direkt mit `cd hexwars-art-publish/experiments/hexfront-3d`, `npm ci` und `npm run dev` starten. Ein eigener Checkout lässt sich so anlegen:
 
 ```sh
 git clone --branch experiment/hexfront-3d-diorama https://github.com/emfau88/hexwars.git
@@ -81,7 +81,7 @@ node tests/territory.mjs
 npm run test:art
 ```
 
-`node tests/hosted.mjs` prüft eine über `PREVIEW_URL` angegebene Produktions-URL mit echten Maus-/Touchbefehlen und nimmt die Abgabe-Screenshots auf. Mit `PREVIEW_URL=local` startet der Test selbst einen Produktionsserver auf Port 4178; alternativ akzeptiert die Variable eine eigene URL. In PowerShell: `$env:PREVIEW_URL='local'; node tests/hosted.mjs`. Den aktuellen Testlink dazu ausdrücklich als `PREVIEW_URL` angeben. Der öffentliche Aufruf wurde bisher nicht verifiziert; der lokale Test des Unterverzeichnisses `preview/index.html` ist bestanden.
+`node tests/hosted.mjs` prüft eine über `PREVIEW_URL` angegebene Produktions-URL mit echten Maus-/Touchbefehlen und nimmt die Abgabe-Screenshots auf. Mit `PREVIEW_URL=local` startet der Test selbst einen Produktionsserver auf Port 4178; alternativ akzeptiert die Variable eine eigene URL. In PowerShell: `$env:PREVIEW_URL='local'; node tests/hosted.mjs`. Den aktuellen Testlink dazu ausdrücklich als `PREVIEW_URL` angeben. Die öffentliche Vorschau und der lokale Aufruf im Unterverzeichnis sind geprüft. Der Test bestätigt bei raw.githack.com zunächst den angezeigten Link auf genau dieses Repository und diesen Commit.
 
 Für die aktuellen Art-Abgabebilder: `$env:PREVIEW_URL='local'; node tests/hosted.mjs --art`. Die reinen Landschaften und unveränderten Vorher-Aufnahmen liegen in `docs/art/`. Der 70°-Vergleich benutzt identischen Spielzustand und Viewport. Für die Eingabeprüfung ohne Überschreiben historischer Kameraberichte: `$env:TEST_OUTPUT='docs/art'; node tests/camera-input.mjs`.
 

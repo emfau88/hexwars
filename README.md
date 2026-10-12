@@ -10,17 +10,17 @@ One playable 37-hex battlefield with real elevation, two ramps, Orange vs Blue A
 
 **Art pass:** Authored fractured rock formations, layered cliff faces, command bunkers and a three-panel relay; restrained vegetation, quiet paths and five optimized CC0 material textures. [Before/after screenshots, art decisions and verification](./experiments/hexfront-3d/docs/ART.md). Gameplay, all 37 sectors and camera controls are preserved.
 
-**Camera update:** 70° tactical view, optional 55° diorama view, geometry-based framing and corrected picking. [Angle comparison and camera QA](./experiments/hexfront-3d/docs/CAMERA.md). The play link is pinned to the production build of this art pass, including the clean ramps, camera update and territory outlines. It is prepared for publication with this branch.
+**Camera update:** 70° tactical view, optional 55° diorama view, geometry-based framing and corrected picking. [Angle comparison and camera QA](./experiments/hexfront-3d/docs/CAMERA.md). The play link is pinned to the production build of this art pass, including the clean ramps, camera update and territory outlines. It is published with this branch and was verified in the browser on desktop and mobile.
 
 Persistent hex outlines and Orange/Blue territory fills now make ownership visible across the battlefield. A separate inset outline marks reachable targets without replacing team colours; the textured 3D terrain remains visible.
 
-The preview is served from this isolated branch through [raw.githack.com](https://raw.githack.com/), without a Vercel account. Its first visit may ask you to confirm opening the repository. Local desktop/mobile production checks passed; GitHub upload and live verification are still pending because the publishing computer lost IPv4 connectivity. See the [publication status and reproducible checks](./experiments/hexfront-3d/docs/PUBLISH.md). The prototype does **not** yet match Tacticus's production art quality, and 60 FPS on real mobile devices is unverified.
+The preview is served from this isolated branch through [raw.githack.com](https://raw.githack.com/), without a Vercel account. On the first visit, click **Open the page** to confirm this repository. GitHub publication and live desktop/mobile browser checks passed on 12 October 2026, including real commands, clock and pause; all 24 hosted files match the production commit byte for byte. See the [publication status and reproducible checks](./experiments/hexfront-3d/docs/PUBLISH.md). The prototype does **not** yet match Tacticus's production art quality, and 60 FPS on real mobile devices is unverified.
 
 <table>
   <tr><th>Desktop · 1440 × 900</th><th>Mobile portrait · 390 × 844</th></tr>
   <tr>
-    <td width="75%"><img src="./experiments/hexfront-3d/docs/art/final-desktop.png" alt="HEXFRONT 3D art pass with the preserved tactical camera at 70 degrees on desktop"></td>
-    <td width="25%"><img src="./experiments/hexfront-3d/docs/art/final-mobile.png" alt="HEXFRONT 3D art pass with the preserved tactical camera in mobile portrait with touch controls"></td>
+    <td width="75%"><img src="./experiments/hexfront-3d/docs/publish-live/final-desktop.png" alt="HEXFRONT 3D art pass with the preserved tactical camera at 70 degrees on desktop"></td>
+    <td width="25%"><img src="./experiments/hexfront-3d/docs/publish-live/final-mobile.png" alt="HEXFRONT 3D art pass with the preserved tactical camera in mobile portrait with touch controls"></td>
   </tr>
 </table>
 
