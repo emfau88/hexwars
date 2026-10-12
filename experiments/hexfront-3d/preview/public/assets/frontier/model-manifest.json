@@ -3,8 +3,8 @@
   "design": "PIP / Haven / Seed \u2014 original HEXFRONT family",
   "models": {
     "PIP": {
-      "meshes": 31,
-      "triangles": 5512
+      "meshes": 26,
+      "triangles": 16092
     },
     "Haven": {
       "meshes": 16,
@@ -14,6 +14,6 @@
       "meshes": 19,
       "triangles": 4802
     },
-    "bytes": 634036
+    "bytes": 928256
   }
 }

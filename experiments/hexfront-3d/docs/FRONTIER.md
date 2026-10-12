@@ -1,5 +1,7 @@
 # Charming Sci-Fi Frontier — integrierter Art-Pass
 
+**Historischer Nachweis des ersten integrierten Charming-Art-Passes (`55d7047`).** Die anschließende ausschließlich auf die Drohne begrenzte Überarbeitung und ihre aktuellen Bilder stehen in [DRONE.md](DRONE.md).
+
 Eine Modellfamilie für die bestehende Karte: **PIP**, die kleine Schwebedrohne; **Haven**, ihr kompaktes HQ mit Andocköffnung; **Seed**, das aufgehängte Relais. Helle Keramik, gedämpftes Jadegrün, dunkle Gelenke, gebürstete Legierung und kleine orange/blaue Akzente verbinden die drei Modelle. Die ruhigeren Spielflächen bleiben der Hintergrund für Gebäude, Einheiten und Truppenwerte.
 
 Vergleichsbasis ist Commit `4867c595a6d18e3f20340d7a7b283574adb7645c`, lokal zusätzlich als `snapshot/hexfront-before-charming-art` gesichert. Er enthält bereits den vollständigen Wirtschafts-/Readability-Pass. Seine [öffentliche Wirtschaftsversion](https://rawcdn.githack.com/emfau88/hexwars/df722a6a8cf04c8c904f97c880115ce2ec0c4ee7/experiments/hexfront-3d/preview/index.html) bleibt unverändert verfügbar.

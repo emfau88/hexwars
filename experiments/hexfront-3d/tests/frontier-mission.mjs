@@ -5,7 +5,7 @@ import {createRequire} from 'node:module';
 import {fileURLToPath} from 'node:url';
 import {spawn} from 'node:child_process';
 import {dragDriver,dragOrder,nextFrame} from './drag-helpers.mjs';
-const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),require=createRequire(import.meta.url),{chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright'),out=path.join(root,'docs/frontier');
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),require=createRequire(import.meta.url),{chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright'),out=path.join(root,process.env.TEST_OUTPUT||'docs/frontier');
 const server=spawn(process.execPath,['scripts/serve.mjs'],{cwd:root,env:{...process.env,PORT:'4192'},stdio:['ignore','pipe','pipe'],windowsHide:true});
 await new Promise((resolve,reject)=>{server.stdout.on('data',d=>{if(String(d).includes('http://'))resolve();});server.on('error',reject);});
 const browser=await chromium.launch({headless:true,args:['--disable-gpu-sandbox']}),report={date:new Date().toISOString(),errors:[]};
@@ -25,7 +25,7 @@ try{
  await page.screenshot({path:path.join(out,'relay-active.png')});
  await fs.mkdir(path.join(out,'relay-sequence'),{recursive:true});
  for(let frame=0;frame<9;frame++){
-  await page.screenshot({path:path.join(out,`relay-sequence/active-${String(frame).padStart(2,'0')}.jpg`),quality:82});
+  if(!process.argv.includes('--no-sequence'))await page.screenshot({path:path.join(out,`relay-sequence/active-${String(frame).padStart(2,'0')}.jpg`),quality:82});
   await advance(.1);
  }
 

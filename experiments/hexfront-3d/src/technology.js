@@ -37,10 +37,10 @@ export function updateTechnology(s,time){
  }
  const d=s.droneDummy,col=new T.Color();let wake=0;s.dronePoses=poses;
  for(let i=0;i<poses.length;i++){
-  const p=poses[i],scale=p.scale??1;d.position.set(p.x,p.y,p.z);d.rotation.set((p.pitch||0)+(s.reduced||p.idle?0:(p.thrust||0)*.065),p.yaw,p.roll||0,'YXZ');d.scale.setScalar(scale);d.updateMatrix();articulateDrones(s,seconds,p,i,d.matrix);for(const part of s.droneTeam)part.setColorAt(i,col.setHex(TEAM[p.owner]));
+  const p=poses[i],scale=p.scale??1;d.position.set(p.x,p.y,p.z);d.rotation.set((p.pitch||0)+(s.reduced||p.idle?0:(p.thrust||0)*.065),p.yaw,p.roll||0,'YXZ');d.scale.setScalar(scale);d.updateMatrix();articulateDrones(s,seconds,p,i,d.matrix);for(const part of s.droneTeam)part.setColorAt(i,col.setHex(part.userData.optic?({orange:0xf28f24,blue:0x36b9ee,neutral:0x89a894}[p.owner]):TEAM[p.owner]));
   d.position.set(p.x,p.ground+.022,p.z);d.rotation.set(0,p.yaw,0);d.scale.setScalar(scale);d.updateMatrix();s.droneShadow.setMatrixAt(i,d.matrix);
   if(p.thrust&&!s.reduced&&s.quality==='high')for(const side of [-1,1]){
-   const offset=new T.Vector3(side*.37,-.09,.065).applyAxisAngle(new T.Vector3(0,1,0),p.yaw);d.position.set(p.x+offset.x,p.y+offset.y,p.z+offset.z);d.rotation.set(0,p.yaw,0);d.scale.set(scale,scale*(.3+p.thrust*.6),scale);d.updateMatrix();s.droneWake.setMatrixAt(wake,d.matrix);s.droneWake.setColorAt(wake++,col.setHex(TEAM[p.owner]));
+   const offset=new T.Vector3(side*.435,.07,.016).applyAxisAngle(new T.Vector3(0,1,0),p.yaw);d.position.set(p.x+offset.x,p.y+offset.y,p.z+offset.z);d.rotation.set(0,p.yaw,0);d.scale.set(scale,scale*(.3+p.thrust*.6),scale);d.updateMatrix();s.droneWake.setMatrixAt(wake,d.matrix);s.droneWake.setColorAt(wake++,col.setHex(TEAM[p.owner]));
   }
  }
  for(const part of [...s.droneParts,s.droneShadow]){part.count=poses.length;part.instanceMatrix.needsUpdate=true;}for(const part of s.droneTeam)if(part.instanceColor)part.instanceColor.needsUpdate=true;s.droneWake.count=wake;s.droneWake.instanceMatrix.needsUpdate=true;if(s.droneWake.instanceColor)s.droneWake.instanceColor.needsUpdate=true;

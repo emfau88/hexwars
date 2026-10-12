@@ -5,7 +5,7 @@ import crypto from 'node:crypto';
 import {spawn,execFileSync} from 'node:child_process';
 import {createRequire} from 'node:module';
 import {fileURLToPath} from 'node:url';
-const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),out=path.join(root,'docs/frontier');
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),out=path.join(root,process.env.TEST_OUTPUT||'docs/frontier');
 const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
 const report={baseline:'4867c595a6d18e3f20340d7a7b283574adb7645c',unchanged:[],files:[],viewer:[],errors:[]};
 for(const name of ['game.js','economy.js','tactics.js','map.js','transport.js','camera.js','main.js','style.css']){
@@ -22,11 +22,11 @@ await new Promise((resolve,reject)=>{server.stdout.on('data',d=>{if(String(d).in
 const browser=await chromium.launch({headless:true,args:['--disable-gpu-sandbox']});
 try{
  const page=await browser.newPage();page.on('pageerror',e=>report.errors.push(e.message));
- for(const width of [1440,390]){
-  await page.setViewportSize({width,height:width===390?844:900});await page.goto('http://127.0.0.1:4196/docs/frontier/compare.html');
-  for(const mode of ['desktop','mobile']){await page.locator('#'+mode).click();await page.waitForFunction(()=>[...document.images].every(i=>i.complete&&i.naturalWidth>0));assert.ok((await page.locator('#after').getAttribute('src')).includes(mode));}
+ for(const folder of ['frontier','drone-reference'])for(const width of [1440,390]){
+  await page.setViewportSize({width,height:width===390?844:900});await page.goto(`http://127.0.0.1:4196/docs/${folder}/compare.html`);
+  for(const mode of (folder==='drone-reference'?['desktop','mobile','detail']:['desktop','mobile'])){await page.locator('#'+mode).click();await page.waitForFunction(()=>[...document.images].every(i=>i.complete&&i.naturalWidth>0));assert.ok((await page.locator('#after').getAttribute('src')).includes(mode));}
   for(const value of ['0','100']){await page.locator('#split').fill(value);assert.ok((await page.locator('#after').getAttribute('style')).includes(value+'%'));}
-  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);assert.equal(await page.locator('video').count(),0);report.viewer.push({width,images:true,tabs:true,slider:true,noOverflow:true,noVideo:true});
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);assert.equal(await page.locator('video').count(),0);report.viewer.push({folder,width,images:true,tabs:true,slider:true,noOverflow:true,noVideo:true});
  }
  await page.goto('http://127.0.0.1:4196/preview/?economy=legacy-local');await page.waitForFunction(()=>document.querySelector('#loading')?.hidden,{},{timeout:45000});
  assert.equal(await page.evaluate(()=>typeof window.__HEXFRONT3D__),'undefined');await page.locator('#primary').click();await page.waitForFunction(()=>document.querySelector('#timer').textContent!=='00:00');

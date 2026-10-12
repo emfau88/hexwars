@@ -56,3 +56,7 @@ The available to3D image-conversion tools were evaluated but not used. Blender s
 ## Runtime
 
 Three.js r169 and its local loader/utilities retain their MIT notice in `vendor/THREE-LICENSE.txt`. Playwright and Pillow are optional authoring/test tools, not playable-build dependencies.
+
+### PIP-Referenzüberarbeitung
+
+Die PIP-Drohne wurde anschließend anhand der vier vom Nutzer bereitgestellten Konzepttafeln neu modelliert. Die Tafeln dienten gemeinsam als Form-/Materialreferenz und sind nicht Bestandteil von Repository oder Build. Keine Bildflächen ersetzen 3D-Geometrie. Eigenständig in Blender modellierte Schalen, optischer Sensor und profilierte Schwebegondeln; keine zusätzlichen externen Meshes oder Texturen. HQ/Relais entsprechen weiter dem Stand `55d7047`. Herstellung und genaue Referenznamen: [DRONE.md](docs/DRONE.md).

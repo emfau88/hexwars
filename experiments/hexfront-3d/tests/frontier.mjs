@@ -7,7 +7,7 @@ import {spawn} from 'node:child_process';
 import {dragDriver,dragOrder,nextFrame} from './drag-helpers.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),require=createRequire(import.meta.url),{chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const details=process.argv.includes('--details');
-const baseline=process.argv.includes('--baseline'),phase=baseline?'before':'after',out=path.join(root,'docs/frontier');
+const baseline=process.argv.includes('--baseline'),phase=baseline?'before':'after',out=path.join(root,process.env.TEST_OUTPUT||'docs/frontier');
 await fs.mkdir(out,{recursive:true});
 const server=spawn(process.execPath,['scripts/serve.mjs'],{cwd:root,env:{...process.env,PORT:'4191'},stdio:['ignore','pipe','pipe'],windowsHide:true});
 await new Promise((resolve,reject)=>{server.stdout.on('data',d=>{if(String(d).includes('http://'))resolve();});server.on('error',reject);server.on('exit',code=>{if(code)reject(Error(`Server exit ${code}`));});});
@@ -20,7 +20,7 @@ try{
   await page.goto('http://127.0.0.1:4191/?qa=1&clock=manual');await page.waitForFunction(()=>window.__HEXFRONT3D__);await nextFrame(page);
   const info=await page.evaluate(()=>({state:window.__HEXFRONT3D__.snapshot(),angle:window.__artScene.angle,metrics:window.__HEXFRONT3D__.metrics()}));
   assert.equal(info.angle,70);assert.equal(info.state.cells.length,37);
-  if(!baseline){const old=JSON.parse(await fs.readFile(path.join(out,'before-report.json'),'utf8')).runs.find(r=>r.name===name);assert.deepEqual(info.state,old.state);}
+  if(!baseline){const old=JSON.parse(await fs.readFile(path.join(root,'docs/frontier/before-report.json'),'utf8')).runs.find(r=>r.name===name);assert.deepEqual(info.state,old.state);}
   await page.screenshot({path:path.join(out,`${name}-${phase}-start.png`)});
   if(!baseline&&!mobile){
    await page.evaluate(()=>{window.__artCapture=true;const s=window.__artScene;s.render(0);for(const m of s.markers.values())for(const o of Object.values(m))o.visible=false;s.gridUnderlay.visible=false;s.pathLine.visible=false;s.labels.style.display='none';document.querySelectorAll('.map-tools,.economy-readout,.map-caption,.map-label,.map-signature,.map-title,.map-hint,#toast,.camera-guidance').forEach(o=>o.style.visibility='hidden');s.renderer.render(s.scene,s.camera);});
@@ -53,7 +53,7 @@ try{
     info.sequence=[];
     for(let i=0;i<=28;i++){
      if(i)await frame(.10);
-     const file=`sequence/action-${String(i).padStart(2,'0')}.jpg`;await page.screenshot({path:path.join(out,file),quality:78});
+     const file=`sequence/action-${String(i).padStart(2,'0')}.jpg`;if(!process.argv.includes('--no-sequence'))await page.screenshot({path:path.join(out,file),quality:78});
      info.sequence.push({file,elapsed:i/10,orders:(await page.evaluate(()=>window.__HEXFRONT3D__.snapshot())).orders.length});
      if(i===8){
       await page.screenshot({path:path.join(out,'drone-gameplay-detail.png')});

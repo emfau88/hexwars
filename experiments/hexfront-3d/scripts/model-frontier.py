@@ -132,42 +132,84 @@ def cap_patch(name,rx,ry,rz,z0,side,mat,parent,gap=.028):
     bpy.ops.object.modifier_apply(modifier=mod.name)
     return o
 
+def curved_panel(name, theta0, theta1, phi0, phi1, mat, parent, radii=(.275,.272,.254), centre=(0,0,.248)):
+    # Separate double-curved manufactured shell pieces, with real panel gaps.
+    nu=max(8,round((phi1-phi0)*12));nv=max(5,round((theta1-theta0)*12));verts=[];faces=[]
+    for j in range(nv+1):
+        t=theta0+(theta1-theta0)*j/nv
+        for i in range(nu+1):
+            p=phi0+(phi1-phi0)*i/nu
+            verts.append((centre[0]+radii[0]*math.sin(t)*math.sin(p),centre[1]+radii[1]*math.sin(t)*math.cos(p),centre[2]+radii[2]*math.cos(t)))
+    for j in range(nv):
+        for i in range(nu):
+            k=j*(nu+1)+i;faces.append((k+1,k+nu+2,k+nu+1,k))
+    o=custom(name,verts,faces,mat,parent)
+    m=o.modifiers.new('Ceramic wall','SOLIDIFY');m.thickness=.012
+    bpy.context.view_layer.objects.active=o;bpy.ops.object.modifier_apply(modifier=m.name)
+    m=o.modifiers.new('Soft panel lip','BEVEL');m.width=.006;m.segments=2;bpy.ops.object.modifier_apply(modifier=m.name)
+    return o
+
+
+def turned(name, profile, mat, parent, n=48):
+    # Authored radial profile: actual intake bowls, rims and tapering housings.
+    verts=[(r*math.cos(i*math.tau/n),r*math.sin(i*math.tau/n),z) for r,z in profile for i in range(n)]
+    faces=[]
+    for j in range(len(profile)-1):
+        for i in range(n):k=(i+1)%n;faces.append((j*n+i,j*n+k,(j+1)*n+k,(j+1)*n+i))
+    return custom(name,verts,faces,mat,parent)
+
+
 def drone():
     root=group('PIP');body=group('Body',root)
-    shell('Sealed belly',[(.015,.18,.21,0),(.035,.27,.28,0),(.10,.32,.31,0),(.17,.315,.30,.015),(.24,.26,.23,.015)],'Graphite',body,n=32,power=2.3)
-    for sign in (-1,1):cap_patch('Split crown',.275,.28,.205,.105,sign,'Porcelain',body)
-    # Narrow recessed dorsal stripe and offset service cap.
-    tube('Dorsal inlay',[(0,-.22,.225),(0,-.12,.289),(0,.02,.313),(0,.18,.278)],.018,'Team',body)
-    cylinder('Service hatch',(.16,-.12,.268),.062,.019,'Jade',body,16)
-    box('Hatch notch',(.16,-.12,.281),(.051,.012,.008),'Alloy',body,.004)
-    # Gimballed optical module faces forward and up, readable at tactical pitch.
-    sensor=group('Sensor',root,(0,.248,.18));sensor.rotation_euler[0]=math.radians(-51)
-    cylinder('Optic socket',(0,0,0),.141,.084,'Graphite',sensor,32)
-    ring('Optic rim',(0,0,.044),.119,.018,'Alloy',sensor)
-    sphere('Smoked lens',(0,0,.044),(.110,.110,.036),'Glass',sensor)
-    ring('Iris aperture',(0,0,.077),.060,.012,'Optic',sensor,segments=28)
-    sphere('Iris',(0,0,.077),(.049,.052,.009),'Team',sensor,20,8)
-    sphere('Lens glint',(-.032,.026,.090),(.014,.009,.004),'Porcelain',sensor,12,6)
-    tube('Curious brow',[(-.137,-.01,.035),(-.112,-.104,.039),(0,-.132,.043),(.115,-.081,.038)],.019,'Porcelain',sensor)
-    # Two separate shaped nacelles with vertical recessed hover turbines.
+    # A compact upright pear, not the old flattened wing-shaped chassis.
+    sphere('Sealed optical chassis',(0,0,.248),(.267,.265,.248),'Graphite',body,40,24)
+    # Rear helmet, two cheek shells, chin and shoulder caps have deliberate gaps.
+    curved_panel('Rear helmet',.08,1.47,.76,math.tau-.76,'Porcelain',body)
+    curved_panel('Forehead bridge',.075,.67,-.745,.745,'Porcelain',body)
+    curved_panel('Lower ceramic jaw',1.59,2.76,-1.18,1.18,'Porcelain',body)
     for sign in (-1,1):
-        pod=group('PodL' if sign<0 else 'PodR',root,(sign*.37,-.065,.115))
-        shell('Pod casing',[(-.10,.085,.125,0),(-.06,.13,.17,0),(.04,.14,.185,0),(.095,.115,.16,.005),(.115,.08,.12,.008)],'Porcelain',pod,n=24,power=2.5)
-        ring('Intake gasket',(0,0,.104),.077,.017,'Graphite',pod,scale=(1,1.25,1),segments=24)
-        cylinder('Turbine inset',(0,0,.104),.069,.008,'Glass',pod,20,bevel=0)
-        for j in range(5):
-            a=j*math.tau/5;o=box('Intake vane',(math.cos(a)*.025,math.sin(a)*.03,.114),(.048,.012,.008),'Alloy',pod,.003);o.rotation_euler[2]=a+.45
-        ring('Team pod band',(0,0,-.035),.132,.013,'Team',pod,scale=(1,1.24,1),segments=28)
-        cylinder('Nozzle',(0,0,-.106),.071,.035,'Graphite',pod,20)
-        ring('Hover aperture',(0,0,-.126),.05,.008,'Optic',pod,segments=20)
-        tube('Suspension',[(sign*-.035,.00,.005),(sign*-.13,.00,.025),(sign*-.17,.035,.04)],.035,'Jade',pod)
-        fin=group('FinL' if sign<0 else 'FinR',root,(sign*.23,-.22,.19))
-        panel('Swept stabilizer',[(sign*.00,.015),(sign*.18,-.005),(sign*.23,-.19),(sign*.10,-.15)],0,.028,'Jade',fin,.012)
-        tube('Fin edge',[(sign*.07,-.10,.031),(sign*.13,-.14,.031),(sign*.20,-.17,.031)],.009,'Team',fin)
-    antenna=group('Antenna',root,(.14,-.20,.28))
-    tube('Flexible stem',[(0,0,0),(.014,-.022,.11),(.01,-.04,.17)],.011,'Graphite',antenna)
-    sphere('Antenna tip',(.01,-.04,.17),(.025,.033,.039),'Jade',antenna,16,8)
+        lo,hi=sorted((sign*.71,sign*1.49))
+        curved_panel('Lens cheek',.76,1.46,lo,hi,'Porcelain',body)
+        lo,hi=sorted((sign*.79,sign*1.19))
+        curved_panel('Shoulder team enamel',.38,1.14,lo,hi,'Team',body,radii=(.28,.277,.259))
+        # Two tapered hover dishes float apart from the body on dark articulated shoulders.
+        pod=group('PodL' if sign<0 else 'PodR',root,(sign*.439,-.016,.235));pod.rotation_euler=(math.radians(-17),sign*math.radians(10),0)
+        turned('Continuous nacelle housing',[(.045,-.12),(.105,-.10),(.154,-.055),(.176,.005),(.176,.034),(.162,.069),(.142,.084),(.133,.070),(.135,.025),(.110,-.01),(.064,-.024)],'Graphite',pod)
+        turned('Ceramic intake lip',[(.164,.025),(.175,.035),(.171,.058),(.156,.082),(.144,.086),(.140,.070),(.154,.054),(.159,.036)],'Porcelain',pod)
+        turned('Recessed turbine bowl',[(.135,.063),(.128,.016),(.10,-.018),(.062,-.037),(.015,-.04)],'Alloy',pod)
+        ring('Turbine light',(0,0,-.017),.066,.010,'Optic',pod,segments=32)
+        sphere('Hover core',(0,0,-.014),(.042,.042,.018),'Optic',pod,24,12)
+        turned('Nozzle ceramic fairing',[(.136,-.068),(.10,-.118),(.067,-.128),(.059,-.105),(.082,-.083)],'Porcelain',pod,n=32)
+        ring('Nozzle aperture',(0,0,-.121),.053,.008,'Optic',pod,segments=28)
+        # A short curved enamel strip, not a large emissive band.
+        pts=[(.177*math.cos(a),.177*math.sin(a),.015) for a in [math.pi*.17,math.pi*.32,math.pi*.47,math.pi*.62,math.pi*.77]]
+        tube('Pod team strip',pts,.013,'Team',pod)
+        cylinder('Shoulder swivel',(sign*.28,-.018,.247),.082,.089,'Graphite',body,32,rotation=(0,math.pi/2,0))
+        ring('Swivel bearing',(sign*.321,-.018,.247),.06,.009,'Alloy',body,rotation=(0,math.pi/2,0),segments=28)
+        tube('Bent suspension',[(sign*.30,-.018,.183),(sign*.354,-.029,.15),(sign*.40,-.023,.145)],.027,'Graphite',body)
+        fin=group('FinL' if sign<0 else 'FinR',root,(sign*.19,-.175,.105))
+        o=panel('Small steering paddle',[(sign*-.035,0),(sign*.041,-.015),(sign*.061,-.086),(sign*.015,-.112)],0,.023,'Graphite',fin,.012);o.rotation_euler[0]=-.38
+        tube('Paddle cap',[(sign*.038,-.035,.024),(sign*.05,-.078,.024)],.014,'Porcelain',fin)
+    # Sensor tilts towards the tactical camera's upper hemisphere. A deep dark
+    # recess, pale interrupted bezel and small luminous pupil read at 20–30 px.
+    sensor=group('Sensor',root,(0,.188,.366));sensor.rotation_euler[0]=math.radians(-40)
+    turned('Gimballed optic housing',[(.103,-.061),(.138,-.048),(.153,-.018),(.153,.034),(.136,.059),(.122,.059),(.117,.036),(.119,.014)],'Graphite',sensor)
+    ring('Optic machined rim',(0,0,.04),.129,.010,'Alloy',sensor,segments=48)
+    sphere('Deep glass lens',(0,0,.024),(.117,.117,.039),'Glass',sensor,40,20)
+    ring('Iris aperture',(0,0,.063),.061,.008,'Optic',sensor,segments=40)
+    sphere('Convex pupil',(0,0,.061),(.053,.053,.022),'Optic',sensor,32,16)
+    sphere('Small reflected glint',(-.018,.022,.081),(.013,.010,.003),'Porcelain',sensor,16,8)
+    for start,end in [(.15,1.28),(1.48,2.72),(3.00,4.08),(4.32,5.98)]:
+        tube('Segmented ceramic eye bezel',[(.15*math.cos(a),.15*math.sin(a),.016) for a in [start+(end-start)*j/12 for j in range(13)]],.015,'Porcelain',sensor)
+    # Raised short dorsal vane makes the outline identifiable from the back too.
+    antenna=group('Antenna',root,(0,-.155,.414))
+    shell('Antenna foot',[(-.015,.054,.05,0),(.018,.046,.041,0),(.045,.033,.03,0)],'Graphite',antenna,n=24,power=2.6)
+    o=panel('Forward listening vane',[(-.028,-.009),(.028,-.009),(.036,-.042),(-.022,-.052)],.025,.166,'Porcelain',antenna,.016);o.rotation_euler[0]=-.18
+    box('Vane enamel',(0,.01,.132),(.038,.008,.070),'Team',antenna,.010)
+    # Underbody service plate retains a clear dark/pale separation without clutter.
+    shell('Chin service cap',[(.011,.061,.083,.02),(.030,.085,.10,.02),(.052,.093,.105,.02)],'Alloy',body,n=28,power=2.7)
     return root
+
 
 def hq():
     root=group('Haven');body=group('Structure',root)
@@ -261,7 +303,7 @@ for (parent,mat),objects in buckets.items():
     o=bpy.context.object;o.name=f'{parent.name}_{mat}'
 
 # Conservative collapse after edge normals are authored; the live asset stays small.
-for root,ratio in zip(roots,[.42,.65,.62]):
+for root,ratio in zip(roots,[.46,.65,.62]):
     for o in root.children_recursive:
         if o.type!='MESH' or len(o.data.polygons)<50:continue
         bpy.context.view_layer.objects.active=o

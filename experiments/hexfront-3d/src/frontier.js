@@ -37,17 +37,33 @@ function architecture(s,library,c){
 
 function drones(s,library){
  const root=library.getObjectByName('PIP');root.updateMatrixWorld(true);
+ // Tint optical emission per instance; white emission washed the small eye out.
+ // This material belongs only to the drone, leaving architecture untouched.
+ const optics=new Map();root.traverse(o=>{if(!o.isMesh||o.material.name!=='Optic')return;
+  if(!optics.has(o.material)){
+   const m=o.material.clone();m.metalness=.12;m.roughness=.26;m.emissiveIntensity=.34;
+   m.onBeforeCompile=shader=>{shader.fragmentShader=shader.fragmentShader.replace('#include <emissivemap_fragment>',`#include <emissivemap_fragment>
+#ifdef USE_INSTANCING_COLOR
+ totalEmissiveRadiance *= vColor;
+#endif`);};
+   m.customProgramCacheKey=()=> 'pip-coloured-optic-v1';optics.set(o.material,m);
+  }o.material=optics.get(o.material);
+ });
  const groups=new Map(),movingNames=new Set(['Sensor','FinL','FinR','Antenna']);
  s.dronePivots={};root.traverse(o=>{if(movingNames.has(o.name))s.dronePivots[o.name]=o.getWorldPosition(new T.Vector3());});
  root.traverse(o=>{
   if(!o.isMesh)return;let p=o.parent,joint='Body';while(p&&p!==root){if(movingNames.has(p.name)){joint=p.name;break;}p=p.parent;}
   const key=joint+'|'+o.material.name;if(!groups.has(key))groups.set(key,{joint,material:o.material,geos:[]});
-  let geo=o.geometry.clone().applyMatrix4(o.matrixWorld);if(geo.index)geo=geo.toNonIndexed();geo.deleteAttribute('tangent');groups.get(key).geos.push(geo);
+  let geo=o.geometry.clone().applyMatrix4(o.matrixWorld);if(geo.index)geo=geo.toNonIndexed();
+  // The coating uses UV0 only. Blender joins can retain a second unused UV set;
+  // normalize attributes before combining the authored nacelles and shell.
+  for(const name of Object.keys(geo.attributes))if(!['position','normal','uv'].includes(name))geo.deleteAttribute(name);
+  groups.get(key).geos.push(geo);
  });
  s.droneParts=[...groups.values()].map(({joint,material,geos})=>{
   const geometry=mergeGeometries(geos);if(!geometry)throw Error('PIP material batching failed');geos.forEach(g=>g.dispose());
   const inst=new T.InstancedMesh(geometry,material,MAX_DRONES);inst.count=0;inst.castShadow=inst.receiveShadow=true;inst.instanceMatrix.setUsage(T.DynamicDrawUsage);inst.frustumCulled=false;
-  inst.userData.joint=joint;inst.userData.team=['Team','Optic'].includes(material.name);s.scene.add(inst);return inst;
+  inst.userData.joint=joint;inst.userData.optic=material.name==='Optic';inst.userData.team=['Team','Optic'].includes(material.name);s.scene.add(inst);return inst;
  });
  s.droneTeam=s.droneParts.filter(p=>p.userData.team);
  s.droneJointMatrices={};for(const name of movingNames)s.droneJointMatrices[name]=new T.Matrix4();
