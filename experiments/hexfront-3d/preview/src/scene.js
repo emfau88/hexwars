@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {reachability} from './tactics.js';
-import {buildDrones,buildEffects,updateTechnology,technologyEffect,clearTechnology} from './technology.js';
+import {buildEffects,updateTechnology,technologyEffect,clearTechnology} from './technology.js';
 import {createArtMaterials,buildArtTerrain,buildArtStructures,loadArtAssets} from './art.js';
 import {mergeGeometries} from '../vendor/utils/BufferGeometryUtils.js';
 import {RADIUS,STEP,corner,surfaceHeight} from './map.js';
@@ -27,26 +27,26 @@ export class Diorama {
     this.scene=new T.Scene();this.scene.background=new T.Color(0x192321);this.scene.fog=new T.Fog(0x192321,28,63);
     this.camera=new T.OrthographicCamera(-10,10,10,-10,.1,100);
     this.renderer=new T.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});
-    this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFShadowMap;this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.10;container.append(this.renderer.domElement);
+    this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.08;container.append(this.renderer.domElement);
     this.renderer.domElement.setAttribute('aria-label','Dreidimensionales Schlachtfeld. Ziehe eine orange Garnison zum Ziel und lasse los. Alternativ Quelle und Ziel antippen.');
-    this.scene.add(new T.HemisphereLight(0xdce5e7,0x727367,1.9));
-    this.sun=new T.DirectionalLight(0xffecd3,2.7);this.sun.position.set(-8,18,6);this.sun.castShadow=true;this.sun.shadow.mapSize.set(2048,2048);Object.assign(this.sun.shadow.camera,{left:-12,right:12,top:12,bottom:-12,near:1,far:50});this.sun.shadow.bias=-.00025;this.sun.shadow.normalBias=.018;this.sun.shadow.radius=3;this.scene.add(this.sun);
-    const fill=new T.DirectionalLight(0xb9cbd7,.50);fill.position.set(9,8,-12);this.scene.add(fill);
+    this.scene.add(new T.HemisphereLight(0xe4eff3,0x858575,2.0));
+    this.sun=new T.DirectionalLight(0xffefdb,2.65);this.sun.position.set(-8,18,6);this.sun.castShadow=true;this.sun.shadow.mapSize.set(2048,2048);Object.assign(this.sun.shadow.camera,{left:-12,right:12,top:12,bottom:-12,near:1,far:50});this.sun.shadow.bias=-.00025;this.sun.shadow.normalBias=.018;this.sun.shadow.radius=3;this.scene.add(this.sun);
+    const fill=new T.DirectionalLight(0xd6e3e8,.48);fill.position.set(9,8,-12);this.scene.add(fill);
     this.static=new T.Group();this.scene.add(this.static);
     this.materials=createArtMaterials(game);
     this.contact=new T.MeshBasicMaterial({map:shadowTexture(),transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2});
-    this.buildTerrain();this.buildStructures();this.buildMarkers();buildDrones(this);buildEffects(this);this.bind();this.resize();
+    this.buildTerrain();this.buildStructures();this.buildMarkers();buildEffects(this);this.bind();this.resize();
     this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(container);
     this.ready=this.loadAssets().then(()=>{this.captureBattlefieldGeometry();this.batchStatic();this.resize();this.render(0);});
   }
   contactAt(x,z,y,sx,sz){const m=mesh(this.static,new T.PlaneGeometry(sx,sz),this.contact,x,y+.018,z);m.rotation.x=-Math.PI/2;m.castShadow=false;m.receiveShadow=false;}
   buildTerrain(){buildArtTerrain(this);}
   buildStructures(){buildArtStructures(this);}
-  async loadAssets(){await Promise.all([loadArtAssets(this),this.materials.ready]);}
+  async loadAssets(){await Promise.all([loadArtAssets(this),this.materials.ready,this.technologyReady]);}
   batchStatic(){
     this.static.updateMatrixWorld(true);const groups=new Map(),remove=[];
     this.static.traverse(o=>{
-      if(!o.isMesh||Array.isArray(o.material))return;
+      if(!o.isMesh||Array.isArray(o.material)||o.userData.frontierAnimated)return;
       const key=o.material.uuid+o.castShadow+o.receiveShadow,g=o.geometry.clone();g.applyMatrix4(o.matrixWorld);
       // Attribute sets stay consistent within each batch.
       const attrs=Object.keys(g.attributes).sort().join(','),id=key+attrs;
@@ -75,6 +75,11 @@ export class Diorama {
     this.fitPoints=new Float32Array(points);this.tacticalFitPoints=new Float32Array(tacticalPoints);this.boundsCache.clear();
   }
   buildMarkers(){
+    // A single batched dark edge gives the existing light contours contrast on
+    // the warmer limestone. Logical fields, colours and interaction stay intact.
+    const edges=this.game.cells.map(c=>ringGeometry(c,this.game.cells,.947,.049));
+    this.gridUnderlay=new T.Mesh(mergeGeometries(edges),new T.MeshBasicMaterial({color:0x344337,transparent:true,opacity:.25,depthWrite:false,side:T.DoubleSide,toneMapped:false}));
+    this.gridUnderlay.renderOrder=1;this.scene.add(this.gridUnderlay);edges.forEach(g=>g.dispose());
     for(const c of this.game.cells){
       const mat=new T.MeshBasicMaterial({color:COLORS[c.owner],transparent:true,opacity:.9,depthWrite:false,side:T.DoubleSide,toneMapped:false});
       const marker=mesh(this.scene,ringGeometry(c,this.game.cells,.94,.035),mat);marker.castShadow=false;marker.receiveShadow=false;marker.renderOrder=2;

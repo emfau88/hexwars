@@ -4,7 +4,7 @@ import {RUINS} from './transport.js';
 import {GLTFLoader} from '../vendor/loaders/GLTFLoader.js';
 import {RADIUS,STEP,corner,cornerHeight,surfaceHeight} from './map.js';
 
-// Morgenwacht: fractured shale, dry earth, chalk concrete and graphite steel.
+// Charming Frontier: warm limestone, sunlit meadow, chalk paths and jade ceramics.
 // All visual relief is decoration; map.js remains the sole navigation surface.
 const fract=n=>n-Math.floor(n),mix=T.MathUtils.lerp,clamp=T.MathUtils.clamp;
 const hash=(x,y)=>fract(Math.sin(x*127.1+y*311.7)*43758.5453);
@@ -38,11 +38,11 @@ function makeGround(m,game,stoneImage,earthImage){
   const wear=1-smooth(clamp((path-.14+(n-.5)*.25)/.46,0,1));
   const rock=upper.some(c=>{const dx=Math.abs(x-c.x),dz=Math.abs(z-c.z);return dx<=Math.sqrt(3)*RADIUS/2&&dz<=RADIUS&&dx/Math.sqrt(3)+dz<=RADIUS;});
   const grass=smooth(clamp((n*.7+large*.3-.39)*3.2,0,1))*(1-wear*.85);
-  const palette=rock?[120,126,119]:[mix(128,83,grass),mix(119,97,grass),mix(99,66,grass)];
+  const palette=rock?[148,153,137]:[mix(168,98,grass),mix(140,137,grass),mix(104,78,grass)];
   const source=rock?stone:earth,u=Math.floor(fract(x*.32)*source.size),v=Math.floor(fract(z*.32)*source.size),p=(v*source.size+u)*4;
-  const value=(source.pixels[p]+source.pixels[p+1]+source.pixels[p+2])/3,relief=(value-(rock?163:116))*(rock?.46:.22)+(fine-.5)*5;
+  const value=(source.pixels[p]+source.pixels[p+1]+source.pixels[p+2])/3,relief=(value-(rock?163:116))*(rock?.32:.18)+(fine-.5)*5;
   const i=(row*size+col)*4;
-  for(let channel=0;channel<3;channel++)d.data[i+channel]=mix(palette[channel],rock?[133,135,123][channel]:[143,132,111][channel],wear*.7)+relief+(large-.5)*9;
+  for(let channel=0;channel<3;channel++)d.data[i+channel]=mix(palette[channel],rock?[163,165,148][channel]:[184,160,122][channel],wear*.7)+relief+(large-.5)*9;
   d.data[i+3]=255;const h=126+(value-116)*.22+(fine-.5)*15;for(let k=0;k<3;k++)bump.data[i+k]=h;bump.data[i+3]=255;
  }
  ctx.putImageData(d,0,0);bx.putImageData(bump,0,0);m.soil.map=canvasTexture(c);m.soil.bumpMap=canvasTexture(b,false);m.soil.needsUpdate=true;
@@ -51,10 +51,10 @@ export function createArtMaterials(game){
  const concrete=weatherMap('concrete'),metal=weatherMap('metal'),std=(colour,options={})=>new T.MeshStandardMaterial({color:colour,roughness:.85,...options});
  const m={
   soil:std(0xffffff,{bumpScale:.085,roughness:.96}),
-  rock:std(0xa7aba3,{vertexColors:true,roughness:.94,normalScale:new T.Vector2(.45,.45)}),
-  cliff:std(0xbcb9ab,{vertexColors:true,roughness:.98,normalScale:new T.Vector2(.40,.40)}),
-  concrete:std(0xd7d3c4,{map:concrete,bumpMap:concrete,bumpScale:.018,roughness:.91}),
-  olive:std(0x67766e,{map:metal,bumpMap:metal,bumpScale:.008,roughness:.76,metalness:.26}),
+  rock:std(0xc3c0a9,{vertexColors:true,roughness:.94,normalScale:new T.Vector2(.45,.45)}),
+  cliff:std(0xccc6ad,{vertexColors:true,roughness:.98,normalScale:new T.Vector2(.40,.40)}),
+  concrete:std(0xe1dcc7,{map:concrete,bumpMap:concrete,bumpScale:.018,roughness:.91}),
+  olive:std(0x78998a,{map:metal,bumpMap:metal,bumpScale:.008,roughness:.76,metalness:.26}),
   steel:std(0x77847e,{map:metal,roughness:.63,metalness:.5}),
   dark:std(0x51615f,{map:metal,roughness:.72,metalness:.3}),
   copper:std(0x89745c,{map:metal,roughness:.72,metalness:.4}),
@@ -180,7 +180,7 @@ export function buildArtStructures(s){
 }
 function grassGeometry(seed,leafy=false){
  const tri=[],colours=[],count=leafy?8:18;
- const palette=leafy?[0x58704b,0x6c8151,0x859866,0x526943]:[0x7e8760,0x9a9c70,0xada580,0x6b7b54];
+ const palette=leafy?[0x456f56,0x648e60,0x83b878,0x547c59]:[0x769b58,0x91af68,0xa4b97a,0x648e60];
  for(let i=0;i<count;i++){
   const a=hash(i+seed,1)*Math.PI*2,r=Math.sqrt(hash(i+seed,2))*.30,x=Math.cos(a)*r,z=Math.sin(a)*r,h=(leafy?.26:.14)+hash(i+seed,3)*(leafy?.32:.18),lean=.09+hash(i+seed,4)*.15;
   const dx=Math.cos(a),dz=Math.sin(a),sideX=-dz,sideZ=dx,w=leafy?.047:.021;
@@ -192,10 +192,10 @@ function grassGeometry(seed,leafy=false){
    for(let k=0;k<4;k++){addQuad(tri,rows[k][0],rows[k+1][0],rows[k+1][1],rows[k][1]);addQuad(tri,rows[k][1],rows[k+1][1],rows[k+1][2],rows[k][2]);for(let j=0;j<4;j++)colours.push(palette[(i+j%2)%palette.length]);}
   }
  }
- const g=geometry(tri,colours),p=g.attributes.position,n=g.attributes.normal,sums=new Map();
+ const g=geometry(tri,colours),p=g.attributes.position,n=g.attributes.normal,sums=new Map(),colorSums=new Map(),colors=g.attributes.color;
  const key=i=>`${p.getX(i).toFixed(5)},${p.getY(i).toFixed(5)},${p.getZ(i).toFixed(5)}`;
- for(let i=0;i<p.count;i++){const k=key(i);if(!sums.has(k))sums.set(k,new T.Vector3());sums.get(k).add(new T.Vector3().fromBufferAttribute(n,i));}
- for(let i=0;i<p.count;i++){const v=sums.get(key(i)).clone().normalize();n.setXYZ(i,v.x,v.y,v.z);}return g;
+ for(let i=0;i<p.count;i++){const k=key(i);if(!sums.has(k))sums.set(k,new T.Vector3());sums.get(k).add(new T.Vector3().fromBufferAttribute(n,i));if(!colorSums.has(k))colorSums.set(k,{sum:new T.Vector3(),count:0});const entry=colorSums.get(k);entry.sum.add(new T.Vector3().fromBufferAttribute(colors,i));entry.count++;}
+ for(let i=0;i<p.count;i++){const v=sums.get(key(i)).clone().normalize();n.setXYZ(i,v.x,v.y,v.z);const entry=colorSums.get(key(i)),c=entry.sum.clone().divideScalar(entry.count);colors.setXYZ(i,c.x,c.y,c.z);}return g;
 }
 function vegetation(s,x,z,scale,seed,leafy=false){const cell=s.cellAt(x,z),y=cell?surfaceHeight(s.game.cells,cell,x,z):0,o=mesh(s.static,grassGeometry(seed,leafy),s.materials.leaf,x,y+.01,z);o.scale.setScalar(scale);o.rotation.y=hash(seed,7)*Math.PI*2;frameTag(o,cell?.id??null);o.castShadow=leafy;return o;}
 export async function loadArtAssets(s){
@@ -215,7 +215,7 @@ export async function loadArtAssets(s){
  groups.forEach(([x,z,scale],i)=>{for(let j=0;j<4;j++){const a=j*2.3+i*.7,r=j?.20+j*.08:0;vegetation(s,x+Math.cos(a)*r,z+Math.sin(a)*r,scale*(.75+hash(i,j)*.4),i*9+j,j%3===0);}});
  const loader=new GLTFLoader(),gltf=await loader.loadAsync(new URL('../public/assets/nature/Fern_1.gltf',import.meta.url).href),source=gltf.scene,box3=new T.Box3().setFromObject(source),center=box3.getCenter(new T.Vector3()),size=box3.getSize(new T.Vector3());
  source.position.set(-center.x,-box3.min.y,-center.z);const model=new T.Group();model.add(source);const width=Math.max(size.x,size.z);
- source.traverse(o=>{if(o.isMesh){o.castShadow=false;o.receiveShadow=true;o.geometry.deleteAttribute('color');for(const mat of Array.isArray(o.material)?o.material:[o.material]){mat.vertexColors=false;mat.color.setHex(0x939b77);mat.roughness=.95;if(mat.map)mat.map.anisotropy=4;}}});
+ source.traverse(o=>{if(o.isMesh){o.castShadow=false;o.receiveShadow=true;o.geometry.deleteAttribute('color');for(const mat of Array.isArray(o.material)?o.material:[o.material]){mat.vertexColors=false;mat.color.setHex(0xa7bf86);mat.roughness=.95;if(mat.map)mat.map.anisotropy=4;}}});
  for(const [i,p] of [[-5.96,-3.9],[5.9,-4.6],[-4.8,5.9],[2.7,.8]].entries()){
   const o=model.clone(true),cell=s.cellAt(...p);o.scale.setScalar(.63/width);o.position.set(p[0],cell?surfaceHeight(s.game.cells,cell,...p):.01,p[1]);o.rotation.y=i*1.3;frameTag(o,cell?.id??null);s.static.add(o);
  }

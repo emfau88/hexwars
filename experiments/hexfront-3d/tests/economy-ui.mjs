@@ -7,7 +7,7 @@ import {spawn} from 'node:child_process';
 import {nextFrame,dragDriver,dragOrder,center} from './drag-helpers.mjs';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),require=createRequire(import.meta.url),{chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const screensOnly=process.argv.includes('--screens-only');
-const baseline=process.argv.includes('--baseline'),phase=baseline?'before':'after',out=path.join(root,'docs/economy');await fs.mkdir(out,{recursive:true});
+const baseline=process.argv.includes('--baseline'),phase=baseline?'before':'after',out=path.join(root,process.env.TEST_OUTPUT||'docs/economy');await fs.mkdir(out,{recursive:true});
 if(baseline){try{await fs.access(path.join(out,'before-report.json'));throw Error('Baseline already saved');}catch(e){if(e.code!=='ENOENT')throw e;}}
 const server=spawn(process.execPath,['scripts/serve.mjs'],{cwd:root,env:{...process.env,PORT:'4195'},stdio:['ignore','pipe','pipe'],windowsHide:true});
 await new Promise((resolve,reject)=>{server.stdout.on('data',d=>{if(String(d).includes('http://'))resolve();});server.on('error',reject);});

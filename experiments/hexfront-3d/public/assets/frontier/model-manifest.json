@@ -1,0 +1,19 @@
+{
+  "authoring": "Blender 5.2.0 LTS",
+  "design": "PIP / Haven / Seed \u2014 original HEXFRONT family",
+  "models": {
+    "PIP": {
+      "meshes": 31,
+      "triangles": 5512
+    },
+    "Haven": {
+      "meshes": 16,
+      "triangles": 7149
+    },
+    "Seed": {
+      "meshes": 19,
+      "triangles": 4802
+    },
+    "bytes": 634036
+  }
+}

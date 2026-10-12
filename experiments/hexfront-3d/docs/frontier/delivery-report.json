@@ -1,0 +1,204 @@
+{
+  "baseline": "4867c595a6d18e3f20340d7a7b283574adb7645c",
+  "unchanged": [
+    "src/game.js",
+    "src/economy.js",
+    "src/tactics.js",
+    "src/map.js",
+    "src/transport.js",
+    "src/camera.js",
+    "src/main.js",
+    "src/style.css"
+  ],
+  "files": [
+    {
+      "path": "index.html",
+      "bytes": 7758,
+      "sha256": "ce3e8134d0dc891374f75afb91d9060ce18d5e10deec6a4989c9c3c4e8a20042"
+    },
+    {
+      "path": "public/assets/asset-provenance.json",
+      "bytes": 637,
+      "sha256": "28c7cbe1fb9fdd31e1cd2fd8d3e827ddfbc47bb0a58d34bfea0fef50a8be997a"
+    },
+    {
+      "path": "public/assets/frontier/frontier.glb",
+      "bytes": 634036,
+      "sha256": "ce27e879d448c9aafd334272e9533c56df28ca7c255bb51f6cf0f0431bd8d021"
+    },
+    {
+      "path": "public/assets/frontier/model-manifest.json",
+      "bytes": 358,
+      "sha256": "6c7bbe883b7ff41f1f6fde0bff772959fabb89aad7ea45afa03eb44ebed59ef1"
+    },
+    {
+      "path": "public/assets/frontier/ORIGIN.txt",
+      "bytes": 323,
+      "sha256": "f7b2ced957ec7b215b6d8db4f1015eb710c876b886984765ef26457a0f7e6b4c"
+    },
+    {
+      "path": "public/assets/materials/LICENSE-PolyHaven.txt",
+      "bytes": 542,
+      "sha256": "c99cfb4334a390b4bf4a1d9c8b8a85fe9209c057c89de34ad57392f7ca74dcf4"
+    },
+    {
+      "path": "public/assets/materials/material-provenance.json",
+      "bytes": 3552,
+      "sha256": "559f58b8b719ec73d3ce33dcd46981ecab64154f870d91422203613bab6e5968"
+    },
+    {
+      "path": "public/assets/materials/rock_boulder_dry_diff.webp",
+      "bytes": 200812,
+      "sha256": "43d830111190552570fb5c4b0271c37b54b81b1d81451720cfac8baae1868504"
+    },
+    {
+      "path": "public/assets/materials/rock_boulder_dry_nor_gl.webp",
+      "bytes": 359952,
+      "sha256": "a7de075a39f29231ba78162d0518ac07b658081a45ed2d5fff505307e65e6038"
+    },
+    {
+      "path": "public/assets/materials/rock_boulder_dry_rough.webp",
+      "bytes": 152422,
+      "sha256": "5bb7dce29e032adb930e44bc178afc93188b5f89160bf7e27013b1f4f05488c7"
+    },
+    {
+      "path": "public/assets/materials/rock_wall_02_diff.webp",
+      "bytes": 249310,
+      "sha256": "3d34688ebdd169c8989cec5746b58cc4b09893a6a21b1f31855566299ef58a42"
+    },
+    {
+      "path": "public/assets/materials/rock_wall_02_rough.webp",
+      "bytes": 162382,
+      "sha256": "8e6c1fb1894dd9a0d5cc5b7ff34520df0852e7e718d8153010c36c64c7b7e77f"
+    },
+    {
+      "path": "public/assets/nature/Fern_1.bin",
+      "bytes": 11448,
+      "sha256": "5e92b87a27f81a69fe15347a533df3c77d567b48298dceeef43168ccb7c22853"
+    },
+    {
+      "path": "public/assets/nature/Fern_1.gltf",
+      "bytes": 2699,
+      "sha256": "fa6b5d0cf7e40bdde851c89cdc133c54dc4e8cad826270ad52c9392c4dd960f7"
+    },
+    {
+      "path": "public/assets/nature/Leaves.png",
+      "bytes": 223199,
+      "sha256": "75835ee6a8fa9a65faf9c3ffaada7db8b9e1159407f6443846ea6db8f0defdc6"
+    },
+    {
+      "path": "public/assets/nature/LICENSE-Quaternius.txt",
+      "bytes": 854,
+      "sha256": "209fd597c1837037fe13a160c628ef9fd9ccce9337256e21447110ba5ba3e025"
+    },
+    {
+      "path": "src/art.js",
+      "bytes": 22262,
+      "sha256": "4ffe689543b24295e6786532bfee58846154ec16b5d84c56d3570e4c1c50e640"
+    },
+    {
+      "path": "src/camera.js",
+      "bytes": 1583,
+      "sha256": "f3461e9afe2dbd2af7152dcd169fec1ded6c6b00ccd1d5edc3232fde630c4907"
+    },
+    {
+      "path": "src/economy.js",
+      "bytes": 1992,
+      "sha256": "6a87cccb52a733b968f86d5cdb026f10d2bce0146657d9d88d76612b76906e07"
+    },
+    {
+      "path": "src/frontier.js",
+      "bytes": 5992,
+      "sha256": "1e039c9651e5040d2fb0d7037580e244f55502b3383bf486950c6eb576720040"
+    },
+    {
+      "path": "src/game.js",
+      "bytes": 7966,
+      "sha256": "e5df72d18b93c29abc59e0da371cbd6730a3301998488e444d0db64a974a9ef4"
+    },
+    {
+      "path": "src/main.js",
+      "bytes": 16335,
+      "sha256": "758130b42a73d6c67add2839260fc17196142da61604c991b60f4fa2ec7279cd"
+    },
+    {
+      "path": "src/map.js",
+      "bytes": 3701,
+      "sha256": "b67dbd7b7a45c95518d19e7a3f7b54ffaa508d91b905ca139484d16363bf2caa"
+    },
+    {
+      "path": "src/overlays.css",
+      "bytes": 6616,
+      "sha256": "76fca03c238e77026a16e17fda7f987f2549804ad99fbfc89f4f431473ca25b2"
+    },
+    {
+      "path": "src/scene.js",
+      "bytes": 25717,
+      "sha256": "60008ace9a53f5d7732f0f3335507b5f73b65e9b9357be5b97406bac81e24933"
+    },
+    {
+      "path": "src/style.css",
+      "bytes": 17660,
+      "sha256": "598ea42e174a90cfb786e504081d0762d759cef7086c02e0c8c7b874799b1ee6"
+    },
+    {
+      "path": "src/tactics.js",
+      "bytes": 1379,
+      "sha256": "eb523de6256b794318488ca69f51006e6e76d123bd4ff0050eefb74c3b78aa20"
+    },
+    {
+      "path": "src/technology.js",
+      "bytes": 8947,
+      "sha256": "32218dbe320889e61ff30c0fbdd9bef6b97e7d90f98e027e3c2513b35c38a792"
+    },
+    {
+      "path": "src/transport.js",
+      "bytes": 2619,
+      "sha256": "b4964547219b2fc45db11e85e6fc8d22aca6d50af4e1a3b4f96c65f2c6c7623f"
+    },
+    {
+      "path": "vendor/loaders/GLTFLoader.js",
+      "bytes": 114756,
+      "sha256": "535673d5725a336607631e8d519aba234dc9eca58616fa02ea705601c9828948"
+    },
+    {
+      "path": "vendor/THREE-LICENSE.txt",
+      "bytes": 1104,
+      "sha256": "3c344bc3e9582186b9e0d4185c3fd01ba8f8753a51fc2736a57afdc1f03928b4"
+    },
+    {
+      "path": "vendor/three.module.min.js",
+      "bytes": 687466,
+      "sha256": "8a906f5fe66282d9704f807427c8811525c53e9f062db17513e5cdec1a2820ab"
+    },
+    {
+      "path": "vendor/utils/BufferGeometryUtils.js",
+      "bytes": 33143,
+      "sha256": "99f37be474f6ebeef7ff6632017cbdff517a696f188d023c5bc9a2a48fe6fda8"
+    }
+  ],
+  "viewer": [
+    {
+      "width": 1440,
+      "images": true,
+      "tabs": true,
+      "slider": true,
+      "noOverflow": true,
+      "noVideo": true
+    },
+    {
+      "width": 390,
+      "images": true,
+      "tabs": true,
+      "slider": true,
+      "noOverflow": true,
+      "noVideo": true
+    }
+  ],
+  "errors": [],
+  "totalBytes": 2969522,
+  "legacyProduction": {
+    "qaAbsent": true,
+    "clockAdvances": true
+  }
+}

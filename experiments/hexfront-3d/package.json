@@ -20,6 +20,7 @@
     "test:drag": "node tests/drag-input.mjs",
     "test:technology": "node tests/technology.mjs && node tests/technology-mission.mjs",
     "test:speeds": "node tests/speed-comparison.mjs && node tests/speed-visual.mjs",
-    "test:economy": "node tests/economy-comparison.mjs && node tests/economy-ui.mjs"
+    "test:economy": "node tests/economy-comparison.mjs && node tests/economy-ui.mjs",
+    "test:frontier": "node tests/frontier.mjs && node tests/frontier-mission.mjs"
   }
 }

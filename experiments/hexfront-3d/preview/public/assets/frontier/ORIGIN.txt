@@ -1,0 +1,5 @@
+PIP / Haven / Seed — original HEXFRONT models.
+Authored in Blender 5.2 using scripts/model-frontier.py.
+Editable source: scripts/frontier-source.blend.
+No external model geometry or reference-game assets.
+Existing repository terms apply. Third-party terrain materials are documented separately in ASSET_LICENSES.md.

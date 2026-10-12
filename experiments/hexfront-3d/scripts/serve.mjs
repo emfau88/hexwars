@@ -5,7 +5,7 @@ import {fileURLToPath} from 'node:url';
 const project=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const root=process.argv.includes('--production')?path.join(project,'dist'):project;
 const port=Number(process.env.PORT||4174),host=process.env.HOST||'127.0.0.1';
-const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.gltf':'model/gltf+json','.bin':'application/octet-stream','.webp':'image/webp','.png':'image/png','.jpg':'image/jpeg','.json':'application/json'};
+const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.glb':'model/gltf-binary','.gltf':'model/gltf+json','.bin':'application/octet-stream','.webp':'image/webp','.png':'image/png','.jpg':'image/jpeg','.json':'application/json'};
 const server=http.createServer(async(req,res)=>{
   try{const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname),name=path.resolve(root,'.'+(pathname.endsWith('/')?pathname+'index.html':pathname));
     if(!name.startsWith(root+path.sep)){res.writeHead(403);res.end('Forbidden');return;}

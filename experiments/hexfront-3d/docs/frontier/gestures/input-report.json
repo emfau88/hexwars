@@ -1,0 +1,39 @@
+{
+  "runs": [
+    {
+      "name": "desktop",
+      "idleDrag": true,
+      "stableFraming": true,
+      "exactlyOneOrder": true,
+      "capture": true,
+      "halfSend": true,
+      "surfacePicking": true,
+      "clickFallback": true,
+      "invalidAndCliffBlocked": true,
+      "outsideAndSelfCancelled": true,
+      "nativeCancellation": true,
+      "secondFingerCancels": false,
+      "backgroundPan": true,
+      "zoomedDrag": true,
+      "pausedNoSend": true
+    },
+    {
+      "name": "mobile",
+      "idleDrag": true,
+      "stableFraming": true,
+      "exactlyOneOrder": true,
+      "capture": true,
+      "halfSend": true,
+      "surfacePicking": true,
+      "clickFallback": true,
+      "invalidAndCliffBlocked": true,
+      "outsideAndSelfCancelled": true,
+      "nativeCancellation": true,
+      "secondFingerCancels": true,
+      "backgroundPan": true,
+      "zoomedDrag": true,
+      "pausedNoSend": true
+    }
+  ],
+  "errors": []
+}
