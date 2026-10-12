@@ -36,10 +36,14 @@ try{
   if(await page.title()==='External Content Notice | rawgit.hack'){
    const destination=new URL(url);assert.equal(destination.hostname,'rawcdn.githack.com');
    assert.ok(destination.pathname.startsWith('/emfau88/hexwars/'));
-   const source=`https://raw.githubusercontent.com${destination.pathname}`;
-   assert.equal(await page.locator(`a[href="${source}"]`).count(),1);
+   // The host may include the economy query in its source link. Validate the
+   // exact repository resource while accepting either notice-link spelling.
+   const sourceLinks=await page.locator('a[href]').evaluateAll(nodes=>nodes.map(a=>a.href));
+   assert.ok(sourceLinks.some(href=>{const u=new URL(href);return u.origin==='https://raw.githubusercontent.com'&&u.pathname===destination.pathname&&(u.search===''||u.search===destination.search);}));
    [response]=await Promise.all([page.waitForNavigation({waitUntil:'domcontentloaded',timeout:45000}),page.getByRole('button',{name:'Open the page',exact:true}).click()]);
-   assert.equal(response.status(),200);assert.equal(page.url(),url);repositoryNoticeConfirmed=true;
+   assert.equal(response.status(),200);
+   if(page.url()!==url){const landed=new URL(page.url());assert.equal(landed.origin,destination.origin);assert.equal(landed.pathname,destination.pathname);await page.goto(url,{waitUntil:'domcontentloaded',timeout:45000});}
+   assert.equal(page.url(),url);repositoryNoticeConfirmed=true;
   }
   await page.waitForFunction(()=>document.getElementById('loading')?.hidden,{},{timeout:45000});
   await page.evaluate(()=>new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r))));

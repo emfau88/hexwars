@@ -4,7 +4,7 @@
 
 New Blender-authored PIP drones with a compact ceramic body, a central articulated optic and two distinct hover nacelles. The complete Charming Frontier art pass adds the Haven HQ family, Seed relay and warmer landscape. The subsequent four-reference drone pass changes **only the drone and its rendering**; gameplay, economy comparison, controls, camera and all 37 sectors are retained.
 
-**Publication pending:** the complete build is committed locally; the PC currently has no Internet gateway. The links below are pinned to the prepared production commit and become available after the isolated branch push.
+**Published and verified:** desktop and touch drag-and-drop work at the public production link. All 33 hosted files match the pinned Git commit.
 
 **[Play HEXFRONT 3D](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/preview/index.html)** · **[Compare the previous local economy](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/preview/index.html?economy=legacy-local)**. On the host's first visit, confirm **Open the page**. [Experiment branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama) · [Start locally](./experiments/hexfront-3d/README.md) · [Publication status](./experiments/hexfront-3d/docs/PUBLISH.md).
 

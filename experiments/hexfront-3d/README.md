@@ -2,7 +2,7 @@
 
 Ein eigenständig startbares 3D-Experiment: 37 Hexfelder, drei Höhenstufen, zwei HQs und eine gegnerische KI. Die neue PIP-Drohne basiert auf den vier gemeinsam ausgewerteten Nutzerreferenzen: kompakter Körper, eingefasster Sensor, zwei abgesetzte Hovergondeln, helle Keramik und kleine Teamakzente. Der vorangegangene Art-Pass mit Haven-HQs, Seed-Relais und freundlicherer Landschaft ist vollständig enthalten. Für die anschließende Drohnenüberarbeitung bleiben Gebäude, Umgebung, Kamera und Gameplay unverändert.
 
-**Veröffentlichung ausstehend:** Der vollständige Stand ist lokal committet. Dem PC fehlt aktuell die Internetroute; die vorbereiteten festen Links funktionieren nach dem isolierten Branch-Push.
+**Veröffentlicht und geprüft:** Öffentlicher Desktop-/Touchstart, Drag-and-drop, Uhr und Pause funktionieren. Alle 33 ausgelieferten Dateien stimmen mit dem festen Git-Commit überein; auch die bisherige Wirtschaftsvariante wurde öffentlich geprüft.
 
 **[Jetzt spielen](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/preview/index.html)** · **[Vergleich: bisherige lokale Wirtschaft](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/preview/index.html?economy=legacy-local)**. Beim ersten Besuch **Open the page** bestätigen. [Veröffentlichungsstatus](docs/PUBLISH.md).
 

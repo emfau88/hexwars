@@ -1,18 +1,24 @@
-# Charming Frontier und Referenzdrohne — Veröffentlichungsstand
+# Charming Frontier und Referenzdrohne — veröffentlicht
 
-Produktionscommit: `c49d8a2eb7fc78e6864c91f8b766e54b86aac898`. Branch: `experiment/hexfront-3d-diorama`. Der gesamte Art-Pass ist als `55d7047be2b888860d05a23314518b17f4d8970c` getrennt gesichert; der Folgecommit ersetzt ausschließlich die Drohne und ihre Darstellung.
+**[HEXFRONT 3D spielen](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/preview/index.html)** · **[Bisherige Wirtschaft](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/preview/index.html?economy=legacy-local)** · **[Drohne Vorher/Nachher](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/docs/drone-reference/compare.html)**. Beim ersten Besuch des Vorschauhosts **Open the page** bestätigen; kein Konto nötig.
 
-**Aktuell lokal vollständig gespeichert, Push noch nicht bestätigt.** Am 12.10.2026 scheitert der Push außerhalb der Sandbox an der Namensauflösung. Windows meldet auf allen Verbindungen selbst vergebene 169.254-Adressen und kein IPv4-Standardgateway. Der alternative GitHub-Connector kann das Repository lesen, lehnt aber das Schreiben eines Git-Blobs mit `403 Resource not accessible by integration` ab. Das ist keine fehlende Freigabe des Nutzers. Keine Netzwerkeinstellungen wurden verändert.
+Produktionscommit: [`c49d8a2eb7fc78e6864c91f8b766e54b86aac898`](https://github.com/emfau88/hexwars/commit/c49d8a2eb7fc78e6864c91f8b766e54b86aac898). Branch: [`experiment/hexfront-3d-diorama`](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama). Der vollständige Charming-Art-Pass ist zusätzlich in `55d7047be2b888860d05a23314518b17f4d8970c` gesichert; der Folgecommit ersetzt gezielt die Drohne und ihre Darstellung. Spätere Dokumentationscommits ändern den fest verlinkten Build nicht.
 
-Vorbereiteter fester [Play-Link](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/preview/index.html) und [Drohnenvergleich](https://rawcdn.githack.com/emfau88/hexwars/c49d8a2eb7fc78e6864c91f8b766e54b86aac898/experiments/hexfront-3d/docs/drone-reference/compare.html); noch kein bestätigter öffentlicher Nachweis für diesen Commit. Beide Links werden nach dem erfolgreichen Push im Browser geprüft. Der bisherige Wirtschaftsteststand unten bleibt die zuletzt bestätigte öffentliche Version.
+Am 12.10.2026 nach erneuter Hotspot-Verbindung erfolgreich gepusht. Der zuvor fehlende Standardgateway verhinderte den Push, nicht eine fehlende Freigabe des Nutzers. Keine Netzwerk-/Kontoeinstellungen wurden verändert. Main bleibt vor und nach diesem Push `c22b6830533f88161483ed22d01cba88c7e2dfc7`; keine Übernahme nach Main, kein Pages-Workflow und keine Änderung an bisherigen Veröffentlichungen.
 
-33 Produktionsdateien / 3.264.987 Bytes, bytegleich mit dem lokal geprüften Build, QA deaktiviert. Beide Wirtschaftsmodi starten lokal. Desktop/Mobile-Vergleich und native Befehle, Effekte, Rampen/Ruinen sowie 32 Logiktests bestanden. [Drohnenbericht](DRONE.md), [Build-/Viewerprüfung](drone-reference/delivery-report.json). Keine Clips.
+- Öffentlicher Produktionslauf bestanden: **Desktop 1440 × 900 und Touch-Mobile 390 × 844**, echte Drag-and-drop-Befehle, Uhr, Pause, QA-API entfernt, kein horizontaler Überlauf, keine Spiel-/Asset-/Browserfehler. [Bericht](drone-reference/live/production-report.json).
+- Vergleichsmodus `?economy=legacy-local` öffentlich auf Mobile geladen und mit echtem Ziehbefehl geprüft. [Bericht](drone-reference/live-legacy/production-report.json). Der Test akzeptiert jetzt die Query-Parameter in der vorgeschalteten Bestätigungsseite des Hosts; der Spielcode wurde dafür nicht geändert.
+- **33 öffentliche Dateien / 3.257.308 Bytes** geladen und per SHA-256 gegen die Git-Blobs geprüft: vollständig identisch mit `c49d8a2eb7fc78e6864c91f8b766e54b86aac898`. [Dateinachweis](drone-reference/live/assets-report.json). Das lokale Windows-Verzeichnis umfasst aufgrund normalisierter Textzeilenenden 3.264.987 Bytes; es sind keine unterschiedlichen Modellversionen.
+- Öffentliche Screenshots tatsächlich betrachtet: [Desktop](drone-reference/live/final-desktop.png), [Mobile](drone-reference/live/final-mobile.png), [Mobile-Ziehbefehl](drone-reference/live/mobile-drag.png), [Vergleichswirtschaft](drone-reference/live-legacy/final-mobile.png). Die direkten Drohnen-Vorher/Nachher-Bilder verwenden die exakt gleiche Kamera und den gleichen tatsächlich gespielten Transportzustand: [Bildvergleich](drone-reference/compare.html).
+- Lokal zusätzlich 32 Logiktests, Effekt-/Ressourcenprüfung, native Eingabe, Rampen/Ruinen und Produktions-Build bestanden. Vollständige Desktop-/Touch-Partien mit Sieg/Niederlage/Neustart im vorausgehenden Art-Pass; Gameplay bleibt danach unverändert. [Drohnenbericht](DRONE.md), [vorangegangener Art-Pass](FRONTIER.md).
 
-Es wird ausschließlich der Experiment-Branch gepusht. Main wurde zuletzt unabhängig bei `c22b6830533f88161483ed22d01cba88c7e2dfc7` gelesen; der Auftrag verändert weder Main noch den Pages-Workflow. Die ursprüngliche Root-README bleibt unter dem Experiment-Intro unverändert.
+Die öffentlichen Einzelmessungen bis zur Bereitschaft lagen bei 10,88 s Desktop / 7,95 s Mobile sowie 4,66 s für den mobilen Wirtschaftsvergleich. Netzwerk, erstmalige Asset-Anfragen und Software-Rendering beeinflussen diese Werte; sie sind keine Ladezeitgarantie. Keine physischen Android-/iOS-Geräte, kein Safari-Test und kein 60-FPS-Nachweis. Keine Clips für diese Abgabe.
+
+Der Testlink liefert den isolierten statischen Build direkt aus diesem Experiment-Commit. Der vollständige Quellstand ist im Branch enthalten; die originale Root-README bleibt unter ihrem Experiment-Intro unverändert.
 
 ---
 
-# Isolierte Veröffentlichung – 12.10.2026
+ Isolierte Veröffentlichung – 12.10.2026
 
 ## Veröffentlichte Wirtschaftsbasis für den folgenden Art-Pass
 
