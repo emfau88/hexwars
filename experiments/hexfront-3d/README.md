@@ -2,7 +2,11 @@
 
 Ein isolierter, tatsächlich spielbarer 3D-Vertical-Slice mit **einem Level**, 37 spielbaren Hexfeldern, zwei HQs, zwei Aufstiegen und einer gegnerischen KI. Orange erobert das blaue HQ; der Verlust des eigenen HQs beendet die Partie.
 
-**[▶ Testversion im Browser öffnen](https://rawcdn.githack.com/emfau88/hexwars/2656632061cf3a538c7001bff8c74e2bb56a324c/experiments/hexfront-3d/preview/index.html)** · [Experiment-Branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama)
+**[▶ Zuletzt veröffentlichte Version — noch ohne Drag-and-drop](https://rawcdn.githack.com/emfau88/hexwars/2656632061cf3a538c7001bff8c74e2bb56a324c/experiments/hexfront-3d/preview/index.html)** · [Experiment-Branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama)
+
+**Veröffentlichungsstatus des Fixes:** Lokal fertig und getestet, Produktions-Commit `47f5d8b59d5f89de398397c8893bcc30d2030d31`. Der Push scheitert aktuell an der unterbrochenen PC-Netzverbindung (keine IPv4-Standardroute). Der Online-Link oben zeigt deshalb weiterhin den vorherigen HUD-Stand. Die aktuelle Fassung über `npm run dev` starten; der bereits gestartete lokale Produktionsserver ist unter http://127.0.0.1:4189 erreichbar.
+
+**Drag-and-drop wiederhergestellt:** Eigenes Feld greifen → zum Ziel ziehen → loslassen und senden, wie im Original. Die Klickbedienung bleibt zusätzlich verfügbar. [Steuerung, Gestentrennung und Prüfungen](docs/DRAG.md).
 
 **Overlay-/HUD-Pass:** Ruhigere Zahlenplaketten mit klarer Priorität für Quelle, Ziel, HQs und Bewegungen. Teamfarben bleiben erhalten; mobile Antippflächen sind mindestens 44 Pixel groß. Der kompakte Match-HUD schafft bei 390 × 844 ohne Auswahl 168 Pixel zusätzliche Kartenhöhe, die sichtbare Plakettenfläche sinkt im gleichen Gefechtszustand um 42 %. Mehr Kartenbereich bedeutet wegen der begrenzten Portraitbreite nicht proportional größere Hexfelder. [Vorher/Nachher, Gestaltung und vollständige Spiel-/Eingabetests](docs/HUD.md). Gelände, Assets, Kameraregeln und Gameplay bleiben unverändert.
 
@@ -56,12 +60,12 @@ Dann die LAN-Adresse des Computers mit Port 4174 öffnen. Eine entsprechende lok
 ## Spielen
 
 1. **Operation starten**. Orange ist die südliche Fraktion.
-2. Eine orange Truppenzahl auswählen. Helle Konturen markieren erreichbare Ziele.
-3. Ein Ziel wählen, Stärke und momentane Kampfprognose prüfen und **Befehl geben**.
+2. Ein eigenes Feld, Gebäude oder seine Truppenzahl greifen und zum Ziel ziehen. Helle Konturen markieren erreichbare Ziele; die Linie zeigt die begehbare Route.
+3. **Loslassen sendet sofort.** Außerhalb des Spielfelds oder auf der Quelle loslassen bricht ab; Felswände und unerreichbare Ziele senden keine Truppen. Alternativ Quelle und Ziel antippen und **Befehl geben**.
 4. `50 %` teilt eine Garnison; `Alle − 1` lässt eine Einheit zurück. Eigene Zwischenfelder dürfen durchquert werden. Wird eine Route erobert, trifft der Konvoi dort auf den Gegner.
 5. Das gegnerische HQ einnehmen. Bei Sieg oder Niederlage lässt sich das identische Level neu starten.
 
-Maus und Touch verwenden denselben Ablauf mit expliziter Befehlsbestätigung. **Taktik/Diorama** wechselt zwischen zwei festen orthografischen Perspektiven (70°/55° über dem Boden). Mausrad, Pinch oder +/− zoomen zwischen Übersicht und 2,2-facher Vergrößerung; die vergrößerte Karte lässt sich begrenzt ziehen. `⌖` stellt die vollständige taktische Übersicht wieder her. Auf sehr kurzen Smartphones nutzt du **+ für Details** und ziehst den Ausschnitt zum gewünschten Feld. Sichtbare Gebäude wählen ihre eigene logische Zelle; Felswände melden eine ungültige Auswahl. `?` öffnet die kurze Anleitung. Die Leertaste pausiert, wenn kein Steuerelement fokussiert ist. Die Partie pausiert auch beim Verlassen des Tabs; nach Rückkehr bewusst fortsetzen.
+Maus und Touch unterstützen Drag-and-drop und zusätzlich die bisherige Klick-/Tippsteuerung. Die gewählte Stärke (`50 %` / `Alle − 1`) gilt für beide. **Ziehen von einem eigenen Feld gibt einen Befehl; Ziehen am Hintergrund verschiebt die vergrößerte Karte.** Zwei Finger navigieren und zoomen immer; die Maus kann auch mit rechter oder mittlerer Taste auf jedem Feld verschieben. Escape, Touch-Abbruch und ein zweiter Finger brechen einen begonnenen Truppenzug ab. **Taktik/Diorama** wechselt zwischen zwei festen orthografischen Perspektiven (70°/55° über dem Boden). Mausrad, Pinch oder +/− zoomen zwischen Übersicht und 2,2-facher Vergrößerung; die vergrößerte Karte lässt sich begrenzt ziehen. `⌖` stellt die vollständige taktische Übersicht wieder her. Auf sehr kurzen Smartphones nutzt du **+ für Details** und ziehst den Ausschnitt zum gewünschten Feld. Sichtbare Gebäude wählen ihre eigene logische Zelle; Felswände melden eine ungültige Auswahl. `?` öffnet die kurze Anleitung. Die Leertaste pausiert, wenn kein Steuerelement fokussiert ist. Die Partie pausiert auch beim Verlassen des Tabs; nach Rückkehr bewusst fortsetzen.
 
 **Taktik:** Die beiden schmalen Aufstiege sind Engpässe. Bergauf besitzt der Verteidiger +30 % Stärke, bergab der Angreifer +15 %. Das HQ bietet +20 % Verteidigung. Es gilt nur der größere Verteidigungsbonus; es wird kein zusätzlicher alter Hill-Bonus angewendet. Das Relais erhöht die eigene Produktion um 30 %. Ein Angriff kann sich während der Anreise durch gegnerische Verstärkungen verändern.
 
@@ -82,6 +86,7 @@ npm run test:camera
 node tests/territory.mjs
 npm run test:art
 npm run test:overlay
+npm run test:drag
 ```
 
 `node tests/hosted.mjs` prüft eine über `PREVIEW_URL` angegebene Produktions-URL mit echten Maus-/Touchbefehlen und nimmt die Abgabe-Screenshots auf. Mit `PREVIEW_URL=local` startet der Test selbst einen Produktionsserver auf Port 4178; alternativ akzeptiert die Variable eine eigene URL. In PowerShell: `$env:PREVIEW_URL='local'; node tests/hosted.mjs`. Den aktuellen Testlink dazu ausdrücklich als `PREVIEW_URL` angeben. Die öffentliche Vorschau und der lokale Aufruf im Unterverzeichnis sind geprüft. Der Test bestätigt bei raw.githack.com zunächst den angezeigten Link auf genau dieses Repository und diesen Commit.

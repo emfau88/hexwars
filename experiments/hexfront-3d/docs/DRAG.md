@@ -33,6 +33,14 @@ Beim Touch-Test wurde eine Besonderheit behoben: Der Verlust des impliziten Poin
 
 Browserprüfungen verwenden Chromium mit Software-Rendering. Physische Android-/iOS-Geräte und Safari bleiben ungeprüft. Auf sehr kleinen Displays bleibt der vorhandene Detailzoom sinnvoll.
 
+## Produktionsprüfung und Veröffentlichung
+
+Der fertige Build wurde lokal mit normal laufender Uhr geprüft: Drag-and-drop auf Desktop und Touch-Mobile sendet einen Befehl, die Uhr läuft und Pause funktioniert. Keine QA-API, Browserausnahmen, HTTP-Fehler oder horizontaler Überlauf. [Produktionsbericht](drag/production/production-report.json), [Dateimanifest](drag/build-report.json).
+
+Die finalen Produktionsbilder wurden tatsächlich angesehen: [Desktop](drag/production/desktop-drag.png), [Mobile](drag/production/mobile-drag.png). Der frühere Starthinweis wird während einer Ziehgeste ausgeblendet, damit er das Befehlsfeld nicht überdeckt.
+
+Der Fix ist lokal committet; der neue Upload scheiterte an der PC-Netzverbindung. Der aktuelle README-Online-Link zeigt weiterhin den vorherigen HUD-Stand. [Veröffentlichungsstatus und vorbereiteter Link](PUBLISH.md).
+
 ## Reproduktion
 
 ```powershell

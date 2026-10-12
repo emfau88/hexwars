@@ -1,6 +1,18 @@
 # Isolierte Veröffentlichung – 12.10.2026
 
-## Aktueller Stand: Overlay-/HUD-Pass
+## Aktueller lokaler Stand: Drag-and-drop-Fix, Upload offen
+
+Produktions-Commit: `47f5d8b59d5f89de398397c8893bcc30d2030d31`, ausschließlich auf `experiment/hexfront-3d-diorama`. Maus/Touch, vollständige Partien, fünf Kamera-/Eingabe-Viewports und Produktions-Build bestanden. [Steuerung und Nachweise](DRAG.md).
+
+Der neue Push scheiterte mit `Could not resolve host: github.com`. Die lokale Netzwerkprüfung findet eine selbst vergebene IPv4-Adresse im Bereich `169.254.*` und keine IPv4-Standardroute. Deshalb wurde die öffentliche Vorschau des Fixes noch nicht geprüft und der funktionierende alte README-Play-Link beibehalten. Es wurden keine Netzwerkeinstellungen geändert. Main/Pages bleiben unverändert.
+
+Vorbereitete URL nach erfolgreichem Push:
+
+`https://rawcdn.githack.com/emfau88/hexwars/47f5d8b59d5f89de398397c8893bcc30d2030d31/experiments/hexfront-3d/preview/index.html`
+
+Zum Fortsetzen: Experiment-Branch pushen, diese URL mit `tests/hosted.mjs --art --match --drag` prüfen und danach die beiden README-Testlinks aktualisieren. [Lokaler Produktionsbericht](drag/production/production-report.json), [Git-Blob-Manifest: 25 Dateien, 2.309.509 Bytes](drag/build-report.json).
+
+## Zuletzt veröffentlichter Stand: Overlay-/HUD-Pass
 
 - Branch: `experiment/hexfront-3d-diorama`; Produktions-Commit: `2656632061cf3a538c7001bff8c74e2bb56a324c`.
 - **[Aktuelle Version spielen](https://rawcdn.githack.com/emfau88/hexwars/2656632061cf3a538c7001bff8c74e2bb56a324c/experiments/hexfront-3d/preview/index.html)** – beim ersten Besuch „Open the page“ bestätigen.

@@ -2,11 +2,15 @@
 
 ## 3D-Diorama experiment — play the isolated prototype
 
-**[▶ Test HEXFRONT: Bastion Morgenwacht](https://rawcdn.githack.com/emfau88/hexwars/2656632061cf3a538c7001bff8c74e2bb56a324c/experiments/hexfront-3d/preview/index.html)**
+**Local drag-and-drop fix ready, upload pending:** commit `47f5d8b59d5f89de398397c8893bcc30d2030d31` passes mouse/touch and full-match tests. The current PC connection has no IPv4 default route; the push could not reach GitHub. The online link below still points to the prior HUD build. Run the updated experiment locally with the commands in its README.
+
+**[▶ Last published version — before drag-and-drop](https://rawcdn.githack.com/emfau88/hexwars/2656632061cf3a538c7001bff8c74e2bb56a324c/experiments/hexfront-3d/preview/index.html)**
 
 One playable 37-hex battlefield with real elevation, two ramps, Orange vs Blue AI, victory/defeat and restart. Hosted separately from the existing GitHub Pages game. This link and the experiment are on `experiment/hexfront-3d-diorama`; no main-branch deployment was changed.
 
 [Start instructions, controls and technical decisions](./experiments/hexfront-3d/README.md) · [Current art verification and limitations](./experiments/hexfront-3d/docs/ART.md) · [Asset licenses](./experiments/hexfront-3d/ASSET_LICENSES.md)
+
+**Drag-and-drop restored:** Grab an owned cell, drag to a reachable target and release to send. Mouse and touch use the same rules; click-to-confirm remains available. Camera navigation is separated from troop commands. [Controls and verification](./experiments/hexfront-3d/docs/DRAG.md).
 
 **Overlay and mobile HUD update:** Quieter troop badges prioritize source, target, HQs and active movements while preserving team colours and 44-pixel mobile tap targets. The compact match HUD frees 168 pixels of map height at 390 × 844; visible badge area in the matched battle state falls by 42%. This is extra canvas space, not a promise of proportionally larger hexes. [Before/after comparisons and full-match/input tests](./experiments/hexfront-3d/docs/HUD.md). Terrain, assets, camera rules and gameplay are unchanged.
 
