@@ -4,7 +4,9 @@
 
 Blender-authored, articulated HQ with ceramic armour, raised command deck, hangar and offset radar dish. Orange/blue variants; original game, drones, relay, terrain, economy and camera retained.
 
-**Publication being prepared.** The pinned play link follows in the documentation commit.
+**[Play the new HQ version](https://rawcdn.githack.com/emfau88/hexwars/2815c40a426ee05daab22715caedbce60faf0b57/experiments/hexfront-3d/preview/index.html)** · [Previous economy](https://rawcdn.githack.com/emfau88/hexwars/2815c40a426ee05daab22715caedbce60faf0b57/experiments/hexfront-3d/preview/index.html?economy=legacy-local) · [Experiment branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama). If the host shows a notice, click **Open the page**.
+
+Runtime commit: `2815c40a426ee05daab22715caedbce60faf0b57`. No further hosted gameplay test was run, as requested.
 
 [Experiment and local start](experiments/hexfront-3d/README.md) · [HQ images, source and test status](experiments/hexfront-3d/docs/HQ_COMMAND.md)
 

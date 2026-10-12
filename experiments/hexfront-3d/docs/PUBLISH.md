@@ -1,6 +1,10 @@
-# Command HQ — publication pending
+# Command HQ — isolierte Veröffentlichung
 
-Integrated on the isolated experiment branch. The next documentation commit records the exact runtime SHA and play link. No further gameplay tests at the user’s explicit request.
+**[Neues HQ spielen](https://rawcdn.githack.com/emfau88/hexwars/2815c40a426ee05daab22715caedbce60faf0b57/experiments/hexfront-3d/preview/index.html)** · [Bisherige Wirtschaft](https://rawcdn.githack.com/emfau88/hexwars/2815c40a426ee05daab22715caedbce60faf0b57/experiments/hexfront-3d/preview/index.html?economy=legacy-local)
+
+Runtime-Commit: `2815c40a426ee05daab22715caedbce60faf0b57`. Branch: `experiment/hexfront-3d-diorama`. 37 Produktionsdateien, 4,82 MiB; Diagnostik-API abgeschaltet. Modell, Gameplay-Ansichten, Blender-Quelle und Bildsequenzen sind im Commit enthalten. Main bleibt bei `c22b6830533f88161483ed22d01cba88c7e2dfc7`; kein Merge und kein Pages-Deployment.
+
+35 Logiktests und visuelle Desktop-/Mobile-Prüfung wurden vor der letzten Nutzeranweisung abgeschlossen. Danach ausdrücklich keine weiteren Tests. Der lange UI-Matchlauf wurde beendet; die zusätzliche HQ-Animationsprüfung ist nicht vollständig bestanden (Speicherassertion bei sinkender Texturanzahl). Der neue öffentliche Link wurde nicht durchgespielt oder im Browser nachgetestet. [Genaue Abgrenzung](HQ_COMMAND.md).
 
 ---
 

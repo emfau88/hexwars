@@ -2,7 +2,9 @@
 
 Neues Blender-HQ: gestaffelte Keramikarchitektur, erhöhter Kommandobereich, beleuchteter Hangar und bewegliche Parabolschüssel. Orange und Blau nutzen dieselbe Modellfamilie. Drohnen, Relais, Gelände, Kamera und Gameplay bleiben unverändert.
 
-**Veröffentlichung wird vorbereitet.** Der neue feste Play-Link wird im unmittelbar folgenden Dokumentationscommit gesetzt.
+**[Jetzt mit dem neuen HQ spielen](https://rawcdn.githack.com/emfau88/hexwars/2815c40a426ee05daab22715caedbce60faf0b57/experiments/hexfront-3d/preview/index.html)** · [Bisherige Wirtschaft](https://rawcdn.githack.com/emfau88/hexwars/2815c40a426ee05daab22715caedbce60faf0b57/experiments/hexfront-3d/preview/index.html?economy=legacy-local). Beim ersten Besuch gegebenenfalls **Open the page** bestätigen.
+
+Spielstand: `2815c40a426ee05daab22715caedbce60faf0b57`. Kein weiterer öffentlicher Spieltest auf ausdrücklichen Nutzerwunsch.
 
 [HQ-Dokumentation und Prüfstand](docs/HQ_COMMAND.md) · [HQ Orange](docs/hq-command/hq-orange.png) · [HQ Blau](docs/hq-command/hq-blue.png) · [GLB](public/assets/command-hq/command-hq.glb) · [Blender-Quelle](scripts/command-hq-source.blend)
 
