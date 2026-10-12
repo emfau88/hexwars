@@ -2,6 +2,8 @@
 
 Stand: 12.10.2026. Ausgangspunkt war der lokale Commit `d591777b43957d7fcd4e28dcddefeb984c60caed` auf `experiment/hexfront-3d-diorama`. Der Drag-and-drop-Commit `47f5d8b` ist dessen Vorfahr. Der entfernte Branch wurde vor Beginn geprüft: `3a54ba2`, ebenfalls mit diesem Fix. Es wurde kein älterer Entwicklungsstand übernommen.
 
+**[Veröffentlichte Fassung spielen](https://rawcdn.githack.com/emfau88/hexwars/6605d24b344ac985de9543e56dd85ed34d6c646d/experiments/hexfront-3d/preview/index.html)** · [Öffentliche Desktop-/Touch-Prüfung](technology/live/production-report.json) · [Auslieferung und Isolation](PUBLISH.md). Produktions-Commit `6605d24`.
+
 ## Gestaltung und Umfang
 
 **Ruhiges Schlachtfeld, markante Technologie, kurze Aktionen.** Die vorhandene Felsfestung, alle 37 Sektoren, drei Höhen, Rampen, Terrainmaterialien, 70°/55°-Kameras, Zahlenplaketten und das Mobile-HUD bleiben erhalten. Neu sind eine gemeinsame Drohnenfamilie, zwei Kommandozentralen und ein Relais. Es stehen keine dekorativen Fahrzeuge mehr auf jeder Garnison. Pro aktivem Transport repräsentiert eine Drohne die gesamte Truppenstärke.

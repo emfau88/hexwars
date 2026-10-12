@@ -2,11 +2,11 @@
 
 Ein isolierter, tatsächlich spielbarer 3D-Vertical-Slice mit **einem Level**, 37 spielbaren Hexfeldern, zwei HQs, zwei Aufstiegen und einer gegnerischen KI. Orange erobert das blaue HQ; der Verlust des eigenen HQs beendet die Partie.
 
-**Neue Technologie-Fassung lokal fertig:** Schwebedrohnen, eine gemeinsame HQ-Familie, aktivierbares Relais, weich animierte Transporte mit **1,1 Sekunden pro Hex** und kurze Kampf-/Eroberungseffekte. Karte, Rampen, 70°/55°-Kamera, Drag-and-drop und das kompakte HUD bleiben erhalten. [Gestaltung, Vorher/Nachher, Bewegung und Prüfnachweise](docs/TECHNOLOGY.md).
+**Neue Technologie-Fassung veröffentlicht:** Schwebedrohnen, eine gemeinsame HQ-Familie, aktivierbares Relais, weich animierte Transporte mit **1,1 Sekunden pro Hex** und kurze Kampf-/Eroberungseffekte. Karte, Rampen, 70°/55°-Kamera, Drag-and-drop und das kompakte HUD bleiben erhalten. [Gestaltung, Vorher/Nachher, Bewegung und Prüfnachweise](docs/TECHNOLOGY.md).
 
-**Veröffentlichung ausstehend:** Dem PC fehlt derzeit die Internetroute. Der bestehende öffentliche Testlink öffnet noch den vorherigen Drag-and-drop-Build **ohne die neuen Drohnen**. Nach erfolgreichem Branch-Push wird er auf den neuen Produktions-Commit umgestellt.
+**Öffentlich geprüft am 12.10.2026:** Der Link öffnet Produktions-Commit `6605d24b344ac985de9543e56dd85ed34d6c646d` mit den neuen Drohnen, HQs und dem Relais. Start, echte Maus-/Touch-Ziehbefehle, Uhr und Pause bestehen auf Desktop und Mobile. [Öffentlicher Prüfbericht](docs/technology/live/production-report.json).
 
-**[▶ Bisher veröffentlichte HEXFRONT-3D-Version spielen](https://rawcdn.githack.com/emfau88/hexwars/47f5d8b59d5f89de398397c8893bcc30d2030d31/experiments/hexfront-3d/preview/index.html)** · [Experiment-Branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama)
+**[▶ HEXFRONT 3D spielen — neue Drohnen & Technologie](https://rawcdn.githack.com/emfau88/hexwars/6605d24b344ac985de9543e56dd85ed34d6c646d/experiments/hexfront-3d/preview/index.html)** · [Experiment-Branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama)
 
 Die Vorschau verwendet [raw.githack.com](https://raw.githack.com/). Beim ersten Besuch **Open the page** bestätigen. Keine Anmeldung oder Vercel-Verbindung nötig. Die bestehenden Pages-/Portalversionen bleiben unverändert. [Veröffentlichungsstatus](docs/PUBLISH.md).
 
@@ -14,7 +14,7 @@ Die Vorschau verwendet [raw.githack.com](https://raw.githack.com/). Beim ersten 
 
 **Lesbarkeit:** Deutliche Hexkonturen und orange/blaue Besitzflächen bleiben erhalten. Helle Innenkonturen kennzeichnen erreichbare Ziele; Truppenzahlen folgen ihren Feldern. [HUD](docs/HUD.md), [Kamera](docs/CAMERA.md), [vorheriger Landschafts-Art-Pass](docs/ART.md).
 
-Neue lokale Version, echte Runtime-Aufnahmen:
+Aktuelle Version, echte Runtime-Aufnahmen:
 
 ![Desktop 1440 × 900, neuer Drohnentransport](docs/technology/desktop-after-transport.png)
 

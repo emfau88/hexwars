@@ -4,13 +4,13 @@
 
 **New technology update:** hover drones, a shared command-station family, activated relay, 1.1-second transports and short capture/combat effects. The 37-sector map, 70°/55° cameras, mouse/touch drag-and-drop and compact HUD are retained. [Design, before/after, motion clip and tests](./experiments/hexfront-3d/docs/TECHNOLOGY.md).
 
-**Publication pending:** the new update is ready locally, but this workstation has no Internet route. The following public link still opens the previous drag-and-drop build, **without the new drones**. It will be updated after the isolated push succeeds.
+**Published and publicly tested on 12 October 2026.** The link below opens the new drone/technology build `6605d24`. Desktop and touch browser checks passed, including real drag orders, clock and pause. [Live evidence](./experiments/hexfront-3d/docs/technology/live/production-report.json).
 
-**[▶ Play the published HEXFRONT 3D build](https://rawcdn.githack.com/emfau88/hexwars/47f5d8b59d5f89de398397c8893bcc30d2030d31/experiments/hexfront-3d/preview/index.html)** · [Experiment branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama) · [Start instructions](./experiments/hexfront-3d/README.md)
+**[▶ Play HEXFRONT 3D — new drones & technology](https://rawcdn.githack.com/emfau88/hexwars/6605d24b344ac985de9543e56dd85ed34d6c646d/experiments/hexfront-3d/preview/index.html)** · [Experiment branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama) · [Start instructions](./experiments/hexfront-3d/README.md)
 
 The experiment lives in `experiments/hexfront-3d/`. Main, portal builds and GitHub Pages remain unchanged. The preview uses raw.githack.com; on the first visit, click **Open the page**. No Vercel account or sign-in is needed. [Publication status](./experiments/hexfront-3d/docs/PUBLISH.md).
 
-New local version, actual runtime captures:
+Current version, actual runtime captures:
 
 <table>
   <tr><th>Desktop · 1440 × 900</th><th>Mobile · 390 × 844</th></tr>

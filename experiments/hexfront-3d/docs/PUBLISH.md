@@ -1,18 +1,29 @@
 # Isolierte Veröffentlichung – 12.10.2026
 
-## Technologie-Fassung: lokal fertig, Push ausstehend
+## Aktuell veröffentlicht: Drohnen und Technologie
 
-Die neue Fassung wurde im isolierten Experiment implementiert. [Inhalt, Screenshots, Clip und Tests](TECHNOLOGY.md). Beide vollständigen Browserpartien (Maus und Touch) bestanden mit Sieg nach 167,1 s / 33 Befehlen, Niederlage bei Untätigkeit nach 257,55 s sowie Neustart. Der Produktions-Build enthält 27 Dateien und keine QA-API.
+**[HEXFRONT 3D jetzt spielen](https://rawcdn.githack.com/emfau88/hexwars/6605d24b344ac985de9543e56dd85ed34d6c646d/experiments/hexfront-3d/preview/index.html)** — beim ersten Besuch **Open the page** bestätigen. Keine Anmeldung und kein Vercel-Konto nötig.
 
-Am 12.10.2026 schlug die erneute GitHub-Verbindungsprüfung mit `Could not resolve host: github.com` fehl. Die rein lesende Windows-Prüfung fand nur 169.254-Adressen ohne IPv4-Standardgateway; auch eine direkte HTTPS-Verbindung zu 1.1.1.1 scheiterte. Es wurden keine DNS-/Netzwerkeinstellungen verändert. Deshalb ist die neue Fassung noch nicht öffentlich geprüft oder als veröffentlicht ausgewiesen. Die README-Links verweisen bis zum erfolgreichen Push ausdrücklich auf den bisherigen Stand.
+Produktions-Commit: [`6605d24b344ac985de9543e56dd85ed34d6c646d`](https://github.com/emfau88/hexwars/commit/6605d24b344ac985de9543e56dd85ed34d6c646d), ausschließlich auf `experiment/hexfront-3d-diorama`. Beide READMEs verwenden diesen unveränderlichen Produktionslink. Spätere Dokumentations-Commits ändern das ausgelieferte Spiel nicht.
 
-## Bisher veröffentlicht: Drag-and-drop-Fix
+Nach erneuter Verbindung des PCs mit dem Mobilfunk-Hotspot gelang der Push am 12.10.2026. Der vorherige Fehler beruhte auf fehlender DNS-Auflösung/Internetroute; es wurden keine System-Netzwerkeinstellungen verändert. Main bleibt `29ff12d6897db9b994b97be980efb0037e54d476`. Der bestehende Pages-Workflow veröffentlicht nur Main; er wurde weder geändert noch manuell gestartet.
+
+- Öffentlicher Produktionslauf bestanden: **Desktop 1440 × 900 und Touch-Mobile 390 × 844**, Start, echte Ziehbefehle, laufende Uhr, Pause, keine QA-API und kein horizontaler Überlauf. Keine Spiel-, Asset- oder Hostingfehler in diesem Lauf. [Bericht](technology/live/production-report.json).
+- Tatsächlich betrachtete öffentliche Aufnahmen: [Desktop-Ziehbefehl](technology/live/desktop-drag.png), [Mobile-Ziehbefehl](technology/live/mobile-drag.png), [Desktop-Start](technology/live/final-desktop.png), [Mobile-Start](technology/live/final-mobile.png). Neue Architektur, Teamflächen, Zielkonturen und Truppenwerte bleiben erkennbar.
+- **Alle 27 Dateien / 2.320.982 Bytes** wurden vom öffentlichen CDN geladen und stimmen per SHA-256 mit den Git-Blobs des Produktions-Commits überein: [SHA-256-Dateinachweis](technology/live/assets-report.json). Reproduktion mit `PREVIEW_URL` auf den obigen Link und `node tests/hosted-assets.mjs`.
+- Vollständige lokale Maus-/Touchpartien bestanden: Sieg nach 167,1 s / 33 Befehlen, Niederlage bei Untätigkeit nach 257,55 s, Neustart. 20 Logik-/Bewegungstests, fünf Kamera-/Eingabe-Viewports, Rampen- und Ruinenabstand, Mehrfeld-Verstärkung und Relais-Einnahme bestanden. [Technischer und visueller Bericht](TECHNOLOGY.md).
+
+Der neue Produktionsstand enthält 27 Dateien und keine QA-API. In diesem öffentlichen Lauf dauerte es 7,10 s am Desktop beziehungsweise 3,50 s in der Mobile-Emulation bis zur Bereitschaft. Das sind Einzelmessungen über diese Verbindung, keine Ladezeit- oder FPS-Garantie. Physische Android-/iOS-Geräte, Safari und menschliche Balance-Tests stehen aus; die Art erreicht noch nicht Tacticus-Produktionsqualität.
+
+Der Vorschauhost liefert die statischen Dateien direkt aus dem öffentlichen Experiment-Commit aus. Die einmalige Bestätigungsseite gehört zum Hostingdienst; sie ist keine zusätzliche Spielanmeldung. Das Hauptspiel und seine bestehenden Veröffentlichungen bleiben unverändert.
+
+## Vorheriger Stand: Drag-and-drop-Fix
 
 Produktions-Commit: `47f5d8b59d5f89de398397c8893bcc30d2030d31`, ausschließlich auf `experiment/hexfront-3d-diorama`. Maus/Touch, vollständige Partien, fünf Kamera-/Eingabe-Viewports und Produktions-Build bestanden. [Steuerung und Nachweise](DRAG.md).
 
-Nach erneutem Verbinden mit dem Mobilfunk-Hotspot gelang der Push am 12.10.2026. Beide README-Testlinks zeigen jetzt diesen Produktionsstand. Main/Pages bleiben unverändert.
+Nach erneutem Verbinden mit dem Mobilfunk-Hotspot gelang der Push am 12.10.2026. Beide README-Testlinks wurden damals auf diesen Produktionsstand umgestellt. Main/Pages bleiben unverändert.
 
-**[Aktuelle Version mit Drag-and-drop spielen](https://rawcdn.githack.com/emfau88/hexwars/47f5d8b59d5f89de398397c8893bcc30d2030d31/experiments/hexfront-3d/preview/index.html)** — beim ersten Besuch „Open the page“ bestätigen.
+**[Vorherige Version mit Drag-and-drop spielen](https://rawcdn.githack.com/emfau88/hexwars/47f5d8b59d5f89de398397c8893bcc30d2030d31/experiments/hexfront-3d/preview/index.html)** — beim ersten Besuch „Open the page“ bestätigen.
 
 - Öffentliche Browserprüfung bestanden: Desktop 1440 × 900 und Touch-Mobile 390 × 844; Start, echter Ziehbefehl, laufende Uhr und Pause. Kein horizontaler Überlauf, keine Produktions-QA-API, keine Spiel-/Assetfehler. [Zusammengeführter Bericht](drag/live/production-report.json) mit den getrennten [Desktop-](drag/live/desktop-report.json) und [Mobile-Läufen](drag/live/mobile-report.json).
 - Alle **25 Dateien / 2.309.509 Bytes** vom CDN geladen und per SHA-256 gegen die Git-Blobs geprüft. [Öffentliche Dateiprüfung](drag/live/assets-report.json), [Produktionsmanifest](drag/build-report.json).
