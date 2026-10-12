@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict';
+import {dragDriver,dragOrder} from './drag-helpers.mjs';
+const useDrag=process.argv.includes('--drag');
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {createRequire} from 'node:module';
@@ -39,11 +41,18 @@ try{
   const click=async s=>{await frame();const b=await page.locator(s).boundingBox();if(mobile)await page.touchscreen.tap(b.x+b.width/2,b.y+b.height/2);else await page.mouse.click(b.x+b.width/2,b.y+b.height/2);};
   await click('#primary');
   if(process.argv.includes('--match')){await frame();await page.screenshot({path:path.join(root,`${shots}/${name}-running.png`)});}
-  await click('[data-cell="-2,3"]');await click('[data-cell="-3,3"]');assert.equal(await page.locator('#primary').isEnabled(),true);
-  if(process.argv.includes('--match')){await frame();await page.screenshot({path:path.join(root,`${shots}/${name}-command.png`)});}
-  await click('#primary');await page.waitForFunction(()=>document.getElementById('timer').textContent!=='00:00');assert.match(await page.locator('#toast').innerText(),/unterwegs/);
+  if(useDrag){
+    const driver=await dragDriver(page,context,mobile);
+    await dragOrder(page,driver,'-2,3','-3,3',async()=>{assert.equal(await page.locator('.drag-tip').getAttribute('data-valid'),'true');await page.screenshot({path:path.join(root,`${shots}/${name}-drag.png`)});});
+    await driver.close();
+  }else{
+    await click('[data-cell="-2,3"]');await click('[data-cell="-3,3"]');assert.equal(await page.locator('#primary').isEnabled(),true);
+    if(process.argv.includes('--match')){await frame();await page.screenshot({path:path.join(root,`${shots}/${name}-command.png`)});}
+    await click('#primary');
+  }
+  await page.waitForFunction(()=>document.getElementById('timer').textContent!=='00:00');assert.match(await page.locator('#toast').innerText(),/unterwegs/);
   await page.screenshot({path:path.join(root,`test-results/${name}-hosted-command.png`)});await click('#pause');assert.match(await page.locator('#phase').innerText(),/PAUSIERT/);
-  report.runs.push({name,...info,repositoryNoticeConfirmed,commandAccepted:true,clockAdvances:true,pause:true});console.log(JSON.stringify(report.runs.at(-1)));await context.close();
+  report.runs.push({name,input:useDrag?'drag-and-drop':'click',...info,repositoryNoticeConfirmed,commandAccepted:true,clockAdvances:true,pause:true});console.log(JSON.stringify(report.runs.at(-1)));await context.close();
  }
  assert.deepEqual(report.errors,[]);console.log('PASS: production build, desktop and touch, real commands, clock and screenshots.');
 }finally{await browser.close();server?.kill();await fs.writeFile(path.join(root,process.env.TEST_OUTPUT?`${shots}/production-report.json`:art?'docs/art/production-report.json':camera?'docs/camera/production-report.json':'test-results/hosted-report.json'),JSON.stringify(report,null,2));}

@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict';
+import {dragDriver,dragOrder,nextFrame} from './drag-helpers.mjs';
+const useDrag=process.argv.includes('--drag');
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import {createRequire} from 'node:module';
@@ -8,7 +10,7 @@ const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const require=createRequire(import.meta.url);
 let chromium;
 try{({chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright'));}catch{throw Error('Install optional browser-test dependency: npm install --no-save --package-lock=false playwright@1.62.1');}
-const output=path.join(root,'test-results');await fs.mkdir(output,{recursive:true});
+const output=path.join(root,process.env.TEST_OUTPUT||'test-results');await fs.mkdir(output,{recursive:true});
 const servers=[];
 async function serve(port,production=false){
   const proc=spawn(process.execPath,['scripts/serve.mjs',...(production?['--production']:[])],{cwd:root,env:{...process.env,PORT:String(port)},stdio:['ignore','pipe','pipe'],windowsHide:true});servers.push(proc);
@@ -17,19 +19,20 @@ async function serve(port,production=false){
 const report={date:new Date().toISOString(),browser:'Chromium / Playwright',runs:[],errors:[]};let browser,currentPage;
 try{
   await serve(4175);browser=await chromium.launch({headless:true,args:['--disable-gpu-sandbox']});report.browserVersion=browser.version();
-  for(const mobile of [false,true]){
+  for(const mobile of process.argv.includes('--mobile')?[true]:[false,true]){
     const name=mobile?'mobile':'desktop',context=await browser.newContext({viewport:mobile?{width:390,height:844}:{width:1366,height:768},isMobile:mobile,hasTouch:mobile,deviceScaleFactor:1});
-    const page=await context.newPage();currentPage=page;page.setDefaultTimeout(8000);page.on('pageerror',e=>report.errors.push(`${name}: ${e.message}`));page.on('console',m=>{if(m.type()==='error')report.errors.push(`${name}: ${m.text()}`);});page.on('response',r=>{if(r.status()>=400)report.errors.push(`${r.status()} ${r.url()}`);});
+    const page=await context.newPage();currentPage=page;const driver=useDrag?await dragDriver(page,context,mobile):null;page.setDefaultTimeout(8000);page.on('pageerror',e=>report.errors.push(`${name}: ${e.message}`));page.on('console',m=>{if(m.type()==='error')report.errors.push(`${name}: ${m.text()}`);});page.on('response',r=>{if(r.status()>=400)report.errors.push(`${r.status()} ${r.url()}`);});
     const response=await page.goto('http://127.0.0.1:4175/?qa=1&clock=manual');assert.equal(response.status(),200);await page.waitForFunction(()=>window.__HEXFRONT3D__);
     await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
     const readyMs=await page.evaluate(()=>performance.now());
     await page.screenshot({path:path.join(output,`${name}-overview.png`)});
     const click=async selector=>{
+      await nextFrame(page);
       const loc=page.locator(selector);assert.equal(await loc.isVisible(),true,`Visible target: ${selector}`);
       const box=await loc.boundingBox(),x=box.x+box.width/2,y=box.y+box.height/2;
       const hit=await page.evaluate(({x,y,selector})=>Boolean(document.elementFromPoint(x,y)?.closest(selector)),{x,y,selector});assert.ok(hit,`Unoccluded target: ${selector}`);
       if(mobile)await page.touchscreen.tap(x,y);else await page.mouse.click(x,y);
-      await page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(resolve)));
+      await nextFrame(page);
     };
     const snapshot=()=>page.evaluate(()=>window.__HEXFRONT3D__.snapshot());
     const advance=seconds=>page.evaluate(s=>window.__HEXFRONT3D__.advance(s),seconds);
@@ -51,10 +54,16 @@ try{
         await click(`[data-cell="${action.from}"]`);
         assert.equal(await page.locator(`[data-cell="${action.from}"]`).getAttribute('aria-pressed'),'true');selectedHeights.add((await snapshot()).cells.find(c=>c.id===action.from).height);
         await click(action.fraction<.65?'#half':'#all');
-        await click(`[data-cell="${action.to}"]`);
-        assert.equal(await page.locator('#primary').isEnabled(),true);
-        if(turn===20){await page.screenshot({path:path.join(output,`${name}-battle.png`)});captured=true;}
-        const old=(await snapshot()).commands;await click('#primary');assert.equal((await snapshot()).commands,old+1);
+        const old=(await snapshot()).commands;
+        if(useDrag){
+          await dragOrder(page,driver,action.from,action.to,async()=>{if(turn===20){await page.screenshot({path:path.join(output,`${name}-battle.png`)});captured=true;}});
+        }else{
+          await click(`[data-cell="${action.to}"]`);
+          assert.equal(await page.locator('#primary').isEnabled(),true);
+          if(turn===20){await page.screenshot({path:path.join(output,`${name}-battle.png`)});captured=true;}
+          await click('#primary');
+        }
+        assert.equal((await snapshot()).commands,old+1);
         if(turn===9){await click('#camera-view');assert.match(await page.locator('#camera-view').innerText(),/Diorama/);assert.equal(await page.locator(`[data-cell="${action.from}"]`).getAttribute('aria-pressed'),'true');await click('#fit');assert.match(await page.locator('#camera-view').innerText(),/Taktik/);}
       }
       await advance(5.05);turn++;if(turn%15===0)console.log(`${name}: ${turn} human UI decisions, ${(await snapshot()).time.toFixed(1)} simulated seconds`);
@@ -71,9 +80,9 @@ try{
     const frameTimes=await page.evaluate(()=>new Promise(resolve=>{const times=[];let prev=performance.now();function measure(now){times.push(now-prev);prev=now;if(times.length<121)requestAnimationFrame(measure);else resolve(times.slice(1));}requestAnimationFrame(measure);}));
     const sorted=[...frameTimes].sort((a,b)=>a-b),median=sorted[Math.floor(sorted.length/2)],p95=sorted[Math.floor(sorted.length*.95)];
     const metrics=await page.evaluate(()=>window.__HEXFRONT3D__.metrics());
-    const run={name,viewport:mobile?'390 × 844':'1366 × 768',readyMs:Math.round(readyMs),victory,defeat,medianFrameMs:Number(median.toFixed(2)),p95FrameMs:Number(p95.toFixed(2)),metrics,layout};report.runs.push(run);console.log(JSON.stringify(run));await context.close();
+    const run={name,input:useDrag?'drag-and-drop':'click',viewport:mobile?'390 × 844':'1366 × 768',readyMs:Math.round(readyMs),victory,defeat,medianFrameMs:Number(median.toFixed(2)),p95FrameMs:Number(p95.toFixed(2)),metrics,layout};report.runs.push(run);console.log(JSON.stringify(run));await context.close();
   }
   execFileSync(process.execPath,['scripts/build.mjs'],{cwd:root,stdio:'inherit'});await serve(4176,true);
   const production=await browser.newPage();await production.goto('http://127.0.0.1:4176/?qa=1&clock=manual');await production.waitForFunction(()=>document.getElementById('loading').hidden);assert.equal(await production.evaluate(()=>typeof window.__HEXFRONT3D__),'undefined');await production.locator('#primary').click();await production.waitForFunction(()=>document.getElementById('timer').textContent!=='00:00');report.production={loads:true,qaApiAbsent:true,realClockAdvances:true};await production.close();
-  assert.deepEqual(report.errors,[]);await fs.writeFile(path.join(output,'browser-report.json'),JSON.stringify(report,null,2));console.log('PASS: Desktop + touch mobile complete victory, defeat, restart; production verified.');
+  assert.deepEqual(report.errors,[]);await fs.writeFile(path.join(output,'browser-report.json'),JSON.stringify(report,null,2));console.log(`PASS: ${report.runs.map(r=>r.name).join(' + ')} complete victory, defeat, restart; production verified.`);
 }catch(error){report.failure=error.stack;if(currentPage&&!currentPage.isClosed())await currentPage.screenshot({path:path.join(output,'failure.png')});throw error;}finally{await browser?.close();for(const server of servers)server.kill();await fs.writeFile(path.join(output,'browser-report.json'),JSON.stringify(report,null,2));}

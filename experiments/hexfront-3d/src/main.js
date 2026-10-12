@@ -3,11 +3,11 @@ import {Diorama} from './scene.js';
 const ALLOW_QA = true;
 const MANUAL_CLOCK = ALLOW_QA && new URLSearchParams(location.search).get('clock')==='manual';
 const $=id=>document.getElementById(id),game=new Battle();
+let scene,selected=null,pending=null,fraction=1,loaded=false,last=0,accumulator=0,lastUI=0,toastTimer,autoPaused=false,helpWasPaused=false;
 // Reserve the actual command panel height, including wrapped text on phones.
 // ResizeObserver then lets the camera fit its remaining visible canvas.
-const fitHUD=()=>{document.querySelector('main').style.setProperty('--battle-bottom',`${Math.ceil(innerHeight-document.querySelector('.command-panel').getBoundingClientRect().top+20)}px`);};
-new ResizeObserver(fitHUD).observe(document.querySelector('.command-panel'));window.addEventListener('resize',fitHUD);fitHUD();
-let scene,selected=null,pending=null,fraction=1,loaded=false,last=0,accumulator=0,lastUI=0,toastTimer,autoPaused=false,helpWasPaused=false;
+const fitHUD=()=>{if(scene?.drag)return;document.querySelector('main').style.setProperty('--battle-bottom',`${Math.ceil(innerHeight-document.querySelector('.command-panel').getBoundingClientRect().top+20)}px`);};
+new ResizeObserver(fitHUD).observe(document.querySelector('.command-panel'));window.addEventListener('resize',()=>{scene?.cancelGesture();fitHUD();});fitHUD();
 const time=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(Math.floor(s%60)).padStart(2,'0')}`;
 function toast(text){$('toast').textContent=text;$('toast').classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('visible'),4200);}
 function select(id,blocked){
@@ -26,7 +26,26 @@ function select(id,blocked){
   }
   scene.select(selected);updateUI();
 }
-function hover(id){if(scene)scene.hover(pending||id);}
+function hover(id){if(scene&&!scene.drag)scene.hover(pending||id);}
+function issueOrder(){
+  const r=game.send(selected,pending,fraction);
+  if(r.ok){toast(`${r.order.units} Truppen unterwegs.`);pending=null;scene.hover(null);}
+  else toast(r.reason);
+  updateUI();
+}
+function dragCommand(phase,id,reason){
+  if(phase==='start'){selected=id;pending=null;scene.select(id);scene.hover(null);}
+  else if(phase==='move'){pending=id;scene.hover(id);}
+  else if(phase==='end'){
+    pending=id;
+    if(reason||!id||id===selected){toast(reason==='cliff'?'Felswand. Ziehe auf eine Feldoberfläche oder ihre Truppenzahl.':'Befehl abgebrochen.');pending=null;scene.hover(null);}
+    else{issueOrder();pending=null;scene.hover(null);}
+  }else{pending=null;scene.hover(null);}
+  updateUI();
+  // Keep the framing fixed while a finger is down; the contextual panel must
+  // never move the destination. Resume normal responsive fitting after release.
+  if(phase==='end'||phase==='cancel')fitHUD();
+}
 function updateUI(){
   $('timer').textContent=time(game.time);$('orange-strength').textContent=game.strength('orange');$('blue-strength').textContent=game.strength('blue');
   $('orange-territory').style.width=`${game.fields('orange')/37*100}%`;$('blue-territory').style.width=`${game.fields('blue')/37*100}%`;
@@ -39,7 +58,7 @@ function updateUI(){
   const match=game.running||game.result?'active':'intro',hud=game.result?'result':!game.running?'intro':game.paused?'paused':source&&target?'command':source?'selection':'idle';
   if(document.body.dataset.match!==match)document.body.dataset.match=match;
   if(document.body.dataset.hud!==hud)document.body.dataset.hud=hud;
-  if(scene)scene.pending=pending;
+  if(scene){scene.pending=pending;scene.orderFraction=fraction;}
   $('command-options').hidden=!source||!game.running;
   if(game.result){$('command-label').textContent='EINSATZ BEENDET';$('command-title').textContent=game.result==='victory'?'Die Bastion ist gesichert.':'Das Hauptquartier ist gefallen.';$('command-detail').textContent='Ein neuer Anlauf beginnt mit derselben Ausgangslage.';$('primary').innerHTML='Erneut spielen <span>↻</span>';$('primary').disabled=false;}
   else if(!game.running){$('command-label').textContent='DEIN EINSATZ';$('command-title').textContent='Die Festung wartet.';$('command-detail').textContent='Wähle Orange. Sichere das Plateau. Erobere das blaue HQ.';$('primary').innerHTML=loaded?'Operation starten <span>→</span>':'Gelände laden <span>→</span>';$('primary').disabled=!loaded;}
@@ -50,12 +69,13 @@ function updateUI(){
     if(!path){$('command-detail').textContent='Die Route wurde unterbrochen. Wähle ein neues Ziel.';}
     else if(target.owner==='orange'){$('command-detail').textContent=`${path.length-1} Feld${path.length>2?'er':''} über eigenes Gebiet · Eine Einheit bleibt zurück.`;}
     else{const f=forecast(path.at(-2),target,amount);$('command-detail').textContent=`${f.win?'Vorteil jetzt':'Unterlegen'}: ${Math.floor(f.effective)} Angriff / ${Math.ceil(target.units)} Abwehr${f.defense>1?` · +${Math.round((f.defense-1)*100)} % Deckung`:f.attack>1?' · +15 % Höhenvorteil':''}`;}
-    $('primary').innerHTML='Befehl geben <span>→</span>';$('primary').disabled=!path||amount<1;
-  } else if(source){$('command-label').textContent=`GARNISON · HÖHE ${source.height}`;$('command-title').textContent=`${source.name} · ${Math.floor(source.units)} Truppen`;$('command-detail').textContent='Helle Umrandungen zeigen erreichbare Ziele. Tippe auf ein Ziel.';$('primary').innerHTML='Ziel wählen <span>◇</span>';$('primary').disabled=true;}
+    $('primary').innerHTML=scene?.drag?'Loslassen zum Senden':'Befehl geben <span>→</span>';$('primary').disabled=!path||amount<1;
+  } else if(source){$('command-label').textContent=`GARNISON · HÖHE ${source.height}`;$('command-title').textContent=`${source.name} · ${Math.floor(source.units)} Truppen`;$('command-detail').textContent='Zum Ziel ziehen und loslassen. Alternativ ein Ziel antippen.';$('primary').innerHTML='Ziel wählen <span>◇</span>';$('primary').disabled=true;}
   else{$('command-label').textContent='DEIN BEFEHL';$('command-title').textContent='Wähle eine orange Garnison.';$('command-detail').textContent='Truppen wachsen automatisch. Das Relais bringt +30 % Nachschub.';$('primary').innerHTML='Garnison wählen <span>◇</span>';$('primary').disabled=true;}
 }
-function restart(){game.reset();selected=null;pending=null;fraction=1;scene.select(null);scene.hover(null);scene.fit();$('half').setAttribute('aria-pressed','false');$('all').setAttribute('aria-pressed','true');$('result-dialog').close();game.start();toast('Neuer Einsatz. Beide Seiten beginnen mit frischen Truppen.');updateUI();}
+function restart(){scene.cancelGesture();game.reset();selected=null;pending=null;fraction=1;scene.select(null);scene.hover(null);scene.fit();$('half').setAttribute('aria-pressed','false');$('all').setAttribute('aria-pressed','true');$('result-dialog').close();game.start();toast('Neuer Einsatz. Beide Seiten beginnen mit frischen Truppen.');updateUI();}
 function showResult(){
+  scene.cancelGesture();
   $('result-label').textContent=game.result==='victory'?'OPERATION ERFOLGREICH':'OPERATION GESCHEITERT';$('result-title').textContent=game.result==='victory'?'Die Bastion gehört dir.':'Die Linie ist gebrochen.';
   $('result-copy').textContent=game.result==='victory'?'Das blaue Hauptquartier wurde erobert. Deine Truppen sichern die Festung.':'Die gegnerischen Truppen haben dein Hauptquartier eingenommen. Bündle beim nächsten Versuch früher deine Kräfte.';
   $('result-time').textContent=time(game.time);$('result-captures').textContent=game.captures;$('result-commands').textContent=game.commands;
@@ -63,26 +83,28 @@ function showResult(){
 }
 function processEvents(){for(const e of game.drainEvents()){if(e.type==='capture'||e.type==='combat')scene.effect(e);if(e.type==='capture'&&e.id==='0,0')toast(e.owner==='orange'?'Relais gesichert. Dein Nachschub steigt um 30 %.':'Blau kontrolliert das Relais. Gegnerischer Nachschub +30 %.');if(e.type==='result')showResult();}}
 $('primary').addEventListener('click',()=>{
-  if(game.result){restart();return;}if(game.paused){game.paused=false;autoPaused=false;updateUI();return;}if(!game.running){game.start();toast('Dein südliches HQ ist Orange. Wähle die Zahl an der Basis.');updateUI();return;}
-  if(selected&&pending){const r=game.send(selected,pending,fraction);if(r.ok){toast(`${r.order.units} Truppen unterwegs.`);pending=null;scene.hover(null);}else toast(r.reason);updateUI();}
+  if(game.result){restart();return;}if(game.paused){game.paused=false;autoPaused=false;updateUI();return;}if(!game.running){game.start();toast('Ziehe von Orange zum Ziel. Loslassen sendet die Truppen.');updateUI();return;}
+  if(selected&&pending)issueOrder();
 });
 $('half').addEventListener('click',()=>{fraction=.5;$('half').setAttribute('aria-pressed','true');$('all').setAttribute('aria-pressed','false');updateUI();});
 $('all').addEventListener('click',()=>{fraction=1;$('half').setAttribute('aria-pressed','false');$('all').setAttribute('aria-pressed','true');updateUI();});
 $('clear').addEventListener('click',()=>{selected=null;pending=null;scene.select(null);scene.hover(null);updateUI();});
-function togglePause(){if(!game.running)return;game.paused=!game.paused;autoPaused=false;updateUI();}
+function togglePause(){if(!game.running)return;scene.cancelGesture();game.paused=!game.paused;autoPaused=false;updateUI();}
 $('pause').addEventListener('click',togglePause);
-$('help').addEventListener('click',()=>{helpWasPaused=game.paused;if(game.running)game.paused=true;$('help-dialog').showModal();updateUI();});
+$('help').addEventListener('click',()=>{scene?.cancelGesture();helpWasPaused=game.paused;if(game.running)game.paused=true;$('help-dialog').showModal();updateUI();});
 const closeHelp=()=>{$('help-dialog').close();};$('close-help').addEventListener('click',closeHelp);$('understood').addEventListener('click',closeHelp);
 $('help-dialog').addEventListener('close',()=>{if(game.running&&!autoPaused)game.paused=helpWasPaused;updateUI();});
 $('restart').addEventListener('click',restart);$('inspect').addEventListener('click',()=>$('result-dialog').close());
 $('zoom-in').addEventListener('click',()=>scene?.zoomBy(1.15));$('zoom-out').addEventListener('click',()=>scene?.zoomBy(1/1.15));$('fit').addEventListener('click',()=>scene?.fit());
 $('camera-view').addEventListener('click',()=>scene?.setView(scene.view==='tactical'?'diorama':'tactical'));
 $('quality').addEventListener('click',()=>{if(!scene)return;const low=scene.quality==='high';scene.setQuality(low?'low':'high');$('quality').textContent=low?'LQ':'HQ';$('quality').setAttribute('aria-label',`Grafikqualität: ${low?'Reduziert':'Hoch'}`);toast(low?'Reduzierte Auflösung und Schattenqualität aktiviert.':'Hohe Grafikqualität aktiviert.');});
-document.addEventListener('keydown',e=>{if(e.code==='Space'&&e.target===document.body){e.preventDefault();togglePause();}if(e.key==='Escape'&&!$('help-dialog').open&&!$('result-dialog').open){selected=null;pending=null;scene?.select(null);scene?.hover(null);updateUI();}});
-document.addEventListener('visibilitychange',()=>{if(document.hidden&&game.running&&!game.paused){game.paused=true;autoPaused=true;updateUI();}last=performance.now();accumulator=0;});
+document.addEventListener('keydown',e=>{if(e.code==='Space'&&e.target===document.body){e.preventDefault();togglePause();}if(e.key==='Escape'&&!$('help-dialog').open&&!$('result-dialog').open){scene?.cancelGesture();selected=null;pending=null;scene?.select(null);scene?.hover(null);updateUI();}});
+window.addEventListener('blur',()=>scene?.cancelGesture());
+document.addEventListener('visibilitychange',()=>{if(document.hidden)scene?.cancelGesture();if(document.hidden&&game.running&&!game.paused){game.paused=true;autoPaused=true;updateUI();}last=performance.now();accumulator=0;});
 try {
   scene=new Diorama($('stage'),$('labels'),game,select,hover);
-  scene.onFrameChange=({zoom,small})=>{const hint=$('camera-guidance');hint.hidden=!small&&zoom<=1.01;hint.querySelector('b').textContent=zoom>1.01?'Ausschnitt':'Übersicht';hint.querySelector('span').textContent=zoom>1.01?'Ziehen · ⌖ zurück':'+ für Details';};
+  scene.onDrag=dragCommand;
+  scene.onFrameChange=({zoom,small})=>{const hint=$('camera-guidance');hint.hidden=!small&&zoom<=1.01;hint.querySelector('b').textContent=zoom>1.01?'Ausschnitt':'Übersicht';hint.querySelector('span').textContent=zoom>1.01?'Hintergrund ziehen':'+ für Details';};
   scene.onViewChange=view=>{$('camera-view').textContent=view==='tactical'?'Taktik':'Diorama';$('camera-view').setAttribute('aria-pressed',String(view==='diorama'));$('camera-view').setAttribute('aria-label',view==='tactical'?'Taktikansicht. Zur Dioramaansicht wechseln':'Dioramaansicht. Zur Taktikansicht wechseln');};
   scene.renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();game.paused=true;toast('Grafikverbindung verloren. Bitte die Seite neu laden.');updateUI();});
   await scene.ready;loaded=true;$('loading').hidden=true;updateUI();

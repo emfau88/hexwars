@@ -74,3 +74,10 @@ body[data-match=active] #toast{top:auto;bottom:calc(var(--battle-bottom,165px) -
 }
 
 @media(max-width:640px){.garrison[data-role=target]:hover .badge-face{background:#25302ce6}}
+
+/* Command drags keep their own feedback, independent of camera panning. */
+#stage{user-select:none;-webkit-user-select:none}
+#stage[data-dragging=true] canvas,#stage[data-dragging=true] .garrison{cursor:grabbing}
+.drag-tip{position:absolute;z-index:7;transform:translateX(-50%);pointer-events:none;white-space:nowrap;padding:6px 10px;border:1px solid #dac79a80;border-radius:4px;background:#1b2926ed;color:#f0dfb8;font-size:12px;box-shadow:0 2px 8px #0003}
+.drag-tip[data-valid=false]{border-color:#ce947870;color:#e6b39d}
+body:has(#stage[data-dragging=true]) #toast{opacity:0;transition:none}

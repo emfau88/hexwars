@@ -31,7 +31,7 @@ export class Diorama {
     this.camera=new T.OrthographicCamera(-10,10,10,-10,.1,100);
     this.renderer=new T.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});
     this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFShadowMap;this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.10;container.append(this.renderer.domElement);
-    this.renderer.domElement.setAttribute('aria-label','Dreidimensionales Schlachtfeld. Wähle eine orange Garnison und danach ein Ziel.');
+    this.renderer.domElement.setAttribute('aria-label','Dreidimensionales Schlachtfeld. Ziehe eine orange Garnison zum Ziel und lasse los. Alternativ Quelle und Ziel antippen.');
     this.scene.add(new T.HemisphereLight(0xdce5e7,0x727367,1.9));
     this.sun=new T.DirectionalLight(0xffecd3,2.7);this.sun.position.set(-8,18,6);this.sun.castShadow=true;this.sun.shadow.mapSize.set(2048,2048);Object.assign(this.sun.shadow.camera,{left:-12,right:12,top:12,bottom:-12,near:1,far:50});this.sun.shadow.bias=-.00025;this.sun.shadow.normalBias=.018;this.sun.shadow.radius=3;this.scene.add(this.sun);
     const fill=new T.DirectionalLight(0xb9cbd7,.50);fill.position.set(9,8,-12);this.scene.add(fill);
@@ -115,7 +115,7 @@ export class Diorama {
   hover(id){this.hovered=id;}
   setQuality(mode){this.quality=mode;this.renderer.setPixelRatio(mode==='low'?1:Math.min(devicePixelRatio,1.6));this.sun.shadow.mapSize.setScalar(mode==='low'?1024:2048);if(this.sun.shadow.map){this.sun.shadow.map.dispose();this.sun.shadow.map=null;}this.sun.shadow.needsUpdate=true;this.resize();}
   setView(view){this.view=view;this.setAngle(CAMERA_VIEWS[view]);this.onViewChange?.(this.view);}
-  setAngle(angle){this.angle=T.MathUtils.clamp(angle,50,85);this.zoom=1;this.viewPan={u:0,v:0};this.resize();}
+  setAngle(angle){this.cancelGesture();this.angle=T.MathUtils.clamp(angle,50,85);this.zoom=1;this.viewPan={u:0,v:0};this.resize();}
   fit(){this.setView('tactical');}
   zoomBy(factor,anchor){
     const old=this.framing;if(!old)return;
@@ -143,17 +143,18 @@ export class Diorama {
     // Match circular hit areas, preserving HQ/relay anchors before other values.
     // Displaced labels remain connected to
     // their exact projected surface, even where different heights overlap.
-    const placed=[],lines=[],offsets=[{x:0,y:0}];
+    const placed=[],lines=[],offsets=[{x:0,y:0}];this.labelPositions=new Map();
     for(const radius of [12,24,36,48,60,72])for(let j=0;j<12;j++)offsets.push({x:Math.cos(j*Math.PI/6)*radius,y:Math.sin(j*Math.PI/6)*radius});
-    for(const e of entries.sort((a,b)=>b.strategic-a.strategic||a.pos.y-b.pos.y||a.id.localeCompare(b.id))){
-      let best=null,bestScore=Infinity;
-      for(const o of offsets){
+    for(const e of entries.sort((a,b)=>Number(this.drag?.labelPositions.has(b.id)||false)-Number(this.drag?.labelPositions.has(a.id)||false)||b.strategic-a.strategic||a.pos.y-b.pos.y||a.id.localeCompare(b.id))){
+      const locked=this.drag?.labelPositions.get(e.id);
+      let best=locked||null,bestScore=Infinity;
+      for(const o of locked?[]:offsets){
         const x=T.MathUtils.clamp(e.pos.x+o.x,e.width/2+6,this.width-e.width/2-6),y=T.MathUtils.clamp(e.pos.y+o.y,e.width/2+2,this.height-e.width/2-2);
         let score=(x-e.pos.x)**2+(y-e.pos.y)**2;
         for(const p of placed){const overlap=(e.width+p.width)/2+2-Math.hypot(x-p.x,y-p.y);if(overlap>0)score+=100000+overlap*overlap*1000;}
         if(score<bestScore){bestScore=score;best={x,y,width:e.width};}
       }
-      placed.push(best);e.el.style.transform=`translate(${best.x}px,${best.y}px) translate(-50%, -50%)`;
+      placed.push(best);this.labelPositions.set(e.id,best);e.el.style.transform=`translate(${best.x}px,${best.y}px) translate(-50%, -50%)`;
       if(Math.hypot(best.x-e.pos.x,best.y-e.pos.y)>6)lines.push(`<path d="M${e.pos.x},${e.pos.y} L${best.x},${best.y}"/><circle cx="${e.pos.x}" cy="${e.pos.y}" r="2"/>`);
     }
     this.leaderLines.innerHTML=lines.join('');
@@ -167,28 +168,99 @@ export class Diorama {
     }
     return this.lastPick.id;
   }
+  hitAt(event){
+    // Pointer capture changes event.target. Always inspect the actual drop point,
+    // including badges, HQ roofs and occluding cliff faces.
+    const element=document.elementFromPoint(event.clientX,event.clientY);
+    if(!element||!this.container.contains(element))return {id:null,reason:'outside'};
+    const label=element.closest('.garrison');
+    if(label)return {id:label.dataset.cell,reason:null};
+    if(element!==this.renderer.domElement)return {id:null,reason:'outside'};
+    const id=this.pick(event);
+    return {id,reason:this.lastPick.kind==='cliff'?'cliff':id?null:'outside'};
+  }
+  updateDrag(event){
+    if(!this.drag)return;
+    const hit=this.hitAt(event),rect=this.container.getBoundingClientRect();
+    this.drag.x=event.clientX-rect.left;this.drag.y=event.clientY-rect.top;
+    if(hit.id!==this.drag.target||hit.reason!==this.drag.reason){
+      this.drag.target=hit.id;this.drag.reason=hit.reason;
+      this.onDrag?.('move',hit.id,hit.reason);
+    }
+  }
+  endDrag(cancel=false){
+    if(!this.drag)return;
+    const {target,reason}=this.drag;this.drag=null;this.labelLayoutKey=null;
+    this.container.removeAttribute('data-dragging');this.dragTip.hidden=true;
+    this.onDrag?.(cancel?'cancel':'end',target,reason);
+  }
+  cancelGesture(){
+    this.endDrag(true);
+    if(this.pointers?.size){this.suppressNextClick=true;this.suppressClickUntil=performance.now()+350;}
+    const ids=[...(this.pointers?.keys()||[])];this.pointers?.clear();this.pinch=null;this.down=null;
+    for(const id of ids)if(this.container.hasPointerCapture(id))this.container.releasePointerCapture(id);
+  }
   bind(){
     const canvas=this.renderer.domElement,input=this.container;this.pointers=new Map();
+    this.dragTip=document.createElement('div');this.dragTip.className='drag-tip';this.dragTip.hidden=true;this.dragTip.setAttribute('aria-live','polite');input.append(this.dragTip);
     input.addEventListener('click',e=>{if((this.suppressNextClick&&e.detail>0)||performance.now()<(this.suppressClickUntil||0)){this.suppressNextClick=false;e.preventDefault();e.stopImmediatePropagation();}},true);
+    input.addEventListener('contextmenu',e=>e.preventDefault());
     input.addEventListener('pointerdown',e=>{
-      if(!this.pointers.size)this.suppressNextClick=false;
-      // Chrome may retarget a touch on visible canvas to a nearby HTML button.
-      // Use the actual hit at the unchanged pointer coordinates instead.
+      if(e.button!==0)e.preventDefault();
+      if(!this.pointers.size){this.suppressNextClick=false;this.suppressClickUntil=0;}
       const label=document.elementFromPoint(e.clientX,e.clientY)?.closest('.garrison'),retargeted=label!==e.target.closest('.garrison');
-      if(!label||retargeted)input.setPointerCapture(e.pointerId);this.pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
-      if(this.pointers.size===1)this.down={x:e.clientX,y:e.clientY,pan:{...this.viewPan},moved:false,label:label?.dataset.cell,retargeted};
-      else{this.down.moved=true;for(const id of this.pointers.keys())input.setPointerCapture(id);const p=[...this.pointers.values()];this.pinch={distance:Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y)};}
+      if(!label||retargeted||e.button!==0)input.setPointerCapture(e.pointerId);
+      this.pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+      if(this.pointers.size===1){
+        const hit=this.hitAt(e),cell=this.game.cell(hit.id);
+        const command=e.button===0&&this.game.running&&!this.game.paused&&!this.game.result&&cell?.owner==='orange';
+        this.down={x:e.clientX,y:e.clientY,pan:{...this.viewPan},moved:false,label:label?.dataset.cell,retargeted,from:command?cell.id:null,button:e.button};
+      }else{
+        this.endDrag(true);this.down.moved=true;this.down.from=null;
+        for(const id of this.pointers.keys())input.setPointerCapture(id);
+        const p=[...this.pointers.values()];
+        this.pinch={distance:Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y),x:(p[0].x+p[1].x)/2,y:(p[0].y+p[1].y)/2};
+      }
     });
     input.addEventListener('pointermove',e=>{
       if(this.pointers.has(e.pointerId))this.pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
-      if(this.pointers.size===2&&this.pinch){const p=[...this.pointers.values()],distance=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y),rect=canvas.getBoundingClientRect();this.zoomBy(distance/Math.max(1,this.pinch.distance),{x:(p[0].x+p[1].x)/2-rect.left,y:(p[0].y+p[1].y)/2-rect.top});this.pinch.distance=distance;return;}
-      if(this.pointers.size===1&&this.down){const dx=e.clientX-this.down.x,dy=e.clientY-this.down.y;if(Math.hypot(dx,dy)>8){this.down.moved=true;input.setPointerCapture(e.pointerId);}if(this.down.moved&&this.zoom>1&&!this.pinch){this.viewPan={u:this.down.pan.u-dx/this.framing.scale,v:this.down.pan.v+dy/this.framing.scale};this.resize();}return;}
+      if(this.pointers.size>=2&&this.pinch){
+        const p=[...this.pointers.values()],distance=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y),x=(p[0].x+p[1].x)/2,y=(p[0].y+p[1].y)/2,rect=canvas.getBoundingClientRect();
+        this.zoomBy(distance/Math.max(1,this.pinch.distance),{x:x-rect.left,y:y-rect.top});
+        this.viewPan.u-=(x-this.pinch.x)/this.framing.scale;this.viewPan.v+=(y-this.pinch.y)/this.framing.scale;this.resize();
+        this.pinch={distance,x,y};return;
+      }
+      if(this.pointers.size===1&&this.down){
+        const dx=e.clientX-this.down.x,dy=e.clientY-this.down.y;
+        if(!this.down.moved&&Math.hypot(dx,dy)>8){
+          this.down.moved=true;input.setPointerCapture(e.pointerId);
+          if(this.down.from){
+            this.drag={from:this.down.from,target:null,reason:null,labelPositions:new Map(this.labelPositions)};
+            input.dataset.dragging='true';this.onDrag?.('start',this.down.from);
+          }
+        }
+        if(this.drag)this.updateDrag(e);
+        else if(this.down.moved&&this.zoom>1&&!this.pinch){this.viewPan={u:this.down.pan.u-dx/this.framing.scale,v:this.down.pan.v+dy/this.framing.scale};this.resize();}
+        return;
+      }
       this.onHover(e.target.closest('.garrison')?.dataset.cell||this.pick(e));
     });
-    input.addEventListener('pointerup',e=>{if(this.down?.moved)this.suppressClickUntil=performance.now()+350;if(this.down?.retargeted)this.suppressNextClick=true;if(this.pointers.size===1&&this.down&&!this.down.moved){if(!this.down.label){const id=this.pick(e);this.onSelect(id,this.lastPick.kind==='cliff'?'cliff':null);}else if(this.down.retargeted)this.onSelect(this.down.label);}this.pointers.delete(e.pointerId);if(!this.pointers.size){this.pinch=null;this.down=null;}});
+    input.addEventListener('pointerup',e=>{
+      if(this.down?.moved){this.suppressClickUntil=performance.now()+350;this.suppressNextClick=true;}
+      if(this.drag){this.updateDrag(e);this.endDrag();}
+      else if(this.down?.retargeted)this.suppressNextClick=true;
+      if(this.pointers.size===1&&this.down&&!this.down.moved&&this.down.button===0){
+        if(!this.down.label){const hit=this.hitAt(e);this.onSelect(hit.id,hit.reason==='cliff'?'cliff':null);}
+        else if(this.down.retargeted)this.onSelect(this.down.label);
+      }
+      this.pointers.delete(e.pointerId);if(!this.pointers.size){this.pinch=null;this.down=null;}
+    });
     input.addEventListener('pointerleave',()=>{if(!this.pointers.size)this.onHover(null);});
-    input.addEventListener('pointercancel',()=>{this.pointers.clear();this.pinch=null;this.down=null;this.suppressClickUntil=performance.now()+350;});
-    input.addEventListener('wheel',e=>{e.preventDefault();const rect=canvas.getBoundingClientRect();this.zoomBy(e.deltaY>0?.92:1.08,{x:e.clientX-rect.left,y:e.clientY-rect.top});},{passive:false});
+    input.addEventListener('pointercancel',()=>this.cancelGesture());
+    // Touch transfers implicit capture from a badge to the stage. That loss
+    // bubbles from the badge and is not a cancelled gesture.
+    input.addEventListener('lostpointercapture',e=>{if(e.target===input&&this.pointers.has(e.pointerId))this.cancelGesture();});
+    input.addEventListener('wheel',e=>{e.preventDefault();if(this.pointers.size)return;const rect=canvas.getBoundingClientRect();this.zoomBy(e.deltaY>0?.92:1.08,{x:e.clientX-rect.left,y:e.clientY-rect.top});},{passive:false});
   }
   effect(event){if(!event.id)return;const c=this.game.cell(event.id);if(!c)return;const m=new T.Mesh(new T.RingGeometry(.1,.14,32),new T.MeshBasicMaterial({color:COLORS[event.owner],transparent:true,opacity:.7,side:T.DoubleSide,depthWrite:false}));m.rotation.x=-Math.PI/2;m.position.set(c.x,c.height*STEP+.1,c.z);this.scene.add(m);this.animations.push({mesh:m,start:performance.now()});}
   updateRovers(time){
@@ -209,7 +281,7 @@ export class Diorama {
       marker.material.color.setHex(owned?COLORS[c.owner]:0xc9d0bb);marker.material.opacity=owned?.95:.62;
       fill.material.color.setHex(owned?COLORS[c.owner]:0xcbce9e);fill.material.opacity=owned?(isSelected?.34:.28):reachable?.025:0;
       if(hover)fill.material.opacity+=.045;fill.visible=fill.material.opacity>.001;
-      action.visible=!!(isSelected||isTarget||reachable);action.material.color.setHex(isTarget?0xf4efe0:isSelected?0xf2d9a4:0xd1c9a9);action.material.opacity=(isSelected||isTarget)?.98:hover?.68:.40;
+      action.visible=!!(isSelected||isTarget||reachable);action.material.color.setHex(isTarget&&this.drag&&!reachable?0xd49079:isTarget?0xf4efe0:isSelected?0xf2d9a4:0xd1c9a9);action.material.opacity=(isSelected||isTarget)?.98:hover?.68:.40;
       const el=this.labelsById.get(c.id),anchorZ=c.z+(c.kind==='hq'?.82:c.kind==='relay'?.68:.38),pos=this.project(c.x,surfaceHeight(this.game.cells,c,c.x,anchorZ)+.24,anchorZ);
       const classes=`garrison ${c.owner}${isSelected?' selected':''}${reachable?' reachable':''}${moving?' in-transit':''}`;if(el.className!==classes)el.className=classes;
       if(el.dataset.priority!==priority)el.dataset.priority=priority;const role=isSelected?'source':isTarget?'target':movingTo.has(c.id)?'incoming':movingFrom.has(c.id)?'outgoing':'field';if(el.dataset.role!==role)el.dataset.role=role;
@@ -225,6 +297,15 @@ export class Diorama {
     this.pathLine.visible=!!path;
     const pathKey=path?.map(c=>c.id).join('|');
     if(path&&pathKey!==this.lastPathKey){const pts=[];for(let i=0;i<path.length-1;i++)for(let s=0;s<=8;s++){const a=path[i],b=path[i+1],t=s/8,x=T.MathUtils.lerp(a.x,b.x,t),z=T.MathUtils.lerp(a.z,b.z,t);pts.push(new T.Vector3(x,surfaceHeight(this.game.cells,t<.5?a:b,x,z)+.15,z));}this.pathLine.geometry.dispose();this.pathLine.geometry=new T.BufferGeometry().setFromPoints(pts);this.pathLine.computeLineDistances();}this.lastPathKey=pathKey;
+    if(this.drag){
+      const amount=Math.max(0,Math.min(Math.floor(selected?.units||0)-1,Math.floor((selected?.units||0)*(this.orderFraction??1))));
+      const valid=!!path&&target?.id!==selected?.id&&amount>0&&selected?.owner==='orange'&&this.game.running&&!this.game.paused;
+      const text=valid?`Loslassen · ${amount} Truppen`:this.drag.reason==='cliff'?'Felswand · kein Ziel':!target?'Außerhalb · Abbrechen':target===selected?'Zum Zielfeld ziehen':amount<1?'Mindestens 2 Truppen nötig':'Kein begehbarer Weg';
+      this.dragTip.hidden=false;this.dragTip.dataset.valid=String(valid);
+      if(this.dragTip.textContent!==text)this.dragTip.textContent=text;
+      this.dragTip.style.left=`${T.MathUtils.clamp(this.drag.x,100,this.width-100)}px`;
+      this.dragTip.style.top=`${T.MathUtils.clamp(this.drag.y-48,12,this.height-48)}px`;
+    }
     if(!this.reduced)this.relayRing.rotation.z=time*.00025;
     for(const a of [...this.animations]){const t=(time-a.start)/900;if(t>1){a.mesh.removeFromParent();a.mesh.geometry.dispose();a.mesh.material.dispose();this.animations.splice(this.animations.indexOf(a),1);}else{a.mesh.scale.setScalar(1+t*8);a.mesh.material.opacity=(1-t)*.7;}}
     this.updateRovers(time);this.renderer.render(this.scene,this.camera);

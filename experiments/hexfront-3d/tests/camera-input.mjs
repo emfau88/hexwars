@@ -66,11 +66,11 @@ try{
   };
   if(width>=390)await testOcclusion();
   const beforeSwitch=await state();await click('#camera-view');assert.equal((await state()).angle,55);assert.equal((await state()).selected,beforeSwitch.selected);if(width>=390)await testOcclusion();await page.screenshot({path:path.join(out,`${width}-diorama.png`)});await click('#fit');assert.equal((await state()).angle,70);assert.equal((await state()).selected,beforeSwitch.selected);
-  await click('#zoom-in');assert.ok((await state()).zoom>1);const stage=await page.locator('#stage').boundingBox(),x=stage.x+stage.width*.5,y=stage.y+stage.height*.85;
+  await click('#zoom-in');assert.ok((await state()).zoom>1);const stage=await page.locator('#stage').boundingBox(),x=stage.x+12,y=stage.y+14;
   const beforeGesture=await state();
   if(mobile){
-   const cdp=await context.newCDPSession(page),touch=(points,type)=>cdp.send('Input.dispatchTouchEvent',{type,touchPoints:points});
-   await touch([{x:x-30,y,id:1},{x:x+30,y,id:2}],'touchStart');await touch([{x:x-65,y:y-10,id:1},{x:x+65,y:y+10,id:2}],'touchMove');await touch([{x:x+65,y:y+10,id:2}],'touchEnd');await touch([],'touchEnd');await frame();
+   const cdp=await context.newCDPSession(page),pinchX=stage.x+stage.width/2,touch=(points,type)=>cdp.send('Input.dispatchTouchEvent',{type,touchPoints:points});
+   await touch([{x:pinchX-30,y,id:1},{x:pinchX+30,y,id:2}],'touchStart');await touch([{x:pinchX-65,y:y-10,id:1},{x:pinchX+65,y:y+10,id:2}],'touchMove');await touch([{x:pinchX+65,y:y+10,id:2}],'touchEnd');await touch([],'touchEnd');await frame();
    assert.ok((await state()).zoom>beforeGesture.zoom,'pinch zooms');
    await touch([{x,y,id:3}],'touchStart');await touch([{x:x+200,y:y-180,id:3}],'touchMove');await touch([],'touchEnd');await frame();
   }else{await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x+600,y-450,{steps:8});await page.mouse.up();await frame();await page.mouse.move(x,y);await page.mouse.wheel(0,-300);await frame();}
