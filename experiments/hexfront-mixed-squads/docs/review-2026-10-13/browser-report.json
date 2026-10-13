@@ -1,0 +1,47 @@
+{
+  "errors": [],
+  "checks": [
+    "queue, repeat, refund, pause and planning via native buttons",
+    "mouse click and drag, drone-only order, persistent squads, combat and rally delivery",
+    "three wins, unlocks, defeat, replay; original campaign storage preserved",
+    "native touch tap and drag, mech selection, 390/320 px layouts, reduced motion, low quality",
+    "standalone production build loads, no QA API, locked missions cannot be skipped"
+  ],
+  "matches": [
+    {
+      "mission": "morgenwacht",
+      "result": "victory",
+      "seconds": 291.0500000000319,
+      "playerCommands": 72,
+      "aiCommands": 44
+    },
+    {
+      "mission": "windpass",
+      "result": "victory",
+      "seconds": 203.30000000001198,
+      "playerCommands": 57,
+      "aiCommands": 27
+    },
+    {
+      "mission": "auenstrom",
+      "result": "victory",
+      "seconds": 213.9000000000144,
+      "playerCommands": 51,
+      "aiCommands": 34
+    }
+  ],
+  "screens": [
+    "production-desktop",
+    "combat-desktop",
+    "supply-desktop",
+    "result-morgenwacht",
+    "result-windpass",
+    "result-auenstrom",
+    "campaign-complete",
+    "result-defeat",
+    "mobile-command",
+    "production-mobile",
+    "mobile-small",
+    "production-build"
+  ]
+}

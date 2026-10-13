@@ -1,0 +1,502 @@
+{
+  "checks": [
+    "morgenwacht: full canvas, land at viewport corners, all fields visible, HQ centered, scenery non-playable, briefing, zoom/pan and selection at four viewport sizes",
+    "windpass: full canvas, land at viewport corners, all fields visible, HQ centered, scenery non-playable, briefing, zoom/pan and selection at four viewport sizes",
+    "auenstrom: full canvas, land at viewport corners, all fields visible, HQ centered, scenery non-playable, briefing, zoom/pan and selection at four viewport sizes"
+  ],
+  "errors": [],
+  "frames": [
+    {
+      "mission": "morgenwacht",
+      "safe": {
+        "left": 12,
+        "right": 1428,
+        "top": 97.59375,
+        "bottom": 818
+      },
+      "hqs": [
+        {
+          "owner": "blue",
+          "x": 720,
+          "y": 191.63887975709213
+        },
+        {
+          "owner": "orange",
+          "x": 720,
+          "y": 723.9548702429082
+        }
+      ],
+      "background": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "statusVisible": true,
+      "width": 1440,
+      "height": 900,
+      "scroll": 1440,
+      "count": 37,
+      "picks": 37,
+      "inside": true,
+      "outsidePick": null,
+      "metrics": {
+        "calls": 123,
+        "triangles": 288425,
+        "pixelRatio": 1,
+        "quality": "high"
+      }
+    },
+    {
+      "mission": "morgenwacht",
+      "safe": {
+        "left": 12,
+        "right": 378,
+        "top": 150,
+        "bottom": 774
+      },
+      "hqs": [
+        {
+          "owner": "blue",
+          "x": 195,
+          "y": 344.50796077794087
+        },
+        {
+          "owner": "orange",
+          "x": 195,
+          "y": 579.4920392220592
+        }
+      ],
+      "background": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "statusVisible": true,
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "count": 37,
+      "picks": 37,
+      "inside": true,
+      "outsidePick": null,
+      "metrics": {
+        "calls": 123,
+        "triangles": 288425,
+        "pixelRatio": 1,
+        "quality": "high"
+      }
+    },
+    {
+      "mission": "morgenwacht",
+      "safe": {
+        "left": 12,
+        "right": 308,
+        "top": 150,
+        "bottom": 670
+      },
+      "hqs": [
+        {
+          "owner": "blue",
+          "x": 160,
+          "y": 317.43051455231705
+        },
+        {
+          "owner": "orange",
+          "x": 160,
+          "y": 502.56948544768306
+        }
+      ],
+      "background": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "statusVisible": true,
+      "width": 320,
+      "height": 740,
+      "scroll": 320,
+      "count": 37,
+      "picks": 37,
+      "inside": true,
+      "outsidePick": null,
+      "metrics": {
+        "calls": 123,
+        "triangles": 288425,
+        "pixelRatio": 1,
+        "quality": "high"
+      }
+    },
+    {
+      "mission": "morgenwacht",
+      "safe": {
+        "left": 208,
+        "right": 636,
+        "top": 89.59375,
+        "bottom": 316
+      },
+      "hqs": [
+        {
+          "owner": "blue",
+          "x": 422,
+          "y": 128.74999745947503
+        },
+        {
+          "owner": "orange",
+          "x": 422,
+          "y": 276.8437525405251
+        }
+      ],
+      "background": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "statusVisible": true,
+      "width": 844,
+      "height": 390,
+      "scroll": 844,
+      "count": 37,
+      "picks": 37,
+      "inside": true,
+      "outsidePick": null,
+      "metrics": {
+        "calls": 123,
+        "triangles": 288425,
+        "pixelRatio": 1,
+        "quality": "high"
+      }
+    },
+    {
+      "mission": "windpass",
+      "safe": {
+        "left": 12,
+        "right": 1428,
+        "top": 97.59375,
+        "bottom": 818
+      },
+      "hqs": [
+        {
+          "owner": "blue",
+          "x": 720,
+          "y": 164.47991884200087
+        },
+        {
+          "owner": "orange",
+          "x": 720,
+          "y": 751.1138311579999
+        }
+      ],
+      "background": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "statusVisible": true,
+      "width": 1440,
+      "height": 900,
+      "scroll": 1440,
+      "count": 34,
+      "picks": 34,
+      "inside": true,
+      "outsidePick": null,
+      "metrics": {
+        "calls": 117,
+        "triangles": 280600,
+        "pixelRatio": 1,
+        "quality": "high"
+      }
+    },
+    {
+      "mission": "windpass",
+      "safe": {
+        "left": 12,
+        "right": 378,
+        "top": 150,
+        "bottom": 774
+      },
+      "hqs": [
+        {
+          "owner": "blue",
+          "x": 195,
+          "y": 282.96450584551246
+        },
+        {
+          "owner": "orange",
+          "x": 195,
+          "y": 641.0354941544881
+        }
+      ],
+      "background": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "statusVisible": true,
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "count": 34,
+      "picks": 34,
+      "inside": true,
+      "outsidePick": null,
+      "metrics": {
+        "calls": 117,
+        "triangles": 280600,
+        "pixelRatio": 1,
+        "quality": "high"
+      }
+    },
+    {
+      "mission": "windpass",
+      "safe": {
+        "left": 12,
+        "right": 308,
+        "top": 150,
+        "bottom": 670
+      },
+      "hqs": [
+        {
+          "owner": "blue",
+          "x": 160,
+          "y": 268.94173187828255
+        },
+        {
+          "owner": "orange",
+          "x": 160,
+          "y": 551.0582681217178
+        }
+      ],
+      "background": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "statusVisible": true,
+      "width": 320,
+      "height": 740,
+      "scroll": 320,
+      "count": 34,
+      "picks": 34,
+      "inside": true,
+      "outsidePick": null,
+      "metrics": {
+        "calls": 117,
+        "triangles": 280600,
+        "pixelRatio": 1,
+        "quality": "high"
+      }
+    },
+    {
+      "mission": "windpass",
+      "safe": {
+        "left": 208,
+        "right": 636,
+        "top": 89.59375,
+        "bottom": 316
+      },
+      "hqs": [
+        {
+          "owner": "blue",
+          "x": 422,
+          "y": 121.19419868975442
+        },
+        {
+          "owner": "orange",
+          "x": 422,
+          "y": 284.39955131024584
+        }
+      ],
+      "background": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "statusVisible": true,
+      "width": 844,
+      "height": 390,
+      "scroll": 844,
+      "count": 34,
+      "picks": 34,
+      "inside": true,
+      "outsidePick": null,
+      "metrics": {
+        "calls": 117,
+        "triangles": 280600,
+        "pixelRatio": 1,
+        "quality": "high"
+      }
+    },
+    {
+      "mission": "auenstrom",
+      "safe": {
+        "left": 12,
+        "right": 1428,
+        "top": 97.59375,
+        "bottom": 818
+      },
+      "hqs": [
+        {
+          "owner": "blue",
+          "x": 719.9999999999999,
+          "y": 205.6471969840321
+        },
+        {
+          "owner": "orange",
+          "x": 720,
+          "y": 709.9465530159683
+        }
+      ],
+      "background": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "statusVisible": true,
+      "width": 1440,
+      "height": 900,
+      "scroll": 1440,
+      "count": 33,
+      "picks": 33,
+      "inside": true,
+      "outsidePick": null,
+      "metrics": {
+        "calls": 117,
+        "triangles": 280200,
+        "pixelRatio": 1,
+        "quality": "high"
+      }
+    },
+    {
+      "mission": "auenstrom",
+      "safe": {
+        "left": 12,
+        "right": 378,
+        "top": 150,
+        "bottom": 774
+      },
+      "hqs": [
+        {
+          "owner": "blue",
+          "x": 194.99999999999997,
+          "y": 332.35361192835296
+        },
+        {
+          "owner": "orange",
+          "x": 194.99999999999997,
+          "y": 591.6463880716473
+        }
+      ],
+      "background": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "statusVisible": true,
+      "width": 390,
+      "height": 844,
+      "scroll": 390,
+      "count": 33,
+      "picks": 33,
+      "inside": true,
+      "outsidePick": null,
+      "metrics": {
+        "calls": 117,
+        "triangles": 280200,
+        "pixelRatio": 1,
+        "quality": "high"
+      }
+    },
+    {
+      "mission": "auenstrom",
+      "safe": {
+        "left": 12,
+        "right": 308,
+        "top": 150,
+        "bottom": 670
+      },
+      "hqs": [
+        {
+          "owner": "blue",
+          "x": 159.99999999999997,
+          "y": 307.85436091324783
+        },
+        {
+          "owner": "orange",
+          "x": 159.99999999999997,
+          "y": 512.1456390867523
+        }
+      ],
+      "background": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "statusVisible": true,
+      "width": 320,
+      "height": 740,
+      "scroll": 320,
+      "count": 33,
+      "picks": 33,
+      "inside": true,
+      "outsidePick": null,
+      "metrics": {
+        "calls": 117,
+        "triangles": 280200,
+        "pixelRatio": 1,
+        "quality": "high"
+      }
+    },
+    {
+      "mission": "auenstrom",
+      "safe": {
+        "left": 208,
+        "right": 636,
+        "top": 89.59375,
+        "bottom": 316
+      },
+      "hqs": [
+        {
+          "owner": "blue",
+          "x": 422,
+          "y": 132.64720201012318
+        },
+        {
+          "owner": "orange",
+          "x": 422,
+          "y": 272.94654798987693
+        }
+      ],
+      "background": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "statusVisible": true,
+      "width": 844,
+      "height": 390,
+      "scroll": 844,
+      "count": 33,
+      "picks": 33,
+      "inside": true,
+      "outsidePick": null,
+      "metrics": {
+        "calls": 117,
+        "triangles": 280200,
+        "pixelRatio": 1,
+        "quality": "high"
+      }
+    }
+  ]
+}
