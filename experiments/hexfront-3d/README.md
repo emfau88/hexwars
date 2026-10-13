@@ -1,20 +1,24 @@
 # HEXFRONT — Field Operations
 
-Drei vollständig spielbare 3D-Missionen mit einem neuen Vollbild-Hauptmenü, echten Kartenaufnahmen, gespeicherten Freischaltungen und Wiederholungsfunktion.
+Drei spielbare 3D-Missionen. Neu integriert: das detaillierte freistehende HQ mit sauber geschlossenem Boden und Radaranimation, der gelieferte Hover-Bot und das Relais. Der Mech bleibt eine separate Modellstudie.
 
 - **Morgenwacht:** bestehende Festung unverändert, 37 Sektoren.
 - **Windpass:** neue Schlucht mit zwei unterschiedlichen Routen, 34 Sektoren.
 - **Auenstrom:** zwei Ufer und drei Flussübergänge, 33 Sektoren.
 
-**[Kampagne testen](https://rawcdn.githack.com/emfau88/hexwars/f65d3432bbd6df290f834fa66900b7792d98e188/experiments/hexfront-3d/preview/index.html)** · [Bisherige Wirtschaft](https://rawcdn.githack.com/emfau88/hexwars/f65d3432bbd6df290f834fa66900b7792d98e188/experiments/hexfront-3d/preview/index.html?economy=legacy-local). Beim ersten Besuch gegebenenfalls **Open the page** bestätigen.
+**[Kampagne testen](https://rawcdn.githack.com/emfau88/hexwars/a1ad71d0361d552086896b68566bbe2bfd26574e/experiments/hexfront-3d/preview/index.html)** · [Bisherige Wirtschaft](https://rawcdn.githack.com/emfau88/hexwars/a1ad71d0361d552086896b68566bbe2bfd26574e/experiments/hexfront-3d/preview/index.html?economy=legacy-local). Beim ersten Besuch gegebenenfalls **Open the page** bestätigen.
 
-Spielstand: `f65d3432bbd6df290f834fa66900b7792d98e188`. Der feste Testlink ist nach dem Branch-Push verfügbar; lokal ist die Version unabhängig davon startbar.
+Spielstand: `a1ad71d0361d552086896b68566bbe2bfd26574e`. Der feste Testlink ist nach dem Branch-Push verfügbar; lokal ist die Version unabhängig davon startbar.
+
+**[Alle vier Modelle drehen](https://rawcdn.githack.com/emfau88/hexwars/a1ad71d0361d552086896b68566bbe2bfd26574e/experiments/hexfront-3d/preview/public/models.html)** · [Neuer Asset-Pass: Bilder, Herstellung und Tests](docs/SUPPLIED_ASSETS.md)
 
 [Kampagne, Screenshots, Prüfungen und Grenzen](docs/CAMPAIGN.md) · [Assetquellen](ASSET_LICENSES.md) · [HQ-Modell und Herstellung](docs/HQ_COMMAND.md)
 
-![Hauptmenü auf Desktop](docs/campaign/menu-desktop.png)
+![HQ: links vorher, rechts das neue integrierte Modell](docs/imported-assets/comparison-hq.png)
 
-<img src="docs/campaign/menu-mobile.png" width="390" alt="Hauptmenü auf Mobile">
+![Aktuelle Spielansicht](docs/imported-assets/after-desktop.png)
+
+<img src="docs/imported-assets/after-mobile.png" width="390" alt="Aktuelle Spielansicht auf Mobile">
 
 46 Logiktests sowie Kampagnen- und Produktions-Browsertests bestanden. Drei Siege, Niederlagen, Neustart, Maus-/Touchbefehle, Freischaltung und Menü geprüft. Die vollständigen automatisierten Partien verwenden echte Spielbefehle und eine manuelle Testuhr. Kein echter Smartphone-Hardwaretest und keine gemessene FPS-Zusage.
 
