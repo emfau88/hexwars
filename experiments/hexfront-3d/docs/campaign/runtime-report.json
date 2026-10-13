@@ -1,5 +1,5 @@
 {
-  "date": "2026-10-13T11:55:19.318Z",
+  "date": "2026-10-13T13:07:50.055Z",
   "errors": [],
   "views": [
     {
@@ -551,8 +551,8 @@
         }
       ],
       "metrics": {
-        "calls": 158,
-        "triangles": 163205,
+        "calls": 106,
+        "triangles": 169955,
         "pixelRatio": 1,
         "quality": "high"
       },
@@ -1108,8 +1108,8 @@
         }
       ],
       "metrics": {
-        "calls": 198,
-        "triangles": 179819,
+        "calls": 145,
+        "triangles": 184523,
         "pixelRatio": 1,
         "quality": "high"
       },
@@ -1649,8 +1649,8 @@
         }
       ],
       "metrics": {
-        "calls": 158,
-        "triangles": 164609,
+        "calls": 106,
+        "triangles": 171359,
         "pixelRatio": 1,
         "quality": "high"
       },
@@ -2206,8 +2206,8 @@
         }
       ],
       "metrics": {
-        "calls": 158,
-        "triangles": 163205,
+        "calls": 106,
+        "triangles": 169955,
         "pixelRatio": 1,
         "quality": "high"
       },
@@ -2763,8 +2763,8 @@
         }
       ],
       "metrics": {
-        "calls": 196,
-        "triangles": 179795,
+        "calls": 144,
+        "triangles": 184523,
         "pixelRatio": 1,
         "quality": "high"
       },
@@ -3320,8 +3320,8 @@
         }
       ],
       "metrics": {
-        "calls": 192,
-        "triangles": 163529,
+        "calls": 140,
+        "triangles": 170279,
         "pixelRatio": 1,
         "quality": "high"
       },
@@ -3861,8 +3861,8 @@
         }
       ],
       "metrics": {
-        "calls": 158,
-        "triangles": 164609,
+        "calls": 106,
+        "triangles": 171359,
         "pixelRatio": 1,
         "quality": "high"
       },
@@ -4402,8 +4402,8 @@
         }
       ],
       "metrics": {
-        "calls": 184,
-        "triangles": 180955,
+        "calls": 132,
+        "triangles": 185683,
         "pixelRatio": 1,
         "quality": "low"
       },

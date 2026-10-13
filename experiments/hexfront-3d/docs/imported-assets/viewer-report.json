@@ -1,0 +1,25 @@
+{
+  "report": [
+    {
+      "id": "hq",
+      "calls": 3,
+      "triangles": 44564
+    },
+    {
+      "id": "hoverbot",
+      "calls": 3,
+      "triangles": 14094
+    },
+    {
+      "id": "relay",
+      "calls": 5,
+      "triangles": 23228
+    },
+    {
+      "id": "mech",
+      "calls": 2,
+      "triangles": 23526
+    }
+  ],
+  "errors": []
+}

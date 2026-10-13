@@ -3,6 +3,7 @@ import {GLTFLoader} from '../vendor/loaders/GLTFLoader.js';
 import {mergeGeometries} from '../vendor/utils/BufferGeometryUtils.js';
 import {STEP} from './map.js';
 import {buildCommandHQ} from './command-hq.js';
+import {loadSupplied,suppliedMaterial} from './supplied-assets.js';
 
 export const TEAM={orange:0xe6a05c,blue:0x70b5cd,neutral:0x89a894};
 export const MAX_DRONES=64;
@@ -16,28 +17,30 @@ function coating(){
  }ctx.putImageData(data,0,0);const map=new T.CanvasTexture(canvas);map.colorSpace=T.SRGBColorSpace;map.wrapS=map.wrapT=T.RepeatWrapping;map.anisotropy=4;return map;
 }
 
-function architecture(s,library,c){
+function architecture(s,library,c,supplied=false){
  const relay=c.kind==='relay',root=library.getObjectByName(relay?'Seed':'Haven').clone(true);
  root.position.set(c.x,c.height*STEP,c.z-.10);root.rotation.y=relay?Math.PI/6:c.hq==='orange'?Math.PI:0;root.userData.pickCell=c.id;
  const mats=new Map(),moving=[];
  root.traverse(o=>{if(!o.isMesh)return;
-  if(['Team','Optic'].includes(o.material.name)){
+  if(supplied){const name=o.material.name;if(!mats.has(name))mats.set(name,suppliedMaterial(o.material,c.owner));o.material=mats.get(name);o.userData.frontierAnimated=true;}
+  else if(['Team','Optic'].includes(o.material.name)){
    const name=o.material.name;if(!mats.has(name))mats.set(name,o.material.clone());o.material=mats.get(name);
    o.material.color.setHex(TEAM[c.owner]);o.material.emissive.setHex(name==='Optic'?TEAM[c.owner]:0x000000);o.material.emissiveIntensity=c.owner==='neutral'?0:.20;
   }
   o.castShadow=o.receiveShadow=true;
  });
- for(const name of relay?['Core','Rotor']:['Scanner']){
+ for(const name of relay?(supplied?['Core','DishL','DishR']:['Core','Rotor']):['Scanner']){
   const part=root.getObjectByName(name);if(!part)throw Error(`Missing authored articulation: ${name}`);
   const base={position:part.position.clone(),rotation:part.rotation.clone()};moving.push({name,part,base});
   part.traverse(o=>{if(o.isMesh)o.userData.frontierAnimated=true;});
  }
- s.static.add(root);s.techStructures.push({cell:c.id,owner:c.owner,activation:-1000,root,mats,moving});
+ s.static.add(root);s.techStructures.push({cell:c.id,owner:c.owner,activation:-1000,root,mats,moving,supplied});
  s.contactAt(c.x,c.z,c.height*STEP,relay?1.62:2.02,relay?1.62:1.92);
 }
 
-function drones(s,library){
+function drones(s,library,supplied=false){
  const root=library.getObjectByName('PIP');root.updateMatrixWorld(true);
+ if(supplied){const mats=new Map();root.traverse(o=>{if(!o.isMesh)return;const key=o.material;if(!mats.has(key))mats.set(key,suppliedMaterial(key,'orange',true));o.material=mats.get(key);});}
  // Tint optical emission per instance; white emission washed the small eye out.
  // This material belongs only to the drone, leaving architecture untouched.
  const optics=new Map();root.traverse(o=>{if(!o.isMesh||o.material.name!=='Optic')return;
@@ -64,10 +67,10 @@ function drones(s,library){
  s.droneParts=[...groups.values()].map(({joint,material,geos})=>{
   const geometry=mergeGeometries(geos);if(!geometry)throw Error('PIP material batching failed');geos.forEach(g=>g.dispose());
   const inst=new T.InstancedMesh(geometry,material,MAX_DRONES);inst.count=0;inst.castShadow=inst.receiveShadow=true;inst.instanceMatrix.setUsage(T.DynamicDrawUsage);inst.frustumCulled=false;
-  inst.userData.joint=joint;inst.userData.optic=material.name==='Optic';inst.userData.team=['Team','Optic'].includes(material.name);s.scene.add(inst);return inst;
+  inst.userData.joint=joint;inst.userData.optic=material.name==='Optic';inst.userData.team=supplied||['Team','Optic'].includes(material.name);s.scene.add(inst);return inst;
  });
  s.droneTeam=s.droneParts.filter(p=>p.userData.team);
- s.droneJointMatrices={};for(const name of movingNames)s.droneJointMatrices[name]=new T.Matrix4();
+ s.droneJointMatrices={};for(const name of movingNames)if(s.dronePivots[name])s.droneJointMatrices[name]=new T.Matrix4();
  const glow=new T.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.28,depthWrite:false,toneMapped:false});
  s.droneWake=new T.InstancedMesh(new T.ConeGeometry(.053,.16,8),glow,MAX_DRONES*2);s.droneWake.instanceMatrix.setUsage(T.DynamicDrawUsage);s.droneWake.frustumCulled=false;s.scene.add(s.droneWake);
  s.droneShadow=new T.InstancedMesh(new T.PlaneGeometry(1.0,.88).rotateX(-Math.PI/2),s.contact,MAX_DRONES);s.droneShadow.instanceMatrix.setUsage(T.DynamicDrawUsage);s.droneShadow.frustumCulled=false;s.scene.add(s.droneShadow);
@@ -76,14 +79,17 @@ function drones(s,library){
 
 export function prepareFrontier(s){
  s.techStructures=[];s.droneParts=[];s.droneTeam=[];s.droneDummy=new T.Object3D();s.droneGhosts=[];s.visualTime=0;s.visualLast=null;s.dronePoses=[];
- return Promise.all([new GLTFLoader().loadAsync(new URL('../public/assets/frontier/frontier.glb',import.meta.url).href),new GLTFLoader().loadAsync(new URL('../public/assets/command-hq/command-hq.glb',import.meta.url).href)]).then(([gltf,hq])=>{
-  const map=coating(),seen=new Set();gltf.scene.traverse(o=>{
+ const useFallback=new URLSearchParams(location.search).get('assets')==='classic';
+ const imported=useFallback?Promise.resolve(null):loadSupplied().catch(error=>{console.warn('Supplied assets unavailable; keeping the classic models.',error);return null;});
+ return imported.then(assets=>assets?[assets,null,null]:Promise.all([null,new GLTFLoader().loadAsync(new URL('../public/assets/frontier/frontier.glb',import.meta.url).href),new GLTFLoader().loadAsync(new URL('../public/assets/command-hq/command-hq.glb',import.meta.url).href)])).then(([assets,gltf,hq])=>{
+  const map=assets?null:coating(),seen=new Set();gltf?.scene.traverse(o=>{
    if(!o.isMesh||seen.has(o.material))return;seen.add(o.material);
    if(['Porcelain','Jade','Alloy','Graphite'].includes(o.material.name)){o.material.map=map;o.material.bumpMap=map;o.material.bumpScale=o.material.name==='Porcelain'?.007:.011;o.material.needsUpdate=true;}
   });
-  for(const c of s.game.cells.filter(c=>c.kind==='relay'))architecture(s,gltf.scene,c);
-  buildCommandHQ(s,hq.scene);
-  drones(s,gltf.scene);
+  for(const c of s.game.cells.filter(c=>c.kind==='relay'))architecture(s,assets?.relay||gltf.scene,c,!!assets);
+  buildCommandHQ(s,assets?.hq||hq.scene,{supplied:!!assets});
+  drones(s,assets?.drone||gltf.scene,!!assets);
+  s.assetFamily=assets?'supplied':'classic';
   // Clones retain geometry/material references. Only the loaded scene container
   // is discarded; no per-frame geometry allocation or texture downloads.
  });

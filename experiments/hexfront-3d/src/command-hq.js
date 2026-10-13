@@ -1,6 +1,7 @@
 import * as T from 'three';
 import {STEP} from './map.js';
 import {hqPose} from './hq-motion.js';
+import {suppliedMaterial,setSuppliedTeam} from './supplied-assets.js';
 const colours={orange:0xe89842,blue:0x629ebf,neutral:0x89a894};
 const lights={orange:0xffbd70,blue:0x88d1ed,neutral:0x89a894};
 
@@ -12,7 +13,7 @@ function surfaceMaps(){
   data.data[k]=data.data[k+1]=data.data[k+2]=v;data.data[k+3]=255;
  }ctx.putImageData(data,0,0);const map=new T.CanvasTexture(canvas);map.wrapS=map.wrapT=T.RepeatWrapping;map.colorSpace=T.SRGBColorSpace;map.anisotropy=4;return map;
 }
-export function buildCommandHQ(s,library){
+export function buildCommandHQ(s,library,{supplied=false}={}){
  s.commandHQs=[];s.hqPendingResult=null;
  s.finishHQCapture=callback=>{
   if(s.reduced){callback();return;}
@@ -27,14 +28,15 @@ export function buildCommandHQ(s,library){
  for(const c of s.game.cells.filter(c=>c.hq)){
   const root=library.getObjectByName('CommandHQ').clone(true);root.position.set(c.x,c.height*STEP,c.z-.10);root.rotation.y=c.hq==='orange'?Math.PI:0;root.userData.pickCell=c.id;
   const mats=new Map();root.traverse(o=>{if(!o.isMesh)return;o.castShadow=o.receiveShadow=true;
-   if(['HQ_Team','HQ_Lights','HQ_Core'].includes(o.material.name)){const n=o.material.name;if(!mats.has(n))mats.set(n,o.material.clone());o.material=mats.get(n);}
+   if(supplied){const n=o.material.name;if(!mats.has(n))mats.set(n,suppliedMaterial(o.material,c.owner));o.material=mats.get(n);o.userData.frontierAnimated=true;}
+   else if(['HQ_Team','HQ_Lights','HQ_Core'].includes(o.material.name)){const n=o.material.name;if(!mats.has(n))mats.set(n,o.material.clone());o.material=mats.get(n);}
   });
   const parts={};for(const name of ['Radar_Pivot','Dish_Tilt','Hangar_Door']){
    const part=root.getObjectByName(name);if(!part)throw Error('Missing HQ articulation: '+name);
    parts[name]={part,rotation:part.rotation.clone(),position:part.position.clone()};part.traverse(o=>{if(o.isMesh)o.userData.frontierAnimated=true;});
   }
   s.static.add(root);s.contactAt(c.x,c.z,c.height*STEP,1.87,1.83);
-  s.commandHQs.push({cell:c.id,root,mats,parts,owner:c.owner,previous:c.owner,scanTime:0,send:-Infinity,hit:-Infinity,capture:-Infinity});
+  s.commandHQs.push({cell:c.id,root,mats,parts,owner:c.owner,previous:c.owner,scanTime:0,send:-Infinity,hit:-Infinity,capture:-Infinity,supplied});
  }
  updateCommandHQ(s,0);
 }
@@ -52,7 +54,7 @@ export function updateCommandHQ(s,delta){
   const economy=s.game.economy(c.owner),producing=running&&economy.hqId===c.id&&economy.rate>0&&c.units<economy.cap;
   const pose=hqPose({seconds:n.scanTime,sendAge:(s.visualTime-n.send)/1000,hitAge:(s.visualTime-n.hit)/1000,captureAge:(s.visualTime-n.capture)/1000,producing,running,reduced:s.reduced});n.pose=pose;
   const owner=pose.useNewTeam?n.owner:n.previous;
-  for(const [name,m] of n.mats){m.color.setHex(name==='HQ_Team'?colours[owner]:lights[owner]);if(name!=='HQ_Team'){m.emissive.setHex(lights[owner]);m.emissiveIntensity=pose.intensity+(name==='HQ_Core'?pose.pulse:0);}}
+  for(const [name,m] of n.mats){if(n.supplied){setSuppliedTeam(m,owner);m.emissiveIntensity=pose.intensity*2+pose.pulse;continue;}m.color.setHex(name==='HQ_Team'?colours[owner]:lights[owner]);if(name!=='HQ_Team'){m.emissive.setHex(lights[owner]);m.emissiveIntensity=pose.intensity+(name==='HQ_Core'?pose.pulse:0);}}
   for(const p of Object.values(n.parts)){p.part.position.copy(p.position);p.part.rotation.copy(p.rotation);}
   n.parts.Radar_Pivot.part.rotation.y+=pose.yaw+pose.reacquire;
   // Blender glTF stores the authored tilt as an X rotation; rotate locally.
