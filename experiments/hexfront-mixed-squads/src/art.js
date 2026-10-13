@@ -4,7 +4,7 @@ import {getMission} from './missions.js';
 import {buildRiver} from './river.js';
 import {buildLandscape,landscapeHeight,LAND_EXTENT} from './landscape.js';
 import {GLTFLoader} from '../../hexfront-3d/vendor/loaders/GLTFLoader.js';
-import {RADIUS,STEP,corner,cornerHeight,surfaceHeight} from './map.js';
+import {RADIUS,STEP,corner,cornerHeight,surfaceHeight,terrainTriangles} from './map.js';
 
 // Charming Frontier: warm limestone, sunlit meadow, chalk paths and jade ceramics.
 // All visual relief is decoration; map.js remains the sole navigation surface.
@@ -95,9 +95,10 @@ export function buildArtTerrain(s){
  }
  const visualPoint=(c,i)=>({...corner(c,i),y:cornerHeight(playable,c,i)});
  for(const c of all){
+  const surface=terrainTriangles(playable,c);
+  for(const tri of surface){tops.push(tri);for(const [x,y,z] of tri)topUV.push(x/23+.5,z/23+.5);}
   for(let i=0;i<6;i++){
    const a=visualPoint(c,i),b=visualPoint(c,(i+1)%6),baseA=corner(c,i),baseB=corner(c,(i+1)%6);
-   const tri=[[c.x,c.height*STEP,c.z],[b.x,b.y,b.z],[a.x,a.y,a.z]];tops.push(tri);for(const [x,y,z] of tri)topUV.push(x/23+.5,z/23+.5);
    const mid={x:(baseA.x+baseB.x)/2,z:(baseA.z+baseB.z)/2},other=all.find(n=>n!==c&&Math.hypot(n.x-mid.x,n.z-mid.z)<RADIUS*.89);
    const lowA=Math.min(a.y,other?surfaceHeight(playable,other,baseA.x,baseA.z):0),lowB=Math.min(b.y,other?surfaceHeight(playable,other,baseB.x,baseB.z):0);
    if(a.y<=lowA+.015&&b.y<=lowB+.015)continue;
@@ -105,8 +106,7 @@ export function buildArtTerrain(s){
    for(const p of [a,b]){const key=jointKey(p);if(!jointNormals.has(key))jointNormals.set(key,new T.Vector2());jointNormals.get(key).add(normal);}
   }
   if(c.kind!=='rim'){
-   const tri=[];for(let i=0;i<6;i++){const a=corner(c,i),b=corner(c,(i+1)%6);tri.push([[c.x,c.height*STEP,c.z],[b.x,cornerHeight(playable,c,(i+1)%6),b.z],[a.x,cornerHeight(playable,c,i),a.z]]);}
-   const pick=new T.Mesh(geometry(tri),new T.MeshBasicMaterial({visible:false,side:T.DoubleSide}));pick.userData.cellId=c.id;s.scene.add(pick);s.picks.push(pick);
+   const pick=new T.Mesh(geometry(surface),new T.MeshBasicMaterial({visible:false,side:T.DoubleSide}));pick.userData.cellId=c.id;s.scene.add(pick);s.picks.push(pick);
   }
  }
  for(const {a,b,normal} of boundary){
