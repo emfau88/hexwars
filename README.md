@@ -1,5 +1,15 @@
 # HEXFRONT
 
+## ▶ JETZT SPIELEN — Mixed Squads (dieser Branch)
+
+**[Mixed Squads im Browser starten](https://rawcdn.githack.com/emfau88/hexwars/3e514efbe53e463c4e844ddb676ce9da72daaad6/experiments/hexfront-mixed-squads/preview/index.html)**
+
+Vorschau für **`experiment/mixed-squads`**: drei bildschirmfüllende Landschaften, Drohnen und Mechs, cozy Sci-Fi-Menüs und HUD, klarere Hexkonturen und Fraktionsfarben. Falls der Vorschauhost einen Hinweis zeigt, **Open the page** anklicken. Der Link ist auf den geprüften Spielstand `3e514ef` festgelegt.
+
+**[22 Screenshots und Analyse für die weitere Review](experiments/hexfront-mixed-squads/docs/review-2026-10-13)** · [Screenshot-Galerie öffnen](https://rawcdn.githack.com/emfau88/hexwars/3e514efbe53e463c4e844ddb676ce9da72daaad6/experiments/hexfront-mixed-squads/docs/review-2026-10-13/index.html) · [Start, Steuerung und Prüfungen](experiments/hexfront-mixed-squads/README.md)
+
+28 Logiktests und drei Browser-Prüfungen bestanden; alle drei Maps auf Desktop und mobilen Bildschirmformaten geprüft. Die ursprünglichen Spielvarianten und ihre Veröffentlichung bleiben unverändert. Die folgenden Links gehören zu diesen älteren Varianten.
+
 ## Isolated 3D experiment — Field Operations
 
 Three playable missions and a redesigned full-screen campaign menu with real 3D map previews, saved unlocks and replay. The original Morgenwacht battlefield is preserved. Windpass adds a canyon with two routes; Auenstrom adds three river crossings.

@@ -1,5 +1,9 @@
 # HEXFRONT — Mixed Squads
 
+**[▶ JETZT SPIELEN — Mixed Squads, dieser Branch](https://rawcdn.githack.com/emfau88/hexwars/3e514efbe53e463c4e844ddb676ce9da72daaad6/experiments/hexfront-mixed-squads/preview/index.html)**
+
+Public preview pinned to tested runtime `3e514ef`. If the host shows a notice, click **Open the page**. [Screenshot gallery](https://rawcdn.githack.com/emfau88/hexwars/3e514efbe53e463c4e844ddb676ce9da72daaad6/experiments/hexfront-mixed-squads/docs/review-2026-10-13/index.html). Regenerate the production-safe checked-in preview with `npm run package:preview`; it reuses the original 3D assets from the same repository revision.
+
 Separate playable prototype on branch `experiment/mixed-squads`, based on `experiment/hexfront-3d-diorama` at `b4f3dd0`. All additions live in this directory. The original 2D game, portal builds, 3D campaign, legacy economy, models and deployment workflows are unchanged.
 
 ## Start
