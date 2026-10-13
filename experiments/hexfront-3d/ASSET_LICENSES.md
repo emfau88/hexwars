@@ -64,3 +64,16 @@ Die PIP-Drohne wurde anschließend anhand der vier vom Nutzer bereitgestellten K
 ### Command HQ – isolierter HQ-Art-Pass
 
 `public/assets/command-hq/command-hq.glb` ist ein neues, eigenständig in Blender 5.2 modelliertes HQ, im isolierten Experiment integriert. Grundlage ist die vom Nutzer bereitgestellte Architekturvorlage `79cab1a4-d284-4014-9621-049f9b353af9.png`; das Bild wird nicht mitverteilt. Meshes und kleine Roughness-Texturen sind eigens erstellt, keine zusätzlichen externen Assets. Bearbeitbare Quelle: `scripts/command-hq-source.blend`; Herstellung, Bilder und aktueller Integrationsstatus: [HQ_COMMAND.md](docs/HQ_COMMAND.md). Die bisherige gemeinsame HQ-/Drohnen-/Relais-Datei bleibt bytegleich; das neue HQ wird separat geladen.
+
+## Campaign maps and river — 13 October 2026
+
+Morgenwacht retains its existing geometry, props and material data. Windpass and Auenstrom are authored layouts using the same licensed subset above. The river ribbon mesh, 256² procedural normal map, sparse ripple strokes and narrow shoreline geometry are original repository code (`src/river.js`, `src/art.js`), created for this experiment. No additional downloaded models, textures, remote services or dependencies. Original repository mission layouts supplied design inspiration only; no third-party game artwork was introduced.
+
+The three JPEG mission illustrations in `public/assets/campaign/` are captures of this project's real Three.js maps, made by `scripts/capture-campaign-art.mjs`. They reuse only the assets already attributed above; no external concept artwork or generated background replaces the playable terrain.
+
+
+## Vom Nutzer gelieferte generierte GLBs · 13. Oktober 2026
+
+`public/assets/supplied/hoverbot.glb`, `relay.glb` und `mech.glb` gehen auf die Dateien aus `HEXFRONT_4_GLB_Quellen.zip` zurück. `hq.glb` verwendet stattdessen das anschließend gelieferte `task_20d92a94-d624-4887-96eb-008eb26802ac_model.glb` aus der neuen freistehenden HQ-Vorlage. Der Nutzer hat ihre Bearbeitung und Integration beauftragt. Der ZIP-Quelle lag keine separate Lizenzdatei bei; sie werden ausdrücklich **nicht als CC0** oder als unabhängig lizenzgeprüfte Drittanbieterassets ausgewiesen. Anbieter-/Kontobedingungen der Generierung bleiben maßgeblich.
+
+Originale Farbtexturen bleiben in den GLBs erhalten. Optimierung, gezielte Trennung, Bodenverschluss, PBR-Masken und die ergänzte Hover-Bot-Sensorlinse wurden im Projekt erstellt. Die neue HQ-Bildvorlage in `docs/imported-assets/hq-clean-source.png` ist eine mit ImageGen bearbeitete Nutzerreferenz; sie ist kein Bestandteil der gerenderten Spielwelt. Der Nutzer lieferte danach das daraus erzeugte 3D-Modell. Keine zusätzlichen Warhammer-/Tacticus-Assets oder heruntergeladenen Fremdtexturen wurden verwendet. Einzelheiten, Hashes und bearbeitbare Blenderquellen: [SUPPLIED_ASSETS.md](docs/SUPPLIED_ASSETS.md).

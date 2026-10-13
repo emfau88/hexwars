@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {setSuppliedTeam} from './supplied-assets.js';
 import {updateCommandHQ,commandHQEvent,resetCommandHQ} from './command-hq.js';
 import {STEP,surfaceHeight} from './map.js';
 import {TRANSPORT_SECONDS_PER_HEX} from './game.js';
@@ -15,13 +16,14 @@ export function updateTechnology(s,time){
  updateCommandHQ(s,s.game.paused?0:delta);
  for(const node of s.techStructures){
   const owner=s.game.cell(node.cell).owner;
-  if(owner!==node.owner){node.owner=owner;node.activation=s.visualTime;for(const [name,mat] of node.mats){mat.color.setHex(TEAM[owner]);if(name==='Optic')mat.emissive.setHex(TEAM[owner]);}}
+  if(owner!==node.owner){node.owner=owner;node.activation=s.visualTime;for(const [name,mat] of node.mats){if(node.supplied){setSuppliedTeam(mat,owner);continue;}mat.color.setHex(TEAM[owner]);if(name==='Optic')mat.emissive.setHex(TEAM[owner]);}}
   const active=owner!=='neutral',pop=active&&!s.reduced?Math.max(0,1-(s.visualTime-node.activation)/700):0;
-  for(const [name,mat] of node.mats)if(name==='Optic')mat.emissiveIntensity=active?.16+pop*.27:0;
+  for(const [name,mat] of node.mats)if(name==='Optic'||node.supplied)mat.emissiveIntensity=active?.16+pop*.27:0;
   for(const {name,part,base} of node.moving){
    part.position.copy(base.position);part.rotation.copy(base.rotation);
    if(!s.reduced){
-    if(name==='Core'&&active){part.position.y+=Math.sin(seconds*1.8)*.018+Math.sin(pop*Math.PI)*.075;part.rotation.y+=seconds*.25;}
+    if(name==='Core'&&active){part.position.y+=Math.sin(seconds*1.8)*.018+Math.sin(pop*Math.PI)*.075;if(!node.supplied)part.rotation.y+=seconds*.25;}
+    if((name==='DishL'||name==='DishR')&&active){part.rotation.y+=Math.sin(seconds*.32+(name==='DishL'?0:1.5))*.11;}
     if(name==='Rotor'&&active){part.rotation.y+=seconds*.15;part.rotation.z+=Math.sin(seconds*.8)*.045+pop*.10;}
     if(name==='Scanner'){part.rotation.y+=Math.sin(seconds*.55+node.root.position.x)*.22;part.rotation.z+=Math.sin(seconds*.82)*.06;}
    }

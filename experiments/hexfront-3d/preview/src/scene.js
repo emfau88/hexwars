@@ -261,6 +261,7 @@ export class Diorama {
   clearEffects(){clearTechnology(this);}
   render(time){
     if(this.disposed)return;
+    if(this.riverNormal&&!this.reduced&&this.game.running&&!this.game.paused)this.riverNormal.offset.x=this.game.time*.008;
     const selected=this.game.cell(this.selected),labelEntries=[],movingFrom=new Set(this.game.orders.map(o=>o.path[0])),movingTo=new Set(this.game.orders.map(o=>o.path.at(-1)));
     const touch=matchMedia('(max-width:640px)').matches;
     for(const c of this.game.cells){

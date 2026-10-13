@@ -1,6 +1,7 @@
 import * as T from 'three';
 import {buildTechnology} from './technology.js';
-import {RUINS} from './transport.js';
+import {getMission} from './missions.js';
+import {buildRiver} from './river.js';
 import {GLTFLoader} from '../vendor/loaders/GLTFLoader.js';
 import {RADIUS,STEP,corner,cornerHeight,surfaceHeight} from './map.js';
 
@@ -20,25 +21,19 @@ function weatherMap(kind){
   const k=(y*512+x)*4;d.data[k]=value;d.data[k+1]=value+(kind==='concrete'?-2:2);d.data[k+2]=value+(kind==='concrete'?-9:3);d.data[k+3]=255;
  }ctx.putImageData(d,0,0);return canvasTexture(c);
 }
-const tracks=[
- [[-1.02,5.31],[-3.7,4.6],[-5.4,2.9],[-5.11,1.77],[-3.06,1.77],[-1.02,1.77],[0,0]],
- [[1.02,-5.31],[3.7,-4.6],[5.4,-2.9],[5.11,-1.77],[3.06,-1.77],[1.02,-1.77],[0,0]],
- [[-1.02,5.31],[1.2,5.0],[4.1,3.3],[5.7,1.1],[5.11,-1.77]],
- [[1.02,-5.31],[-1.4,-5.0],[-4.3,-3.3],[-5.7,-1.1],[-5.11,1.77]],
-];
 function segmentDistance(x,z,a,b){const dx=b[0]-a[0],dz=b[1]-a[1],t=clamp(((x-a[0])*dx+(z-a[1])*dz)/(dx*dx+dz*dz),0,1);return Math.hypot(x-a[0]-dx*t,z-a[1]-dz*t);}
 function sampleImage(image){const c=canvas(image.width);c.getContext('2d').drawImage(image,0,0);return {pixels:c.getContext('2d').getImageData(0,0,c.width,c.height).data,size:c.width};}
 function makeGround(m,game,stoneImage,earthImage){
  const size=1024,extent=11.5,c=canvas(size),b=canvas(size),ctx=c.getContext('2d'),bx=b.getContext('2d'),d=ctx.createImageData(size,size),bump=bx.createImageData(size,size);
- const stone=sampleImage(stoneImage),earth=sampleImage(earthImage),segments=tracks.flatMap(t=>t.slice(1).map((p,i)=>[t[i],p]));
- const upper=game.cells.filter(c=>c.height===2);
+ const stone=sampleImage(stoneImage),earth=sampleImage(earthImage),segments=getMission(game.missionId).art.tracks.flatMap(t=>t.slice(1).map((p,i)=>[t[i],p]));
+ const upper=game.cells.filter(c=>c.height===2),wet=getMission(game.missionId).biome==='river';
  for(let row=0;row<size;row++)for(let col=0;col<size;col++){
   const x=(col/size-.5)*extent*2,z=(.5-row/size)*extent*2,n=noise(x*.49+9,z*.49+5),large=noise(x*.17+3,z*.17+7),fine=noise(x*6,z*6);
   let path=10;for(const [a,b] of segments)path=Math.min(path,segmentDistance(x,z,a,b));
   const wear=1-smooth(clamp((path-.14+(n-.5)*.25)/.46,0,1));
   const rock=upper.some(c=>{const dx=Math.abs(x-c.x),dz=Math.abs(z-c.z);return dx<=Math.sqrt(3)*RADIUS/2&&dz<=RADIUS&&dx/Math.sqrt(3)+dz<=RADIUS;});
   const grass=smooth(clamp((n*.7+large*.3-.39)*3.2,0,1))*(1-wear*.85);
-  const palette=rock?[148,153,137]:[mix(168,98,grass),mix(140,137,grass),mix(104,78,grass)];
+  const palette=rock?[148,153,137]:wet?[mix(151,88,grass),mix(143,131,grass),mix(116,88,grass)]:[mix(168,98,grass),mix(140,137,grass),mix(104,78,grass)];
   const source=rock?stone:earth,u=Math.floor(fract(x*.32)*source.size),v=Math.floor(fract(z*.32)*source.size),p=(v*source.size+u)*4;
   const value=(source.pixels[p]+source.pixels[p+1]+source.pixels[p+2])/3,relief=(value-(rock?163:116))*(rock?.32:.18)+(fine-.5)*5;
   const i=(row*size+col)*4;
@@ -84,16 +79,26 @@ const addQuad=(out,a,b,c,d)=>out.push([a,b,c],[a,c,d]);
 function frameTag(o,id,kind){o.userData.pickCell=id;if(kind)o.userData.pickKind=kind;return o;}
 
 export function buildArtTerrain(s){
- const playable=s.game.cells,all=[...playable];
- for(let r=-4;r<=4;r++)for(let q=-4;q<=4;q++)if(Math.max(Math.abs(q),Math.abs(r),Math.abs(q+r))===4)all.push({id:`rim${q},${r}`,q,r,x:Math.sqrt(3)*RADIUS*(q+r/2),z:1.5*RADIUS*r,height:0,kind:'rim'});
+ const playable=s.game.cells,all=[...playable],compact=getMission(s.game.missionId).compactRim;
+ if(!compact)for(const id of getMission(s.game.missionId).excluded){const [q,r]=id.split(',').map(Number);all.push({id:`rim${id}`,q,r,x:Math.sqrt(3)*RADIUS*(q+r/2),z:1.5*RADIUS*r,height:0,kind:'rim'});}
+ if(!compact)for(let r=-4;r<=4;r++)for(let q=-4;q<=4;q++)if(Math.max(Math.abs(q),Math.abs(r),Math.abs(q+r))===4)all.push({id:`rim${q},${r}`,q,r,x:Math.sqrt(3)*RADIUS*(q+r/2),z:1.5*RADIUS*r,height:0,kind:'rim'});
  s.land=all;const tops=[],topUV=[],edges=[],jointNormals=new Map(),jointKey=p=>`${p.x.toFixed(4)},${p.z.toFixed(4)}`;
+ const boundary=[],borderNormals=new Map();
+ // A narrow continuous apron follows this mission's authored outline. Inward
+ // bays stay empty: the canyon is real geometry, not another circular island.
+ if(compact)for(const c of playable)for(let i=0;i<6;i++){
+  const a=corner(c,i),b=corner(c,(i+1)%6),mid={x:(a.x+b.x)/2,z:(a.z+b.z)/2};
+  if(playable.some(n=>n!==c&&Math.hypot(n.x-mid.x,n.z-mid.z)<RADIUS*.89))continue;
+  const normal=new T.Vector2(mid.x-c.x,mid.z-c.z).normalize();boundary.push({a,b,normal});
+  for(const p of [a,b]){const k=jointKey(p);if(!borderNormals.has(k))borderNormals.set(k,new T.Vector2());borderNormals.get(k).add(normal);}
+ }
  const visualPoint=(c,i)=>{const p=corner(c,i);if(c.kind!=='rim')return {...p,y:cornerHeight(playable,c,i)};const distance=Math.min(...playable.map(c=>Math.hypot(c.x-p.x,c.z-p.z))),f=smooth(clamp((distance-1.19)/1.0,0,1)),len=Math.hypot(p.x,p.z),angle=Math.atan2(p.z,p.x),radius=mix(len,8.45+Math.sin(angle*3+1)*.48+Math.sin(angle*7)*.26,f),offset=radius-len;return {x:p.x+p.x/len*offset,z:p.z+p.z/len*offset,y:(noise(p.x*.8,p.z*.8)-.5)*.12*f};};
  for(const c of all){
   for(let i=0;i<6;i++){
    const a=visualPoint(c,i),b=visualPoint(c,(i+1)%6),baseA=corner(c,i),baseB=corner(c,(i+1)%6);
    const tri=[[c.x,c.height*STEP,c.z],[b.x,b.y,b.z],[a.x,a.y,a.z]];tops.push(tri);for(const [x,y,z] of tri)topUV.push(x/23+.5,z/23+.5);
    const mid={x:(baseA.x+baseB.x)/2,z:(baseA.z+baseB.z)/2},other=all.find(n=>n!==c&&Math.hypot(n.x-mid.x,n.z-mid.z)<RADIUS*.89);
-   const lowA=Math.min(a.y,other?(other.kind==='rim'?a.y:surfaceHeight(playable,other,baseA.x,baseA.z)):-1.1),lowB=Math.min(b.y,other?(other.kind==='rim'?b.y:surfaceHeight(playable,other,baseB.x,baseB.z)):-1.1);
+   const lowA=Math.min(a.y,other?(other.kind==='rim'?a.y:surfaceHeight(playable,other,baseA.x,baseA.z)):(compact?0:-1.1)),lowB=Math.min(b.y,other?(other.kind==='rim'?b.y:surfaceHeight(playable,other,baseB.x,baseB.z)):(compact?0:-1.1));
    if(a.y<=lowA+.015&&b.y<=lowB+.015)continue;
    const normal=new T.Vector2(mid.x-c.x,mid.z-c.z).normalize();edges.push({a,b,lowA,lowB,normal});
    for(const p of [a,b]){const key=jointKey(p);if(!jointNormals.has(key))jointNormals.set(key,new T.Vector2());jointNormals.get(key).add(normal);}
@@ -102,6 +107,14 @@ export function buildArtTerrain(s){
    const tri=[];for(let i=0;i<6;i++){const a=corner(c,i),b=corner(c,(i+1)%6);tri.push([[c.x,c.height*STEP,c.z],[b.x,cornerHeight(playable,c,(i+1)%6),b.z],[a.x,cornerHeight(playable,c,i),a.z]]);}
    const pick=new T.Mesh(geometry(tri),new T.MeshBasicMaterial({visible:false,side:T.DoubleSide}));pick.userData.cellId=c.id;s.scene.add(pick);s.picks.push(pick);
   }
+ }
+ for(const {a,b,normal} of boundary){
+  const extend=p=>{const n=borderNormals.get(jointKey(p)).clone().normalize(),w=(getMission(s.game.missionId).biome==='river'&&Math.abs(p.z)<3.2?.10:.44)+noise(p.x*1.8,p.z*1.8)*.13;return {x:p.x+n.x*w,z:p.z+n.y*w,y:0};};
+  const outA=extend(a),outB=extend(b),tri=[];
+  addQuad(tri,[a.x,0,a.z],[b.x,0,b.z],[outB.x,0,outB.z],[outA.x,0,outA.z]);
+  for(const t of tri){tops.push(t);for(const [x,y,z] of t)topUV.push(x/23+.5,z/23+.5);}
+  edges.push({a:outA,b:outB,lowA:-1.1,lowB:-1.1,normal});
+  for(const p of [outA,outB]){const k=jointKey(p);if(!jointNormals.has(k))jointNormals.set(k,new T.Vector2());jointNormals.get(k).add(normal);}
  }
  const topGeo=geometry(tops);topGeo.setAttribute('uv',new T.Float32BufferAttribute(topUV,2));const ground=mesh(s.static,topGeo,s.materials.soil);ground.userData.pickKind='ground';
  const walls=[],colours=[],lips=[],lipColours=[];
@@ -124,6 +137,7 @@ export function buildArtTerrain(s){
  const rimLip=mesh(s.static,geometry(lips,lipColours,.55),s.materials.rock);rimLip.userData.pickKind='cliff';
  s.artCliffEdges=edges;
  const wall=mesh(s.static,geometry(walls,colours,.55),s.materials.cliff);wall.userData.pickKind='cliff';
+ if(getMission(s.game.missionId).biome==='river')buildRiver(s);
  const floor=mesh(s.static,new T.PlaneGeometry(200,200),new T.ShadowMaterial({color:0x0c171b,opacity:.17}),0,-1.2,0);floor.rotation.x=-Math.PI/2;floor.castShadow=false;
  // Ramps use the continuous terrain surface and worn-earth atlas. No transverse
  // treads or regular marker posts: their real slope and hex edges show the route.
@@ -175,8 +189,8 @@ function ruin(s,x,z,length,y,rotation){
 
 export function buildArtStructures(s){
  buildTechnology(s);
- // Keep the existing four ruin fragments and every landscape asset in place.
- for(const args of RUINS)ruin(s,...args);
+ // Mission-authored ruin fragments share the transport clearance data.
+ for(const args of getMission(s.game.missionId).art.ruins)ruin(s,...args);
 }
 function grassGeometry(seed,leafy=false){
  const tri=[],colours=[],count=leafy?8:18;
@@ -200,23 +214,21 @@ function grassGeometry(seed,leafy=false){
 function vegetation(s,x,z,scale,seed,leafy=false){const cell=s.cellAt(x,z),y=cell?surfaceHeight(s.game.cells,cell,x,z):0,o=mesh(s.static,grassGeometry(seed,leafy),s.materials.leaf,x,y+.01,z);o.scale.setScalar(scale);o.rotation.y=hash(seed,7)*Math.PI*2;frameTag(o,cell?.id??null);o.castShadow=leafy;return o;}
 export async function loadArtAssets(s){
  // Three large outcrops and four medium formations, placed by composition.
- const rocks=[[-6.5,-3.05,2.05,1.32,0,.6],[5.55,-4.66,1.80,1.22,1,-.4],[6.95,1.76,2.08,1.12,2,1.5],[-4.65,5.91,1.40,.62,3,-.2],[.15,-7.12,1.35,.69,4,.8],[7.10,-.87,1.10,.64,5,-.7],[.75,6.92,1.48,.48,6,.2]];
+ const {rocks,shoulders,rubble,vegetation:groups,ferns}=getMission(s.game.missionId).art;
  for(const args of rocks)addRock(s,...args);
  // Joined fracture shoulders interrupt the cliff silhouette. They stay on
  // impassable edges, below the plateau and outside every traversable ramp.
- for(const [x,z,w,h,v,r] of [[-1.13,3.04,.91,1.84,3,.18],[1.14,3.05,.96,1.59,1,-.2],[-3.15,.15,.81,1.48,4,1.1],[3.12,.27,.79,1.79,0,-.8]]){
+ for(const [x,z,w,h,v,r] of shoulders){
   const o=addRock(s,x,z,w,h,v,r);o.scale.z*=.62;frameTag(o,null,'cliff');
  }
  // Shards attach to those outcrops and to four cliff-foot pockets. No ring of
  // boulders and no scatter rule over every playable hex.
- const rubble=[[-5.71,-3.72,.67,.35,3,.7],[-6.55,-2.11,.51,.23,5,.4],[5.13,-5.57,.66,.32,4,-.3],[6.10,-3.99,.47,.22,2,.4],[6.57,2.86,.65,.28,3,-.5],[-4.13,6.30,.49,.22,1,1.1],[-2.39,2.49,.64,.36,5,.4],[-1.91,2.90,.37,.19,3,.1],[2.52,.61,.56,.31,4,.6],[2.70,.19,.32,.17,6,.4],[-2.20,-.84,.36,.18,2,-.6],[.30,-2.75,.45,.26,0,.4]];
  for(const args of rubble)addRock(s,...args);
- const groups=[[-6.04,-2.1,1.0],[-5.95,-3.91,.8],[4.88,-5.9,1.0],[6.20,2.80,.9],[-4.32,5.95,.9],[.31,6.73,.7],[-2.42,2.62,.65],[2.61,.53,.62],[.47,-2.70,.7]];
  groups.forEach(([x,z,scale],i)=>{for(let j=0;j<4;j++){const a=j*2.3+i*.7,r=j?.20+j*.08:0;vegetation(s,x+Math.cos(a)*r,z+Math.sin(a)*r,scale*(.75+hash(i,j)*.4),i*9+j,j%3===0);}});
  const loader=new GLTFLoader(),gltf=await loader.loadAsync(new URL('../public/assets/nature/Fern_1.gltf',import.meta.url).href),source=gltf.scene,box3=new T.Box3().setFromObject(source),center=box3.getCenter(new T.Vector3()),size=box3.getSize(new T.Vector3());
  source.position.set(-center.x,-box3.min.y,-center.z);const model=new T.Group();model.add(source);const width=Math.max(size.x,size.z);
  source.traverse(o=>{if(o.isMesh){o.castShadow=false;o.receiveShadow=true;o.geometry.deleteAttribute('color');for(const mat of Array.isArray(o.material)?o.material:[o.material]){mat.vertexColors=false;mat.color.setHex(0xa7bf86);mat.roughness=.95;if(mat.map)mat.map.anisotropy=4;}}});
- for(const [i,p] of [[-5.96,-3.9],[5.9,-4.6],[-4.8,5.9],[2.7,.8]].entries()){
+ for(const [i,p] of ferns.entries()){
   const o=model.clone(true),cell=s.cellAt(...p);o.scale.setScalar(.63/width);o.position.set(p[0],cell?surfaceHeight(s.game.cells,cell,...p):.01,p[1]);o.rotation.y=i*1.3;frameTag(o,cell?.id??null);s.static.add(o);
  }
 }

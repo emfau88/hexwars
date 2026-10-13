@@ -1,0 +1,49 @@
+{
+  "report": {
+    "family": "supplied",
+    "batches": 2,
+    "relayFloats": true,
+    "activeEmission": 0.43000000000000005,
+    "neutralInactive": true,
+    "bounded": true,
+    "unchanged": true,
+    "expired": true,
+    "newHQ": true,
+    "hqStartImmediate": true,
+    "hqLightPulse": [
+      {
+        "age": 0,
+        "intensity": 0.43882384422736115,
+        "orders": 1
+      },
+      {
+        "age": 0.5,
+        "intensity": 1.1188238442273613,
+        "orders": 1
+      },
+      {
+        "age": 1.1,
+        "intensity": 0.43882384422736115,
+        "orders": 1
+      }
+    ],
+    "radarScan": [
+      [
+        -0.4,
+        -0.4
+      ],
+      [
+        0.4,
+        0.4
+      ],
+      [
+        -0.4,
+        -0.4
+      ]
+    ],
+    "hqCapture": true,
+    "reducedMotion": true,
+    "lowQuality": true
+  },
+  "errors": []
+}
