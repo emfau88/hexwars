@@ -1,18 +1,22 @@
-# HEXFRONT — Command HQ
+# HEXFRONT — Field Operations
 
-Neues Blender-HQ: gestaffelte Keramikarchitektur, erhöhter Kommandobereich, beleuchteter Hangar und bewegliche Parabolschüssel. Orange und Blau nutzen dieselbe Modellfamilie. Drohnen, Relais, Gelände, Kamera und Gameplay bleiben unverändert.
+Drei vollständig spielbare 3D-Missionen mit einem neuen Vollbild-Hauptmenü, echten Kartenaufnahmen, gespeicherten Freischaltungen und Wiederholungsfunktion.
 
-**[Jetzt mit dem neuen HQ spielen](https://rawcdn.githack.com/emfau88/hexwars/2815c40a426ee05daab22715caedbce60faf0b57/experiments/hexfront-3d/preview/index.html)** · [Bisherige Wirtschaft](https://rawcdn.githack.com/emfau88/hexwars/2815c40a426ee05daab22715caedbce60faf0b57/experiments/hexfront-3d/preview/index.html?economy=legacy-local). Beim ersten Besuch gegebenenfalls **Open the page** bestätigen.
+- **Morgenwacht:** bestehende Festung unverändert, 37 Sektoren.
+- **Windpass:** neue Schlucht mit zwei unterschiedlichen Routen, 34 Sektoren.
+- **Auenstrom:** zwei Ufer und drei Flussübergänge, 33 Sektoren.
 
-Spielstand: `2815c40a426ee05daab22715caedbce60faf0b57`. Kein weiterer öffentlicher Spieltest auf ausdrücklichen Nutzerwunsch.
+**[Kampagne testen](https://rawcdn.githack.com/emfau88/hexwars/f65d3432bbd6df290f834fa66900b7792d98e188/experiments/hexfront-3d/preview/index.html)** · [Bisherige Wirtschaft](https://rawcdn.githack.com/emfau88/hexwars/f65d3432bbd6df290f834fa66900b7792d98e188/experiments/hexfront-3d/preview/index.html?economy=legacy-local). Beim ersten Besuch gegebenenfalls **Open the page** bestätigen.
 
-[HQ-Dokumentation und Prüfstand](docs/HQ_COMMAND.md) · [HQ Orange](docs/hq-command/hq-orange.png) · [HQ Blau](docs/hq-command/hq-blue.png) · [GLB](public/assets/command-hq/command-hq.glb) · [Blender-Quelle](scripts/command-hq-source.blend)
+Spielstand: `f65d3432bbd6df290f834fa66900b7792d98e188`. Der feste Testlink ist nach dem Branch-Push verfügbar; lokal ist die Version unabhängig davon startbar.
 
-![Desktop-Spielansicht](docs/hq-command/desktop-after.png)
+[Kampagne, Screenshots, Prüfungen und Grenzen](docs/CAMPAIGN.md) · [Assetquellen](ASSET_LICENSES.md) · [HQ-Modell und Herstellung](docs/HQ_COMMAND.md)
 
-<img src="docs/hq-command/mobile-after.png" width="390" alt="Mobile-Spielansicht mit beiden HQs">
+![Hauptmenü auf Desktop](docs/campaign/menu-desktop.png)
 
-35 Logiktests bestanden; Desktop/Mobile-Aufnahmen geprüft. Weiterführende Browser-Tests wurden auf Nutzerwunsch beendet. Details und offene Prüfungen stehen im HQ-Bericht.
+<img src="docs/campaign/menu-mobile.png" width="390" alt="Hauptmenü auf Mobile">
+
+46 Logiktests sowie Kampagnen- und Produktions-Browsertests bestanden. Drei Siege, Niederlagen, Neustart, Maus-/Touchbefehle, Freischaltung und Menü geprüft. Die vollständigen automatisierten Partien verwenden echte Spielbefehle und eine manuelle Testuhr. Kein echter Smartphone-Hardwaretest und keine gemessene FPS-Zusage.
 
 ## Starten
 
@@ -49,15 +53,15 @@ Dann die LAN-Adresse des Computers mit Port 4174 öffnen. Eine entsprechende lok
 
 ## Spielen
 
-1. **Operation starten**. Orange ist die südliche Fraktion.
+1. Im Hauptmenü eine freigeschaltete Mission wählen und **Einsatz starten**. Orange ist die südliche Fraktion.
 2. Ein eigenes Feld, Gebäude oder seine Truppenzahl greifen und zum Ziel ziehen. Helle Konturen markieren erreichbare Ziele; die Linie zeigt die begehbare Route.
 3. **Loslassen sendet sofort.** Außerhalb des Spielfelds oder auf der Quelle loslassen bricht ab; Felswände und unerreichbare Ziele senden keine Truppen. Alternativ Quelle und Ziel antippen und **Befehl geben**.
 4. `50 %` teilt eine Garnison; `Alle − 1` lässt eine Einheit zurück. Eigene Zwischenfelder dürfen durchquert werden. Wird eine Route erobert, trifft der Konvoi dort auf den Gegner.
-5. Das gegnerische HQ einnehmen. Bei Sieg oder Niederlage lässt sich das identische Level neu starten.
+5. Das gegnerische HQ einnehmen. Ein Sieg schaltet den nächsten Einsatz frei; abgeschlossene Missionen bleiben wiederholbar. Neustart und Rückkehr zum Menü sind jederzeit erreichbar.
 
 Maus und Touch unterstützen Drag-and-drop und zusätzlich die bisherige Klick-/Tippsteuerung. Die gewählte Stärke (`50 %` / `Alle − 1`) gilt für beide. **Ziehen von einem eigenen Feld gibt einen Befehl; Ziehen am Hintergrund verschiebt die vergrößerte Karte.** Zwei Finger navigieren und zoomen immer; die Maus kann auch mit rechter oder mittlerer Taste auf jedem Feld verschieben. Escape, Touch-Abbruch und ein zweiter Finger brechen einen begonnenen Truppenzug ab. **Taktik/Diorama** wechselt zwischen zwei festen orthografischen Perspektiven (70°/55° über dem Boden). Mausrad, Pinch oder +/− zoomen zwischen Übersicht und 2,2-facher Vergrößerung; die vergrößerte Karte lässt sich begrenzt ziehen. `⌖` stellt die vollständige taktische Übersicht wieder her. Auf sehr kurzen Smartphones nutzt du **+ für Details** und ziehst den Ausschnitt zum gewünschten Feld. Sichtbare Gebäude wählen ihre eigene logische Zelle; Felswände melden eine ungültige Auswahl. `?` öffnet die kurze Anleitung. Die Leertaste pausiert, wenn kein Steuerelement fokussiert ist. Die Partie pausiert auch beim Verlassen des Tabs; nach Rückkehr bewusst fortsetzen.
 
-**Taktik:** Die beiden schmalen Aufstiege sind Engpässe. Bergauf besitzt der Verteidiger +30 % Stärke, bergab der Angreifer +15 %. Das HQ bietet +20 % Verteidigung. Es gilt nur der größere Verteidigungsbonus; es wird kein zusätzlicher alter Hill-Bonus angewendet. In der neuen Testvariante produziert nur das HQ: verbundene Sektoren erhöhen seine Rate, das verbundene Relais bringt +20 %. Die Vergleichsvariante `?economy=legacy-local` erhält die alte lokale Produktion samt +30-%-Relaisbonus. Ein Angriff kann sich während der Anreise durch gegnerische Verstärkungen verändern.
+**Taktik:** Aufstiege und Übergänge sind missionsabhängige Engpässe. Bergauf besitzt der Verteidiger +30 % Stärke, bergab der Angreifer +15 %. Das HQ bietet +20 % Verteidigung. Es gilt nur der größere Verteidigungsbonus; es wird kein zusätzlicher alter Hill-Bonus angewendet. In der neuen Testvariante produziert nur das HQ: verbundene Sektoren erhöhen seine Rate, das verbundene Relais bringt +20 %. Die Vergleichsvariante `?economy=legacy-local` erhält die alte lokale Produktion samt +30-%-Relaisbonus. Ein Angriff kann sich während der Anreise durch gegnerische Verstärkungen verändern.
 
 ## Prüfungen
 
@@ -78,6 +82,8 @@ npm run test:art
 npm run test:overlay
 npm run test:drag
 npm run test:economy
+npm run test:campaign
+node tests/campaign-production.mjs
 ```
 
 `node tests/hosted.mjs` prüft eine über `PREVIEW_URL` angegebene Produktions-URL mit echten Maus-/Touchbefehlen und nimmt die Abgabe-Screenshots auf. Mit `PREVIEW_URL=local` startet der Test selbst einen Produktionsserver auf Port 4178; alternativ akzeptiert die Variable eine eigene URL. In PowerShell: `$env:PREVIEW_URL='local'; node tests/hosted.mjs`. Den aktuellen Testlink dazu ausdrücklich als `PREVIEW_URL` angeben. Die öffentliche Vorschau und der lokale Aufruf im Unterverzeichnis sind geprüft. Der Test bestätigt bei raw.githack.com zunächst den angezeigten Link auf genau dieses Repository und diesen Commit. `--art --match --drag` prüft die Ziehsteuerung; `--mobile` beschränkt einen Wiederholungslauf auf Touch. Fehlgeschlagene Requests werden erfasst; blockierte Drittanbieterwerbung der Hosting-Bestätigungsseite steht separat unter `hostWarnings`.
@@ -97,7 +103,7 @@ Die Testseite `?qa=1&clock=manual` stellt ausschließlich im Entwicklungs-Build 
 - Eigenständiges ES-Modul-Projekt, eigener Lockfile, eigener Node-HTTP-Server und Build. Kein Import aus der bisherigen Kampagne.
 - Three.js r169 mit WebGL 2, orthografischer Kamera, PBR-Materialien, Schatten, Kontaktschatten, Weltkoordinaten-Texturen und gebündelter statischer Geometrie.
 - Durchgehende, geschlossene Geländeoberfläche; Seitenflächen werden nur an tatsächlichen Höhenunterschieden und am äußeren Diorama-Rand erzeugt. Keine schwebenden Einzel-Hexblöcke.
-- Hex-Höhen 0/1/2 sind Daten. Die vier expliziten Übergangskanten der zwei Rampen bestimmen Navigation, KI, sichtbare Rampengeometrie und Bewegungsanimation.
+- Hex-Höhen 0/1/2 sind Daten. Explizite Übergangskanten je Mission bestimmen Navigation, KI, sichtbare Rampengeometrie und Bewegungsanimation.
 - Fünf optimierte CC0-Texturen aus zwei Poly-Haven-Materialien und vier Quaternius-Farne. Eigens modellierte Felsfamilie, geschlossene Plateauflanken, Kommandobunker, Relais, Betonruinen und gebogene Blatt-/Grasgeometrie. Unbenötigte Altmodelle werden nicht mehr ausgeliefert. Keine KI-Hintergrundgrafik und keine Tacticus-Assets.
 - Statische Modelle werden nach Material gebündelt; Fahrzeuge werden instanziert. `HQ/LQ` schaltet Renderauflösung und Schattenauflösung um.
 

@@ -1,18 +1,18 @@
 # HEXFRONT
 
-## Isolated 3D experiment — new Command HQ
+## Isolated 3D experiment — Field Operations
 
-Blender-authored, articulated HQ with ceramic armour, raised command deck, hangar and offset radar dish. Orange/blue variants; original game, drones, relay, terrain, economy and camera retained.
+Three playable missions and a redesigned full-screen campaign menu with real 3D map previews, saved unlocks and replay. The original Morgenwacht battlefield is preserved. Windpass adds a canyon with two routes; Auenstrom adds three river crossings.
 
-**[Play the new HQ version](https://rawcdn.githack.com/emfau88/hexwars/2815c40a426ee05daab22715caedbce60faf0b57/experiments/hexfront-3d/preview/index.html)** · [Previous economy](https://rawcdn.githack.com/emfau88/hexwars/2815c40a426ee05daab22715caedbce60faf0b57/experiments/hexfront-3d/preview/index.html?economy=legacy-local) · [Experiment branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama). If the host shows a notice, click **Open the page**.
+**[Play the three-mission campaign](https://rawcdn.githack.com/emfau88/hexwars/f65d3432bbd6df290f834fa66900b7792d98e188/experiments/hexfront-3d/preview/index.html)** · [Previous economy](https://rawcdn.githack.com/emfau88/hexwars/f65d3432bbd6df290f834fa66900b7792d98e188/experiments/hexfront-3d/preview/index.html?economy=legacy-local) · [Experiment branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama). If the host shows a notice, click **Open the page**.
 
-Runtime commit: `2815c40a426ee05daab22715caedbce60faf0b57`. No further hosted gameplay test was run, as requested.
+Runtime commit: `f65d3432bbd6df290f834fa66900b7792d98e188`. The pinned preview becomes available after this branch is pushed; local start works independently of GitHub.
 
-[Experiment and local start](experiments/hexfront-3d/README.md) · [HQ images, source and test status](experiments/hexfront-3d/docs/HQ_COMMAND.md)
+[Local start and controls](experiments/hexfront-3d/README.md) · [Campaign, screenshots and test results](experiments/hexfront-3d/docs/CAMPAIGN.md)
 
-![Desktop](experiments/hexfront-3d/docs/hq-command/desktop-after.png)
+![Campaign menu](experiments/hexfront-3d/docs/campaign/menu-desktop.png)
 
-Only the experiment branch is published; main and the original deployment remain untouched. Extended browser tests were stopped at the user's request; this is not a claim of complete UI acceptance.
+46 logic tests passed. Chromium checks cover three campaign victories, defeats, replay, mouse/touch, mobile framing and the production menu. Full matches use normal simulation commands with an accelerated test clock; no real-device FPS claim. Main and its original deployment remain untouched.
 
 [![Verify and deploy](https://github.com/emfau88/hexwars/actions/workflows/pages.yml/badge.svg)](https://github.com/emfau88/hexwars/actions/workflows/pages.yml)
 
