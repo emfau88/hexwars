@@ -1,3 +1,4 @@
+import {getMission} from './missions.js';
 import {createMap,neighbors,traversable,route,graphDistance} from './map.js';
 import {ECONOMY_MODE,ECONOMY_MODES,PRODUCTION_CAP,economyState,localProduction} from './economy.js';
 export {ECONOMY_MODE} from './economy.js';
@@ -11,8 +12,8 @@ export function forecast(from,to,amount) {
   return {effective,win:effective>to.units,remaining:Math.abs(effective-to.units),defense:defenseFactor(from,to),attack:attackFactor(from,to)};
 }
 export class Battle {
-  constructor({economyMode=ECONOMY_MODE}={}){if(!ECONOMY_MODES.includes(economyMode))throw Error('Unknown economy mode');this.economyMode=economyMode;this.reset();}
-  reset(){this.economyCache=new Map();this.cells=createMap();this.time=0;this.orders=[];this.events=[];this.result=null;this.running=false;this.paused=false;this.nextAI=10;this.serial=0;this.commands=0;this.captures=0;this.aiCommands=0;}
+  constructor({economyMode=ECONOMY_MODE,missionId='morgenwacht'}={}){if(!ECONOMY_MODES.includes(economyMode))throw Error('Unknown economy mode');this.economyMode=economyMode;this.mission=getMission(missionId);this.missionId=this.mission.id;this.reset();}
+  reset(){this.economyCache=new Map();this.cells=createMap(this.missionId);this.time=0;this.orders=[];this.events=[];this.result=null;this.running=false;this.paused=false;this.nextAI=10;this.serial=0;this.commands=0;this.captures=0;this.aiCommands=0;}
   cell(id){return this.cells.find(c=>c.id===id);}
   economy(owner){
     const key=this.cells.map(c=>c.owner[0]).join(''),cached=this.economyCache.get(owner);
@@ -53,7 +54,7 @@ export class Battle {
     if(!this.running||this.paused||this.result)return;
     dt=Math.min(Math.max(dt,0),.1);this.time+=dt;
     if(this.economyMode==='legacy-local'){
-      const relay=this.cell('0,0').owner;
+      const relay=this.cells.find(c=>c.kind==='relay').owner;
       for(const c of this.cells)if(c.owner!=='neutral'&&c.units<PRODUCTION_CAP)c.units=Math.min(PRODUCTION_CAP,c.units+localProduction(c,relay)*dt);
     }else for(const owner of ['orange','blue']){
       const economy=this.economy(owner),hq=this.cell(economy.hqId);
@@ -71,7 +72,7 @@ export class Battle {
     }
     if(!this.result&&this.time>=this.nextAI){const action=chooseOrder(this,'blue');if(action)this.send(action.from,action.to,action.fraction,'blue');this.nextAI=this.time+6.3;}
   }
-  snapshot(){return {economyMode:this.economyMode,time:this.time,result:this.result,running:this.running,paused:this.paused,cells:this.cells.map(c=>({...c})),orders:this.orders.map(o=>({...o,path:[...o.path]})),commands:this.commands,aiCommands:this.aiCommands,captures:this.captures};}
+  snapshot(){return {missionId:this.missionId,economyMode:this.economyMode,time:this.time,result:this.result,running:this.running,paused:this.paused,cells:this.cells.map(c=>({...c})),orders:this.orders.map(o=>({...o,path:[...o.path]})),commands:this.commands,aiCommands:this.aiCommands,captures:this.captures};}
   drainEvents(){return this.events.splice(0);}
 }
 /** Honest deterministic opponent: identical graph, units, production and combat. */
@@ -79,7 +80,7 @@ export function chooseOrder(game,owner,{aggression=1}={}) {
   const enemy=opposite(owner),hq=game.cells.find(c=>c.hq===enemy),own=game.cells.filter(c=>c.owner===owner),choices=[];
   const incoming=id=>game.orders.filter(o=>o.owner===owner&&o.path.at(-1)===id).reduce((n,o)=>n+o.units,0);
   const dist=new Map(game.cells.map(c=>[c.id,graphDistance(game.cells,c,hq)]));
-  const relay=game.cell('0,0'),relayDist=new Map(game.cells.map(c=>[c.id,graphDistance(game.cells,c,relay)]));
+  const relay=game.cells.find(c=>c.kind==='relay'),relayDist=new Map(game.cells.map(c=>[c.id,graphDistance(game.cells,c,relay)]));
   const front=own.filter(c=>neighbors(game.cells,c).some(n=>n.owner!==owner&&traversable(c,n)));
   for(const a of own) {
     if(a.units<4)continue;

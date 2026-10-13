@@ -2,15 +2,54 @@ import {Battle,chooseOrder} from './game.js';
 import {ECONOMY_MODE,ECONOMY_MODES} from './economy.js';
 import {reachability,orderPreview,fieldInfo,rateText} from './tactics.js';
 import {Diorama} from './scene.js';
+import {MISSIONS} from './missions.js';
+import {createMap} from './map.js';
+import {createCampaign,loadProgress} from './campaign.js';
 const ALLOW_QA = false;
 const MANUAL_CLOCK = ALLOW_QA && new URLSearchParams(location.search).get('clock')==='manual';
-const requestedEconomy=new URLSearchParams(location.search).get('economy');
-const $=id=>document.getElementById(id),game=new Battle({economyMode:ECONOMY_MODES.includes(requestedEconomy)?requestedEconomy:ECONOMY_MODE});
+const params=new URLSearchParams(location.search),requestedEconomy=params.get('economy');
+const progress=loadProgress(MISSIONS),requestedMission=params.get('mission');
+const qa=ALLOW_QA&&params.has('qa');
+const missionId=MISSIONS.some(m=>m.id===requestedMission)&&(qa||progress.unlocked.includes(requestedMission))?requestedMission:MISSIONS[0].id;
+const $=id=>document.getElementById(id),game=new Battle({missionId,economyMode:ECONOMY_MODES.includes(requestedEconomy)?requestedEconomy:ECONOMY_MODE});
+const mission=game.mission;
+document.title=`HEXFRONT — ${mission.title}`;
+$('operation-index').textContent=String(mission.index).padStart(2,'0');
+$('mission-index').textContent=`OPERATION ${String(mission.index).padStart(2,'0')}`;
+$('mission-title').replaceChildren(document.createTextNode(mission.id==='morgenwacht'?'Bastion':mission.id==='windpass'?'Schlucht':'Flussland'),document.createElement('br'),Object.assign(document.createElement('span'),{textContent:mission.title}));
+$('mission-description').textContent=mission.subtitle;
+$('mission-terrain').textContent=`${game.cells.length} Sektoren · 3 Höhenstufen`;
+$('mission-tactic').textContent=mission.id==='morgenwacht'?'Plateau sichern. Kräfte bündeln.':'Flanken nutzen. Nachschub sichern.';
+$('mission-coordinate').textContent=`SEKTOR ${String(mission.index).padStart(2,'0')} / ${mission.subtitle.toUpperCase()}`;
+document.querySelector('.map-title > span').textContent=mission.title.toUpperCase();
 const central=game.economyMode==='hq-centralized';
 $('economy-mode').textContent=central?'Zentrale Produktion':'Lokale Produktion';
-$('economy-briefing').textContent=central?'Nur dein HQ produziert. Verbundene Sektoren stärken den Nachschub; das verbundene Relais bringt +20 %. Felswände lassen sich nur über die beiden Rampen überwinden.':'Alle eigenen Sektoren produzieren. Relaisbesitz bringt +30 % Nachschub. Felswände lassen sich nur über die beiden Rampen überwinden.';
+$('economy-briefing').textContent=central?'Nur dein HQ produziert. Verbundene Sektoren stärken den Nachschub; das verbundene Relais bringt +20 %. Felswände lassen sich nur an den sichtbaren Aufstiegen überwinden.':'Alle eigenen Sektoren produzieren. Relaisbesitz bringt +30 % Nachschub. Felswände lassen sich nur an den sichtbaren Aufstiegen überwinden.';
 $('economy-help').textContent=central?'Nur das HQ erzeugt neue Truppen. Kontrollierte, begehbar verbundene Sektoren erhöhen seine Produktion. Das verbundene Relais bringt zusätzlich +20 %. Bei 99 Truppen pausiert das Wachstum; Verstärkungen gehen nicht verloren.':'Eigene Sektoren erzeugen Truppen. Relaisbesitz erhöht die gesamte Produktion um 30 %. Bei 99 Truppen pausiert das Wachstum.';
-let scene,selected=null,pending=null,fraction=1,loaded=false,last=0,accumulator=0,lastUI=0,toastTimer,autoPaused=false,helpWasPaused=false;
+let scene,campaign,selected=null,pending=null,fraction=1,loaded=false,last=0,accumulator=0,lastUI=0,toastTimer,autoPaused=false,helpWasPaused=false;
+function launchMission(id){
+  if(!loaded||!campaign.getProgress().unlocked.includes(id))return;
+  if(id===missionId){campaign.hide();restart();toast(mission.tactic);return;}
+  const url=new URL(location.href);url.searchParams.set('mission',id);url.searchParams.set('play','1');
+  if(!campaign.getProgress().persistent){history.replaceState(history.state,'',url.href);location.reload();}
+  else location.assign(url.href);
+}
+campaign=createCampaign({
+  missions:MISSIONS.map(m=>({...m,cells:createMap(m.id)})),currentMission:params.has('mission')?missionId:MISSIONS.find(m=>!progress.completed.includes(m.id))?.id||missionId,
+  getState:()=>({running:game.running,finished:!!game.result,busy:!loaded}),
+  onOpen:()=>{scene?.cancelGesture();if(game.running)game.paused=true;updateUI();},
+  onResume:()=>{game.paused=false;autoPaused=false;last=performance.now();accumulator=0;updateUI();},
+  onLaunch:launchMission,
+});
+function openCampaign(){
+  if($('result-dialog').open)$('result-dialog').close();
+  if($('help-dialog').open)$('help-dialog').close();
+  campaign.show();
+}
+$('campaign-open').addEventListener('click',openCampaign);
+document.querySelector('.brand').addEventListener('click',e=>{e.preventDefault();openCampaign();});
+$('result-campaign').addEventListener('click',openCampaign);
+$('next-mission').addEventListener('click',()=>launchMission(MISSIONS[mission.index]?.id));
 // Reserve the actual command panel height, including wrapped text on phones.
 // ResizeObserver then lets the camera fit its remaining visible canvas.
 const fitHUD=()=>{if(scene?.drag)return;document.querySelector('main').style.setProperty('--battle-bottom',`${Math.ceil(innerHeight-document.querySelector('.command-panel').getBoundingClientRect().top+20)}px`);};
@@ -56,7 +95,7 @@ function dragCommand(phase,id,reason){
 }
 function updateUI(){
   $('timer').textContent=time(game.time);$('orange-strength').textContent=game.strength('orange');$('blue-strength').textContent=game.strength('blue');
-  $('orange-territory').style.width=`${game.fields('orange')/37*100}%`;$('blue-territory').style.width=`${game.fields('blue')/37*100}%`;
+  $('orange-territory').style.width=`${game.fields('orange')/game.cells.length*100}%`;$('blue-territory').style.width=`${game.fields('blue')/game.cells.length*100}%`;
   $('field-count').textContent=`${game.fields('orange')} : ${game.fields('blue')} SEKTOREN`;
   $('phase').textContent=game.result?'EINSATZ BEENDET':game.paused?'PAUSIERT':game.running?'IM EINSATZ':'BEREIT';
   $('pause').disabled=!game.running;$('pause').textContent=game.paused?'▶':'Ⅱ';$('pause').setAttribute('aria-label',game.paused?'Fortsetzen':'Pausieren');document.body.classList.toggle('paused',game.paused);
@@ -71,8 +110,8 @@ function updateUI(){
   if(document.body.dataset.hud!==hud)document.body.dataset.hud=hud;
   if(scene){scene.pending=pending;scene.orderFraction=fraction;}
   $('command-options').hidden=!source||!game.running;
-  if(game.result){$('command-label').textContent='EINSATZ BEENDET';$('command-title').textContent=game.result==='victory'?'Die Bastion ist gesichert.':'Das Hauptquartier ist gefallen.';$('command-detail').textContent='Ein neuer Anlauf beginnt mit derselben Ausgangslage.';$('primary').innerHTML='Erneut spielen <span>↻</span>';$('primary').disabled=false;}
-  else if(!game.running){$('command-label').textContent='DEIN EINSATZ';$('command-title').textContent='Die Festung wartet.';$('command-detail').textContent='Wähle Orange. Sichere das Plateau. Erobere das blaue HQ.';$('primary').innerHTML=loaded?'Operation starten <span>→</span>':'Gelände laden <span>→</span>';$('primary').disabled=!loaded;}
+  if(game.result){$('command-label').textContent='EINSATZ BEENDET';$('command-title').textContent=game.result==='victory'?`${mission.title} ist gesichert.`:'Das Hauptquartier ist gefallen.';$('command-detail').textContent='Ein neuer Anlauf beginnt mit derselben Ausgangslage.';$('primary').innerHTML='Erneut spielen <span>↻</span>';$('primary').disabled=false;}
+  else if(!game.running){$('command-label').textContent='DEIN EINSATZ';$('command-title').textContent=`${mission.title} erwartet dich.`;$('command-detail').textContent=mission.briefing;$('primary').innerHTML=loaded?'Operation starten <span>→</span>':'Gelände laden <span>→</span>';$('primary').disabled=!loaded;}
   else if(game.paused){$('command-label').textContent='TAKTISCHE PAUSE';$('command-title').textContent='Die Schlacht ist angehalten.';$('command-detail').textContent='Nimm dir Zeit, das Gelände und die Front zu betrachten.';$('primary').innerHTML='Fortsetzen <span>▶</span>';$('primary').disabled=false;}
   else if(source&&target){
     const {path,amount,combat}=orderPreview(game,source,target,fraction);
@@ -87,18 +126,23 @@ function updateUI(){
       $('command-detail').textContent=`${bonuses.length?bonuses.join(' · '):'Kein Höhenbonus'} · Prognose: ${combat.win?'Vorteil':'Unterlegen'}\nStand jetzt · Ziel kann bis zur Ankunft verstärkt werden.`;
     }
     $('primary').innerHTML=scene?.drag?'Loslassen zum Senden':'Befehl geben <span>→</span>';$('primary').disabled=!path||amount<1;
-  } else if(source){$('command-label').textContent=`${source.kind==='hq'?'HAUPTQUARTIER':source.kind==='relay'?'RELAIS':source.height===1?'RAMPE':source.height===2?'FELSPLATEAU':'GARNISON'} · HÖHE ${source.height}`;$('command-title').textContent=`${source.name} · ${Math.floor(source.units)} Truppen`;$('command-detail').textContent=fieldInfo(game,source)+(source.height>0?' · Gegen Angriffe von unten: +30 % Abwehr.':'');$('primary').innerHTML='Ziel wählen <span>◇</span>';$('primary').disabled=true;}
+  } else if(source){$('command-label').textContent=`${source.kind==='hq'?'HAUPTQUARTIER':source.kind==='relay'?'RELAIS':source.kind==='ramp'?'RAMPE':source.height>0?'FELSPLATEAU':'GARNISON'} · HÖHE ${source.height}`;$('command-title').textContent=`${source.name} · ${Math.floor(source.units)} Truppen`;$('command-detail').textContent=fieldInfo(game,source)+(source.height>0?' · Gegen Angriffe von unten: +30 % Abwehr.':'');$('primary').innerHTML='Ziel wählen <span>◇</span>';$('primary').disabled=true;}
   else{$('command-label').textContent='DEIN BEFEHL';$('command-title').textContent='Wähle eine orange Garnison.';$('command-detail').textContent=central?'Verbundene Sektoren stärken das HQ. Verbundenes Relais: +20 %.':'Truppen wachsen auf allen Feldern. Relaisbesitz: +30 %.';$('primary').innerHTML='Garnison wählen <span>◇</span>';$('primary').disabled=true;}
 }
 function restart(){scene.cancelGesture();scene.clearEffects();game.reset();selected=null;pending=null;fraction=1;scene.select(null);scene.hover(null);scene.fit();$('half').setAttribute('aria-pressed','false');$('all').setAttribute('aria-pressed','true');$('result-dialog').close();game.start();toast('Neuer Einsatz. Beide Seiten beginnen mit frischen Truppen.');updateUI();}
 function showResult(){
   scene.cancelGesture();
-  $('result-label').textContent=game.result==='victory'?'OPERATION ERFOLGREICH':'OPERATION GESCHEITERT';$('result-title').textContent=game.result==='victory'?'Die Bastion gehört dir.':'Die Linie ist gebrochen.';
-  $('result-copy').textContent=game.result==='victory'?'Das blaue Hauptquartier wurde erobert. Deine Truppen sichern die Festung.':'Die gegnerischen Truppen haben dein Hauptquartier eingenommen. Bündle beim nächsten Versuch früher deine Kräfte.';
+  if(game.result==='victory')campaign.complete(missionId);
+  const next=MISSIONS[mission.index];
+  $('next-mission').hidden=game.result!=='victory'||!next;
+  $('restart').classList.toggle('primary',game.result!=='victory'||!next);
+  $('restart').classList.toggle('text-button',game.result==='victory'&&!!next);
+  $('result-label').textContent=game.result==='victory'?'OPERATION ERFOLGREICH':'OPERATION GESCHEITERT';$('result-title').textContent=game.result==='victory'?`${mission.title} gehört dir.`:'Die Linie ist gebrochen.';
+  $('result-copy').textContent=game.result==='victory'?(next?`${next.title} ist freigeschaltet. ${campaign.getProgress().persistent?'Dein Fortschritt ist auf diesem Gerät gespeichert.':'Dein Fortschritt bleibt in diesem Tab erhalten.'}`:'Alle drei Operationen sind abgeschlossen. Du kannst jede Mission erneut spielen.'):'Die gegnerischen Truppen haben dein Hauptquartier eingenommen. Bündle beim nächsten Versuch früher deine Kräfte.';
   $('result-time').textContent=time(game.time);$('result-captures').textContent=game.captures;$('result-commands').textContent=game.commands;
   if($('help-dialog').open)$('help-dialog').close();$('result-dialog').showModal();updateUI();
 }
-function processEvents(){for(const e of game.drainEvents()){if(e.type==='send'||e.type==='capture'||e.type==='combat'||e.type==='reinforce')scene.effect(e);if(e.type==='capture'&&e.id==='0,0')toast(`${e.owner==='orange'?'Relais gesichert':'Blau kontrolliert das Relais'}. ${central?(game.economy(e.owner).relayConnected?'Verbunden · HQ-Nachschub +20 %.':'Abgeschnitten · noch kein HQ-Bonus.'):'Nachschub +30 %.'}`);if(e.type==='result'){if(scene.finishHQCapture)scene.finishHQCapture(showResult);else showResult();}}}
+function processEvents(){for(const e of game.drainEvents()){if(e.type==='send'||e.type==='capture'||e.type==='combat'||e.type==='reinforce')scene.effect(e);if(e.type==='capture'&&game.cell(e.id)?.kind==='relay')toast(`${e.owner==='orange'?'Relais gesichert':'Blau kontrolliert das Relais'}. ${central?(game.economy(e.owner).relayConnected?'Verbunden · HQ-Nachschub +20 %.':'Abgeschnitten · noch kein HQ-Bonus.'):'Nachschub +30 %.'}`);if(e.type==='result'){if(scene.finishHQCapture)scene.finishHQCapture(showResult);else showResult();}}}
 $('primary').addEventListener('click',()=>{
   if(game.result){restart();return;}if(game.paused){game.paused=false;autoPaused=false;updateUI();return;}if(!game.running){game.start();toast('Ziehe von Orange zum Ziel. Loslassen sendet die Truppen.');updateUI();return;}
   if(selected&&pending)issueOrder();
@@ -115,7 +159,7 @@ $('restart').addEventListener('click',restart);$('inspect').addEventListener('cl
 $('zoom-in').addEventListener('click',()=>scene?.zoomBy(1.15));$('zoom-out').addEventListener('click',()=>scene?.zoomBy(1/1.15));$('fit').addEventListener('click',()=>scene?.fit());
 $('camera-view').addEventListener('click',()=>scene?.setView(scene.view==='tactical'?'diorama':'tactical'));
 $('quality').addEventListener('click',()=>{if(!scene)return;const low=scene.quality==='high';scene.setQuality(low?'low':'high');$('quality').textContent=low?'LQ':'HQ';$('quality').setAttribute('aria-label',`Grafikqualität: ${low?'Reduziert':'Hoch'}`);toast(low?'Reduzierte Auflösung und Schattenqualität aktiviert.':'Hohe Grafikqualität aktiviert.');});
-document.addEventListener('keydown',e=>{if(e.code==='Space'&&e.target===document.body){e.preventDefault();togglePause();}if(e.key==='Escape'&&!$('help-dialog').open&&!$('result-dialog').open){scene?.cancelGesture();selected=null;pending=null;scene?.select(null);scene?.hover(null);updateUI();}});
+document.addEventListener('keydown',e=>{if(campaign.open)return;if(e.code==='Space'&&e.target===document.body){e.preventDefault();togglePause();}if(e.key==='Escape'&&!$('help-dialog').open&&!$('result-dialog').open){scene?.cancelGesture();selected=null;pending=null;scene?.select(null);scene?.hover(null);updateUI();}});
 window.addEventListener('blur',()=>scene?.cancelGesture());
 document.addEventListener('visibilitychange',()=>{if(document.hidden)scene?.cancelGesture();if(document.hidden&&game.running&&!game.paused){game.paused=true;autoPaused=true;updateUI();}last=performance.now();accumulator=0;});
 try {
@@ -124,7 +168,9 @@ try {
   scene.onFrameChange=({zoom,small})=>{const hint=$('camera-guidance');hint.hidden=!small&&zoom<=1.01;hint.querySelector('b').textContent=zoom>1.01?'Ausschnitt':'Übersicht';hint.querySelector('span').textContent=zoom>1.01?'Hintergrund ziehen':'+ für Details';};
   scene.onViewChange=view=>{$('camera-view').textContent=view==='tactical'?'Taktik':'Diorama';$('camera-view').setAttribute('aria-pressed',String(view==='diorama'));$('camera-view').setAttribute('aria-label',view==='tactical'?'Taktikansicht. Zur Dioramaansicht wechseln':'Dioramaansicht. Zur Taktikansicht wechseln');};
   scene.renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();game.paused=true;toast('Grafikverbindung verloren. Bitte die Seite neu laden.');updateUI();});
-  await scene.ready;loaded=true;$('loading').hidden=true;updateUI();
+  await scene.ready;loaded=true;$('loading').hidden=true;updateUI();campaign.refresh();
+  if(params.get('play')==='1'&&requestedMission===missionId){game.start();toast(mission.tactic);updateUI();}
+  else if(!qa)campaign.show();
   const frame=now=>{const dt=last?Math.min((now-last)/1000,.2):0;last=now;if(!document.hidden){accumulator+=dt;while(accumulator>=.05){if(!MANUAL_CLOCK)game.update(.05);accumulator-=.05;}processEvents();if(now-lastUI>130){updateUI();lastUI=now;}scene.simulationRemainder=MANUAL_CLOCK?0:accumulator;scene.render(now);}requestAnimationFrame(frame);};requestAnimationFrame(frame);
   if(ALLOW_QA&&new URLSearchParams(location.search).has('qa'))window.__HEXFRONT3D__={
     snapshot:()=>game.snapshot(),point:id=>scene.screenCell(id),route:(a,b)=>game.path(game.cell(a),game.cell(b))?.map(c=>c.id),

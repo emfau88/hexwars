@@ -1,15 +1,16 @@
-import {surfaceHeight,STEP} from './map.js';
+import {getMission} from './missions.js';
+import {surfaceHeight} from './map.js';
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),mix=(a,b,t)=>a+(b-a)*t;
 // The existing decoration locations are shared with art.js. They never enter
 // the movement graph; a drone only gains enough visual height to clear them.
-export const RUINS=[[-.96,-1.25,1.22,STEP*2,-.20],[1.22,1.20,.98,STEP*2,-.20],[-1.13,-2.40,1.48,0,-.45],[1.22,2.38,1.25,0,2.70]];
+export const RUINS=getMission().art.ruins;
 export function structureClearance(game,x,z,ground=0){
  let clearance=0;
  for(const c of game.cells)if(c.kind==='hq'||c.kind==='relay'){
   const d=Math.hypot(x-c.x,z-(c.z-.10)),u=clamp((1.65-d)/.90,0,1);
   clearance=Math.max(clearance,(c.kind==='hq'?1.25:1.43)*u*u*(3-2*u));
  }
- for(const [rx,rz,length,base,angle] of RUINS){
+ for(const [rx,rz,length,base,angle] of getMission(game.missionId).art.ruins){
   const dx=x-rx,dz=z-rz,c=Math.cos(angle),s=Math.sin(angle);
   const outside=Math.hypot(Math.max(0,Math.abs(dx*c-dz*s)-length/2),Math.max(0,Math.abs(dx*s+dz*c)-.25));
   const u=clamp((.85-outside)/.45,0,1);

@@ -64,3 +64,9 @@ Die PIP-Drohne wurde anschließend anhand der vier vom Nutzer bereitgestellten K
 ### Command HQ – isolierter HQ-Art-Pass
 
 `public/assets/command-hq/command-hq.glb` ist ein neues, eigenständig in Blender 5.2 modelliertes HQ, im isolierten Experiment integriert. Grundlage ist die vom Nutzer bereitgestellte Architekturvorlage `79cab1a4-d284-4014-9621-049f9b353af9.png`; das Bild wird nicht mitverteilt. Meshes und kleine Roughness-Texturen sind eigens erstellt, keine zusätzlichen externen Assets. Bearbeitbare Quelle: `scripts/command-hq-source.blend`; Herstellung, Bilder und aktueller Integrationsstatus: [HQ_COMMAND.md](docs/HQ_COMMAND.md). Die bisherige gemeinsame HQ-/Drohnen-/Relais-Datei bleibt bytegleich; das neue HQ wird separat geladen.
+
+## Campaign maps and river — 13 October 2026
+
+Morgenwacht retains its existing geometry, props and material data. Windpass and Auenstrom are authored layouts using the same licensed subset above. The river ribbon mesh, 256² procedural normal map, sparse ripple strokes and narrow shoreline geometry are original repository code (`src/river.js`, `src/art.js`), created for this experiment. No additional downloaded models, textures, remote services or dependencies. Original repository mission layouts supplied design inspiration only; no third-party game artwork was introduced.
+
+The three JPEG mission illustrations in `public/assets/campaign/` are captures of this project's real Three.js maps, made by `scripts/capture-campaign-art.mjs`. They reuse only the assets already attributed above; no external concept artwork or generated background replaces the playable terrain.
