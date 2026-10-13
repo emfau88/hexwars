@@ -10,8 +10,14 @@ export const attackFactor=(from,to)=>from.height>to.height?1.15:1;
 export function forecast(from,to,formation) {
   const attacking=typeof formation==='number'?troops(formation):formation;
   const defense=defenseFactor(from,to),attack=attackFactor(from,to);
-  const effective=power(attacking)*Math.sqrt(attack/defense),opposition=power(to.troops);
-  return {effective,win:effective>opposition,remaining:Math.abs(effective-opposition),defense,attack};
+  // A mech retains its gun until destroyed; drones lose guns with casualties.
+  // Use the same exchanges as combat, since a scalar comparison misses this.
+  const a=cloneTroops(attacking),b=cloneTroops(to.troops);
+  for(let i=0;i<1000&&countTroops(a)&&countTroops(b);i++){
+    const outgoing=damageRate(a)*attack*.25,incoming=damageRate(b)*defense*.25;
+    applyDamage(a,incoming);applyDamage(b,outgoing);
+  }
+  return {win:countTroops(a)>0&&!countTroops(b),defense,attack};
 }
 function faction(){return {credits:64,queue:['drone','drone','mech'],repeat:true,productionPaused:false,active:null,rally:null,nextSupply:0,spent:0,produced:{drone:0,mech:0},earned:0};}
 function counted(object) {Object.defineProperty(object,'units',{enumerable:true,get(){return countTroops(this.troops);}});return object;}
@@ -20,7 +26,8 @@ export class Battle {
   reset() {
     this.cells=createMap(this.missionId).map(c=>{
       const old=c.units;delete c.units;
-      c.troops=c.hq?troops(c.owner==='orange'?14:13,2):c.owner==='neutral'?troops(old):troops(4);
+      // Ordinary territory is unoccupied. Only the relay keeps neutral guards.
+      c.troops=c.hq?troops(c.owner==='orange'?14:13,2):c.owner==='neutral'?troops(c.kind==='relay'?old:0):troops(4);
       c.battle=null;return counted(c);
     });
     this.factions={orange:faction(),blue:faction()};this.economyCache=new Map();
@@ -75,7 +82,7 @@ export class Battle {
     if(!path)return {ok:false,reason:'Kein begehbarer Weg über eigenes Gebiet.'};
     const formation=takeTroops(a.troops,filter,fraction,reserve);
     if(!countTroops(formation))return {ok:false,reason:'Keine Einheiten dieses Typs verfügbar.'};
-    const order=counted({id:++this.serial,owner,troops:formation,path:path.map(c=>c.id),segment:0,progress:0,kind,blocked:false,seconds:travelSeconds(formation)});
+    const order=counted({id:++this.serial,owner,troops:formation,path:path.map(c=>c.id),segment:0,progress:0,kind,blocked:false,departedAt:this.time,seconds:travelSeconds(formation)});
     this.orders.push(order);if(kind==='command')owner==='orange'?this.commands++:this.aiCommands++;
     this.events.push({type:'send',owner,from:a.id,to:b.id,units:order.units,kind});return {ok:true,order};
   }
@@ -85,6 +92,7 @@ export class Battle {
       this.events.push({type:'reinforce',id:to.id,from:from.id,owner:order.owner,units:order.units});return;
     }
     if(order.kind==='supply')throw Error('Supply must never attack');
+    if(!to.units&&!to.battle){this.capture(to,{owner:order.owner,troops:order.troops,from:from.id});return;}
     if(!to.battle)to.battle={owner:order.owner,troops:emptyTroops(),from:from.id,elapsed:0,tick:0};
     if(to.battle.owner!==order.owner)throw Error('Only two player factions are supported');
     mergeTroops(to.battle.troops,order.troops);
@@ -104,7 +112,7 @@ export class Battle {
       if(f.active.elapsed+1e-8<spec.seconds||this.strength(owner)>=ARMY_LIMIT)continue;
       const type=f.active.type;mergeTroops(hq.troops,troops(type==='drone'?1:0,type==='mech'?1:0));
       f.produced[type]++;f.active=null;if(f.repeat)f.queue.push(type);
-      this.events.push({type:'produced',id:hq.id,owner,unitType:type});
+      this.events.push({type:'produced',id:hq.id,owner,unitType:type,time:this.time});
     }
   }
   updateSupply() {
@@ -160,8 +168,10 @@ export class Battle {
       if(b.tick<.25-1e-8)continue;
       const step=b.tick;b.tick=0;
       const from=this.cell(b.from),attack=damageRate(b.troops)*attackFactor(from,c),defend=damageRate(c.troops)*defenseFactor(from,c);
+      const shooter=t=>countType(t,'mech')&&(!countType(t,'drone')||Math.round(b.elapsed*4)%3===0)?'mech':'drone';
+      const attackerType=shooter(b.troops),defenderType=shooter(c.troops);
       const defenderLost=applyDamage(c.troops,attack*step),attackerLost=applyDamage(b.troops,defend*step);
-      this.events.push({type:'combat',id:c.id,from:b.from,owner:b.owner,previous:c.owner,attackerLost,defenderLost});
+      this.events.push({type:'combat',id:c.id,from:b.from,owner:b.owner,previous:c.owner,attackerLost,defenderLost,attackerType,defenderType});
       if(!countTroops(b.troops)){c.battle=null;this.events.push({type:'repelled',id:c.id,owner:c.owner});}
       else if(!c.units)this.capture(c,b);
       if(this.result)break;

@@ -1,6 +1,5 @@
 import * as T from 'three';
-import {countType} from './units.js';
-import {prepareMechs,formationPoses,drawMechs} from './squads.js';
+import {prepareMechs,formationPoses,drawMechs,combatPose,weaponPoint} from './squads.js';
 import {setSuppliedTeam} from './supplied-assets.js';
 import {updateCommandHQ,commandHQEvent,resetCommandHQ} from './command-hq.js';
 import {STEP,surfaceHeight} from './map.js';
@@ -48,21 +47,27 @@ export function buildEffects(s){
  for(let i=0;i<MAX_EFFECTS;i++){
   const group=new T.Group();group.visible=false;s.scene.add(group);
   const mat=new T.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false,toneMapped:false}),ringMat=mat.clone(),defMat=mat.clone();
-  const flash=mesh(group,flashGeo,mat),bolt=mesh(group,boltGeo,mat),ring=mesh(group,hexGeo.clone(),ringMat),guard=mesh(group,hexGeo.clone(),defMat);
+  const flash=mesh(group,flashGeo,mat),muzzle=mesh(group,flashGeo,mat),bolt=mesh(group,boltGeo,mat),ring=mesh(group,hexGeo.clone(),ringMat),guard=mesh(group,hexGeo.clone(),defMat);
   const chips=new T.InstancedMesh(chipGeo,mat,10);chips.instanceMatrix.setUsage(T.DynamicDrawUsage);group.add(chips);
   group.traverse(o=>{o.castShadow=false;o.receiveShadow=false;});
-  s.effectPool.push({group,mat,ringMat,defMat,flash,bolt,ring,guard,chips,baseContour:hexGeo.attributes.position.array,active:false});
+  s.effectPool.push({group,mat,ringMat,defMat,flash,muzzle,bolt,ring,guard,chips,baseContour:hexGeo.attributes.position.array,active:false});
  }
 }
 export function technologyEffect(s,e){
  commandHQEvent(s,e);
+ if(!['combat','capture','reinforce'].includes(e.type))return;
  const cell=s.game.cell(e.id);if(!cell)return;
- if(e.type==='combat'&&!e.returnFire&&cell.units>0)technologyEffect(s,{...e,owner:e.previous,previous:e.owner,returnFire:true});
- const formation=e.returnFire?cell.troops:cell.battle?.troops;
- const heavy=!!formation&&countType(formation,'mech')>0&&Math.floor((cell.battle?.elapsed||0)*4)%3===0;
+ if(e.type==='combat'&&!e.returnFire)technologyEffect(s,{...e,owner:e.previous,previous:e.owner,returnFire:true});
+ const type=e.returnFire?e.defenderType:e.attackerType,heavy=type==='mech';
+ let origin=null,target=null;
+ if(e.type==='combat'){
+  const pose=combatPose(s,cell,e.from,type,e.owner,e.returnFire?'defend':'attack');
+  const opponent=combatPose(s,cell,e.from,e.returnFire?e.attackerType:e.defenderType,e.previous,e.returnFire?'attack':'defend');
+  origin=weaponPoint(pose);target=new T.Vector3(opponent.x,opponent.y+(opponent.type==='mech'?.38:.08),opponent.z);
+ }
  const limit=s.quality==='low'?8:MAX_EFFECTS,pool=s.effectPool.slice(0,limit),fx=pool.find(f=>!f.active)||pool.reduce((a,b)=>a.start<b.start?a:b);
  const from=s.game.cell(e.from)||cell,dx=cell.x-from.x,dz=cell.z-from.z,length=Math.hypot(dx,dz)||1;
- Object.assign(fx,{active:true,start:s.visualTime,event:e,cell,duration:e.type==='capture'?(cell.hq?780:650):e.type==='reinforce'?240:360,heavy,dx:dx/length*(e.returnFire?-1:1),dz:dz/length*(e.returnFire?-1:1)});
+ Object.assign(fx,{active:true,start:s.visualTime,event:e,cell,duration:e.type==='capture'?(cell.hq?780:650):e.type==='reinforce'?240:360,heavy,origin,target,shooterType:type,dx:dx/length*(e.returnFire?-1:1),dz:dz/length*(e.returnFire?-1:1)});
  fx.group.visible=true;fx.mat.color.setHex(TEAM[e.owner]);fx.ringMat.color.setHex(TEAM[e.owner]);fx.defMat.color.setHex(TEAM[e.previous]||TEAM.neutral);
 
 }
@@ -75,8 +80,13 @@ function updateEffects(s){
   f.group.position.set(x,y,z);f.mat.opacity=quiet?.15:(1-t)*.75;f.ringMat.opacity=(1-t)*(quiet?.18:.7);f.defMat.opacity=(1-t)*.48;
   const attackPhase=clamp(age/140,0,1),flash=quiet?.5:Math.sin(clamp((age-65)/230,0,1)*Math.PI);
   f.flash.visible=!reinforce&&age<340;f.flash.position.set(f.dx*.12,roof+.28,f.dz*.12);f.flash.scale.setScalar(.45+flash*(cell.hq?2.3:1.3));
-  f.bolt.visible=!quiet&&!reinforce&&age<170;
-  const a=new T.Vector3(-f.dx*.72,roof+.39,-f.dz*.72),b=new T.Vector3(f.dx*.13,roof+.22,f.dz*.13),dir=b.clone().sub(a);f.bolt.position.copy(a.lerp(b,attackPhase*.5+.3));f.bolt.quaternion.setFromUnitVectors(up,dir.clone().normalize());f.bolt.scale.set(f.heavy?2.6:1,dir.length()*(.22+.45*(1-attackPhase)),f.heavy?2.6:1);
+  f.bolt.visible=!quiet&&!!f.origin&&age<170;f.muzzle.visible=!quiet&&!!f.origin&&age<90;
+  if(f.origin){
+    const center=new T.Vector3(x,y,z),a=f.origin.clone().sub(center),b=f.target.clone().sub(center),dir=b.clone().sub(a),length=dir.length();
+    f.muzzle.position.copy(a);f.muzzle.scale.setScalar(f.heavy?.25:.13);
+    f.flash.position.copy(b);f.flash.scale.setScalar((f.heavy?.50:.28)*flash);f.flash.visible=age>100&&age<340;
+    f.bolt.position.copy(a).lerp(b,attackPhase);f.bolt.quaternion.setFromUnitVectors(up,dir.normalize());f.bolt.scale.set(f.heavy?2.6:1,Math.min(.20,length*.22),f.heavy?2.6:1);
+  }
   f.ring.visible=capture||reinforce;const r=quiet?(cell.hq?2.3:1):capture?(cell.hq?2+t*.55:.60+t*1.30):.5+t*.70;
   f.guard.visible=!capture&&!reinforce;
   // Fixed-size pooled buffers follow the real slope; no clipping on ramps.

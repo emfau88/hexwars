@@ -24,6 +24,8 @@ export class Diorama {
   constructor(container,labels,game,onSelect,onHover){
     this.container=container;this.labels=labels;this.game=game;this.onSelect=onSelect;this.onHover=onHover;this.selected=null;this.hovered=null;this.zoom=1;this.quality='high';this.markers=new Map();this.labelsById=new Map();this.picks=[];this.disposed=false;this.reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.view='tactical';this.angle=CAMERA_VIEWS.tactical;this.viewPan={u:0,v:0};this.boundsCache=new Map();this.occluders=[];
+    const ownHQ=game.cells.find(c=>c.hq==='orange'),enemyHQ=game.cells.find(c=>c.hq==='blue');
+    this.azimuth=Math.atan2(ownHQ.x-enemyHQ.x,ownHQ.z-enemyHQ.z);
     matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',e=>{this.reduced=e.matches;if(this.reduced)this.droneGhosts=[];});
     this.scene=new T.Scene();this.scene.background=new T.Color(0x192321);this.scene.fog=new T.Fog(0x192321,28,63);
     this.camera=new T.OrthographicCamera(-10,10,10,-10,.1,100);
@@ -89,7 +91,8 @@ export class Diorama {
       // Keep territory colour independent of orders, as in the original board.
       // A separate inset contour marks selection/reachability on the real slope.
       const action=new T.Mesh(ringGeometry(c,this.game.cells,.80,.025),new T.MeshBasicMaterial({color:0xf2d9a4,transparent:true,opacity:.85,depthWrite:false,side:T.DoubleSide,toneMapped:false}));action.visible=false;action.renderOrder=3;this.scene.add(action);
-      this.markers.set(c.id,{marker,fill,action});
+      const combat=new T.Mesh(ringGeometry(c,this.game.cells,.87,.055),new T.MeshBasicMaterial({color:0xffd69a,transparent:true,opacity:.6,depthWrite:false,side:T.DoubleSide,toneMapped:false}));combat.visible=false;combat.renderOrder=4;this.scene.add(combat);
+      this.markers.set(c.id,{marker,fill,action,combat});
       const el=document.createElement('button');el.className='garrison '+c.owner;el.dataset.cell=c.id;el.type='button';el.innerHTML='<span class="badge-face"><span class="count"></span><span class="cell-symbol"></span></span>';el.addEventListener('click',e=>{e.stopPropagation();const hit=e.detail?this.hitAt(e):{id:c.id};this.onSelect(hit.id,hit.reason);});el.addEventListener('pointerenter',e=>this.onHover(this.hitAt(e).id));el.addEventListener('focus',()=>this.onHover(c.id));this.labels.append(el);this.labelsById.set(c.id,el);
     }
     this.pathLine=new T.Line(new T.BufferGeometry(),new T.LineDashedMaterial({color:0xe8d6a7,dashSize:.18,gapSize:.12,transparent:true,opacity:.8}));this.pathLine.frustumCulled=false;this.scene.add(this.pathLine);
@@ -111,7 +114,11 @@ export class Diorama {
     const w=this.container.clientWidth,h=this.container.clientHeight;if(!w||!h)return;
     this.renderer.setSize(w,h,false);
     if(!this.fitPoints)this.captureBattlefieldGeometry();
-    const basis=cameraBasis(this.angle),key=`${this.view}:${this.angle}`;let bounds=this.boundsCache.get(key);if(!bounds){bounds=projectedBounds(this.view==='diorama'?this.fitPoints:this.tacticalFitPoints,basis);this.boundsCache.set(key,bounds);}
+    const basis=cameraBasis(this.angle,this.azimuth),key=`${this.view}:${this.angle}`;let bounds=this.boundsCache.get(key);if(!bounds){
+      bounds=projectedBounds(this.view==='diorama'?this.fitPoints:this.tacticalFitPoints,basis);
+      const hq=this.game.cells.find(c=>c.hq==='orange'),u=hq.x*basis.right[0]+hq.z*basis.right[2],radius=Math.max(u-bounds.minU,bounds.maxU-u);
+      bounds.minU=u-radius;bounds.maxU=u+radius;this.boundsCache.set(key,bounds);
+    }
     const f=frameBattlefield(bounds,w,h,this.zoom,this.viewPan);this.framing=f;this.projectedWorldBounds=bounds;this.viewPan={u:f.u,v:f.v};
     this.camera.position.fromArray(basis.out).multiplyScalar(30);this.camera.lookAt(0,0,0);
     this.camera.left=f.centerU-f.halfW;this.camera.right=f.centerU+f.halfW;this.camera.top=f.centerV+f.halfH;this.camera.bottom=f.centerV-f.halfH;this.camera.updateProjectionMatrix();this.camera.updateMatrixWorld();
@@ -266,7 +273,8 @@ export class Diorama {
     const selected=this.game.cell(this.selected),labelEntries=[],movingFrom=new Set(this.game.orders.map(o=>o.path[0])),movingTo=new Set(this.game.orders.map(o=>o.path.at(-1)));
     const touch=matchMedia('(max-width:640px)').matches;
     for(const c of this.game.cells){
-      const {marker,fill,action}=this.markers.get(c.id),isSelected=c.id===this.selected,access=reachability(this.game,selected,c),reachable=access==='direct'||access==='indirect',hover=c.id===this.hovered,owned=c.owner!=='neutral',isTarget=c.id===this.pending;
+      const {marker,fill,action,combat}=this.markers.get(c.id),isSelected=c.id===this.selected,access=reachability(this.game,selected,c),reachable=access==='direct'||access==='indirect',hover=c.id===this.hovered,owned=c.owner!=='neutral',isTarget=c.id===this.pending;
+      combat.visible=!!c.battle;combat.material.opacity=this.reduced?.65:.52+Math.sin(this.game.time*5)*.18;
       const moving=movingFrom.has(c.id)||movingTo.has(c.id),invalid=this.invalid?.id===c.id&&time<this.invalid.until;
       marker.material.color.setHex(owned?COLORS[c.owner]:0xc9d0bb);marker.material.opacity=owned?.95:.62;
       fill.material.color.setHex(owned?COLORS[c.owner]:0xcbce9e);fill.material.opacity=owned?(isSelected?.34:.28):reachable?.025:0;
@@ -278,7 +286,8 @@ export class Diorama {
       if(el.dataset.access!==access)el.dataset.access=access;
       const classes=`garrison ${c.owner}${isSelected?' selected':''}${reachable?' reachable':''}${moving?' in-transit':''}`;if(el.className!==classes)el.className=classes;
       const role=isSelected?'source':isTarget?'target':movingTo.has(c.id)?'incoming':movingFrom.has(c.id)?'outgoing':'field';if(el.dataset.role!==role)el.dataset.role=role;
-      const count=String(combatValue(c.troops)),symbol=c.kind==='hq'?'⌂':c.kind==='relay'?'⌁':'';if(el.querySelector('.count').textContent!==count)el.querySelector('.count').textContent=count;if(el.querySelector('.cell-symbol').textContent!==symbol)el.querySelector('.cell-symbol').textContent=symbol;
+      const strength=combatValue(c.troops),count=strength?String(strength):'',symbol=c.kind==='hq'?'⌂':c.kind==='relay'?'⌁':'';if(el.querySelector('.count').textContent!==count)el.querySelector('.count').textContent=count;if(el.querySelector('.cell-symbol').textContent!==symbol)el.querySelector('.cell-symbol').textContent=symbol;
+      el.classList.toggle('empty',!strength&&!symbol);
       el.setAttribute('aria-label',`${isSelected?'Quelle, ':isTarget?'Ziel, ':''}${c.name}, ${c.owner==='orange'?'Orange':c.owner==='blue'?'Blau':'neutral'}, Kampfwert ${combatValue(c.troops)}, ${countType(c.troops,'drone')} Drohnen und ${countType(c.troops,'mech')} Mechs${c.battle?', im Gefecht':''}, Höhe ${c.height}`);el.setAttribute('aria-pressed',String(isSelected));
       el.classList.toggle('fighting',!!c.battle);el.classList.toggle('rally',this.game.factions.orange.rally===c.id);
       el.style.visibility='visible';

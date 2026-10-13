@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {Battle,chooseOrder} from '../src/game.js';
+import {Battle,chooseOrder,forecast} from '../src/game.js';
 import {UNIT,troops,cloneTroops,countTroops,countType,health,mergeTroops,takeTroops,applyDamage} from '../src/units.js';
 import {ARMY_LIMIT,HQ_RESERVE} from '../src/economy.js';
 import {createMap,neighbors,traversable} from '../src/map.js';
@@ -82,7 +82,32 @@ test('rerouting and disconnected waiting do not move supply across enemy terrain
 });
 test('pause freezes income, movement, combat and production; reset isolates snapshots',()=>{
   const g=new Battle();g.start();advance(g,8);g.paused=true;const snapshot=g.snapshot();advance(g,10);assert.deepEqual(g.snapshot(),snapshot);
-  snapshot.cells[0].troops.drone[0].count=999;assert.notEqual(g.cells[0].units,999);g.reset();assert.deepEqual(g.snapshot(),new Battle().snapshot());
+  const occupied=snapshot.cells.find(c=>c.troops.drone.length);occupied.troops.drone[0].count=999;assert.notEqual(g.cell(occupied.id).units,999);g.reset();assert.deepEqual(g.snapshot(),new Battle().snapshot());
+});
+test('ordinary neutral fields are empty and capture on arrival without damage or combat',()=>{
+  for(const mission of MISSIONS){const g=new Battle({missionId:mission.id,ai:false});g.start();
+    for(const c of g.cells.filter(c=>c.owner==='neutral'))assert.equal(c.units>0,c.kind==='relay');
+    const a=g.cells.find(c=>c.owner==='orange'&&!c.hq),b=neighbors(g.cells,a).find(c=>c.owner==='neutral'&&traversable(a,c));
+    const hp=health(a.troops),order=g.send(a.id,b.id).order;advance(g,order.seconds);assert.equal(b.owner,'orange');assert.equal(b.battle,null);near(health(b.troops),hp);
+  }
+});
+test('two independent battles exchange damage concurrently',()=>{
+  const g=fixture(),targets=[],used=new Set();
+  for(const a of g.cells.filter(c=>c.owner==='orange'&&!c.hq)){
+    const b=neighbors(g.cells,a).find(c=>c.owner==='neutral'&&!used.has(c.id)&&traversable(a,c));used.add(b.id);b.troops=troops(8);a.troops=troops(8);targets.push(b);assert.ok(g.send(a.id,b.id).ok);
+  }
+  advance(g,1.2);assert.equal(targets.filter(c=>c.battle).length,2);const hp=targets.map(c=>[health(c.troops),health(c.battle.troops)]);advance(g,.5);
+  targets.forEach((c,i)=>{assert.ok(health(c.troops)<hp[i][0]);assert.ok(health(c.battle.troops)<hp[i][1]);});
+});
+test('income breakdown includes relay bonus and removes disconnected fields',()=>{
+  const g=fixture();for(const c of g.cells)c.owner='orange';let e=g.economy('orange');
+  near(e.rate,e.hqIncome+e.fieldIncome+e.bonusIncome);near(e.bonusIncome,e.baseIncome*.2);assert.equal(e.relayConnected,true);
+  for(const c of neighbors(g.cells,g.cell(e.hqId)))c.owner='blue';e=g.economy('orange');assert.equal(e.rate,2);assert.equal(e.fieldIncome,0);assert.equal(e.bonusIncome,0);assert.ok(e.isolatedIds.length>0);
+});
+test('mech cost trades speed for a stronger concentrated formation',()=>{
+  const duel=n=>{const a=troops(0,1),b=troops(n);for(let k=0;k<1000&&countTroops(a)&&countTroops(b);k++){const da=UNIT.mech.dps*countType(a,'mech')*.05,db=UNIT.drone.dps*countType(b,'drone')*.05;applyDamage(a,db);applyDamage(b,da);}return {a:countTroops(a),b:countTroops(b)};};
+  assert.equal(duel(3).b,0);assert.equal(duel(5).a,0);assert.ok(UNIT.mech.cost>3*UNIT.drone.cost&&UNIT.mech.cost<4*UNIT.drone.cost);assert.ok(UNIT.mech.travel>UNIT.drone.travel);
+  const from={height:0},to={height:0,kind:'field',troops:troops(4)};assert.equal(forecast(from,to,troops(0,1)).win,true);assert.equal(countTroops(to.troops),4);
 });
 test('campaign saves never read or overwrite the original campaign key',()=>{
   assert.notEqual(CAMPAIGN_KEY,'hexfront.campaign.v1');const data=new Map([['hexfront.campaign.v1','original']]);

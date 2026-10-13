@@ -3,7 +3,7 @@
 export const UNIT_TYPES = ['drone', 'mech'];
 export const UNIT = Object.freeze({
   drone: Object.freeze({name:'Drohne', short:'D', cost:12, seconds:1.8, hp:12, dps:3, travel:1.1}),
-  mech: Object.freeze({name:'Mech', short:'M', cost:40, seconds:4.8, hp:48, dps:8, travel:1.9}),
+  mech: Object.freeze({name:'Mech', short:'M', cost:40, seconds:4.8, hp:48, dps:9, travel:1.9}),
 });
 export const emptyTroops = () => ({drone:[], mech:[]});
 export function troops(drone=0, mech=0) {

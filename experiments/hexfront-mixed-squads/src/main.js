@@ -1,5 +1,5 @@
 import {Battle,chooseOrder} from './game.js';
-import {countTroops,countType,troopText,combatValue} from './units.js';
+import {countType,troopText,combatValue} from './units.js';
 import {createProductionUI} from './production-ui.js';
 import {ECONOMY_MODE,ECONOMY_MODES} from './economy.js';
 import {reachability,orderPreview,fieldInfo,rateText} from './tactics.js';
@@ -78,7 +78,7 @@ function select(id,blocked){
 function hover(id){if(scene&&!scene.drag)scene.hover(pending||id);}
 function issueOrder(){
   const r=game.send(selected,pending,fraction,'orange',unitFilter);
-  if(r.ok){toast(`${troopText(r.order.troops)} unterwegs.`);pending=null;scene.hover(null);}
+  if(r.ok){toast(`${troopText(r.order.troops)} unterwegs.`);selected=null;pending=null;scene.select(null);scene.hover(null);}
   else {toast(r.reason,'blocked');scene.reject(pending);}
   updateUI();
 }
@@ -105,7 +105,7 @@ function updateUI(){
   const economy=game.economy('orange'),hq=game.cell(economy.hqId),full=game.strength('orange')>=economy.cap;
   $('credits').textContent=`${Math.floor(game.factions.orange.credits)} Cr`;
   production.render();
-  $('hq-production').textContent=`+${rateText(economy.rate)} Cr/s · ${economy.connectedFields} Felder`;
+  $('hq-production').textContent=`+${rateText(economy.rate)} Cr/s Einkommen`;
   $('hq-production').title=`Relaisbonus ${Math.round(economy.relayBonus*100)} % · ${game.strength('orange')}/${economy.cap} Roboter${full?' · Armeelimit erreicht':''}`;
   $('hint').style.opacity=game.commands>3?.55:1;
   let source=game.cell(selected),target=game.cell(pending);
@@ -149,7 +149,7 @@ function showResult(){
   $('result-time').textContent=time(game.time);$('result-captures').textContent=game.captures;$('result-commands').textContent=game.commands;
   if($('help-dialog').open)$('help-dialog').close();$('result-dialog').showModal();updateUI();
 }
-function processEvents(){for(const e of game.drainEvents()){if(e.type==='send'||e.type==='capture'||e.type==='combat'||e.type==='reinforce'||e.type==='engage')scene.effect(e);if(e.type==='supplyStopped'&&e.owner==='orange')toast('Nachschub angehalten: Route unterbrochen.');if(e.type==='capture'&&game.cell(e.id)?.kind==='relay')toast(`${e.owner==='orange'?'Relais gesichert':'Blau kontrolliert das Relais'}. ${central?(game.economy(e.owner).relayConnected?'Verbunden · Einkommen +20 %.':'Abgeschnitten · noch kein HQ-Bonus.'):'Nachschub +30 %.'}`);if(e.type==='result'){if(scene.finishHQCapture)scene.finishHQCapture(showResult);else showResult();}}}
+function processEvents(){for(const e of game.drainEvents()){if(e.type==='send'||e.type==='produced'||e.type==='capture'||e.type==='combat'||e.type==='reinforce'||e.type==='engage')scene.effect(e);if(e.type==='supplyStopped'&&e.owner==='orange')toast('Nachschub angehalten: Route unterbrochen.');if(e.type==='capture'&&game.cell(e.id)?.kind==='relay')toast(`${e.owner==='orange'?'Relais gesichert':'Blau kontrolliert das Relais'}. ${central?(game.economy(e.owner).relayConnected?'Verbunden · Einkommen +20 %.':'Abgeschnitten · noch kein HQ-Bonus.'):'Nachschub +30 %.'}`);if(e.type==='result'){if(scene.finishHQCapture)scene.finishHQCapture(showResult);else showResult();}}}
 $('primary').addEventListener('click',()=>{
   if(game.result){restart();return;}if(game.paused){game.paused=false;autoPaused=false;updateUI();return;}if(!game.running){game.start();toast('Ziehe von Orange zum Ziel. Loslassen sendet die Truppen.');updateUI();return;}
   if(selected&&pending)issueOrder();

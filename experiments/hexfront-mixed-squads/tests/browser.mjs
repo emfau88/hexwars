@@ -35,6 +35,7 @@ async function ready(page){await page.waitForFunction(()=>window.__HEXFRONT3D__&
 const snapshot=page=>page.evaluate(()=>window.__HEXFRONT3D__.snapshot());
 const advance=(page,n)=>page.evaluate(n=>window.__HEXFRONT3D__.advance(n),n);
 async function shot(page,name){await page.screenshot({path:path.join(out,name+'.png')});report.screens.push(name);}
+async function clear(page){if(await page.locator('#clear').isVisible())await page.locator('#clear').click();}
 async function pick(page,id){await page.locator(`.garrison[data-cell="${id}"]`).click();}
 async function layout(page){
   const state=await page.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth,controls:[...document.querySelectorAll('#command-options button,#primary')].filter(b=>b.getBoundingClientRect().width&&b.getBoundingClientRect().height).map(b=>{const r=b.getBoundingClientRect();return {id:b.id||b.dataset.unit,x:r.x,y:r.y,right:r.right,bottom:r.bottom};}),height:innerHeight}));
@@ -60,12 +61,12 @@ try {
   await page.locator('#campaign-open').click();await page.locator('.campaign-launch').click();
   await pick(page,'-2,3');await page.locator('[data-unit="drone"]').click();await pick(page,'-3,3');await layout(page);await page.locator('#primary').click();
   let state=await snapshot(page);assert.equal(state.orders.length,1);assert.equal(state.orders[0].troops.mech.length,0);assert.equal(state.orders[0].units,14);
-  state=await advance(page,1.4);assert.ok(state.cells.find(c=>c.id==='-3,3').battle);await shot(page,'combat-desktop');
+  state=await advance(page,1.4);assert.equal(state.cells.find(c=>c.id==='-3,3').owner,'orange');assert.equal(state.cells.find(c=>c.id==='-3,3').battle,null);await shot(page,'combat-desktop');
   state=await advance(page,3);assert.equal(state.cells.find(c=>c.id==='-3,3').owner,'orange');
-  const poses=await page.evaluate(()=>window.__HEXFRONT3D__.formations());assert.ok(poses.drones.some(p=>p.cellId==='-3,3'&&p.owner==='orange'));assert.ok(poses.mechs.some(p=>p.owner==='blue'));
-  await page.locator('#clear').click();await pick(page,'-3,3');await page.locator('#rally-set').click();assert.equal((await snapshot(page)).factions.orange.rally,'-3,3');
+  const poses=await page.evaluate(()=>window.__HEXFRONT3D__.formations());assert.ok(poses.drones.some(p=>p.cellId==='-3,3'&&p.owner==='orange'));assert.equal(state.cells.find(c=>c.hq==='blue').troops.mech[0].count,2);
+  await clear(page);await pick(page,'-3,3');await page.locator('#rally-set').click();assert.equal((await snapshot(page)).factions.orange.rally,'-3,3');
   const before=(await snapshot(page)).cells.find(c=>c.id==='-3,3').units;state=await advance(page,18);assert.ok(state.cells.find(c=>c.id==='-3,3').units>before);assert.ok(state.cells.find(c=>c.hq==='orange').units>=6);
-  await page.locator('[data-unit="all"]').click();await page.locator('#clear').click();
+  await page.locator('[data-unit="all"]').click();await clear(page);
   const points=await page.evaluate(()=>['-3,3','-3,2'].map(id=>window.__HEXFRONT3D__.point(id)));const commands=(await snapshot(page)).commands;
   await page.mouse.move(points[0].x,points[0].y);await page.mouse.down();await page.mouse.move(points[1].x,points[1].y,{steps:8});await page.mouse.up();assert.equal((await snapshot(page)).commands,commands+1);
   await page.locator('#quality').click();await page.locator('#zoom-in').click();await page.locator('#fit').click();await shot(page,'supply-desktop');report.checks.push('mouse click and drag, drone-only order, persistent squads, combat and rally delivery');
@@ -87,7 +88,7 @@ try {
   const mobile=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:1,reducedMotion:'reduce'});
   const phone=await mobile.newPage();await instrument(phone);await phone.goto(base+'?qa=1&clock=manual');await ready(phone);await phone.locator('#primary').tap();
   await phone.locator('.garrison[data-cell="-2,3"]').tap();await phone.locator('[data-unit="mech"]').tap();await phone.locator('.garrison[data-cell="-2,2"]').tap();await layout(phone);await shot(phone,'mobile-command');await phone.locator('#primary').tap();
-  assert.equal((await snapshot(phone)).orders[0].troops.drone.length,0);await advance(phone,2);await phone.locator('#clear').tap();await phone.locator('.garrison[data-cell="-2,3"]').tap();await phone.locator('[data-unit="all"]').tap();await phone.locator('#clear').tap();
+  assert.equal((await snapshot(phone)).orders[0].troops.drone.length,0);await advance(phone,2);await clear(phone);await phone.locator('.garrison[data-cell="-2,3"]').tap();await phone.locator('[data-unit="all"]').tap();await clear(phone);
   const touch=await mobile.newCDPSession(phone),[from,to]=await phone.evaluate(()=>['-2,3','-3,3'].map(id=>window.__HEXFRONT3D__.point(id))),beforeTouch=(await snapshot(phone)).commands;
   await touch.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:from.x,y:from.y}]});
   for(let n=1;n<=8;n++)await touch.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:from.x+(to.x-from.x)*n/8,y:from.y+(to.y-from.y)*n/8}]});

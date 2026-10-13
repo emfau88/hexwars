@@ -15,7 +15,7 @@ export function suppliedMaterial(source,owner='orange',instanced=false){
   shader.uniforms.uSuppliedTeam=team;
   if(instanced){
    shader.vertexShader='varying vec3 vSuppliedTeam;\n'+shader.vertexShader;
-   shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvSuppliedTeam = instanceColor;');
+   shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\n#ifdef USE_INSTANCING_COLOR\nvSuppliedTeam = instanceColor;\n#else\nvSuppliedTeam = vec3(1.0);\n#endif');
   }
   shader.fragmentShader='uniform vec3 uSuppliedTeam;\n'+(instanced?'varying vec3 vSuppliedTeam;\n':'')+shader.fragmentShader;
   shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`
@@ -29,7 +29,7 @@ diffuseColor.rgb=mix(sourceAlbedo,assetTeam*sourceAlbedo.r/.905,warmMask);`}
 ${optic?'totalEmissiveRadiance *= assetTeam;':'float lampStrength=max(totalEmissiveRadiance.r,max(totalEmissiveRadiance.g,totalEmissiveRadiance.b)); totalEmissiveRadiance=assetTeam*lampStrength;'}`);
  };
  if(optic){m.emissive.setHex(0xffffff);m.emissiveIntensity=.65;}
- m.customProgramCacheKey=()=>`mixed-masked-v2-${optic}-${instanced}`;
+ m.customProgramCacheKey=()=>`mixed-masked-v3-${optic}-${instanced}`;
  return m;
 }
 export function setSuppliedTeam(material,owner){material.userData.teamUniform.value.setHex(SUPPLIED_TEAMS[owner]||SUPPLIED_TEAMS.neutral);}
