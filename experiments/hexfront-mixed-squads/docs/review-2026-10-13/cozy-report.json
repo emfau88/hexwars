@@ -1,0 +1,11 @@
+{
+  "checks": [
+    "Menu, mission locks, settings/help keyboard back navigation, graphics toggle, deliberate pause preserved, explicit resume",
+    "1440×900: home, HUD, production, victory and defeat",
+    "390×844: home, HUD, production, victory and defeat",
+    "320×740: home, HUD, production, victory and defeat",
+    "844×390: home, HUD, production, victory and defeat",
+    "Packaged branch preview starts with correct sibling asset paths and QA disabled"
+  ],
+  "errors": []
+}

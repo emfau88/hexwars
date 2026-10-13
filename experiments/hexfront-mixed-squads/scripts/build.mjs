@@ -4,7 +4,7 @@ import {fileURLToPath} from 'node:url';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'),out=path.join(root,'dist'),base=path.join(root,'../hexfront-3d');
 if(out!==path.resolve(root,'dist')||!out.startsWith(root+path.sep))throw Error('Unsafe output directory');
 await fs.rm(out,{recursive:true,force:true});
-for(const [dir,names] of [[root,['index.html','src']],[base,['src','public','vendor']]])for(const name of names) {
+for(const [dir,names] of [[root,['index.html','src','public']],[base,['src','public','vendor']]])for(const name of names) {
   await fs.cp(path.join(dir,name),path.join(out,path.basename(dir),name),{recursive:true});
 }
 const main=path.join(out,'hexfront-mixed-squads/src/main.js');

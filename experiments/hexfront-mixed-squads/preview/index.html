@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f6eddf"><meta name="description" content="HEXFRONT: Drei spielbare 3D-Hex-Missionen. Erobere Festung, Schlucht und Flussübergänge gegen eine KI.">
+  <title>HEXFRONT — Field Operations</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath fill='%23d59a59' d='M20 2 36 11v18L20 38 4 29V11z'/%3E%3Cpath fill='%23192321' d='M12 11h5v7h6v-7h5v18h-5v-7h-6v7h-5z'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../hexfront-3d/src/style.css">
+  <link rel="stylesheet" href="../../hexfront-3d/src/overlays.css">
+
+  <script type="importmap">{"imports":{"three":"../../hexfront-3d/vendor/three.module.min.js"}}</script>
+  <link rel="stylesheet" href="./src/mixed.css">
+  <link rel="stylesheet" href="./src/landscape.css">
+  <link rel="stylesheet" href="./src/cozy.css">
+</head>
+<body class="landscape-view cozy-ui">
+  <header class="topbar">
+    <a class="brand" href="./" aria-label="HEXFRONT Start"><svg viewBox="0 0 32 36" aria-hidden="true"><path d="M16 1 31 9.5v17L16 35 1 26.5v-17Z"/><path d="M10 11v14m12-14v14M10 18h12"/></svg><span>HEXFRONT<small>MIXED SQUADS</small></span></a>
+    <div class="header-center"><span class="status-dot"></span> MIXED SQUADS <span class="slash">/</span> <span id="operation-index">01</span></div>
+    <nav class="utility" aria-label="Spieloptionen"><button id="campaign-open" title="Spielmenü" aria-label="Spielmenü öffnen"><span data-icon="settings"></span></button><button id="pause" title="Pausieren" aria-label="Pausieren" disabled>Ⅱ</button></nav>
+  </header>
+  <main>
+    <details class="mission" id="mission-info">
+      <summary><span class="mission-art" data-icon="terrain"></span><strong id="mission-summary">Morgenwacht</strong><small>Mission & Gelände</small></summary>
+      <div class="mission-content">
+      <div class="eyebrow"><span class="rule"></span> <span id="mission-index">OPERATION 01</span></div>
+      <h1 id="mission-title">Bastion<br><span>Morgenwacht</span></h1>
+      <p class="mission-description" id="mission-description">Eine vergessene Festung.<br>Zwei Aufstiege. Eine Entscheidung.</p>
+      <div class="objective"><span class="objective-icon">◇</span><div><small>MISSIONSZIEL</small><strong>Blaues HQ erobern</strong></div></div>
+      <div class="briefing-details"><div><span>GELÄNDE</span><b id="mission-terrain">37 Sektoren · 3 Höhenstufen</b></div><div><span>TAKTIK</span><b id="mission-tactic">Plateau sichern. Kräfte bündeln.</b></div><p id="economy-briefing"></p></div>
+      <div class="legend"><div><i class="orange-dot"></i> Deine Truppen</div><div><i class="blue-dot"></i> Gegnerische KI</div><div><i class="hollow-dot"></i> Freie Gebiete · Relais bewacht</div><div>Zahl im Feld = Kampfwert</div></div>
+      <div class="coordinate" id="mission-coordinate">SEKTOR 07 / 48° N<br><span>FELSENFESTUNG · FRÜHER MORGEN</span></div>
+      <p class="landscape-note">Umrandete Hexfelder sind spielbar. Das Umland gehört zur Landschaft.</p>
+      </div>
+    </details>
+    <section class="battle-status" aria-label="Aktueller Spielstand">
+      <div class="faction orange"><span class="faction-mark">I</span><div><small>ORANGE <span>DU</span></small><strong id="orange-strength">50</strong><em>ROBOTER</em></div></div>
+      <div class="time-status"><span id="phase">BEREIT</span><strong id="timer">00:00</strong><div class="territory-track"><i id="orange-territory"></i><i id="blue-territory"></i></div><small id="field-count">3 : 3 SEKTOREN</small></div>
+      <div class="faction blue"><div><small>BLAU <span>KI</span></small><strong id="blue-strength">46</strong><em>ROBOTER</em></div><span class="faction-mark">II</span></div>
+    </section>
+    <section id="stage" aria-label="Schlachtfeld"><div id="labels"></div><div id="loading"><span class="spinner"></span><strong>Festung wird vorbereitet</strong><small>Gelände, Modelle und Materialien laden …</small></div></section>
+    <div class="map-title"><span>BASTION MORGENWACHT</span><small>TAKTISCHE ANSICHT / ORTHOGRAFISCH</small></div>
+    <div class="map-tools" aria-label="Kamera"><button id="camera-view" aria-label="Taktikansicht. Zur Dioramaansicht wechseln" aria-pressed="false" title="Feste Taktik- oder Dioramaansicht">Taktik</button><button id="zoom-out" aria-label="Herauszoomen">−</button><button id="fit" aria-label="Taktikansicht zentrieren" title="Taktikansicht zurücksetzen">⌖</button><button id="zoom-in" aria-label="Hineinzoomen">+</button></div>
+    <div class="economy-readout"><span class="credit-icon" data-icon="credit"></span><strong id="credits">64 Cr</strong><details class="income-details"><summary id="hq-production" title="Einkommen aufschlüsseln"></summary><div class="income-popover"><dl class="income-breakdown"><div><dt>Hauptquartier</dt><dd data-income="hq"></dd></div><div><dt data-income="fields-label"></dt><dd data-income="fields"></dd></div><div><dt data-income="relay-label"></dt><dd data-income="relay"></dd></div><div class="income-total"><dt>Gesamteinkommen</dt><dd data-income="total"></dd></div></dl><p class="income-note" data-income="isolated"></p><p class="income-note">Nur eine durchgehend eigene Verbindung zum HQ zählt. Produktionskosten werden zusätzlich bei Baubeginn abgezogen.</p></div></details><button id="production-shortcut" aria-label="Produktion und Nachschub verwalten"><span id="production-shortcut-label">HQ-Produktion</span><progress id="hud-production-progress" max="1" value="0" aria-label="HQ-Produktionsfortschritt"></progress><span aria-hidden="true">›</span></button><small id="economy-mode">Credits & Rekrutierung</small></div>
+    <div id="camera-guidance" class="camera-guidance" hidden><b>Übersicht</b><span>+ für Details</span></div>
+    <div id="hint" class="map-hint"><span>01</span> Garnison greifen <i>›</i> <span>02</span> Zum Ziel ziehen <i>›</i> <span>03</span> Loslassen</div>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <footer class="command-panel">
+      <div class="command-emblem" id="command-emblem" data-robot="drone"></div>
+      <div class="command-copy"><small id="command-label">DEIN EINSATZ</small><strong id="command-title">Die Festung wartet.</strong><p id="command-detail">Erobere das gegnerische Hauptquartier. Dein HQ muss standhalten.</p></div>
+      <div id="command-options" hidden><div class="unit-filter" role="group" aria-label="Einheitentyp"><button data-unit="all" aria-pressed="true">Verband</button><button data-unit="drone" aria-pressed="false">Drohnen</button><button data-unit="mech" aria-pressed="false">Mechs</button></div><div class="fraction-control" aria-label="Truppenauswahl"><button id="half" aria-pressed="false">50 %</button><button id="all" aria-pressed="true">Alle</button></div><button id="rally-set" title="Ausgewähltes Feld als Sammelpunkt">Sammelpunkt</button><button id="clear" aria-label="Auswahl aufheben" title="Auswahl aufheben">×</button></div>
+      <button id="primary" class="primary" disabled>Gelände laden <span>→</span></button>
+    </footer>
+  </main>
+  <dialog id="help-dialog"><button class="dialog-close" id="close-help" aria-label="Anleitung schließen">×</button><div class="eyebrow">GUT ZU WISSEN</div><h2>Dein erster Einsatz.</h2><p>Du spielst <b class="orange-text">Orange</b>. Erobere das blaue Hauptquartier und verteidige dein eigenes.</p><ol><li><strong>Garnison greifen</strong><span>Halte ein oranges Feld oder seine Zahl gedrückt. Ziehe zum Ziel; helle Innenränder zeigen direkte Nachbarn, schwache Innenränder Fernziele über eigenes Gebiet.</span></li><li><strong>Ziel prüfen</strong><span>Die Route folgt begehbaren Wegen. Ungültige Ziele werden markiert. Außerhalb loslassen bricht ab.</span></li><li><strong>Loslassen und senden</strong><span>Loslassen gibt den Befehl sofort. Alternativ Quelle und Ziel antippen, dann „Befehl geben“. Wähle Verband, Drohnen oder Mechs. 50 % / Alle gilt für beide Steuerungen. Im Gefecht gebundene Einheiten bleiben bis zum Ende dort.</span></li></ol><div class="help-grid"><p><b>Höhenvorteil</b> Bergauf +30 % Verteidigung, bergab +15 % Angriff. Das HQ hat +20 % Verteidigung. Es gilt nur der größere Verteidigungsbonus.</p><p><b>Nachschub</b><span id="economy-help"></span></p><p><b>Gefechte</b> Freie neutrale Felder werden ohne Kampf übernommen; das Relais wird bewacht. Ein sichtbares Modell steht für alle Einheiten seines Typs. Die einzelne Feldzahl ist der Kampfwert: 1 Punkt entspricht ungefähr einer gesunden Drohne. Typen erkennst du am Modell, genaue Stückzahlen stehen bei Auswahl im Befehlsfeld. Beide Seiten schießen automatisch, Verstärkungen greifen sofort ein. Mechs sind stärker und langsamer; ein gemischter Verband bewegt sich im Mech-Tempo.</p><p><b>Bewegung</b> Befehle können eigenes Gebiet durchqueren. Felswände sind gesperrt; die sichtbaren Aufstiege verbinden die Höhenstufen.</p><p><b>Ansicht</b> Dein HQ liegt unten mittig, das gegnerische oben. Taktik zeigt die Übersicht, Diorama die Miniatur. Mausrad, +/− oder zwei Finger zoomen. Vergrößerte Karte am Hintergrund oder mit zwei Fingern verschieben; Maus auch mit rechter/mittlerer Taste. Eigene Felder ziehen gibt Befehle; ⌖ setzt die Taktikansicht zurück. Auf kleinen Displays + für präzise Ziele. Leertaste pausiert.</p></div><button class="primary" id="understood">Verstanden <span>→</span></button></dialog>
+  <dialog id="result-dialog" aria-labelledby="result-title">
+    <section class="result-card ceramic"><div class="result-sigil" data-hq></div><div class="eyebrow" id="result-label"></div><h2 id="result-title"></h2><p id="result-greeting"></p><p id="result-copy"></p>
+    <div class="result-stats"><div><span data-icon="clock"></span><small>Zeit</small><strong id="result-time"></strong></div><div><span data-icon="hex"></span><small>Eroberungen</small><strong id="result-captures"></strong></div><div><span data-icon="flag"></span><small>Befehle</small><strong id="result-commands"></strong></div></div>
+    <button id="next-mission" class="primary" hidden>Nächster Einsatz <span data-icon="play"></span></button><button id="restart" class="primary">Noch einmal <span>↻</span></button><button id="result-campaign" class="secondary">Mission wählen <span data-icon="menu"></span></button><button id="inspect" class="text-button">Schlachtfeld ansehen</button></section>
+  </dialog>
+  <dialog id="settings-dialog" aria-labelledby="settings-title"><button id="settings-close" class="dialog-close" aria-label="Einstellungen schließen">×</button><div class="eyebrow">DEINE SPIELECKE</div><h2 id="settings-title">Alles nach deinem Plan.</h2><p>Mach es dir bequem. Dein Einsatz wartet.</p><div class="setting-row"><div><strong>Grafikqualität</strong><small>Reduziert schont Akku und Leistung.</small></div><button id="quality" aria-label="Grafikqualität: Hoch">Hoch</button></div><button id="help" class="settings-help">Spielanleitung <span>?</span></button><button id="settings-done" class="primary">Zurück <span>→</span></button></dialog>
+  <dialog id="production-dialog" aria-labelledby="production-title">
+    <button id="production-close" class="dialog-close" aria-label="Produktion schließen">×</button>
+    <div class="eyebrow">DEIN HAUPTQUARTIER</div><h2 id="production-title">Verstärkung kommt.</h2>
+    <p class="production-intro">Felder sichern, Credits sammeln, Roboter bauen. Die Schlacht pausiert, während du planst.</p>
+    <div class="production-balance"><strong id="production-credits"></strong><span id="production-income"></span></div>
+    <details class="income-details production-income-details"><summary>Woher kommen meine Credits?</summary><dl class="income-breakdown"><div><dt>Hauptquartier</dt><dd data-income="hq"></dd></div><div><dt data-income="fields-label"></dt><dd data-income="fields"></dd></div><div><dt data-income="relay-label"></dt><dd data-income="relay"></dd></div><div class="income-total"><dt>Gesamteinkommen</dt><dd data-income="total"></dd></div></dl><p class="income-note" data-income="isolated"></p><p class="income-note">Nur eine durchgehend eigene Verbindung zum HQ zählt. Produktionskosten werden zusätzlich bei Baubeginn abgezogen.</p></details><div class="recruit-options">
+      <button id="enqueue-drone" class="unit-card drone-card"><span data-robot="drone"></span><b>Drohne +</b><span class="unit-role">Expansion &amp; Flanken</span><strong data-unit-cost="drone"></strong><small data-unit-stats="drone"></small><span class="unit-benefit">Günstig und schnell. Erobert freie Felder und bringt rasch Verstärkung.</span></button>
+      <button id="enqueue-mech" class="unit-card mech-card"><span data-robot="mech"></span><b>Mech +</b><span class="unit-role">Front halten &amp; durchbrechen</span><strong data-unit-cost="mech"></strong><small data-unit-stats="mech"></small><span class="unit-benefit">4× Lebenspunkte, 3× Feuerkraft einer Drohne. Teurer und langsamer.</span></button>
+    </div>
+    <div id="active-production" class="active-production"><span id="production-status"></span><progress id="production-progress" max="1" value="0" aria-label="Produktionsfortschritt"></progress><button id="production-cancel">Auftrag abbrechen · Credits zurück</button></div>
+    <div class="queue-heading"><b>Als Nächstes</b><span id="queue-count"></span></div>
+    <div id="production-queue" class="production-queue" aria-label="Produktionswarteschlange"></div>
+    <p class="queue-hint">Auftrag antippen zum Entfernen. Kosten fallen erst bei Produktionsbeginn an.</p>
+    <div class="production-toggles"><button id="repeat-production" aria-pressed="true">Schleife: an</button><button id="pause-production" aria-pressed="false">Produktion pausieren</button></div>
+    <div class="rally-info"><b>Sammelpunkt</b><span id="rally-status"></span><button id="rally-clear">Nachschub stoppen</button><details class="rally-help"><summary>So funktioniert der Sammelpunkt</summary><small>Eigenes Feld auswählen → Sammelpunkt. Das HQ behält 6 Roboter. Die Reserve bleibt im Hangar. Fertige Roboter verlassen das Tor und sammeln sich seitlich oder ziehen zum Sammelpunkt. Transporte greifen niemals selbst an; bei abgeschnittenen Wegen warten sie oder halten am letzten sicheren Feld.</small></details></div>
+    <p id="production-message" role="status" aria-live="polite"></p>
+    <button id="production-done" class="primary">Zurück zum Einsatz <span>→</span></button>
+  </dialog>
+  <noscript>Zum Spielen wird JavaScript mit WebGL 2 benötigt.</noscript>
+  <script type="module" src="./src/main.js"></script>
+</body></html>

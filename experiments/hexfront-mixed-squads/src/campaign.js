@@ -1,3 +1,4 @@
+import {icon} from './ui-icons.js';
 
 export const CAMPAIGN_KEY='hexfront.mixed-squads.campaign.v1';
 
@@ -36,58 +37,63 @@ function browserStore(missions){
 export const loadProgress=missions=>browserStore(missions).read();
 
 const escape=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
-const emblem='<svg viewBox="0 0 40 44" aria-hidden="true"><path d="M20 2 38 12v20L20 42 2 32V12Z"/><path d="M13 14v16m14-16v16M13 22h14"/></svg>';
-const arrow='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h15m-6-6 6 6-6 6"/></svg>';
-const lock='<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 9V6a4 4 0 0 1 8 0v3M4 9h12v9H4Zm6 3v3"/></svg>';
 
 const artURL=id=>new URL(`../../hexfront-3d/public/assets/campaign/${id}.jpg`,import.meta.url).href;
-
-export function createCampaign({missions,currentMission,onLaunch,onResume,onOpen,getState=()=>({})}){
-  const ids=missions.map(m=>m.id),store=browserStore(missions);
-  let selected=store.unlocked(currentMission)?currentMission:ids[0],previousFocus=null;
-  const dialog=document.createElement('dialog');dialog.id='campaign-menu';dialog.className='campaign-menu';
-  dialog.setAttribute('aria-labelledby','campaign-title');
-  dialog.innerHTML=`
-    <div class="campaign-shell">
-      <header class="campaign-masthead"><div class="campaign-brand">${emblem}<span>HEXFRONT<small>SMALL WORLDS. BIG TACTICS.</small></span></div><span class="campaign-edition">MIXED SQUADS <i></i> 01—${String(missions.length).padStart(2,'0')}</span><button type="button" class="campaign-dismiss" aria-label="Zur laufenden Partie zurückkehren" hidden>×</button></header>
-      <div class="campaign-body">
-        <section class="campaign-intro"><img class="campaign-hero-art" alt="" aria-hidden="true"><div class="campaign-kicker"><span></span> DEINE KAMPAGNE</div><h1 id="campaign-title">Kleine Welt.<br><em>Große Pläne.</em></h1><p class="campaign-lead">Führe Orange durch drei Einsätze. Sichere Wege, rekrutiere Drohnen und Mechs und erobere das blaue Hauptquartier.</p><div class="campaign-route" aria-hidden="true"><span>01</span><i></i><span>02</span><i></i><span>03</span></div><p class="campaign-progress" role="status" aria-live="polite"></p><div class="campaign-primer"><span class="campaign-primer-symbol">↗</span><p><strong>Greifen. Ziehen. Erobern.</strong><span>Ziehe von einem eigenen Feld zum Ziel. Oder tippe beide Felder an und bestätige den Befehl.</span></p></div></section>
-        <section class="campaign-selection" aria-label="Mission auswählen"><div class="campaign-selection-title"><span>EINSATZGEBIETE</span><span>ORANGE / BLAU</span></div><div class="campaign-cards">${missions.map((m,index)=>`<button type="button" class="campaign-card" data-mission="${escape(m.id)}" aria-pressed="false"><div class="campaign-card-top"><span class="campaign-index">${String(index+1).padStart(2,'0')}</span><span class="campaign-card-state"></span></div><div class="campaign-map"><img src="${artURL(m.id)}" alt="" loading="eager" draggable="false"></div><div class="campaign-card-caption"><small>${escape(m.subtitle)}</small><h2>${escape(m.id==='morgenwacht'?'Bastion Morgenwacht':m.title)}</h2><div class="campaign-card-facts"><span>${m.fields??m.cells?.length??37} SEKTOREN</span><span>3 HÖHEN</span></div></div></button>`).join('')}</div><div class="campaign-map-key">Missionen freischalten · Jederzeit erneut spielen</div><div class="campaign-briefing"><span class="campaign-briefing-label">DEIN PLAN</span><p></p></div></section>
-      </div>
-      <footer class="campaign-footer"><div class="campaign-save"><span class="campaign-save-dot"></span><p><strong></strong><small>Gespeichert werden abgeschlossene Missionen.</small></p></div><div class="campaign-actions"><button type="button" class="campaign-resume" hidden>Partie fortsetzen ${arrow}</button><button type="button" class="campaign-launch">Einsatz starten ${arrow}</button></div><p class="campaign-replace" hidden>Ein neuer Einsatz beendet deine laufende Partie.</p></footer>
-    </div>`;
-  document.body.append(dialog);
-  const query=selector=>dialog.querySelector(selector),cards=[...dialog.querySelectorAll('.campaign-card')];
-  const playing=()=>{const state=getState()||{};return !!state.running&&!state.finished;};
-  function update(){
-    const progress=store.read(),active=playing(),mission=missions.find(m=>m.id===selected);
-    query('.campaign-progress').textContent=`${progress.completed.length} von ${missions.length} Einsätzen abgeschlossen`;
-    query('.campaign-save strong').textContent=progress.persistent?'Fortschritt auf diesem Gerät':'Fortschritt für diese Sitzung';
-    query('.campaign-save small').textContent=progress.persistent?'Gespeichert werden abgeschlossene Missionen.':'Browserspeicher nicht verfügbar. Lass diesen Tab geöffnet.';
-    query('.campaign-briefing p').textContent=mission.tactic||mission.briefing;
-    query('.campaign-hero-art').src=artURL(mission.id);
-    query('#campaign-title').textContent=mission.title;
-    query('.campaign-kicker').textContent=`OPERATION ${String(mission.index).padStart(2,'0')} / ${mission.subtitle}`;
-    query('.campaign-lead').textContent=mission.briefing;
-    query('.campaign-intro').dataset.mission=mission.id;
-    const busy=!!getState()?.busy;
-    query('.campaign-launch').innerHTML=`${busy?'Gelände wird vorbereitet …':active?'Neuen Einsatz starten':progress.completed.includes(selected)?'Einsatz wiederholen':'Einsatz starten'} ${arrow}`;
-    query('.campaign-launch').disabled=busy;
-    query('.campaign-launch').classList.toggle('secondary',active);
-    query('.campaign-resume').hidden=!active;query('.campaign-dismiss').hidden=!active;query('.campaign-replace').hidden=!active;
-    for(const card of cards){const id=card.dataset.mission,unlocked=store.unlocked(id),complete=progress.completed.includes(id),selectedCard=id===selected;
-      card.disabled=!unlocked;card.setAttribute('aria-pressed',String(selectedCard));card.classList.toggle('selected',selectedCard);card.classList.toggle('locked',!unlocked);
-      card.querySelector('.campaign-card-state').innerHTML=!unlocked?`${lock}<span>Nach Einsatz ${String(ids.indexOf(id)).padStart(2,'0')}</span>`:complete?'<span class="campaign-check">✓</span> Abgeschlossen':selectedCard?'<span class="campaign-ready-dot"></span> Ausgewählt':'Bereit';
-      const title=missions.find(m=>m.id===id).title;card.setAttribute('aria-label',`${title}. ${!unlocked?'Gesperrt. Schließe zuerst den vorherigen Einsatz ab.':complete?'Abgeschlossen. Erneut spielbar.':'Bereit.'}`);
-    }
-  }
-  function hide(){if(dialog.open)dialog.close();document.body.classList.remove('campaign-open');if(previousFocus?.isConnected)previousFocus.focus({preventScroll:true});}
-  function resume(){if(!playing())return;hide();onResume?.();}
-  function show(){if(dialog.open)return;previousFocus=document.activeElement;onOpen?.();update();dialog.showModal();document.body.classList.add('campaign-open');(playing()?query('.campaign-resume'):query('.campaign-launch')).focus({preventScroll:true});}
-  cards.forEach(card=>card.addEventListener('click',()=>{selected=card.dataset.mission;update();}));
-  query('.campaign-dismiss').addEventListener('click',resume);query('.campaign-resume').addEventListener('click',resume);
-  query('.campaign-launch').addEventListener('click',()=>{if(!store.unlocked(selected)||getState()?.busy)return;store.select(selected);hide();onLaunch?.(selected);});
-  dialog.addEventListener('cancel',event=>{event.preventDefault();resume();});
-  update();
-  return {show,hide,refresh:update,complete(id){const progress=store.complete(id);if(dialog.open)update();return progress;},getProgress:()=>store.read(),isUnlocked:id=>store.unlocked(id),get open(){return dialog.open;},destroy(){hide();dialog.remove();}};
+export function createCampaign({missions,currentMission,onLaunch,onResume,onOpen,onSettings,getState=()=>({})}){
+ const ids=missions.map(m=>m.id),store=browserStore(missions);
+ let selected=store.unlocked(currentMission)?currentMission:ids[0],previousFocus=null;
+ const dialog=document.createElement('dialog');dialog.id='campaign-menu';dialog.className='campaign-menu';dialog.dataset.view='home';dialog.setAttribute('aria-labelledby','campaign-title');
+ dialog.innerHTML=`
+ <div class="menu-home ceramic">
+   <div class="menu-logo">${icon('hex')}<span>H</span></div>
+   <h1 id="campaign-title">HEXFRONT</h1><p class="menu-subtitle">MIXED SQUADS</p>
+   <p class="menu-welcome">Kleine Welt. Große Pläne.</p>
+   <button class="campaign-resume primary" hidden>${icon('play')} Einsatz fortsetzen</button>
+   <button class="campaign-quick primary">${icon('play')} Einsatz starten</button>
+   <button class="campaign-choose">${icon('menu')} Mission wählen</button>
+   <button class="campaign-settings">${icon('settings')} Einstellungen</button>
+   <p class="campaign-progress" role="status"></p>
+ </div>
+ <section class="mission-picker ceramic" hidden aria-labelledby="picker-title">
+   <header class="picker-header"><button class="campaign-back icon-button" aria-label="Zurück zum Hauptmenü">${icon('back')}</button><div><small>DEINE KAMPAGNE</small><h2 id="picker-title">Wohin geht's?</h2></div><button class="campaign-dismiss icon-button" aria-label="Zur laufenden Partie zurückkehren" hidden>×</button></header>
+   <div class="campaign-cards">${missions.map((m,i)=>`<button class="campaign-card" data-mission="${escape(m.id)}" aria-pressed="false"><img src="${artURL(m.id)}" alt="" draggable="false"><span class="campaign-card-caption"><span class="campaign-index">0${i+1}</span><strong>${escape(m.title)}</strong><span class="campaign-card-state"></span><small>${m.fields??m.cells?.length??37} Felder · 3 Höhenstufen</small></span></button>`).join('')}</div>
+   <div class="campaign-briefing"><strong></strong><p></p></div>
+   <button class="campaign-launch primary">Einsatz starten ${icon('arrow')}</button>
+   <p class="campaign-replace" hidden>Ein neuer Einsatz beendet deine laufende Partie.</p>
+   <p class="campaign-save"></p>
+ </section>
+ <span class="menu-caption">Dein nächster Einsatz wartet.</span>`;
+ document.body.append(dialog);
+ const query=s=>dialog.querySelector(s),cards=[...dialog.querySelectorAll('.campaign-card')];
+ const playing=()=>{const s=getState()||{};return !!s.running&&!s.finished;};
+ function setView(view){dialog.dataset.view=view;query('.menu-home').hidden=view!=='home';query('.mission-picker').hidden=view!=='missions';(view==='missions'?query('.campaign-back'):playing()?query('.campaign-resume'):query('.campaign-quick')).focus({preventScroll:true});}
+ function update(){
+   const progress=store.read(),active=playing(),mission=missions.find(m=>m.id===selected),busy=!!getState()?.busy;
+   query('.campaign-progress').textContent=`${progress.completed.length} von ${missions.length} Einsätzen abgeschlossen`;
+   query('.campaign-save').textContent=progress.persistent?'Abgeschlossene Einsätze werden auf diesem Gerät gespeichert.':'Fortschritt bleibt in dieser Sitzung erhalten. Lass diesen Tab geöffnet.';
+   query('.campaign-briefing strong').textContent=mission.title;
+   query('.campaign-briefing p').textContent=mission.tactic||mission.briefing;
+   query('.campaign-quick').innerHTML=icon('play')+(busy?'Gelände lädt …':'Einsatz starten');
+   query('.campaign-quick').disabled=busy;query('.campaign-quick').hidden=active;
+   query('.campaign-resume').hidden=!active;query('.campaign-dismiss').hidden=!active;query('.campaign-replace').hidden=!active;
+   query('.campaign-launch').innerHTML=(busy?'Gelände lädt …':active?'Neuen Einsatz starten':progress.completed.includes(selected)?'Einsatz wiederholen':'Einsatz starten')+icon('arrow');
+   query('.campaign-launch').disabled=busy;
+   for(const card of cards){const id=card.dataset.mission,unlocked=store.unlocked(id),complete=progress.completed.includes(id);
+     card.disabled=!unlocked;card.setAttribute('aria-pressed',String(id===selected));card.classList.toggle('selected',id===selected);card.classList.toggle('locked',!unlocked);
+     card.querySelector('.campaign-card-state').textContent=!unlocked?`Nach Einsatz 0${ids.indexOf(id)}`:complete?'✓ Abgeschlossen':id===selected?'● Ausgewählt':'Bereit';
+     card.setAttribute('aria-label',`${missions.find(m=>m.id===id).title}. ${!unlocked?'Gesperrt. Schließe zuerst den vorherigen Einsatz ab.':complete?'Abgeschlossen. Erneut spielbar.':'Bereit.'}`);
+   }
+ }
+ function hide(){if(dialog.open)dialog.close();document.body.classList.remove('campaign-open');if(previousFocus?.isConnected)previousFocus.focus({preventScroll:true});}
+ function resume(){if(!playing())return;hide();onResume?.();}
+ function launch(){if(!store.unlocked(selected)||getState()?.busy)return;store.select(selected);hide();onLaunch?.(selected);}
+ function show(view='home'){if(!dialog.open){previousFocus=document.activeElement;onOpen?.();update();dialog.showModal();document.body.classList.add('campaign-open');}setView(view);}
+ cards.forEach(card=>card.addEventListener('click',()=>{selected=card.dataset.mission;update();}));
+ query('.campaign-choose').addEventListener('click',()=>setView('missions'));
+ query('.campaign-back').addEventListener('click',()=>setView('home'));
+ query('.campaign-settings').addEventListener('click',()=>onSettings?.());
+ query('.campaign-dismiss').addEventListener('click',resume);query('.campaign-resume').addEventListener('click',resume);
+ query('.campaign-launch').addEventListener('click',launch);query('.campaign-quick').addEventListener('click',launch);
+ dialog.addEventListener('cancel',event=>{event.preventDefault();if(dialog.dataset.view==='missions')setView('home');else resume();});
+ update();return {show,hide,refresh:update,complete(id){const p=store.complete(id);if(dialog.open)update();return p;},getProgress:()=>store.read(),isUnlocked:id=>store.unlocked(id),get open(){return dialog.open;},destroy(){hide();dialog.remove();}};
 }

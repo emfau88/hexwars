@@ -1,0 +1,16 @@
+{
+  "generator": "Built-in image_gen (Imagegen skill)",
+  "reference": "Approved HEXFRONT menu / HUD / victory / defeat concept, 2026-10-13",
+  "assets": [
+    {
+      "file": "home-meadow.png",
+      "use": "Main menu and mirrored victory background",
+      "prompt": "Use case: stylized-concept. Asset: full-screen landscape background illustration for the HEXFRONT cozy sci-fi game's menu and results. Reference image: the accepted UI concept board, use ONLY its upper-left artwork as style and subject reference. Create ONE full-bleed 16:9 scene, no panels, no split-screen, no text, letters, logo, numbers, buttons, borders or UI. Preserve the appealing high-quality miniature 3D look: rounded white ceramic and warm orange sci-fi circular HQ with segmented walls, central small tower, luminous cyan details. Cute round hovering white/orange service drone with dark face and two cyan eyes, little side thrusters. Sunlit lush meadow with little daisies, distant soft rocky valley, pine trees and turquoise river. Put the HQ and drone in the RIGHT half, HQ near x=68%, drone x=80% y=38%. Left 40% is softly defocused meadow and scenery, lower visual contrast, intended for a separately coded menu overlay. Warm sunlight, calm welcoming cozy mood, tactile realistic toy materials, no warfare or destruction. Entire composition landscape wide."
+    },
+    {
+      "file": "quiet-meadow.png",
+      "use": "Defeat background",
+      "prompt": "Use case: stylized-concept. Asset: full-screen defeat result background for cozy sci-fi game HEXFRONT. Use the attached illustration as reference and preserve exactly the rounded white ceramic/orange circular HQ design, cyan accents, cute round white/orange robot identity, miniature 3D quality and natural meadow landscape. Produce ONE wide 16:9 scene with NO UI, text, words, logos, letters, buttons, borders or split-screen. Composition changed for overlay: put the headquarters in the LEFT half, centered x=25% y=57%; the small robot rests gently on grass at x=42% y=78%, with slumped little limbs and quieter cyan eyes, visibly taking a breather after a lost mission. HQ intact, no damage, no smoke, no wreckage. Right 45% softly out of focus meadow and distant scenery, clear for a separately coded result panel. Soft slightly cooler late-afternoon light, consoling and calm rather than gloomy. River and pine-cliff scenery behind, daisies on lush meadow. Match reference material and rendering quality closely."
+    }
+  ]
+}

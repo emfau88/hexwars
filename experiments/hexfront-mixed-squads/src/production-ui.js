@@ -10,7 +10,7 @@ export function createProductionUI(game,{refresh,beforeOpen,canResume}) {
     document.querySelector(`[data-unit="${type}"]`).title=`${spec.name}: ${spec.cost} Cr · ${type==='drone'?'schnelle Expansion':'widerstandsfähig, hohe Feuerkraft'} · ${rateText(spec.travel)} s/Feld`;
   }
   function open(){beforeOpen();wasPaused=game.paused;if(game.running)game.paused=true;message('');render();dialog.showModal();refresh();}
-  for(const id of ['production-open','production-shortcut'])$(id).addEventListener('click',open);
+  $('production-shortcut').addEventListener('click',open);
   for(const id of ['production-close','production-done'])$(id).addEventListener('click',()=>dialog.close());
   dialog.addEventListener('close',()=>{if(game.running&&!wasPaused&&canResume())game.paused=false;refresh();});
   for(const type of ['drone','mech'])$('enqueue-'+type).addEventListener('click',()=>{const r=game.enqueue(type);message(r.ok?`${UNIT[type].name} eingereiht.`:r.reason);render();});
@@ -41,7 +41,9 @@ export function createProductionUI(game,{refresh,beforeOpen,canResume}) {
     const target=game.cell(f.rally),connected=target&&game.ownedPath(hq,target,'orange');
     $('rally-status').textContent=!target?'Keiner · Roboter bleiben am HQ':target.owner!=='orange'?'Sammelpunkt erobert · neues eigenes Feld wählen':`${target.name} (${target.id}) · ${connected?'verbunden':'Verbindung unterbrochen'}`;
     $('rally-clear').disabled=!enabled||!f.rally;
-    $('production-shortcut').textContent=active?`${spec.name} ${Math.round(active.elapsed/spec.seconds*100)} % →`:'HQ-Produktion →';
+    $('production-shortcut-label').textContent=f.productionPaused?'Produktion pausiert':hq?.battle?'HQ im Gefecht':game.strength('orange')>=ARMY_LIMIT?'Armeelimit erreicht':active?`${spec.name} · ${Math.round(active.elapsed/spec.seconds*100)} %`:f.queue.length?'Wartet auf Credits':'HQ-Produktion';
+    $('hud-production-progress').value=active?active.elapsed/spec.seconds:0;
+    $('hud-production-progress').setAttribute('aria-valuetext',status);
     $('production-shortcut').title=`${status}${hq?' · '+troopText(hq.troops):''}`;
   }
   return {render,open};

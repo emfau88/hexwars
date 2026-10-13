@@ -81,17 +81,17 @@ export class Diorama {
   buildMarkers(){
     // A single batched dark edge gives the existing light contours contrast on
     // the warmer limestone. Logical fields, colours and interaction stay intact.
-    const edges=this.game.cells.map(c=>ringGeometry(c,this.game.cells,.947,.049));
-    this.gridUnderlay=new T.Mesh(mergeGeometries(edges),new T.MeshBasicMaterial({color:0x344337,transparent:true,opacity:.25,depthWrite:false,side:T.DoubleSide,toneMapped:false}));
+    const edges=this.game.cells.map(c=>ringGeometry(c,this.game.cells,.947,.067));
+    this.gridUnderlay=new T.Mesh(mergeGeometries(edges),new T.MeshBasicMaterial({color:0x344337,transparent:true,opacity:.42,depthWrite:false,side:T.DoubleSide,toneMapped:false}));
     this.gridUnderlay.renderOrder=1;this.scene.add(this.gridUnderlay);edges.forEach(g=>g.dispose());
     for(const c of this.game.cells){
       const mat=new T.MeshBasicMaterial({color:COLORS[c.owner],transparent:true,opacity:.9,depthWrite:false,side:T.DoubleSide,toneMapped:false});
-      const marker=mesh(this.scene,ringGeometry(c,this.game.cells,.94,.035),mat);marker.castShadow=false;marker.receiveShadow=false;marker.renderOrder=2;
+      const marker=mesh(this.scene,ringGeometry(c,this.game.cells,.94,.045),mat);marker.castShadow=false;marker.receiveShadow=false;marker.renderOrder=2;
       const fillGeo=this.picks.find(p=>p.userData.cellId===c.id).geometry.clone();fillGeo.translate(0,.018,0);
       const fill=new T.Mesh(fillGeo,new T.MeshBasicMaterial({color:COLORS[c.owner],transparent:true,opacity:0,depthWrite:false,side:T.DoubleSide,toneMapped:false}));fill.renderOrder=1;this.scene.add(fill);
       // Keep territory colour independent of orders, as in the original board.
       // A separate inset contour marks selection/reachability on the real slope.
-      const action=new T.Mesh(ringGeometry(c,this.game.cells,.80,.025),new T.MeshBasicMaterial({color:0xf2d9a4,transparent:true,opacity:.85,depthWrite:false,side:T.DoubleSide,toneMapped:false}));action.visible=false;action.renderOrder=3;this.scene.add(action);
+      const action=new T.Mesh(ringGeometry(c,this.game.cells,.80,.034),new T.MeshBasicMaterial({color:0xf2d9a4,transparent:true,opacity:.85,depthWrite:false,side:T.DoubleSide,toneMapped:false}));action.visible=false;action.renderOrder=3;this.scene.add(action);
       const combat=new T.Mesh(ringGeometry(c,this.game.cells,.87,.055),new T.MeshBasicMaterial({color:0xffd69a,transparent:true,opacity:.6,depthWrite:false,side:T.DoubleSide,toneMapped:false}));combat.visible=false;combat.renderOrder=4;this.scene.add(combat);
       this.markers.set(c.id,{marker,fill,action,combat});
       const el=document.createElement('button');el.className='garrison '+c.owner;el.dataset.cell=c.id;el.type='button';el.innerHTML='<span class="badge-face"><span class="count"></span><span class="cell-symbol"></span></span>';el.addEventListener('click',e=>{e.stopPropagation();const hit=e.detail?this.hitAt(e):{id:c.id};this.onSelect(hit.id,hit.reason);});el.addEventListener('pointerenter',e=>this.onHover(this.hitAt(e).id));el.addEventListener('focus',()=>this.onHover(c.id));this.labels.append(el);this.labelsById.set(c.id,el);
@@ -122,11 +122,12 @@ export class Diorama {
     }
     // Render edge to edge, but fit the playable terrain between the actual HUD
     // rectangles. Expanding a briefing must not move the map underneath it.
-    const hud=[...document.querySelectorAll('.topbar,.battle-status,.map-tools,.economy-readout,.mission > summary')];
+    const hud=[...document.querySelectorAll('.topbar,.battle-status,.economy-readout,.mission > summary')];
     const landscapePhone=w>640&&h<=550;
-    const top=landscapePhone?document.querySelector('.topbar').getBoundingClientRect().bottom+10:Math.max(0,...hud.map(el=>el.getBoundingClientRect().bottom))+10;
-    const bottom=landscapePhone&&document.body.dataset.hud==='idle'?h-12:document.querySelector('.command-panel').getBoundingClientRect().top-20;
-    const margin=landscapePhone?218:12,safe={left:margin,right:w-margin,top,bottom:Math.max(top+60,bottom)};
+    const top=landscapePhone?Math.max(...hud.filter(el=>!el.classList.contains('battle-status')).map(el=>el.getBoundingClientRect().bottom))+10:Math.max(0,...hud.map(el=>el.getBoundingClientRect().bottom))+10;
+    const panel=document.querySelector('.command-panel'),controls=document.querySelector('.map-tools').getBoundingClientRect();
+    const bottom=panel.offsetWidth&&!landscapePhone?Math.min(panel.getBoundingClientRect().top-14,controls.top-12):controls.top-12;
+    const margin=landscapePhone?Math.max(208,panel.offsetWidth?panel.getBoundingClientRect().right+12:0):12,safe={left:margin,right:w-margin,top,bottom:Math.max(top+60,bottom)};
     const f=frameBattlefield(bounds,safe.right-safe.left,safe.bottom-safe.top,this.zoom,this.viewPan);
     f.centerV+=((safe.top+safe.bottom)/2-h/2)/f.scale;
     f.halfW=w/(2*f.scale);f.halfH=h/(2*f.scale);
@@ -164,7 +165,7 @@ export class Diorama {
     const w=this.dragTip.offsetWidth,h=this.dragTip.offsetHeight,pad=4,rect=this.container.getBoundingClientRect();
     // The HUD grows during a held gesture while camera framing is deliberately
     // frozen. Its new rectangle can cover part of the old canvas: exclude it.
-    const hud=document.querySelector('.command-panel').getBoundingClientRect(),safeHeight=Math.min(this.height,hud.top-rect.top-8);
+    const hud=document.querySelector('.command-panel').getBoundingClientRect(),safeHeight=hud.width?Math.min(this.height,hud.top-rect.top-8):this.height;
     const labels=[...this.labelPositions].map(([id,p])=>{const face=this.labelsById.get(id).firstElementChild;return {x:p.x-face.offsetWidth/2,y:p.y-face.offsetHeight/2,w:face.offsetWidth,h:face.offsetHeight};});
     for(const el of document.querySelectorAll('.topbar,.battle-status,.mission,.map-tools,.economy-readout')){const b=el.getBoundingClientRect();labels.push({x:b.x-rect.x,y:b.y-rect.y,w:b.width,h:b.height});}
     const near={x:T.MathUtils.clamp(this.drag.x-w/2,pad,this.width-w-pad),y:T.MathUtils.clamp(this.drag.y-h-20,pad,safeHeight-h-pad)};
@@ -287,8 +288,8 @@ export class Diorama {
       const {marker,fill,action,combat}=this.markers.get(c.id),isSelected=c.id===this.selected,access=reachability(this.game,selected,c),reachable=access==='direct'||access==='indirect',hover=c.id===this.hovered,owned=c.owner!=='neutral',isTarget=c.id===this.pending;
       combat.visible=!!c.battle;combat.material.opacity=this.reduced?.65:.52+Math.sin(this.game.time*5)*.18;
       const moving=movingFrom.has(c.id)||movingTo.has(c.id),invalid=this.invalid?.id===c.id&&time<this.invalid.until;
-      marker.material.color.setHex(owned?COLORS[c.owner]:0xc9d0bb);marker.material.opacity=owned?.95:.62;
-      fill.material.color.setHex(owned?COLORS[c.owner]:0xcbce9e);fill.material.opacity=owned?(isSelected?.34:.28):reachable?.025:0;
+      marker.material.color.setHex(owned?COLORS[c.owner]:0xc9d0bb);marker.material.opacity=owned?1:.84;
+      fill.material.color.setHex(owned?COLORS[c.owner]:0xcbce9e);fill.material.opacity=owned?(isSelected?.46:.38):reachable?.025:0;
       if(hover)fill.material.opacity+=.045;fill.visible=fill.material.opacity>.001;
       action.visible=!!(isSelected||reachable||invalid||(isTarget&&this.drag));
       action.material.color.setHex(invalid||(isTarget&&this.drag&&!reachable)?0xdf826b:isTarget?0xf4efe0:isSelected?0xf2d9a4:0xeee7cc);

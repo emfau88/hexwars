@@ -1,0 +1,78 @@
+/* This variant alone owns the continuous landscape and compact briefing. */
+body.landscape-view main {position:absolute;inset:0;height:100dvh}
+body.landscape-view #stage {position:absolute;inset:0}
+body.landscape-view .topbar {height:70px;margin:0;padding:0 24px;background:linear-gradient(#18241eef,#18241ebd);border-bottom:1px solid #dce7be22}
+body.landscape-view .battle-status {position:fixed;top:7px;left:50%;right:auto;transform:translateX(-50%);width:340px;height:56px;z-index:11}
+body.landscape-view .mission {display:block;position:absolute;top:82px;left:24px;right:auto;width:192px;pointer-events:auto;z-index:12}
+.landscape-view .mission summary {cursor:pointer;padding:9px 13px;background:#1b2b24eb;border:1px solid #bdc9a64a;border-radius:5px;font-size:12px;min-height:44px;list-style:none}
+.landscape-view .mission summary::-webkit-details-marker {display:none}
+.landscape-view .mission summary::after {content:'⌄';position:absolute;right:12px;top:12px;color:#dfc49a}
+.landscape-view .mission[open] summary::after {content:'⌃'}
+.landscape-view .mission summary strong,.landscape-view .mission summary small {display:block}
+.landscape-view .mission summary strong {color:#e9dcc0;font-weight:600}
+.landscape-view .mission summary small {font-size:9px;color:#aebea6;margin-top:2px}
+.landscape-view .mission summary:focus-visible {outline:2px solid #efce91;outline-offset:3px}
+.landscape-view .mission-content {position:absolute;top:calc(100% + 6px);left:0;width:300px;max-width:calc(100vw - 24px);max-height:calc(100dvh - 170px);overflow:auto;padding:20px;background:#1c2b24f7;border:1px solid #b9c8a64d;border-radius:6px;box-shadow:0 12px 32px #09150b66}
+.landscape-view .mission-content h1 {font-size:29px;margin:16px 0}.landscape-view .mission-content h1 span {font-size:27px}
+.landscape-view .mission-content .eyebrow,.landscape-view .mission-content .briefing-details,.landscape-view .mission-content .legend,.landscape-view .mission-content .mission-description {display:block}
+.landscape-view .mission-content .coordinate {display:none}
+.landscape-view .mission-content .legend {display:grid;gap:9px;margin-top:18px}
+.landscape-note {font-size:11px;line-height:1.5;color:#b2c2a9;border-top:1px solid #dce7be22;padding-top:12px}
+body.landscape-view .economy-readout {left:auto;right:235px;top:82px;display:grid;grid-template-columns:auto auto;align-items:center;gap:0 12px;padding:7px 12px;min-width:0;background:#1b2b24eb;border:1px solid #bdc9a64a;border-radius:5px}
+.landscape-view #production-shortcut {grid-column:1/-1;font-size:10px;padding:0;line-height:18px}
+.landscape-view #economy-mode {display:none}
+.landscape-view .income-popover {left:auto;right:0;top:calc(100% + 6px)}
+body.landscape-view .map-tools {top:82px;right:24px;padding:5px;background:#1b2b24eb;border:1px solid #bdc9a64a;border-radius:5px}
+body.landscape-view .map-title,body.landscape-view .map-hint {display:none}
+body.landscape-view #toast {left:50%;top:auto;bottom:calc(var(--battle-bottom,165px) - 17px)}
+body.landscape-view .camera-guidance {display:none}
+@media(max-width:1000px) and (min-width:641px){
+ body.landscape-view .brand {font-size:18px;letter-spacing:2px;gap:7px}.landscape-view .brand svg {width:24px}.landscape-view .brand small {font-size:6px}
+ body.landscape-view .battle-status {width:280px}.landscape-view .faction-mark {display:none}
+ body.landscape-view .utility {gap:3px}.landscape-view .utility button {width:32px}
+ body.landscape-view .mission {width:160px}
+ body.landscape-view .economy-readout {right:224px;gap:0 8px;padding-inline:8px}
+ body.landscape-view .economy-readout strong {font-size:15px}
+}
+@media(max-width:640px){
+ body.landscape-view .topbar {height:48px;margin:0;padding:0 10px}
+ body.landscape-view .brand {font-size:15px;letter-spacing:1px;gap:5px}
+ body.landscape-view .brand svg {width:19px;height:24px}.landscape-view .brand small {display:none}
+ body.landscape-view .utility {gap:1px}
+ body.landscape-view .utility button,body.landscape-view .utility #pause {width:34px;height:44px}
+ body.landscape-view .battle-status {top:53px;left:12px;right:12px;transform:none;width:auto;height:44px;padding:3px 8px;border-radius:4px;background:#1b2b24db}
+ body.landscape-view .faction {gap:0}.landscape-view .faction-mark {display:none}
+ body.landscape-view .faction strong {font-size:23px}.landscape-view .faction em {font-size:6px}
+ body.landscape-view .time-status>span {font-size:6px;margin-bottom:1px}.landscape-view .time-status strong {font-size:14px}
+ body.landscape-view .territory-track {margin:3px 0 1px}
+ body.landscape-view .mission {left:12px;top:105px;width:120px}
+ .landscape-view .mission summary {padding:7px 9px;font-size:11px}
+ .landscape-view .mission summary::after {right:6px;top:9px}
+ .landscape-view .mission summary small {font-size:8px}
+ .landscape-view .mission-content {max-height:calc(100dvh - 185px)}
+ body.landscape-view .economy-readout {top:105px;left:auto;right:12px;display:grid;gap:0 6px;padding:4px 8px;max-width:calc(100vw - 152px)}
+ body.landscape-view .economy-readout strong {font-size:13px}
+ .landscape-view .income-details summary {font-size:10px;line-height:17px;min-height:20px}
+ body.landscape-view #production-shortcut {font-size:9px;line-height:18px;flex-basis:auto}
+ body.landscape-view .map-tools {top:161px;right:12px;padding:3px;gap:3px}
+ body.landscape-view .map-tools button {width:44px;height:44px}
+ .landscape-view .income-popover {right:0;left:auto;top:calc(100% + 6px);width:min(290px,calc(100vw - 24px))}
+ .landscape-view .mission-content .objective {margin:18px 0}
+ .landscape-view .mission-content .objective strong {font-size:12px}
+}
+@media(max-height:550px) and (min-width:641px){
+ body.landscape-view .topbar {height:48px}
+ body.landscape-view .battle-status {top:2px;height:44px}
+ .landscape-view .brand small,.landscape-view .faction-mark {display:none}
+ body.landscape-view .faction strong {font-size:22px}
+ body.landscape-view .time-status>span {font-size:6px;margin-bottom:1px}
+ body.landscape-view .time-status strong {font-size:15px}
+ body.landscape-view .territory-track {margin:2px 0 1px}
+ body.landscape-view .mission,body.landscape-view .map-tools,body.landscape-view .economy-readout {top:56px}
+ body.landscape-view .mission {left:12px;width:190px}
+ body.landscape-view .map-tools {right:12px}
+ body.landscape-view .economy-readout {top:114px;left:12px;right:auto;width:190px;grid-template-columns:1fr;gap:0}
+ body.landscape-view .economy-readout .income-popover {left:0;right:auto}
+ body.landscape-view[data-hud=idle] .command-panel {left:12px;right:auto;bottom:12px;width:190px;min-height:48px;padding:10px}
+ body.landscape-view[data-hud=idle] .command-copy strong {font-size:11px}
+}

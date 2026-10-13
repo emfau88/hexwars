@@ -1,3 +1,4 @@
+import {icon,robot,headquarters} from './ui-icons.js';
 import {Battle,chooseOrder} from './game.js';
 import {countType,troopText,combatValue} from './units.js';
 import {createProductionUI} from './production-ui.js';
@@ -15,6 +16,9 @@ const qa=ALLOW_QA&&params.has('qa');
 const missionId=MISSIONS.some(m=>m.id===requestedMission)&&(qa||progress.unlocked.includes(requestedMission))?requestedMission:MISSIONS[0].id;
 const $=id=>document.getElementById(id),game=new Battle({missionId,economyMode:ECONOMY_MODES.includes(requestedEconomy)?requestedEconomy:ECONOMY_MODE});
 const mission=game.mission;
+for(const el of document.querySelectorAll('[data-icon]'))el.innerHTML=icon(el.dataset.icon);
+for(const el of document.querySelectorAll('[data-robot]'))el.innerHTML=robot(el.dataset.robot);
+for(const el of document.querySelectorAll('[data-hq]'))el.innerHTML=headquarters;
 document.title=`HEXFRONT Mixed Squads — ${mission.title}`;
 $('operation-index').textContent=String(mission.index).padStart(2,'0');
 $('mission-index').textContent=`OPERATION ${String(mission.index).padStart(2,'0')}`;
@@ -29,7 +33,7 @@ const central=true;
 $('economy-mode').textContent='Verbundene Felder → Credits';
 $('economy-briefing').textContent='Verbundene Sektoren liefern Credits. Rekrutiere schnelle Drohnen und schwere Mechs im HQ. Setze ein eigenes Feld als Sammelpunkt für automatischen Nachschub.';
 $('economy-help').textContent='Das HQ liefert 2 Credits/s, jedes verbundene Feld weitere 0,9. Ein verbundenes Relais erhöht das Einkommen um 20 %. Die HQ-Warteschlange baut Drohnen und Mechs; eine aktivierte Schleife wiederholt fertige Aufträge. Bei 160 Robotern pausiert die Produktion. Wähle ein eigenes Feld als Sammelpunkt; 6 Roboter bleiben zur HQ-Verteidigung. Abgeschnittener Nachschub greift niemals an.';
-let scene,campaign,selected=null,pending=null,fraction=1,unitFilter='all',loaded=false,last=0,accumulator=0,lastUI=0,toastTimer,autoPaused=false,helpWasPaused=false;
+let scene,campaign,selected=null,pending=null,fraction=1,unitFilter='all',loaded=false,last=0,accumulator=0,lastUI=0,toastTimer,autoPaused=false,helpWasPaused=false,settingsWasPaused=false;
 const production=createProductionUI(game,{refresh:()=>updateUI(),beforeOpen:()=>scene?.cancelGesture(),canResume:()=>!autoPaused&&!campaign?.open&&!document.hidden});
 function launchMission(id){
   if(!loaded||!campaign.getProgress().unlocked.includes(id))return;
@@ -43,7 +47,7 @@ campaign=createCampaign({
   getState:()=>({running:game.running,finished:!!game.result,busy:!loaded}),
   onOpen:()=>{scene?.cancelGesture();if(game.running)game.paused=true;updateUI();},
   onResume:()=>{game.paused=false;autoPaused=false;last=performance.now();accumulator=0;updateUI();},
-  onLaunch:launchMission,
+  onLaunch:launchMission,onSettings:openSettings,
 });
 function openCampaign(){
   if($('result-dialog').open)$('result-dialog').close();
@@ -52,11 +56,11 @@ function openCampaign(){
 }
 $('campaign-open').addEventListener('click',openCampaign);
 document.querySelector('.brand').addEventListener('click',e=>{e.preventDefault();openCampaign();});
-$('result-campaign').addEventListener('click',openCampaign);
+$('result-campaign').addEventListener('click',()=>{openCampaign();campaign.show('missions');});
 $('next-mission').addEventListener('click',()=>launchMission(MISSIONS[mission.index]?.id));
 // Reserve the actual command panel height, including wrapped text on phones.
 // The canvas stays full screen; only its safe framing area changes with the HUD.
-const fitHUD=()=>{if(scene?.drag)return;document.querySelector('main').style.setProperty('--battle-bottom',`${Math.ceil(innerHeight-document.querySelector('.command-panel').getBoundingClientRect().top+20)}px`);scene?.resize();};
+const fitHUD=()=>{if(scene?.drag)return;document.querySelector('main').style.setProperty('--battle-bottom',`${document.querySelector('.command-panel').offsetWidth?Math.ceil(innerHeight-document.querySelector('.command-panel').getBoundingClientRect().top+20):80}px`);scene?.resize();};
 const hudObserver=new ResizeObserver(fitHUD);document.querySelectorAll('.command-panel,.topbar,.battle-status,.map-tools,.economy-readout,.mission > summary').forEach(el=>hudObserver.observe(el));window.addEventListener('resize',()=>{scene?.cancelGesture();fitHUD();});fitHUD();
 document.addEventListener('pointerdown',e=>{for(const details of document.querySelectorAll('.mission[open],.economy-readout details[open]'))if(!details.contains(e.target))details.open=false;});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')$('mission-info').open=false;});
@@ -108,7 +112,7 @@ function updateUI(){
   const economy=game.economy('orange'),hq=game.cell(economy.hqId),full=game.strength('orange')>=economy.cap;
   $('credits').textContent=`${Math.floor(game.factions.orange.credits)} Cr`;
   production.render();
-  $('hq-production').textContent=`+${rateText(economy.rate)} Cr/s Einkommen`;
+  $('hq-production').textContent=`+${rateText(economy.rate)} Cr/s`;
   $('hq-production').title=`Relaisbonus ${Math.round(economy.relayBonus*100)} % · ${game.strength('orange')}/${economy.cap} Roboter${full?' · Armeelimit erreicht':''}`;
   $('hint').style.opacity=game.commands>3?.55:1;
   let source=game.cell(selected),target=game.cell(pending);
@@ -116,6 +120,7 @@ function updateUI(){
   const match=game.running||game.result?'active':'intro',hud=game.result?'result':!game.running?'intro':game.paused?'paused':source&&target?'command':source?'selection':'idle';
   if(document.body.dataset.match!==match)document.body.dataset.match=match;
   if(document.body.dataset.hud!==hud)document.body.dataset.hud=hud;
+  const portrait=unitFilter==='mech'?'mech':'drone';if($('command-emblem').dataset.robot!==portrait){$('command-emblem').dataset.robot=portrait;$('command-emblem').innerHTML=robot(portrait);}
   if(scene){scene.pending=pending;scene.orderFraction=fraction;scene.orderFilter=unitFilter;}
   $('command-options').hidden=!source||!game.running;
   $('rally-set').disabled=!source||game.paused;
@@ -147,8 +152,11 @@ function showResult(){
   $('next-mission').hidden=game.result!=='victory'||!next;
   $('restart').classList.toggle('primary',game.result!=='victory'||!next);
   $('restart').classList.toggle('text-button',game.result==='victory'&&!!next);
-  $('result-label').textContent=game.result==='victory'?'OPERATION ERFOLGREICH':'OPERATION GESCHEITERT';$('result-title').textContent=game.result==='victory'?`${mission.title} gehört dir.`:'Die Linie ist gebrochen.';
-  $('result-copy').textContent=game.result==='victory'?(next?`${next.title} ist freigeschaltet. ${campaign.getProgress().persistent?'Dein Fortschritt ist auf diesem Gerät gespeichert.':'Dein Fortschritt bleibt in diesem Tab erhalten.'}`:'Alle drei Operationen sind abgeschlossen. Du kannst jede Mission erneut spielen.'):'Die gegnerischen Truppen haben dein Hauptquartier eingenommen. Bündle beim nächsten Versuch früher deine Kräfte.';
+  $('result-dialog').dataset.result=game.result;
+  $('result-label').textContent=mission.title;
+  $('result-title').textContent=game.result==='victory'?'Sektor gesichert':'Einsatz verloren';
+  $('result-greeting').textContent=game.result==='victory'?'Gute Arbeit, Commander.':'Zeit für einen neuen Plan.';
+  $('result-copy').textContent=game.result==='victory'?(next?`${next.title} ist freigeschaltet. ${campaign.getProgress().persistent?'Dein Fortschritt ist auf diesem Gerät gespeichert.':'Dein Fortschritt bleibt in diesem Tab erhalten.'}`:'Alle drei Operationen sind abgeschlossen. Du kannst jede Mission erneut spielen.'):'Ein neuer Anlauf, eine neue Idee. Sichere deine Wege und halte den Nachschub zusammen.';
   $('result-time').textContent=time(game.time);$('result-captures').textContent=game.captures;$('result-commands').textContent=game.commands;
   if($('help-dialog').open)$('help-dialog').close();$('result-dialog').showModal();updateUI();
 }
@@ -162,6 +170,9 @@ $('all').addEventListener('click',()=>{fraction=1;$('half').setAttribute('aria-p
 document.querySelectorAll('[data-unit]').forEach(button=>button.addEventListener('click',()=>{unitFilter=button.dataset.unit;document.querySelectorAll('[data-unit]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));updateUI();}));
 $('rally-set').addEventListener('click',()=>{const result=game.setRally(selected);if(result.ok)toast('Sammelpunkt gesetzt. Das HQ schickt überschüssige Verbände automatisch.');else toast(result.reason,'blocked');updateUI();});
 $('clear').addEventListener('click',()=>{selected=null;pending=null;scene.select(null);scene.hover(null);updateUI();});
+function openSettings(){scene?.cancelGesture();settingsWasPaused=game.paused;if(game.running)game.paused=true;$('settings-dialog').showModal();updateUI();}
+for(const id of ['settings-close','settings-done'])$(id).addEventListener('click',()=>$('settings-dialog').close());
+$('settings-dialog').addEventListener('close',()=>{if(game.running&&!autoPaused&&!campaign.open&&!document.hidden)game.paused=settingsWasPaused;updateUI();});
 function togglePause(){if(!game.running)return;scene.cancelGesture();game.paused=!game.paused;autoPaused=false;updateUI();}
 $('pause').addEventListener('click',togglePause);
 $('help').addEventListener('click',()=>{scene?.cancelGesture();helpWasPaused=game.paused;if(game.running)game.paused=true;$('help-dialog').showModal();updateUI();});
@@ -170,8 +181,8 @@ $('help-dialog').addEventListener('close',()=>{if(game.running&&!autoPaused)game
 $('restart').addEventListener('click',restart);$('inspect').addEventListener('click',()=>$('result-dialog').close());
 $('zoom-in').addEventListener('click',()=>scene?.zoomBy(1.15));$('zoom-out').addEventListener('click',()=>scene?.zoomBy(1/1.15));$('fit').addEventListener('click',()=>scene?.fit());
 $('camera-view').addEventListener('click',()=>scene?.setView(scene.view==='tactical'?'diorama':'tactical'));
-$('quality').addEventListener('click',()=>{if(!scene)return;const low=scene.quality==='high';scene.setQuality(low?'low':'high');$('quality').textContent=low?'LQ':'HQ';$('quality').setAttribute('aria-label',`Grafikqualität: ${low?'Reduziert':'Hoch'}`);toast(low?'Reduzierte Auflösung und Schattenqualität aktiviert.':'Hohe Grafikqualität aktiviert.');});
-document.addEventListener('keydown',e=>{if(campaign.open||$('production-dialog').open)return;if(e.code==='Space'&&e.target===document.body){e.preventDefault();togglePause();}if(e.key==='Escape'&&!$('help-dialog').open&&!$('result-dialog').open){scene?.cancelGesture();selected=null;pending=null;scene?.select(null);scene?.hover(null);updateUI();}});
+$('quality').addEventListener('click',()=>{if(!scene)return;const low=scene.quality==='high';scene.setQuality(low?'low':'high');$('quality').textContent=low?'Reduziert':'Hoch';$('quality').setAttribute('aria-label',`Grafikqualität: ${low?'Reduziert':'Hoch'}`);toast(low?'Reduzierte Auflösung und Schattenqualität aktiviert.':'Hohe Grafikqualität aktiviert.');});
+document.addEventListener('keydown',e=>{if(campaign.open||$('production-dialog').open||$('settings-dialog').open)return;if(e.code==='Space'&&e.target===document.body){e.preventDefault();togglePause();}if(e.key==='Escape'&&!$('help-dialog').open&&!$('result-dialog').open){scene?.cancelGesture();selected=null;pending=null;scene?.select(null);scene?.hover(null);updateUI();}});
 window.addEventListener('blur',()=>scene?.cancelGesture());
 document.addEventListener('visibilitychange',()=>{if(document.hidden)scene?.cancelGesture();if(document.hidden&&game.running&&!game.paused){game.paused=true;autoPaused=true;updateUI();}last=performance.now();accumulator=0;});
 try {
@@ -183,7 +194,7 @@ try {
   await scene.ready;loaded=true;$('loading').hidden=true;updateUI();campaign.refresh();
   if(params.get('play')==='1'&&requestedMission===missionId){game.start();toast(mission.tactic);updateUI();}
   else if(!qa)campaign.show();
-  const frame=now=>{const dt=last?Math.min((now-last)/1000,.2):0;last=now;if(!document.hidden){accumulator+=dt;while(accumulator>=.05){if(!MANUAL_CLOCK)game.update(.05);accumulator-=.05;}processEvents();if(now-lastUI>130){updateUI();lastUI=now;}scene.simulationRemainder=MANUAL_CLOCK?0:accumulator;scene.render(now);}requestAnimationFrame(frame);};requestAnimationFrame(frame);
+  const frame=now=>{const dt=last?Math.min((now-last)/1000,.2):0;last=now;if(!document.hidden){accumulator+=dt;while(accumulator>=.05){if(!MANUAL_CLOCK)game.update(.05);accumulator-=.05;}processEvents();if(now-lastUI>130){updateUI();lastUI=now;}scene.simulationRemainder=MANUAL_CLOCK?0:accumulator;if(!campaign.open&&!$('result-dialog').open)scene.render(now);}requestAnimationFrame(frame);};requestAnimationFrame(frame);
   if(ALLOW_QA&&new URLSearchParams(location.search).has('qa'))window.__HEXFRONT3D__={
     snapshot:()=>game.snapshot(),point:id=>scene.screenCell(id),route:(a,b)=>game.path(game.cell(a),game.cell(b))?.map(c=>c.id),
     suggest:()=>chooseOrder(game,'orange'),

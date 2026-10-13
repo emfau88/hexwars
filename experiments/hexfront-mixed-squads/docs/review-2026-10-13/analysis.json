@@ -1,0 +1,146 @@
+{
+  "date": "2026-10-13",
+  "branch": "experiment/mixed-squads",
+  "approved_reference": "approved-ui-concept.png",
+  "scope": "Nur Mixed Squads; Originalvarianten und ihre Kampagnen bleiben unverändert.",
+  "changes": [
+    "Helle keramische UI mit abgerundeten Flächen, salbeifarbenen Anzeigen und warmen orangefarbenen Hauptaktionen.",
+    "Eigenes Hauptmenü, Missionsauswahl, Einstellungen/Hilfe, kompakter HUD und kontextbezogene Befehlsauswahl.",
+    "Produktion mit Einheitenvergleich und Einkommensaufschlüsselung; Sieg und Niederlage mit eigener Illustration.",
+    "Alle drei Maps: normale Hexfelder bleiben eben, Höhenübergänge bleiben auf Rampen beschränkt.",
+    "Morgenwacht: nur die beiden erhöhten Ruinenfragmente am Relais samt Flugabstand entfernt.",
+    "Besetzte Felder: Füllung 0,28 → 0,38; ausgewählt 0,34 → 0,46. Konturbreite 0,035 → 0,045; neutraler Rand 0,62 → 0,84 Deckkraft; dunkler Unterrand 0,25 → 0,42."
+  ],
+  "camera": {
+    "recommendation": "Festen Taktikwinkel beibehalten und Karten darauf abstimmen. Kein zusätzlicher Dreh-Joystick.",
+    "tactical_degrees": 70,
+    "diorama_degrees": 55,
+    "controls": "Zoom, Verschieben, Zentrieren und Ansichtswechsel; eigenes HQ unten mittig.",
+    "review": "Paarweise Taktik-/Diorama-Bilder vergleichen: Höhenlesbarkeit, verdeckte Wege, Größe der Spielfelder und Freiraum für HUD."
+  },
+  "verification": {
+    "logic_tests": 28,
+    "browser": [
+      "queue, repeat, refund, pause and planning via native buttons",
+      "mouse click and drag, drone-only order, persistent squads, combat and rally delivery",
+      "three wins, unlocks, defeat, replay; original campaign storage preserved",
+      "native touch tap and drag, mech selection, 390/320 px layouts, reduced motion, low quality",
+      "standalone production build loads, no QA API, locked missions cannot be skipped"
+    ],
+    "ui": [
+      "Menu, mission locks, settings/help keyboard back navigation, graphics toggle, deliberate pause preserved, explicit resume",
+      "1440×900: home, HUD, production, victory and defeat",
+      "390×844: home, HUD, production, victory and defeat",
+      "320×740: home, HUD, production, victory and defeat",
+      "844×390: home, HUD, production, victory and defeat",
+      "Packaged branch preview starts with correct sibling asset paths and QA disabled"
+    ],
+    "landscape": [
+      "morgenwacht: full canvas, land at viewport corners, all fields visible, HQ centered, scenery non-playable, briefing, zoom/pan and selection at four viewport sizes",
+      "windpass: full canvas, land at viewport corners, all fields visible, HQ centered, scenery non-playable, briefing, zoom/pan and selection at four viewport sizes",
+      "auenstrom: full canvas, land at viewport corners, all fields visible, HQ centered, scenery non-playable, briefing, zoom/pan and selection at four viewport sizes"
+    ]
+  },
+  "limitations": [
+    "Browserbilder stammen aus Chromium mit emulierten Smartphone-Abmessungen, nicht von physischen Mobilgeräten.",
+    "Die cozy-victory/defeat-Bilder verwenden Testzustände zur Layoutprüfung; die regulären Ergebnisbilder stammen aus vollständig simulierten Partien.",
+    "Eine gezeigte Roboterfigur repräsentiert den Einheitentyp im Feld, nicht jeden einzelnen Roboter.",
+    "Illustrationen wurden mit dem eingebauten Imagegen-Tool erzeugt; Prompts und Assets liegen in public/ui."
+  ],
+  "review_questions": [
+    "Ist die Gebietszughörigkeit auf Fels und Gras bei beiden Kamerawinkeln sofort erkennbar?",
+    "Sind neutrale Konturen klar, ohne die Fraktionsfarben zu überlagern?",
+    "Ist der Unterschied zwischen Auswahl, erreichbaren Feldern und laufendem Gefecht deutlich?",
+    "Bleiben die mobilen Bedienelemente gut erreichbar, ohne das eigentliche Spielfeld zu überdecken?"
+  ],
+  "screenshots": [
+    {
+      "file": "cozy-menu-1440.png",
+      "caption": "Hauptmenü · Desktop"
+    },
+    {
+      "file": "cozy-menu-390.png",
+      "caption": "Hauptmenü · Smartphone"
+    },
+    {
+      "file": "cozy-missions.png",
+      "caption": "Missionsauswahl"
+    },
+    {
+      "file": "landscape-morgenwacht-1440.png",
+      "caption": "morgenwacht · Taktik 70°"
+    },
+    {
+      "file": "landscape-morgenwacht-diorama-1440.png",
+      "caption": "morgenwacht · Diorama 55°"
+    },
+    {
+      "file": "landscape-windpass-1440.png",
+      "caption": "windpass · Taktik 70°"
+    },
+    {
+      "file": "landscape-windpass-diorama-1440.png",
+      "caption": "windpass · Diorama 55°"
+    },
+    {
+      "file": "landscape-auenstrom-1440.png",
+      "caption": "auenstrom · Taktik 70°"
+    },
+    {
+      "file": "landscape-auenstrom-diorama-1440.png",
+      "caption": "auenstrom · Diorama 55°"
+    },
+    {
+      "file": "landscape-auenstrom-390.png",
+      "caption": "Auenstrom · Smartphone"
+    },
+    {
+      "file": "landscape-auenstrom-844.png",
+      "caption": "Auenstrom · Querformat"
+    },
+    {
+      "file": "landscape-morgenwacht-320.png",
+      "caption": "Morgenwacht · schmales Smartphone"
+    },
+    {
+      "file": "mobile-command.png",
+      "caption": "Befehlsauswahl · Touch"
+    },
+    {
+      "file": "supply-desktop.png",
+      "caption": "Nachschub · Desktop"
+    },
+    {
+      "file": "cozy-production-1440.png",
+      "caption": "Produktion · Desktop"
+    },
+    {
+      "file": "cozy-production-390.png",
+      "caption": "Produktion · Smartphone"
+    },
+    {
+      "file": "result-morgenwacht.png",
+      "caption": "Sieg · reguläre simulierte Partie"
+    },
+    {
+      "file": "result-defeat.png",
+      "caption": "Niederlage · reguläre simulierte Partie"
+    },
+    {
+      "file": "cozy-victory-390.png",
+      "caption": "Sieg · Smartphone (Layout-Testzustand)"
+    },
+    {
+      "file": "cozy-defeat-390.png",
+      "caption": "Niederlage · Smartphone (Layout-Testzustand)"
+    },
+    {
+      "file": "cozy-victory-844.png",
+      "caption": "Sieg · Querformat (Layout-Testzustand)"
+    },
+    {
+      "file": "cozy-defeat-844.png",
+      "caption": "Niederlage · Querformat (Layout-Testzustand)"
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+/* Only this variant loads these rules. The original styles and assets are shared read-only. */
+.economy-readout {pointer-events:auto;display:grid;gap:1px;min-width:145px}
+.economy-readout strong {font-size:19px;color:#f0c99d}
+.economy-readout button {background:none;border:0;color:#e9d3b0;font:inherit;padding:4px 0;text-align:left;cursor:pointer}
+.economy-readout small {font-size:9px}
+.badge-face {font-size:13px;gap:2px;padding:0 5px;min-width:26px;height:22px;position:relative}
+.badge-face,.count {white-space:nowrap;flex-shrink:0}
+.garrison.fighting .badge-face {border-color:#fff3c5;box-shadow:0 0 0 2px #f8bc7930}
+.garrison.empty .badge-face {visibility:hidden}
+.garrison.empty.rally .badge-face {visibility:visible;background:none;border-color:transparent;box-shadow:none;min-width:0;padding:0;width:16px}
+.garrison.empty.rally .badge-face::before {left:0}
+.garrison.empty:focus-visible .badge-face {visibility:visible;min-width:15px;background:#24332d;outline:2px solid #ffdfa5}
+.income-details summary {cursor:pointer;color:#f2d3a9;font-size:12px;min-height:24px;line-height:24px}
+.income-details summary::marker {font-size:9px}
+.income-popover {position:absolute;right:0;top:57px;width:290px;box-sizing:border-box;background:#1e2d26;border:1px solid #819a7770;border-radius:8px;padding:15px;box-shadow:0 8px 30px #07120bc0;z-index:30}
+.economy-readout:has(.income-details[open]) {z-index:30}
+.income-breakdown {display:grid;gap:8px;margin:8px 0;font-size:11px}
+.income-breakdown div {display:flex;justify-content:space-between;gap:12px}.income-breakdown dd {margin:0;white-space:nowrap;color:#f2d3a9}
+.income-total {border-top:1px solid #a8b89a40;padding-top:9px;font-weight:bold}
+.income-note {font-size:10px;line-height:1.45;color:#bdcbb3;margin:8px 0 0}
+.production-income-details {margin:10px 0}
+.recruit-options .unit-role {font-size:11px;color:#f3c898}
+.recruit-options .unit-benefit {font-size:11px;line-height:1.45;color:#d1dcc8}
+.recruit-options strong {font-size:14px;color:#fff0d7}
+.garrison.rally .badge-face::before {content:'⚑';position:absolute;left:-12px;top:1px;color:#ffd598;font-size:15px}
+#command-options {flex-wrap:wrap;max-width:310px;gap:6px}
+.unit-filter {display:flex;gap:3px;flex-basis:100%}
+.unit-filter button,#rally-set {font:inherit;font-size:11px;color:#d6dfcb;background:#24332d;border:1px solid #a9b69540;border-radius:5px;padding:7px 9px;cursor:pointer;min-height:32px}
+.unit-filter [aria-pressed=true] {color:#ffe0b5;border-color:#d5a068;background:#4a4030}
+#rally-set {font-size:10px}
+button:disabled {cursor:default;opacity:.45}
+#production-dialog {width:min(560px,calc(100vw - 24px));max-height:calc(100dvh - 24px);padding:28px;overflow:auto}
+#production-dialog h2 {font-size:30px;margin:8px 0 5px}
+#production-dialog .production-intro {font-size:12px;line-height:1.5;margin:0 0 16px}
+.production-balance {display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:12px 0;border-block:1px solid #b9c4a626}
+.production-balance strong {color:#edc592;font-size:24px}
+.production-balance span {font-size:11px}
+.recruit-options {display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
+.recruit-options button {text-align:left;display:grid;gap:5px;padding:14px;background:#26372f;color:#e4ecdd;border:1px solid #9eaf9445;border-radius:8px;cursor:pointer}
+.recruit-options b {color:#f4d5aa;font-size:16px}
+.recruit-options span {font-size:12px}.recruit-options small {font-size:10px;line-height:1.4;color:#aabbad}
+.active-production {display:grid;gap:7px;margin:12px 0}.active-production span {font-size:12px}
+.active-production progress {width:100%;height:7px;accent-color:#e3ab70}
+.active-production button {border:0;background:none;color:#bac9b5;text-align:left;padding:3px 0;font-size:11px;cursor:pointer}
+.queue-heading {display:flex;justify-content:space-between;font-size:11px;margin:18px 0 7px}
+.production-queue {display:flex;flex-wrap:wrap;gap:5px;min-height:32px}
+.production-queue button,.production-toggles button,.rally-info button {font:inherit;font-size:11px;border:1px solid #a1b89444;border-radius:5px;background:#26382e;color:#e0e9d8;padding:7px 9px;cursor:pointer}
+#production-dialog .queue-hint {font-size:10px;color:#a7b69e;margin:5px 0 12px;line-height:1.4}
+.production-toggles {display:flex;gap:7px}.production-toggles [aria-pressed=true] {border-color:#d2a570;color:#f1c794}
+.rally-info {display:grid;gap:7px;margin-top:18px;padding-top:14px;border-top:1px solid #b9c4a626;font-size:12px}
+.rally-info button {justify-self:start}.rally-info small {font-size:10px;line-height:1.5;color:#a7b69e}
+#production-dialog #production-message {min-height:16px;font-size:11px;color:#e7c18b;margin:12px 0 8px}
+#production-done {width:100%}
+@media(max-width:640px){
+ .badge-face {font-size:12px;min-width:25px}.economy-readout strong {font-size:14px}
+ body[data-match=active] .economy-readout {top:55px;left:14px;right:14px;line-height:1.25;display:flex;flex-wrap:wrap;align-items:baseline;gap:0 10px}
+ body[data-match=active] .economy-readout #production-shortcut {flex-basis:100%;font-size:10px;padding:0;line-height:18px}
+ body[data-match=active] .map-tools {top:100px}
+ body[data-match=active] #stage {top:147px}
+ body[data-match=active] .faction em {display:block;font-size:6px;line-height:1.1;margin-top:1px}
+ body[data-match=active] .economy-readout small {display:none}
+ .income-details summary {font-size:12px}.income-popover {left:0;right:auto;top:43px;width:min(290px,calc(100vw - 28px))}
+ body[data-match=active] .camera-guidance {top:109px!important}
+ #command-options {max-width:none;width:100%;justify-content:space-between;gap:3px}
+ .command-panel #command-options {grid-column:1/-1}
+ .command-panel:has(#command-options:not([hidden])) .primary {grid-column:1/-1;width:100%}
+ .command-panel .command-copy {padding-right:28px}
+ .command-panel #clear {position:absolute;right:8px;top:8px;width:32px;height:32px}
+ .unit-filter {flex-basis:auto}.unit-filter button {padding:5px 7px;font-size:10px;min-height:32px}
+ #rally-set {padding:5px;font-size:9px}.fraction-control button {padding:5px 6px!important;font-size:10px!important}
+ #production-dialog {padding:23px 18px}#production-dialog h2 {font-size:25px}.production-balance strong {font-size:20px}
+ .recruit-options button {padding:10px}.production-balance {flex-wrap:wrap;gap:3px}
+}
+@media(max-width:360px){.unit-filter {flex-basis:100%}.unit-filter button {flex:1}body[data-match=active] .brand{font-size:14px}.utility button {width:36px!important;min-width:36px}}

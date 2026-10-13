@@ -1,0 +1,239 @@
+/* Mixed Squads only: ceramic controls, sage displays and warm amber actions. */
+:root {color-scheme:light;--ink:#283c38;--muted:#64736a;--paper:#f6efdf;--orange:#b77525;--blue:#397b96;--line:#c5bda966;--gold:#f3b75b;--panel:#f6efdf;--edge:#c9beaa;--shadow:0 3px 2px #4b473326,0 12px 30px #26352b22}
+body.cozy-ui {color:var(--ink);font-family:'Segoe UI',Arial,sans-serif}
+.cozy-ui button:not(.garrison),.cozy-ui summary {touch-action:manipulation}
+.cozy-ui button:not(.garrison) {color:var(--ink);background:linear-gradient(#fffaf0,#eae0ce);border:1px solid var(--edge);border-radius:12px;box-shadow:inset 0 1px 0 #fff9,0 2px 1px #4c4b3326;font-weight:600}
+.cozy-ui button:not(.garrison):hover:not(:disabled) {background:#fffaf0;border-color:#b89960}
+.cozy-ui button:focus-visible,.cozy-ui summary:focus-visible {outline:3px solid #317f98;outline-offset:3px}
+.cozy-ui button:disabled {opacity:.5}
+.cozy-ui button.primary,.cozy-ui button.primary:hover:not(:disabled) {background:linear-gradient(#ffd180,#efad4d);border-color:#d99a40;color:#322e20;min-height:48px;font-size:15px}
+.cozy-ui button.primary:hover:not(:disabled) {background:linear-gradient(#ffdda0,#f4bb68)}
+.cozy-ui .primary:disabled {background:#e2dac7;border-color:var(--edge)}
+.ui-icon {display:block;width:24px;height:24px;flex:none}
+.robot-art {display:block;width:80px;height:80px}.hq-art {width:100%;height:100%;display:block}
+.ceramic,.cozy-ui dialog,.cozy-ui .mission summary,.cozy-ui .mission-content,body.cozy-ui .economy-readout,body.cozy-ui .battle-status,body.cozy-ui .command-panel,body.cozy-ui .map-tools {background:linear-gradient(130deg,#fcf7eb,#f0e7d6);border:1px solid #cabea7;border-radius:18px;box-shadow:inset 0 1px 0 #fff, var(--shadow)}
+body.cozy-ui main {height:100dvh}
+body.cozy-ui #stage {inset:0}
+body.cozy-ui .topbar {position:fixed;inset:20px 20px auto auto;width:108px;height:60px;margin:0;padding:0;border:0;background:none;z-index:15}
+.cozy-ui .topbar .brand,.cozy-ui .header-center {display:none}
+.cozy-ui .utility {gap:8px}
+body.cozy-ui .utility button,body.cozy-ui .utility #pause {display:grid;place-items:center;width:50px;min-width:50px;height:60px;border-radius:15px;font-size:21px;box-shadow:var(--shadow)}
+body.cozy-ui .mission {left:20px;top:20px;width:224px;z-index:16}
+.cozy-ui .mission summary {position:relative;min-height:60px;padding:10px 28px 10px 56px;line-height:1.35}
+.cozy-ui .mission summary strong {font-size:16px;color:var(--ink)}
+.cozy-ui .mission summary small {font-size:11px;color:#657367;margin-top:3px}
+.cozy-ui .mission summary::after {right:14px;top:17px;font-size:18px;color:var(--ink)}
+.mission-art {position:absolute;left:13px;top:13px}.mission-art .ui-icon {width:32px;height:32px}
+.cozy-ui .mission-content {width:320px;padding:22px;max-height:calc(100dvh - 106px);border-radius:16px}
+.cozy-ui .mission-content h1,.cozy-ui .mission-content h1 span {font-family:inherit;font-size:27px;font-weight:700;letter-spacing:-.6px;color:var(--ink)}
+.cozy-ui .mission-content :is(.mission-description,.briefing-details b,.briefing-details p,.legend,.landscape-note) {color:#596d60;font-size:12px}
+.cozy-ui .mission-content .eyebrow {font-size:10px;color:#96672f}
+.cozy-ui .objective-icon {color:#c28d44}.cozy-ui .objective strong {font-size:14px}
+.cozy-ui .briefing-details span {color:#7a7863}
+body.cozy-ui .battle-status {top:22px;left:calc(50% - 38px);right:auto;transform:translateX(-50%);width:228px;height:56px;padding:7px 14px;z-index:11}
+.cozy-ui .faction {gap:0}.cozy-ui .faction-mark,.cozy-ui .faction em {display:none!important}
+.cozy-ui .faction small {font-size:8px;letter-spacing:.4px}.cozy-ui .faction small span {display:none}
+body.cozy-ui .faction strong {font-size:22px;font-weight:700;letter-spacing:-.5px;line-height:1.1}
+.cozy-ui .time-status {width:90px}.cozy-ui .time-status>span {font-size:7px;letter-spacing:.6px;color:#647466;margin:0}
+.cozy-ui .time-status strong {font-size:14px;letter-spacing:.5px;font-weight:600}
+.cozy-ui .time-status>small {color:#697968;font-size:7px;letter-spacing:.1px}
+.cozy-ui .territory-track {background:#d6d5c6;margin:3px 0;height:3px;border-radius:3px;overflow:hidden}.cozy-ui .territory-track i {height:3px}
+body.cozy-ui .economy-readout {top:20px;right:140px;left:auto;width:246px;max-width:none;grid-template-columns:24px auto 1fr;gap:2px 7px;padding:8px 13px;min-height:60px;z-index:14;font-size:12px}
+body.cozy-ui .economy-readout strong {font-size:19px;color:var(--ink);font-variant-numeric:tabular-nums}
+.cozy-ui .economy-readout .income-details {justify-self:end}
+.cozy-ui .income-details summary {color:#53705c;font-size:12px;line-height:24px;min-height:24px}
+.cozy-ui .income-details summary::marker {font-size:8px}
+.cozy-ui .economy-readout #production-shortcut {grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:8px;background:none;border:0;border-radius:5px;box-shadow:none;padding:0;min-height:21px;color:#566757;font-size:11px;font-weight:400}
+.cozy-ui progress {appearance:none;height:8px;border:0;border-radius:6px;overflow:hidden;background:#d9d3c3;color:#efaf50}
+.cozy-ui progress::-webkit-progress-bar {background:#d9d3c3;border-radius:6px}
+.cozy-ui progress::-webkit-progress-value {background:linear-gradient(#ffd07c,#eeac46);border-radius:6px}
+.cozy-ui progress::-moz-progress-bar {background:#efaf50;border-radius:6px}
+#hud-production-progress {width:74px;flex:none;margin-left:auto}
+.cozy-ui .income-popover {background:#f6efdf;border-color:var(--edge);border-radius:15px;color:var(--ink);box-shadow:var(--shadow);top:calc(100% + 8px)}
+.cozy-ui .income-breakdown {font-size:12px}.cozy-ui .income-breakdown dd {color:#426851}
+.cozy-ui .income-total {border-color:var(--edge)}.cozy-ui .income-note {color:#687662;font-size:11px}
+body.cozy-ui .map-tools {top:auto;bottom:20px;right:20px;gap:4px;padding:4px;z-index:12;border-radius:15px}
+body.cozy-ui .map-tools button {width:40px;height:40px;min-height:40px;min-width:40px;box-shadow:none;border:0;background:none;border-radius:10px;font-size:20px}
+body.cozy-ui .map-tools #camera-view {width:66px;font-size:12px}
+body.cozy-ui .command-panel {left:20px;right:auto;bottom:20px;width:380px;min-height:0;display:grid;grid-template-columns:58px 1fr;gap:8px 10px;padding:14px;border-radius:18px;z-index:12}
+body.cozy-ui[data-hud=idle] .command-panel {display:none}
+/* A drag keeps its original camera framing. Do not cover its destination with
+   the newly opened field card; the floating drag hint supplies feedback. */
+body.cozy-ui:has(#stage[data-dragging=true]) .command-panel {visibility:hidden;pointer-events:none}
+.cozy-ui .command-panel .command-emblem {display:block;width:58px;height:62px;border:0;border-radius:0;background:none}
+.cozy-ui .command-emblem .robot-art {width:64px;height:64px}
+.cozy-ui .command-copy {grid-column:2;align-self:center;padding-right:22px}
+.cozy-ui .command-copy small {color:#84724f;font-size:9px;letter-spacing:.7px;margin-bottom:4px}
+.cozy-ui .command-copy strong {font-size:15px;font-weight:700;line-height:1.25}
+body.cozy-ui .command-copy p {color:#5c7062;font-size:11px;line-height:1.45;margin:5px 0 0;min-height:0}
+.cozy-ui #command-options {grid-column:1/-1;width:100%;max-width:none;gap:7px;justify-content:flex-start}
+.cozy-ui .unit-filter {flex-basis:100%;display:flex;background:#dfdfd0;padding:3px;border-radius:10px;gap:3px}
+.cozy-ui .unit-filter button {flex:1;background:none;border:0;box-shadow:none;min-height:36px;font-size:12px;padding:5px 8px;border-radius:8px}
+.cozy-ui .unit-filter button[aria-pressed=true] {background:#fbf5e8;box-shadow:0 1px 3px #313d2522;color:#916422}
+.cozy-ui .fraction-control {height:38px;border-radius:10px;border-color:var(--edge)}
+.cozy-ui .fraction-control button {box-shadow:none;border:0;border-radius:0;min-width:52px;background:#e8e4d5;color:var(--ink);font-size:12px;padding:0 12px!important}
+.cozy-ui .fraction-control button[aria-pressed=true] {background:#f7ce86;color:#654813}
+.cozy-ui #rally-set {min-height:38px;font-size:11px;background:#f7f0e2;color:#586c5e;border-color:var(--edge);margin-left:auto}
+.cozy-ui #clear {position:absolute;top:8px;right:8px;width:32px;height:32px;min-width:32px;background:none;border:0;box-shadow:none;font-size:23px;color:#687462}
+body.cozy-ui .command-panel .primary {grid-column:1/-1;width:100%;margin:0;min-height:44px;height:auto;padding:10px 16px;font-size:13px}
+.cozy-ui[data-hud=selection] #primary {display:none}
+body.cozy-ui #toast {padding:9px 15px;border:1px solid #cabea7;background:#faf2e2;color:#384e40;border-radius:12px;box-shadow:var(--shadow);font-size:12px;max-width:min(460px,calc(100% - 28px))}
+body.cozy-ui #toast[data-kind=blocked] {color:#8a492e;border-color:#d5a37e}
+.cozy-ui .drag-tip {border-radius:10px;background:#fbf2df;color:#384e40;border-color:#c8b790;box-shadow:var(--shadow)}
+.cozy-ui .drag-tip[data-valid=false] {color:#914a2d}
+.cozy-ui #loading {background:#e8ecdf;color:#415445}.cozy-ui #loading small {color:#71816f}
+.cozy-ui.paused #stage {filter:saturate(.88)}
+/* Real HTML menus sit over the illustration; all controls remain accessible. */
+.cozy-ui #campaign-menu,.cozy-ui #result-dialog {position:fixed;inset:0;margin:0;width:100%;height:100dvh;max-width:none;max-height:none;border:0;border-radius:0;padding:clamp(20px,5vw,80px);background:#b6c6a2 url('../public/ui/home-meadow.png') center/cover no-repeat;box-shadow:none;overflow:auto}
+.cozy-ui #campaign-menu::backdrop,.cozy-ui #result-dialog::backdrop {background:#d5dcc9;backdrop-filter:none}
+.cozy-ui #campaign-menu[open],.cozy-ui #result-dialog[open] {display:flex;align-items:center}
+.cozy-ui .menu-home {width:360px;max-width:100%;padding:28px 26px 20px;text-align:center;flex:none}
+.menu-logo {position:relative;width:66px;height:68px;margin:0 auto 13px;color:#efa942}.menu-logo .ui-icon {width:66px;height:68px;stroke-width:1.3}.menu-logo>span {position:absolute;inset:15px 0 0;font:600 33px/1 'Segoe UI',sans-serif}
+.cozy-ui .menu-home h1 {font:750 32px/1.1 'Segoe UI',sans-serif;letter-spacing:4px;margin:0;color:#253d38}
+.cozy-ui .menu-subtitle {font-size:10px;letter-spacing:4px;color:#75846f;margin:8px 0 0}
+.cozy-ui .menu-welcome {font-size:13px;color:#75816f;margin:18px 0 22px}
+.cozy-ui .menu-home button {display:flex;align-items:center;text-align:left;gap:16px;width:100%;min-height:54px;margin:11px 0 0;padding:12px 17px;font-size:16px;white-space:normal;justify-content:flex-start}
+.cozy-ui .menu-home .campaign-progress {position:static;margin:23px 0 0;font-size:11px;color:#7b8575;letter-spacing:0}
+.menu-caption {position:absolute;bottom:24px;right:35px;color:#fff9e9;font-size:12px;text-shadow:0 1px 5px #283521}
+.cozy-ui #campaign-menu[data-view=missions] {justify-content:center;background-image:linear-gradient(#68765f55,#68765f55),url('../public/ui/home-meadow.png')}
+.mission-picker {width:min(900px,100%);padding:28px;max-height:100%;overflow:auto}
+.picker-header {display:flex;align-items:center;gap:16px;margin-bottom:24px}
+.picker-header small {color:#7f836e;font-size:10px;letter-spacing:2px}
+.cozy-ui .picker-header h2 {font-family:inherit;font-size:30px;font-weight:700;letter-spacing:-.6px;margin:3px 0 0}
+.cozy-ui .icon-button {display:grid;place-items:center;width:44px;height:44px;flex:none;min-height:44px}
+.campaign-dismiss {margin-left:auto;font-size:24px}
+.campaign-cards {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.cozy-ui .campaign-card {overflow:hidden;padding:0;text-align:left;background:#ece9da;border:2px solid transparent;box-shadow:0 2px 4px #53604922;border-radius:14px;min-width:0}
+.cozy-ui .campaign-card.selected {border-color:#dfaa53;box-shadow:0 0 0 2px #f4d49a77}
+.cozy-ui .campaign-card:disabled {opacity:.65;filter:saturate(.6)}
+.campaign-card>img {display:block;width:100%;height:135px;object-fit:cover}
+.campaign-card-caption {padding:13px;display:grid;gap:6px;position:relative}
+.campaign-card-caption strong {font-size:18px;letter-spacing:-.4px}
+.campaign-card-caption small {font-size:10px;font-weight:400;color:#657362}
+.campaign-index {font-size:10px;color:#9c7b44}
+.campaign-card-state {font-size:11px;color:#8e6e35}
+.campaign-briefing {margin:24px 0 18px;padding:16px 18px;background:#e5e8d9;border-radius:12px}
+.campaign-briefing strong {font-size:14px}.cozy-ui .campaign-briefing p {margin:5px 0 0;font-size:13px;color:#596b59}
+.cozy-ui .campaign-launch {margin:0;width:100%;height:52px}
+.cozy-ui .campaign-save,.cozy-ui .campaign-replace {font-size:11px;color:#7b806c;text-align:center;margin:16px 0 0}
+.cozy-ui .campaign-replace {color:#986a39}
+.cozy-ui dialog:not(#campaign-menu):not(#result-dialog) {padding:30px;max-height:calc(100dvh - 28px);overflow:auto}
+.cozy-ui dialog::backdrop {background:#334c3c66;backdrop-filter:blur(7px)}
+.cozy-ui dialog {color:var(--ink)}
+.cozy-ui dialog h2 {font-family:inherit;font-weight:700;letter-spacing:-.8px}
+.cozy-ui dialog p,.cozy-ui dialog li span {color:#61725f}
+.cozy-ui dialog b {color:#415942}
+.cozy-ui .eyebrow {font-size:10px;letter-spacing:1.5px;color:#9a773a}
+.cozy-ui .dialog-close {width:36px;height:36px;background:none!important;box-shadow:none!important;border:0!important}
+.cozy-ui #settings-dialog {width:470px}
+.setting-row {display:flex;align-items:center;gap:20px;border-block:1px solid var(--line);padding:20px 0;margin:24px 0}
+.setting-row>div {flex:1}.setting-row strong,.setting-row small {display:block}.setting-row strong {font-size:14px}.setting-row small {font-size:11px;color:#6c7c69;margin-top:5px}
+.cozy-ui #quality {min-width:96px;min-height:44px;font-size:13px}
+.cozy-ui .settings-help {display:flex;justify-content:space-between;width:100%;padding:14px 18px;min-height:48px;font-size:14px}
+.cozy-ui #production-dialog {width:min(590px,calc(100vw - 24px))}
+.cozy-ui #production-dialog h2 {font-size:30px}
+.cozy-ui .production-balance {border-color:var(--line);background:#e2e6d7;border-radius:12px;padding:13px}
+.cozy-ui .production-balance strong {color:#405f45;font-size:23px}.cozy-ui .production-balance span {color:#536d56}
+.cozy-ui .recruit-options {gap:12px}
+.cozy-ui .unit-card {position:relative;background:#faf3e5;padding:14px;gap:7px;border-color:#d0c3ac;border-radius:14px;align-content:start}
+.cozy-ui .unit-card>[data-robot] {justify-self:center;height:85px}
+.cozy-ui .unit-card b {color:#3f574a;font-size:19px}.cozy-ui .unit-card .unit-role {color:#8c763f;font-size:11px}
+.cozy-ui .unit-card strong {color:#97621c;font-size:13px}.cozy-ui .unit-card small {color:#637764;font-size:11px}
+.cozy-ui .unit-card .unit-benefit {color:#66745f;font-size:11px;font-weight:400}
+.cozy-ui .active-production {background:#e7e8da;padding:14px;border-radius:12px}
+.cozy-ui .active-production button {color:#756644;background:none;box-shadow:none;border:0;font-size:11px}
+.cozy-ui .production-queue button,.cozy-ui .production-toggles button,.cozy-ui .rally-info button {background:#f4ecd9;color:#5b694f;border-color:#c4c5ae;border-radius:9px;min-height:36px;font-size:11px}
+.cozy-ui .production-toggles [aria-pressed=true] {background:#f8dca1;color:#7d5d25}
+.cozy-ui #production-dialog .queue-hint,.cozy-ui .rally-info small {color:#72806b;font-size:11px}
+.cozy-ui #production-message {color:#907039!important}
+.cozy-ui .rally-info {border-color:var(--edge);font-size:12px}
+.rally-help summary {font-size:11px;color:#71816b;cursor:pointer;min-height:24px;line-height:24px}
+.rally-help small {display:block;margin-top:7px}
+.cozy-ui #result-dialog {justify-content:flex-end;text-align:center;isolation:isolate;background-image:none}
+.cozy-ui #result-dialog::before {content:'';position:fixed;inset:0;z-index:-1;background:url('../public/ui/home-meadow.png') center/cover no-repeat;transform:scaleX(-1)}
+.cozy-ui #result-dialog[data-result=defeat]::before {background-image:url('../public/ui/quiet-meadow.png');transform:none}
+.result-card {width:390px;max-width:100%;padding:26px;position:relative;flex:none}
+.cozy-ui .result-sigil {width:90px;height:90px;margin:-63px auto 16px;border-radius:50%;filter:drop-shadow(0 3px 2px #65513444)}
+.cozy-ui #result-dialog[data-result=defeat] .result-sigil {--badge:#acc6cb;filter:grayscale(.65) drop-shadow(0 3px 2px #65513444)}
+.cozy-ui #result-title {font-size:29px;margin:12px 0 4px;letter-spacing:-.8px}
+.cozy-ui #result-label {font-size:9px;letter-spacing:1.2px}
+.cozy-ui #result-greeting {font-size:15px;margin:5px 0;color:#60705c}
+.cozy-ui #result-copy {font-size:12px;line-height:1.5;margin:13px 0 0;color:#78816b}
+.cozy-ui .result-stats {padding:18px 0;margin:18px 0 8px;border-block:1px solid var(--edge);gap:0}
+.result-stats>div {flex:1;display:flex;align-items:center;flex-direction:column;gap:7px}
+.result-stats>div+div {border-left:1px solid var(--edge)}
+.cozy-ui .result-stats strong {font-size:17px;font-weight:600}
+.cozy-ui .result-stats small {font-size:11px;color:#5e705e;letter-spacing:0;margin:0}
+.cozy-ui .result-card button {width:100%;min-height:46px;margin-top:10px;display:flex;align-items:center;justify-content:space-between;padding:10px 17px;font-size:14px}
+.cozy-ui .result-card .text-button {min-height:32px;display:block;background:none;box-shadow:none;border:0;color:#718168;font-size:11px;padding:6px;margin-top:7px}
+@media(max-width:1100px) and (min-width:641px){
+ body.cozy-ui .battle-status {top:92px;left:20px;transform:none;width:224px}
+}
+@media(max-width:640px){
+ body.cozy-ui .topbar {top:max(10px,env(safe-area-inset-top));right:10px;width:96px;height:54px}
+ body.cozy-ui .utility button,body.cozy-ui .utility #pause {width:44px;min-width:44px;height:54px;border-radius:14px}
+ body.cozy-ui .mission {left:10px;top:max(10px,env(safe-area-inset-top));width:calc(100% - 126px)}
+ .cozy-ui .mission summary {min-height:54px;padding:9px 24px 8px 44px}
+ .cozy-ui .mission summary strong {font-size:14px}.cozy-ui .mission summary small {font-size:10px}
+ .mission-art {left:10px;top:13px}.mission-art .ui-icon {width:27px;height:27px}
+ .cozy-ui .mission summary::after {right:10px;top:14px}
+ .cozy-ui .mission-content {max-height:calc(100dvh - 93px);width:300px;padding:18px}
+ body.cozy-ui .economy-readout {top:calc(max(10px,env(safe-area-inset-top)) + 64px);right:10px;left:auto;width:178px;max-width:none;grid-template-columns:18px auto 1fr;padding:7px 9px;gap:1px 4px;min-height:60px;border-radius:14px}
+ .cozy-ui .credit-icon .ui-icon {width:18px;height:18px}
+ body.cozy-ui .economy-readout strong {font-size:14px}
+ .cozy-ui .economy-readout .income-details summary {font-size:10px;line-height:24px}
+ .cozy-ui .economy-readout #production-shortcut {font-size:10px;gap:4px;min-height:24px}
+ #hud-production-progress {width:46px;height:7px}
+ body.cozy-ui .battle-status {left:10px;right:auto;top:calc(max(10px,env(safe-area-inset-top)) + 64px);width:calc(100% - 208px);height:60px;min-width:102px;transform:none;padding:6px 7px;gap:5px;border-radius:14px;flex-wrap:wrap;justify-content:space-between;align-content:center}
+ .cozy-ui .faction small {font-size:7px;display:inline;margin-right:4px;letter-spacing:0}.cozy-ui .faction strong {font-size:17px!important;letter-spacing:0}
+ .cozy-ui .time-status {order:3;width:100%;display:flex;gap:4px;justify-content:center;align-items:center}.cozy-ui .time-status strong {font-size:11px}.cozy-ui .time-status>span {font-size:6px;letter-spacing:0}
+ .cozy-ui .time-status>small,.cozy-ui .territory-track {display:none}
+ body.cozy-ui .map-tools {right:10px;bottom:max(10px,env(safe-area-inset-bottom));padding:3px;gap:2px;border-radius:14px}
+ body.cozy-ui .map-tools button {width:40px;height:40px;min-width:40px;min-height:40px}.cozy-ui .map-tools #camera-view {width:60px}
+ body.cozy-ui .command-panel {left:10px;right:10px;bottom:calc(max(10px,env(safe-area-inset-bottom)) + 57px);width:auto;padding:11px;gap:6px 8px;grid-template-columns:48px 1fr;border-radius:16px}
+ .cozy-ui .command-panel .command-emblem {width:48px;height:54px}.cozy-ui .command-emblem .robot-art {width:54px;height:54px}
+ body.cozy-ui .command-copy strong {font-size:13px}.cozy-ui .command-copy small {font-size:8px}.cozy-ui .command-copy {grid-column:2;padding-right:18px}
+ body.cozy-ui .command-copy p {font-size:10px;line-height:1.35}
+ .cozy-ui .unit-filter button {min-height:36px;font-size:11px}.cozy-ui #command-options {gap:5px}
+ .cozy-ui .fraction-control {height:38px}.cozy-ui .fraction-control button {font-size:11px;min-width:48px}
+ .cozy-ui #rally-set {min-height:38px;font-size:10px;padding:5px 8px}
+ .cozy-ui #clear {width:32px;height:32px}
+ .cozy-ui #campaign-menu,.cozy-ui #result-dialog {padding:22px 18px;background-position:95% center}
+ .cozy-ui #campaign-menu[open] {align-items:flex-end;justify-content:center}
+ .cozy-ui .menu-home {width:320px;padding:23px 22px 17px;margin-bottom:4vh;background:linear-gradient(#fff9eeef,#f2e9d9)}
+ .cozy-ui .menu-home h1 {font-size:28px}.menu-logo {width:54px;height:58px;margin-bottom:10px}.menu-logo .ui-icon {width:54px;height:58px}.menu-logo>span {font-size:27px;top:14px}
+ .cozy-ui .menu-home button {font-size:15px;min-height:50px;padding:10px 14px;gap:13px}
+ .cozy-ui .menu-welcome {font-size:12px;margin:14px 0 18px}.cozy-ui .menu-home .campaign-progress {margin-top:20px;font-size:10px}
+ .menu-caption {display:none}
+ .cozy-ui #campaign-menu[data-view=missions] {align-items:center;padding:12px}
+ .mission-picker {padding:17px;border-radius:18px}.picker-header {gap:12px;margin-bottom:17px}.cozy-ui .picker-header h2 {font-size:24px}.picker-header small {font-size:8px}
+ .campaign-cards {grid-template-columns:1fr;gap:10px}.cozy-ui .campaign-card {display:grid;grid-template-columns:90px 1fr;align-items:center}
+ .campaign-card>img {height:100%;min-height:93px}.campaign-card-caption {padding:10px 12px;gap:4px}.campaign-card-caption strong {font-size:17px}.campaign-index {display:none}.campaign-card-state {font-size:10px}
+ .campaign-briefing {margin:16px 0;padding:12px}.cozy-ui .campaign-briefing p {font-size:11px}.cozy-ui .campaign-save {font-size:10px;margin-top:12px}
+ .cozy-ui dialog:not(#campaign-menu):not(#result-dialog) {padding:25px 18px;border-radius:18px}
+ .cozy-ui #production-dialog h2 {font-size:27px}.cozy-ui .recruit-options {gap:8px}.cozy-ui .unit-card {padding:10px;gap:6px}.cozy-ui .unit-card b {font-size:17px}.cozy-ui .unit-card small {font-size:10px}.cozy-ui .unit-card strong {font-size:11px}
+ .cozy-ui .production-balance {gap:4px}.cozy-ui .production-balance strong {font-size:21px}
+ .cozy-ui #result-dialog[open] {align-items:center;justify-content:center;padding-top:60px}
+ .result-card {padding:22px 18px;background:linear-gradient(#fcf7ebeF,#f0e7d6)}
+ .cozy-ui #result-title {font-size:26px}.cozy-ui #result-copy {font-size:11px}.cozy-ui .result-sigil {width:78px;height:78px;margin:-58px auto 14px}
+ .cozy-ui #settings-title {font-size:25px}.setting-row {gap:12px}.cozy-ui #quality {min-width:85px}
+}
+@media(max-height:550px) and (min-width:641px){
+ body.cozy-ui .topbar {top:12px;right:12px;height:48px;width:96px}
+ body.cozy-ui .utility button,body.cozy-ui .utility #pause {height:48px;width:44px;min-width:44px}
+ body.cozy-ui .mission {top:12px;left:12px;width:184px}.cozy-ui .mission summary {min-height:54px;padding-left:48px}.cozy-ui .mission summary strong {font-size:14px}.mission-art .ui-icon {width:27px;height:27px}
+ body.cozy-ui .economy-readout {top:12px;right:120px;left:auto;width:238px;min-height:54px}
+ body.cozy-ui .battle-status {top:76px;left:12px;width:184px;height:52px;transform:none}
+ body.cozy-ui .command-panel {left:12px;bottom:12px;width:284px;padding:10px;gap:5px}
+ body.cozy-ui .command-copy p {font-size:10px}.cozy-ui .command-copy strong {font-size:13px}
+ body.cozy-ui .map-tools {bottom:12px;right:12px}
+ .cozy-ui .mission-content {max-height:calc(100dvh - 88px)}
+ .cozy-ui #campaign-menu,.cozy-ui #result-dialog {padding:16px 35px;align-items:center}
+ .cozy-ui .menu-home {width:320px;padding:14px 22px}.menu-logo {display:none}.cozy-ui .menu-home h1 {font-size:27px}.cozy-ui .menu-welcome {margin:8px 0 14px}.cozy-ui .menu-home button {min-height:44px;margin-top:8px;font-size:14px}.cozy-ui .menu-home .campaign-progress {margin-top:13px}
+ .mission-picker {padding:18px}.picker-header {margin-bottom:14px}.campaign-card>img {height:80px}.campaign-card-caption {padding:8px 12px;gap:3px}.campaign-briefing {margin:12px 0;padding:10px}.campaign-card-caption strong {font-size:16px}.cozy-ui .campaign-save {margin-top:10px}
+ .result-card {width:370px;padding:15px 22px}.cozy-ui .result-sigil {width:52px;height:52px;margin:0 auto 5px}.cozy-ui #result-title {font-size:25px;margin:4px 0}.cozy-ui #result-greeting {font-size:12px}.cozy-ui #result-copy {font-size:10px;margin-top:5px}.cozy-ui .result-stats {margin:8px 0;padding:8px 0}.result-stats>div {gap:3px}.result-stats .ui-icon {display:none}.cozy-ui .result-card button {min-height:36px;font-size:12px;margin-top:6px;padding:7px 12px}.cozy-ui .result-card .text-button {min-height:24px;font-size:10px;padding:3px}
+ .cozy-ui .result-sigil {position:absolute;left:15px;top:16px;width:40px;height:40px;margin:0}
+ .cozy-ui #result-title {font-size:23px;line-height:1.2}
+ .cozy-ui #result-greeting {margin:4px 0}
+ .cozy-ui #result-dialog #restart.text-button {display:none}
+}

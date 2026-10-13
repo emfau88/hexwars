@@ -2,7 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createMap,corner,cornerHeight,terrainTriangles,surfaceHeight,STEP,neighbors,traversable,isRamp} from '../src/map.js';
 import * as original from '../../hexfront-3d/src/map.js';
-import {transportPose} from '../src/transport.js';
+import {transportPose,structureClearance} from '../src/transport.js';
+import {getMission} from '../src/missions.js';
+import {getMission as originalMission} from '../../hexfront-3d/src/missions.js';
 
 for(const mission of ['morgenwacht','windpass','auenstrom']){
  test(`${mission}: ordinary fields stay level, with unchanged routes and height tiers`,()=>{
@@ -33,5 +35,15 @@ test('river relay has a level landing and pick triangles agree with surface quer
  for(const c of cells)for(const tri of terrainTriangles(cells,c)){
   const average=axis=>tri.reduce((sum,p)=>sum+p[axis]/3,0);
   assert.ok(Math.abs(surfaceHeight(cells,c,average(0),average(2))-average(1))<1e-8);
+ }
+});
+
+test('Morgenwacht removes only the two raised relay props and their flight clearance',()=>{
+ const before=originalMission('morgenwacht').art.ruins,after=getMission('morgenwacht').art.ruins;
+ assert.equal(before.length,4);assert.deepEqual(after,before.slice(2));
+ for(const id of ['windpass','auenstrom'])assert.deepEqual(getMission(id),originalMission(id));
+ for(const [x,z,,ground] of before.slice(0,2)){
+  // With no HQ/relay nearby, a removed prop must not cause a phantom ascent.
+  assert.equal(structureClearance({missionId:'morgenwacht',cells:[]},x,z,ground),0);
  }
 });

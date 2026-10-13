@@ -38,8 +38,8 @@ try{
    const info=await page.locator('.mission-content').boundingBox();assert.ok(info.x>=0&&info.x+info.width<=width&&info.y+info.height<=height);
    await page.keyboard.press('Escape');assert.equal(await page.locator('#mission-info').getAttribute('open'),null);
   }
-  await page.setViewportSize({width:1440,height:900});await page.locator('#camera-view').click();
-  await page.locator('#quality').click();for(let i=0;i<8;i++)await page.locator('#zoom-in').click();
+  await page.setViewportSize({width:1440,height:900});await page.locator('#camera-view').click();await page.screenshot({path:path.join(out,`landscape-${mission}-diorama-1440.png`)});
+  await page.locator('#campaign-open').click();await page.locator('.campaign-settings').click();await page.locator('#quality').click();await page.locator('#settings-done').click();await page.locator('.campaign-resume').click();for(let i=0;i<8;i++)await page.locator('#zoom-in').click();
   await page.mouse.move(400,500);await page.mouse.down({button:'middle'});await page.mouse.move(1100,200,{steps:6});await page.mouse.up({button:'middle'});
   await page.locator('#fit').click();
   const source=await page.evaluate(()=>window.__landscape.game.cells.find(c=>c.owner==='orange'&&c.kind!=='hq').id);
