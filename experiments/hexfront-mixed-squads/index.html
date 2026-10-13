@@ -10,15 +10,18 @@
   <link rel="stylesheet" href="../hexfront-3d/src/campaign.css">
   <script type="importmap">{"imports":{"three":"../hexfront-3d/vendor/three.module.min.js"}}</script>
   <link rel="stylesheet" href="./src/mixed.css">
+  <link rel="stylesheet" href="./src/landscape.css">
 </head>
-<body>
+<body class="landscape-view">
   <header class="topbar">
     <a class="brand" href="./" aria-label="HEXFRONT Start"><svg viewBox="0 0 32 36" aria-hidden="true"><path d="M16 1 31 9.5v17L16 35 1 26.5v-17Z"/><path d="M10 11v14m12-14v14M10 18h12"/></svg><span>HEXFRONT<small>MIXED SQUADS</small></span></a>
     <div class="header-center"><span class="status-dot"></span> MIXED SQUADS <span class="slash">/</span> <span id="operation-index">01</span></div>
     <nav class="utility" aria-label="Spieloptionen"><button id="campaign-open" title="Kampagne öffnen" aria-label="Kampagne öffnen">☰</button><button id="production-open" aria-label="HQ-Produktion öffnen" title="HQ-Produktion">⚙</button><button id="help" title="Spielanleitung" aria-label="Spielanleitung">?</button><button id="quality" title="Grafikqualität ändern" aria-label="Grafikqualität: Hoch">HQ</button><button id="pause" title="Pausieren" aria-label="Pausieren" disabled>Ⅱ</button></nav>
   </header>
   <main>
-    <aside class="mission">
+    <details class="mission" id="mission-info">
+      <summary><strong id="mission-summary">Morgenwacht</strong><small>Mission & Gelände</small></summary>
+      <div class="mission-content">
       <div class="eyebrow"><span class="rule"></span> <span id="mission-index">OPERATION 01</span></div>
       <h1 id="mission-title">Bastion<br><span>Morgenwacht</span></h1>
       <p class="mission-description" id="mission-description">Eine vergessene Festung.<br>Zwei Aufstiege. Eine Entscheidung.</p>
@@ -26,7 +29,9 @@
       <div class="briefing-details"><div><span>GELÄNDE</span><b id="mission-terrain">37 Sektoren · 3 Höhenstufen</b></div><div><span>TAKTIK</span><b id="mission-tactic">Plateau sichern. Kräfte bündeln.</b></div><p id="economy-briefing"></p></div>
       <div class="legend"><div><i class="orange-dot"></i> Deine Truppen</div><div><i class="blue-dot"></i> Gegnerische KI</div><div><i class="hollow-dot"></i> Freie Gebiete · Relais bewacht</div><div>Zahl im Feld = Kampfwert</div></div>
       <div class="coordinate" id="mission-coordinate">SEKTOR 07 / 48° N<br><span>FELSENFESTUNG · FRÜHER MORGEN</span></div>
-    </aside>
+      <p class="landscape-note">Umrandete Hexfelder sind spielbar. Das Umland gehört zur Landschaft.</p>
+      </div>
+    </details>
     <section class="battle-status" aria-label="Aktueller Spielstand">
       <div class="faction orange"><span class="faction-mark">I</span><div><small>ORANGE <span>DU</span></small><strong id="orange-strength">50</strong><em>ROBOTER</em></div></div>
       <div class="time-status"><span id="phase">BEREIT</span><strong id="timer">00:00</strong><div class="territory-track"><i id="orange-territory"></i><i id="blue-territory"></i></div><small id="field-count">3 : 3 SEKTOREN</small></div>

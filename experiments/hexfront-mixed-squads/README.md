@@ -24,10 +24,13 @@ The build copies its read-only dependencies into **this variant's own `dist/`** 
 
 `npm run test:readability` checks the empty opening map, selection reset, HQ deployment, income breakdown, mobile unit cards, camera alignment on all maps, and simultaneous battles with both mech muzzle origins on the measured gun arm.
 
+`npm run test:landscape` checks all three maps at desktop, narrow phone and landscape viewports: full-screen terrain coverage, complete playable-field framing, centered HQ, non-playable scenery, expandable briefing and camera controls.
+
 ## Play
 
 - Capture the blue HQ. All three existing maps are available through sequential campaign unlocks.
 - Ordinary neutral fields start empty and are captured on arrival without a fight. The relay retains its neutral guards. Empty fields have no number; rally flags remain visible. Each map is framed with your HQ at the bottom center and the enemy HQ above it.
+- The landscape fills the viewport: rocky meadows around Morgenwacht, an extended valley around Windpass, and a continuous river through Auenstrom. Only outlined hexes are playable. Mission information opens from the compact top-left briefing. Camera fitting reserves space for the actual HUD; decorative surroundings do not shrink the battlefield or receive orders.
 - Connected territory earns credits: HQ **2/s**, other connected sectors **0.9/s** each, connected relay **+20%**. Disconnected sectors give no income.
 - Click the live **Cr/s Einkommen** readout for the HQ contribution, connected-field contribution, relay bonus, total and disconnected fields. The same breakdown appears in production. This is gross income; paid production orders deduct credits separately.
 - The HQ starts a repeating **drone → drone → mech** production sequence. Open **HQ-Produktion** or **⚙** to add/remove orders, toggle repetition, pause production or refund the active order. Opening this planning panel pauses the match.
@@ -43,6 +46,6 @@ The campaign uses `hexfront.mixed-squads.campaign.v1` and a separate history-sta
 
 ## Deliberate limits
 
-No mech rig, skeletal animation, foot placement or replacement model files. The existing mech moves as a rigid model following the ramp surface. Fire, recoil, impact and disappearance effects provide feedback. No new buildings, unit types, special abilities or maps. The diorama boundary and surrounding landscape are retained; a fullscreen landscape is only a discussed future option.
+No mech rig, skeletal animation, foot placement or replacement model files. The existing mech moves as a rigid model following the ramp surface. Fire, recoil, impact and disappearance effects provide feedback. No new buildings, unit types, special abilities or maps. The extended landscape is static decoration using existing materials and meshes; map navigation, field count and balancing stay unchanged.
 
 The AI follows the same credits, production, movement and damage rules as the player. Automated match outcomes provide regression evidence, not a guarantee of human balance. Browser checks cover desktop and emulated touch layouts; they are not physical-phone FPS measurements.

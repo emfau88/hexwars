@@ -27,8 +27,8 @@ export class Diorama {
     const ownHQ=game.cells.find(c=>c.hq==='orange'),enemyHQ=game.cells.find(c=>c.hq==='blue');
     this.azimuth=Math.atan2(ownHQ.x-enemyHQ.x,ownHQ.z-enemyHQ.z);
     matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change',e=>{this.reduced=e.matches;if(this.reduced)this.droneGhosts=[];});
-    this.scene=new T.Scene();this.scene.background=new T.Color(0x192321);this.scene.fog=new T.Fog(0x192321,28,63);
-    this.camera=new T.OrthographicCamera(-10,10,10,-10,.1,100);
+    this.scene=new T.Scene();this.scene.background=new T.Color(0x9aa18b);this.scene.fog=new T.Fog(0x9aa18b,60,130);
+    this.camera=new T.OrthographicCamera(-10,10,10,-10,.1,180);
     this.renderer=new T.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});
     this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.08;container.append(this.renderer.domElement);
     this.renderer.domElement.setAttribute('aria-label','Dreidimensionales Schlachtfeld. Ziehe eine orange Garnison zum Ziel und lasse los. Alternativ Quelle und Ziel antippen.');
@@ -67,6 +67,7 @@ export class Diorama {
     this.static.updateMatrixWorld(true);const points=[],tacticalPoints=[],v=new T.Vector3();this.occluders=[];
     this.static.traverse(o=>{
       if(!o.isMesh||o.material.isShadowMaterial||o.material===this.contact)return;
+      let decoration=o;while(decoration){if(decoration.userData.landscape)return;decoration=decoration.parent;}
       let owner=o;while(owner&&!Object.hasOwn(owner.userData,'pickCell'))owner=owner.parent;
       const attr=o.geometry.attributes.position;for(let i=0;i<attr.count;i++){v.fromBufferAttribute(attr,i).applyMatrix4(o.matrixWorld);points.push(v.x,v.y,v.z);if(owner?.userData.pickCell||this.cellAt(v.x,v.z))tacticalPoints.push(v.x,v.y,v.z);}
       const materials=Array.isArray(o.material)?o.material:[o.material];if(materials.some(m=>m.transparent||m.alphaTest))return;
@@ -119,7 +120,17 @@ export class Diorama {
       const hq=this.game.cells.find(c=>c.hq==='orange'),u=hq.x*basis.right[0]+hq.z*basis.right[2],radius=Math.max(u-bounds.minU,bounds.maxU-u);
       bounds.minU=u-radius;bounds.maxU=u+radius;this.boundsCache.set(key,bounds);
     }
-    const f=frameBattlefield(bounds,w,h,this.zoom,this.viewPan);this.framing=f;this.projectedWorldBounds=bounds;this.viewPan={u:f.u,v:f.v};
+    // Render edge to edge, but fit the playable terrain between the actual HUD
+    // rectangles. Expanding a briefing must not move the map underneath it.
+    const hud=[...document.querySelectorAll('.topbar,.battle-status,.map-tools,.economy-readout,.mission > summary')];
+    const landscapePhone=w>640&&h<=550;
+    const top=landscapePhone?document.querySelector('.topbar').getBoundingClientRect().bottom+10:Math.max(0,...hud.map(el=>el.getBoundingClientRect().bottom))+10;
+    const bottom=landscapePhone&&document.body.dataset.hud==='idle'?h-12:document.querySelector('.command-panel').getBoundingClientRect().top-20;
+    const margin=landscapePhone?218:12,safe={left:margin,right:w-margin,top,bottom:Math.max(top+60,bottom)};
+    const f=frameBattlefield(bounds,safe.right-safe.left,safe.bottom-safe.top,this.zoom,this.viewPan);
+    f.centerV+=((safe.top+safe.bottom)/2-h/2)/f.scale;
+    f.halfW=w/(2*f.scale);f.halfH=h/(2*f.scale);
+    this.safeFrame=safe;this.framing=f;this.projectedWorldBounds=bounds;this.viewPan={u:f.u,v:f.v};
     this.camera.position.fromArray(basis.out).multiplyScalar(30);this.camera.lookAt(0,0,0);
     this.camera.left=f.centerU-f.halfW;this.camera.right=f.centerU+f.halfW;this.camera.top=f.centerV+f.halfH;this.camera.bottom=f.centerV-f.halfH;this.camera.updateProjectionMatrix();this.camera.updateMatrixWorld();
     this.width=w;this.height=h;
@@ -155,7 +166,7 @@ export class Diorama {
     // frozen. Its new rectangle can cover part of the old canvas: exclude it.
     const hud=document.querySelector('.command-panel').getBoundingClientRect(),safeHeight=Math.min(this.height,hud.top-rect.top-8);
     const labels=[...this.labelPositions].map(([id,p])=>{const face=this.labelsById.get(id).firstElementChild;return {x:p.x-face.offsetWidth/2,y:p.y-face.offsetHeight/2,w:face.offsetWidth,h:face.offsetHeight};});
-    for(const el of document.querySelectorAll('.map-tools,.economy-readout')){const b=el.getBoundingClientRect();labels.push({x:b.x-rect.x,y:b.y-rect.y,w:b.width,h:b.height});}
+    for(const el of document.querySelectorAll('.topbar,.battle-status,.mission,.map-tools,.economy-readout')){const b=el.getBoundingClientRect();labels.push({x:b.x-rect.x,y:b.y-rect.y,w:b.width,h:b.height});}
     const near={x:T.MathUtils.clamp(this.drag.x-w/2,pad,this.width-w-pad),y:T.MathUtils.clamp(this.drag.y-h-20,pad,safeHeight-h-pad)};
     const candidates=[near];for(const x of [pad,(this.width-w)/2,this.width-w-pad])for(const y of [pad,safeHeight-h-pad])candidates.push({x,y});
     const overlap=p=>labels.reduce((n,b)=>n+Math.max(0,Math.min(p.x+w+3,b.x+b.w)-Math.max(p.x-3,b.x))*Math.max(0,Math.min(p.y+h+3,b.y+b.h)-Math.max(p.y-3,b.y)),0);

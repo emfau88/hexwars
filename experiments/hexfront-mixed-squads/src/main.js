@@ -20,6 +20,7 @@ $('operation-index').textContent=String(mission.index).padStart(2,'0');
 $('mission-index').textContent=`OPERATION ${String(mission.index).padStart(2,'0')}`;
 $('mission-title').replaceChildren(document.createTextNode(mission.id==='morgenwacht'?'Bastion':mission.id==='windpass'?'Schlucht':'Flussland'),document.createElement('br'),Object.assign(document.createElement('span'),{textContent:mission.title}));
 $('mission-description').textContent=mission.subtitle;
+$('mission-summary').textContent=mission.title;
 $('mission-terrain').textContent=`${game.cells.length} Sektoren · 3 Höhenstufen`;
 $('mission-tactic').textContent=mission.id==='morgenwacht'?'Plateau sichern. Kräfte bündeln.':'Flanken nutzen. Nachschub sichern.';
 $('mission-coordinate').textContent=`SEKTOR ${String(mission.index).padStart(2,'0')} / ${mission.subtitle.toUpperCase()}`;
@@ -54,9 +55,11 @@ document.querySelector('.brand').addEventListener('click',e=>{e.preventDefault()
 $('result-campaign').addEventListener('click',openCampaign);
 $('next-mission').addEventListener('click',()=>launchMission(MISSIONS[mission.index]?.id));
 // Reserve the actual command panel height, including wrapped text on phones.
-// ResizeObserver then lets the camera fit its remaining visible canvas.
-const fitHUD=()=>{if(scene?.drag)return;document.querySelector('main').style.setProperty('--battle-bottom',`${Math.ceil(innerHeight-document.querySelector('.command-panel').getBoundingClientRect().top+20)}px`);};
-new ResizeObserver(fitHUD).observe(document.querySelector('.command-panel'));window.addEventListener('resize',()=>{scene?.cancelGesture();fitHUD();});fitHUD();
+// The canvas stays full screen; only its safe framing area changes with the HUD.
+const fitHUD=()=>{if(scene?.drag)return;document.querySelector('main').style.setProperty('--battle-bottom',`${Math.ceil(innerHeight-document.querySelector('.command-panel').getBoundingClientRect().top+20)}px`);scene?.resize();};
+const hudObserver=new ResizeObserver(fitHUD);document.querySelectorAll('.command-panel,.topbar,.battle-status,.map-tools,.economy-readout,.mission > summary').forEach(el=>hudObserver.observe(el));window.addEventListener('resize',()=>{scene?.cancelGesture();fitHUD();});fitHUD();
+document.addEventListener('pointerdown',e=>{for(const details of document.querySelectorAll('.mission[open],.economy-readout details[open]'))if(!details.contains(e.target))details.open=false;});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')$('mission-info').open=false;});
 const time=s=>`${String(Math.floor(s/60)).padStart(2,'0')}:${String(Math.floor(s%60)).padStart(2,'0')}`;
 function toast(text,kind=''){$('toast').dataset.kind=kind;$('toast').textContent=text;$('toast').classList.add('visible');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('visible'),4200);}
 function select(id,blocked){
