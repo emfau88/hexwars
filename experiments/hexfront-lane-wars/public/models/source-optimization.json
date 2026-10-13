@@ -1,0 +1,67 @@
+{
+  "HQ": {
+    "sourceFile": "HQ-clean-source.glb",
+    "sourceSha256": "d4c1fc587b4b30303901f0569947f7571017597e25d065449fe413f448b43771",
+    "sourceTriangles": 93278,
+    "afterCleanup": 90507,
+    "optimizedTriangles": 44540,
+    "reductionPercent": 52.3,
+    "bytes": 3293600,
+    "parts": {
+      "Body": 40912,
+      "Radar": 3056
+    },
+    "scale": 1.5957525658604137,
+    "maxHeight": 1.32,
+    "sourceTexture": "1024x1024 original retained",
+    "blend": "supplied-hq.blend"
+  },
+  "HoverBot": {
+    "sourceSha256": "a16b0547d5b0d0c661dee0ff84e7f614600414ab9b525a0408aede2989d51814",
+    "sourceTriangles": 56428,
+    "afterCleanup": 56428,
+    "optimizedTriangles": 14070,
+    "reductionPercent": 75.1,
+    "bytes": 2570764,
+    "parts": {
+      "Body": 13542
+    },
+    "scale": 1.03947001775909,
+    "maxHeight": 0.7270421720302376,
+    "sourceTexture": "1024x1024 original retained",
+    "blend": "supplied-hoverbot.blend"
+  },
+  "Relay": {
+    "sourceSha256": "7a117376dea184cd8276efbeca8995c048d87610fca43b9fb88aeb3333909974",
+    "sourceTriangles": 48344,
+    "afterCleanup": 48344,
+    "optimizedTriangles": 23204,
+    "reductionPercent": 52.0,
+    "bytes": 3253504,
+    "parts": {
+      "Body": 17004,
+      "Core": 3120,
+      "DishL": 2007,
+      "DishR": 1073
+    },
+    "scale": 1.6226653350591567,
+    "maxHeight": 1.37,
+    "sourceTexture": "1024x1024 original retained",
+    "blend": "supplied-relay.blend"
+  },
+  "Mech": {
+    "sourceSha256": "edadea0dc3b75df0766dac276ab83c8111cd573abe363f0d67da116d59ea9d0e",
+    "sourceTriangles": 55958,
+    "afterCleanup": 55958,
+    "optimizedTriangles": 23502,
+    "reductionPercent": 58.0,
+    "bytes": 3053920,
+    "parts": {
+      "Body": 23502
+    },
+    "scale": 1.3236213124909788,
+    "maxHeight": 1.1805272807307734,
+    "sourceTexture": "1024x1024 original retained",
+    "blend": "supplied-mech.blend"
+  }
+}

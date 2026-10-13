@@ -1,0 +1,18 @@
+{
+  "name": "hexfront-lane-wars",
+  "version": "0.1.5",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "build": "node scripts/build.mjs",
+    "preview": "node scripts/serve.mjs --production",
+    "test": "node --test tests/*.test.mjs",
+    "balance": "node scripts/balance.mjs",
+    "test:browser": "node tests/browser.mjs",
+    "test:visual": "node tests/visual-browser.mjs",
+    "capture": "node scripts/capture-visual.mjs"
+  },
+  "engines": { "node": ">=20" },
+  "devDependencies": { "@playwright/test": "1.62.1" }
+}

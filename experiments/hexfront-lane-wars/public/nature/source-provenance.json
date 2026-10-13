@@ -1,0 +1,20 @@
+[
+  {
+    "local": "nature/Fern_1.gltf",
+    "repository": "anandin/the-wild-between",
+    "path": "assets/quaternius-nature/Fern_1.gltf",
+    "sourceBlobSha": "2be91c742acf0c19f6b5a5195ac5070e9dbd56b2"
+  },
+  {
+    "local": "nature/Fern_1.bin",
+    "repository": "anandin/the-wild-between",
+    "path": "assets/quaternius-nature/Fern_1.bin",
+    "sourceBlobSha": "8712382dcdcf5a335e0bba000060acf285e918a0"
+  },
+  {
+    "local": "nature/Leaves.png",
+    "repository": "anandin/the-wild-between",
+    "path": "assets/quaternius-nature/Leaves.png",
+    "sourceBlobSha": "4c9072464b9bdaf10798806cadd207d83fe2c321"
+  }
+]

@@ -1,0 +1,113 @@
+# HEXFRONT Lane Wars — GDD v0.2
+
+Stand: 14. Oktober 2026. Ersetzt den Entwurf v0.1 aus dem Chat. Die Grundrichtung ist vom Nutzer freigegeben; Zahlen bleiben Testwerte. Meilenstein 1 ist abgeschlossen. Der aktuelle Folgeauftrag umfasst ausschließlich Meilenstein 1.5, die visuelle Integration (siehe Ergänzung unten).
+
+## Verbindliche Entscheidungen
+
+- Mensch gegen KI, PC-first, eine spätere vollständige 1v1-Partie.
+- Zwei Lanes, vier feste Fabrikplätze pro Fraktion, drei Robotertypen: Drohne, Mech, Fernkämpfer.
+- Fabriken produzieren automatisch. Beide Seiten erhalten gemeinsame Verstärkungswellen alle 15 Sekunden, einschließlich einer ersten Welle bei Spielbeginn.
+- Jeder sichtbare Roboter ist eine eigene Simulationseinheit mit Position, Lebenspunkten, Waffenreichweite, Ziel und Angriffsintervall. Überlebende bleiben mit ihren Restlebenspunkten bestehen.
+- Keine direkte Einheitensteuerung. Bestehende Roboter wechseln ihre Lane nicht.
+- Begrenzter bezahlter Sofortnachschub erscheint am eigenen Stützpunkt und läuft regulär zur Front. Keine Teleportation, keine kostenlosen Truppen.
+- Umrüstung kostet Credits, gilt ab der nächsten Welle und verursacht keine zusätzliche ausgesetzte Welle. Vorhandene Roboter bleiben bestehen und blockieren die neue Produktion nicht.
+- Fabriken werden später echte sichtbare 3D-Gebäude auf den vier Bauplätzen. Jede Fabrikwelle fährt sichtbar aus ihrer Ursprungsfabrik aus. Ausgangswege zur gewählten Lane dürfen keine gegenseitigen Staus erzeugen; ihre Laufzeit zählt zur tatsächlichen Ankunftszeit.
+- Das HQ wird ausschließlich durch erfolgreiche Angriffe zerstört. Keine automatische HQ-Zerstörung, Überlastung, zeitabhängigen Schadensboni oder künstlichen Siegerentscheidungen.
+- Vier bis sieben Minuten sind ein Matchdauer-Ziel, kein Zeitlimit.
+- Keine eigenmächtigen zusätzlichen Gameplay-Systeme. Vorerst keine weiteren Einheiten, Forschung, Kontrollpunkte, frei platzierbaren Gebäude, Spezialfähigkeiten oder Multiplayer.
+
+## Partie und Spieleraktionen (späterer Meilenstein)
+
+In der ruhenden Aufbauansicht werden zwei Startfabriken einschließlich Typ und Lane konfiguriert. Mit Spielbeginn starten die erste Welle und das laufende Einkommen. Der Spieler kann die zwei übrigen Fabrikplätze bebauen, bestehende Fabriken umrüsten, die Lane zukünftiger Wellen ändern, einen Wirtschaftsausbau kaufen oder Sofortnachschub einsetzen. Einheiten kämpfen automatisch. Die Zerstörung eines HQs entscheidet die Partie; gleichzeitige Zerstörung ist ein Unentschieden.
+
+Kostenpflichtige Fabrikaufträge werden beim Vormerken bezahlt und können bis zur Ausführung korrigiert oder vollständig erstattet werden. An der nächsten Wellengrenze werden die vorgemerkten Einstellungen gemeinsam übernommen, danach wird produziert. Befehle nach dieser Grenze betreffen die folgende Welle. Lane-Wechsel sind kostenlos. Die nächste eigene Welle wird je Lane sichtbar zusammengefasst. Vorgemerkte gegnerische Befehle bleiben verborgen.
+
+## Wirtschaft: ausdrücklich noch nicht festgelegt
+
+| Größe | Referenz / Testkandidat |
+|---|---:|
+| Startkapital; zwei Startfabriken | 200 Credits; je 100 |
+| Zusätzliche Fabrik | 100 Credits |
+| Grundeinkommen | 2 Credits/s |
+| Umrüstung | 30 Credits |
+| Lane-Wechsel | kostenlos |
+| Sofortnachschub | 60 Credits |
+| Wirtschaftsausbau v0.1, kritisch zu prüfen | 120 Credits, +1 Credit/s |
+| Einfacher Vergleichskandidat v0.2 | 80 Credits, +1 Credit/s |
+
+Keine Abschussbelohnungen, Gebietseinnahmen, Unterhaltskosten, weiteren Ressourcen oder laufenden Produktionskosten. Einkommen und Fabriken gehen bei verlorenen Gefechten nicht verloren. Der Ausbau ist einmalig. Alle Kosten und Einkommen in dieser Tabelle bleiben offen bis zum späteren Wirtschaftstest.
+
+Die reine Amortisationszeit unterschätzt den Nachteil eines Wirtschaftsausbaus: Zusätzlich fehlen frühe Fabrikwellen. Unter idealisiertem sofortigem Kauf bei ausreichendem Guthaben, ohne Sofortnachschub oder Umrüstung und mit zwei Startfabriken ergibt sich:
+
+| Aufbaufolge | Wirtschaft gekauft | Dritte Fabrik produziert erstmals | Vierte Fabrik produziert erstmals | Fehlende Fabrikverbände gegenüber direktem Ausbau | Finanzieller Gleichstand gegenüber direktem Ausbau |
+|---|---:|---:|---:|---:|---:|
+| Fabriken zuerst | — | 1:00 | 1:45 | 0 | — |
+| Wirtschaft für 120, +1/s | 1:00 | 1:45 | 2:15 | 5 | 3:00 |
+| Wirtschaft für 80, +1/s | 0:40 | 1:15 | 2:00 | 2 | 2:00 |
+
+Bei Minute fünf beträgt der zusätzliche Kreditbestand gegenüber direktem Ausbau beim alten Entwurf 120, beim neuen Kandidaten 180 Credits. Das entspricht nominal zwei beziehungsweise drei Soforttrupps, ersetzt aber weder deren andere Ankunftszeit noch bereits verlorene Fronten. Der 120er-Ausbau ist deshalb als Startempfehlung zu schwach begründet. 80/+1 ist ein zu prüfender Kandidat, kein bewiesenes Gleichgewicht.
+
+Der spätere Wirtschaftstest muss direkte Expansion und frühe Wirtschaft gegen Druck, defensiven Aufbau und adaptive Gegner vergleichen. Erfasst werden nicht nur Guthaben, sondern ausgefallene Produktionswellen, HQ-Schaden, Siege, Matchdauer und Comebacks. Der Fabrikausbau darf nicht stets die beste Eröffnung sein; Wirtschaft darf ebenso wenig ein Pflichtkauf sein. Im Kampflabor wird keine Wirtschaft implementiert.
+
+## Fabriken und Sofortnachschub (später)
+
+Eine Drohnenfabrik erzeugt drei Drohnen, eine Mechfabrik einen Mech und eine Fernkampffabrik einen Fernkämpfer je Welle. Alle Typen stehen von Anfang an zur Verfügung. Vier Plätze begrenzen dauerhafte Produktion, nicht die Lebensdauer existierender Roboter.
+
+Sofortnachschub liefert für 60 Credits einen dieser drei Verbände auf die gewählte Lane. Eine eigene Abklingzeit von 15 Sekunden ab Einsatz verhindert Doppelkäufe am Wellenwechsel und erlaubt höchstens einen Einsatz innerhalb eines Wellenintervalls. Es gibt keine angesparten Ladungen oder automatische Wiederholung. Alle drei Typen sind unabhängig vom Fabrikbestand verfügbar. Der spätere Sofortnachschub verwendet einen klar sichtbaren HQ-Ausgang; reguläre Fabrikwellen kommen aus ihren jeweiligen Gebäuden.
+
+## Kampfregeln: Umfang von Meilenstein 1
+
+Die drei Rollen entstehen aus Anzahl, Haltbarkeit, Geschwindigkeit, Reichweite, Feuerintervall und begrenztem Flächenschaden. Keine Typenschadensboni, Rüstung, kritischen Treffer, Heilung, Ausweichwürfe oder versteckten Kampfboni.
+
+- Drohnen: schneller Schwarm gegen ungeschützte Fernkämpfer, empfindlich gegen Mech-Flächenschaden.
+- Mech: robuste Front gegen Drohnen, langsam und gegen konzentrierten Fernkampf verwundbar.
+- Fernkämpfer: hoher Einzelschaden gegen schwere Ziele, lange Feuerpause und schwache eigene Haltbarkeit.
+- Mech plus Fernkampf darf stark sein, muss aber bei vergleichbarer Produktionsinvestition konterbar bleiben. Eine einzelne gewinnende Demonstration beweist noch keine allgemeine Balance.
+
+Die aktuelle ausführbare Wertetabelle steht in `../src/rules.js`; reproduzierbare Vergleiche stehen nach Abschluss in `RESULTS.md`. Änderungen bleiben innerhalb der genannten Eigenschaften und werden dokumentiert.
+
+Einheiten behalten ein lebendes Ziel derselben Lane in Reichweite. Andernfalls wählen sie den nächsten gültigen Gegner in Waffenreichweite. Ohne erreichbaren Gegner rücken sie vor. Gleichstände werden über eine fraktionsunabhängige Formationsreihenfolge aufgelöst. Eigene Einheiten blockieren Schüsse nicht. Einzelschüsse verschwenden Übertreffer; nur der Mech trifft höchstens zwei zusätzliche nahe Ziele. Treffer beider Seiten werden aus demselben Zustand gesammelt und gemeinsam verrechnet.
+
+Die Bewegung verwendet eine feste Längsrichtung je Lane und seitlichen Raum. Verbündete erzeugen keine harten Blockaden. Kurze Waffen können an anhaltenden Fernkämpfern vorbeiziehen. Sanfte Abstandskorrekturen begrenzen Überlagerungen und verwenden dieselben Regeln für beide Fraktionen. Keine Physikengine und keine allgemeine Wegfindung. Gegner werden nicht auf dem Weg durch ihre Front hindurch ignoriert.
+
+Die spätere HQ-Zielwahl muss erreichbare Roboter priorisieren, aber bei deren Abwesenheit ein erreichbares HQ angreifen, auch wenn weit entfernt noch andere Gegner existieren. Das aktuelle Labor enthält noch keinen HQ-Kampf.
+
+## Karte, HQ und KI (später, nicht Bestandteil des Labors)
+
+Eine einzige übersichtliche Karte mit zwei zunächst gleichwertigen Routen, ungefähr 30 Längeneinheiten und 3 Einheiten nutzbarer Breite. Kein Lane-übergreifendes Schießen oder Wechseln. Die gesamte Karte ist sichtbar. Tatsächliche Laufzeiten ab den Fabrikausgängen müssen vor dem Kartenbau geprüft werden; künstliche Ausfahrtschlangen sind zu vermeiden.
+
+HQ-Startwerte bleiben 1.200 HP, keine Heilung, eine gemeinsame Verteidigungswaffe für beide Zufahrten mit 12 Schaden, 0,8 Sekunden Intervall und 5 Reichweite. Noch nicht implementieren. Reichweite, Schaden und Haltbarkeit müssen ein natürliches Ende durch Angriffe ermöglichen; bei Patts zuerst diese Werte, Laufwege und Kampfwerte untersuchen.
+
+Die spätere KI verwendet dieselben Ressourcen, Befehle und Informationen wie der Mensch. Drei einfache Profile (Druck, ausgeglichen, Wirtschaft), verzögerte Wahrnehmung und begrenzte Umrüstfrequenz reichen zunächst. Keine Kenntnis geheimer Aufträge und keine Ressourcenboni.
+
+## Überlebende, Leistung und Patt-Situationen
+
+Vorerst keine Fabrik- oder globale Bevölkerungssperre, die bezahlte Konterproduktion blockiert. Kein automatisches Entfernen alter Roboter. Da das harte Matchende gestrichen wurde, gilt die frühere rechnerische Obergrenze von 840 Robotern ausdrücklich nicht mehr. Für die vollständige Partie müssen Wachstum und Langzeitverhalten gemessen werden. Ein endlos laufendes Produktionsexperiment kann ohne Verluste unbegrenzt wachsen; dies ist ein offener Prüfpunkt, keine heimlich einzuführende Begrenzung.
+
+Das Kampflabor erzeugt nur die einmalig gewählten Verbände. Ein Testzeitbudget beendet lediglich die Messung und meldet einen ungelösten Kampf, niemals einen künstlichen Spielsieg. Browser-Pause und Zeitraffer sind Laborwerkzeuge und keine neuen Spielmechaniken.
+
+## Entwicklungsgrenze und Abnahme von Meilenstein 1 (abgeschlossen)
+
+Jetzt erlaubt: browserunabhängige deterministische Simulation, drei Rollen, Bewegung, Zielauswahl, Reichweite, simultane Treffer, einfache Platzhalter, kleine Browseransicht, reproduzierbare Tests und Ergebnisbericht.
+
+Jetzt nicht vorgesehen: Produktionswellen, Fabrik- oder Wirtschaftslogik, vollständige Karte, Gegner-KI, HQ-Endspiel, aufwendige Menüs, Asset-Konvertierung und umfangreiche grafische Ausarbeitung.
+
+Abnahme: gleiche Regeln und gespiegelte Ergebnisse für beide Fraktionen; keine Verbündeten-Blockade; Fernkämpfer schießen hinter Frontkämpfern; Reichweiten werden eingehalten; Übertreffer und Flächenschadengrenze sind nachvollziehbar; drei Rollen haben nachweisbare Vor- und Nachteile; mindestens ein gleichwertiger Konter gegen Mech plus Fernkampf; Ergebnisse können im Browser mit derselben Simulation betrachtet werden.
+
+Nach dem Kampflabor erfolgt eine Ergebniszusammenfassung. Der nächste Meilenstein benötigt einen neuen Auftrag.
+
+## Freigegebene Ergänzung: Meilenstein 1.5 – Visuelle Integration
+
+Der Folgeauftrag erlaubt die Übertragung der bestehenden M1-Simulation in eine hochwertige, eigenständig startbare Lane-Wars-Darstellung. Wichtigste Stilreferenz ist Mixed Squads; HEXFRONT 3D liefert Originalmodelle und weitere Grafikgrundlagen. Die älteren Varianten und das ursprüngliche main-Spiel bleiben unverändert.
+
+Zwei klar lesbare, organische Wege durch eine durchgehende Wiesenlandschaft verbinden die beiden Basisbereiche. Orange liegt unten, Blau oben. Auf Nutzerwunsch dürfen die Wege länger werden: Die aktuelle Darstellung verwendet zwei gespiegelte Bögen mit jeweils 29,928 Welteinheiten Mittellinienlänge. Die Simulation behält ihre 30 Längeneinheiten. Die Querkoordinate wird zur Lesbarkeit doppelt so breit gezeichnet; Weltabstände sind deshalb keine neue Grundlage der Kampfberechnung. Felsiger Westen, offener Osten und Höhenunterschiede bewirken keine Kampfboni.
+
+Die Spielansicht und die separat erreichbare Laboransicht importieren dieselben Dateien für Kampfregeln und Simulation. `rules.js`, `simulation.js` und die ursprünglichen Laborszenarien sind gegenüber M1 bytegleich. Drei zusätzliche Demonstrationsaufstellungen verwenden auf jeder Lane eine unveränderte Combat-Instanz. Nur ihre Anfangsformation ist großzügiger gestaffelt. Die Demonstration erzeugt einmalig Roboter; es gibt keine automatische Wiederholung oder Produktion.
+
+Original-HQ, Hover-Bot und Mech werden einschließlich Texturen übernommen. Beide Fraktionen verwenden selektive Fraktionsfarben. Der Fernkämpfer bleibt mangels GLB ein ausdrücklich vorläufiger Silhouetten-Platzhalter. Mech-Bewegung ist vorläufige Ganzkörperbewegung, kein vollständiges Lauf-Rig. HQs und leere Bauflächen sind Darstellung ohne Lebenspunkte oder Kampflogik.
+
+Kompaktes HUD in der bestehenden Keramikgestaltung: HQ-Status, Credits/Einkommen/Wellenfeld sowie vier Fabrikkarten als gekennzeichnete, deaktivierte Vorschau. Unimplementierte Werte erscheinen als Striche. Keine Fantasie-Credits, kein laufender Wellen-Countdown. Eigene sichtbare 3D-Fabriken und Roboter-Ausfahrten bleiben ein späterer Auftrag.
+
+Nicht freigegeben: Wirtschaft, Produktionswellen, Fabriksteuerung, Sofortnachschub, Forschung, neue Einheitentypen, zusätzliche funktionale Gebäude, vollständiges HQ-Endspiel, Kampagnen oder Multiplayer. Ruinen und technische Requisiten sind ausschließlich Dekoration.
+
+Abnahmebelege: echte Laufzeit-Screenshots für Übersicht, Kampf, Modelle, HUD und Mixed-Squads-Vergleich; kritische Sichtprüfung; weiter bestehende M1-Tests; identische Browser-/Headless-Ergebnisse. Bericht: `VISUAL-INTEGRATION.md`, Bildübersicht: `../review.html`.

@@ -1,0 +1,149 @@
+{
+  "assumptions": "Two starting factories; 2 credits/s, +1 with upgrade; 100 per extra factory; purchases as soon as affordable; no combat, refits or reinforcement purchases. Not a win-rate simulation.",
+  "strategies": [
+    {
+      "name": "factories-first",
+      "upgradeAt": null,
+      "thirdPurchase": 50,
+      "fourthPurchase": 100,
+      "productionAt": [
+        60,
+        105
+      ],
+      "creditBreakEven": null,
+      "milestones": [
+        {
+          "time": 60,
+          "credits": 20,
+          "batches": 11
+        },
+        {
+          "time": 90,
+          "credits": 80,
+          "batches": 17
+        },
+        {
+          "time": 120,
+          "credits": 40,
+          "batches": 25
+        },
+        {
+          "time": 180,
+          "credits": 160,
+          "batches": 41
+        },
+        {
+          "time": 240,
+          "credits": 280,
+          "batches": 57
+        },
+        {
+          "time": 300,
+          "credits": 400,
+          "batches": 73
+        },
+        {
+          "time": 420,
+          "credits": 640,
+          "batches": 105
+        }
+      ]
+    },
+    {
+      "name": "economy-120",
+      "upgradeAt": 60,
+      "thirdPurchase": 93.33333333333334,
+      "fourthPurchase": 126.66666666666667,
+      "productionAt": [
+        105,
+        135
+      ],
+      "creditBreakEven": 180,
+      "milestones": [
+        {
+          "time": 60,
+          "credits": 0,
+          "batches": 10
+        },
+        {
+          "time": 90,
+          "credits": 90,
+          "batches": 14
+        },
+        {
+          "time": 120,
+          "credits": 80,
+          "batches": 20
+        },
+        {
+          "time": 180,
+          "credits": 160,
+          "batches": 36
+        },
+        {
+          "time": 240,
+          "credits": 340,
+          "batches": 52
+        },
+        {
+          "time": 300,
+          "credits": 520,
+          "batches": 68
+        },
+        {
+          "time": 420,
+          "credits": 880,
+          "batches": 100
+        }
+      ]
+    },
+    {
+      "name": "economy-80",
+      "upgradeAt": 40,
+      "thirdPurchase": 73.33333333333334,
+      "fourthPurchase": 106.66666666666667,
+      "productionAt": [
+        75,
+        120
+      ],
+      "creditBreakEven": 120,
+      "milestones": [
+        {
+          "time": 60,
+          "credits": 60,
+          "batches": 10
+        },
+        {
+          "time": 90,
+          "credits": 50,
+          "batches": 16
+        },
+        {
+          "time": 120,
+          "credits": 40,
+          "batches": 23
+        },
+        {
+          "time": 180,
+          "credits": 220,
+          "batches": 39
+        },
+        {
+          "time": 240,
+          "credits": 400,
+          "batches": 55
+        },
+        {
+          "time": 300,
+          "credits": 580,
+          "batches": 71
+        },
+        {
+          "time": 420,
+          "credits": 940,
+          "batches": 103
+        }
+      ]
+    }
+  ]
+}
