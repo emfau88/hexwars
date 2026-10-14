@@ -1,0 +1,47 @@
+{
+  "duration": 29.96,
+  "images": [
+    {
+      "source": "docs/m21-qa/03-first-front.png",
+      "loaded": true
+    },
+    {
+      "source": "docs/m21-qa/08-meadow.png",
+      "loaded": true
+    },
+    {
+      "source": "docs/m21-qa/04-meadow-ghost-arrows.png",
+      "loaded": true
+    },
+    {
+      "source": "docs/m21-qa/05-refit.png",
+      "loaded": true
+    },
+    {
+      "source": "docs/m21-qa/06-supply-drag.png",
+      "loaded": true
+    },
+    {
+      "source": "docs/m21-qa/07-supply-sent.png",
+      "loaded": true
+    },
+    {
+      "source": "docs/m21-qa/09-mobile-meadow.png",
+      "loaded": true
+    },
+    {
+      "source": "docs/m21-qa/10-mobile-first.png",
+      "loaded": true
+    },
+    {
+      "source": "docs/m21-qa/result-first-orange.png",
+      "loaded": true
+    },
+    {
+      "source": "docs/m21-qa/result-meadow-blue.png",
+      "loaded": true
+    }
+  ],
+  "errors": [],
+  "playback": true
+}

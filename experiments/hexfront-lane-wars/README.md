@@ -1,62 +1,54 @@
-# HEXFRONT Lane Wars · Meilenstein 2
+# HEXFRONT Lane Wars · Meilenstein 2.1
 
-Vollständige 1v1-Partie Mensch gegen KI auf der erhaltenen M1.5-Diorama-Karte: zwei Lanes, vier Fabrikplätze, drei Robotertypen, Wirtschaft, gemeinsame 15-Sekunden-Wellen und echte HQ-Zerstörung. Der M1-Kampfkern bleibt bytegleich.
+Eine spielbare Kampagne Mensch gegen KI mit **Erste Front** (eine Lane) und **Wiesenkrieg** (zwei Lanes). Die vorhandenen HEXFRONT-Modelle, Diorama-Materialien und das Keramik-HUD bleiben erhalten.
 
 ## Spielen
-
-Im Verzeichnis `experiments/hexfront-lane-wars`:
 
 ```powershell
 node scripts/serve.mjs
 ```
 
-**[Partie öffnen](http://127.0.0.1:4181/)** · [Kampflabor](http://127.0.0.1:4181/lab.html) · [Erhaltene M1.5-Demo](http://127.0.0.1:4181/m15.html)
+**[Kampagne lokal spielen](http://127.0.0.1:4181/)** · [Bilder und Nachschubdemo](http://127.0.0.1:4181/m21-review.html) · [Kampflabor](http://127.0.0.1:4181/lab.html) · [M1.5-Demo](http://127.0.0.1:4181/m15.html)
 
-Der lokale Link benötigt den laufenden Server. Node.js ab Version 20 genügt; das Spiel lädt Modelle und Bibliotheken lokal, ohne npm-Installation oder CDN. `PORT` ändert bei Bedarf den Port. Der statische Build funktioniert auch auf einem beliebigen HTTP-Host.
+Der lokale Server wird benötigt. Node.js ab Version 20 genügt; sämtliche Spielressourcen liegen im Experiment, ohne CDN oder Abhängigkeit von anderen HEXFRONT-Varianten.
 
-[Ergebnisse, Matchprotokolle, bekannte Schwächen und Screenshots](docs/MILESTONE-2.md) · [GDD v0.2 mit freigegebener M2-Ergänzung](docs/GDD.md)
-
-Die bisherige [öffentliche M1.5-Vorschau](https://rawcdn.githack.com/emfau88/hexwars/c038ffed9718192a7249ec8764951d3f5d3293c2/experiments/hexfront-lane-wars/index.html) zeigt ausdrücklich noch keine vollständige M2-Partie. M2 wurde lokal getestet; ein öffentlicher M2-Playlink ist nicht verifiziert.
+**Kampagne starten** beginnt sofort mit einer Drohnenfabrik. Ein Sieg in Erste Front schaltet Wiesenkrieg frei. Eigene Spielstände je Mission und Fortschritt bleiben lokal im Browser unter `hexfront-lane-wars-campaign-v1` erhalten. **Neu** ersetzt nach Bestätigung nur den gewählten Missionsspielstand.
 
 ## Bedienung
 
-1. Die beiden Startfabriken über ihre Karten konfigurieren, ein KI-Profil wählen und **Partie starten**.
-2. Credits werden automatisch verdient. Die vier Fabrikkarten öffnen Bau, Umrüstung und Lane-Zuweisung. Vorgemerkte Aufträge sind bis zur nächsten Welle korrigierbar oder gegen volle Erstattung stornierbar.
-3. **Wirtschaft** erhöht das Einkommen einmalig. **Sofortnachschub** liefert gegen Credits einen Verband vom HQ-Ausgang; die Abklingzeit beträgt 15 Sekunden.
-4. **Gegnerfabriken** zeigt die tatsächlich gebauten gegnerischen Fabriken. Eigene zukünftige Wellen werden je Lane angezeigt.
-5. Ein zerstörtes HQ entscheidet die Partie. Die Ergebnisansicht erlaubt eine neue Partie.
+- **Fabrikkarte:** Typ bauen oder umrüsten. Neubauten erscheinen sofort transparent. Aufträge gelten ab der nächsten 15-Sekunden-Welle und sind bis dahin korrigierbar/stornierbar.
+- **← WEST / OST →:** am Gebäude oder in der Karte kostenlos die nächste Produktionsrichtung wechseln. Bestehende Roboter behalten ihre Lane.
+- **Nachschub:** Robotersymbol auf einen Weg ziehen; alternativ Typ antippen und anschließend Straße oder Frontanzeige antippen. In Erste Front genügt der Typ. 60 Credits, 15 Sekunden Abklingzeit, tatsächlicher Start am eigenen HQ.
+- **Wirtschaft:** einmalig 80 Credits für dauerhaft +1 Credit/s. Fabriken produzieren ohne weitere Bestellungen.
+- **Menü / Leertaste:** pausieren bzw. fortsetzen. Tabwechsel pausiert ebenfalls. Keine Offline-Produktion.
+- **Kamera:** Plus/Minus oder Mausrad zoomt; Ziehen verschiebt; ⌖ zeigt die Übersicht. Diorama/Taktik und Modellbewegung stehen in den Einstellungen.
+- **Roboter anklicken:** echte Lebenspunkte und Reichweite ansehen.
 
-Fabriken produzieren selbstständig, ohne wiederholte Bestellungen. Umrüstung und Lane-Wechsel gelten für zukünftige Wellen; vorhandene Roboter bleiben bestehen. Einheiten kämpfen automatisch. Es gibt keinen künstlichen Endtimer.
+Das gegnerische HQ muss durch Angriffe zerstört werden. Kein künstliches Zeitlimit. [GDD mit freigegebener M2.1-Ergänzung](docs/GDD.md) · **[Ergebnisse, Teststatus und offene Schwächen](docs/MILESTONE-2.1.md)**.
 
-Leertaste startet/pausiert; Tabwechsel pausiert. Mausrad oder Plus/Minus zoomt, Ziehen verschiebt die Kamera. Fadenkreuz oder Escape zeigt die Übersicht, der Kameraschalter wechselt zwischen Diorama und Taktik. Roboter anklicken zeigt ihre echten Lebenspunkte.
-
-## Prüfen und bauen
+## Prüfen
 
 ```powershell
 npm test
-npm run audit:matches
-npm run audit:economy
-npm run audit:late
-npm run build
+npm run audit:campaign
+npm run audit:campaign-late
+npm run test:match
 npm run test:browser
 npm run test:visual
-npm run test:match
+npm run test:exits
+npm run build
 ```
 
-Die ersten vier Befehle benötigen keinen Browser. Für Browserprüfungen einmalig `npm ci` und gegebenenfalls `npx playwright install chromium`; außerdem muss der Server laufen. `build` erstellt `dist/`. Mit laufendem Entwicklungsserver ist der statische Build unter [localhost /dist/](http://127.0.0.1:4181/dist/) erreichbar. `npm run preview` startet stattdessen einen Server direkt für den Build.
+Die ersten drei Befehle benötigen keinen Browser. Für Browsertests einmalig `npm ci` und gegebenenfalls `npx playwright install chromium`; der lokale Server muss laufen. `build` erzeugt einen eigenständigen statischen Build in `dist/`. Er ist über [localhost /dist/](http://127.0.0.1:4181/dist/) prüfbar. Browsertests lassen sich mit `MATCH_URL` auf diesen Build richten.
 
-Die Match-Browserprüfung kann mit `$env:MATCH_URL='http://127.0.0.1:4181/dist/'` gegen den statischen Build laufen. Sie spielt vier vollständige Partien mit beschleunigter Testuhr, prüft echte UI-Befehle, Neustart und Browser-/Headless-Gleichheit. Sie ersetzt keine menschlichen Balance- oder Hardwaretests.
+`window.__LANE_MATCH__` liefert Zustandskopien und Diagnosen. Nur `?qa=1` aktiviert die beschleunigte Teststeuerung mit derselben Simulation.
 
-## Struktur und Grenzen
+## Entwicklungsstand
 
-- `src/match.js`: Ressourcen, Aufträge, Wellen, Ausfahrten und HQ-Endspiel.
-- `src/match-ai.js`: dieselben legalen Befehle, verzögerte öffentliche Wahrnehmung, drei Profile.
-- `src/match-layout.js`, `factory-view.js`, `match-view.js`: reale Ausfahrtszeit, 3D-Fabriken und erhaltene Diorama-Darstellung.
-- `src/match-main.js`, `match.css`: bedienbares Keramik-HUD.
-- `src/simulation.js`, `rules.js`, `scenarios.js`: unveränderter M1-Kern, durch SHA-256 abgesichert.
-- `lab.html`: separates Kampflabor. `m15.html`: erhaltene M1.5-Demo.
-- Git-Tag `codex/lane-wars-m1.5`: Sicherung vor M2 bei `3b58f63`.
+- Sicherung vor M2.1: `1a40373`, Tag `codex/lane-wars-pre-m2.1`.
+- M1-Kampfkern und Roboterwerte bleiben unverändert. Missions-HQ-Werte und KI-Taktung sind im Ergebnisbericht dokumentiert.
+- Gleiche Ausfahrtszeit je Typ unabhängig von Fabrikplatz, Lane oder Fraktion.
+- Lange Patts bleiben bei bestimmten starren Produktionsplänen möglich. Der Fernkämpfer ist weiterhin ein Platzhalter, der Mech besitzt kein artikuliertes Lauf-Rig.
+- Die [öffentliche M1.5-Vorschau](https://rawcdn.githack.com/emfau88/hexwars/c038ffed9718192a7249ec8764951d3f5d3293c2/experiments/hexfront-lane-wars/index.html) ist historisch und zeigt die Kampagne nicht. Eine öffentliche M2.1-Veröffentlichung wird erst nach erfolgreichem Push und Prüfung als verfügbar bezeichnet.
 
-`window.__LANE_MATCH__` liefert Zustandskopien und Renderdiagnosen. Nur `?qa=1` aktiviert die deterministische Teststeuerung. Sie verwendet dieselben Simulationsschritte wie die normale Wiedergabe.
-
-Vier bis sieben Minuten bleiben ein Ziel. Nach der [Ausfahrtskorrektur](docs/FACTORY-EXITS.md) enden alle zwölf Strategieproben durch HQ-Zerstörung, acht im Zielbereich. Die alten M2-Messwerte dokumentieren den ursprünglichen Abnahmestand; aktuelle Ankunftszeiten und Wirtschaftsvergleiche stehen im Korrekturbericht. Fernkampf-/Lane-Balance und KI sind noch ausbaufähig. Der Fernkämpfer bleibt der vorhandene Platzhalter; der Mech besitzt weiterhin kein Lauf-Rig. Keine neuen Robotertypen, Gebäudearten, Karten, Forschung oder Multiplayer.
+Historische Berichte: [M2](docs/MILESTONE-2.md), [Fabrikausfahrten](docs/FACTORY-EXITS.md), [M1.5](docs/VISUAL-INTEGRATION.md).

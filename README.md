@@ -1,19 +1,19 @@
 # HEXFRONT
 
-## ▶ Lane Wars – Meilenstein 2
+## ▶ Lane Wars – Meilenstein 2.1
 
-Vollständige Partie **Mensch gegen KI** im Branch `codex/lane-wars`: vier Fabrikplätze, automatische 15-Sekunden-Wellen, Wirtschaft, Umrüstung, Lane-Zuweisung, Sofortnachschub und echte HQ-Zerstörung. Die Diorama-Landschaft und das Keramik-HUD aus M1.5 bleiben erhalten.
+Spielbare Kampagne **Mensch gegen KI** im Branch `codex/lane-wars`: **Erste Front** mit einer Lane und **Wiesenkrieg** mit zwei Fronten. Direkte Gebäudepfeile, transparente Bauvorschauen, Nachschub per Drag/Tap und getrennte lokale Missionsspielstände. Die vorhandene Diorama-Architektur und der M1-Kampfkern bleiben erhalten.
 
 ```powershell
 cd experiments/hexfront-lane-wars
 node scripts/serve.mjs
 ```
 
-**[M2 lokal spielen](http://127.0.0.1:4181/)** · [Lokales Kampflabor](http://127.0.0.1:4181/lab.html) · [Bedienung und Tests](experiments/hexfront-lane-wars/README.md) · [M2-Ergebnisse und Screenshots](experiments/hexfront-lane-wars/docs/MILESTONE-2.md)
+**[Kampagne lokal spielen](http://127.0.0.1:4181/)** · **[Bilder und Nachschubdemo](http://127.0.0.1:4181/m21-review.html)** · [Kampflabor](http://127.0.0.1:4181/lab.html) · [Bedienung und Tests](experiments/hexfront-lane-wars/README.md) · [M2.1-Ergebnisse](experiments/hexfront-lane-wars/docs/MILESTONE-2.1.md)
 
-Die lokalen Links benötigen den laufenden Server. Node.js ab Version 20 genügt; Spiel und Modelle liegen vollständig im Repository. Die beiden Startfabriken konfigurieren und **Partie starten**.
+Die lokalen Links benötigen den laufenden Server. Node.js ab Version 20 genügt. **Kampagne starten** beginnt direkt; ein Sieg in Erste Front schaltet Wiesenkrieg frei.
 
-Die [öffentliche M1.5-Vorschau](https://rawcdn.githack.com/emfau88/hexwars/c038ffed9718192a7249ec8764951d3f5d3293c2/experiments/hexfront-lane-wars/index.html) bleibt auf dem älteren Stand `c038ffe`; sie zeigt vorbereitete Gefechte und enthält M2 noch nicht. Ein öffentlicher M2-Playlink ist bisher nicht verifiziert.
+Die [öffentliche M1.5-Vorschau](https://rawcdn.githack.com/emfau88/hexwars/c038ffed9718192a7249ec8764951d3f5d3293c2/experiments/hexfront-lane-wars/index.html) bleibt historisch und enthält die Kampagne nicht. Ein öffentlicher M2.1-Playlink ist noch nicht verifiziert.
 
 ## Mixed Squads — ältere Variante
 

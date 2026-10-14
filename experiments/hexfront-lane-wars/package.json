@@ -1,6 +1,6 @@
 {
   "name": "hexfront-lane-wars",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -12,11 +12,13 @@
     "test:browser": "node tests/browser.mjs",
     "test:visual": "node tests/visual-browser.mjs",
     "capture": "node scripts/capture-visual.mjs",
-    "test:match": "node tests/match-browser.mjs",
+    "test:match": "node tests/campaign-browser.mjs",
     "audit:matches": "node scripts/match-audit.mjs",
     "audit:economy": "node scripts/match-economy-audit.mjs",
     "audit:late": "node scripts/late-response-audit.mjs",
-    "test:exits": "node tests/exits-browser.mjs"
+    "test:exits": "node tests/exits-browser.mjs",
+    "audit:campaign": "node scripts/campaign-audit.mjs",
+    "audit:campaign-late": "node scripts/campaign-late-audit.mjs"
   },
   "engines": {
     "node": ">=20"

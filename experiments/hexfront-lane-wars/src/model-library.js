@@ -25,8 +25,15 @@ function partsOf(root,{width,height,owner,supplied=true}) {
   });
   return [...groups].map(([source,geos])=>{const geometry=mergeGeometries(geos);geos.forEach(g=>g.dispose());return {geometry,material:supplied?suppliedMaterial(source,owner):source};});
 }
+// Keep immutable source bytes for mission switches; each view owns its parsed GPU resources.
+const modelBytes=new Map();
+async function modelData(name){
+ const url=new URL('../public/models/'+name+'.glb',import.meta.url);
+ if(!modelBytes.has(name))modelBytes.set(name,fetch(url).then(response=>{if(!response.ok)throw Error('Modell '+name+': HTTP '+response.status);return response.arrayBuffer();}).catch(error=>{modelBytes.delete(name);throw error;}));
+ return modelBytes.get(name);
+}
 export async function loadModels() {
-  const loader=new GLTFLoader(),entries=await Promise.all(['hoverbot','mech','hq'].map(async name=>[name,await loader.loadAsync(new URL(`../public/models/${name}.glb`,import.meta.url).href)])),files=Object.fromEntries(entries),library={},metadata={};
+  const loader=new GLTFLoader(),entries=await Promise.all(['hoverbot','mech','hq'].map(async name=>[name,await loader.parseAsync(await modelData(name),new URL('../public/models/',import.meta.url).href)])),files=Object.fromEntries(entries),library={},metadata={};
   for(const [name,gltf] of entries){let meshes=0,skins=0,triangles=0;gltf.scene.traverse(o=>{if(o.isMesh){meshes++;triangles+=(o.geometry.index?.count??o.geometry.attributes.position.count)/3;}if(o.isSkinnedMesh)skins++;});metadata[name]={meshes,skins,animations:gltf.animations.length,triangles};}
   for(const owner of ['orange','blue']) {
     library[owner]={drone:partsOf(files.hoverbot.scene,{width:1.08,owner}),mech:partsOf(files.mech.scene,{height:1.45,owner}),hq:partsOf(files.hq.scene,{width:4.3,owner}),rail:partsOf(railPlaceholder(owner),{height:1.3,owner,supplied:false})};

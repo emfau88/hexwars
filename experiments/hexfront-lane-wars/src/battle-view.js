@@ -11,7 +11,8 @@ const visualPoint=(u,height=0)=>{const p=routePoint(u.lane,u.p,u.x);return new T
 const shortest=(a,b)=>Math.atan2(Math.sin(b-a),Math.cos(b-a));
 
 export class BattleView {
-  constructor(stage,labels,onSelect) {
+  constructor(stage,labels,onSelect,options={}) {
+    this.options=options;
     this.stage=stage;this.labels=labels;this.onSelect=onSelect;this.poses=new Map();this.health=new Map();this.effects=[];this.selected=null;this.zoom=1;this.pan={u:0,v:0};this.mode='diorama';this.elapsed=0;this.pickIds={};this.lastLanes=[];
     this.reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.scene=new T.Scene();this.scene.background=new T.Color(0xadb699);this.scene.fog=new T.Fog(0xadb699,65,130);
@@ -24,9 +25,10 @@ export class BattleView {
     const fill=new T.DirectionalLight(0xd6e3e8,.48);fill.position.set(9,8,-12);this.scene.add(fill);
     this.dummy=new T.Object3D();this.raycaster=new T.Raycaster();
     this.selection=new T.Mesh(new T.RingGeometry(.57,.60,48),new T.MeshBasicMaterial({color:0xf4d493,side:T.DoubleSide,transparent:true,opacity:.85,depthWrite:false}));this.selection.rotation.x=-Math.PI/2;this.selection.visible=false;this.scene.add(this.selection);
-    this.ready=Promise.all([buildLandscape(this.scene),loadModels()]).then(([,models])=>{this.library=models.library;this.assetMetadata=models.metadata;this.batches=makeBatches(this.scene,this.library);this.hqs=['orange','blue'].map(owner=>addHQ(this.scene,this.library[owner].hq,owner));this.resize();});
+    this.ready=Promise.all([buildLandscape(this.scene,options.single),loadModels()]).then(([,models])=>{this.library=models.library;this.assetMetadata=models.metadata;this.batches=makeBatches(this.scene,this.library);this.hqs=['orange','blue'].map(owner=>addHQ(this.scene,this.library[owner].hq,owner));this.resize();});
     this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(stage);this.bind();this.resize();
   }
+  dispose(){this.observer.disconnect();this.reset();const geometries=new Set(),materials=new Set(),textures=new Set();this.scene.traverse(o=>{if(o.geometry)geometries.add(o.geometry);for(const m of (Array.isArray(o.material)?o.material:[o.material]).filter(Boolean)){materials.add(m);for(const v of Object.values(m))if(v?.isTexture)textures.add(v);}});geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());this.renderer.dispose();this.renderer.forceContextLoss();this.renderer.domElement.remove();}
   point(u,height=0) {return visualPoint(u,height);}
   heading(u,lane,game) {
     const p=this.point({...u,lane}),target=game.units.find(v=>v.id===u.target);
@@ -38,8 +40,8 @@ export class BattleView {
     this.stage.parentElement.dataset.closeup=String(this.zoom>1.35);
     const w=this.stage.clientWidth,h=this.stage.clientHeight;if(!w||!h)return;
     const basis=cameraBasis(CAMERA_VIEWS[this.mode],0),points=[];
-    for(const x of [-16,16])for(const z of [-12.4,12.4])for(const y of [0,2.3])points.push(x,y,z);
-    const bounds=projectedBounds(points,basis),top=w<700?134:90,bottom=this.safeBottom??(w<700?148:142);
+    for(const x of (this.options.single?[-10,10]:[-16,16]))for(const z of [-12.4,12.4])for(const y of [0,2.3])points.push(x,y,z);
+    const bounds=projectedBounds(points,basis),top=this.safeTop??(w<700?134:90),bottom=this.safeBottom??(w<700?148:142);
     const frame=frameBattlefield(bounds,w,Math.max(150,h-top-bottom),this.zoom,this.pan,8);this.pan={u:frame.u,v:frame.v};this.frame=frame;
     const centerU=frame.centerU,centerV=frame.centerV+(top-bottom)/(2*frame.scale);
     const target=new T.Vector3(...basis.right).multiplyScalar(centerU).addScaledVector(new T.Vector3(...basis.up),centerV);

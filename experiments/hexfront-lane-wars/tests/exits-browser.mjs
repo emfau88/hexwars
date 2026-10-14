@@ -3,7 +3,7 @@ import fs from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import {chromium} from '@playwright/test';
 const base=process.env.MATCH_URL||'http://127.0.0.1:4181/';
-const output=new URL('../docs/exit-qa/',import.meta.url);await fs.mkdir(output,{recursive:true});
+const output=new URL(process.env.EXITS_QA_OUTPUT||'../docs/m21-qa/exits/',import.meta.url);await fs.mkdir(output,{recursive:true});
 const browser=await chromium.launch({headless:true}),page=await browser.newPage({viewport:{width:1440,height:960}}),errors=[];
 page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});page.on('requestfailed',r=>errors.push(r.url()+': '+r.failure()?.errorText));
 const cases=[];

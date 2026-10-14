@@ -6,10 +6,10 @@ function shellGeometry(w,h,d){
  shape.moveTo(-w/2+radius,-d/2);shape.lineTo(w/2-radius,-d/2);shape.quadraticCurveTo(w/2,-d/2,w/2,-d/2+radius);shape.lineTo(w/2,d/2-radius);shape.quadraticCurveTo(w/2,d/2,w/2-radius,d/2);shape.lineTo(-w/2+radius,d/2);shape.quadraticCurveTo(-w/2,d/2,-w/2,d/2-radius);shape.lineTo(-w/2,-d/2+radius);shape.quadraticCurveTo(-w/2,-d/2,-w/2+radius,-d/2);
  const geometry=new T.ExtrudeGeometry(shape,{depth:h,bevelEnabled:true,bevelSize:Math.min(.035,h*.12),bevelThickness:Math.min(.035,h*.12),bevelSegments:2,steps:1,curveSegments:3});geometry.rotateX(-Math.PI/2);geometry.translate(0,-h/2,0);return geometry;
 }
-export function createFactories(scene) {
+export function createFactories(scene,mission=null) {
   const all={};
-  for(const owner of ['orange','blue'])for(let slot=0;slot<4;slot++){
-    const root=new T.Group(),position=factoryPosition(owner,slot);root.position.set(position.x,.06,position.z);root.rotation.y=owner==='orange'?0:Math.PI;
+  for(const owner of ['orange','blue'])for(let slot=0;slot<(mission?.slots||4);slot++){
+    const root=new T.Group(),position=factoryPosition(owner,slot,mission);root.position.set(position.x,.06,position.z);root.rotation.y=owner==='orange'?0:Math.PI;
     const ceramic=new T.MeshStandardMaterial({color:0xe6e2d2,roughness:.72,metalness:.12});
     const team=new T.MeshStandardMaterial({color:SUPPLIED_TEAMS[owner],roughness:.65,metalness:.22});
     const dark=new T.MeshStandardMaterial({color:0x344541,roughness:.65,metalness:.28});
@@ -30,10 +30,16 @@ export function createFactories(scene) {
 }
 export function updateFactories(items,match){
   for(const item of Object.values(items)){
-    const factory=match.players[item.owner].factories[item.slot];item.root.visible=!!factory;
+    const player=match.players[item.owner],factory=player.factories[item.slot],pending=item.owner==='orange'?player.pending[item.slot]:null;
+    const ghost=!factory&&!!pending;item.root.visible=!!factory||ghost;
+    if(item.ghost!==ghost){item.root.traverse(o=>{if(o.material){o.material.transparent=ghost;o.material.opacity=ghost?.34:1;o.material.depthWrite=!ghost;o.castShadow=!ghost;}});item.ghost=ghost;}
+    if(factory&&!item.wasBuilt)item.activatedAt=item.lastProduction>=0?item.lastProduction:match.time;item.wasBuilt=!!factory;
+    item.root.scale.y=ghost?1:Math.min(1,.85+Math.max(0,match.time-(item.activatedAt||0))*.3);
+    item.root.userData.state=ghost?'planned':pending?'refit':'active';
+    item.roofMark.material.emissive.setHex(pending?0xf0ae35:0x80c4a1);
     const open=Math.max(0,1-(match.time-item.lastProduction)/2);
     item.door.scale.y=1-open*.94;item.door.position.y=.65+open*.34;
     item.roofMark.material.emissiveIntensity=.35+open;
-    item.roofMark.scale.x=factory?.type==='rail'?1.6:1;item.roofMark.scale.z=factory?.type==='mech'?1.5:1;
+    item.roofMark.scale.x=(pending||factory)?.type==='rail'?1.6:1;item.roofMark.scale.z=(pending||factory)?.type==='mech'?1.5:1;
   }
 }

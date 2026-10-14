@@ -1,6 +1,6 @@
 # HEXFRONT Lane Wars — GDD v0.2
 
-Stand: 14. Oktober 2026. Ersetzt den Entwurf v0.1 aus dem Chat. Die Grundrichtung ist vom Nutzer freigegeben; Zahlen bleiben Testwerte. Meilenstein 1 und 1.5 sind abgeschlossen. Der aktuelle Folgeauftrag umfasst Meilenstein 2, die vollständige Partie (siehe freigegebene Ergänzung unten). Die früheren Entwicklungsgrenzen bleiben als historische Meilensteinbeschreibung erhalten.
+Stand: 14. Oktober 2026. Ersetzt den Entwurf v0.1 aus dem Chat. Die Grundrichtung ist vom Nutzer freigegeben; Zahlen bleiben Testwerte. Meilenstein 1 und 1.5 sind abgeschlossen. Der aktuelle Folgeauftrag umfasst Meilenstein 2.1 mit Kampagneneinstieg und direkter Steuerung (siehe freigegebene Ergänzungen unten). Die früheren Entwicklungsgrenzen bleiben als historische Meilensteinbeschreibung erhalten.
 
 ## Verbindliche Entscheidungen
 
@@ -133,3 +133,21 @@ M2 führt keine weiteren Robotertypen, Forschung, Verteidigungsgebäude, Kontrol
 Die sichtbaren Fabrikwege münden nun ohne Umkehr an der vorhandenen Lane außerhalb der äußeren Gebäude, bei Fortschritt 4 beziehungsweise gespiegelt 26. Jede Einheit erreicht dort ihre korrekte Formationsposition; ihre individuelle Weglänge bestimmt die Ausfahrtszeit. Frontausrichtung und Position folgen demselben gekrümmten Weg. Die M1-Kampfregeln, Roboterwerte, Kosten und KI bleiben unverändert.
 
 Damit ändern sich Ankunftszeiten und Begegnungen gegenüber der ursprünglichen M2-Abnahme. Deren Match- und Wirtschaftsbewertung ist historisch; die erneut gemessenen Ergebnisse und offenen Balancefragen stehen in [FACTORY-EXITS.md](FACTORY-EXITS.md).
+
+## Freigegebene Ergänzung: Meilenstein 2.1 – Kampagneneinstieg und direkte Steuerung
+
+Der Folgeauftrag erlaubt vor dem bestehenden Zwei-Lane-Spiel eine neue kompakte Ein-Lane-Mission. Die historischen Beschränkungen früherer Meilensteine auf genau zwei Lanes beziehungsweise keine Kampagne gelten damit nicht für M2.1.
+
+**Level 1 – Erste Front:** eine tatsächlich simulierte Lane, zwei feste Bauplätze je Fraktion, eine vorhandene Drohnenfabrik. Alle drei Typen bleiben verfügbar. **Level 2 – Wiesenkrieg:** die bestehende Zwei-Lane-Karte mit vier Plätzen und zwei Startfabriken, nun symmetrisch links und rechts des HQs. Beide Missionen verwenden dieselbe Match-, Wirtschafts-, Wellen- und Kampfengine.
+
+Fabrikrichtungen werden direkt am Gebäude und an der Karte kostenlos für die nächste Welle umgestellt. Keine automatische 50:50-Verteilung. Neubau zeigt sofort eine transparente 3D-Vorschau; Umrüstung markiert den geplanten Wechsel am bestehenden Gebäude. Kostenreservierung, Korrektur und Erstattung bleiben erhalten. Nachschub verwendet Drag-and-drop oder Typ-zu-Lane-Taps und läuft ausschließlich vom eigenen HQ los; 60 Credits und 15 Sekunden Abklingzeit bleiben bestehen.
+
+Die Ausfahrtszeiten werden missionsweise standardisiert: 4 / Robotergeschwindigkeit in Erste Front, 8 / Robotergeschwindigkeit in Wiesenkrieg. Sie hängen nicht mehr von Bauplatz, Lane, Formationsposition oder Fraktion ab. Die visuellen Bögen führen ohne Umkehr an dieselben Lane-Eintritte bei Fortschritt 4/26; ihr Darstellungstempo passt sich an die einheitliche Ankunftszeit an. Das ersetzt ausdrücklich die unterschiedlichen M2-Ausfahrtszeiten.
+
+Erste Front nutzt für beide Fraktionen 480 HQ-LP und 4 HQ-Schaden, Wiesenkrieg weiterhin 1.200/8. HQ-Intervall 0,8 s, Reichweite 4 und sämtliche M1-Roboterwerte bleiben unverändert. Die Startcredits bezahlen genau die vorhandenen Fabriken (100 bzw. 200). Alle weiteren Wirtschaftswerte entsprechen M2. Ziele: Erste Front ungefähr 2–4 Minuten, Wiesenkrieg ungefähr 4–7 Minuten; ausschließlich echte HQ-Zerstörung beendet die Partie.
+
+KI-Profile werden intern durch die Mission festgelegt. Erste Front reagiert mit 7,5 Sekunden Wahrnehmungs-/Entscheidungsabstand, baut frühestens bei Sekunde 65 die zweite Fabrik und rüstet regulär höchstens alle 60 Sekunden um. Wiesenkrieg verwendet 3,5 Sekunden und 35 Sekunden. Die bisherige konzentrierte Drohnenantwort darf weiterhin alle 15 Sekunden erfolgen. Kosten, Produktion und Kampfregeln sind identisch zum Menschen.
+
+Frontanzeigen beruhen auf Kontaktposition und deren Veränderung, wirklicher HQ-Nähe gegnerischer Einheiten sowie eigenen anrückenden Verstärkungen. Sie sind keine Gewinngarantie. Ein minimalistisches Menü enthält Start/Fortsetzen, Levelwahl und Einstellungen. Ein Sieg in Erste Front schaltet Wiesenkrieg frei. Getrennte lokale Missionsspielstände und explizite Neustartbestätigung verhindern versehentliches Überschreiben. Der neue Speicherschlüssel ist ausschließlich `hexfront-lane-wars-campaign-v1`.
+
+Keine neuen Robotertypen, Forschung, Gebäudearten, Kontrollpunkte oder Multiplayer. Kampflabor und M1.5-Demo bleiben separat. Ergebnisse, Veränderungen und bekannte Grenzen: [MILESTONE-2.1.md](MILESTONE-2.1.md).

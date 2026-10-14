@@ -14,9 +14,10 @@ const errors = [];
 page.on('pageerror', error => errors.push(error.message));
 page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
 page.on('requestfailed', request => errors.push(`${request.url()}: ${request.failure()?.errorText}`));
-await fs.mkdir(new URL('../docs/qa/', import.meta.url), { recursive: true });
+const output=new URL(process.env.LAB_QA_OUTPUT||'../docs/m21-qa/lab/',import.meta.url);
+await fs.mkdir(output,{recursive:true});
 const checks = [];
-const screenshot = name => page.screenshot({ path: fileURLToPath(new URL(`../docs/qa/${name}`, import.meta.url)), fullPage: true });
+const screenshot = name => page.screenshot({ path: fileURLToPath(new URL(name,output)), fullPage: true });
 try {
   await page.goto(url);
   await page.waitForFunction(() => !!window.__COMBAT_LAB__);
@@ -77,6 +78,6 @@ try {
   checks.push('GDD and result report are accessible');
   assert.deepEqual(errors, []);
   const report = { checks, errors, browser: browser.version(), url };
-  await fs.writeFile(new URL('../docs/qa/browser-results.json', import.meta.url), JSON.stringify(report, null, 2));
+  await fs.writeFile(new URL('browser-results.json',output), JSON.stringify(report, null, 2));
   console.log(JSON.stringify(report, null, 2));
 } finally { await browser.close(); }
