@@ -2,6 +2,12 @@
 
 Eigenständige 3D-Vorschau und erhaltenes Kampflabor. Zwei vorbereitete Gefechte nutzen dieselbe browserunabhängige M1-Simulation. Die Originalvarianten und das ursprüngliche Hauptspiel bleiben unverändert.
 
+## Direkt im Browser testen
+
+**[Lane Wars starten](https://rawcdn.githack.com/emfau88/hexwars/c038ffed9718192a7249ec8764951d3f5d3293c2/experiments/hexfront-lane-wars/index.html)** · [Kampflabor](https://rawcdn.githack.com/emfau88/hexwars/c038ffed9718192a7249ec8764951d3f5d3293c2/experiments/hexfront-lane-wars/lab.html) · [Screenshot-Galerie](https://rawcdn.githack.com/emfau88/hexwars/c038ffed9718192a7249ec8764951d3f5d3293c2/experiments/hexfront-lane-wars/review.html)
+
+Öffentliche Vorschau ohne Installation, festgelegt auf `c038ffe` von `codex/lane-wars`. Beim Hinweis des Vorschauhosts **Open the page** wählen und anschließend **Gefechte starten**. Falls die 3D-Ansicht beim Laden der Assets stehen bleibt, können die Gefechte im separat verlinkten Kampflabor geprüft werden. Die unten beschriebenen lokalen Startschritte starten die 3D-Ansicht unabhängig vom Vorschauhost.
+
 ## Start
 
 Im Verzeichnis `experiments/hexfront-lane-wars`:

@@ -1,6 +1,16 @@
 # HEXFRONT
 
-## ▶ JETZT SPIELEN — Mixed Squads (dieser Branch)
+## ▶ JETZT TESTEN — Lane Wars (dieser Branch)
+
+**[Lane Wars im Browser starten](https://rawcdn.githack.com/emfau88/hexwars/c038ffed9718192a7249ec8764951d3f5d3293c2/experiments/hexfront-lane-wars/index.html)**
+
+Vorschau für **`codex/lane-wars`**, Meilenstein 1.5: zwei längere Wege, 3D-Hauptquartiere und Roboter sowie drei auswählbare Gefechtsaufstellungen. Mit **Gefechte starten** läuft die Simulation. Fabriken, Wirtschaft, Wellen und HQ-Kampf sind noch inaktiv; dies sind vorbereitete Testgefechte, noch keine vollständige Partie.
+
+[Technisches Kampflabor](https://rawcdn.githack.com/emfau88/hexwars/c038ffed9718192a7249ec8764951d3f5d3293c2/experiments/hexfront-lane-wars/lab.html) · [Screenshots und Vergleich](https://rawcdn.githack.com/emfau88/hexwars/c038ffed9718192a7249ec8764951d3f5d3293c2/experiments/hexfront-lane-wars/review.html) · [Bedienung und lokale Tests](experiments/hexfront-lane-wars/README.md)
+
+Ohne lokale Installation. Falls der Vorschauhost einen Hinweis zeigt, **Open the page** anklicken. Die Links sind auf den Spielstand `c038ffe` dieses Branches festgelegt; spätere Codeänderungen benötigen einen aktualisierten Vorschau-Link. Falls die 3D-Ansicht beim Laden der Assets stehen bleibt, ist das separat verlinkte Kampflabor der direkte Zugang zu den Testgefechten; die 3D-Ansicht lässt sich auch lokal starten.
+
+## Mixed Squads — ältere Variante
 
 **[Mixed Squads im Browser starten](https://rawcdn.githack.com/emfau88/hexwars/3e514efbe53e463c4e844ddb676ce9da72daaad6/experiments/hexfront-mixed-squads/preview/index.html)**
 
