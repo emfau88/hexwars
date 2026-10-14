@@ -4,17 +4,23 @@ Eine spielbare Kampagne Mensch gegen KI mit **Erste Front** (eine Lane) und **Wi
 
 ## Spielen
 
+**[▶ M2.1 im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/5016cb1caffc011a5dcd4df34f648994e86f724c/experiments/hexfront-lane-wars/index.html)** · **[Screenshots und Nachschubvideo](https://rawcdn.githack.com/emfau88/hexwars/5016cb1caffc011a5dcd4df34f648994e86f724c/experiments/hexfront-lane-wars/m21-review.html)**
+
+Öffentliche Vorschau des Kampagnenstands `5016cb1`, ohne lokalen Server. Falls ein Hinweis erscheint, **Open the page** anklicken.
+
 ```powershell
 node scripts/serve.mjs
 ```
 
 **[Kampagne lokal spielen](http://127.0.0.1:4181/)** · [Bilder und Nachschubdemo](http://127.0.0.1:4181/m21-review.html) · [Kampflabor](http://127.0.0.1:4181/lab.html) · [M1.5-Demo](http://127.0.0.1:4181/m15.html)
 
-Der lokale Server wird benötigt. Node.js ab Version 20 genügt; sämtliche Spielressourcen liegen im Experiment, ohne CDN oder Abhängigkeit von anderen HEXFRONT-Varianten.
+Für die lokalen Links wird der Server benötigt. Node.js ab Version 20 genügt; sämtliche Spielressourcen liegen im Experiment, ohne CDN oder Abhängigkeit von anderen HEXFRONT-Varianten.
 
 **Kampagne starten** beginnt sofort mit einer Drohnenfabrik. Ein Sieg in Erste Front schaltet Wiesenkrieg frei. Eigene Spielstände je Mission und Fortschritt bleiben lokal im Browser unter `hexfront-lane-wars-campaign-v1` erhalten. **Neu** ersetzt nach Bestätigung nur den gewählten Missionsspielstand.
 
 ## Bedienung
+
+**Smartphone:** Die Fabrikverwaltung ist zunächst eingeklappt. **Fabriken & Wirtschaft** öffnet Karten, Ausbau und Kameraknöpfe. Nachschub und Richtungspfeile bleiben direkt erreichbar. **?** zeigt den kurzen Missionshinweis; Antippen einer Frontanzeige zeigt Verstärkungsdetails. [Mobile Korrektur und Bilder](docs/MOBILE-HUD.md).
 
 - **Fabrikkarte:** Typ bauen oder umrüsten. Neubauten erscheinen sofort transparent. Aufträge gelten ab der nächsten 15-Sekunden-Welle und sind bis dahin korrigierbar/stornierbar.
 - **← WEST / OST →:** am Gebäude oder in der Karte kostenlos die nächste Produktionsrichtung wechseln. Bestehende Roboter behalten ihre Lane.
@@ -36,6 +42,7 @@ npm run test:match
 npm run test:browser
 npm run test:visual
 npm run test:exits
+npm run test:mobile
 npm run build
 ```
 
@@ -49,6 +56,6 @@ Die ersten drei Befehle benötigen keinen Browser. Für Browsertests einmalig `n
 - M1-Kampfkern und Roboterwerte bleiben unverändert. Missions-HQ-Werte und KI-Taktung sind im Ergebnisbericht dokumentiert.
 - Gleiche Ausfahrtszeit je Typ unabhängig von Fabrikplatz, Lane oder Fraktion.
 - Lange Patts bleiben bei bestimmten starren Produktionsplänen möglich. Der Fernkämpfer ist weiterhin ein Platzhalter, der Mech besitzt kein artikuliertes Lauf-Rig.
-- Die [öffentliche M1.5-Vorschau](https://rawcdn.githack.com/emfau88/hexwars/c038ffed9718192a7249ec8764951d3f5d3293c2/experiments/hexfront-lane-wars/index.html) ist historisch und zeigt die Kampagne nicht. Eine öffentliche M2.1-Veröffentlichung wird erst nach erfolgreichem Push und Prüfung als verfügbar bezeichnet.
+- Der öffentliche Playlink oben zeigt die M2.1-Kampagne. Die [frühere M1.5-Vorschau](https://rawcdn.githack.com/emfau88/hexwars/c038ffed9718192a7249ec8764951d3f5d3293c2/experiments/hexfront-lane-wars/index.html) bleibt als historischer Stand erhalten.
 
 Historische Berichte: [M2](docs/MILESTONE-2.md), [Fabrikausfahrten](docs/FACTORY-EXITS.md), [M1.5](docs/VISUAL-INTEGRATION.md).

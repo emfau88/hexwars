@@ -27,8 +27,9 @@
  <button id="apply-factory" class="primary"></button><button id="cancel-order" hidden></button><small id="order-help"></small>
 </section>
 <section class="ceramic unit-inspector" id="selection" hidden><button id="close-selection" aria-label="Auswahl schließen">×</button><strong id="selected-name"></strong><p id="selected-details"></p><button id="focus-unit">Näher ansehen</button></section>
-<footer class="command-deck">
- <section class="production" aria-label="Eigene Fabriken"><div class="deck-heading"><strong>DEINE FABRIKEN</strong><small id="reserved"></small></div><div id="factory-cards"></div></section>
+<footer class="command-deck" id="command-deck">
+ <div class="mobile-deck-bar"><button id="toggle-factories" class="ceramic" aria-expanded="false" aria-controls="production-panel"><span>Fabriken &amp; Wirtschaft</span><small id="factory-summary"></small><b aria-hidden="true">⌃</b></button><button id="toggle-hint" class="ceramic" aria-label="Missionshinweis anzeigen" aria-expanded="false" aria-controls="hint">?</button></div>
+ <section class="production" id="production-panel" aria-label="Eigene Fabriken"><div class="deck-heading"><strong>DEINE FABRIKEN</strong><small id="reserved"></small></div><div id="factory-cards"></div></section>
  <div class="deck-bottom">
   <button id="economy" class="ceramic"></button>
   <section class="ceramic supply-tray" aria-label="Sofortnachschub"><div><strong>SOFORTNACHSCHUB · 60</strong><small id="supply-status"></small></div><div id="supply-units"></div></section>

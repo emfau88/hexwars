@@ -1,0 +1,21 @@
+{
+  "url": "https://rawcdn.githack.com/emfau88/hexwars/60aaf1f6b893b3a607040571363c3fd50bb1a6e2/experiments/hexfront-lane-wars/index.html",
+  "runtimeCommit": "60aaf1f6b893b3a607040571363c3fd50bb1a6e2",
+  "checks": [
+    "Public M2.1 menu and single-lane mission load with live 3D resources",
+    "Complete public first mission reaches actual HQ destruction and unlocks second mission",
+    "Public second mission, free building direction and tap supply work"
+  ],
+  "firstResult": {
+    "result": "orange",
+    "time": 182.10000000000002
+  },
+  "errors": [],
+  "gallery": {
+    "url": "https://rawcdn.githack.com/emfau88/hexwars/60aaf1f6b893b3a607040571363c3fd50bb1a6e2/experiments/hexfront-lane-wars/m21-review.html",
+    "images": 10,
+    "videoDuration": 29.96,
+    "playback": true,
+    "errors": []
+  }
+}
