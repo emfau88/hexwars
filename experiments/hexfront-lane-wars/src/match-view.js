@@ -1,15 +1,16 @@
 import * as T from 'three';
 import {BattleView} from './battle-view.js';
 import {createFactories,updateFactories} from './factory-view.js';
-import {exitPoint,baseSign} from './match-layout.js';
+import {exitPose,laneEntry,baseSign} from './match-layout.js';
 import {groundHeight} from './routes.js';
 export class MatchView extends BattleView {
  constructor(stage,labels,onSelect,onFactory){super(stage,labels,onSelect);this.onFactory=onFactory;this.factoryBuildings=createFactories(this.scene);this.factoryLabels=[];this.safeBottom=205;this.resize();}
  point(u,height=0){
    if(u.hq)return new T.Vector3(0,height+.9,baseSign(u.hq)*10.3);
-   if(u.departing){const p=exitPoint(u,this.matchTime||0),spread=u.x*.4;return new T.Vector3(p.x+spread,groundHeight(p.x,p.z)+height,p.z);}
+   if(u.departing){const p=exitPose(u,this.matchTime||0);return new T.Vector3(p.x,groundHeight(p.x,p.z)+height,p.z);}
    return super.point(u,height);
  }
+ heading(u,lane,game){return u.departing?exitPose(u,this.matchTime||0).yaw:super.heading(u,lane,game);}
  pick(e){
    const rect=this.stage.getBoundingClientRect();this.raycaster.setFromCamera(new T.Vector2((e.clientX-rect.left)/rect.width*2-1,1-(e.clientY-rect.top)/rect.height*2),this.camera);
    const hit=this.raycaster.intersectObjects(Object.values(this.factoryBuildings).filter(b=>b.owner==='orange').map(b=>b.root),true)[0];
@@ -25,11 +26,11 @@ export class MatchView extends BattleView {
    this.effect(e,e.lane);
  }
  renderMatch(match,dt=0,draw=true){
-   this.matchTime=match.time;updateFactories(this.factoryBuildings,match);
-   const lanes=match.lanes.map((g,lane)=>({units:[...g.units,...match.transit.filter(u=>u.lane===lane).map(u=>({...u,departing:true,p:u.owner==='orange'?0:30,target:null}))]}));
+   this.matchTime=match.time+Math.max(0,match.remainder||0);updateFactories(this.factoryBuildings,match);
+   const lanes=match.lanes.map((g,lane)=>({units:[...g.units,...match.transit.filter(u=>u.lane===lane).map(u=>({...u,departing:true,p:laneEntry(u.owner),target:null}))]}));
 
    if(this.hqs)for(const [i,hq] of this.hqs.entries()){const owner=i===0?'orange':'blue';const scale=match.players[owner].hq>0?1:.28;if(hq.scale.y!==scale)this.dirty=true;hq.scale.y=scale;hq.position.y=match.players[owner].hq>0?.04:-.25;}
-   super.render(lanes,match.time,dt,draw);
+   super.render(lanes,this.matchTime,dt,draw);
  }
  factoryScreens(){
    return Object.values(this.factoryBuildings).map(f=>{const v=f.root.position.clone().add(new T.Vector3(0,1.9,0)).project(this.camera);return {owner:f.owner,slot:f.slot,visible:f.root.visible,x:(v.x*.5+.5)*this.stage.clientWidth,y:(-.5*v.y+.5)*this.stage.clientHeight};});

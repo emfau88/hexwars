@@ -127,3 +127,9 @@ Die drei KI-Profile verwenden dieselben bezahlten Befehle und öffentliche Sicht
 HUD, Fabrikkarten, HQ-Werte und Countdown zeigen echte Simulationsdaten. Die bestehende Diorama-Landschaft, Originalmodelle und Keramikgestaltung werden erhalten. Sieg, Niederlage, Unentschieden, Pause und Neustart gehören zum vollständigen Ablauf. Es gibt weiterhin keinen künstlichen Endtimer. Das Matchdauerziel bleibt 4–7 Minuten; ungelöste Messläufe gelten als offene Balancepunkte.
 
 M2 führt keine weiteren Robotertypen, Forschung, Verteidigungsgebäude, Kontrollpunkte, Karten oder Multiplayer ein. Der Stand wird ausschließlich im Lane-Wars-Entwicklungsbranch geführt, ohne Merge nach main.
+
+## Ausfahrtskorrektur nach dem M2-Spieltest
+
+Die sichtbaren Fabrikwege münden nun ohne Umkehr an der vorhandenen Lane außerhalb der äußeren Gebäude, bei Fortschritt 4 beziehungsweise gespiegelt 26. Jede Einheit erreicht dort ihre korrekte Formationsposition; ihre individuelle Weglänge bestimmt die Ausfahrtszeit. Frontausrichtung und Position folgen demselben gekrümmten Weg. Die M1-Kampfregeln, Roboterwerte, Kosten und KI bleiben unverändert.
+
+Damit ändern sich Ankunftszeiten und Begegnungen gegenüber der ursprünglichen M2-Abnahme. Deren Match- und Wirtschaftsbewertung ist historisch; die erneut gemessenen Ergebnisse und offenen Balancefragen stehen in [FACTORY-EXITS.md](FACTORY-EXITS.md).

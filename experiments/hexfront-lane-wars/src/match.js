@@ -1,6 +1,6 @@
 import {Combat} from './simulation.js';
 import {STEP,LENGTH,OWNERS,TYPES,UNITS,other,distance} from './rules.js';
-import {exitDuration} from './match-layout.js';
+import {exitDuration,laneEntry} from './match-layout.js';
 
 export const MATCH_RULES=Object.freeze({startCredits:200,factoryCost:100,refitCost:30,income:2,economyCost:80,economyIncome:1,supplyCost:60,supplyCooldown:15,wave:15,hqHP:1200,hqDamage:8,hqInterval:.8,hqRange:4});
 const validConfig=c=>c&&TYPES.includes(c.type)&&(c.lane===0||c.lane===1);
@@ -68,9 +68,10 @@ export class Match {
     this.phase='running';this.produceWave();return true;
   }
   spawn(owner,factory,config) {
-    const duration=exitDuration(owner,factory,config.lane,config.type);
     for(let i=0;i<UNITS[config.type].count;i++){
-      this.transit.push({id:-(++this.serial),owner,factory,type:config.type,lane:config.lane,hp:UNITS[config.type].hp,x:(i-(UNITS[config.type].count-1)/2)*.58,spawnTime:this.time,arrivalTick:this.tick+Math.max(1,Math.ceil(duration/STEP-1e-9)),moving:true});
+      const lateral=(i-(UNITS[config.type].count-1)/2)*.58;
+      const duration=exitDuration(owner,factory,config.lane,config.type,lateral);
+      this.transit.push({id:-(++this.serial),owner,factory,type:config.type,lane:config.lane,hp:UNITS[config.type].hp,x:lateral,spawnTime:this.time,arrivalTick:this.tick+Math.max(1,Math.ceil(duration/STEP-1e-9)),moving:true});
       this.players[owner].metrics.produced++;
     }
     this.events.push({kind:'production',owner,factory,lane:config.lane,type:config.type,time:this.time});
@@ -110,7 +111,7 @@ export class Match {
     const dead=OWNERS.filter(owner=>this.players[owner].hq<=0);
     if(dead.length){this.phase='ended';this.result=dead.length===2?'draw':other(dead[0]);this.record(null,'end',{result:this.result});return;}
     for(const u of this.transit.filter(u=>u.arrivalTick<=this.tick)){
-      const g=this.lanes[u.lane],unit=g.addUnit({type:u.type,owner:u.owner,lane:u.lane,p:u.owner==='orange'?0:LENGTH,x:u.x});unit.factory=u.factory;unit.spawnTime=u.spawnTime;
+      const g=this.lanes[u.lane],unit=g.addUnit({type:u.type,owner:u.owner,lane:u.lane,p:laneEntry(u.owner),x:u.x});unit.factory=u.factory;unit.spawnTime=u.spawnTime;
     }
     this.transit=this.transit.filter(u=>u.arrivalTick>this.tick);
     if(this.tick%Math.round(this.rules.wave/STEP)===0)this.produceWave();

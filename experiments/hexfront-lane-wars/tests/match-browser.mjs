@@ -6,7 +6,7 @@ import {MatchAI,startingFactories} from '../src/match-ai.js';
 const base=process.env.MATCH_URL||'http://127.0.0.1:4181/',browser=await chromium.launch({headless:true});
 let phase='boot';
 const page=await browser.newPage({viewport:{width:1440,height:960}}),errors=[],checks=[];
-const output=new URL(new URL(base).pathname.includes('/dist/')?'../docs/m2-qa/production/':'../docs/m2-qa/',import.meta.url);await fs.mkdir(output,{recursive:true});
+const output=new URL(process.env.MATCH_QA_OUTPUT||(new URL(base).pathname.includes('/dist/')?'../docs/m2-qa/production/':'../docs/m2-qa/'),import.meta.url);await fs.mkdir(output,{recursive:true});
 page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});page.on('requestfailed',r=>{const message=phase+': '+r.url()+': '+r.failure()?.errorText;errors.push(message);console.error(message);});
 const advance=seconds=>page.evaluate(s=>window.__LANE_MATCH_QA__.advance(s),seconds);
 const at=seconds=>page.evaluate(s=>window.__LANE_MATCH_QA__.advance(Math.max(0,s-window.__LANE_MATCH__.snapshot().tick*.05)),seconds);

@@ -1,0 +1,168 @@
+{
+  "url": "http://127.0.0.1:4181/dist/",
+  "browser": "151.0.7922.34",
+  "checks": [
+    "setup configures real factories; first wave exits its origin buildings; HQ models preserved",
+    "economy, build reservation, refund and wave-boundary building construction work through controls",
+    "refit, free lane assignment, paid HQ supply, independent cooldown and enemy production inspection work",
+    "normal playback progresses, pause stops simulation and camera leaves it unchanged",
+    "three complete browser matches reach real HQ destruction and exactly match headless simulation; restart returns to setup",
+    "an unanswered AI attack destroys the player HQ and displays the defeat state",
+    "separate M1 diagnostic lab remains available"
+  ],
+  "matches": [
+    {
+      "profile": "balanced",
+      "result": "orange",
+      "time": 395.55,
+      "waves": 27,
+      "peakUnits": 34,
+      "hq": {
+        "orange": 780,
+        "blue": 0
+      },
+      "metrics": {
+        "orange": {
+          "spent": 1320,
+          "earned": 1146.65,
+          "produced": 108,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 14,
+          "economyAt": 40,
+          "credits": 26.65
+        },
+        "blue": {
+          "spent": 1200,
+          "earned": 1046.65,
+          "produced": 276,
+          "hqDamage": 420,
+          "builds": 2,
+          "refits": 2,
+          "laneChanges": 0,
+          "supplies": 11,
+          "economyAt": 140,
+          "credits": 46.65
+        }
+      },
+      "lateOrders": 28
+    },
+    {
+      "profile": "pressure",
+      "result": "orange",
+      "time": 463.95000000000005,
+      "waves": 31,
+      "peakUnits": 32,
+      "hq": {
+        "orange": 426,
+        "blue": 0
+      },
+      "metrics": {
+        "orange": {
+          "spent": 1500,
+          "earned": 1351.85,
+          "produced": 127,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 17,
+          "economyAt": 40,
+          "credits": 51.85
+        },
+        "blue": {
+          "spent": 1410,
+          "earned": 1251.85,
+          "produced": 360,
+          "hqDamage": 774,
+          "builds": 2,
+          "refits": 1,
+          "laneChanges": 0,
+          "supplies": 15,
+          "economyAt": 140,
+          "credits": 41.85
+        }
+      },
+      "lateOrders": 34
+    },
+    {
+      "profile": "economy",
+      "result": "blue",
+      "time": 178,
+      "waves": 12,
+      "peakUnits": 33,
+      "hq": {
+        "orange": 0,
+        "blue": 935
+      },
+      "metrics": {
+        "orange": {
+          "spent": 660,
+          "earned": 494,
+          "produced": 37,
+          "hqDamage": 265,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 3,
+          "economyAt": 40,
+          "credits": 34
+        },
+        "blue": {
+          "spent": 660,
+          "earned": 494,
+          "produced": 70,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 2,
+          "laneChanges": 0,
+          "supplies": 2,
+          "economyAt": 40,
+          "credits": 34
+        }
+      },
+      "lateOrders": 6
+    },
+    {
+      "profile": "pressure-unanswered",
+      "result": "blue",
+      "time": 190.95000000000002,
+      "waves": 13,
+      "peakUnits": 22,
+      "hq": {
+        "orange": 0,
+        "blue": 1020
+      },
+      "metrics": {
+        "orange": {
+          "spent": 200,
+          "earned": 381.9,
+          "produced": 26,
+          "hqDamage": 180,
+          "builds": 0,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 0,
+          "economyAt": null,
+          "credits": 381.9
+        },
+        "blue": {
+          "spent": 570,
+          "earned": 432.85,
+          "produced": 96,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 1,
+          "laneChanges": 0,
+          "supplies": 1,
+          "economyAt": 140,
+          "credits": 32.85
+        }
+      },
+      "lateOrders": 4
+    }
+  ],
+  "errors": []
+}

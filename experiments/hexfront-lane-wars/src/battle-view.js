@@ -28,6 +28,11 @@ export class BattleView {
     this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(stage);this.bind();this.resize();
   }
   point(u,height=0) {return visualPoint(u,height);}
+  heading(u,lane,game) {
+    const p=this.point({...u,lane}),target=game.units.find(v=>v.id===u.target);
+    const destination=target?this.point({...target,lane}):this.point({...u,lane,p:u.p+(u.owner==='orange'?1:-1)});
+    return Math.atan2(p.x-destination.x,p.z-destination.z);
+  }
   resize() {
     this.dirty=true;
     this.stage.parentElement.dataset.closeup=String(this.zoom>1.35);
@@ -86,10 +91,11 @@ export class BattleView {
     if(!this.batches)return;this.lastLanes=lanes;this.elapsed=seconds;
     const needed=Math.max(1,...['orange','blue'].flatMap(owner=>['drone','mech','rail'].map(type=>lanes.reduce((n,g)=>n+g.units.filter(u=>u.owner===owner&&u.type===type).length,0)))); if(needed>Object.values(this.batches)[0][0].instanceMatrix.count){const capacity=2**Math.ceil(Math.log2(needed));for(const mesh of Object.values(this.batches).flat()){mesh.removeFromParent();mesh.dispose();}this.batches=makeBatches(this.scene,this.library,capacity);} const alive=new Set(),counts={},ids={};for(const id of Object.keys(this.batches)){counts[id]=0;ids[id]=[];}
     for(const [lane,game] of lanes.entries())for(const u of game.units) {
-      const id=key(lane,u.id),p=this.point({...u,lane}),defaultYaw=u.owner==='orange'?0:Math.PI;alive.add(id);
-      let pose=this.poses.get(id);if(!pose){pose={position:p.clone(),yaw:defaultYaw,kick:0,hit:0,unit:u};this.poses.set(id,pose);}pose.unit=u;
-      const target=game.units.find(v=>v.id===u.target),destination=target?this.point({...target,lane}):this.point({...u,lane,p:u.p+(u.owner==='orange'?1:-1)});
-      const yaw=Math.atan2(p.x-destination.x,p.z-destination.z),blend=dt>0?1-Math.exp(-dt*22):1;pose.position.lerp(p,blend);pose.yaw+=shortest(pose.yaw,yaw)*Math.min(1,dt*16||1);
+      const id=key(lane,u.id),p=this.point({...u,lane}),yaw=this.heading(u,lane,game);alive.add(id);
+      let pose=this.poses.get(id);if(!pose){pose={position:p.clone(),yaw,kick:0,hit:0,unit:u};this.poses.set(id,pose);}pose.unit=u;
+      const blend=dt>0?1-Math.exp(-dt*22):1;
+      if(u.departing){pose.position.copy(p);pose.yaw=yaw;}
+      else{pose.position.lerp(p,blend);pose.yaw+=shortest(pose.yaw,yaw)*Math.min(1,dt*16||1);}
       pose.kick=Math.max(0,pose.kick-dt*6);pose.hit=Math.max(0,pose.hit-dt*7);
       const bob=this.reduced?0:Math.sin(seconds*(u.type==='drone'?3.3:9)+u.id*1.7)*(u.type==='drone'?.05:u.moving?.028:0);
       this.dummy.position.copy(pose.position);this.dummy.position.y+=(u.type==='drone'?.28:0)+bob;
@@ -121,7 +127,7 @@ export class BattleView {
       return {left,right,top,bottom,width:right-left,height:bottom-top};
     };
     const projected=[];
-    for(const [id,p] of this.poses){const position=screen(p.position.clone().add(new T.Vector3(0,.65,0))),batch=`${p.unit.owner}-${p.unit.type}`,index=this.pickIds[batch].indexOf(id),matrix=new T.Matrix4();this.batches[batch][0].getMatrixAt(index,matrix);projected.push({id,type:p.unit.type,owner:p.unit.owner,...position,bounds:bounds(this.batches[batch],matrix)});}
+    for(const [id,p] of this.poses){const position=screen(p.position.clone().add(new T.Vector3(0,.65,0))),batch=`${p.unit.owner}-${p.unit.type}`,index=this.pickIds[batch].indexOf(id),matrix=new T.Matrix4();this.batches[batch][0].getMatrixAt(index,matrix);projected.push({id,type:p.unit.type,owner:p.unit.owner,departing:!!p.unit.departing,world:{x:p.position.x,z:p.position.z},yaw:p.yaw,...position,bounds:bounds(this.batches[batch],matrix)});}
     const headquarters=this.hqs.map((hq,i)=>({owner:i===0?'orange':'blue',bounds:bounds(hq.children,hq.matrixWorld)}));
     return {assets:this.assetMetadata,drawCalls:this.renderer.info.render.calls,triangles:this.renderer.info.render.triangles,geometries:this.renderer.info.memory.geometries,textures:this.renderer.info.memory.textures,zoom:this.zoom,mode:this.mode,scale:this.frame.scale,units:projected,headquarters,effects:this.effects.length};
   }

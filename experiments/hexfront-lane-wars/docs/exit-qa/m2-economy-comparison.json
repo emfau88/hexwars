@@ -1,0 +1,1663 @@
+{
+  "description": "Controlled opening comparison: each pair has identical start army, final factory types/lanes, supply sequence and opponent. Only economy-first versus factory-first differs. Both planners act every 2.5s with no secret enemy data. Measurement limit is not a match timer.",
+  "cases": [
+    {
+      "plan": "mixed",
+      "enemy": "pressure",
+      "opening": "factory",
+      "result": "blue",
+      "time": 259.5,
+      "waves": 18,
+      "peakUnits": 25,
+      "hq": {
+        "orange": 0,
+        "blue": 525
+      },
+      "metrics": {
+        "orange": {
+          "spent": 780,
+          "earned": 638.5,
+          "produced": 66,
+          "hqDamage": 675,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 5,
+          "economyAt": 140,
+          "credits": 58.5
+        },
+        "blue": {
+          "spent": 810,
+          "earned": 638.5,
+          "produced": 120,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 1,
+          "laneChanges": 0,
+          "supplies": 5,
+          "economyAt": 140,
+          "credits": 28.5
+        }
+      },
+      "lateOrders": 13,
+      "timeline": [
+        {
+          "time": 50,
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 100,
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 140,
+          "action": "economy"
+        },
+        {
+          "time": 160,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 180,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 200,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 220,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 240,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        }
+      ]
+    },
+    {
+      "plan": "mixed",
+      "enemy": "pressure",
+      "opening": "economy",
+      "result": "blue",
+      "time": 246.95000000000002,
+      "waves": 17,
+      "peakUnits": 26,
+      "hq": {
+        "orange": 0,
+        "blue": 675
+      },
+      "metrics": {
+        "orange": {
+          "spent": 840,
+          "earned": 700.85,
+          "produced": 60,
+          "hqDamage": 525,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 6,
+          "economyAt": 40,
+          "credits": 60.85
+        },
+        "blue": {
+          "spent": 750,
+          "earned": 600.85,
+          "produced": 111,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 1,
+          "laneChanges": 0,
+          "supplies": 4,
+          "economyAt": 140,
+          "credits": 50.85
+        }
+      },
+      "lateOrders": 12,
+      "timeline": [
+        {
+          "time": 40,
+          "action": "economy"
+        },
+        {
+          "time": 75,
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 107.5,
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 127.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 147.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 167.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 187.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 207.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 227.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        }
+      ]
+    },
+    {
+      "plan": "mixed",
+      "enemy": "balanced",
+      "opening": "factory",
+      "result": "blue",
+      "time": 345.95000000000005,
+      "waves": 24,
+      "peakUnits": 26,
+      "hq": {
+        "orange": 0,
+        "blue": 525
+      },
+      "metrics": {
+        "orange": {
+          "spent": 1080,
+          "earned": 897.85,
+          "produced": 95,
+          "hqDamage": 675,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 10,
+          "economyAt": 140,
+          "credits": 17.85
+        },
+        "blue": {
+          "spent": 1050,
+          "earned": 897.85,
+          "produced": 164,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 1,
+          "laneChanges": 0,
+          "supplies": 9,
+          "economyAt": 140,
+          "credits": 47.85
+        }
+      },
+      "lateOrders": 22,
+      "timeline": [
+        {
+          "time": 50,
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 100,
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 140,
+          "action": "economy"
+        },
+        {
+          "time": 160,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 180,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 200,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 220,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 240,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 260,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 280,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 300,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 320,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 340,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        }
+      ]
+    },
+    {
+      "plan": "mixed",
+      "enemy": "balanced",
+      "opening": "economy",
+      "result": "blue",
+      "time": 325.3,
+      "waves": 22,
+      "peakUnits": 25,
+      "hq": {
+        "orange": 0,
+        "blue": 345
+      },
+      "metrics": {
+        "orange": {
+          "spent": 1080,
+          "earned": 935.9,
+          "produced": 84,
+          "hqDamage": 855,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 10,
+          "economyAt": 40,
+          "credits": 55.9
+        },
+        "blue": {
+          "spent": 990,
+          "earned": 835.9,
+          "produced": 147,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 1,
+          "laneChanges": 0,
+          "supplies": 8,
+          "economyAt": 140,
+          "credits": 45.9
+        }
+      },
+      "lateOrders": 20,
+      "timeline": [
+        {
+          "time": 40,
+          "action": "economy"
+        },
+        {
+          "time": 75,
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 107.5,
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 127.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 147.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 167.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 187.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 207.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 227.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 247.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 267.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 287.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 307.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        }
+      ]
+    },
+    {
+      "plan": "mixed",
+      "enemy": "economy",
+      "opening": "factory",
+      "result": "blue",
+      "time": 375.65000000000003,
+      "waves": 26,
+      "peakUnits": 26,
+      "hq": {
+        "orange": 0,
+        "blue": 540
+      },
+      "metrics": {
+        "orange": {
+          "spent": 1140,
+          "earned": 986.95,
+          "produced": 104,
+          "hqDamage": 660,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 11,
+          "economyAt": 140,
+          "credits": 46.95
+        },
+        "blue": {
+          "spent": 1260,
+          "earned": 1086.95,
+          "produced": 176,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 2,
+          "laneChanges": 0,
+          "supplies": 12,
+          "economyAt": 40,
+          "credits": 26.95
+        }
+      },
+      "lateOrders": 25,
+      "timeline": [
+        {
+          "time": 50,
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 100,
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 140,
+          "action": "economy"
+        },
+        {
+          "time": 160,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 180,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 200,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 220,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 240,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 260,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 280,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 300,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 320,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 340,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 360,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        }
+      ]
+    },
+    {
+      "plan": "mixed",
+      "enemy": "economy",
+      "opening": "economy",
+      "result": "blue",
+      "time": 204.3,
+      "waves": 14,
+      "peakUnits": 24,
+      "hq": {
+        "orange": 0,
+        "blue": 840
+      },
+      "metrics": {
+        "orange": {
+          "spent": 720,
+          "earned": 572.9,
+          "produced": 46,
+          "hqDamage": 360,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 4,
+          "economyAt": 40,
+          "credits": 52.9
+        },
+        "blue": {
+          "spent": 750,
+          "earned": 572.9,
+          "produced": 55,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 3,
+          "laneChanges": 1,
+          "supplies": 3,
+          "economyAt": 40,
+          "credits": 22.9
+        }
+      },
+      "lateOrders": 9,
+      "timeline": [
+        {
+          "time": 40,
+          "action": "economy"
+        },
+        {
+          "time": 75,
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 107.5,
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 127.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 147.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 167.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 187.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        }
+      ]
+    },
+    {
+      "plan": "swarm",
+      "enemy": "pressure",
+      "opening": "factory",
+      "result": "blue",
+      "time": 237.65,
+      "waves": 16,
+      "peakUnits": 32,
+      "hq": {
+        "orange": 0,
+        "blue": 786
+      },
+      "metrics": {
+        "orange": {
+          "spent": 720,
+          "earned": 572.95,
+          "produced": 171,
+          "hqDamage": 414,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 4,
+          "economyAt": 140,
+          "credits": 52.95
+        },
+        "blue": {
+          "spent": 750,
+          "earned": 572.95,
+          "produced": 79,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 1,
+          "laneChanges": 0,
+          "supplies": 4,
+          "economyAt": 140,
+          "credits": 22.95
+        }
+      },
+      "lateOrders": 11,
+      "timeline": [
+        {
+          "time": 50,
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 100,
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 140,
+          "action": "economy"
+        },
+        {
+          "time": 160,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 180,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 200,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 220,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        }
+      ]
+    },
+    {
+      "plan": "swarm",
+      "enemy": "pressure",
+      "opening": "economy",
+      "result": "blue",
+      "time": 225.75,
+      "waves": 16,
+      "peakUnits": 33,
+      "hq": {
+        "orange": 0,
+        "blue": 984
+      },
+      "metrics": {
+        "orange": {
+          "spent": 780,
+          "earned": 637.25,
+          "produced": 165,
+          "hqDamage": 216,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 5,
+          "economyAt": 40,
+          "credits": 57.25
+        },
+        "blue": {
+          "spent": 690,
+          "earned": 537.25,
+          "produced": 78,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 1,
+          "laneChanges": 0,
+          "supplies": 3,
+          "economyAt": 140,
+          "credits": 47.25
+        }
+      },
+      "lateOrders": 10,
+      "timeline": [
+        {
+          "time": 40,
+          "action": "economy"
+        },
+        {
+          "time": 75,
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 107.5,
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 127.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 147.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 167.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 187.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 207.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        }
+      ]
+    },
+    {
+      "plan": "swarm",
+      "enemy": "balanced",
+      "opening": "factory",
+      "result": "blue",
+      "time": 254.75,
+      "waves": 17,
+      "peakUnits": 35,
+      "hq": {
+        "orange": 0,
+        "blue": 1146
+      },
+      "metrics": {
+        "orange": {
+          "spent": 780,
+          "earned": 624.25,
+          "produced": 186,
+          "hqDamage": 54,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 5,
+          "economyAt": 140,
+          "credits": 44.25
+        },
+        "blue": {
+          "spent": 810,
+          "earned": 624.25,
+          "produced": 62,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 1,
+          "laneChanges": 0,
+          "supplies": 5,
+          "economyAt": 140,
+          "credits": 14.25
+        }
+      },
+      "lateOrders": 13,
+      "timeline": [
+        {
+          "time": 50,
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 100,
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 140,
+          "action": "economy"
+        },
+        {
+          "time": 160,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 180,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 200,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 220,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 240,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        }
+      ]
+    },
+    {
+      "plan": "swarm",
+      "enemy": "balanced",
+      "opening": "economy",
+      "result": "blue",
+      "time": 341.45000000000005,
+      "waves": 23,
+      "peakUnits": 32,
+      "hq": {
+        "orange": 0,
+        "blue": 1200
+      },
+      "metrics": {
+        "orange": {
+          "spent": 1140,
+          "earned": 984.35,
+          "produced": 267,
+          "hqDamage": 0,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 11,
+          "economyAt": 40,
+          "credits": 44.35
+        },
+        "blue": {
+          "spent": 1050,
+          "earned": 884.35,
+          "produced": 90,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 1,
+          "laneChanges": 0,
+          "supplies": 9,
+          "economyAt": 140,
+          "credits": 34.35
+        }
+      },
+      "lateOrders": 22,
+      "timeline": [
+        {
+          "time": 40,
+          "action": "economy"
+        },
+        {
+          "time": 75,
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 107.5,
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 127.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 147.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 167.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 187.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 207.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 227.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 247.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 267.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 287.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 307.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 327.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        }
+      ]
+    },
+    {
+      "plan": "swarm",
+      "enemy": "economy",
+      "opening": "factory",
+      "result": "blue",
+      "time": 202,
+      "waves": 14,
+      "peakUnits": 37,
+      "hq": {
+        "orange": 0,
+        "blue": 984
+      },
+      "metrics": {
+        "orange": {
+          "spent": 660,
+          "earned": 466,
+          "produced": 144,
+          "hqDamage": 216,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 3,
+          "economyAt": 140,
+          "credits": 6
+        },
+        "blue": {
+          "spent": 750,
+          "earned": 566,
+          "produced": 46,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 1,
+          "laneChanges": 1,
+          "supplies": 4,
+          "economyAt": 40,
+          "credits": 16
+        }
+      },
+      "lateOrders": 10,
+      "timeline": [
+        {
+          "time": 50,
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 100,
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 140,
+          "action": "economy"
+        },
+        {
+          "time": 160,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 180,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 200,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        }
+      ]
+    },
+    {
+      "plan": "swarm",
+      "enemy": "economy",
+      "opening": "economy",
+      "result": "blue",
+      "time": 345.6,
+      "waves": 24,
+      "peakUnits": 31,
+      "hq": {
+        "orange": 0,
+        "blue": 1200
+      },
+      "metrics": {
+        "orange": {
+          "spent": 1140,
+          "earned": 996.8,
+          "produced": 279,
+          "hqDamage": 0,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 11,
+          "economyAt": 40,
+          "credits": 56.8
+        },
+        "blue": {
+          "spent": 1170,
+          "earned": 996.8,
+          "produced": 93,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 1,
+          "laneChanges": 0,
+          "supplies": 11,
+          "economyAt": 40,
+          "credits": 26.8
+        }
+      },
+      "lateOrders": 23,
+      "timeline": [
+        {
+          "time": 40,
+          "action": "economy"
+        },
+        {
+          "time": 75,
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 107.5,
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 127.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 147.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 167.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 187.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 207.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 227.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 247.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 267.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 287.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 307.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 327.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        }
+      ]
+    },
+    {
+      "plan": "ranged",
+      "enemy": "pressure",
+      "opening": "factory",
+      "result": "blue",
+      "time": 131.85,
+      "waves": 9,
+      "peakUnits": 28,
+      "hq": {
+        "orange": 0,
+        "blue": 210
+      },
+      "metrics": {
+        "orange": {
+          "spent": 400,
+          "earned": 263.7,
+          "produced": 25,
+          "hqDamage": 990,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 0,
+          "economyAt": null,
+          "credits": 63.7
+        },
+        "blue": {
+          "spent": 460,
+          "earned": 263.7,
+          "produced": 60,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 1,
+          "economyAt": null,
+          "credits": 3.7
+        }
+      },
+      "lateOrders": 1,
+      "timeline": [
+        {
+          "time": 50,
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 100,
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 1
+        }
+      ]
+    },
+    {
+      "plan": "ranged",
+      "enemy": "pressure",
+      "opening": "economy",
+      "result": "blue",
+      "time": 128.70000000000002,
+      "waves": 9,
+      "peakUnits": 29,
+      "hq": {
+        "orange": 0,
+        "blue": 480
+      },
+      "metrics": {
+        "orange": {
+          "spent": 540,
+          "earned": 346.1,
+          "produced": 23,
+          "hqDamage": 720,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 1,
+          "economyAt": 40,
+          "credits": 6.1
+        },
+        "blue": {
+          "spent": 400,
+          "earned": 257.4,
+          "produced": 57,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 0,
+          "economyAt": null,
+          "credits": 57.4
+        }
+      },
+      "lateOrders": 1,
+      "timeline": [
+        {
+          "time": 40,
+          "action": "economy"
+        },
+        {
+          "time": 75,
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 107.5,
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 127.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        }
+      ]
+    },
+    {
+      "plan": "ranged",
+      "enemy": "balanced",
+      "opening": "factory",
+      "result": "blue",
+      "time": 198.60000000000002,
+      "waves": 14,
+      "peakUnits": 37,
+      "hq": {
+        "orange": 0,
+        "blue": 120
+      },
+      "metrics": {
+        "orange": {
+          "spent": 600,
+          "earned": 455.8,
+          "produced": 47,
+          "hqDamage": 1080,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 2,
+          "economyAt": 140,
+          "credits": 55.8
+        },
+        "blue": {
+          "spent": 600,
+          "earned": 455.8,
+          "produced": 92,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 2,
+          "laneChanges": 1,
+          "supplies": 1,
+          "economyAt": 140,
+          "credits": 55.8
+        }
+      },
+      "lateOrders": 7,
+      "timeline": [
+        {
+          "time": 50,
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 100,
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 140,
+          "action": "economy"
+        },
+        {
+          "time": 160,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 180,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        }
+      ]
+    },
+    {
+      "plan": "ranged",
+      "enemy": "balanced",
+      "opening": "economy",
+      "result": "blue",
+      "time": 198.45000000000002,
+      "waves": 14,
+      "peakUnits": 37,
+      "hq": {
+        "orange": 0,
+        "blue": 300
+      },
+      "metrics": {
+        "orange": {
+          "spent": 720,
+          "earned": 555.35,
+          "produced": 46,
+          "hqDamage": 900,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 4,
+          "economyAt": 40,
+          "credits": 35.35
+        },
+        "blue": {
+          "spent": 600,
+          "earned": 455.35,
+          "produced": 92,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 2,
+          "laneChanges": 1,
+          "supplies": 1,
+          "economyAt": 140,
+          "credits": 55.35
+        }
+      },
+      "lateOrders": 8,
+      "timeline": [
+        {
+          "time": 40,
+          "action": "economy"
+        },
+        {
+          "time": 75,
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 107.5,
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 127.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 147.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 167.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 187.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        }
+      ]
+    },
+    {
+      "plan": "ranged",
+      "enemy": "economy",
+      "opening": "factory",
+      "result": "blue",
+      "time": 171.65,
+      "waves": 12,
+      "peakUnits": 37,
+      "hq": {
+        "orange": 0,
+        "blue": 300
+      },
+      "metrics": {
+        "orange": {
+          "spent": 540,
+          "earned": 374.95,
+          "produced": 38,
+          "hqDamage": 900,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 1,
+          "economyAt": 140,
+          "credits": 34.95
+        },
+        "blue": {
+          "spent": 660,
+          "earned": 474.95,
+          "produced": 74,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 2,
+          "laneChanges": 1,
+          "supplies": 2,
+          "economyAt": 40,
+          "credits": 14.95
+        }
+      },
+      "lateOrders": 5,
+      "timeline": [
+        {
+          "time": 50,
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 100,
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 140,
+          "action": "economy"
+        },
+        {
+          "time": 160,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        }
+      ]
+    },
+    {
+      "plan": "ranged",
+      "enemy": "economy",
+      "opening": "economy",
+      "result": "blue",
+      "time": 202,
+      "waves": 14,
+      "peakUnits": 41,
+      "hq": {
+        "orange": 0,
+        "blue": 120
+      },
+      "metrics": {
+        "orange": {
+          "spent": 720,
+          "earned": 566,
+          "produced": 46,
+          "hqDamage": 1080,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 4,
+          "economyAt": 40,
+          "credits": 46
+        },
+        "blue": {
+          "spent": 720,
+          "earned": 566,
+          "produced": 101,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 2,
+          "laneChanges": 2,
+          "supplies": 3,
+          "economyAt": 40,
+          "credits": 46
+        }
+      },
+      "lateOrders": 9,
+      "timeline": [
+        {
+          "time": 40,
+          "action": "economy"
+        },
+        {
+          "time": 75,
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 107.5,
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 127.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 147.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 167.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 187.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        }
+      ]
+    }
+  ]
+}

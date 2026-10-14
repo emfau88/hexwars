@@ -77,7 +77,7 @@ test('a correct visible production response after minute three changes the outco
  const {lateResponse}=await import('./fixtures/late-response.mjs');
  const ignored=lateResponse({reacts:false}),reacted=lateResponse({reacts:true});
  assert.ok(reacted.visibleAtReaction.every(f=>f.type==='mech'));
- assert.equal(ignored.result,'unresolved');assert.ok(ignored.hq.orange<400);
+ assert.notEqual(ignored.result,'orange');assert.ok(ignored.hq.orange<400);
  assert.equal(reacted.result,'orange');assert.ok(reacted.time>240&&reacted.time<420);
  assert.equal(reacted.hq.orange,MATCH_RULES.hqHP);assert.equal(reacted.metrics.orange.refits,4);
 });

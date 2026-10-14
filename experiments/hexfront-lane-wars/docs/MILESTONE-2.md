@@ -2,6 +2,8 @@
 
 Stand: 14. Oktober 2026. Implementierung ausschließlich im Branch `codex/lane-wars`. M1.5 ist vor Änderungen durch den lokalen Tag `codex/lane-wars-m1.5` bei `3b58f637684c5e5cb558ad34c09ea35cb1898383` gesichert. Kein Merge nach main, keine Änderung an anderen Spielvarianten.
 
+**Nachtrag zur Ausfahrtskorrektur:** Die untenstehenden Matchzahlen und Wirtschaftsvergleiche dokumentieren den ursprünglichen Stand `87865e8`. Die korrigierten Wege ändern Ankunftszeiten und Ergebnisse. [Aktuelle Korrektur, Tests und Vergleichsläufe](FACTORY-EXITS.md).
+
 ## Selbst spielen
 
 [Partie starten](http://127.0.0.1:4181/) – der lokale Server muss laufen. Startanleitung und Bedienung stehen in [README](../README.md).
