@@ -1,6 +1,6 @@
 # HEXFRONT Lane Wars — GDD v0.2
 
-Stand: 14. Oktober 2026. Ersetzt den Entwurf v0.1 aus dem Chat. Die Grundrichtung ist vom Nutzer freigegeben; Zahlen bleiben Testwerte. Meilenstein 1 ist abgeschlossen. Der aktuelle Folgeauftrag umfasst ausschließlich Meilenstein 1.5, die visuelle Integration (siehe Ergänzung unten).
+Stand: 14. Oktober 2026. Ersetzt den Entwurf v0.1 aus dem Chat. Die Grundrichtung ist vom Nutzer freigegeben; Zahlen bleiben Testwerte. Meilenstein 1 und 1.5 sind abgeschlossen. Der aktuelle Folgeauftrag umfasst Meilenstein 2, die vollständige Partie (siehe freigegebene Ergänzung unten). Die früheren Entwicklungsgrenzen bleiben als historische Meilensteinbeschreibung erhalten.
 
 ## Verbindliche Entscheidungen
 
@@ -111,3 +111,19 @@ Kompaktes HUD in der bestehenden Keramikgestaltung: HQ-Status, Credits/Einkommen
 Nicht freigegeben: Wirtschaft, Produktionswellen, Fabriksteuerung, Sofortnachschub, Forschung, neue Einheitentypen, zusätzliche funktionale Gebäude, vollständiges HQ-Endspiel, Kampagnen oder Multiplayer. Ruinen und technische Requisiten sind ausschließlich Dekoration.
 
 Abnahmebelege: echte Laufzeit-Screenshots für Übersicht, Kampf, Modelle, HUD und Mixed-Squads-Vergleich; kritische Sichtprüfung; weiter bestehende M1-Tests; identische Browser-/Headless-Ergebnisse. Bericht: `VISUAL-INTEGRATION.md`, Bildübersicht: `../review.html`.
+
+## Freigegebene Ergänzung: Meilenstein 2 – vollständige Partie
+
+Der neue Entwicklungsauftrag erweitert die abgeschlossene M1.5-Darstellung zur vollständig spielbaren Partie Mensch gegen KI. Die vorherigen Abschnitte zum Umfang von M1 und M1.5 dokumentieren deren damalige Grenzen; ihre Verbote von Wirtschaft und HQ-Kampf gelten nicht für den ausdrücklich freigegebenen M2-Auftrag. Das Kampflabor bleibt separat.
+
+Implementiert werden die oben festgelegten vier Fabrikplätze, zwei konfigurierbaren Startfabriken, kontinuierliches Einkommen, einmaliger Wirtschaftsausbau, Fabrikbau und Umrüstung, kostenlose Lane-Zuweisung, gemeinsame 15-Sekunden-Wellen und bezahlter Sofortnachschub mit eigener 15-Sekunden-Abklingzeit. Alle drei bestehenden Robotertypen und ihr M1-Kampfkern bleiben unverändert. Erst echte HQ-Zerstörung beendet die Partie.
+
+Für M2 gelten vorläufig die Tabellenwerte 200 Startcredits, 100 je Fabrik, 2 Credits/s, 30 für Umrüstung, 60 für Nachschub und der v0.2-Kandidat 80/+1 für den einmaligen Wirtschaftsausbau. Die gemeinsame HQ-Waffe wird als dokumentierte Balanceanpassung mit **8 Schaden und Reichweite 4** statt 12/5 implementiert; 1.200 HP und 0,8 Sekunden Intervall bleiben erhalten. Auswertung und offene Schwächen: [MILESTONE-2.md](MILESTONE-2.md).
+
+Fabriken sind nun sichtbare 3D-Gebäude auf den bestehenden Basisplätzen. Produzierte Roboter verlassen ihre jeweilige Fabrik; ihre tatsächliche Ausfahrtszeit hängt von Typ, Bauplatz und gewählter Lane ab und zählt zur Ankunftszeit. Beide Fraktionen verwenden dieselben gespiegelten Wege. Der Vorplatz liegt außerhalb des Lane-Kampfes; ab dem Lane-Eingang verwendet jeder Roboter die unveränderten M1-Regeln. Sofortnachschub läuft vom sichtbaren HQ-Ausgang los. Keine Warteketten, automatische Zusatzbestellungen oder Bevölkerungssperren.
+
+Die drei KI-Profile verwenden dieselben bezahlten Befehle und öffentliche Sicht mit 2,5 Sekunden Verzögerung. Gegnerische Credits und vorgemerkte Aufträge bleiben unbekannt. Reguläre Umrüstung erfolgt höchstens alle 30 Sekunden, eine konzentrierte Drohnenantwort auf starke ungeschützte Fernkampfproduktion höchstens alle 15 Sekunden. Das verändert nur die Entscheidungsheuristik, keine Regeln oder Ressourcen.
+
+HUD, Fabrikkarten, HQ-Werte und Countdown zeigen echte Simulationsdaten. Die bestehende Diorama-Landschaft, Originalmodelle und Keramikgestaltung werden erhalten. Sieg, Niederlage, Unentschieden, Pause und Neustart gehören zum vollständigen Ablauf. Es gibt weiterhin keinen künstlichen Endtimer. Das Matchdauerziel bleibt 4–7 Minuten; ungelöste Messläufe gelten als offene Balancepunkte.
+
+M2 führt keine weiteren Robotertypen, Forschung, Verteidigungsgebäude, Kontrollpunkte, Karten oder Multiplayer ein. Der Stand wird ausschließlich im Lane-Wars-Entwicklungsbranch geführt, ohne Merge nach main.

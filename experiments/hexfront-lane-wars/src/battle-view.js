@@ -27,13 +27,14 @@ export class BattleView {
     this.ready=Promise.all([buildLandscape(this.scene),loadModels()]).then(([,models])=>{this.library=models.library;this.assetMetadata=models.metadata;this.batches=makeBatches(this.scene,this.library);this.hqs=['orange','blue'].map(owner=>addHQ(this.scene,this.library[owner].hq,owner));this.resize();});
     this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(stage);this.bind();this.resize();
   }
+  point(u,height=0) {return visualPoint(u,height);}
   resize() {
     this.dirty=true;
     this.stage.parentElement.dataset.closeup=String(this.zoom>1.35);
     const w=this.stage.clientWidth,h=this.stage.clientHeight;if(!w||!h)return;
     const basis=cameraBasis(CAMERA_VIEWS[this.mode],0),points=[];
     for(const x of [-16,16])for(const z of [-12.4,12.4])for(const y of [0,2.3])points.push(x,y,z);
-    const bounds=projectedBounds(points,basis),top=w<700?134:90,bottom=w<700?148:142;
+    const bounds=projectedBounds(points,basis),top=w<700?134:90,bottom=this.safeBottom??(w<700?148:142);
     const frame=frameBattlefield(bounds,w,Math.max(150,h-top-bottom),this.zoom,this.pan,8);this.pan={u:frame.u,v:frame.v};this.frame=frame;
     const centerU=frame.centerU,centerV=frame.centerV+(top-bottom)/(2*frame.scale);
     const target=new T.Vector3(...basis.right).multiplyScalar(centerU).addScaledVector(new T.Vector3(...basis.up),centerV);
@@ -65,7 +66,7 @@ export class BattleView {
     const source=this.poses.get(key(lane,event.source??event.id));
     if(event.kind==='shot') {
       if(source)source.kick=1;
-      const root=new T.Group(),base=visualPoint({...event.from,lane}),to=visualPoint({...event.to,lane},.65),yaw=Math.atan2(base.x-to.x,base.z-to.z);
+      const root=new T.Group(),base=this.point({...event.from,lane}),to=this.point({...event.to,lane},.65),yaw=Math.atan2(base.x-to.x,base.z-to.z);
       const muzzleLocal=event.type==='mech'?new T.Vector3(.58,.72,-.54):event.type==='rail'?new T.Vector3(0,.91,-.96):new T.Vector3(0,.50,-.35);
       const from=base.clone().add(muzzleLocal.applyAxisAngle(new T.Vector3(0,1,0),yaw)),color=event.owner==='orange'?0xf6cb83:0xb8d9df;
       // Pure event visualization; projectiles never calculate damage.
@@ -77,17 +78,17 @@ export class BattleView {
       source.hit=1;const root=new T.Group(),p=source.position.clone().add(new T.Vector3(0,.65,0));
       for(let i=0;i<4;i++){const s=new T.Mesh(new T.SphereGeometry(.028,4,3),new T.MeshBasicMaterial({color:0xffdf9b,transparent:true}));s.position.copy(p);s.userData.velocity=new T.Vector3(Math.cos(i*2.4)*.7,.3+i*.13,Math.sin(i*2.4)*.7);root.add(s);}this.scene.add(root);this.effects.push({root,age:0,life:.25,kind:'sparks'});
     } else if(event.kind==='destroyed') {
-      const root=new T.Group(),p=visualPoint({...event,lane},.25);
+      const root=new T.Group(),p=this.point({...event,lane},.25);
       for(let i=0;i<8;i++){const m=new T.Mesh(new T.IcosahedronGeometry(i<3?.13:.055,0),new T.MeshStandardMaterial({color:i<3?0xb6ad94:SUPPLIED_TEAMS[event.owner],roughness:1,transparent:true,opacity:.8}));m.position.copy(p);m.userData.velocity=new T.Vector3(Math.cos(i*2.4)*(i<3?.4:1.1),.65+(i%3)*.25,Math.sin(i*2.4)*(i<3?.4:1.1));root.add(m);}this.scene.add(root);this.effects.push({root,age:0,life:.65,kind:'sparks'});
     }
   }
   render(lanes,seconds,dt=0,draw=true) {
     if(!this.batches)return;this.lastLanes=lanes;this.elapsed=seconds;
-    const alive=new Set(),counts={},ids={};for(const id of Object.keys(this.batches)){counts[id]=0;ids[id]=[];}
+    const needed=Math.max(1,...['orange','blue'].flatMap(owner=>['drone','mech','rail'].map(type=>lanes.reduce((n,g)=>n+g.units.filter(u=>u.owner===owner&&u.type===type).length,0)))); if(needed>Object.values(this.batches)[0][0].instanceMatrix.count){const capacity=2**Math.ceil(Math.log2(needed));for(const mesh of Object.values(this.batches).flat()){mesh.removeFromParent();mesh.dispose();}this.batches=makeBatches(this.scene,this.library,capacity);} const alive=new Set(),counts={},ids={};for(const id of Object.keys(this.batches)){counts[id]=0;ids[id]=[];}
     for(const [lane,game] of lanes.entries())for(const u of game.units) {
-      const id=key(lane,u.id),p=visualPoint({...u,lane}),defaultYaw=u.owner==='orange'?0:Math.PI;alive.add(id);
+      const id=key(lane,u.id),p=this.point({...u,lane}),defaultYaw=u.owner==='orange'?0:Math.PI;alive.add(id);
       let pose=this.poses.get(id);if(!pose){pose={position:p.clone(),yaw:defaultYaw,kick:0,hit:0,unit:u};this.poses.set(id,pose);}pose.unit=u;
-      const target=game.units.find(v=>v.id===u.target),destination=target?visualPoint({...target,lane}):visualPoint({...u,lane,p:u.p+(u.owner==='orange'?1:-1)});
+      const target=game.units.find(v=>v.id===u.target),destination=target?this.point({...target,lane}):this.point({...u,lane,p:u.p+(u.owner==='orange'?1:-1)});
       const yaw=Math.atan2(p.x-destination.x,p.z-destination.z),blend=dt>0?1-Math.exp(-dt*22):1;pose.position.lerp(p,blend);pose.yaw+=shortest(pose.yaw,yaw)*Math.min(1,dt*16||1);
       pose.kick=Math.max(0,pose.kick-dt*6);pose.hit=Math.max(0,pose.hit-dt*7);
       const bob=this.reduced?0:Math.sin(seconds*(u.type==='drone'?3.3:9)+u.id*1.7)*(u.type==='drone'?.05:u.moving?.028:0);

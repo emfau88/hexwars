@@ -1,0 +1,37 @@
+import * as T from 'three';
+import {BattleView} from './battle-view.js';
+import {createFactories,updateFactories} from './factory-view.js';
+import {exitPoint,baseSign} from './match-layout.js';
+import {groundHeight} from './routes.js';
+export class MatchView extends BattleView {
+ constructor(stage,labels,onSelect,onFactory){super(stage,labels,onSelect);this.onFactory=onFactory;this.factoryBuildings=createFactories(this.scene);this.factoryLabels=[];this.safeBottom=205;this.resize();}
+ point(u,height=0){
+   if(u.hq)return new T.Vector3(0,height+.9,baseSign(u.hq)*10.3);
+   if(u.departing){const p=exitPoint(u,this.matchTime||0),spread=u.x*.4;return new T.Vector3(p.x+spread,groundHeight(p.x,p.z)+height,p.z);}
+   return super.point(u,height);
+ }
+ pick(e){
+   const rect=this.stage.getBoundingClientRect();this.raycaster.setFromCamera(new T.Vector2((e.clientX-rect.left)/rect.width*2-1,1-(e.clientY-rect.top)/rect.height*2),this.camera);
+   const hit=this.raycaster.intersectObjects(Object.values(this.factoryBuildings).filter(b=>b.owner==='orange').map(b=>b.root),true)[0];
+   if(hit){let object=hit.object;while(object.parent&&object.parent!==this.scene)object=object.parent;const factory=Object.values(this.factoryBuildings).find(f=>f.root===object);if(factory){this.onFactory(factory.slot);return;}}
+   super.pick(e);
+ }
+ matchEvent(e){
+   if(e.kind==='production'){const f=this.factoryBuildings[e.owner+':'+e.factory];if(f)f.lastProduction=e.time;return;}
+   if(e.kind==='hq-shot'){
+     const from=this.point({hq:e.owner},.65),to=this.point(e.to,.65),root=new T.Group(),beam=this.line(from,to,e.owner==='orange'?0xe9b16b:0x90c8e0,.04),pulse=new T.Mesh(new T.SphereGeometry(.1,6,5),new T.MeshBasicMaterial({color:0xffddaa})),muzzle=pulse.clone();root.add(beam,pulse,muzzle);this.scene.add(root);this.effects.push({root,age:0,life:.24,kind:'shot',from,to,pulse,beam,muzzle});return;
+   }
+   if(e.kind==='shot'&&String(e.target).startsWith('hq-'))e={...e,to:{...e.to,hq:e.target.slice(3)}};
+   this.effect(e,e.lane);
+ }
+ renderMatch(match,dt=0,draw=true){
+   this.matchTime=match.time;updateFactories(this.factoryBuildings,match);
+   const lanes=match.lanes.map((g,lane)=>({units:[...g.units,...match.transit.filter(u=>u.lane===lane).map(u=>({...u,departing:true,p:u.owner==='orange'?0:30,target:null}))]}));
+
+   if(this.hqs)for(const [i,hq] of this.hqs.entries()){const owner=i===0?'orange':'blue';const scale=match.players[owner].hq>0?1:.28;if(hq.scale.y!==scale)this.dirty=true;hq.scale.y=scale;hq.position.y=match.players[owner].hq>0?.04:-.25;}
+   super.render(lanes,match.time,dt,draw);
+ }
+ factoryScreens(){
+   return Object.values(this.factoryBuildings).map(f=>{const v=f.root.position.clone().add(new T.Vector3(0,1.9,0)).project(this.camera);return {owner:f.owner,slot:f.slot,visible:f.root.visible,x:(v.x*.5+.5)*this.stage.clientWidth,y:(-.5*v.y+.5)*this.stage.clientHeight};});
+ }
+}

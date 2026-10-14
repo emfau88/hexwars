@@ -1,14 +1,19 @@
 # HEXFRONT
 
-## ▶ JETZT TESTEN — Lane Wars (dieser Branch)
+## ▶ Lane Wars – Meilenstein 2
 
-**[Lane Wars im Browser starten](https://rawcdn.githack.com/emfau88/hexwars/c038ffed9718192a7249ec8764951d3f5d3293c2/experiments/hexfront-lane-wars/index.html)**
+Vollständige Partie **Mensch gegen KI** im Branch `codex/lane-wars`: vier Fabrikplätze, automatische 15-Sekunden-Wellen, Wirtschaft, Umrüstung, Lane-Zuweisung, Sofortnachschub und echte HQ-Zerstörung. Die Diorama-Landschaft und das Keramik-HUD aus M1.5 bleiben erhalten.
 
-Vorschau für **`codex/lane-wars`**, Meilenstein 1.5: zwei längere Wege, 3D-Hauptquartiere und Roboter sowie drei auswählbare Gefechtsaufstellungen. Mit **Gefechte starten** läuft die Simulation. Fabriken, Wirtschaft, Wellen und HQ-Kampf sind noch inaktiv; dies sind vorbereitete Testgefechte, noch keine vollständige Partie.
+```powershell
+cd experiments/hexfront-lane-wars
+node scripts/serve.mjs
+```
 
-[Technisches Kampflabor](https://rawcdn.githack.com/emfau88/hexwars/c038ffed9718192a7249ec8764951d3f5d3293c2/experiments/hexfront-lane-wars/lab.html) · [Screenshots und Vergleich](https://rawcdn.githack.com/emfau88/hexwars/c038ffed9718192a7249ec8764951d3f5d3293c2/experiments/hexfront-lane-wars/review.html) · [Bedienung und lokale Tests](experiments/hexfront-lane-wars/README.md)
+**[M2 lokal spielen](http://127.0.0.1:4181/)** · [Lokales Kampflabor](http://127.0.0.1:4181/lab.html) · [Bedienung und Tests](experiments/hexfront-lane-wars/README.md) · [M2-Ergebnisse und Screenshots](experiments/hexfront-lane-wars/docs/MILESTONE-2.md)
 
-Ohne lokale Installation. Falls der Vorschauhost einen Hinweis zeigt, **Open the page** anklicken. Die Links sind auf den Spielstand `c038ffe` dieses Branches festgelegt; spätere Codeänderungen benötigen einen aktualisierten Vorschau-Link. Falls die 3D-Ansicht beim Laden der Assets stehen bleibt, ist das separat verlinkte Kampflabor der direkte Zugang zu den Testgefechten; die 3D-Ansicht lässt sich auch lokal starten.
+Die lokalen Links benötigen den laufenden Server. Node.js ab Version 20 genügt; Spiel und Modelle liegen vollständig im Repository. Die beiden Startfabriken konfigurieren und **Partie starten**.
+
+Die [öffentliche M1.5-Vorschau](https://rawcdn.githack.com/emfau88/hexwars/c038ffed9718192a7249ec8764951d3f5d3293c2/experiments/hexfront-lane-wars/index.html) bleibt auf dem älteren Stand `c038ffe`; sie zeigt vorbereitete Gefechte und enthält M2 noch nicht. Ein öffentlicher M2-Playlink ist bisher nicht verifiziert.
 
 ## Mixed Squads — ältere Variante
 

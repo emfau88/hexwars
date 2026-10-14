@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {chromium} from '@playwright/test';
 import {PRESENTATIONS,createPresentation} from '../src/presentation.js';
-const browser=await chromium.launch({headless:true}),base=process.env.BATTLE_URL||'http://127.0.0.1:4181/';
+const browser=await chromium.launch({headless:true}),base=process.env.BATTLE_URL||'http://127.0.0.1:4181/m15.html';
 const page=await browser.newPage({viewport:{width:1440,height:900},deviceScaleFactor:1}),errors=[],requests=[],checks=[];
 let phase='initial-load';
 page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});page.on('requestfailed',r=>{const message=`${phase}: ${r.url()}: ${r.failure()?.errorText}`;errors.push(message);console.error(message);});page.on('request',r=>requests.push(r.url()));
@@ -49,9 +49,9 @@ try {
   assert.ok(requests.filter(u=>u.startsWith('http')).every(u=>u.startsWith(new URL(base).origin)));
   assert.ok(!requests.some(u=>/hexfront-mixed-squads|hexfront-3d/.test(u)));
   checks.push('all runtime requests stay inside this local standalone variant');
-  phase='open-lab';await page.locator('.lab-link').click();await page.waitForFunction(()=>window.__COMBAT_LAB__);assert.equal(await page.locator('#scenario').count(),1);phase='return-to-game';await page.locator('footer a').click();await page.waitForFunction(()=>window.__LANE_WARS__);
+  phase='open-lab';await page.locator('.lab-link').click();await page.waitForFunction(()=>window.__COMBAT_LAB__);assert.equal(await page.locator('#scenario').count(),1);phase='return-to-game';await page.locator('footer a').click();await page.waitForFunction(()=>window.__LANE_MATCH__);
   checks.push('game → retained combat lab → game round trip works');
   assert.deepEqual(errors,[]);
   const report={url:base,browser:browser.version(),checks,errors,assets:metrics.assets,initialDrawCalls:metrics.drawCalls,initialTriangles:metrics.triangles};
-  await fs.writeFile(new URL(`../docs/visual-qa/${new URL(base).pathname.includes('/dist/')?'production-browser-results':'browser-results'}.json`,import.meta.url),JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));
+  await fs.writeFile(new URL(`../docs/visual-qa/${'m15-regression-results'}.json`,import.meta.url),JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));
 }finally{await browser.close();}
