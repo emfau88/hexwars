@@ -18,7 +18,7 @@ async function boot(p){await p.goto(base+'?qa=1');await p.waitForFunction(()=>wi
 async function assessLayout(p){
  const issues=await p.evaluate(()=>{
   const rect=e=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height};},overlap=(a,b)=>a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;
-  const buttons=[...document.querySelectorAll('#factory-labels .orange:not([hidden]) button')],cards=[...document.querySelectorAll('#factory-cards button')],deck=rect(document.querySelector('.command-deck'));
+  const buttons=[...document.querySelectorAll('#factory-labels .orange:not([hidden]) button')],cards=[...document.querySelectorAll('#factory-cards button')].filter(b=>b.getClientRects().length),deck=rect(document.querySelector('.command-deck'));
   const d=window.__LANE_MATCH__.diagnostics(),buildings=d.factories.filter(f=>f.owner==='orange').map(f=>({x:f.bounds.left,y:f.bounds.top,w:f.bounds.right-f.bounds.left,h:f.bounds.bottom-f.bounds.top}));
   const errors=[];
   for(const [i,b] of buttons.entries()){const a=rect(b);if(a.w<44||a.h<44)errors.push('small building touch target');if(overlap(a,deck))errors.push('building control overlaps HUD');if(buildings.some(c=>overlap(a,c)))errors.push('building control overlaps model');if(buttons.slice(i+1).some(c=>overlap(a,rect(c))))errors.push('building controls overlap');}

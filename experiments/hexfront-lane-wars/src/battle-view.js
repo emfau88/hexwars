@@ -40,7 +40,8 @@ export class BattleView {
     this.stage.parentElement.dataset.closeup=String(this.zoom>1.35);
     const w=this.stage.clientWidth,h=this.stage.clientHeight;if(!w||!h)return;
     const basis=cameraBasis(CAMERA_VIEWS[this.mode],0),points=[];
-    for(const x of (this.options.single?[-10,10]:[-16,16]))for(const z of [-12.4,12.4])for(const y of [0,2.3])points.push(x,y,z);
+    const halfWidth=this.fitHalfWidth??(this.options.single?10:16);
+    for(const x of [-halfWidth,halfWidth])for(const z of [-12.4,12.4])for(const y of [0,2.3])points.push(x,y,z);
     const bounds=projectedBounds(points,basis),top=this.safeTop??(w<700?134:90),bottom=this.safeBottom??(w<700?148:142);
     const frame=frameBattlefield(bounds,w,Math.max(150,h-top-bottom),this.zoom,this.pan,8);this.pan={u:frame.u,v:frame.v};this.frame=frame;
     const centerU=frame.centerU,centerV=frame.centerV+(top-bottom)/(2*frame.scale);

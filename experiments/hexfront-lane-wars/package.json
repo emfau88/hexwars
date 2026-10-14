@@ -18,7 +18,8 @@
     "audit:late": "node scripts/late-response-audit.mjs",
     "test:exits": "node tests/exits-browser.mjs",
     "audit:campaign": "node scripts/campaign-audit.mjs",
-    "audit:campaign-late": "node scripts/campaign-late-audit.mjs"
+    "audit:campaign-late": "node scripts/campaign-late-audit.mjs",
+    "test:mobile": "node tests/mobile-hud-browser.mjs"
   },
   "engines": {
     "node": ">=20"

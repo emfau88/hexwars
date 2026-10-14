@@ -1,0 +1,180 @@
+{
+  "checks": [
+    "fresh campaign, locked second mission, actual single lane, no direction controls, ghost, cancellation/refund and next-wave activation through UI",
+    "symmetric initial factories; building/card direction toggle is free and pending only; refit stays visible; real lane drag and tap supply charge once; cooldown refuses duplicate",
+    "reload restores exact state; resume works; cancelled restart preserves the separate mission save",
+    "four complete browser/headless-identical matches: victory and defeat on each mission; real HQ deaths, result controls, campaign unlock",
+    "390×844 touch: building toggle, type-then-lane tap, native touch drag onto road, one-tap single-lane supply; 44 px controls without model/HUD overlap"
+  ],
+  "errors": [],
+  "results": [
+    {
+      "id": "first",
+      "options": {
+        "reactive": true,
+        "opening": "factory"
+      },
+      "result": "orange",
+      "time": 182.10000000000002,
+      "waves": 13,
+      "peakUnits": 22,
+      "hq": {
+        "orange": 480,
+        "blue": 0
+      },
+      "metrics": {
+        "orange": {
+          "spent": 550,
+          "earned": 456.3,
+          "produced": 55,
+          "hqDamage": 480,
+          "builds": 1,
+          "refits": 3,
+          "laneChanges": 0,
+          "supplies": 3,
+          "economyAt": 90,
+          "credits": 6.3
+        },
+        "blue": {
+          "spent": 520,
+          "earned": 456.3,
+          "produced": 44,
+          "hqDamage": 0,
+          "builds": 1,
+          "refits": 2,
+          "laneChanges": 0,
+          "supplies": 3,
+          "economyAt": 90,
+          "credits": 36.3
+        }
+      },
+      "lateOrders": 9
+    },
+    {
+      "id": "first",
+      "options": {
+        "reactive": false,
+        "opening": "factory"
+      },
+      "result": "blue",
+      "time": 226.45000000000002,
+      "waves": 16,
+      "peakUnits": 13,
+      "hq": {
+        "orange": 0,
+        "blue": 480
+      },
+      "metrics": {
+        "orange": {
+          "spent": 640,
+          "earned": 589.35,
+          "produced": 66,
+          "hqDamage": 0,
+          "builds": 1,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 6,
+          "economyAt": 90,
+          "credits": 49.35
+        },
+        "blue": {
+          "spent": 640,
+          "earned": 589.35,
+          "produced": 48,
+          "hqDamage": 480,
+          "builds": 1,
+          "refits": 2,
+          "laneChanges": 0,
+          "supplies": 5,
+          "economyAt": 90,
+          "credits": 49.35
+        }
+      },
+      "lateOrders": 11
+    },
+    {
+      "id": "meadow",
+      "options": {
+        "reactive": true,
+        "opening": "economy"
+      },
+      "result": "orange",
+      "time": 350.6,
+      "waves": 24,
+      "peakUnits": 31,
+      "hq": {
+        "orange": 900,
+        "blue": 0
+      },
+      "metrics": {
+        "orange": {
+          "spent": 1200,
+          "earned": 1011.8,
+          "produced": 150,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 8,
+          "laneChanges": 0,
+          "supplies": 8,
+          "economyAt": 40,
+          "credits": 11.8
+        },
+        "blue": {
+          "spent": 1080,
+          "earned": 911.8,
+          "produced": 152,
+          "hqDamage": 300,
+          "builds": 2,
+          "refits": 6,
+          "laneChanges": 0,
+          "supplies": 7,
+          "economyAt": 140,
+          "credits": 31.8
+        }
+      },
+      "lateOrders": 29
+    },
+    {
+      "id": "meadow",
+      "options": {
+        "reactive": false,
+        "opening": "economy"
+      },
+      "result": "blue",
+      "time": 327.20000000000005,
+      "waves": 22,
+      "peakUnits": 33,
+      "hq": {
+        "orange": 0,
+        "blue": 885
+      },
+      "metrics": {
+        "orange": {
+          "spent": 1080,
+          "earned": 941.6,
+          "produced": 84,
+          "hqDamage": 315,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 10,
+          "economyAt": 40,
+          "credits": 61.6
+        },
+        "blue": {
+          "spent": 1020,
+          "earned": 841.6,
+          "produced": 207,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 2,
+          "laneChanges": 0,
+          "supplies": 8,
+          "economyAt": 140,
+          "credits": 21.6
+        }
+      },
+      "lateOrders": 21
+    }
+  ]
+}

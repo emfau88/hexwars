@@ -3,6 +3,8 @@
 Stand: 14. Oktober 2026. Entwicklung ausschließlich in `codex/lane-wars`.
 Sicherung vor den Änderungen: Commit `1a40373`, Tag `codex/lane-wars-pre-m2.1`. Der Sicherungsstand enthält bereits die korrigierten Fabrikausfahrten.
 
+**Mobile Nachbesserung:** Nach dem persönlichen Hochformat-Test wurden Fabrikverwaltung und Hinweise eingeklappt, die Frontanzeigen verkürzt und der Kameraausschnitt angepasst. [Neue Ansichten und Prüfungen](MOBILE-HUD.md).
+
 ## Spielen
 
 **[Öffentliche M2.1-Kampagne](https://rawcdn.githack.com/emfau88/hexwars/60aaf1f6b893b3a607040571363c3fd50bb1a6e2/experiments/hexfront-lane-wars/index.html)** · [Öffentliche Bilder und Nachschubdemo](https://rawcdn.githack.com/emfau88/hexwars/60aaf1f6b893b3a607040571363c3fd50bb1a6e2/experiments/hexfront-lane-wars/m21-review.html). Laufzeitstand `60aaf1f`, ohne lokalen Server. Beim ersten Besuch gegebenenfalls **Open the page** bestätigen.

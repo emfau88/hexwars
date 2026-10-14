@@ -20,6 +20,8 @@ Für die lokalen Links wird der Server benötigt. Node.js ab Version 20 genügt;
 
 ## Bedienung
 
+**Smartphone:** Die Fabrikverwaltung ist zunächst eingeklappt. **Fabriken & Wirtschaft** öffnet Karten, Ausbau und Kameraknöpfe. Nachschub und Richtungspfeile bleiben direkt erreichbar. **?** zeigt den kurzen Missionshinweis; Antippen einer Frontanzeige zeigt Verstärkungsdetails. [Mobile Korrektur und Bilder](docs/MOBILE-HUD.md).
+
 - **Fabrikkarte:** Typ bauen oder umrüsten. Neubauten erscheinen sofort transparent. Aufträge gelten ab der nächsten 15-Sekunden-Welle und sind bis dahin korrigierbar/stornierbar.
 - **← WEST / OST →:** am Gebäude oder in der Karte kostenlos die nächste Produktionsrichtung wechseln. Bestehende Roboter behalten ihre Lane.
 - **Nachschub:** Robotersymbol auf einen Weg ziehen; alternativ Typ antippen und anschließend Straße oder Frontanzeige antippen. In Erste Front genügt der Typ. 60 Credits, 15 Sekunden Abklingzeit, tatsächlicher Start am eigenen HQ.
@@ -40,6 +42,7 @@ npm run test:match
 npm run test:browser
 npm run test:visual
 npm run test:exits
+npm run test:mobile
 npm run build
 ```
 

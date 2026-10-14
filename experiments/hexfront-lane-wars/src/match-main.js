@@ -9,6 +9,11 @@ import {robot} from './ui-icons.js';
 const $=id=>document.getElementById(id),names={drone:'Drohne',mech:'Mech',rail:'Fernkämpfer'},short={drone:'D',mech:'M',rail:'F'};
 const timeText=t=>`${Math.floor(t/60).toString().padStart(2,'0')}:${Math.floor(t%60).toString().padStart(2,'0')}`;
 const laneName=lane=>lane===0?'West':'Ost';
+const compactHUD=()=>matchMedia('(max-width:650px), (max-height:500px) and (max-width:1000px)').matches;
+let deckOpen=false,hintOpen=false;
+function setDeck(open){deckOpen=open;$('command-deck').classList.toggle('expanded',open);$('toggle-factories').setAttribute('aria-expanded',String(open));$('toggle-factories').querySelector('span').textContent=open?'Fabriken schließen':'Fabriken & Wirtschaft';$('toggle-factories').querySelector('b').textContent=open?'⌄':'⌃';}
+function frameField(){if(!view)return;const compact=compactHUD();view.safeTop=compact?118:undefined;view.safeBottom=compact?(innerWidth>650?132:190):330;view.fitHalfWidth=compact?(match.mission.lanes===1?6.8:14.3):undefined;view.resize();}
+
 let campaign=readCampaign(localStorage),match,view,ready=false,playing=false,inMenu=true,selected=0,last=performance.now(),hudClock=0,saveClock=0,noticeUntil=0,cardKey='',restartId=null,markerElements=[],frontHistory=[],frontReadings=[],supplyType=null,targetLane=null,drag=null,ignoreSupplyClick=false,endedSaved=false,loading=false;
 function notify(message){$('notice').textContent=message;$('notice').hidden=false;noticeUntil=performance.now()+4500;}
 function persist(){
@@ -23,7 +28,7 @@ function issue(action,data={}){
  else{flush();view?.renderMatch(match,0);save();updateHUD();markers();}
  return result.ok;
 }
-function setMenu(show){inMenu=show;if(show){playing=false;save();cancelSupply();$('orders').hidden=true;updateMenu();}else last=performance.now();$('main-menu').hidden=!show;$('game-ui').hidden=show;updateHUD();}
+function setMenu(show){inMenu=show;if(show){playing=false;save();cancelSupply();setDeck(false);hintOpen=false;$('orders').hidden=true;updateMenu();}else last=performance.now();$('main-menu').hidden=!show;$('game-ui').hidden=show;updateHUD();}
 function updateMenu(){
  const active=campaign.active&&campaign.saves[campaign.active]?.match.phase==='running';
  $('resume-game').hidden=!active;$('campaign-go').textContent=active?'Kampagne fortsetzen':campaign.completed.includes('first')?'Wiesenkrieg spielen':'Kampagne starten';
@@ -39,12 +44,12 @@ async function prepare(id,{fresh=false,start=false}={}){
   const saved=!fresh&&campaign.saves[id],mission=MISSIONS[id];
   match=saved?Match.restore(saved.match):new Match({mission:id});
   match.controllers=saved?saved.ai.map(a=>MatchAI.restore(a)):[new MatchAI('blue',mission.ai)];
-  selected=mission.startSlots[0];cardKey='';endedSaved=false;frontHistory=[];frontReadings=[];$('orders').hidden=true;$('selection').hidden=true;
+  selected=mission.startSlots[0];setDeck(false);hintOpen=false;cardKey='';endedSaved=false;frontHistory=[];frontReadings=[];$('orders').hidden=true;$('selection').hidden=true;
   view?.dispose();const old=$('battle-stage'),stage=old.cloneNode(false);old.replaceWith(stage);$('battle-labels').replaceChildren();$('factory-labels').replaceChildren();$('building-leaders').replaceChildren();markerElements=[];
   view=new MatchView(stage,$('battle-labels'),inspect,selectFactory,mission);await view.ready;
   view.onLanePick=e=>{if(!supplyType)return false;sendSupply(view.laneAt(e.clientX,e.clientY));return true;};
   view.setCamera(campaign.settings.camera);view.reduced=!campaign.settings.motion||matchMedia('(prefers-reduced-motion: reduce)').matches;
-  view.safeBottom=innerWidth<651?345:330;view.safeTop=innerWidth<651&&match?.mission.lanes===1?190:undefined;view.resize();stage.addEventListener('click',onFieldClick,true);
+  frameField();stage.addEventListener('click',onFieldClick,true);
   document.querySelector('.menu-caption span').textContent='0'+mission.number+' / '+mission.name.toUpperCase();document.querySelector('.menu-caption strong').innerHTML=mission.lanes===1?'Ein Weg.<br>Deine erste Entscheidung.':'Zwei Wege.<br>Eine gemeinsame Front.';
   $('battlefield').dataset.mission=id;$('fronts').innerHTML=Array.from({length:mission.lanes},(_,lane)=>`<button class="ceramic front" data-lane="${lane}" aria-label="${mission.lanes===1?'Front':laneName(lane)}"><strong></strong><span></span><div class="front-track"><i></i></div><small></small></button>`).join('');
   ready=true;if(start&&match.phase==='setup'){match.start();flush();}view.renderMatch(match,0);updateHUD();markers();$('loading').hidden=true;loading=false;
@@ -58,7 +63,7 @@ async function openMission(id){
 }
 function requestRestart(id){restartId=id;$('restart-confirm').hidden=false;$('confirm-restart').textContent=MISSIONS[id].name+' neu beginnen';}
 function selectFactory(slot){
- if(inMenu||!ready||match.phase!=='running')return;selected=slot;const p=match.players.orange,f=p.pending[slot]||p.factories[slot]||{type:'drone',lane:slot%match.laneCount};
+ if(inMenu||!ready||match.phase!=='running')return;setDeck(false);hintOpen=false;selected=slot;const p=match.players.orange,f=p.pending[slot]||p.factories[slot]||{type:'drone',lane:slot%match.laneCount};
  $('factory-type').value=f.type;$('factory-lane').value=f.lane;$('orders').hidden=false;$('selection').hidden=true;cancelSupply();updateEditor();
 }
 function updateEditor(){
@@ -76,7 +81,7 @@ function toggleLane(slot){
  if(issue('factory',{slot,type:f.type,lane:1-f.lane}))notify('Fabrik '+(slot+1)+': '+laneName(1-f.lane)+' ab nächster Welle · kostenlos.');
 }
 function inspect(){
- if(!view||!match||inMenu)return;const u=view.inspect();$('selection').hidden=!u;if(!u)return;$('orders').hidden=true;
+ if(!view||!match||inMenu)return;const u=view.inspect();$('selection').hidden=!u;if(!u)return;setDeck(false);hintOpen=false;$('orders').hidden=true;
  $('selected-name').textContent=(u.owner==='orange'?'Deine ':'Gegnerische ')+names[u.type];$('selected-details').textContent=`${u.hp} / ${UNITS[u.type].hp} LP · Reichweite ${UNITS[u.type].range}${u.departing?' · verlässt die Basis':''}`;
 }
 function hint(){
@@ -96,7 +101,7 @@ function updateHUD(){
  $('mission-title').textContent=match.mission.name.toUpperCase();$('battle-clock').textContent=timeText(match.time);$('phase-label').textContent=ended?'BEENDET':playing?'WELLE '+match.wave:'PAUSE';
  for(const [id,player] of [['own',p],['enemy',enemy]]){$(id+'-hq').textContent=player.hq+' LP';$(id+'-health').max=match.rules.hqHP;$(id+'-health').value=player.hq;}
  $('credits').textContent=Math.floor(match.credits('orange'));$('income').textContent=ended?'Partie beendet':'+'+match.income('orange')+' Credits / s';$('wave-countdown').textContent=ended?'Keine weiteren Wellen':'Welle in '+match.nextWave.toFixed(1)+' s';
- $('match-play').textContent=playing?'Pause':'Weiter';$('match-play').disabled=ended;
+ $('match-play').textContent=compactHUD()?(playing?'Ⅱ':'▶'):(playing?'Pause':'Weiter');$('match-play').setAttribute('aria-label',playing?'Partie pausieren':'Partie fortsetzen');$('match-play').disabled=ended;
  $('economy').disabled=ended||p.economy||match.credits('orange')<match.rules.economyCost;
  $('economy').innerHTML=p.economy?'Wirtschaft ausgebaut <small>+'+match.income('orange')+' Credits/s</small>':'Wirtschaft · '+match.rules.economyCost+' <small>Einmalig +'+match.rules.economyIncome+' Credit/s</small>';
  const cool=Math.max(0,(p.supplyReady-match.tick)*.05);
@@ -108,30 +113,34 @@ function updateHUD(){
   return `<article class="factory-card ${pending?'pending':''}" data-slot="${i}"><button class="factory-open" data-edit="${i}" ${ended?'disabled':''} aria-label="Fabrik ${i+1} bearbeiten"><span class="slot-no">0${i+1}</span>${next?robot(next.type):'<span class="empty">+</span>'}<span><strong>${f?names[f.type]:pending?names[pending.type]+' geplant':'Bauen'}</strong><small>${info}</small></span></button>${next&&match.laneCount===2?'<button class="route-button" data-route="'+i+'" '+(ended?'disabled':'')+' aria-label="Fabrik '+(i+1)+' Richtung wechseln">'+(next.lane===0?'← WEST':'OST →')+(pending?' · nächste Welle':'')+'</button>':''}<small class="factory-timer" data-timer="${i}"></small></article>`;
  }).join('');}
  for(const el of document.querySelectorAll('[data-timer]')){const i=Number(el.dataset.timer),f=p.factories[i],next=p.pending[i];el.textContent=ended?'Beendet':next?'Geplant: '+names[next.type]+' · '+match.nextWave.toFixed(1)+' s':f?'Produktion in '+match.nextWave.toFixed(1)+' s':'Fester Bauplatz';}
+ $('factory-summary').textContent=p.factories.filter(Boolean).length+'/'+match.slotCount+(p.pending.some(Boolean)?' · Auftrag':'' );
  $('reserved').textContent=p.pending.some(Boolean)?p.pending.reduce((n,f)=>n+(f?.paid||0),0)+' Credits reserviert':'Automatisch alle 15 Sekunden';
  frontReadings=match.lanes.map((_,lane)=>{const h=frontHistory[lane]??=[];return frontState(match,lane,h.find(x=>match.time-x.time>=5));});
  for(const state of frontReadings){
   const history=frontHistory[state.lane];if(!history.length||match.time-history.at(-1).time>=1)history.push({time:match.time,position:state.position});while(history.length&&match.time-history[0].time>10)history.shift();
   const el=$('fronts').children[state.lane];if(!el)continue;el.classList.toggle('risk',state.risk);el.classList.toggle('target',state.lane===targetLane);
-  el.querySelector('strong').textContent=match.laneCount===1?'FRONT':laneName(state.lane).toUpperCase();el.querySelector('span').textContent=ended?'Partie beendet':state.label;
+  el.querySelector('strong').textContent=match.laneCount===1?'FRONT':laneName(state.lane).toUpperCase();
+  const brief={'Eigene Front rückt vor':'Vormarsch','Eigene Front weicht zurück':'Rückzug','Front im Gefecht':'Im Gefecht','Truppen auf dem Weg':'Unterwegs','Front noch offen':'Noch offen','Angriff am Gegner-HQ':'Am Gegner-HQ'};
+  el.querySelector('span').textContent=ended?'Beendet':compactHUD()?(brief[state.label]||state.label):state.label;
+  el.setAttribute('aria-label',(match.laneCount===1?'Front':laneName(state.lane))+': '+state.label+', '+state.incoming+' unterwegs, nächste Welle '+state.next);
   el.querySelector('i').style.left=(state.position/30*100)+'%';el.querySelector('small').textContent=ended?'':state.incoming+' unterwegs · nächste Welle '+state.next;
  }
- const [title,text]=hint();$('hint').hidden=ended||!campaign.settings.hints||!$('orders').hidden;$('hint').innerHTML='<strong>'+title+'</strong>'+text;
+ const [title,text]=hint();$('hint').hidden=ended||!campaign.settings.hints||!$('orders').hidden||(compactHUD()&&!hintOpen);$('toggle-hint').setAttribute('aria-expanded',String(!$('hint').hidden));$('hint').innerHTML='<strong>'+title+'</strong>'+text;
  $('match-result').hidden=!ended;if(ended){$('orders').hidden=true;$('selection').hidden=true;cancelSupply();$('result-title').textContent=match.result==='orange'?'Mission geschafft.':match.result==='blue'?'Dein HQ ist gefallen.':'Beide HQs sind gefallen.';
  $('result-details').textContent=match.mission.name+' · '+timeText(match.time)+' · '+match.wave+' Wellen. HQ: '+p.hq+' : '+enemy.hq+' LP.'+(match.result==='orange'&&match.mission.id==='first'?' Wiesenkrieg ist freigeschaltet.':'');
  $('result-next').textContent=match.result==='orange'&&match.mission.id==='first'?'Weiter zu Wiesenkrieg':'Mission erneut spielen';}
- if(innerWidth<651)$('hint').style.bottom=(innerHeight-document.querySelector('.command-deck').getBoundingClientRect().top+10)+'px';else $('hint').style.bottom='';
+ if(compactHUD())$('hint').style.bottom=(innerHeight-document.querySelector('.command-deck').getBoundingClientRect().top+10)+'px';else $('hint').style.bottom='';
  updateEditor();updateSupplyFeedback();
 }
 function markers(){
  if(!ready||inMenu)return;const screens=view.factoryScreens(),own=screens.filter(f=>f.owner==='orange'),enemy=screens.filter(f=>f.owner==='blue');
  const allBottom=Math.max(...own.map(f=>f.bounds.bottom),...view.hqs.filter((_,i)=>i===0).map(h=>view.buildingBounds(h).bottom));
- const width=innerWidth,spacing=width<650?86:108,center=width/2,top=allBottom+8;
+ const width=innerWidth,spacing=compactHUD()?Math.min(86,(width-24)/match.slotCount):108,center=width/2,top=allBottom+8;
  const data=[...own,...enemy],lines=[];
  for(let i=0;i<data.length;i++){
   const f=data[i],p=match.players[f.owner],actual=p.factories[f.slot],pending=f.owner==='orange'?p.pending[f.slot]:null,next=pending||actual;
   let el=markerElements[i];if(!el){el=document.createElement('div');$('factory-labels').append(el);markerElements[i]=el;}
-  el.hidden=!next;el.className='building-marker '+f.owner+(!actual&&pending?' ghost':'');if(!next)continue;
+  el.hidden=!next||(compactHUD()&&(deckOpen||!$('orders').hidden));el.className='building-marker '+f.owner+(!actual&&pending?' ghost':'');if(!next)continue;
   const x=center+(f.slot-(match.slotCount-1)/2)*spacing,y=f.owner==='orange'?top:Math.min(...enemy.map(b=>b.bounds.top))-22;
   el.style.left=x+'px';el.style.top=y+'px';
   const desc=f.owner==='blue'?'0'+(f.slot+1)+' · '+names[next.type]+(match.laneCount===2?' · '+laneName(next.lane):''):'0'+(f.slot+1)+' · '+(pending?names[pending.type]+' · '+Math.ceil(match.nextWave)+' s':names[actual.type]);
@@ -159,20 +168,22 @@ function frame(now){
  if(noticeUntil&&now>noticeUntil){$('notice').hidden=true;noticeUntil=0;}requestAnimationFrame(frame);
 }
 $('supply-units').innerHTML=Object.keys(names).map(type=>'<button data-type="'+type+'" aria-label="'+names[type]+' Sofortnachschub">'+robot(type)+'<small>'+names[type]+'</small></button>').join('');
-$('supply-units').addEventListener('pointerdown',e=>{const b=e.target.closest('[data-type]');if(!b||b.disabled||!ready)return;ignoreSupplyClick=false;$('orders').hidden=true;supplyType=b.dataset.type;drag={id:e.pointerId,x:e.clientX,y:e.clientY,moved:false};b.setPointerCapture(e.pointerId);updateSupplyFeedback();});
+$('supply-units').addEventListener('pointerdown',e=>{const b=e.target.closest('[data-type]');if(!b||b.disabled||!ready)return;ignoreSupplyClick=false;setDeck(false);hintOpen=false;$('selection').hidden=true;$('orders').hidden=true;supplyType=b.dataset.type;drag={id:e.pointerId,x:e.clientX,y:e.clientY,moved:false};b.setPointerCapture(e.pointerId);updateSupplyFeedback();});
 $('supply-units').addEventListener('pointermove',e=>{if(!drag||e.pointerId!==drag.id)return;if(Math.hypot(e.clientX-drag.x,e.clientY-drag.y)>8)drag.moved=true;if(drag.moved)setTarget(targetAt(e.clientX,e.clientY));});
 $('supply-units').addEventListener('pointerup',e=>{if(!drag)return;const moved=drag.moved;drag=null;if(moved){ignoreSupplyClick=true;const lane=targetAt(e.clientX,e.clientY);if(lane===null)cancelSupply();else sendSupply(lane);}});
 $('supply-units').addEventListener('pointercancel',cancelSupply);
 $('supply-units').addEventListener('click',e=>{if(ignoreSupplyClick&&e.detail!==0){ignoreSupplyClick=false;return;}const b=e.target.closest('[data-type]');if(!b)return;supplyType=b.dataset.type;$('orders').hidden=true;if(match.laneCount===1)sendSupply(0);else updateSupplyFeedback();});
-$('fronts').onclick=e=>{const b=e.target.closest('[data-lane]');if(b&&supplyType)sendSupply(Number(b.dataset.lane));};
+$('fronts').onclick=e=>{const b=e.target.closest('[data-lane]');if(!b)return;if(supplyType)sendSupply(Number(b.dataset.lane));else if(compactHUD()){const show=!b.classList.contains('detail');for(const front of $('fronts').children){front.classList.remove('detail');front.setAttribute('aria-expanded','false');}b.classList.toggle('detail',show);b.setAttribute('aria-expanded',String(show));}};
 $('cancel-supply').onclick=cancelSupply;
+$('toggle-factories').onclick=()=>{setDeck(!deckOpen);hintOpen=false;cancelSupply();$('orders').hidden=true;$('selection').hidden=true;updateHUD();markers();};
+$('toggle-hint').onclick=()=>{hintOpen=!hintOpen;setDeck(false);updateHUD();markers();};
 function factoryClick(e){const edit=e.target.closest('[data-edit]'),route=e.target.closest('[data-route]');if(route)toggleLane(Number(route.dataset.route));else if(edit)selectFactory(Number(edit.dataset.edit));}
 $('factory-cards').onclick=factoryClick;$('factory-labels').onclick=factoryClick;
 $('factory-type').onchange=updateEditor;$('factory-lane').onchange=updateEditor;
 $('apply-factory').onclick=()=>{if(issue('factory',{slot:selected,type:$('factory-type').value,lane:match.laneCount===1?0:Number($('factory-lane').value)})){notify('Auftrag vorgemerkt · aktiv in '+match.nextWave.toFixed(1)+' s.');$('orders').hidden=true;}};
 $('cancel-order').onclick=()=>{if(issue('cancel',{slot:selected})){notify('Auftrag storniert, Credits erstattet.');$('orders').hidden=true;}};
 $('close-orders').onclick=()=>{$('orders').hidden=true;};
-$('economy').onclick=()=>{if(issue('economy'))notify('Wirtschaft ausgebaut: +'+match.income('orange')+' Credits/s.');};
+$('economy').onclick=()=>{if(issue('economy')){setDeck(false);notify('Wirtschaft ausgebaut: +'+match.income('orange')+' Credits/s.');}};
 $('open-menu').onclick=()=>setMenu(true);$('result-menu').onclick=()=>setMenu(true);
 $('campaign-go').onclick=()=>openMission(campaign.active&&campaign.saves[campaign.active]?.match.phase==='running'?campaign.active:campaign.completed.includes('first')?'meadow':'first');
 $('resume-game').onclick=()=>openMission(campaign.active);
@@ -190,7 +201,7 @@ $('camera-home').onclick=()=>view.home();$('zoom-in').onclick=()=>view.zoomBy(1.
 $('close-selection').onclick=()=>{view.selected=null;$('selection').hidden=true;};$('focus-unit').onclick=()=>view.focusSelected();
 document.addEventListener('visibilitychange',()=>{if(document.hidden){playing=false;save();}last=performance.now();});
 window.addEventListener('pagehide',save);
-window.addEventListener('resize',()=>{if(view){view.safeBottom=innerWidth<651?345:330;view.safeTop=innerWidth<651&&match?.mission.lanes===1?190:undefined;view.resize();updateHUD();markers();}});
+window.addEventListener('resize',()=>{if(view){frameField();updateHUD();markers();}});
 document.addEventListener('keydown',e=>{if(e.code==='Escape'){cancelSupply();$('orders').hidden=true;if(!inMenu)setMenu(true);}if(e.code==='Space'&&!inMenu&&!['SELECT','INPUT','BUTTON'].includes(document.activeElement.tagName)){e.preventDefault();$('match-play').click();}});
 updateMenu();await prepare(campaign.active&&MISSIONS[campaign.active]?campaign.active:'first');requestAnimationFrame(frame);
 window.__LANE_MATCH__=Object.freeze({snapshot:()=>match.snapshot(),observe:()=>match.observe('orange'),summary:()=>match.summary(),diagnostics:()=>({...view.diagnostics(),factories:view.factoryScreens(),laneTargets:view.laneScreens(),fronts:frontReadings}),get playing(){return playing;},campaign:()=>structuredClone(campaign)});
