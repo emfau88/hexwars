@@ -1,0 +1,5218 @@
+{
+  "rules": {
+    "drone": {
+      "name": "Drohne",
+      "plural": "Drohnen",
+      "count": 3,
+      "hp": 24,
+      "damage": 6,
+      "interval": 0.6,
+      "range": 1.1,
+      "speed": 1.6,
+      "windup": 0.1,
+      "splash": 0,
+      "secondary": 0,
+      "maxSecondary": 0,
+      "radius": 0.22
+    },
+    "mech": {
+      "name": "Mech",
+      "plural": "Mechs",
+      "count": 1,
+      "hp": 120,
+      "damage": 10,
+      "interval": 1.2,
+      "range": 1.6,
+      "speed": 0.9,
+      "windup": 0.2,
+      "splash": 0.8,
+      "secondary": 7,
+      "maxSecondary": 2,
+      "radius": 0.34
+    },
+    "rail": {
+      "name": "Fernkämpfer",
+      "plural": "Fernkämpfer",
+      "count": 1,
+      "hp": 40,
+      "damage": 45,
+      "interval": 2.4,
+      "range": 4,
+      "speed": 1,
+      "windup": 0.35,
+      "splash": 0,
+      "secondary": 0,
+      "maxSecondary": 0,
+      "radius": 0.27
+    }
+  },
+  "measurementLimitSeconds": 90,
+  "comparisons": 2025,
+  "mirrorErrors": [],
+  "unresolved": [],
+  "cases": [
+    {
+      "id": "swarm",
+      "ok": true,
+      "normal": {
+        "result": "orange",
+        "time": 7.45,
+        "survivors": {
+          "orange": {
+            "count": 1,
+            "hp": 24
+          },
+          "blue": {
+            "count": 0,
+            "hp": 0
+          }
+        },
+        "stats": {
+          "orange": {
+            "initial": 3,
+            "initialHP": 72,
+            "damage": 40,
+            "shots": 7,
+            "lost": 2
+          },
+          "blue": {
+            "initial": 1,
+            "initialHP": 40,
+            "damage": 48,
+            "shots": 2,
+            "lost": 1
+          }
+        }
+      },
+      "reverse": {
+        "result": "blue",
+        "time": 7.45,
+        "survivors": {
+          "orange": {
+            "count": 0,
+            "hp": 0
+          },
+          "blue": {
+            "count": 1,
+            "hp": 24
+          }
+        },
+        "stats": {
+          "orange": {
+            "initial": 1,
+            "initialHP": 40,
+            "damage": 48,
+            "shots": 2,
+            "lost": 1
+          },
+          "blue": {
+            "initial": 3,
+            "initialHP": 72,
+            "damage": 40,
+            "shots": 7,
+            "lost": 2
+          }
+        }
+      }
+    },
+    {
+      "id": "splash",
+      "ok": true,
+      "normal": {
+        "result": "orange",
+        "time": 9.2,
+        "survivors": {
+          "orange": {
+            "count": 1,
+            "hp": 12
+          },
+          "blue": {
+            "count": 0,
+            "hp": 0
+          }
+        },
+        "stats": {
+          "orange": {
+            "initial": 1,
+            "initialHP": 120,
+            "damage": 72,
+            "shots": 5,
+            "lost": 0
+          },
+          "blue": {
+            "initial": 3,
+            "initialHP": 72,
+            "damage": 108,
+            "shots": 18,
+            "lost": 3
+          }
+        }
+      },
+      "reverse": {
+        "result": "blue",
+        "time": 9.2,
+        "survivors": {
+          "orange": {
+            "count": 0,
+            "hp": 0
+          },
+          "blue": {
+            "count": 1,
+            "hp": 12
+          }
+        },
+        "stats": {
+          "orange": {
+            "initial": 3,
+            "initialHP": 72,
+            "damage": 108,
+            "shots": 18,
+            "lost": 3
+          },
+          "blue": {
+            "initial": 1,
+            "initialHP": 120,
+            "damage": 72,
+            "shots": 5,
+            "lost": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "range",
+      "ok": true,
+      "normal": {
+        "result": "orange",
+        "time": 9.4,
+        "survivors": {
+          "orange": {
+            "count": 1,
+            "hp": 20
+          },
+          "blue": {
+            "count": 0,
+            "hp": 0
+          }
+        },
+        "stats": {
+          "orange": {
+            "initial": 1,
+            "initialHP": 40,
+            "damage": 120,
+            "shots": 3,
+            "lost": 0
+          },
+          "blue": {
+            "initial": 1,
+            "initialHP": 120,
+            "damage": 20,
+            "shots": 2,
+            "lost": 1
+          }
+        }
+      },
+      "reverse": {
+        "result": "blue",
+        "time": 9.4,
+        "survivors": {
+          "orange": {
+            "count": 0,
+            "hp": 0
+          },
+          "blue": {
+            "count": 1,
+            "hp": 20
+          }
+        },
+        "stats": {
+          "orange": {
+            "initial": 1,
+            "initialHP": 120,
+            "damage": 20,
+            "shots": 2,
+            "lost": 1
+          },
+          "blue": {
+            "initial": 1,
+            "initialHP": 40,
+            "damage": 120,
+            "shots": 3,
+            "lost": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "mixed",
+      "ok": true,
+      "normal": {
+        "result": "orange",
+        "time": 9.1,
+        "survivors": {
+          "orange": {
+            "count": 8,
+            "hp": 133
+          },
+          "blue": {
+            "count": 0,
+            "hp": 0
+          }
+        },
+        "stats": {
+          "orange": {
+            "initial": 12,
+            "initialHP": 288,
+            "damage": 320,
+            "shots": 55,
+            "lost": 4
+          },
+          "blue": {
+            "initial": 4,
+            "initialHP": 320,
+            "damage": 155,
+            "shots": 12,
+            "lost": 4
+          }
+        }
+      },
+      "reverse": {
+        "result": "blue",
+        "time": 9.1,
+        "survivors": {
+          "orange": {
+            "count": 0,
+            "hp": 0
+          },
+          "blue": {
+            "count": 8,
+            "hp": 133
+          }
+        },
+        "stats": {
+          "orange": {
+            "initial": 4,
+            "initialHP": 320,
+            "damage": 155,
+            "shots": 12,
+            "lost": 4
+          },
+          "blue": {
+            "initial": 12,
+            "initialHP": 288,
+            "damage": 320,
+            "shots": 55,
+            "lost": 4
+          }
+        }
+      }
+    },
+    {
+      "id": "swarm-answer",
+      "ok": true,
+      "normal": {
+        "result": "orange",
+        "time": 8.9,
+        "survivors": {
+          "orange": {
+            "count": 4,
+            "hp": 276
+          },
+          "blue": {
+            "count": 0,
+            "hp": 0
+          }
+        },
+        "stats": {
+          "orange": {
+            "initial": 4,
+            "initialHP": 480,
+            "damage": 288,
+            "shots": 16,
+            "lost": 0
+          },
+          "blue": {
+            "initial": 12,
+            "initialHP": 288,
+            "damage": 204,
+            "shots": 34,
+            "lost": 12
+          }
+        }
+      },
+      "reverse": {
+        "result": "blue",
+        "time": 8.9,
+        "survivors": {
+          "orange": {
+            "count": 0,
+            "hp": 0
+          },
+          "blue": {
+            "count": 4,
+            "hp": 276
+          }
+        },
+        "stats": {
+          "orange": {
+            "initial": 12,
+            "initialHP": 288,
+            "damage": 204,
+            "shots": 34,
+            "lost": 12
+          },
+          "blue": {
+            "initial": 4,
+            "initialHP": 480,
+            "damage": 288,
+            "shots": 16,
+            "lost": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "heavy-answer",
+      "ok": true,
+      "normal": {
+        "result": "orange",
+        "time": 12.25,
+        "survivors": {
+          "orange": {
+            "count": 1,
+            "hp": 30
+          },
+          "blue": {
+            "count": 0,
+            "hp": 0
+          }
+        },
+        "stats": {
+          "orange": {
+            "initial": 4,
+            "initialHP": 240,
+            "damage": 400,
+            "shots": 13,
+            "lost": 3
+          },
+          "blue": {
+            "initial": 4,
+            "initialHP": 400,
+            "damage": 210,
+            "shots": 13,
+            "lost": 4
+          }
+        }
+      },
+      "reverse": {
+        "result": "blue",
+        "time": 12.25,
+        "survivors": {
+          "orange": {
+            "count": 0,
+            "hp": 0
+          },
+          "blue": {
+            "count": 1,
+            "hp": 30
+          }
+        },
+        "stats": {
+          "orange": {
+            "initial": 4,
+            "initialHP": 400,
+            "damage": 210,
+            "shots": 13,
+            "lost": 4
+          },
+          "blue": {
+            "initial": 4,
+            "initialHP": 240,
+            "damage": 400,
+            "shots": 13,
+            "lost": 3
+          }
+        }
+      }
+    },
+    {
+      "id": "mirror",
+      "ok": true,
+      "normal": {
+        "result": "draw",
+        "time": 12.85,
+        "survivors": {
+          "orange": {
+            "count": 0,
+            "hp": 0
+          },
+          "blue": {
+            "count": 0,
+            "hp": 0
+          }
+        },
+        "stats": {
+          "orange": {
+            "initial": 8,
+            "initialHP": 304,
+            "damage": 304,
+            "shots": 26,
+            "lost": 8
+          },
+          "blue": {
+            "initial": 8,
+            "initialHP": 304,
+            "damage": 304,
+            "shots": 26,
+            "lost": 8
+          }
+        }
+      },
+      "reverse": {
+        "result": "draw",
+        "time": 12.85,
+        "survivors": {
+          "orange": {
+            "count": 0,
+            "hp": 0
+          },
+          "blue": {
+            "count": 0,
+            "hp": 0
+          }
+        },
+        "stats": {
+          "orange": {
+            "initial": 8,
+            "initialHP": 304,
+            "damage": 304,
+            "shots": 26,
+            "lost": 8
+          },
+          "blue": {
+            "initial": 8,
+            "initialHP": 304,
+            "damage": 304,
+            "shots": 26,
+            "lost": 8
+          }
+        }
+      }
+    }
+  ],
+  "ranking": [
+    {
+      "army": {
+        "drone": 0,
+        "mech": 0,
+        "rail": 4
+      },
+      "wins": 9,
+      "losses": 5,
+      "draws": 1,
+      "unresolved": 0
+    },
+    {
+      "army": {
+        "drone": 0,
+        "mech": 1,
+        "rail": 3
+      },
+      "wins": 9,
+      "losses": 5,
+      "draws": 1,
+      "unresolved": 0
+    },
+    {
+      "army": {
+        "drone": 0,
+        "mech": 2,
+        "rail": 2
+      },
+      "wins": 8,
+      "losses": 5,
+      "draws": 2,
+      "unresolved": 0
+    },
+    {
+      "army": {
+        "drone": 0,
+        "mech": 3,
+        "rail": 1
+      },
+      "wins": 12,
+      "losses": 1,
+      "draws": 2,
+      "unresolved": 0
+    },
+    {
+      "army": {
+        "drone": 0,
+        "mech": 4,
+        "rail": 0
+      },
+      "wins": 9,
+      "losses": 5,
+      "draws": 1,
+      "unresolved": 0
+    },
+    {
+      "army": {
+        "drone": 1,
+        "mech": 0,
+        "rail": 3
+      },
+      "wins": 3,
+      "losses": 11,
+      "draws": 1,
+      "unresolved": 0
+    },
+    {
+      "army": {
+        "drone": 1,
+        "mech": 1,
+        "rail": 2
+      },
+      "wins": 5,
+      "losses": 9,
+      "draws": 1,
+      "unresolved": 0
+    },
+    {
+      "army": {
+        "drone": 1,
+        "mech": 2,
+        "rail": 1
+      },
+      "wins": 7,
+      "losses": 7,
+      "draws": 1,
+      "unresolved": 0
+    },
+    {
+      "army": {
+        "drone": 1,
+        "mech": 3,
+        "rail": 0
+      },
+      "wins": 1,
+      "losses": 13,
+      "draws": 1,
+      "unresolved": 0
+    },
+    {
+      "army": {
+        "drone": 2,
+        "mech": 0,
+        "rail": 2
+      },
+      "wins": 6,
+      "losses": 8,
+      "draws": 1,
+      "unresolved": 0
+    },
+    {
+      "army": {
+        "drone": 2,
+        "mech": 1,
+        "rail": 1
+      },
+      "wins": 4,
+      "losses": 10,
+      "draws": 1,
+      "unresolved": 0
+    },
+    {
+      "army": {
+        "drone": 2,
+        "mech": 2,
+        "rail": 0
+      },
+      "wins": 4,
+      "losses": 10,
+      "draws": 1,
+      "unresolved": 0
+    },
+    {
+      "army": {
+        "drone": 3,
+        "mech": 0,
+        "rail": 1
+      },
+      "wins": 7,
+      "losses": 7,
+      "draws": 1,
+      "unresolved": 0
+    },
+    {
+      "army": {
+        "drone": 3,
+        "mech": 1,
+        "rail": 0
+      },
+      "wins": 8,
+      "losses": 6,
+      "draws": 1,
+      "unresolved": 0
+    },
+    {
+      "army": {
+        "drone": 4,
+        "mech": 0,
+        "rail": 0
+      },
+      "wins": 12,
+      "losses": 2,
+      "draws": 1,
+      "unresolved": 0
+    }
+  ],
+  "mixedCounters": [
+    {
+      "army": {
+        "drone": 0,
+        "mech": 1,
+        "rail": 3
+      },
+      "variations": [
+        {
+          "gap": 6,
+          "result": "blue",
+          "time": 7.3,
+          "survivors": {
+            "orange": {
+              "count": 0,
+              "hp": 0
+            },
+            "blue": {
+              "count": 2,
+              "hp": 80
+            }
+          },
+          "stats": {
+            "orange": {
+              "initial": 4,
+              "initialHP": 240,
+              "damage": 240,
+              "shots": 9,
+              "lost": 4
+            },
+            "blue": {
+              "initial": 4,
+              "initialHP": 320,
+              "damage": 240,
+              "shots": 11,
+              "lost": 2
+            }
+          }
+        },
+        {
+          "gap": 12,
+          "result": "blue",
+          "time": 10.35,
+          "survivors": {
+            "orange": {
+              "count": 0,
+              "hp": 0
+            },
+            "blue": {
+              "count": 2,
+              "hp": 80
+            }
+          },
+          "stats": {
+            "orange": {
+              "initial": 4,
+              "initialHP": 240,
+              "damage": 240,
+              "shots": 9,
+              "lost": 4
+            },
+            "blue": {
+              "initial": 4,
+              "initialHP": 320,
+              "damage": 240,
+              "shots": 10,
+              "lost": 2
+            }
+          }
+        },
+        {
+          "gap": 18,
+          "result": "orange",
+          "time": 13,
+          "survivors": {
+            "orange": {
+              "count": 2,
+              "hp": 80
+            },
+            "blue": {
+              "count": 0,
+              "hp": 0
+            }
+          },
+          "stats": {
+            "orange": {
+              "initial": 4,
+              "initialHP": 240,
+              "damage": 320,
+              "shots": 10,
+              "lost": 2
+            },
+            "blue": {
+              "initial": 4,
+              "initialHP": 320,
+              "damage": 160,
+              "shots": 9,
+              "lost": 4
+            }
+          }
+        }
+      ]
+    },
+    {
+      "army": {
+        "drone": 1,
+        "mech": 0,
+        "rail": 3
+      },
+      "variations": [
+        {
+          "gap": 6,
+          "result": "blue",
+          "time": 7,
+          "survivors": {
+            "orange": {
+              "count": 0,
+              "hp": 0
+            },
+            "blue": {
+              "count": 2,
+              "hp": 80
+            }
+          },
+          "stats": {
+            "orange": {
+              "initial": 6,
+              "initialHP": 192,
+              "damage": 240,
+              "shots": 9,
+              "lost": 6
+            },
+            "blue": {
+              "initial": 4,
+              "initialHP": 320,
+              "damage": 192,
+              "shots": 10,
+              "lost": 2
+            }
+          }
+        },
+        {
+          "gap": 12,
+          "result": "orange",
+          "time": 10.25,
+          "survivors": {
+            "orange": {
+              "count": 2,
+              "hp": 80
+            },
+            "blue": {
+              "count": 0,
+              "hp": 0
+            }
+          },
+          "stats": {
+            "orange": {
+              "initial": 6,
+              "initialHP": 192,
+              "damage": 320,
+              "shots": 14,
+              "lost": 4
+            },
+            "blue": {
+              "initial": 4,
+              "initialHP": 320,
+              "damage": 112,
+              "shots": 10,
+              "lost": 4
+            }
+          }
+        },
+        {
+          "gap": 18,
+          "result": "blue",
+          "time": 13.3,
+          "survivors": {
+            "orange": {
+              "count": 0,
+              "hp": 0
+            },
+            "blue": {
+              "count": 3,
+              "hp": 92
+            }
+          },
+          "stats": {
+            "orange": {
+              "initial": 6,
+              "initialHP": 192,
+              "damage": 228,
+              "shots": 11,
+              "lost": 6
+            },
+            "blue": {
+              "initial": 4,
+              "initialHP": 320,
+              "damage": 192,
+              "shots": 14,
+              "lost": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "army": {
+        "drone": 1,
+        "mech": 2,
+        "rail": 1
+      },
+      "variations": [
+        {
+          "gap": 6,
+          "result": "blue",
+          "time": 11.4,
+          "survivors": {
+            "orange": {
+              "count": 0,
+              "hp": 0
+            },
+            "blue": {
+              "count": 1,
+              "hp": 23
+            }
+          },
+          "stats": {
+            "orange": {
+              "initial": 6,
+              "initialHP": 352,
+              "damage": 297,
+              "shots": 20,
+              "lost": 6
+            },
+            "blue": {
+              "initial": 4,
+              "initialHP": 320,
+              "damage": 352,
+              "shots": 17,
+              "lost": 3
+            }
+          }
+        },
+        {
+          "gap": 12,
+          "result": "orange",
+          "time": 15.65,
+          "survivors": {
+            "orange": {
+              "count": 1,
+              "hp": 40
+            },
+            "blue": {
+              "count": 0,
+              "hp": 0
+            }
+          },
+          "stats": {
+            "orange": {
+              "initial": 6,
+              "initialHP": 352,
+              "damage": 320,
+              "shots": 20,
+              "lost": 5
+            },
+            "blue": {
+              "initial": 4,
+              "initialHP": 320,
+              "damage": 312,
+              "shots": 19,
+              "lost": 4
+            }
+          }
+        },
+        {
+          "gap": 18,
+          "result": "blue",
+          "time": 16,
+          "survivors": {
+            "orange": {
+              "count": 0,
+              "hp": 0
+            },
+            "blue": {
+              "count": 3,
+              "hp": 87
+            }
+          },
+          "stats": {
+            "orange": {
+              "initial": 6,
+              "initialHP": 352,
+              "damage": 233,
+              "shots": 16,
+              "lost": 6
+            },
+            "blue": {
+              "initial": 4,
+              "initialHP": 320,
+              "damage": 352,
+              "shots": 21,
+              "lost": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "army": {
+        "drone": 2,
+        "mech": 0,
+        "rail": 2
+      },
+      "variations": [
+        {
+          "gap": 6,
+          "result": "blue",
+          "time": 8.7,
+          "survivors": {
+            "orange": {
+              "count": 0,
+              "hp": 0
+            },
+            "blue": {
+              "count": 2,
+              "hp": 80
+            }
+          },
+          "stats": {
+            "orange": {
+              "initial": 8,
+              "initialHP": 224,
+              "damage": 240,
+              "shots": 15,
+              "lost": 8
+            },
+            "blue": {
+              "initial": 4,
+              "initialHP": 320,
+              "damage": 224,
+              "shots": 13,
+              "lost": 2
+            }
+          }
+        },
+        {
+          "gap": 12,
+          "result": "orange",
+          "time": 11.1,
+          "survivors": {
+            "orange": {
+              "count": 2,
+              "hp": 80
+            },
+            "blue": {
+              "count": 0,
+              "hp": 0
+            }
+          },
+          "stats": {
+            "orange": {
+              "initial": 8,
+              "initialHP": 224,
+              "damage": 320,
+              "shots": 32,
+              "lost": 6
+            },
+            "blue": {
+              "initial": 4,
+              "initialHP": 320,
+              "damage": 144,
+              "shots": 15,
+              "lost": 4
+            }
+          }
+        },
+        {
+          "gap": 18,
+          "result": "blue",
+          "time": 15.7,
+          "survivors": {
+            "orange": {
+              "count": 0,
+              "hp": 0
+            },
+            "blue": {
+              "count": 1,
+              "hp": 40
+            }
+          },
+          "stats": {
+            "orange": {
+              "initial": 8,
+              "initialHP": 224,
+              "damage": 280,
+              "shots": 29,
+              "lost": 8
+            },
+            "blue": {
+              "initial": 4,
+              "initialHP": 320,
+              "damage": 224,
+              "shots": 17,
+              "lost": 3
+            }
+          }
+        }
+      ]
+    },
+    {
+      "army": {
+        "drone": 2,
+        "mech": 2,
+        "rail": 0
+      },
+      "variations": [
+        {
+          "gap": 6,
+          "result": "orange",
+          "time": 11.85,
+          "survivors": {
+            "orange": {
+              "count": 1,
+              "hp": 82
+            },
+            "blue": {
+              "count": 0,
+              "hp": 0
+            }
+          },
+          "stats": {
+            "orange": {
+              "initial": 8,
+              "initialHP": 384,
+              "damage": 320,
+              "shots": 37,
+              "lost": 7
+            },
+            "blue": {
+              "initial": 4,
+              "initialHP": 320,
+              "damage": 302,
+              "shots": 19,
+              "lost": 4
+            }
+          }
+        },
+        {
+          "gap": 12,
+          "result": "blue",
+          "time": 13.7,
+          "survivors": {
+            "orange": {
+              "count": 0,
+              "hp": 0
+            },
+            "blue": {
+              "count": 3,
+              "hp": 82
+            }
+          },
+          "stats": {
+            "orange": {
+              "initial": 8,
+              "initialHP": 384,
+              "damage": 238,
+              "shots": 32,
+              "lost": 8
+            },
+            "blue": {
+              "initial": 4,
+              "initialHP": 320,
+              "damage": 384,
+              "shots": 25,
+              "lost": 1
+            }
+          }
+        },
+        {
+          "gap": 18,
+          "result": "blue",
+          "time": 16,
+          "survivors": {
+            "orange": {
+              "count": 0,
+              "hp": 0
+            },
+            "blue": {
+              "count": 3,
+              "hp": 112
+            }
+          },
+          "stats": {
+            "orange": {
+              "initial": 8,
+              "initialHP": 384,
+              "damage": 208,
+              "shots": 30,
+              "lost": 8
+            },
+            "blue": {
+              "initial": 4,
+              "initialHP": 320,
+              "damage": 384,
+              "shots": 25,
+              "lost": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "army": {
+        "drone": 3,
+        "mech": 0,
+        "rail": 1
+      },
+      "variations": [
+        {
+          "gap": 6,
+          "result": "blue",
+          "time": 8.7,
+          "survivors": {
+            "orange": {
+              "count": 0,
+              "hp": 0
+            },
+            "blue": {
+              "count": 1,
+              "hp": 40
+            }
+          },
+          "stats": {
+            "orange": {
+              "initial": 10,
+              "initialHP": 256,
+              "damage": 280,
+              "shots": 29,
+              "lost": 10
+            },
+            "blue": {
+              "initial": 4,
+              "initialHP": 320,
+              "damage": 256,
+              "shots": 14,
+              "lost": 3
+            }
+          }
+        },
+        {
+          "gap": 12,
+          "result": "orange",
+          "time": 12.65,
+          "survivors": {
+            "orange": {
+              "count": 2,
+              "hp": 43
+            },
+            "blue": {
+              "count": 0,
+              "hp": 0
+            }
+          },
+          "stats": {
+            "orange": {
+              "initial": 10,
+              "initialHP": 256,
+              "damage": 320,
+              "shots": 46,
+              "lost": 8
+            },
+            "blue": {
+              "initial": 4,
+              "initialHP": 320,
+              "damage": 213,
+              "shots": 14,
+              "lost": 4
+            }
+          }
+        },
+        {
+          "gap": 18,
+          "result": "orange",
+          "time": 13.45,
+          "survivors": {
+            "orange": {
+              "count": 4,
+              "hp": 60
+            },
+            "blue": {
+              "count": 0,
+              "hp": 0
+            }
+          },
+          "stats": {
+            "orange": {
+              "initial": 10,
+              "initialHP": 256,
+              "damage": 320,
+              "shots": 54,
+              "lost": 6
+            },
+            "blue": {
+              "initial": 4,
+              "initialHP": 320,
+              "damage": 196,
+              "shots": 14,
+              "lost": 4
+            }
+          }
+        }
+      ]
+    },
+    {
+      "army": {
+        "drone": 4,
+        "mech": 0,
+        "rail": 0
+      },
+      "variations": [
+        {
+          "gap": 6,
+          "result": "orange",
+          "time": 8.8,
+          "survivors": {
+            "orange": {
+              "count": 3,
+              "hp": 30
+            },
+            "blue": {
+              "count": 0,
+              "hp": 0
+            }
+          },
+          "stats": {
+            "orange": {
+              "initial": 12,
+              "initialHP": 288,
+              "damage": 320,
+              "shots": 55,
+              "lost": 9
+            },
+            "blue": {
+              "initial": 4,
+              "initialHP": 320,
+              "damage": 258,
+              "shots": 14,
+              "lost": 4
+            }
+          }
+        },
+        {
+          "gap": 12,
+          "result": "orange",
+          "time": 9.1,
+          "survivors": {
+            "orange": {
+              "count": 8,
+              "hp": 133
+            },
+            "blue": {
+              "count": 0,
+              "hp": 0
+            }
+          },
+          "stats": {
+            "orange": {
+              "initial": 12,
+              "initialHP": 288,
+              "damage": 320,
+              "shots": 55,
+              "lost": 4
+            },
+            "blue": {
+              "initial": 4,
+              "initialHP": 320,
+              "damage": 155,
+              "shots": 12,
+              "lost": 4
+            }
+          }
+        },
+        {
+          "gap": 18,
+          "result": "orange",
+          "time": 11.5,
+          "survivors": {
+            "orange": {
+              "count": 8,
+              "hp": 116
+            },
+            "blue": {
+              "count": 0,
+              "hp": 0
+            }
+          },
+          "stats": {
+            "orange": {
+              "initial": 12,
+              "initialHP": 288,
+              "damage": 320,
+              "shots": 54,
+              "lost": 4
+            },
+            "blue": {
+              "initial": 4,
+              "initialHP": 320,
+              "damage": 172,
+              "shots": 12,
+              "lost": 4
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "armies": [
+    {
+      "drone": 0,
+      "mech": 0,
+      "rail": 4
+    },
+    {
+      "drone": 0,
+      "mech": 1,
+      "rail": 3
+    },
+    {
+      "drone": 0,
+      "mech": 2,
+      "rail": 2
+    },
+    {
+      "drone": 0,
+      "mech": 3,
+      "rail": 1
+    },
+    {
+      "drone": 0,
+      "mech": 4,
+      "rail": 0
+    },
+    {
+      "drone": 1,
+      "mech": 0,
+      "rail": 3
+    },
+    {
+      "drone": 1,
+      "mech": 1,
+      "rail": 2
+    },
+    {
+      "drone": 1,
+      "mech": 2,
+      "rail": 1
+    },
+    {
+      "drone": 1,
+      "mech": 3,
+      "rail": 0
+    },
+    {
+      "drone": 2,
+      "mech": 0,
+      "rail": 2
+    },
+    {
+      "drone": 2,
+      "mech": 1,
+      "rail": 1
+    },
+    {
+      "drone": 2,
+      "mech": 2,
+      "rail": 0
+    },
+    {
+      "drone": 3,
+      "mech": 0,
+      "rail": 1
+    },
+    {
+      "drone": 3,
+      "mech": 1,
+      "rail": 0
+    },
+    {
+      "drone": 4,
+      "mech": 0,
+      "rail": 0
+    }
+  ],
+  "sweeps": [
+    {
+      "gap": 6,
+      "spacing": 0.6,
+      "matrix": [
+        [
+          "draw",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "draw",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "draw",
+          "blue",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "orange",
+          "draw",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "blue"
+        ],
+        [
+          "blue",
+          "orange",
+          "draw",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "draw",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "draw",
+          "orange",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "draw",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange"
+        ],
+        [
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "orange",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "draw",
+          "orange",
+          "draw",
+          "orange"
+        ],
+        [
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "draw",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "draw",
+          "orange",
+          "draw",
+          "orange"
+        ],
+        [
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "blue",
+          "draw"
+        ]
+      ],
+      "durationRange": [
+        2.25,
+        18.1
+      ],
+      "ranking": [
+        {
+          "army": {
+            "drone": 0,
+            "mech": 0,
+            "rail": 4
+          },
+          "wins": 2,
+          "losses": 12,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 1,
+            "rail": 3
+          },
+          "wins": 6,
+          "losses": 7,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 2,
+            "rail": 2
+          },
+          "wins": 9,
+          "losses": 4,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 3,
+            "rail": 1
+          },
+          "wins": 12,
+          "losses": 1,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 4,
+            "rail": 0
+          },
+          "wins": 10,
+          "losses": 4,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 0,
+            "rail": 3
+          },
+          "wins": 2,
+          "losses": 11,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 1,
+            "rail": 2
+          },
+          "wins": 3,
+          "losses": 10,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 2,
+            "rail": 1
+          },
+          "wins": 7,
+          "losses": 5,
+          "draws": 3
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 3,
+            "rail": 0
+          },
+          "wins": 8,
+          "losses": 6,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 0,
+            "rail": 2
+          },
+          "wins": 5,
+          "losses": 9,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 1,
+            "rail": 1
+          },
+          "wins": 5,
+          "losses": 8,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 2,
+            "rail": 0
+          },
+          "wins": 8,
+          "losses": 5,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 3,
+            "mech": 0,
+            "rail": 1
+          },
+          "wins": 6,
+          "losses": 8,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 3,
+            "mech": 1,
+            "rail": 0
+          },
+          "wins": 8,
+          "losses": 5,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 4,
+            "mech": 0,
+            "rail": 0
+          },
+          "wins": 9,
+          "losses": 5,
+          "draws": 1
+        }
+      ]
+    },
+    {
+      "gap": 6,
+      "spacing": 0.72,
+      "matrix": [
+        [
+          "draw",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "draw",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "draw",
+          "blue",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "orange",
+          "draw",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "draw",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "draw",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "draw",
+          "orange",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "blue"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "draw",
+          "draw",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "draw",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "draw",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "draw",
+          "orange",
+          "orange",
+          "blue"
+        ],
+        [
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "draw",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "draw",
+          "orange"
+        ],
+        [
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "draw"
+        ]
+      ],
+      "durationRange": [
+        2.25,
+        18.05
+      ],
+      "ranking": [
+        {
+          "army": {
+            "drone": 0,
+            "mech": 0,
+            "rail": 4
+          },
+          "wins": 3,
+          "losses": 11,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 1,
+            "rail": 3
+          },
+          "wins": 8,
+          "losses": 5,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 2,
+            "rail": 2
+          },
+          "wins": 11,
+          "losses": 2,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 3,
+            "rail": 1
+          },
+          "wins": 11,
+          "losses": 2,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 4,
+            "rail": 0
+          },
+          "wins": 9,
+          "losses": 5,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 0,
+            "rail": 3
+          },
+          "wins": 2,
+          "losses": 11,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 1,
+            "rail": 2
+          },
+          "wins": 4,
+          "losses": 9,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 2,
+            "rail": 1
+          },
+          "wins": 8,
+          "losses": 4,
+          "draws": 3
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 3,
+            "rail": 0
+          },
+          "wins": 7,
+          "losses": 7,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 0,
+            "rail": 2
+          },
+          "wins": 3,
+          "losses": 11,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 1,
+            "rail": 1
+          },
+          "wins": 5,
+          "losses": 8,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 2,
+            "rail": 0
+          },
+          "wins": 8,
+          "losses": 6,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 3,
+            "mech": 0,
+            "rail": 1
+          },
+          "wins": 5,
+          "losses": 9,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 3,
+            "mech": 1,
+            "rail": 0
+          },
+          "wins": 7,
+          "losses": 7,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 4,
+            "mech": 0,
+            "rail": 0
+          },
+          "wins": 10,
+          "losses": 4,
+          "draws": 1
+        }
+      ]
+    },
+    {
+      "gap": 6,
+      "spacing": 0.85,
+      "matrix": [
+        [
+          "draw",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "draw",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "orange",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "draw",
+          "orange",
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "draw",
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "draw",
+          "draw",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "draw",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "draw",
+          "orange",
+          "orange",
+          "orange"
+        ],
+        [
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "draw",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "draw",
+          "blue"
+        ],
+        [
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "draw"
+        ]
+      ],
+      "durationRange": [
+        2.25,
+        18.15
+      ],
+      "ranking": [
+        {
+          "army": {
+            "drone": 0,
+            "mech": 0,
+            "rail": 4
+          },
+          "wins": 4,
+          "losses": 10,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 1,
+            "rail": 3
+          },
+          "wins": 9,
+          "losses": 4,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 2,
+            "rail": 2
+          },
+          "wins": 12,
+          "losses": 2,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 3,
+            "rail": 1
+          },
+          "wins": 11,
+          "losses": 3,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 4,
+            "rail": 0
+          },
+          "wins": 6,
+          "losses": 8,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 0,
+            "rail": 3
+          },
+          "wins": 4,
+          "losses": 9,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 1,
+            "rail": 2
+          },
+          "wins": 3,
+          "losses": 10,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 2,
+            "rail": 1
+          },
+          "wins": 7,
+          "losses": 5,
+          "draws": 3
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 3,
+            "rail": 0
+          },
+          "wins": 8,
+          "losses": 6,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 0,
+            "rail": 2
+          },
+          "wins": 4,
+          "losses": 10,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 1,
+            "rail": 1
+          },
+          "wins": 4,
+          "losses": 9,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 2,
+            "rail": 0
+          },
+          "wins": 7,
+          "losses": 7,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 3,
+            "mech": 0,
+            "rail": 1
+          },
+          "wins": 6,
+          "losses": 8,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 3,
+            "mech": 1,
+            "rail": 0
+          },
+          "wins": 7,
+          "losses": 7,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 4,
+            "mech": 0,
+            "rail": 0
+          },
+          "wins": 10,
+          "losses": 4,
+          "draws": 1
+        }
+      ]
+    },
+    {
+      "gap": 12,
+      "spacing": 0.6,
+      "matrix": [
+        [
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "blue"
+        ],
+        [
+          "blue",
+          "draw",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "orange",
+          "draw",
+          "draw",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue"
+        ],
+        [
+          "orange",
+          "blue",
+          "draw",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange"
+        ],
+        [
+          "orange",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "draw",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "draw",
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "draw",
+          "draw",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue"
+        ],
+        [
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "blue",
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "draw",
+          "orange",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "draw",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "draw",
+          "blue"
+        ],
+        [
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "draw"
+        ]
+      ],
+      "durationRange": [
+        5.25,
+        21.3
+      ],
+      "ranking": [
+        {
+          "army": {
+            "drone": 0,
+            "mech": 0,
+            "rail": 4
+          },
+          "wins": 7,
+          "losses": 7,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 1,
+            "rail": 3
+          },
+          "wins": 8,
+          "losses": 6,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 2,
+            "rail": 2
+          },
+          "wins": 10,
+          "losses": 3,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 3,
+            "rail": 1
+          },
+          "wins": 12,
+          "losses": 1,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 4,
+            "rail": 0
+          },
+          "wins": 9,
+          "losses": 4,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 0,
+            "rail": 3
+          },
+          "wins": 3,
+          "losses": 11,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 1,
+            "rail": 2
+          },
+          "wins": 4,
+          "losses": 8,
+          "draws": 3
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 2,
+            "rail": 1
+          },
+          "wins": 7,
+          "losses": 6,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 3,
+            "rail": 0
+          },
+          "wins": 4,
+          "losses": 10,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 0,
+            "rail": 2
+          },
+          "wins": 6,
+          "losses": 8,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 1,
+            "rail": 1
+          },
+          "wins": 4,
+          "losses": 10,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 2,
+            "rail": 0
+          },
+          "wins": 4,
+          "losses": 10,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 3,
+            "mech": 0,
+            "rail": 1
+          },
+          "wins": 5,
+          "losses": 9,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 3,
+            "mech": 1,
+            "rail": 0
+          },
+          "wins": 7,
+          "losses": 7,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 4,
+            "mech": 0,
+            "rail": 0
+          },
+          "wins": 12,
+          "losses": 2,
+          "draws": 1
+        }
+      ]
+    },
+    {
+      "gap": 12,
+      "spacing": 0.72,
+      "matrix": [
+        [
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue"
+        ],
+        [
+          "blue",
+          "draw",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "orange",
+          "draw",
+          "draw",
+          "orange",
+          "blue",
+          "orange",
+          "blue",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "blue"
+        ],
+        [
+          "orange",
+          "blue",
+          "draw",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange"
+        ],
+        [
+          "orange",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "draw",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "draw",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "blue"
+        ],
+        [
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "blue",
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "draw",
+          "orange",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "draw",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "draw",
+          "blue"
+        ],
+        [
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "draw"
+        ]
+      ],
+      "durationRange": [
+        5.25,
+        22.2
+      ],
+      "ranking": [
+        {
+          "army": {
+            "drone": 0,
+            "mech": 0,
+            "rail": 4
+          },
+          "wins": 9,
+          "losses": 5,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 1,
+            "rail": 3
+          },
+          "wins": 9,
+          "losses": 5,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 2,
+            "rail": 2
+          },
+          "wins": 8,
+          "losses": 5,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 3,
+            "rail": 1
+          },
+          "wins": 12,
+          "losses": 1,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 4,
+            "rail": 0
+          },
+          "wins": 9,
+          "losses": 5,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 0,
+            "rail": 3
+          },
+          "wins": 3,
+          "losses": 11,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 1,
+            "rail": 2
+          },
+          "wins": 5,
+          "losses": 9,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 2,
+            "rail": 1
+          },
+          "wins": 7,
+          "losses": 7,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 3,
+            "rail": 0
+          },
+          "wins": 1,
+          "losses": 13,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 0,
+            "rail": 2
+          },
+          "wins": 6,
+          "losses": 8,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 1,
+            "rail": 1
+          },
+          "wins": 4,
+          "losses": 10,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 2,
+            "rail": 0
+          },
+          "wins": 4,
+          "losses": 10,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 3,
+            "mech": 0,
+            "rail": 1
+          },
+          "wins": 7,
+          "losses": 7,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 3,
+            "mech": 1,
+            "rail": 0
+          },
+          "wins": 8,
+          "losses": 6,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 4,
+            "mech": 0,
+            "rail": 0
+          },
+          "wins": 12,
+          "losses": 2,
+          "draws": 1
+        }
+      ]
+    },
+    {
+      "gap": 12,
+      "spacing": 0.85,
+      "matrix": [
+        [
+          "draw",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue"
+        ],
+        [
+          "orange",
+          "draw",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue"
+        ],
+        [
+          "orange",
+          "orange",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "draw",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "orange",
+          "blue"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue"
+        ],
+        [
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "orange",
+          "blue",
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "draw",
+          "orange",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "draw",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "draw",
+          "blue"
+        ],
+        [
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "draw"
+        ]
+      ],
+      "durationRange": [
+        5.25,
+        21.4
+      ],
+      "ranking": [
+        {
+          "army": {
+            "drone": 0,
+            "mech": 0,
+            "rail": 4
+          },
+          "wins": 8,
+          "losses": 6,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 1,
+            "rail": 3
+          },
+          "wins": 11,
+          "losses": 3,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 2,
+            "rail": 2
+          },
+          "wins": 13,
+          "losses": 1,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 3,
+            "rail": 1
+          },
+          "wins": 12,
+          "losses": 2,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 4,
+            "rail": 0
+          },
+          "wins": 7,
+          "losses": 7,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 0,
+            "rail": 3
+          },
+          "wins": 5,
+          "losses": 9,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 1,
+            "rail": 2
+          },
+          "wins": 6,
+          "losses": 8,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 2,
+            "rail": 1
+          },
+          "wins": 4,
+          "losses": 10,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 3,
+            "rail": 0
+          },
+          "wins": 5,
+          "losses": 9,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 0,
+            "rail": 2
+          },
+          "wins": 4,
+          "losses": 10,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 1,
+            "rail": 1
+          },
+          "wins": 5,
+          "losses": 9,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 2,
+            "rail": 0
+          },
+          "wins": 2,
+          "losses": 12,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 3,
+            "mech": 0,
+            "rail": 1
+          },
+          "wins": 5,
+          "losses": 9,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 3,
+            "mech": 1,
+            "rail": 0
+          },
+          "wins": 6,
+          "losses": 8,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 4,
+            "mech": 0,
+            "rail": 0
+          },
+          "wins": 12,
+          "losses": 2,
+          "draws": 1
+        }
+      ]
+    },
+    {
+      "gap": 18,
+      "spacing": 0.6,
+      "matrix": [
+        [
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue"
+        ],
+        [
+          "blue",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue"
+        ],
+        [
+          "orange",
+          "blue",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "blue"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "draw",
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "draw",
+          "draw",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "draw",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "draw",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "draw",
+          "orange",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "draw",
+          "blue"
+        ],
+        [
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "draw"
+        ]
+      ],
+      "durationRange": [
+        8.25,
+        23.5
+      ],
+      "ranking": [
+        {
+          "army": {
+            "drone": 0,
+            "mech": 0,
+            "rail": 4
+          },
+          "wins": 10,
+          "losses": 4,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 1,
+            "rail": 3
+          },
+          "wins": 12,
+          "losses": 2,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 2,
+            "rail": 2
+          },
+          "wins": 11,
+          "losses": 3,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 3,
+            "rail": 1
+          },
+          "wins": 12,
+          "losses": 2,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 4,
+            "rail": 0
+          },
+          "wins": 9,
+          "losses": 5,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 0,
+            "rail": 3
+          },
+          "wins": 1,
+          "losses": 13,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 1,
+            "rail": 2
+          },
+          "wins": 3,
+          "losses": 10,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 2,
+            "rail": 1
+          },
+          "wins": 4,
+          "losses": 9,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 3,
+            "rail": 0
+          },
+          "wins": 5,
+          "losses": 9,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 0,
+            "rail": 2
+          },
+          "wins": 3,
+          "losses": 11,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 1,
+            "rail": 1
+          },
+          "wins": 5,
+          "losses": 9,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 2,
+            "rail": 0
+          },
+          "wins": 3,
+          "losses": 11,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 3,
+            "mech": 0,
+            "rail": 1
+          },
+          "wins": 8,
+          "losses": 6,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 3,
+            "mech": 1,
+            "rail": 0
+          },
+          "wins": 6,
+          "losses": 8,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 4,
+            "mech": 0,
+            "rail": 0
+          },
+          "wins": 12,
+          "losses": 2,
+          "draws": 1
+        }
+      ]
+    },
+    {
+      "gap": 18,
+      "spacing": 0.72,
+      "matrix": [
+        [
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue"
+        ],
+        [
+          "blue",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue"
+        ],
+        [
+          "orange",
+          "blue",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "blue"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "draw",
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "draw",
+          "draw",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "draw",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "draw",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "draw",
+          "blue"
+        ],
+        [
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "draw"
+        ]
+      ],
+      "durationRange": [
+        8.25,
+        23.5
+      ],
+      "ranking": [
+        {
+          "army": {
+            "drone": 0,
+            "mech": 0,
+            "rail": 4
+          },
+          "wins": 10,
+          "losses": 4,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 1,
+            "rail": 3
+          },
+          "wins": 12,
+          "losses": 2,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 2,
+            "rail": 2
+          },
+          "wins": 11,
+          "losses": 3,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 3,
+            "rail": 1
+          },
+          "wins": 12,
+          "losses": 2,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 4,
+            "rail": 0
+          },
+          "wins": 9,
+          "losses": 5,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 0,
+            "rail": 3
+          },
+          "wins": 1,
+          "losses": 13,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 1,
+            "rail": 2
+          },
+          "wins": 4,
+          "losses": 9,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 2,
+            "rail": 1
+          },
+          "wins": 4,
+          "losses": 9,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 3,
+            "rail": 0
+          },
+          "wins": 7,
+          "losses": 7,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 0,
+            "rail": 2
+          },
+          "wins": 4,
+          "losses": 10,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 1,
+            "rail": 1
+          },
+          "wins": 4,
+          "losses": 10,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 2,
+            "rail": 0
+          },
+          "wins": 1,
+          "losses": 13,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 3,
+            "mech": 0,
+            "rail": 1
+          },
+          "wins": 7,
+          "losses": 7,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 3,
+            "mech": 1,
+            "rail": 0
+          },
+          "wins": 7,
+          "losses": 7,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 4,
+            "mech": 0,
+            "rail": 0
+          },
+          "wins": 11,
+          "losses": 3,
+          "draws": 1
+        }
+      ]
+    },
+    {
+      "gap": 18,
+      "spacing": 0.85,
+      "matrix": [
+        [
+          "draw",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue"
+        ],
+        [
+          "orange",
+          "draw",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue"
+        ],
+        [
+          "orange",
+          "orange",
+          "draw",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "blue"
+        ],
+        [
+          "orange",
+          "blue",
+          "draw",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange"
+        ],
+        [
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "draw",
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "draw",
+          "draw",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "draw",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "draw",
+          "orange",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "draw",
+          "blue",
+          "blue",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "draw",
+          "orange",
+          "blue"
+        ],
+        [
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "draw",
+          "blue"
+        ],
+        [
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "blue",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "orange",
+          "draw"
+        ]
+      ],
+      "durationRange": [
+        8.25,
+        24.75
+      ],
+      "ranking": [
+        {
+          "army": {
+            "drone": 0,
+            "mech": 0,
+            "rail": 4
+          },
+          "wins": 9,
+          "losses": 5,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 1,
+            "rail": 3
+          },
+          "wins": 12,
+          "losses": 2,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 2,
+            "rail": 2
+          },
+          "wins": 12,
+          "losses": 1,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 3,
+            "rail": 1
+          },
+          "wins": 12,
+          "losses": 1,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 0,
+            "mech": 4,
+            "rail": 0
+          },
+          "wins": 10,
+          "losses": 4,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 0,
+            "rail": 3
+          },
+          "wins": 2,
+          "losses": 12,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 1,
+            "rail": 2
+          },
+          "wins": 3,
+          "losses": 10,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 2,
+            "rail": 1
+          },
+          "wins": 4,
+          "losses": 9,
+          "draws": 2
+        },
+        {
+          "army": {
+            "drone": 1,
+            "mech": 3,
+            "rail": 0
+          },
+          "wins": 4,
+          "losses": 10,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 0,
+            "rail": 2
+          },
+          "wins": 5,
+          "losses": 9,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 1,
+            "rail": 1
+          },
+          "wins": 5,
+          "losses": 9,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 2,
+            "mech": 2,
+            "rail": 0
+          },
+          "wins": 1,
+          "losses": 13,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 3,
+            "mech": 0,
+            "rail": 1
+          },
+          "wins": 7,
+          "losses": 7,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 3,
+            "mech": 1,
+            "rail": 0
+          },
+          "wins": 6,
+          "losses": 8,
+          "draws": 1
+        },
+        {
+          "army": {
+            "drone": 4,
+            "mech": 0,
+            "rail": 0
+          },
+          "wins": 11,
+          "losses": 3,
+          "draws": 1
+        }
+      ]
+    }
+  ]
+}

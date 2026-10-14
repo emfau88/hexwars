@@ -1,0 +1,21 @@
+{
+  "checks": [
+    "3D loads; single step and reset work",
+    "clicking a robot inspects its HP and range",
+    "play, pause and range display work",
+    "browser/headless identical: swarm",
+    "browser/headless identical: splash",
+    "browser/headless identical: range",
+    "browser/headless identical: mixed",
+    "browser/headless identical: swarm-answer",
+    "browser/headless identical: heavy-answer",
+    "browser/headless identical: mirror",
+    "side swap reverses winner",
+    "custom army and gap reset the setup",
+    "compact desktop has no horizontal overflow",
+    "GDD and result report are accessible"
+  ],
+  "errors": [],
+  "browser": "151.0.7922.34",
+  "url": "http://127.0.0.1:4181/lab.html"
+}

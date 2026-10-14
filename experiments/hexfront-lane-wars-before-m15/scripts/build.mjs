@@ -1,0 +1,13 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const destination=process.argv.includes('--preview-package')?'preview':'dist';
+const out=path.resolve(root,destination);
+if(path.dirname(out)!==root||!['dist','preview'].includes(path.basename(out)))throw Error('Invalid build directory');
+await fs.rm(out,{recursive:true,force:true});await fs.mkdir(out,{recursive:true});
+for(const name of ['index.html','src','public','vendor'])await fs.cp(path.join(root,name),path.join(out,name),{recursive:true});
+const main=path.join(out,'src/main.js'),source=await fs.readFile(main,'utf8');
+if(!source.includes('const ALLOW_QA = true;'))throw Error('Missing development guard');
+await fs.writeFile(main,source.replace('const ALLOW_QA = true;','const ALLOW_QA = false;'));
+console.log(`Independent production build: ${out}`);

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="de"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HEXFRONT · Lane Wars</title>
+<meta name="description" content="Zwei Wege durch das Wiesental. HEXFRONT Lane Wars mit gemeinsamer Kampflabor-Simulation.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%23eab176' d='M16 2 29 9v14L16 30 3 23V9z'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="./src/battle.css">
+<script type="importmap">{"imports":{"three":"./vendor/three.module.min.js"}}</script>
+</head><body>
+<main id="battlefield" aria-label="Lane Wars Spielansicht">
+  <div id="battle-stage" tabindex="0"></div><div id="battle-labels" aria-hidden="true"></div>
+  <header class="hud-top">
+    <div class="ceramic brand"><span class="brand-icon" data-icon="terrain"></span><div><strong>HEXFRONT</strong><span>LANE WARS <i>·</i> WIESENTAL</span></div></div>
+    <div class="ceramic match-info" aria-label="HQ- und Gefechtsstatus">
+      <div class="faction orange"><small>DEIN HQ</small><strong>— <em>LP</em></strong></div>
+      <div class="match-clock"><span>VORBEREITETES GEFECHT</span><strong id="battle-clock">00:00</strong><small>HQ-Kampf folgt später</small></div>
+      <div class="faction blue"><small>GEGNER-HQ</small><strong>— <em>LP</em></strong></div>
+    </div>
+    <div class="ceramic economy-preview" aria-label="Wirtschaftsvorschau, noch nicht aktiv"><span data-icon="credit"></span><div><strong>— Credits <small>+ — /s</small></strong><span>Nächste Welle — <b>VORSCHAU</b></span></div></div>
+  </header>
+  <div class="field-caption"><span class="live-dot"></span> VISUELLE STUDIE <span>01.5</span></div>
+  <div class="lane-label west"><span>01</span> WESTWEG <small>Felsiger Pass</small></div>
+  <div class="lane-label east"><span>02</span> OSTWEG <small>Offene Wiese</small></div>
+  <section class="ceramic selection" id="selection" hidden aria-label="Ausgewählter Roboter"><button id="close-selection" aria-label="Auswahl schließen">×</button><small id="selected-faction"></small><strong id="selected-name"></strong><p id="selected-details"></p><button id="focus-unit">Näher ansehen</button></section>
+  <div class="ceramic battle-outcome" id="battle-outcome" role="status" hidden></div>
+  <div class="control-left">
+    <div class="ceramic scenario-picker"><label for="presentation">GEFECHT ANSEHEN</label><select id="presentation"></select></div>
+    <div class="play-controls"><button class="primary" id="battle-play" disabled><span data-icon="play"></span><span>Gefechte starten</span></button><button id="battle-reset" aria-label="Gefechte neu aufstellen" title="Neu aufstellen" disabled>↻</button></div>
+    <a class="lab-link" href="./lab.html">Kampflabor öffnen <span>↗</span></a>
+  </div>
+  <section class="production-preview" aria-label="Vorschau der vier zukünftigen Fabrikplätze">
+    <div class="production-heading"><span>DEINE FABRIKPLÄTZE</span><small>Vorschau · Produktion noch inaktiv</small></div>
+    <div class="factory-grid">
+      <button class="factory-card" disabled><span class="slot">01</span><span class="unit-art" data-unit="drone"></span><span class="factory-copy"><strong>Drohne</strong><small>Westweg · Vorschau</small></span></button>
+      <button class="factory-card" disabled><span class="slot">02</span><span class="unit-art" data-unit="mech"></span><span class="factory-copy"><strong>Mech</strong><small>Ostweg · Vorschau</small></span></button>
+      <button class="factory-card" disabled><span class="slot">03</span><span class="empty-slot">+</span><span class="factory-copy"><strong>Freier Platz</strong><small>Typ / Lane später</small></span></button>
+      <button class="factory-card" disabled><span class="slot">04</span><span class="empty-slot">+</span><span class="factory-copy"><strong>Freier Platz</strong><small>Typ / Lane später</small></span></button>
+    </div>
+    <div class="production-foot"><span>Drohne · Mech · Fernkämpfer</span><button disabled>Sofortnachschub <span>später</span></button></div>
+  </section>
+  <div class="control-right"><button id="model-closeup" class="ceramic">Modelle ansehen <span>↗</span></button><div class="ceramic camera-controls"><button id="camera-mode">Diorama 55°</button><button id="zoom-out" aria-label="Herauszoomen">−</button><button id="camera-home" aria-label="Gesamtes Schlachtfeld anzeigen" title="Gesamtes Schlachtfeld">⌖</button><button id="zoom-in" aria-label="Hineinzoomen">+</button></div><small>Mausrad: Zoom · Ziehen: Ausschnitt</small></div>
+  <div id="loading" role="status"><div class="ceramic"><span class="loading-mark">H</span><strong>Das Wiesental wird vorbereitet.</strong><p>Gelände, Hauptquartiere und Roboter laden …</p></div></div>
+  <div id="battle-error" role="alert" hidden></div>
+</main><script type="module" src="./src/battle-main.js"></script>
+</body></html>

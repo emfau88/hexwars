@@ -1,0 +1,3738 @@
+{
+  "measurementLimit": 600,
+  "description": "Deterministic strategy probes, not human playtests; timeout is unresolved, never victory.",
+  "cases": [
+    {
+      "label": "static-factory-vs-pressure",
+      "result": "blue",
+      "time": 264.45,
+      "waves": 18,
+      "peakUnits": 25,
+      "hq": {
+        "orange": 0,
+        "blue": 765
+      },
+      "metrics": {
+        "orange": {
+          "spent": 840,
+          "earned": 653.35,
+          "produced": 67,
+          "hqDamage": 435,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 6,
+          "economyAt": 140,
+          "credits": 13.35
+        },
+        "blue": {
+          "spent": 810,
+          "earned": 653.35,
+          "produced": 114,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 1,
+          "laneChanges": 0,
+          "supplies": 5,
+          "economyAt": 140,
+          "credits": 43.35
+        }
+      },
+      "lateOrders": 14,
+      "checkpoints": [
+        {
+          "time": 60,
+          "hq": [
+            1116,
+            1050
+          ],
+          "credits": [
+            20,
+            20
+          ],
+          "units": [
+            2,
+            6
+          ],
+          "orders": 1
+        },
+        {
+          "time": 120,
+          "hq": [
+            990,
+            840
+          ],
+          "credits": [
+            40,
+            40
+          ],
+          "units": [
+            5,
+            7
+          ],
+          "orders": 2
+        },
+        {
+          "time": 180,
+          "hq": [
+            630,
+            840
+          ],
+          "credits": [
+            0,
+            0
+          ],
+          "units": [
+            6,
+            6
+          ],
+          "orders": 5
+        },
+        {
+          "time": 240,
+          "hq": [
+            450,
+            765
+          ],
+          "credits": [
+            0,
+            30
+          ],
+          "units": [
+            6,
+            6
+          ],
+          "orders": 8
+        }
+      ],
+      "playerActions": [
+        {
+          "time": 50,
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 100,
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 140,
+          "action": "economy"
+        },
+        {
+          "time": 160,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 180,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 200,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 220,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 240,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 260,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        }
+      ],
+      "enemyActions": [
+        {
+          "time": 50,
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 100,
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 140,
+          "action": "economy"
+        },
+        {
+          "time": 160,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 180,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 190,
+          "action": "factory",
+          "slot": 1,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 210,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 230,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 250,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        }
+      ]
+    },
+    {
+      "label": "static-economy-vs-pressure",
+      "result": "blue",
+      "time": 327.95000000000005,
+      "waves": 22,
+      "peakUnits": 34,
+      "hq": {
+        "orange": 0,
+        "blue": 855
+      },
+      "metrics": {
+        "orange": {
+          "spent": 1140,
+          "earned": 943.85,
+          "produced": 85,
+          "hqDamage": 345,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 11,
+          "economyAt": 40,
+          "credits": 3.85
+        },
+        "blue": {
+          "spent": 1020,
+          "earned": 843.85,
+          "produced": 215,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 2,
+          "laneChanges": 0,
+          "supplies": 8,
+          "economyAt": 140,
+          "credits": 23.85
+        }
+      },
+      "lateOrders": 22,
+      "checkpoints": [
+        {
+          "time": 60,
+          "hq": [
+            1116,
+            1050
+          ],
+          "credits": [
+            60,
+            20
+          ],
+          "units": [
+            2,
+            6
+          ],
+          "orders": 1
+        },
+        {
+          "time": 120,
+          "hq": [
+            948,
+            990
+          ],
+          "credits": [
+            40,
+            40
+          ],
+          "units": [
+            4,
+            6
+          ],
+          "orders": 3
+        },
+        {
+          "time": 180,
+          "hq": [
+            948,
+            900
+          ],
+          "credits": [
+            40,
+            0
+          ],
+          "units": [
+            5,
+            8
+          ],
+          "orders": 6
+        },
+        {
+          "time": 240,
+          "hq": [
+            834,
+            900
+          ],
+          "credits": [
+            40,
+            0
+          ],
+          "units": [
+            7,
+            8
+          ],
+          "orders": 9
+        },
+        {
+          "time": 300,
+          "hq": [
+            294,
+            900
+          ],
+          "credits": [
+            40,
+            0
+          ],
+          "units": [
+            5,
+            7
+          ],
+          "orders": 12
+        }
+      ],
+      "playerActions": [
+        {
+          "time": 40,
+          "action": "economy"
+        },
+        {
+          "time": 75,
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 107.5,
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 127.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 147.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 167.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 187.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 207.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 227.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 247.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 267.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 287.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 307.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 327.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        }
+      ],
+      "enemyActions": [
+        {
+          "time": 50,
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 100,
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 140,
+          "action": "economy"
+        },
+        {
+          "time": 150,
+          "action": "factory",
+          "slot": 1,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 170,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 180,
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 200,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 220,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 240,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 260,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 280,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 300,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 320,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        }
+      ]
+    },
+    {
+      "label": "reactive-factory-vs-pressure",
+      "result": "orange",
+      "time": 245.55,
+      "waves": 17,
+      "peakUnits": 31,
+      "hq": {
+        "orange": 1116,
+        "blue": 0
+      },
+      "metrics": {
+        "orange": {
+          "spent": 750,
+          "earned": 596.65,
+          "produced": 70,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 3,
+          "laneChanges": 0,
+          "supplies": 3,
+          "economyAt": 140,
+          "credits": 46.65
+        },
+        "blue": {
+          "spent": 720,
+          "earned": 596.65,
+          "produced": 125,
+          "hqDamage": 84,
+          "builds": 2,
+          "refits": 4,
+          "laneChanges": 2,
+          "supplies": 2,
+          "economyAt": 140,
+          "credits": 46.65
+        }
+      },
+      "lateOrders": 15,
+      "checkpoints": [
+        {
+          "time": 60,
+          "hq": [
+            1116,
+            1050
+          ],
+          "credits": [
+            20,
+            20
+          ],
+          "units": [
+            2,
+            6
+          ],
+          "orders": 1
+        },
+        {
+          "time": 120,
+          "hq": [
+            1116,
+            890
+          ],
+          "credits": [
+            40,
+            40
+          ],
+          "units": [
+            2,
+            5
+          ],
+          "orders": 2
+        },
+        {
+          "time": 180,
+          "hq": [
+            1116,
+            380
+          ],
+          "credits": [
+            30,
+            0
+          ],
+          "units": [
+            7,
+            8
+          ],
+          "orders": 5
+        },
+        {
+          "time": 240,
+          "hq": [
+            1116,
+            102
+          ],
+          "credits": [
+            30,
+            30
+          ],
+          "units": [
+            3,
+            6
+          ],
+          "orders": 9
+        }
+      ],
+      "playerActions": [
+        {
+          "time": 50,
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 100,
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 140,
+          "action": "economy"
+        },
+        {
+          "time": 150,
+          "action": "factory",
+          "slot": 0,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 170,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 190,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 200,
+          "action": "factory",
+          "slot": 0,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 220,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 230,
+          "action": "factory",
+          "slot": 1,
+          "type": "mech",
+          "lane": 1
+        }
+      ],
+      "enemyActions": [
+        {
+          "time": 50,
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 100,
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 140,
+          "action": "economy"
+        },
+        {
+          "time": 150,
+          "action": "factory",
+          "slot": 1,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 170,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 180,
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 200,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 210,
+          "action": "factory",
+          "slot": 0,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 225,
+          "action": "factory",
+          "slot": 0,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 240,
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 1
+        }
+      ]
+    },
+    {
+      "label": "reactive-economy-vs-pressure",
+      "result": "blue",
+      "time": 304.5,
+      "waves": 21,
+      "peakUnits": 36,
+      "hq": {
+        "orange": 0,
+        "blue": 458
+      },
+      "metrics": {
+        "orange": {
+          "spent": 1020,
+          "earned": 873.5,
+          "produced": 116,
+          "hqDamage": 742,
+          "builds": 2,
+          "refits": 6,
+          "laneChanges": 0,
+          "supplies": 6,
+          "economyAt": 40,
+          "credits": 53.5
+        },
+        "blue": {
+          "spent": 930,
+          "earned": 773.5,
+          "produced": 156,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 5,
+          "laneChanges": 2,
+          "supplies": 5,
+          "economyAt": 140,
+          "credits": 43.5
+        }
+      },
+      "lateOrders": 22,
+      "checkpoints": [
+        {
+          "time": 60,
+          "hq": [
+            1116,
+            1050
+          ],
+          "credits": [
+            60,
+            20
+          ],
+          "units": [
+            2,
+            6
+          ],
+          "orders": 1
+        },
+        {
+          "time": 120,
+          "hq": [
+            948,
+            918
+          ],
+          "credits": [
+            10,
+            40
+          ],
+          "units": [
+            6,
+            6
+          ],
+          "orders": 4
+        },
+        {
+          "time": 180,
+          "hq": [
+            858,
+            503
+          ],
+          "credits": [
+            40,
+            0
+          ],
+          "units": [
+            6,
+            7
+          ],
+          "orders": 7
+        },
+        {
+          "time": 240,
+          "hq": [
+            848,
+            458
+          ],
+          "credits": [
+            40,
+            30
+          ],
+          "units": [
+            5,
+            6
+          ],
+          "orders": 11
+        },
+        {
+          "time": 300,
+          "hq": [
+            150,
+            458
+          ],
+          "credits": [
+            40,
+            30
+          ],
+          "units": [
+            3,
+            17
+          ],
+          "orders": 15
+        }
+      ],
+      "playerActions": [
+        {
+          "time": 40,
+          "action": "economy"
+        },
+        {
+          "time": 75,
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 107.5,
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 117.5,
+          "action": "factory",
+          "slot": 1,
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 137.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 147.5,
+          "action": "factory",
+          "slot": 0,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 167.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 187.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 197.5,
+          "action": "factory",
+          "slot": 1,
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 217.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 227.5,
+          "action": "factory",
+          "slot": 0,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 247.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 257.5,
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 277.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 287.5,
+          "action": "factory",
+          "slot": 1,
+          "type": "mech",
+          "lane": 1
+        }
+      ],
+      "enemyActions": [
+        {
+          "time": 50,
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 100,
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 140,
+          "action": "economy"
+        },
+        {
+          "time": 150,
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 170,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 180,
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 200,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 210,
+          "action": "factory",
+          "slot": 1,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 230,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 242.5,
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 257.5,
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 270,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 290,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        }
+      ]
+    },
+    {
+      "label": "static-factory-vs-balanced",
+      "result": "blue",
+      "time": 222.75,
+      "waves": 15,
+      "peakUnits": 29,
+      "hq": {
+        "orange": 0,
+        "blue": 1155
+      },
+      "metrics": {
+        "orange": {
+          "spent": 720,
+          "earned": 528.25,
+          "produced": 53,
+          "hqDamage": 45,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 4,
+          "economyAt": 140,
+          "credits": 8.25
+        },
+        "blue": {
+          "spent": 690,
+          "earned": 528.25,
+          "produced": 88,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 1,
+          "laneChanges": 0,
+          "supplies": 3,
+          "economyAt": 140,
+          "credits": 38.25
+        }
+      },
+      "lateOrders": 10,
+      "checkpoints": [
+        {
+          "time": 60,
+          "hq": [
+            1155,
+            1155
+          ],
+          "credits": [
+            20,
+            20
+          ],
+          "units": [
+            2,
+            3
+          ],
+          "orders": 1
+        },
+        {
+          "time": 120,
+          "hq": [
+            1110,
+            1155
+          ],
+          "credits": [
+            40,
+            40
+          ],
+          "units": [
+            4,
+            5
+          ],
+          "orders": 2
+        },
+        {
+          "time": 180,
+          "hq": [
+            975,
+            1155
+          ],
+          "credits": [
+            0,
+            30
+          ],
+          "units": [
+            4,
+            10
+          ],
+          "orders": 5
+        }
+      ],
+      "playerActions": [
+        {
+          "time": 50,
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 100,
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 140,
+          "action": "economy"
+        },
+        {
+          "time": 160,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 180,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 200,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 220,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        }
+      ],
+      "enemyActions": [
+        {
+          "time": 50,
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 100,
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 140,
+          "action": "economy"
+        },
+        {
+          "time": 155,
+          "action": "factory",
+          "slot": 0,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 170,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 190,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 210,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        }
+      ]
+    },
+    {
+      "label": "static-economy-vs-balanced",
+      "result": "orange",
+      "time": 540.15,
+      "waves": 37,
+      "peakUnits": 29,
+      "hq": {
+        "orange": 1020,
+        "blue": 0
+      },
+      "metrics": {
+        "orange": {
+          "spent": 1740,
+          "earned": 1580.45,
+          "produced": 155,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 21,
+          "economyAt": 40,
+          "credits": 40.45
+        },
+        "blue": {
+          "spent": 1680,
+          "earned": 1480.45,
+          "produced": 420,
+          "hqDamage": 180,
+          "builds": 2,
+          "refits": 2,
+          "laneChanges": 0,
+          "supplies": 19,
+          "economyAt": 140,
+          "credits": 0.45
+        }
+      },
+      "lateOrders": 43,
+      "checkpoints": [
+        {
+          "time": 60,
+          "hq": [
+            1155,
+            1155
+          ],
+          "credits": [
+            60,
+            20
+          ],
+          "units": [
+            2,
+            3
+          ],
+          "orders": 1
+        },
+        {
+          "time": 120,
+          "hq": [
+            1020,
+            1155
+          ],
+          "credits": [
+            40,
+            40
+          ],
+          "units": [
+            5,
+            5
+          ],
+          "orders": 3
+        },
+        {
+          "time": 180,
+          "hq": [
+            1020,
+            1155
+          ],
+          "credits": [
+            40,
+            0
+          ],
+          "units": [
+            7,
+            5
+          ],
+          "orders": 6
+        },
+        {
+          "time": 240,
+          "hq": [
+            1020,
+            1000
+          ],
+          "credits": [
+            40,
+            0
+          ],
+          "units": [
+            6,
+            4
+          ],
+          "orders": 9
+        },
+        {
+          "time": 300,
+          "hq": [
+            1020,
+            845
+          ],
+          "credits": [
+            40,
+            0
+          ],
+          "units": [
+            6,
+            4
+          ],
+          "orders": 12
+        },
+        {
+          "time": 360,
+          "hq": [
+            1020,
+            690
+          ],
+          "credits": [
+            40,
+            0
+          ],
+          "units": [
+            6,
+            4
+          ],
+          "orders": 15
+        },
+        {
+          "time": 420,
+          "hq": [
+            1020,
+            160
+          ],
+          "credits": [
+            40,
+            0
+          ],
+          "units": [
+            6,
+            4
+          ],
+          "orders": 18
+        },
+        {
+          "time": 480,
+          "hq": [
+            1020,
+            75
+          ],
+          "credits": [
+            40,
+            0
+          ],
+          "units": [
+            6,
+            4
+          ],
+          "orders": 21
+        },
+        {
+          "time": 540,
+          "hq": [
+            1020,
+            30
+          ],
+          "credits": [
+            40,
+            0
+          ],
+          "units": [
+            7,
+            4
+          ],
+          "orders": 24
+        }
+      ],
+      "playerActions": [
+        {
+          "time": 40,
+          "action": "economy"
+        },
+        {
+          "time": 75,
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 107.5,
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 127.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 147.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 167.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 187.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 207.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 227.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 247.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 267.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 287.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 307.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 327.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 347.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 367.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 387.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 407.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 427.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 447.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 467.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 487.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 507.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 527.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        }
+      ],
+      "enemyActions": [
+        {
+          "time": 50,
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 100,
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 140,
+          "action": "economy"
+        },
+        {
+          "time": 150,
+          "action": "factory",
+          "slot": 1,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 170,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 180,
+          "action": "factory",
+          "slot": 0,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 200,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 220,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 240,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 260,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 280,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 300,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 320,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 340,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 360,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 380,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 400,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 420,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 440,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 460,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 480,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 500,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 520,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 540,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        }
+      ]
+    },
+    {
+      "label": "reactive-factory-vs-balanced",
+      "result": "blue",
+      "time": 481.1,
+      "waves": 33,
+      "peakUnits": 31,
+      "hq": {
+        "orange": 0,
+        "blue": 40
+      },
+      "metrics": {
+        "orange": {
+          "spent": 1500,
+          "earned": 1303.3,
+          "produced": 233,
+          "hqDamage": 1160,
+          "builds": 2,
+          "refits": 10,
+          "laneChanges": 0,
+          "supplies": 12,
+          "economyAt": 140,
+          "credits": 3.3
+        },
+        "blue": {
+          "spent": 1440,
+          "earned": 1303.3,
+          "produced": 234,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 10,
+          "laneChanges": 1,
+          "supplies": 11,
+          "economyAt": 140,
+          "credits": 33.3
+        }
+      },
+      "lateOrders": 46,
+      "checkpoints": [
+        {
+          "time": 60,
+          "hq": [
+            1155,
+            1155
+          ],
+          "credits": [
+            20,
+            20
+          ],
+          "units": [
+            2,
+            3
+          ],
+          "orders": 1
+        },
+        {
+          "time": 120,
+          "hq": [
+            975,
+            1155
+          ],
+          "credits": [
+            40,
+            40
+          ],
+          "units": [
+            3,
+            4
+          ],
+          "orders": 2
+        },
+        {
+          "time": 180,
+          "hq": [
+            975,
+            1115
+          ],
+          "credits": [
+            30,
+            0
+          ],
+          "units": [
+            6,
+            3
+          ],
+          "orders": 5
+        },
+        {
+          "time": 240,
+          "hq": [
+            975,
+            665
+          ],
+          "credits": [
+            0,
+            30
+          ],
+          "units": [
+            4,
+            5
+          ],
+          "orders": 9
+        },
+        {
+          "time": 300,
+          "hq": [
+            969,
+            665
+          ],
+          "credits": [
+            0,
+            30
+          ],
+          "units": [
+            6,
+            8
+          ],
+          "orders": 13
+        },
+        {
+          "time": 360,
+          "hq": [
+            663,
+            482
+          ],
+          "credits": [
+            0,
+            30
+          ],
+          "units": [
+            7,
+            7
+          ],
+          "orders": 17
+        },
+        {
+          "time": 420,
+          "hq": [
+            528,
+            40
+          ],
+          "credits": [
+            0,
+            30
+          ],
+          "units": [
+            5,
+            6
+          ],
+          "orders": 21
+        },
+        {
+          "time": 480,
+          "hq": [
+            21,
+            40
+          ],
+          "credits": [
+            0,
+            30
+          ],
+          "units": [
+            9,
+            5
+          ],
+          "orders": 25
+        }
+      ],
+      "playerActions": [
+        {
+          "time": 50,
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 100,
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 140,
+          "action": "economy"
+        },
+        {
+          "time": 150,
+          "action": "factory",
+          "slot": 0,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 170,
+          "action": "supply",
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 182.5,
+          "action": "factory",
+          "slot": 1,
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 200,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 220,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 240,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 250,
+          "action": "factory",
+          "slot": 0,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 270,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 280,
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 300,
+          "action": "supply",
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 312.5,
+          "action": "factory",
+          "slot": 0,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 330,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 342.5,
+          "action": "factory",
+          "slot": 1,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 360,
+          "action": "supply",
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 372.5,
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 390,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 402.5,
+          "action": "factory",
+          "slot": 0,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 420,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 432.5,
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 450,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 462.5,
+          "action": "factory",
+          "slot": 0,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 480,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        }
+      ],
+      "enemyActions": [
+        {
+          "time": 50,
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 100,
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 140,
+          "action": "economy"
+        },
+        {
+          "time": 150,
+          "action": "factory",
+          "slot": 0,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 170,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 180,
+          "action": "factory",
+          "slot": 0,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 200,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 210,
+          "action": "factory",
+          "slot": 1,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 230,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 250,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 260,
+          "action": "factory",
+          "slot": 0,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 280,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 290,
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 310,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 320,
+          "action": "factory",
+          "slot": 0,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 340,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 350,
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 370,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 380,
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 400,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 410,
+          "action": "factory",
+          "slot": 0,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 430,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 440,
+          "action": "factory",
+          "slot": 1,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 460,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 480,
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 1
+        }
+      ]
+    },
+    {
+      "label": "reactive-economy-vs-balanced",
+      "result": "blue",
+      "time": 341.70000000000005,
+      "waves": 23,
+      "peakUnits": 39,
+      "hq": {
+        "orange": 0,
+        "blue": 35
+      },
+      "metrics": {
+        "orange": {
+          "spent": 1110,
+          "earned": 985.1,
+          "produced": 107,
+          "hqDamage": 1165,
+          "builds": 2,
+          "refits": 7,
+          "laneChanges": 2,
+          "supplies": 7,
+          "economyAt": 40,
+          "credits": 45.1
+        },
+        "blue": {
+          "spent": 1050,
+          "earned": 885.1,
+          "produced": 201,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 3,
+          "laneChanges": 3,
+          "supplies": 8,
+          "economyAt": 140,
+          "credits": 35.1
+        }
+      },
+      "lateOrders": 28,
+      "checkpoints": [
+        {
+          "time": 60,
+          "hq": [
+            1155,
+            1155
+          ],
+          "credits": [
+            60,
+            20
+          ],
+          "units": [
+            2,
+            3
+          ],
+          "orders": 1
+        },
+        {
+          "time": 120,
+          "hq": [
+            1020,
+            1155
+          ],
+          "credits": [
+            10,
+            40
+          ],
+          "units": [
+            4,
+            5
+          ],
+          "orders": 4
+        },
+        {
+          "time": 180,
+          "hq": [
+            800,
+            705
+          ],
+          "credits": [
+            10,
+            0
+          ],
+          "units": [
+            3,
+            6
+          ],
+          "orders": 8
+        },
+        {
+          "time": 240,
+          "hq": [
+            590,
+            705
+          ],
+          "credits": [
+            10,
+            30
+          ],
+          "units": [
+            3,
+            8
+          ],
+          "orders": 12
+        },
+        {
+          "time": 300,
+          "hq": [
+            578,
+            705
+          ],
+          "credits": [
+            10,
+            30
+          ],
+          "units": [
+            4,
+            6
+          ],
+          "orders": 16
+        }
+      ],
+      "playerActions": [
+        {
+          "time": 40,
+          "action": "economy"
+        },
+        {
+          "time": 75,
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 107.5,
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 117.5,
+          "action": "factory",
+          "slot": 0,
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 137.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 150,
+          "action": "factory",
+          "slot": 0,
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 167.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 180,
+          "action": "factory",
+          "slot": 1,
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 197.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 210,
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 227.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 240,
+          "action": "factory",
+          "slot": 0,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 257.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 270,
+          "action": "factory",
+          "slot": 0,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 287.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 300,
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 317.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 330,
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 1
+        }
+      ],
+      "enemyActions": [
+        {
+          "time": 50,
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 100,
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 140,
+          "action": "economy"
+        },
+        {
+          "time": 150,
+          "action": "factory",
+          "slot": 0,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 165,
+          "action": "factory",
+          "slot": 1,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 180,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 200,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 220,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 230,
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 250,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 260,
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 270,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 290,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 310,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 320,
+          "action": "factory",
+          "slot": 0,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 330,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        }
+      ]
+    },
+    {
+      "label": "static-factory-vs-economy",
+      "result": "blue",
+      "time": 219.35000000000002,
+      "waves": 15,
+      "peakUnits": 28,
+      "hq": {
+        "orange": 0,
+        "blue": 990
+      },
+      "metrics": {
+        "orange": {
+          "spent": 660,
+          "earned": 518.05,
+          "produced": 52,
+          "hqDamage": 210,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 3,
+          "economyAt": 140,
+          "credits": 58.05
+        },
+        "blue": {
+          "spent": 780,
+          "earned": 618.05,
+          "produced": 76,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 2,
+          "laneChanges": 0,
+          "supplies": 4,
+          "economyAt": 40,
+          "credits": 38.05
+        }
+      },
+      "lateOrders": 9,
+      "checkpoints": [
+        {
+          "time": 60,
+          "hq": [
+            1200,
+            1200
+          ],
+          "credits": [
+            20,
+            60
+          ],
+          "units": [
+            2,
+            2
+          ],
+          "orders": 1
+        },
+        {
+          "time": 120,
+          "hq": [
+            1200,
+            1200
+          ],
+          "credits": [
+            40,
+            10
+          ],
+          "units": [
+            5,
+            5
+          ],
+          "orders": 2
+        },
+        {
+          "time": 180,
+          "hq": [
+            1020,
+            990
+          ],
+          "credits": [
+            0,
+            40
+          ],
+          "units": [
+            6,
+            4
+          ],
+          "orders": 5
+        }
+      ],
+      "playerActions": [
+        {
+          "time": 50,
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 100,
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 140,
+          "action": "economy"
+        },
+        {
+          "time": 160,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 180,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 200,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        }
+      ],
+      "enemyActions": [
+        {
+          "time": 40,
+          "action": "economy"
+        },
+        {
+          "time": 75,
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 107.5,
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 117.5,
+          "action": "factory",
+          "slot": 1,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 137.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 157.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 175,
+          "action": "factory",
+          "slot": 0,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 187.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 207.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        }
+      ]
+    },
+    {
+      "label": "static-economy-vs-economy",
+      "result": "blue",
+      "time": 311.1,
+      "waves": 21,
+      "peakUnits": 37,
+      "hq": {
+        "orange": 0,
+        "blue": 1200
+      },
+      "metrics": {
+        "orange": {
+          "spent": 1080,
+          "earned": 893.3,
+          "produced": 80,
+          "hqDamage": 0,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 10,
+          "economyAt": 40,
+          "credits": 13.3
+        },
+        "blue": {
+          "spent": 1050,
+          "earned": 893.3,
+          "produced": 182,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 3,
+          "laneChanges": 1,
+          "supplies": 8,
+          "economyAt": 40,
+          "credits": 43.3
+        }
+      },
+      "lateOrders": 21,
+      "checkpoints": [
+        {
+          "time": 60,
+          "hq": [
+            1200,
+            1200
+          ],
+          "credits": [
+            60,
+            60
+          ],
+          "units": [
+            2,
+            2
+          ],
+          "orders": 1
+        },
+        {
+          "time": 120,
+          "hq": [
+            1200,
+            1200
+          ],
+          "credits": [
+            40,
+            10
+          ],
+          "units": [
+            4,
+            2
+          ],
+          "orders": 3
+        },
+        {
+          "time": 180,
+          "hq": [
+            1200,
+            1200
+          ],
+          "credits": [
+            40,
+            40
+          ],
+          "units": [
+            10,
+            3
+          ],
+          "orders": 6
+        },
+        {
+          "time": 240,
+          "hq": [
+            1026,
+            1200
+          ],
+          "credits": [
+            40,
+            10
+          ],
+          "units": [
+            7,
+            9
+          ],
+          "orders": 9
+        },
+        {
+          "time": 300,
+          "hq": [
+            150,
+            1200
+          ],
+          "credits": [
+            40,
+            10
+          ],
+          "units": [
+            7,
+            9
+          ],
+          "orders": 12
+        }
+      ],
+      "playerActions": [
+        {
+          "time": 40,
+          "action": "economy"
+        },
+        {
+          "time": 75,
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 107.5,
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 127.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 147.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 167.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 187.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 207.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 227.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 247.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 267.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 287.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 307.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        }
+      ],
+      "enemyActions": [
+        {
+          "time": 40,
+          "action": "economy"
+        },
+        {
+          "time": 75,
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 107.5,
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 117.5,
+          "action": "factory",
+          "slot": 0,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 137.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 147.5,
+          "action": "factory",
+          "slot": 1,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 167.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 177.5,
+          "action": "factory",
+          "slot": 1,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 187.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 207.5,
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 217.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 237.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 257.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 277.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 297.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        }
+      ]
+    },
+    {
+      "label": "reactive-factory-vs-economy",
+      "result": "blue",
+      "time": 374.1,
+      "waves": 25,
+      "peakUnits": 28,
+      "hq": {
+        "orange": 0,
+        "blue": 530
+      },
+      "metrics": {
+        "orange": {
+          "spent": 1140,
+          "earned": 982.3,
+          "produced": 133,
+          "hqDamage": 670,
+          "builds": 2,
+          "refits": 6,
+          "laneChanges": 0,
+          "supplies": 8,
+          "economyAt": 140,
+          "credits": 12.3
+        },
+        "blue": {
+          "spent": 1260,
+          "earned": 1082.3,
+          "produced": 167,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 8,
+          "laneChanges": 0,
+          "supplies": 9,
+          "economyAt": 40,
+          "credits": 22.3
+        }
+      },
+      "lateOrders": 32,
+      "checkpoints": [
+        {
+          "time": 60,
+          "hq": [
+            1200,
+            1200
+          ],
+          "credits": [
+            20,
+            60
+          ],
+          "units": [
+            2,
+            2
+          ],
+          "orders": 1
+        },
+        {
+          "time": 120,
+          "hq": [
+            1200,
+            795
+          ],
+          "credits": [
+            40,
+            10
+          ],
+          "units": [
+            4,
+            5
+          ],
+          "orders": 2
+        },
+        {
+          "time": 180,
+          "hq": [
+            960,
+            755
+          ],
+          "credits": [
+            0,
+            40
+          ],
+          "units": [
+            4,
+            2
+          ],
+          "orders": 6
+        },
+        {
+          "time": 240,
+          "hq": [
+            870,
+            755
+          ],
+          "credits": [
+            30,
+            40
+          ],
+          "units": [
+            5,
+            6
+          ],
+          "orders": 9
+        },
+        {
+          "time": 300,
+          "hq": [
+            560,
+            755
+          ],
+          "credits": [
+            30,
+            40
+          ],
+          "units": [
+            4,
+            5
+          ],
+          "orders": 13
+        },
+        {
+          "time": 360,
+          "hq": [
+            135,
+            530
+          ],
+          "credits": [
+            0,
+            40
+          ],
+          "units": [
+            5,
+            4
+          ],
+          "orders": 17
+        }
+      ],
+      "playerActions": [
+        {
+          "time": 50,
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 100,
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 140,
+          "action": "economy"
+        },
+        {
+          "time": 150,
+          "action": "factory",
+          "slot": 1,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 170,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 180,
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 200,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 210,
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 230,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 250,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 267.5,
+          "action": "factory",
+          "slot": 1,
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 280,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 297.5,
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 310,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 330,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 340,
+          "action": "factory",
+          "slot": 0,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 360,
+          "action": "supply",
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 370,
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 0
+        }
+      ],
+      "enemyActions": [
+        {
+          "time": 40,
+          "action": "economy"
+        },
+        {
+          "time": 75,
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 107.5,
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 117.5,
+          "action": "factory",
+          "slot": 1,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 137.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 157.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 170,
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 187.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 205,
+          "action": "factory",
+          "slot": 0,
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 217.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 235,
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 247.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 265,
+          "action": "factory",
+          "slot": 1,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 277.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 295,
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 307.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 325,
+          "action": "factory",
+          "slot": 0,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 337.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 355,
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 367.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        }
+      ]
+    },
+    {
+      "label": "reactive-economy-vs-economy",
+      "result": "blue",
+      "time": 325.8,
+      "waves": 22,
+      "peakUnits": 31,
+      "hq": {
+        "orange": 0,
+        "blue": 1200
+      },
+      "metrics": {
+        "orange": {
+          "spent": 1110,
+          "earned": 937.4,
+          "produced": 137,
+          "hqDamage": 0,
+          "builds": 2,
+          "refits": 7,
+          "laneChanges": 1,
+          "supplies": 7,
+          "economyAt": 40,
+          "credits": 27.4
+        },
+        "blue": {
+          "spent": 1110,
+          "earned": 937.4,
+          "produced": 123,
+          "hqDamage": 1200,
+          "builds": 2,
+          "refits": 7,
+          "laneChanges": 0,
+          "supplies": 7,
+          "economyAt": 40,
+          "credits": 27.4
+        }
+      },
+      "lateOrders": 26,
+      "checkpoints": [
+        {
+          "time": 60,
+          "hq": [
+            1200,
+            1200
+          ],
+          "credits": [
+            60,
+            60
+          ],
+          "units": [
+            2,
+            2
+          ],
+          "orders": 1
+        },
+        {
+          "time": 120,
+          "hq": [
+            1200,
+            1200
+          ],
+          "credits": [
+            10,
+            10
+          ],
+          "units": [
+            4,
+            2
+          ],
+          "orders": 4
+        },
+        {
+          "time": 180,
+          "hq": [
+            1200,
+            1200
+          ],
+          "credits": [
+            10,
+            10
+          ],
+          "units": [
+            8,
+            6
+          ],
+          "orders": 8
+        },
+        {
+          "time": 240,
+          "hq": [
+            1140,
+            1200
+          ],
+          "credits": [
+            10,
+            10
+          ],
+          "units": [
+            9,
+            6
+          ],
+          "orders": 12
+        },
+        {
+          "time": 300,
+          "hq": [
+            645,
+            1200
+          ],
+          "credits": [
+            10,
+            10
+          ],
+          "units": [
+            10,
+            3
+          ],
+          "orders": 16
+        }
+      ],
+      "playerActions": [
+        {
+          "time": 40,
+          "action": "economy"
+        },
+        {
+          "time": 75,
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 107.5,
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 117.5,
+          "action": "factory",
+          "slot": 1,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 137.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 147.5,
+          "action": "factory",
+          "slot": 1,
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 167.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 177.5,
+          "action": "factory",
+          "slot": 0,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 197.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 207.5,
+          "action": "factory",
+          "slot": 0,
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 227.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 237.5,
+          "action": "factory",
+          "slot": 0,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 257.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 267.5,
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 287.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 297.5,
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 317.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        }
+      ],
+      "enemyActions": [
+        {
+          "time": 40,
+          "action": "economy"
+        },
+        {
+          "time": 75,
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 107.5,
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 117.5,
+          "action": "factory",
+          "slot": 0,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 137.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 147.5,
+          "action": "factory",
+          "slot": 0,
+          "type": "mech",
+          "lane": 1
+        },
+        {
+          "time": 167.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 177.5,
+          "action": "factory",
+          "slot": 0,
+          "type": "drone",
+          "lane": 1
+        },
+        {
+          "time": 197.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 207.5,
+          "action": "factory",
+          "slot": 0,
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 227.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 1
+        },
+        {
+          "time": 240,
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 257.5,
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 270,
+          "action": "factory",
+          "slot": 1,
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 287.5,
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 300,
+          "action": "factory",
+          "slot": 1,
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 317.5,
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        }
+      ]
+    }
+  ]
+}

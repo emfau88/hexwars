@@ -1,0 +1,41 @@
+{
+  "url": "http://127.0.0.1:4181/m15.html",
+  "browser": "151.0.7922.34",
+  "checks": [
+    "actual HQ/drone/mech GLBs loaded; both factions and all three robot types visible",
+    "four factory cards disabled; economy and HQ values explicitly preview only",
+    "camera switch, zoom and reset do not mutate simulation",
+    "instanced robot picking, honest animation label and close-up work",
+    "real requestAnimationFrame playback advances and pause freezes combat",
+    "both rendered lanes exactly match headless results: encounter",
+    "both rendered lanes exactly match headless results: counter",
+    "both rendered lanes exactly match headless results: mirror",
+    "actual shot/hit/death events create effects and damaged-unit HP bars",
+    "compact desktop and narrow layout retain working controls without horizontal overflow",
+    "all runtime requests stay inside this local standalone variant",
+    "game → retained combat lab → game round trip works"
+  ],
+  "errors": [],
+  "assets": {
+    "hoverbot": {
+      "meshes": 2,
+      "skins": 0,
+      "animations": 0,
+      "triangles": 14070
+    },
+    "mech": {
+      "meshes": 1,
+      "skins": 0,
+      "animations": 0,
+      "triangles": 23502
+    },
+    "hq": {
+      "meshes": 2,
+      "skins": 0,
+      "animations": 0,
+      "triangles": 44540
+    }
+  },
+  "initialDrawCalls": 68,
+  "initialTriangles": 805435
+}

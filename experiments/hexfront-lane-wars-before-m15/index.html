@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="de">
+<head>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+ <meta name="theme-color" content="#f4eddd"><title>HEXFRONT · Lane Wars</title>
+ <meta name="description" content="Zwei Fronten, drei Roboterrollen. Ein eigenständiges HEXFRONT Lane-Wars-Experiment.">
+ <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cpath fill='%23e6a754' d='M20 2 36 11v18L20 38 4 29V11z'/%3E%3Cpath fill='%23314946' d='M12 11h5v7h6v-7h5v18h-5v-7h-6v7h-5z'/%3E%3C/svg%3E">
+ <link rel="stylesheet" href="./src/style.css">
+ <script type="importmap">{"imports":{"three":"./vendor/three.module.min.js"}}</script>
+</head>
+<body>
+ <main id="app">
+  <div id="stage" aria-label="Dreidimensionales Schlachtfeld mit Westweg und Ostweg"></div>
+  <div id="loading" role="status"><span class="spinner"></span><strong>Roboter werden vorbereitet …</strong></div>
+  <header class="hud">
+   <div class="identity panel"><span class="wordmark">HEXFRONT<small>LANE WARS · FELDVERSUCH 01</small></span></div>
+   <div class="score panel"><div class="hq-score orange"><span>DEIN HQ</span><strong id="own-health">420</strong><progress id="own-health-bar" max="420" value="420"></progress></div><div class="clock"><span id="phase">BEREIT</span><strong id="time">00:00</strong></div><div class="hq-score blue"><span>GEGNER-HQ</span><strong id="enemy-health">420</strong><progress id="enemy-health-bar" max="420" value="420"></progress></div></div>
+   <div class="resources panel"><strong id="credits">70 Cr</strong><span title="Beide HQs erhalten 4 Credits pro Sekunde. Keine Gebietseinnahmen.">+4 Cr/s · HQ</span></div>
+   <button id="pause" class="panel square" aria-label="Spiel pausieren" title="Pause (Leertaste)" disabled>Ⅱ</button>
+   <button id="menu" class="panel square" aria-label="Spielmenü öffnen" title="Spielmenü"><span data-icon="settings"></span></button>
+  </header>
+  <div id="world-labels" aria-hidden="true"><span id="label-west" class="way-label">WESTWEG</span><span id="label-east" class="way-label">OSTWEG</span></div>
+  <aside class="camera-tools panel"><button id="quality" aria-label="Grafikqualität wechseln">Grafik: Hoch</button><button id="view" aria-label="Kameraperspektive wechseln">Taktik</button></aside>
+  <section class="command panel" aria-label="Produktion">
+   <div class="command-head"><div><span class="eyebrow">DEIN NÄCHSTER AUFTRAG</span><strong>Welche Front braucht dich?</strong></div><div class="lane-switch" role="group" aria-label="Einsatzweg"><button data-lane="west" aria-pressed="true">↖ Westweg <small id="west-status">Noch ruhig</small></button><button data-lane="east" aria-pressed="false">Ostweg ↗ <small id="east-status">Noch ruhig</small></button></div></div>
+   <div id="unit-cards" class="unit-cards"></div>
+   <div class="assembly"><div id="active-order" class="active-order"><span class="status-light"></span><span id="active-label">Fertigung bereit</span><progress id="build-progress" max="1" value="0" aria-label="Produktionsfortschritt"></progress><button id="cancel-active" class="cancel" aria-label="Aktiven Auftrag abbrechen und Kosten erstatten" hidden>×</button></div><label class="repeat"><input id="repeat" type="checkbox"> Folge wiederholen</label></div>
+   <div id="queue" class="queue" aria-label="Wartende Aufträge"></div>
+   <div class="command-foot"><span id="queue-note">Kosten werden bei Baubeginn abgezogen.</span><span id="army-count">0 / 30 Roboter</span><button id="help" class="text-button">So funktioniert’s</button></div>
+  </section>
+  <div id="notice" role="status" aria-live="polite"></div>
+ </main>
+ <dialog id="home" class="home-dialog"><div class="home-card panel"><div class="brand-badge" id="home-badge"></div><span class="eyebrow">KLEINE ROBOTER. ZWEI GROSSE FRONTEN.</span><h1>HEXFRONT<span>Lane Wars</span></h1><p>Baue deine Roboter. Wähle ihren Weg.<br>Den Rest regelt deine kleine Armee.</p><div class="mission-tag"><span data-icon="terrain"></span><div><strong>Zwillingswiese</strong><small>Zwei Wege · drei Rollen · ein gegnerisches HQ</small></div></div><label class="difficulty">Gegner <select id="difficulty"><option value="normal">Standard</option><option value="relaxed">Entspannt</option></select></label><button id="resume" class="primary" hidden>Einsatz fortsetzen <span data-icon="play"></span></button><button id="start" class="primary" disabled>Einsatz starten <span data-icon="play"></span></button><button id="home-help" class="secondary">Roboter & Spielregeln</button><p class="small-note">Eigenständiger Genre-Test · Mensch gegen KI</p></div></dialog>
+ <dialog id="help-dialog" class="help-dialog panel"><span class="eyebrow">DEIN KOMMANDOPULT</span><h2>Du planst. Sie rücken vor.</h2><ol><li><strong>Westweg oder Ostweg wählen.</strong> Die Markierung zeigt den Weg für neue Aufträge.</li><li><strong>Roboter bestellen.</strong> Dein HQ baut einen Auftrag nach dem anderen. Die fertigen Roboter laufen selbstständig aus dem Tor.</li><li><strong>Auf den Gegner reagieren.</strong> Drohnen überrennen einzelne Fernkämpfer. Mechs treffen Gruppen. Rail-Bots knacken schwere Ziele.</li></ol><p>Beide Seiten verdienen <strong>4 Credits pro Sekunde</strong>. Bezahlt wird bei Baubeginn. Abbrechen erstattet die Kosten des aktiven Auftrags. Wartende Aufträge kosten noch nichts.</p><p><strong>Folge wiederholen</strong> hängt fertige Aufträge wieder hinten an – mit demselben Weg. Der nächste Auftrag wartet bei fehlenden Credits oder bei 30 Robotern.</p><p>Jeder sichtbare Roboter ist eine Einheit. Kämpfe laufen auf beiden Wegen gleichzeitig. Schütze deine Fernkämpfer mit einer Front und zerstöre das gegnerische HQ. Beide HQs haben eine kurze Verteidigungsreichweite.</p><p class="small-note">1 / 2: Weg wählen · Q / W / E: Roboter bestellen · Leertaste: Pause · Escape: Menü / zurück. Die Partie hat kein Zeitlimit.</p><button id="close-help" class="primary">Verstanden</button></dialog>
+ <dialog id="result" class="result-dialog"><div class="result-card panel"><div id="result-badge"></div><span class="eyebrow">ZWILLINGSWIESE</span><h2 id="result-title">Sektor gesichert</h2><p id="result-copy"></p><div class="result-stats"><div><span>Einsatzzeit</span><strong id="result-time"></strong></div><div><span>Roboter gebaut</span><strong id="result-produced"></strong></div><div><span>HQ-Schaden</span><strong id="result-damage"></strong></div></div><button id="again" class="primary">Noch ein Einsatz <span data-icon="play"></span></button><button id="back-home" class="secondary">Zur Einsatzplanung</button><button id="inspect" class="text-button">Schlachtfeld ansehen</button></div></dialog>
+ <script type="module" src="./src/main.js"></script>
+</body>
+</html>

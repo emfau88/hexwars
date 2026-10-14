@@ -1,0 +1,83 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+import { chromium } from '@playwright/test';
+import { Combat } from '../src/simulation.js';
+import { SCENARIOS } from '../src/scenarios.js';
+
+const url = process.env.LAB_URL || 'http://127.0.0.1:4181/lab.html';
+let browser;
+try { browser = await chromium.launch({ headless: true }); }
+catch { browser = await chromium.launch({ channel: 'msedge', headless: true }); }
+const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 });
+const errors = [];
+page.on('pageerror', error => errors.push(error.message));
+page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
+page.on('requestfailed', request => errors.push(`${request.url()}: ${request.failure()?.errorText}`));
+const output=new URL(process.env.LAB_QA_OUTPUT||'../docs/m21-qa/lab/',import.meta.url);
+await fs.mkdir(output,{recursive:true});
+const checks = [];
+const screenshot = name => page.screenshot({ path: fileURLToPath(new URL(name,output)), fullPage: true });
+try {
+  await page.goto(url);
+  await page.waitForFunction(() => !!window.__COMBAT_LAB__);
+  assert.equal(await page.locator('#stage canvas').count(), 1);
+  assert.equal(await page.locator('#render-error').isVisible(), false);
+  assert.equal((await page.evaluate(() => window.__COMBAT_LAB__.snapshot())).units.length, 16);
+  await page.locator('#step').click();
+  assert.equal((await page.evaluate(() => window.__COMBAT_LAB__.snapshot())).time, 0.05);
+  await page.locator('#reset').click();
+  assert.equal((await page.evaluate(() => window.__COMBAT_LAB__.snapshot())).time, 0);
+  checks.push('3D loads; single step and reset work');
+  await screenshot('desktop-setup.png');
+  const health = await page.locator('.health').first().boundingBox();
+  await page.mouse.click(health.x + health.width / 2, health.y + 11);
+  assert.match(await page.locator('#inspector').innerText(), /Drohne #/);
+  checks.push('clicking a robot inspects its HP and range');
+  await page.locator('#reset').click();
+  await page.locator('#show-ranges').check();
+  await page.locator('#play').click();
+  await page.waitForFunction(() => window.__COMBAT_LAB__.snapshot().time >= 4);
+  await page.locator('#play').click();
+  const paused = await page.evaluate(() => window.__COMBAT_LAB__.snapshot().time);
+  await page.waitForTimeout(150);
+  assert.equal(await page.evaluate(() => window.__COMBAT_LAB__.snapshot().time), paused);
+  await screenshot('desktop-combat.png');
+  checks.push('play, pause and range display work');
+  await page.locator('#show-ranges').uncheck();
+  await page.locator('#speed').selectOption('4');
+  for (const scenario of SCENARIOS) {
+    await page.locator('#scenario').selectOption(scenario.id);
+    await page.locator('#play').click();
+    await page.waitForFunction(() => !!window.__COMBAT_LAB__.snapshot().result, null, { timeout: 20000 });
+    const actual = await page.evaluate(() => window.__COMBAT_LAB__.summary());
+    const expected = new Combat({ orange: scenario.orange, blue: scenario.blue }).run();
+    assert.deepEqual(actual, expected, `browser/headless parity: ${scenario.id}`);
+    checks.push(`browser/headless identical: ${scenario.id}`);
+  }
+  await page.locator('#scenario').selectOption('mixed');
+  await page.locator('#swap').click();
+  await page.locator('#play').click();
+  await page.waitForFunction(() => !!window.__COMBAT_LAB__.snapshot().result);
+  assert.equal(await page.evaluate(() => window.__COMBAT_LAB__.snapshot().result), 'blue');
+  checks.push('side swap reverses winner');
+  await page.locator('#orange-drone').fill('1');
+  await page.locator('#orange-drone').press('Tab');
+  assert.equal(await page.locator('#scenario').inputValue(), 'custom');
+  assert.equal(await page.evaluate(() => window.__COMBAT_LAB__.snapshot().time), 0);
+  await page.locator('#gap').selectOption('18');
+  assert.equal(await page.evaluate(() => window.__COMBAT_LAB__.snapshot().time), 0);
+  checks.push('custom army and gap reset the setup');
+  await page.locator('#scenario').selectOption('mixed');
+  await page.locator('#gap').selectOption('12');
+  await page.setViewportSize({ width: 1100, height: 750 });
+  await screenshot('compact-desktop.png');
+  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
+  checks.push('compact desktop has no horizontal overflow');
+  for (const doc of ['GDD.md', 'RESULTS.md']) assert.equal((await page.request.get(new URL(`docs/${doc}`, url).href)).status(), 200);
+  checks.push('GDD and result report are accessible');
+  assert.deepEqual(errors, []);
+  const report = { checks, errors, browser: browser.version(), url };
+  await fs.writeFile(new URL('browser-results.json',output), JSON.stringify(report, null, 2));
+  console.log(JSON.stringify(report, null, 2));
+} finally { await browser.close(); }

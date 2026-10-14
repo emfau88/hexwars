@@ -1,0 +1,16 @@
+import http from 'node:http';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+const project=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const root=process.argv.includes('--production')?path.join(project,'dist'):project;
+const port=Number(process.env.PORT||4178);
+const mime={'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json','.glb':'model/gltf-binary','.png':'image/png','.webp':'image/webp','.txt':'text/plain; charset=utf-8'};
+http.createServer(async(req,res)=>{
+ try {
+  const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);
+  const file=path.resolve(root,'.'+(pathname.endsWith('/')?pathname+'index.html':pathname));
+  if(!file.startsWith(root+path.sep))throw Error('Path outside variant');
+  const data=await fs.readFile(file);res.writeHead(200,{'Content-Type':mime[path.extname(file)]||'application/octet-stream','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'});res.end(data);
+ }catch{res.writeHead(404);res.end('Not found');}
+}).listen(port,'127.0.0.1',()=>console.log(`HEXFRONT Lane Wars: http://127.0.0.1:${port}/`));

@@ -1,0 +1,131 @@
+{
+  "date": "2026-10-14",
+  "reference": "HEXFRONT Mixed Squads / HEXFRONT 3D, existing local files at f187bc3; notices retained",
+  "files": [
+    {
+      "file": "public/materials/LICENSE-PolyHaven.txt",
+      "bytes": 542,
+      "sha256": "c99cfb4334a390b4bf4a1d9c8b8a85fe9209c057c89de34ad57392f7ca74dcf4"
+    },
+    {
+      "file": "public/materials/material-provenance.json",
+      "bytes": 3552,
+      "sha256": "559f58b8b719ec73d3ce33dcd46981ecab64154f870d91422203613bab6e5968"
+    },
+    {
+      "file": "public/materials/rock_boulder_dry_diff.webp",
+      "bytes": 200812,
+      "sha256": "43d830111190552570fb5c4b0271c37b54b81b1d81451720cfac8baae1868504"
+    },
+    {
+      "file": "public/materials/rock_boulder_dry_nor_gl.webp",
+      "bytes": 359952,
+      "sha256": "a7de075a39f29231ba78162d0518ac07b658081a45ed2d5fff505307e65e6038"
+    },
+    {
+      "file": "public/materials/rock_boulder_dry_rough.webp",
+      "bytes": 152422,
+      "sha256": "5bb7dce29e032adb930e44bc178afc93188b5f89160bf7e27013b1f4f05488c7"
+    },
+    {
+      "file": "public/materials/rock_wall_02_diff.webp",
+      "bytes": 249310,
+      "sha256": "3d34688ebdd169c8989cec5746b58cc4b09893a6a21b1f31855566299ef58a42"
+    },
+    {
+      "file": "public/materials/rock_wall_02_rough.webp",
+      "bytes": 162382,
+      "sha256": "8e6c1fb1894dd9a0d5cc5b7ff34520df0852e7e718d8153010c36c64c7b7e77f"
+    },
+    {
+      "file": "public/models/hoverbot.glb",
+      "bytes": 2570764,
+      "sha256": "de2db19ba485d878b386704b81701540ab890171d9a261ee2923943a77a68907"
+    },
+    {
+      "file": "public/models/hq.glb",
+      "bytes": 3293600,
+      "sha256": "63b2043cbbe631fdac6999144a024962daac8367af60bc4c4185ea88d73a7a70"
+    },
+    {
+      "file": "public/models/mech.glb",
+      "bytes": 3053920,
+      "sha256": "a67900fb60175475efe7eff2ca26fff5d3edbc940a02615020ab780d3b35d1a2"
+    },
+    {
+      "file": "public/models/source-optimization.json",
+      "bytes": 1952,
+      "sha256": "8f8284beb8b60ecca5eb2a61c08e61d7bb9707fe16b15b45ba251357c627342d"
+    },
+    {
+      "file": "public/nature/Fern_1.bin",
+      "bytes": 11448,
+      "sha256": "5e92b87a27f81a69fe15347a533df3c77d567b48298dceeef43168ccb7c22853"
+    },
+    {
+      "file": "public/nature/Fern_1.gltf",
+      "bytes": 2699,
+      "sha256": "fa6b5d0cf7e40bdde851c89cdc133c54dc4e8cad826270ad52c9392c4dd960f7"
+    },
+    {
+      "file": "public/nature/Leaves.png",
+      "bytes": 223199,
+      "sha256": "75835ee6a8fa9a65faf9c3ffaada7db8b9e1159407f6443846ea6db8f0defdc6"
+    },
+    {
+      "file": "public/nature/LICENSE-Quaternius.txt",
+      "bytes": 854,
+      "sha256": "209fd597c1837037fe13a160c628ef9fd9ccce9337256e21447110ba5ba3e025"
+    },
+    {
+      "file": "public/nature/source-provenance.json",
+      "bytes": 637,
+      "sha256": "28c7cbe1fb9fdd31e1cd2fd8d3e827ddfbc47bb0a58d34bfea0fef50a8be997a"
+    },
+    {
+      "file": "vendor/loaders/GLTFLoader.js",
+      "bytes": 114756,
+      "sha256": "535673d5725a336607631e8d519aba234dc9eca58616fa02ea705601c9828948"
+    },
+    {
+      "file": "vendor/THREE-LICENSE.txt",
+      "bytes": 1104,
+      "sha256": "3c344bc3e9582186b9e0d4185c3fd01ba8f8753a51fc2736a57afdc1f03928b4"
+    },
+    {
+      "file": "vendor/three.module.min.js",
+      "bytes": 687466,
+      "sha256": "8a906f5fe66282d9704f807427c8811525c53e9f062db17513e5cdec1a2820ab"
+    },
+    {
+      "file": "vendor/utils/BufferGeometryUtils.js",
+      "bytes": 33143,
+      "sha256": "99f37be474f6ebeef7ff6632017cbdff517a696f188d023c5bc9a2a48fe6fda8"
+    },
+    {
+      "file": "docs/reference/asset-history.md",
+      "bytes": 9740,
+      "sha256": "1c66b01c2c2750e3842ef5177462addfd146878f6e8df70a6a28d282ab1dc6f8"
+    },
+    {
+      "file": "docs/reference/cozy-production-1440.png",
+      "bytes": 503345,
+      "sha256": "0d9c0c693e5df85ecb606b42076ce2a8e6be5ccd147a7cbfbbe951435e49a282"
+    },
+    {
+      "file": "docs/reference/landscape-morgenwacht-1440.png",
+      "bytes": 1544889,
+      "sha256": "5de757fa141be84cdbd85a1802af0ca6680ddf7a2ed4db9c701e675174740b5d"
+    },
+    {
+      "file": "docs/reference/landscape-windpass-diorama-1440.png",
+      "bytes": 1539083,
+      "sha256": "3e90256788595edf99ca5b889f112572a550f8dc5c0c0d590de2fc852d2976d2"
+    },
+    {
+      "file": "docs/reference/SUPPLIED_ASSETS.md",
+      "bytes": 9270,
+      "sha256": "36d700b6f983ec617a19a0c329a9c7965678303d449c077526a1002597322b1d"
+    }
+  ]
+}
