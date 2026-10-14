@@ -1,0 +1,11 @@
+{
+  "url": "https://rawcdn.githack.com/emfau88/hexwars/5016cb1caffc011a5dcd4df34f648994e86f724c/experiments/hexfront-lane-wars/index.html",
+  "viewport": "390x844 touch",
+  "clearFraction": 0.7239336492890995,
+  "checks": [
+    "Collapsed mobile HUD and optional hint",
+    "Touch factory build in first mission",
+    "Building direction and tap supply in second mission"
+  ],
+  "errors": []
+}

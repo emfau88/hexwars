@@ -7,7 +7,7 @@ Sicherung vor den Änderungen: Commit `1a40373`, Tag `codex/lane-wars-pre-m2.1`.
 
 ## Spielen
 
-**[Öffentliche M2.1-Kampagne](https://rawcdn.githack.com/emfau88/hexwars/60aaf1f6b893b3a607040571363c3fd50bb1a6e2/experiments/hexfront-lane-wars/index.html)** · [Öffentliche Bilder und Nachschubdemo](https://rawcdn.githack.com/emfau88/hexwars/60aaf1f6b893b3a607040571363c3fd50bb1a6e2/experiments/hexfront-lane-wars/m21-review.html). Laufzeitstand `60aaf1f`, ohne lokalen Server. Beim ersten Besuch gegebenenfalls **Open the page** bestätigen.
+**[Öffentliche M2.1-Kampagne](https://rawcdn.githack.com/emfau88/hexwars/5016cb1caffc011a5dcd4df34f648994e86f724c/experiments/hexfront-lane-wars/index.html)** · [Öffentliche Bilder und Nachschubdemo](https://rawcdn.githack.com/emfau88/hexwars/5016cb1caffc011a5dcd4df34f648994e86f724c/experiments/hexfront-lane-wars/m21-review.html). Laufzeitstand `5016cb1`, ohne lokalen Server. Beim ersten Besuch gegebenenfalls **Open the page** bestätigen.
 
 **[Lokale Kampagne](http://127.0.0.1:4181/)** · **[Bilder und Nachschubdemonstration](http://127.0.0.1:4181/m21-review.html)** · [Kampflabor](http://127.0.0.1:4181/lab.html)
 

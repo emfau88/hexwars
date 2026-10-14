@@ -32,6 +32,8 @@ Touch-Bauen, Stornieren/Erstattung, Umrüstung, kostenloser Gebäuderichtungswec
 
 Die Prüfung ist eine Browseremulation und ersetzt keinen erneuten persönlichen Smartphone-Test. Wiesenkrieg bleibt wegen seiner breiten Zwei-Lane-Landschaft in der Gesamtansicht kleiner als Erste Front; Kamera-Zoom ist in der Fabrikverwaltung erreichbar.
 
+Die veröffentlichte Vorschau wurde zusätzlich bei 390 × 844 mit Touch-Eingabe geprüft: eingeklappte Verwaltung, Fabrikbau in Erste Front, Richtungspfeil und Nachschub in Wiesenkrieg. Keine Browserfehler. [Öffentliches Prüfprotokoll](mobile-hud/public-preview.json).
+
 ## Bilder
 
 ![Erste Front im Hochformat](mobile-hud/first-390x844.png)

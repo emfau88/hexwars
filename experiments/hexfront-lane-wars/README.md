@@ -4,9 +4,9 @@ Eine spielbare Kampagne Mensch gegen KI mit **Erste Front** (eine Lane) und **Wi
 
 ## Spielen
 
-**[▶ M2.1 im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/60aaf1f6b893b3a607040571363c3fd50bb1a6e2/experiments/hexfront-lane-wars/index.html)** · **[Screenshots und Nachschubvideo](https://rawcdn.githack.com/emfau88/hexwars/60aaf1f6b893b3a607040571363c3fd50bb1a6e2/experiments/hexfront-lane-wars/m21-review.html)**
+**[▶ M2.1 im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/5016cb1caffc011a5dcd4df34f648994e86f724c/experiments/hexfront-lane-wars/index.html)** · **[Screenshots und Nachschubvideo](https://rawcdn.githack.com/emfau88/hexwars/5016cb1caffc011a5dcd4df34f648994e86f724c/experiments/hexfront-lane-wars/m21-review.html)**
 
-Öffentliche Vorschau des Kampagnenstands `60aaf1f`, ohne lokalen Server. Falls ein Hinweis erscheint, **Open the page** anklicken.
+Öffentliche Vorschau des Kampagnenstands `5016cb1`, ohne lokalen Server. Falls ein Hinweis erscheint, **Open the page** anklicken.
 
 ```powershell
 node scripts/serve.mjs
