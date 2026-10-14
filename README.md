@@ -4,6 +4,10 @@
 
 Spielbare Kampagne **Mensch gegen KI** im Branch `codex/lane-wars`: **Erste Front** mit einer Lane und **Wiesenkrieg** mit zwei Fronten. Direkte Gebäudepfeile, transparente Bauvorschauen, Nachschub per Drag/Tap und getrennte lokale Missionsspielstände. Die vorhandene Diorama-Architektur und der M1-Kampfkern bleiben erhalten.
 
+**[▶ M2.1 jetzt im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/60aaf1f6b893b3a607040571363c3fd50bb1a6e2/experiments/hexfront-lane-wars/index.html)** · **[Screenshots und Nachschubvideo](https://rawcdn.githack.com/emfau88/hexwars/60aaf1f6b893b3a607040571363c3fd50bb1a6e2/experiments/hexfront-lane-wars/m21-review.html)**
+
+Der öffentliche Playlink ist auf den Kampagnenstand `60aaf1f` festgelegt und benötigt keinen lokalen Server. Falls der Vorschauhost einen Hinweis zeigt, **Open the page** anklicken. Dieser Branch veröffentlicht ausschließlich die Lane-Wars-Vorschau; die älteren Spielvarianten bleiben unverändert.
+
 ```powershell
 cd experiments/hexfront-lane-wars
 node scripts/serve.mjs
@@ -13,7 +17,7 @@ node scripts/serve.mjs
 
 Die lokalen Links benötigen den laufenden Server. Node.js ab Version 20 genügt. **Kampagne starten** beginnt direkt; ein Sieg in Erste Front schaltet Wiesenkrieg frei.
 
-Die [öffentliche M1.5-Vorschau](https://rawcdn.githack.com/emfau88/hexwars/c038ffed9718192a7249ec8764951d3f5d3293c2/experiments/hexfront-lane-wars/index.html) bleibt historisch und enthält die Kampagne nicht. Ein öffentlicher M2.1-Playlink ist noch nicht verifiziert.
+
 
 ## Mixed Squads — ältere Variante
 

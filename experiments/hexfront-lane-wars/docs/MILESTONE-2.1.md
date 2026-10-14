@@ -5,6 +5,8 @@ Sicherung vor den Änderungen: Commit `1a40373`, Tag `codex/lane-wars-pre-m2.1`.
 
 ## Spielen
 
+**[Öffentliche M2.1-Kampagne](https://rawcdn.githack.com/emfau88/hexwars/60aaf1f6b893b3a607040571363c3fd50bb1a6e2/experiments/hexfront-lane-wars/index.html)** · [Öffentliche Bilder und Nachschubdemo](https://rawcdn.githack.com/emfau88/hexwars/60aaf1f6b893b3a607040571363c3fd50bb1a6e2/experiments/hexfront-lane-wars/m21-review.html). Laufzeitstand `60aaf1f`, ohne lokalen Server. Beim ersten Besuch gegebenenfalls **Open the page** bestätigen.
+
 **[Lokale Kampagne](http://127.0.0.1:4181/)** · **[Bilder und Nachschubdemonstration](http://127.0.0.1:4181/m21-review.html)** · [Kampflabor](http://127.0.0.1:4181/lab.html)
 
 Der Entwicklungsserver muss laufen. Im Hauptmenü beginnt **Kampagne starten** direkt mit Erste Front. Ein Sieg schaltet Wiesenkrieg frei. Pro Mission bleibt ein eigener lokaler Spielstand erhalten. Wiederholen ist über **Level auswählen → Neu** möglich; das Ersetzen eines vorhandenen Spielstands muss ausdrücklich bestätigt werden.
@@ -100,6 +102,8 @@ Eine auf beide Lanes verteilte Drohnenantwort auf Fernkämpfer bleibt nach zwöl
 - Die Nachschubaufnahme prüft zusätzlich den echten Animations-/Spielzeitablauf und Pause. Die alten gelegentlichen Modell-Request-Abbrüche traten nach vollständigem Einlesen und Wiederverwenden der GLB- und Farn-Quelldaten in den erfolgreichen Abnahmeläufen nicht mehr auf.
 - Prüfungen verwenden Chromium mit Desktop-Viewport und emulierter Touch-Eingabe. Sie sind keine Tests auf einem physischen Smartphone und keine FPS-Zusage.
 - M1-Kampflabor und M1.5-Grafikdemo bleiben eigenständig erreichbar. Keine zusätzlichen Laufzeitabhängigkeiten, keine Änderungen an anderen Spielvarianten, kein Merge nach main.
+
+Die öffentliche Vorschau wurde nach dem Push ebenfalls im Browser geprüft: vollständiger Sieg in Erste Front, Freischaltung und Start von Wiesenkrieg, kostenloser Gebäuderichtungswechsel und bezahlter Nachschub. Keine Browserfehler. [Öffentliches Prüfprotokoll](m21-qa/public-preview.json).
 
 ## Reproduzieren
 

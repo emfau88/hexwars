@@ -4,13 +4,17 @@ Eine spielbare Kampagne Mensch gegen KI mit **Erste Front** (eine Lane) und **Wi
 
 ## Spielen
 
+**[▶ M2.1 im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/60aaf1f6b893b3a607040571363c3fd50bb1a6e2/experiments/hexfront-lane-wars/index.html)** · **[Screenshots und Nachschubvideo](https://rawcdn.githack.com/emfau88/hexwars/60aaf1f6b893b3a607040571363c3fd50bb1a6e2/experiments/hexfront-lane-wars/m21-review.html)**
+
+Öffentliche Vorschau des Kampagnenstands `60aaf1f`, ohne lokalen Server. Falls ein Hinweis erscheint, **Open the page** anklicken.
+
 ```powershell
 node scripts/serve.mjs
 ```
 
 **[Kampagne lokal spielen](http://127.0.0.1:4181/)** · [Bilder und Nachschubdemo](http://127.0.0.1:4181/m21-review.html) · [Kampflabor](http://127.0.0.1:4181/lab.html) · [M1.5-Demo](http://127.0.0.1:4181/m15.html)
 
-Der lokale Server wird benötigt. Node.js ab Version 20 genügt; sämtliche Spielressourcen liegen im Experiment, ohne CDN oder Abhängigkeit von anderen HEXFRONT-Varianten.
+Für die lokalen Links wird der Server benötigt. Node.js ab Version 20 genügt; sämtliche Spielressourcen liegen im Experiment, ohne CDN oder Abhängigkeit von anderen HEXFRONT-Varianten.
 
 **Kampagne starten** beginnt sofort mit einer Drohnenfabrik. Ein Sieg in Erste Front schaltet Wiesenkrieg frei. Eigene Spielstände je Mission und Fortschritt bleiben lokal im Browser unter `hexfront-lane-wars-campaign-v1` erhalten. **Neu** ersetzt nach Bestätigung nur den gewählten Missionsspielstand.
 
@@ -49,6 +53,6 @@ Die ersten drei Befehle benötigen keinen Browser. Für Browsertests einmalig `n
 - M1-Kampfkern und Roboterwerte bleiben unverändert. Missions-HQ-Werte und KI-Taktung sind im Ergebnisbericht dokumentiert.
 - Gleiche Ausfahrtszeit je Typ unabhängig von Fabrikplatz, Lane oder Fraktion.
 - Lange Patts bleiben bei bestimmten starren Produktionsplänen möglich. Der Fernkämpfer ist weiterhin ein Platzhalter, der Mech besitzt kein artikuliertes Lauf-Rig.
-- Die [öffentliche M1.5-Vorschau](https://rawcdn.githack.com/emfau88/hexwars/c038ffed9718192a7249ec8764951d3f5d3293c2/experiments/hexfront-lane-wars/index.html) ist historisch und zeigt die Kampagne nicht. Eine öffentliche M2.1-Veröffentlichung wird erst nach erfolgreichem Push und Prüfung als verfügbar bezeichnet.
+- Der öffentliche Playlink oben zeigt die M2.1-Kampagne. Die [frühere M1.5-Vorschau](https://rawcdn.githack.com/emfau88/hexwars/c038ffed9718192a7249ec8764951d3f5d3293c2/experiments/hexfront-lane-wars/index.html) bleibt als historischer Stand erhalten.
 
 Historische Berichte: [M2](docs/MILESTONE-2.md), [Fabrikausfahrten](docs/FACTORY-EXITS.md), [M1.5](docs/VISUAL-INTEGRATION.md).
