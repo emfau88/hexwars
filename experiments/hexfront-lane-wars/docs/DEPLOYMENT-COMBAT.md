@@ -54,9 +54,9 @@ Späte Entscheidungen bleiben relevant, aber nicht jede Gegenproduktion reicht f
 - Drei automatisierte Browserpartien stimmen mit Node überein: zwei Siege, eine symmetrische Partie nach zwölf Minuten weiterhin offen. Kein künstliches Ende.
 - Neustarts, alle drei Gegnerwahlen, Geldreservierung/Storno sowie Touch-Bedienung im Hochformat geprüft; keine Konsolen- oder Ladefehler.
 - Kampflabor: **14 Browserprüfungen bestanden**, einschließlich Browser-/Node-Übereinstimmung.
-- Öffentliche Prüfung nach dem Push folgt.
+- Öffentlicher Playlink zum Commit 4ec7337: dieselben vollständigen Partien mit identischen Ergebnissen und alle 30 Fabriktor-/Abstandsprüfungen bestanden. Der Sieg mit echten HUD-Eingaben endet ebenfalls bei 6:59,75; keine Lade- oder Konsolenfehler.
 
-Rohdaten: [56 Balanceproben](deployment-qa/audit.json), [alte HQ-Stärke als Gegenprobe](deployment-qa/previous-hq-control.json), [Logiktests](deployment-qa/node-tests.txt), [30 Browserfälle und Modellabstand](deployment-qa/browser/results.json), [vollständige Build-Partien](deployment-qa/production/results.json), [Kampflabor](deployment-qa/lab/browser-results.json).
+Rohdaten: [56 Balanceproben](deployment-qa/audit.json), [alte HQ-Stärke als Gegenprobe](deployment-qa/previous-hq-control.json), [Logiktests](deployment-qa/node-tests.txt), [30 Browserfälle und Modellabstand](deployment-qa/browser/results.json), [vollständige Build-Partien](deployment-qa/production/results.json), [Kampflabor](deployment-qa/lab/browser-results.json), [öffentliche Partien](deployment-qa/public/results.json), [öffentliche Fabrikkämpfe](deployment-qa/public-exits/results.json).
 
 ## Reproduzieren
 ~~~powershell

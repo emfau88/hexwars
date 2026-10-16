@@ -31,7 +31,7 @@ HQs haben in neuen zentralen Partien 800 LP und verursachen 2 Schaden/s. Ausrüc
 
 ## Ergebnisse
 
-**79 Logiktests**, **30 gezielte 3D-Browserfälle** an Fabrik-/HQ-Ausgängen und vollständige Build-Partien bestanden. Ein Sieg mit tatsächlichen HUD-Eingaben endet nach 6:59; Speichern/Fortsetzen, Niederlage, Neustart und Hochformat-Touch sind geprüft. Das Kampflabor besteht seine 14 Browserprüfungen; die alten Kampfabläufe bleiben durch Regressionstests abgesichert.
+**79 Logiktests**, **30 gezielte 3D-Browserfälle** an Fabrik-/HQ-Ausgängen und vollständige Build-/öffentliche Partien bestanden. Ein Sieg mit tatsächlichen HUD-Eingaben endet nach 6:59; Speichern/Fortsetzen, Niederlage, Neustart und Hochformat-Touch sind geprüft. Das Kampflabor besteht seine 14 Browserprüfungen; die alten Kampfabläufe bleiben durch Regressionstests abgesichert.
 
 Die sechs reagierenden KI-Referenzpartien enden nach **5:27, 6:59 und 7:00**. Im breiten Audit bleiben jedoch **28 von 56 Läufen** nach zwölf Minuten offen (zuvor 14). Darin sind auch starre Pläne, Spiegelungen und Parameterkontrollen enthalten. Die Balance ist damit weiterhin nicht allgemein gelöst. [Details und Rohdaten](docs/DEPLOYMENT-COMBAT.md) · [GDD v0.3.1](docs/GDD.md).
 
