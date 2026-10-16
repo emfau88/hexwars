@@ -1,0 +1,12 @@
+# Reproducible intermediate exploration and duplicate browser captures.
+docs/central-qa/*-grid.json
+docs/central-qa/initial-audit.json
+docs/central-qa/economy.json
+docs/central-qa/late.json
+docs/central-qa/audit-summary.txt
+docs/central-qa/first-look.png
+docs/central-qa/browser/
+docs/central-qa/mobile-regression/*.png
+docs/central-qa/legacy-browser/*.png
+docs/central-qa/lab/*.png
+docs/central-qa/public/*.png

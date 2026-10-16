@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {chromium} from '@playwright/test';
-const base=process.env.MATCH_URL||'http://127.0.0.1:4181/',out='docs/mobile-hud/';
+const base=process.env.MATCH_URL||'http://127.0.0.1:4181/',out=process.env.MOBILE_QA_OUTPUT||'docs/mobile-hud/';
 await fs.mkdir(out,{recursive:true});
 const browser=await chromium.launch({headless:true}),errors=[],layouts=[],checks=[];
 function watch(p){p.on('pageerror',e=>errors.push(e.message));p.on('requestfailed',r=>errors.push(r.url()+': '+r.failure()?.errorText));}
@@ -19,7 +19,7 @@ try{
  for(const size of [[390,844],[360,640],[320,568],[412,915],[844,390]]){
   const c=await browser.newContext({viewport:{width:size[0],height:size[1]},hasTouch:true,isMobile:true,deviceScaleFactor:1}),p=await c.newPage();watch(p);
   await p.goto(base+'?qa=1');await p.waitForFunction(()=>window.__LANE_MATCH_QA__);
-  for(const id of ['first','meadow']){
+  for(const id of ['central','first','meadow']){
    await p.evaluate(id=>window.__LANE_MATCH_QA__.load(id),id);await p.evaluate(()=>window.__LANE_MATCH_QA__.advance(80));
    const measured=await layout(p);layouts.push(measured);
    assert.equal(measured.overflow,false);assert.equal(measured.hqHidden,false);

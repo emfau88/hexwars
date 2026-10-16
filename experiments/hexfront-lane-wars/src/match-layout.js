@@ -8,7 +8,7 @@ export const baseSign = owner => owner === 'orange' ? 1 : -1;
 // This is a physical lane entrance; the inherited M1 combat rules are unchanged.
 export const ENTRY_PROGRESS = 4;
 export const laneEntry = (owner,mission=null) => owner === 'orange' ? (mission?.entry??ENTRY_PROGRESS) : LENGTH-(mission?.entry??ENTRY_PROGRESS);
-export function factoryPosition(owner,slot,mission=null) { return {x:mission?.lanes===1?[-3.6,3.6][slot]:FACTORY_X[slot],z:10.5*baseSign(owner)}; }
+export function factoryPosition(owner,slot,mission=null) { return {x:mission?.slots===2?[-3.6,3.6][slot]:FACTORY_X[slot],z:10.5*baseSign(owner)}; }
 
 const curves=new Map();
 function curve(slot,lane,lateral=0,mission=null) {
@@ -16,7 +16,8 @@ function curve(slot,lane,lateral=0,mission=null) {
   if(curves.has(key))return curves.get(key);
   // Build once in orange coordinates and mirror z for blue, including tangents.
   // The narrow gate formation fans out into the actual lateral lane positions.
-  const start={x:(slot===null?0:factoryPosition('orange',slot,mission).x)+lateral*.4,z:9.4};
+  const gateLateral=lateral-(slot===null?0:(slot-((mission?.slots||4)-1)/2)*(mission?.formationSpread||0));
+  const start={x:(slot===null?0:factoryPosition('orange',slot,mission).x)+gateLateral*.4,z:9.4};
   const entry=mission?.entry??ENTRY_PROGRESS;
   const at=p=>missionRoute(mission,lane,p,lateral)||routePoint(lane,p,lateral);
   const end=at(entry),ahead=at(entry+.001);
@@ -44,12 +45,12 @@ export function exitPath(owner,slot,lane,lateral=0,mission=null) {
   return curve(slot,lane,lateral,mission).points.map(p=>({x:p.x,z:p.z*sign}));
 }
 export function pathLength(points) { return points.slice(1).reduce((n,p,i)=>n+Math.hypot(p.x-points[i].x,p.z-points[i].z),0); }
-export function exitDuration(owner,slot,lane,type,lateral=0,mission=null) {
-  return (mission?.departure??curve(slot,lane,lateral).length)/UNITS[type].speed;
+export function exitDuration(owner,slot,lane,type,lateral=0,mission=null,specs=mission?.units||UNITS) {
+  return (mission?.departure??curve(slot,lane,lateral).length)/specs[type].speed;
 }
 export function exitPose(unit,time) {
   const mission=unit.missionId?missionById(unit.missionId):null,c=curve(unit.factory,unit.lane,unit.x||0,mission),sign=baseSign(unit.owner);
-  const distance=Math.max(0,Math.min(c.length,(time-unit.spawnTime)*c.length/exitDuration(unit.owner,unit.factory,unit.lane,unit.type,unit.x||0,mission)));
+  const distance=Math.max(0,Math.min(c.length,(time-unit.spawnTime)*c.length/(unit.travelDuration??exitDuration(unit.owner,unit.factory,unit.lane,unit.type,unit.x||0,mission))));
   let lo=1,hi=c.points.length-1;
   while(lo<hi){const mid=(lo+hi)>>1;if(c.points[mid].arc<distance)lo=mid+1;else hi=mid;}
   const a=c.points[lo-1],b=c.points[lo],fraction=b.arc===a.arc?0:(distance-a.arc)/(b.arc-a.arc);

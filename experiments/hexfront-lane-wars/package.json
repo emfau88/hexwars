@@ -19,7 +19,9 @@
     "test:exits": "node tests/exits-browser.mjs",
     "audit:campaign": "node scripts/campaign-audit.mjs",
     "audit:campaign-late": "node scripts/campaign-late-audit.mjs",
-    "test:mobile": "node tests/mobile-hud-browser.mjs"
+    "test:mobile": "node tests/mobile-hud-browser.mjs",
+    "audit:central": "node scripts/central-audit.mjs",
+    "test:central-browser": "node tests/central-browser.mjs"
   },
   "engines": {
     "node": ">=20"

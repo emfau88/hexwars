@@ -47,7 +47,7 @@ async function loadFern(){
  return (await new GLTFLoader().parseAsync(await fernSource,base.href)).scene;
 }
 
-export async function buildLandscape(scene,single=false) {
+export async function buildLandscape(scene,single=false,slots=single?2:4) {
   const groundHeight=single?firstHeight:meadowHeight,pathDistance=single?firstDistance:meadowDistance;
   const instances=(parent,geometry,material,poses,shadows=true)=>scatter(parent,geometry,material,poses,shadows,groundHeight);
   const root=new T.Group();scene.add(root);
@@ -79,7 +79,7 @@ export async function buildLandscape(scene,single=false) {
   const panel=mesh(ruin,new T.BoxGeometry(.7,.055,.6),jade,.2,.2,.8);panel.rotation.z=.16;
   for(const [x,z,r] of [[-16,8.1,.25],[16,-8.7,2.7]]) {const cabinet=new T.Group();cabinet.position.set(x,groundHeight(x,z),z);cabinet.rotation.y=r;root.add(cabinet);mesh(cabinet,new T.BoxGeometry(.5,.72,.45),jade,0,.36,0);mesh(cabinet,new T.BoxGeometry(.33,.18,.035),dark,0,.5,-.244);mesh(cabinet,new T.BoxGeometry(.7,.12,.64),concrete,0,.03,0);}
   // Subtle empty hardstands reserve four future factory footprints per base.
-  for(const z of [-10.5,10.5])for(const x of (single?[-3.6,3.6]:[-5.7,-3.6,3.6,5.7])) {
+  for(const z of [-10.5,10.5])for(const x of (slots===2?[-3.6,3.6]:[-5.7,-3.6,3.6,5.7])) {
     const plate=mesh(root,new T.CylinderGeometry(.86,.94,.08,8),concrete,x,.025,z);plate.receiveShadow=true;
     for(const dx of [-.66,.66])mesh(root,new T.BoxGeometry(.06,.012,.3),jade,x+dx,.075,z);
   }

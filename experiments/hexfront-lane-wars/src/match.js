@@ -1,28 +1,28 @@
 import {Combat} from './simulation.js';
-import {STEP,LENGTH,OWNERS,TYPES,UNITS,other,distance} from './rules.js';
+import {STEP,LENGTH,OWNERS,UNITS,other,distance} from './rules.js';
 import {exitDuration,laneEntry} from './match-layout.js';
 import {missionById} from './missions.js';
 
 export const MATCH_RULES=Object.freeze({startCredits:200,factoryCost:100,refitCost:30,income:2,economyCost:80,economyIncome:1,supplyCost:60,supplyCooldown:15,wave:15,hqHP:1200,hqDamage:8,hqInterval:.8,hqRange:4});
-const validConfig=c=>c&&TYPES.includes(c.type)&&(c.lane===0||c.lane===1);
 const clone=x=>structuredClone(x);
 
-/** The M1 step, movement, aiming, splash and simultaneous robot hits stay inherited. */
+/** Shared M1 combat algorithm; each match supplies its own immutable unit profile. */
 export class MatchLane extends Combat {
-  constructor(match,lane){super();this.match=match;this.lane=lane;this.result=null;}
+  constructor(match,lane){super({specs:match.unitSpecs});this.match=match;this.lane=lane;this.result=null;}
   resolveResult() { this.result=null; }
   chooseTarget(unit,snapshot) {
     const robot=super.chooseTarget(unit,snapshot);if(robot)return robot;
     const owner=other(unit.owner),p=owner==='orange'?0:LENGTH;
-    if(this.match.players[owner].hq>0&&Math.abs(p-unit.p)<=UNITS[unit.type].range+1e-9)
+    if(this.match.players[owner].hq>0&&Math.abs(p-unit.p)<=this.specs[unit.type].range+1e-9)
       return {id:'hq-'+owner,owner,p,x:unit.x,lane:this.lane,order:Infinity};
     return null;
   }
 }
 
 export class Match {
-  constructor({orange,blue,rules={},mission=null}={}) {
+  constructor({orange,blue,rules={},mission=null,unitSpecs=null}={}) {
     this.mission=mission?missionById(typeof mission==='string'?mission:mission.id):null;
+    this.unitSpecs=unitSpecs||this.mission?.units||UNITS;
     this.laneCount=this.mission?.lanes||2;this.slotCount=this.mission?.slots||4;this.startSlots=this.mission?.startSlots||[0,1];
     orange??=this.mission?.start||[{type:'mech',lane:0},{type:'rail',lane:1}];blue??=orange;
     this.rules=Object.freeze({...MATCH_RULES,...this.mission?.rules,...rules});this.tick=0;this.time=0;this.remainder=0;this.phase='setup';this.result=null;this.wave=0;this.transit=[];this.serial=0;this.events=[];this.orders=[];this.controllers=[];
@@ -30,7 +30,7 @@ export class Match {
     for(const owner of OWNERS)if(!this.startSlots.every(i=>this.validConfig(this.players[owner].factories[i])))throw Error('Two valid starting factories required.');
     this.lanes=Array.from({length:this.laneCount},(_,i)=>new MatchLane(this,i));this.peakUnits=0;
   }
-  validConfig(c){return validConfig(c)&&c.lane<this.laneCount;}
+  validConfig(c){return c&&Object.hasOwn(this.unitSpecs,c.type)&&Number.isInteger(c.lane)&&c.lane>=0&&c.lane<this.laneCount;}
   get nextWave(){return this.phase==='setup'?0:Math.max(0,(this.wave* Math.round(this.rules.wave/STEP)-this.tick)*STEP);}
   credits(owner){return this.players[owner].cents/100;}
   income(owner){return this.rules.income+(this.players[owner].economy?this.rules.economyIncome:0);}
@@ -73,10 +73,11 @@ export class Match {
     this.phase='running';this.produceWave();return true;
   }
   spawn(owner,factory,config) {
-    for(let i=0;i<UNITS[config.type].count;i++){
-      const lateral=(i-(UNITS[config.type].count-1)/2)*.58;
-      const duration=exitDuration(owner,factory,config.lane,config.type,lateral,this.mission);
-      this.transit.push({id:-(++this.serial),owner,factory,type:config.type,lane:config.lane,missionId:this.mission?.id,hp:UNITS[config.type].hp,x:lateral,spawnTime:this.time,arrivalTick:this.tick+Math.max(1,Math.ceil(duration/STEP-1e-9)),moving:true});
+    for(let i=0;i<this.unitSpecs[config.type].count;i++){
+      // Symmetric, modest separation prevents four factories stacking at exactly x=0.
+      const lateral=(i-(this.unitSpecs[config.type].count-1)/2)*.58+(factory===null?0:(factory-(this.slotCount-1)/2)*(this.mission?.formationSpread||0));
+      const duration=exitDuration(owner,factory,config.lane,config.type,lateral,this.mission,this.unitSpecs);
+      this.transit.push({id:-(++this.serial),owner,factory,type:config.type,lane:config.lane,missionId:this.mission?.id,hp:this.unitSpecs[config.type].hp,travelDuration:duration,x:lateral,spawnTime:this.time,arrivalTick:this.tick+Math.max(1,Math.ceil(duration/STEP-1e-9)),moving:true});
       this.players[owner].metrics.produced++;
     }
     this.events.push({kind:'production',owner,factory,lane:config.lane,type:config.type,time:this.time});
@@ -104,7 +105,7 @@ export class Match {
     const damage={orange:0,blue:0};
     for(const [lane,g] of this.lanes.entries()){
       g.step();
-      for(const e of g.drainEvents()){if(e.kind==='shot'&&String(e.target).startsWith('hq-'))damage[e.target.slice(3)]+=UNITS[e.type].damage;this.events.push({...e,lane});}
+      for(const e of g.drainEvents()){if(e.kind==='shot'&&String(e.target).startsWith('hq-'))damage[e.target.slice(3)]+=this.unitSpecs[e.type].damage;this.events.push({...e,lane});}
     }
     for(const hit of hqHits){
       const g=this.lanes[hit.lane],u=g.units.find(v=>v.id===hit.id);if(!u)continue;
@@ -136,10 +137,10 @@ export class Match {
   }
   drainEvents(){return this.events.splice(0);}
   snapshot(){return clone({mission:this.mission?.id||null,tick:this.tick,phase:this.phase,result:this.result,wave:this.wave,players:this.players,lanes:this.lanes.map(g=>g.snapshot()),transit:this.transit});}
-  save(){return clone({version:1,mission:this.mission?.id||null,rules:this.rules,tick:this.tick,time:this.time,remainder:this.remainder,phase:this.phase,result:this.result,wave:this.wave,players:this.players,transit:this.transit,serial:this.serial,orders:this.orders,peakUnits:this.peakUnits,lanes:this.lanes.map(g=>({...g.snapshot(),serial:g.serial,remainder:g.remainder}))});}
+  save(){return clone({version:1,mission:this.mission?.id||null,rules:this.rules,unitSpecs:this.unitSpecs,tick:this.tick,time:this.time,remainder:this.remainder,phase:this.phase,result:this.result,wave:this.wave,players:this.players,transit:this.transit,serial:this.serial,orders:this.orders,peakUnits:this.peakUnits,lanes:this.lanes.map(g=>({...g.snapshot(),serial:g.serial,remainder:g.remainder}))});}
   static restore(data){
     if(!data||data.version!==1||!Number.isInteger(data.tick)||data.tick<0||!['setup','running','ended'].includes(data.phase))throw Error('Ungültiger Spielstand.');
-    const m=new Match({mission:data.mission,rules:data.rules});
+    const m=new Match({mission:data.mission,rules:data.rules,unitSpecs:data.unitSpecs});
     if(data.lanes?.length!==m.laneCount||OWNERS.some(o=>data.players?.[o]?.factories?.length!==m.slotCount||data.players[o].pending?.length!==m.slotCount))throw Error('Spielstand passt nicht zur Mission.');
     for(const name of ['tick','time','remainder','phase','result','wave','players','transit','serial','orders','peakUnits'])m[name]=clone(data[name]);
     for(const [i,g] of m.lanes.entries())for(const name of ['tick','time','result','units','stats','serial','remainder'])g[name]=clone(data.lanes[i][name]);

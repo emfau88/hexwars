@@ -9,6 +9,6 @@ export function frontState(match,lane,previous=null){
  const risk=enemy.some(u=>u.p<=7),breakthrough=own.some(u=>u.p>=23);
  const incoming=match.transit.filter(u=>u.owner==='orange'&&u.lane===lane).length+own.filter(u=>u.moving&&u.p<position-2).length;
  const label=risk?'HQ bedroht':breakthrough?'Angriff am Gegner-HQ':contact!==null&&contact<5?(delta>.7?'Eigene Front rückt vor':delta<-.7?'Eigene Front weicht zurück':'Front im Gefecht'):own.length||enemy.length?'Truppen auf dem Weg':'Front noch offen';
- const next=match.players.orange.factories.reduce((n,f,i)=>{const c=match.players.orange.pending[i]||f;return n+(c?.lane===lane?UNITS[c.type].count:0);},0);
+ const next=match.players.orange.factories.reduce((n,f,i)=>{const c=match.players.orange.pending[i]||f;return n+(c?.lane===lane?(match.unitSpecs||UNITS)[c.type].count:0);},0);
  return {lane,time:match.time,position:Math.max(0,Math.min(LENGTH,position)),delta,label,risk,incoming,next,contact};
 }

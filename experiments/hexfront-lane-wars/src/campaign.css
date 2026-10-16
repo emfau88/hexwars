@@ -42,3 +42,5 @@ button{min-height:44px}button.primary,.primary{background:linear-gradient(#ffd58
 }
 @media(max-width:360px){.game-status{padding:5px;gap:4px}.game-status strong{font-size:14px}.game-status small{font-size:7px}.wallet{min-width:80px;padding:6px}.supply-tray{padding:4px}.supply-tray>div:first-child{max-width:91px}.supply-tray strong,.supply-tray small{font-size:8px}#toggle-factories{font-size:11px;padding:0 8px;gap:4px}}
 @media(max-height:500px) and (min-width:651px) and (max-width:1000px){.command-deck:not(.expanded){display:flex;gap:6px;align-items:stretch;width:min(700px,calc(100% - 16px))}.command-deck:not(.expanded) .mobile-deck-bar{width:260px;margin:0}.command-deck:not(.expanded) .deck-bottom{flex:1}.command-deck.expanded{max-height:calc(100dvh - 125px);overflow:auto}.order-panel{bottom:80px;max-height:calc(100dvh - 150px)}}
+
+.central-setup{font-size:11px;margin-bottom:14px}.central-setup label{display:block;margin:7px 0 4px}.central-setup summary{cursor:pointer;min-height:44px;display:flex;align-items:center}.central-setup small{display:block;line-height:1.5;color:var(--muted);margin:7px 0}.central-setup details select{font-size:12px}

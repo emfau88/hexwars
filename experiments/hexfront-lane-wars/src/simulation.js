@@ -2,7 +2,8 @@ import { STEP, LENGTH, HALF_WIDTH, OWNERS, TYPES, UNITS, other, direction, dista
 
 /** Pure fixed-step simulation. No DOM, renderer, clock, network, or Math.random. */
 export class Combat {
-  constructor({ orange = {}, blue = {}, gap = 12, spacing = 0.72, lane = 0 } = {}) {
+  constructor({ orange = {}, blue = {}, gap = 12, spacing = 0.72, lane = 0, specs = UNITS } = {}) {
+    this.specs = specs;
     this.time = 0;
     this.tick = 0;
     this.remainder = 0;
@@ -21,10 +22,10 @@ export class Combat {
   addArmy(owner, army, { gap, spacing, lane }) {
     let row = 0;
     let order = 0;
-    for (const type of ['mech', 'drone', 'rail']) {
+    for (const type of Object.keys(this.specs).sort((a,b) => (this.specs[a].formation ?? {mech:0,drone:1,rail:2}[a] ?? 3) - (this.specs[b].formation ?? {mech:0,drone:1,rail:2}[b] ?? 3))) {
       const batches = army[type] ?? 0;
       if (!Number.isInteger(batches) || batches < 0 || batches > 12) throw new RangeError('Choose 0–12 batches of each type.');
-      const count = batches * UNITS[type].count;
+      const count = batches * this.specs[type].count;
       for (let i = 0; i < count; i++) {
         const rowCount = Math.min(3, count - Math.floor(i / 3) * 3);
         const x = (i % 3 - (rowCount - 1) / 2) * spacing;
@@ -35,8 +36,8 @@ export class Combat {
     }
   }
 
-  addUnit({ type, owner, p, x = 0, lane = 0, hp = UNITS[type]?.hp, cooldown = 0, order = null }) {
-    if (!UNITS[type] || !OWNERS.includes(owner) || ![p, x, hp, cooldown].every(Number.isFinite) || hp <= 0 || hp > UNITS[type].hp || cooldown < 0 || !Number.isInteger(lane)) throw new TypeError('Invalid unit.');
+  addUnit({ type, owner, p, x = 0, lane = 0, hp = this.specs[type]?.hp, cooldown = 0, order = null }) {
+    if (!this.specs[type] || !OWNERS.includes(owner) || ![p, x, hp, cooldown].every(Number.isFinite) || hp <= 0 || hp > this.specs[type].hp || cooldown < 0 || !Number.isInteger(lane)) throw new TypeError('Invalid unit.');
     const u = { id: ++this.serial, order: order ?? this.stats[owner].initial, type, owner, lane, p, x, homeX: x, hp, cooldown, target: null, aiming: null, aimTime: 0, moving: false };
     this.units.push(u);
     this.stats[owner].initial++;
@@ -46,7 +47,7 @@ export class Combat {
   }
 
   chooseTarget(unit, snapshot) {
-    const spec = UNITS[unit.type];
+    const spec = this.specs[unit.type];
     const inRange = snapshot.filter(v => v.owner !== unit.owner && v.lane === unit.lane && distance(unit, v) <= spec.range + 1e-9);
     return inRange.find(v => v.id === unit.target) || inRange.sort((a, b) => this.compareDistance(unit, a, b))[0] || null;
   }
@@ -57,7 +58,7 @@ export class Combat {
   }
 
   move(unit, snapshot, engaged) {
-    const spec = UNITS[unit.type];
+    const spec = this.specs[unit.type];
     const dir = direction(unit.owner);
     let dp = engaged ? 0 : dir * spec.speed * STEP;
     let dx = (unit.homeX - unit.x) * 0.18 * STEP;
@@ -72,7 +73,7 @@ export class Combat {
     for (const v of snapshot) {
       if (v.id === unit.id || v.lane !== unit.lane) continue;
       if (v.owner !== unit.owner) continue;
-      const wanted = spec.radius + UNITS[v.type].radius + 0.06;
+      const wanted = spec.radius + this.specs[v.type].radius + 0.06;
       const d = distance(unit, v);
       if (d < wanted && Math.abs(unit.p - v.p) < wanted) {
         const sign = Math.abs(unit.x - v.x) > 1e-7 ? Math.sign(unit.x - v.x) : (unit.order < v.order ? -1 : 1);
@@ -94,7 +95,7 @@ export class Combat {
       hits.get(target.id).push({ damage, owner });
     };
     for (const u of this.units) {
-      const spec = UNITS[u.type];
+      const spec = this.specs[u.type];
       const before = snapshot.find(v => v.id === u.id);
       const target = this.chooseTarget(before, snapshot);
       const position = this.move(before, snapshot, !!target);

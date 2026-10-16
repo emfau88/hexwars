@@ -30,7 +30,7 @@ async function assessLayout(p){
 }
 try{
  await boot(page);assert.equal(await page.locator('#battle-error').isVisible(),false);assert.equal(await page.locator('button[data-mission="meadow"]').isDisabled(),true);assert.equal(await page.locator('#ai-profile').count(),0);await capture('01-menu');
- await page.locator('#campaign-go').click();await page.waitForFunction(()=>window.__LANE_MATCH__.snapshot().phase==='running');await advance(0);
+ await page.locator('[data-mission=first]').click();await page.waitForFunction(()=>window.__LANE_MATCH__.snapshot().phase==='running');await advance(0);
  assert.equal((await snap()).lanes.length,1);assert.equal((await info()).factories.length,2);assert.equal(await page.locator('[data-route]').count(),0);
  await advance(51);await page.locator('#factory-cards [data-edit="1"]').click();assert.equal(await page.locator('#lane-field').isVisible(),false);
  await page.locator('#factory-type').selectOption('mech');await page.locator('#apply-factory').click();

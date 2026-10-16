@@ -1,4 +1,6 @@
+import {CENTRAL_RULES,CENTRAL_UNITS} from './central-rules.js';
 export const MISSIONS=Object.freeze({
+ central:{id:'central',number:3,name:'Zentrale Front',lanes:1,slots:4,startSlots:[1,2],start:[{type:'mech',lane:0},{type:'rail',lane:0}],entry:4,departure:6,formationSpread:.48,ai:{profile:'balanced'},rules:CENTRAL_RULES,units:CENTRAL_UNITS,objective:'Baue deine Produktion aus, erkenne Gegenstrategien und zerstöre das blaue HQ.',target:'5–8 Minuten'},
  first:{id:'first',number:1,name:'Erste Front',lanes:1,slots:2,startSlots:[0],start:[{type:'drone',lane:0}],entry:4,departure:4,ai:{profile:'balanced',reaction:150,refitInterval:60,buildAfter:65},rules:{startCredits:100,hqHP:480,hqDamage:4},objective:'Baue eine zweite Fabrik und zerstöre das blaue HQ.',target:'2–4 Minuten'},
  meadow:{id:'meadow',number:2,name:'Wiesenkrieg',lanes:2,slots:4,startSlots:[1,2],start:[{type:'mech',lane:0},{type:'rail',lane:1}],entry:4,departure:8,ai:{profile:'balanced',reaction:70,refitInterval:35,variant:1},rules:{},objective:'Verteile deine Produktion auf zwei Fronten und zerstöre das blaue HQ.',target:'4–7 Minuten'}
 });

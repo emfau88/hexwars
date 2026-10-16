@@ -14,7 +14,7 @@ for(const mission of Object.values(MISSIONS)){
   for(const p of Object.values(m.players)){assert.equal(p.factories.length,mission.slots);assert.equal(p.factories.filter(Boolean).length,mission.startSlots.length);}
   m.start();const count=m.players.orange.metrics.produced;
   assert.equal(m.command('orange','supply',{type:'mech',lane:mission.lanes}).ok,false);
-  m.advance(14.95);assert.equal(m.wave,1);m.advance(.05);assert.equal(m.wave,2);assert.equal(m.players.orange.metrics.produced,count*2);
+  m.advance(m.rules.wave-.05);assert.equal(m.wave,1);m.advance(.05);assert.equal(m.wave,2);assert.equal(m.players.orange.metrics.produced,count*2);
  });
  test(mission.id+': every factory, lane, faction and formation has equal deployment time',()=>{
   for(const type of ['drone','mech','rail']){const durations=[];

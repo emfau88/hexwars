@@ -6,7 +6,7 @@ import {groundHeight,routePoint} from './routes.js';
 import {missionRoute} from './missions.js';
 import {firstHeight} from './landscape-view.js';
 export class MatchView extends BattleView {
- constructor(stage,labels,onSelect,onFactory,mission=null){super(stage,labels,onSelect,{single:mission?.lanes===1});this.mission=mission;this.onFactory=onFactory;this.factoryBuildings=createFactories(this.scene,mission);this.factoryLabels=[];this.safeBottom=330;this.resize();}
+ constructor(stage,labels,onSelect,onFactory,mission=null){super(stage,labels,onSelect,{single:mission?.lanes===1,slots:mission?.slots,specs:mission?.units,clarity:mission?.id==='central'});this.mission=mission;this.onFactory=onFactory;this.factoryBuildings=createFactories(this.scene,mission);this.factoryLabels=[];this.safeBottom=330;this.resize();}
  point(u,height=0){
    if(u.hq)return new T.Vector3(0,height+.9,baseSign(u.hq)*10.3);
    if(u.departing){const p=exitPose(u,this.matchTime||0);return new T.Vector3(p.x,(this.mission?.lanes===1?firstHeight:groundHeight)(p.x,p.z)+height,p.z);}
@@ -30,7 +30,7 @@ export class MatchView extends BattleView {
    this.effect(e,e.lane);
  }
  renderMatch(match,dt=0,draw=true){
-   this.currentMatch=match;const state=JSON.stringify([match.tick,match.phase,match.players.orange.factories,match.players.orange.pending,match.players.blue.factories]);if(state!==this.renderState)this.dirty=true;this.renderState=state;
+   this.currentMatch=match;this.specs=match.unitSpecs;const state=JSON.stringify([match.tick,match.phase,match.players.orange.factories,match.players.orange.pending,match.players.blue.factories]);if(state!==this.renderState)this.dirty=true;this.renderState=state;
    this.matchTime=match.time+Math.max(0,match.remainder||0);updateFactories(this.factoryBuildings,match);
    const lanes=match.lanes.map((g,lane)=>({units:[...g.units,...match.transit.filter(u=>u.lane===lane).map(u=>({...u,departing:true,p:laneEntry(u.owner,this.mission),target:null}))]}));
 

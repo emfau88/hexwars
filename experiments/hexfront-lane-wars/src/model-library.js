@@ -42,7 +42,7 @@ export async function loadModels() {
 }
 export function makeBatches(scene,library,capacity=128) {
   const batches={};
-  for(const owner of ['orange','blue'])for(const type of ['drone','mech','rail']) {
+  for(const owner of ['orange','blue'])for(const type of Object.keys(library[owner]).filter(type=>type!=='hq')) {
     const id=`${owner}-${type}`;batches[id]=library[owner][type].map(({geometry,material})=>{const mesh=new T.InstancedMesh(geometry,material,capacity);mesh.count=0;mesh.castShadow=mesh.receiveShadow=true;mesh.instanceMatrix.setUsage(T.DynamicDrawUsage);mesh.frustumCulled=false;mesh.userData.batch=id;scene.add(mesh);return mesh;});
   }
   return batches;

@@ -53,5 +53,5 @@ try {
   checks.push('game → retained combat lab → game round trip works');
   assert.deepEqual(errors,[]);
   const report={url:base,browser:browser.version(),checks,errors,assets:metrics.assets,initialDrawCalls:metrics.drawCalls,initialTriangles:metrics.triangles};
-  await fs.writeFile(new URL('../docs/m21-qa/regression-m15.json',import.meta.url),JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));
+  await fs.writeFile(new URL(process.env.VISUAL_QA_OUTPUT||'../docs/m21-qa/regression-m15.json',import.meta.url),JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));
 }finally{await browser.close();}

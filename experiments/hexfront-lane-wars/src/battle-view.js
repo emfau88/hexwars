@@ -12,20 +12,20 @@ const shortest=(a,b)=>Math.atan2(Math.sin(b-a),Math.cos(b-a));
 
 export class BattleView {
   constructor(stage,labels,onSelect,options={}) {
-    this.options=options;
+    this.options=options;this.specs=options.specs||UNITS;
     this.stage=stage;this.labels=labels;this.onSelect=onSelect;this.poses=new Map();this.health=new Map();this.effects=[];this.selected=null;this.zoom=1;this.pan={u:0,v:0};this.mode='diorama';this.elapsed=0;this.pickIds={};this.lastLanes=[];
     this.reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.scene=new T.Scene();this.scene.background=new T.Color(0xadb699);this.scene.fog=new T.Fog(0xadb699,65,130);
     this.camera=new T.OrthographicCamera(-20,20,15,-15,.1,180);
     this.renderer=new T.WebGLRenderer({antialias:true,powerPreference:'high-performance'});this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.08;
     this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFSoftShadowMap;
-    this.renderer.domElement.setAttribute('aria-label','HEXFRONT Wiesental: zwei Wege, orangefarbenes HQ unten, blaues HQ oben. Roboter anklicken zum Untersuchen.');stage.append(this.renderer.domElement);
+    this.renderer.domElement.setAttribute('aria-label','HEXFRONT: '+(options.single?'eine zentrale Front':'zwei Wege')+', orangefarbenes HQ unten, blaues HQ oben. Roboter anklicken zum Untersuchen.');stage.append(this.renderer.domElement);
     this.scene.add(new T.HemisphereLight(0xe4eff3,0x858575,2.0));
     const sun=new T.DirectionalLight(0xffefdb,2.65);sun.position.set(-12,24,9);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-21,right:21,top:21,bottom:-21,near:1,far:65});sun.shadow.bias=-.00025;sun.shadow.normalBias=.018;sun.shadow.radius=3;this.scene.add(sun);
     const fill=new T.DirectionalLight(0xd6e3e8,.48);fill.position.set(9,8,-12);this.scene.add(fill);
     this.dummy=new T.Object3D();this.raycaster=new T.Raycaster();
     this.selection=new T.Mesh(new T.RingGeometry(.57,.60,48),new T.MeshBasicMaterial({color:0xf4d493,side:T.DoubleSide,transparent:true,opacity:.85,depthWrite:false}));this.selection.rotation.x=-Math.PI/2;this.selection.visible=false;this.scene.add(this.selection);
-    this.ready=Promise.all([buildLandscape(this.scene,options.single),loadModels()]).then(([,models])=>{this.library=models.library;this.assetMetadata=models.metadata;this.batches=makeBatches(this.scene,this.library);this.hqs=['orange','blue'].map(owner=>addHQ(this.scene,this.library[owner].hq,owner));this.resize();});
+    this.ready=Promise.all([buildLandscape(this.scene,options.single,options.slots),loadModels()]).then(([,models])=>{this.library=models.library;this.assetMetadata=models.metadata;this.batches=makeBatches(this.scene,this.library);this.hqs=['orange','blue'].map(owner=>addHQ(this.scene,this.library[owner].hq,owner));this.resize();});
     this.observer=new ResizeObserver(()=>this.resize());this.observer.observe(stage);this.bind();this.resize();
   }
   dispose(){this.observer.disconnect();this.reset();const geometries=new Set(),materials=new Set(),textures=new Set();this.scene.traverse(o=>{if(o.geometry)geometries.add(o.geometry);for(const m of (Array.isArray(o.material)?o.material:[o.material]).filter(Boolean)){materials.add(m);for(const v of Object.values(m))if(v?.isTexture)textures.add(v);}});geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());this.renderer.dispose();this.renderer.forceContextLoss();this.renderer.domElement.remove();}
@@ -78,10 +78,10 @@ export class BattleView {
       const muzzleLocal=event.type==='mech'?new T.Vector3(.58,.72,-.54):event.type==='rail'?new T.Vector3(0,.91,-.96):new T.Vector3(0,.50,-.35);
       const from=base.clone().add(muzzleLocal.applyAxisAngle(new T.Vector3(0,1,0),yaw)),color=event.owner==='orange'?0xf6cb83:0xb8d9df;
       // Pure event visualization; projectiles never calculate damage.
-      const beam=this.line(from,to,color,event.type==='rail'?.026:.012);root.add(beam);
+      const beam=this.line(from,to,color,event.type==='rail'?.026:.012);root.add(beam);if(this.options.clarity&&event.type!=='rail')beam.visible=false;
       const pulse=new T.Mesh(new T.SphereGeometry(event.type==='rail'?.09:.07,8,6),new T.MeshBasicMaterial({color}));pulse.position.copy(from);root.add(pulse);
       const muzzle=new T.Mesh(new T.SphereGeometry(event.type==='mech'?.12:.075,8,6),new T.MeshBasicMaterial({color,transparent:true,opacity:.8}));muzzle.position.copy(from);root.add(muzzle);
-      this.scene.add(root);this.effects.push({root,age:0,life:event.type==='rail'?.32:.20,kind:'shot',from,to,pulse,beam,muzzle});
+      this.scene.add(root);this.effects.push({root,age:0,life:event.type==='rail'?(this.options.clarity ? .38 : .32):.20,kind:'shot',from,to,pulse,beam,muzzle});
     } else if(event.kind==='hit'&&source) {
       source.hit=1;const root=new T.Group(),p=source.position.clone().add(new T.Vector3(0,.65,0));
       for(let i=0;i<4;i++){const s=new T.Mesh(new T.SphereGeometry(.028,4,3),new T.MeshBasicMaterial({color:0xffdf9b,transparent:true}));s.position.copy(p);s.userData.velocity=new T.Vector3(Math.cos(i*2.4)*.7,.3+i*.13,Math.sin(i*2.4)*.7);root.add(s);}this.scene.add(root);this.effects.push({root,age:0,life:.25,kind:'sparks'});
@@ -92,7 +92,7 @@ export class BattleView {
   }
   render(lanes,seconds,dt=0,draw=true) {
     if(!this.batches)return;this.lastLanes=lanes;this.elapsed=seconds;
-    const needed=Math.max(1,...['orange','blue'].flatMap(owner=>['drone','mech','rail'].map(type=>lanes.reduce((n,g)=>n+g.units.filter(u=>u.owner===owner&&u.type===type).length,0)))); if(needed>Object.values(this.batches)[0][0].instanceMatrix.count){const capacity=2**Math.ceil(Math.log2(needed));for(const mesh of Object.values(this.batches).flat()){mesh.removeFromParent();mesh.dispose();}this.batches=makeBatches(this.scene,this.library,capacity);} const alive=new Set(),counts={},ids={};for(const id of Object.keys(this.batches)){counts[id]=0;ids[id]=[];}
+    const needed=Math.max(1,...['orange','blue'].flatMap(owner=>Object.keys(this.specs).map(type=>lanes.reduce((n,g)=>n+g.units.filter(u=>u.owner===owner&&u.type===type).length,0)))); if(needed>Object.values(this.batches)[0][0].instanceMatrix.count){const capacity=2**Math.ceil(Math.log2(needed));for(const mesh of Object.values(this.batches).flat()){mesh.removeFromParent();mesh.dispose();}this.batches=makeBatches(this.scene,this.library,capacity);} const alive=new Set(),counts={},ids={};for(const id of Object.keys(this.batches)){counts[id]=0;ids[id]=[];}
     for(const [lane,game] of lanes.entries())for(const u of game.units) {
       const id=key(lane,u.id),p=this.point({...u,lane}),yaw=this.heading(u,lane,game);alive.add(id);
       let pose=this.poses.get(id);if(!pose){pose={position:p.clone(),yaw,kick:0,hit:0,unit:u};this.poses.set(id,pose);}pose.unit=u;
@@ -106,8 +106,8 @@ export class BattleView {
       // Static mech GLB: temporary whole-body sway/recoil, no articulated rig.
       this.dummy.rotation.set(pose.kick*.035,pose.yaw,pose.hit*.055+(u.moving&&!this.reduced?Math.sin(seconds*8+u.id)*.016:0));this.dummy.scale.setScalar(1);this.dummy.updateMatrix();
       const batch=`${u.owner}-${u.type}`,index=counts[batch]++;ids[batch].push(id);for(const mesh of this.batches[batch])mesh.setMatrixAt(index,this.dummy.matrix);
-      let label=this.health.get(id);if(!label){label=document.createElement('div');label.className=`health ${u.owner}`;label.innerHTML='<i></i>';this.labels.append(label);this.health.set(id,label);}label.hidden=u.hp===UNITS[u.type].hp&&this.selected!==id;
-      const q=pose.position.clone().add(new T.Vector3(0,u.type==='mech'?1.75:1.25,0)).project(this.camera);label.style.transform=`translate(${(q.x*.5+.5)*this.stage.clientWidth}px,${(-q.y*.5+.5)*this.stage.clientHeight}px)`;label.firstChild.style.width=`${u.hp/UNITS[u.type].hp*100}%`;label.dataset.unit=id;
+      let label=this.health.get(id);if(!label){label=document.createElement('div');label.className=`health ${u.owner}`;label.innerHTML='<i></i>';this.labels.append(label);this.health.set(id,label);}label.hidden=u.hp===this.specs[u.type].hp&&this.selected!==id;
+      const q=pose.position.clone().add(new T.Vector3(0,u.type==='mech'?1.75:1.25,0)).project(this.camera);label.style.transform=`translate(${(q.x*.5+.5)*this.stage.clientWidth}px,${(-q.y*.5+.5)*this.stage.clientHeight}px)`;label.firstChild.style.width=`${u.hp/this.specs[u.type].hp*100}%`;label.dataset.unit=id;
     }
     for(const [id] of this.poses)if(!alive.has(id)){this.poses.delete(id);this.health.get(id)?.remove();this.health.delete(id);}
     for(const [id,meshes] of Object.entries(this.batches))for(const mesh of meshes){mesh.count=counts[id];mesh.instanceMatrix.needsUpdate=true;}
