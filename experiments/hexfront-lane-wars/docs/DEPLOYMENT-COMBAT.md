@@ -2,7 +2,7 @@
 Stand: 16. Oktober 2026 · Branch codex/lane-wars · Ausgangsstand 3a9bba1.
 
 ## Spielen
-[Zentrale Front im Browser](https://rawcdn.githack.com/emfau88/hexwars/9da12b8e4bac4fd8eff57fc3f91febae4da070dc/experiments/hexfront-lane-wars/index.html).
+[Zentrale Front im Browser](https://rawcdn.githack.com/emfau88/hexwars/4ec733700a9ca1ac88f1537bfb443293e1bb85f9/experiments/hexfront-lane-wars/index.html).
 Bitte eine **neue zentrale Partie** starten. Gespeicherte Partien erhalten den Fabrikkampf und den Mech-Schussabstand ebenfalls, behalten aber ihre bisherigen HQ-Werte.
 
 ## Die beiden Korrekturen

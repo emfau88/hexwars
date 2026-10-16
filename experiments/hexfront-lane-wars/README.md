@@ -4,9 +4,9 @@ Eine vollständige Partie Mensch gegen KI auf einer zentralen Lane: vier Fabrikp
 
 ## Spielen
 
-**[▶ Zentrale Front im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/9da12b8e4bac4fd8eff57fc3f91febae4da070dc/experiments/hexfront-lane-wars/index.html)** · **[Aktuelle Korrekturen, Tests und Balance](docs/DEPLOYMENT-COMBAT.md)**
+**[▶ Zentrale Front im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/4ec733700a9ca1ac88f1537bfb443293e1bb85f9/experiments/hexfront-lane-wars/index.html)** · **[Aktuelle Korrekturen, Tests und Balance](docs/DEPLOYMENT-COMBAT.md)**
 
-Öffentlicher Laufzeitstand `9da12b8`, ohne lokalen Server. Falls ein Hinweis erscheint: **Open the page** anklicken.
+Öffentlicher Laufzeitstand `4ec7337`, ohne lokalen Server. Falls ein Hinweis erscheint: **Open the page** anklicken.
 
 ```powershell
 node scripts/serve.mjs
