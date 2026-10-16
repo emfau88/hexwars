@@ -33,7 +33,7 @@ HQs haben in neuen zentralen Partien 800 LP und verursachen 2 Schaden/s. Ausrüc
 
 Der Nachschub-Cooldown in Zentrale Front beträgt jetzt **30 Sekunden** für beide Fraktionen, auch beim Fortsetzen älterer Spielstände. Kosten, Wellen und alle übrigen Spielwerte bleiben unverändert. [Prüfbericht](docs/SUPPLY-30.md).
 
-Die neue Fabrik liegt als **echtes GLB mit Blender-Quelle zur Modellfreigabe** vor: [Drehbare Vorschau](https://rawcdn.githack.com/emfau88/hexwars/4e7155295251af399a1057092a4ea09190a2c95d/experiments/hexfront-lane-wars/factory-preview.html) · [Maße, Screenshots und Prüfbericht](docs/factory-model/REVIEW.md). Vier animierte Torsegmente, sichtbarer Innenraum, Orange/Blau, drei austauschbare Produktionsmodule sowie HQ-/Mech-Vergleich. **Noch nicht im Spiel integriert.**
+Die neue **GLB-Fabrik ist im Spiel eingebaut**: vier animierte Torsegmente, sichtbarer Innenraum, Orange/Blau und drei austauschbare Produktionsmodule. [Integration und Tests](docs/factory-integration/REPORT.md) · [GLB und Blender-Quelle](docs/factory-model/REVIEW.md) · [Separate Modellansicht](factory-preview.html). Die Tore bleiben bei Robotern im Durchlass offen; Gameplay und Balance sind unverändert.
 
 ## Ergebnisse vor der Cooldown-Änderung (35 Sekunden)
 
@@ -48,6 +48,7 @@ Die sechs reagierenden KI-Referenzpartien enden nach **5:27, 6:59 und 7:00**. Im
 ```powershell
 npm test
 npm run test:factory-preview
+npm run test:factory-game
 npm run test:supply
 npm run test:deployment
 npm run audit:central

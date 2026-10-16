@@ -1,45 +1,98 @@
 import * as T from 'three';
-import {factoryPosition,baseSign} from './match-layout.js';
-import {SUPPLIED_TEAMS} from './team-material.js';
-function shellGeometry(w,h,d){
- const radius=Math.min(w,h,d)*.13,shape=new T.Shape();
- shape.moveTo(-w/2+radius,-d/2);shape.lineTo(w/2-radius,-d/2);shape.quadraticCurveTo(w/2,-d/2,w/2,-d/2+radius);shape.lineTo(w/2,d/2-radius);shape.quadraticCurveTo(w/2,d/2,w/2-radius,d/2);shape.lineTo(-w/2+radius,d/2);shape.quadraticCurveTo(-w/2,d/2,-w/2,d/2-radius);shape.lineTo(-w/2,-d/2+radius);shape.quadraticCurveTo(-w/2,-d/2,-w/2+radius,-d/2);
- const geometry=new T.ExtrudeGeometry(shape,{depth:h,bevelEnabled:true,bevelSize:Math.min(.035,h*.12),bevelThickness:Math.min(.035,h*.12),bevelSegments:2,steps:1,curveSegments:3});geometry.rotateX(-Math.PI/2);geometry.translate(0,-h/2,0);return geometry;
+import {GLTFLoader} from '../vendor/loaders/GLTFLoader.js';
+import {factoryPosition,exitPose} from './match-layout.js';
+import {missionRoute} from './missions.js';
+import {routePoint} from './routes.js';
+
+// Cache bytes, not GPU objects: each mission view owns and disposes its resources.
+const bytes=new Map(),systems=new WeakMap();
+async function asset(name){
+ const url=new URL('../public/models/factory-preview/'+name+'.glb',import.meta.url);
+ if(!bytes.has(name))bytes.set(name,fetch(url).then(r=>{if(!r.ok)throw Error('Fabrikmodell '+name+': HTTP '+r.status);return r.arrayBuffer();}).catch(e=>{bytes.delete(name);throw e;}));
+ return new GLTFLoader().parseAsync(await bytes.get(name),new URL('.',url).href);
 }
-export function createFactories(scene,mission=null) {
-  const all={};
-  for(const owner of ['orange','blue'])for(let slot=0;slot<(mission?.slots||4);slot++){
-    const root=new T.Group(),position=factoryPosition(owner,slot,mission);root.position.set(position.x,.06,position.z);root.rotation.y=owner==='orange'?0:Math.PI;
-    const ceramic=new T.MeshStandardMaterial({color:0xe6e2d2,roughness:.72,metalness:.12});
-    const team=new T.MeshStandardMaterial({color:SUPPLIED_TEAMS[owner],roughness:.65,metalness:.22});
-    const dark=new T.MeshStandardMaterial({color:0x344541,roughness:.65,metalness:.28});
-    const glow=new T.MeshStandardMaterial({color:0xbce7cc,emissive:0x80c4a1,emissiveIntensity:.5,roughness:.4});
-    const box=(w,h,d,m,x,y,z)=>{const o=new T.Mesh(shellGeometry(w,h,d),m);o.position.set(x,y,z);o.castShadow=o.receiveShadow=true;root.add(o);return o;};
-    box(1.85,.16,2.0,ceramic,0,.05,0);box(1.75,.13,1.85,team,0,.19,0);
-    box(.3,1.0,1.65,ceramic,-.7,.7,.06);box(.3,1.0,1.65,ceramic,.7,.7,.06);
-    box(1.25,1.0,.36,ceramic,0,.7,.7);box(1.3,.15,1.78,ceramic,0,1.2,0);
-    const cap=box(1.45,.22,1.25,team,0,1.4,.12);cap.rotation.z=.035;
-    box(1.12,.81,.04,dark,0,.65,-.77);
-    const door=box(1.08,.74,.06,team,0,.65,-.81);box(1.16,.06,.1,glow,0,1.06,-.84);
-    for(const x of [-.43,-.2,.03,.26,.49])box(.045,.04,.47,dark,x,1.535,.14);
-    box(.26,.55,.32,team,.96,.45,.36);box(.28,.06,.36,ceramic,.96,.75,.36);
-    const roofMark=new T.Mesh(new T.CylinderGeometry(.23,.23,.025,6),glow);roofMark.position.set(0,1.54,-.3);root.add(roofMark);
-    root.visible=false;scene.add(root);all[owner+':'+slot]={root,door,roofMark,lastProduction:-10,owner,slot};
+const roles=['drone','mech','rail'];
+const clamp=x=>T.MathUtils.clamp(x,0,1);
+
+export async function createFactories(scene,mission=null){
+ const assets=await Promise.all(['factory',...roles.map(r=>'module-'+r)].map(asset));
+ const items={},group=new T.Group(),materials=new Map();group.name='Factory_instances';scene.add(group);
+ const system={group,materials,batches:[],signature:null,mission};systems.set(items,system);
+ system.material=(source,owner,ghost)=>{
+  const key=source.uuid+':'+(source.name==='Team'?owner:'neutral')+':'+ghost;
+  if(!materials.has(key)){
+   const m=source.clone();if(source.name==='Team')m.color.setHex(owner==='orange'?0xf49a43:0x469dce);
+   m.transparent=ghost;m.opacity=ghost?.34:1;m.depthWrite=!ghost;materials.set(key,m);
   }
-  return all;
+  return materials.get(key);
+ };
+ for(const owner of ['orange','blue'])for(let slot=0;slot<(mission?.slots||4);slot++){
+  const root=assets[0].scene.clone(true),position=factoryPosition(owner,slot,mission);
+  root.position.set(position.x,.06,position.z);root.rotation.y=owner==='orange'?0:Math.PI;
+  const socket=root.getObjectByName('Production_Socket'),modules={};
+  for(const [i,role] of roles.entries()){modules[role]=assets[i+1].scene.clone(true);socket.add(modules[role]);}
+  const mixer=new T.AnimationMixer(root),action=mixer.clipAction(assets[0].animations[0]);action.play();action.paused=true;
+  root.traverse(o=>{if(o.isMesh){o.userData.sourceMaterial=o.material;o.layers.set(2);o.castShadow=o.receiveShadow=true;}});
+  root.visible=false;scene.add(root);
+  items[owner+':'+slot]={root,modules,mixer,action,duration:assets[0].animations[0].duration,owner,slot,lastProduction:-10,heldAt:-10,open:0,ghost:false,type:null,asset:'factory.glb'};
+ }
+ // Clones retain the textures and geometries; source material objects are no longer used.
+ for(const gltf of assets)gltf.scene.traverse(o=>{if(o.isMesh) o.material.dispose();});
+ return items;
+}
+function rebuild(items,system){
+ for(const b of system.batches)b.mesh.dispose();system.batches=[];system.group.clear();
+ const grouped=new Map();
+ for(const item of Object.values(items))item.root.traverseVisible(o=>{
+  if(!o.isMesh)return;
+  const material=system.material(o.userData.sourceMaterial,item.owner,item.ghost);o.material=material;
+  const key=o.geometry.uuid+':'+material.uuid;
+  if(!grouped.has(key))grouped.set(key,[]);grouped.get(key).push(o);
+ });
+ for(const nodes of grouped.values()){
+  const mesh=new T.InstancedMesh(nodes[0].geometry,nodes[0].material,nodes.length);
+  mesh.name='Factory_batch';mesh.castShadow=!mesh.material.transparent;mesh.receiveShadow=true;mesh.frustumCulled=false;
+  mesh.instanceMatrix.setUsage(T.DynamicDrawUsage);system.group.add(mesh);system.batches.push({mesh,nodes});
+ }
 }
 export function updateFactories(items,match){
-  for(const item of Object.values(items)){
-    const player=match.players[item.owner],factory=player.factories[item.slot],pending=item.owner==='orange'?player.pending[item.slot]:null;
-    const ghost=!factory&&!!pending;item.root.visible=!!factory||ghost;
-    if(item.ghost!==ghost){item.root.traverse(o=>{if(o.material){o.material.transparent=ghost;o.material.opacity=ghost?.34:1;o.material.depthWrite=!ghost;o.castShadow=!ghost;}});item.ghost=ghost;}
-    if(factory&&!item.wasBuilt)item.activatedAt=item.lastProduction>=0?item.lastProduction:match.time;item.wasBuilt=!!factory;
-    item.root.scale.y=ghost?1:Math.min(1,.85+Math.max(0,match.time-(item.activatedAt||0))*.3);
-    item.root.userData.state=ghost?'planned':pending?'refit':'active';
-    item.roofMark.material.emissive.setHex(pending?0xf0ae35:0x80c4a1);
-    const open=Math.max(0,1-(match.time-item.lastProduction)/2);
-    item.door.scale.y=1-open*.94;item.door.position.y=.65+open*.34;
-    item.roofMark.material.emissiveIntensity=.35+open;
-    item.roofMark.scale.x=(pending||factory)?.type==='rail'?1.6:1;item.roofMark.scale.z=(pending||factory)?.type==='mech'?1.5:1;
+ const system=systems.get(items);if(!system)return;
+ const time=match.time+Math.max(0,match.remainder||0),waveStart=(match.wave-1)*match.rules.wave;
+ const occupants=[...match.lanes.flatMap((g,lane)=>g.units.map(u=>missionRoute(match.mission,lane,u.p,u.x)||routePoint(lane,u.p,u.x))),...match.transit.map(u=>exitPose(u,time))];
+ for(const item of Object.values(items)){
+  const player=match.players[item.owner],factory=player.factories[item.slot],pending=item.owner==='orange'?player.pending[item.slot]:null;
+  const ghost=!factory&&!!pending,type=(factory||pending)?.type||null;
+  item.ghost=ghost;item.type=type;item.root.visible=!!factory||ghost;
+  item.root.userData.state=ghost?'planned':pending?'refit':'active';
+  if(factory&&!item.wasBuilt)item.activatedAt=time;item.wasBuilt=!!factory;
+  // The module settles on completion; never squash the gate around a newly spawned mech.
+  for(const [role,module] of Object.entries(item.modules)){
+   module.visible=role===type;module.scale.y=ghost?1:Math.min(1,.85+Math.max(0,time-(item.activatedAt??time))*.3);
   }
+  const upcoming=match.phase==='running'?clamp(1-match.nextWave):0;
+  const recent=factory&&match.wave>0?clamp(3-(time-Math.max(waveStart,item.lastProduction))):0;
+  // Visual safety only: no collision, targeting or simulation timing is changed.
+  const occupied=item.root.visible&&occupants.some(p=>{
+   const forward=(item.root.position.z-p.z)*(item.owner==='orange'?1:-1);
+   return Math.abs(p.x-item.root.position.x)<1.65&&forward>-.15&&forward<2.25;
+  });
+  if(occupied)item.heldAt=time;
+  item.open=ghost?upcoming:Math.max(upcoming,recent,clamp(1-(time-item.heldAt)));
+  item.action.time=item.open*item.duration;item.mixer.update(0);
+ }
+ const signature=JSON.stringify(Object.values(items).map(f=>[f.root.visible,f.ghost,f.type]));
+ if(signature!==system.signature){rebuild(items,system);system.signature=signature;}
+ for(const item of Object.values(items))item.root.updateMatrixWorld(true);
+ for(const {mesh,nodes} of system.batches){nodes.forEach((o,i)=>mesh.setMatrixAt(i,o.matrixWorld));mesh.instanceMatrix.needsUpdate=true;}
+}
+export function disposeFactories(items){
+ const system=systems.get(items);if(!system)return;
+ for(const b of system.batches)b.mesh.dispose();
+ for(const material of system.materials.values())material.dispose();
+ for(const f of Object.values(items)){f.mixer.stopAllAction();f.mixer.uncacheRoot(f.root);}
+ systems.delete(items);
+}
+export function factoryDiagnostics(items){
+ const system=systems.get(items);
+ return {asset:'factory.glb',batches:system?.batches.length||0,instances:Object.values(items).filter(f=>f.root.visible).length};
 }

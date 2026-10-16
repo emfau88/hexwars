@@ -16,7 +16,7 @@ Der Playlink zeigt den festgelegten Spielstand `c738c46` und benötigt keinen lo
 
 **Aktuell:** Sofortnachschub im Hauptmodus hat **30 Sekunden** Cooldown, auch beim Fortsetzen. 83 Logiktests und gezielte HUD-/Speichertests bestanden. Die sechs neuen Referenzläufe ergeben vier HQ-Entscheidungen und zwei offene Partien nach zwölf Minuten; weitere Balancewerte wurden nicht verändert. [Prüfbericht](experiments/hexfront-lane-wars/docs/SUPPLY-30.md).
 
-**Fabrik als echtes GLB zur Modellfreigabe:** [Drehbare 3D-Vorschau](https://rawcdn.githack.com/emfau88/hexwars/4e7155295251af399a1057092a4ea09190a2c95d/experiments/hexfront-lane-wars/factory-preview.html) · [Modell, Blender-Quelle und Prüfbericht](experiments/hexfront-lane-wars/docs/factory-model/REVIEW.md). Torsteuerung, Innenraum, Orange/Blau, drei Module und HQ-/Mech-Vergleich. Noch nicht im Spiel integriert; keine weiteren Gameplayänderungen.
+**Neu im Spiel:** Die GLB-Fabriken besitzen vier animierte Torsegmente, einen sichtbaren Innenraum, Orange/Blau und austauschbare Produktionsmodule. Bauen, Umrüstung und bestehende Ausfahrten sind angebunden. [Integration und Tests](experiments/hexfront-lane-wars/docs/factory-integration/REPORT.md) · [Separate Modellansicht](https://rawcdn.githack.com/emfau88/hexwars/4e7155295251af399a1057092a4ea09190a2c95d/experiments/hexfront-lane-wars/factory-preview.html). Gameplay und Balance bleiben unverändert.
 
 ```powershell
 cd experiments/hexfront-lane-wars

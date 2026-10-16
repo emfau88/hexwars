@@ -24,7 +24,8 @@
     "test:central-browser": "node tests/central-browser.mjs",
     "test:deployment": "node tests/deployment-browser.mjs",
     "test:supply": "node tests/supply-browser.mjs",
-    "test:factory-preview": "node tests/factory-preview-browser.mjs"
+    "test:factory-preview": "node tests/factory-preview-browser.mjs",
+    "test:factory-game": "node tests/factory-game-browser.mjs"
   },
   "engines": {
     "node": ">=20"

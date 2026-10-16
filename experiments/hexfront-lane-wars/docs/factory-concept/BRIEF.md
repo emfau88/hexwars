@@ -2,7 +2,7 @@
 
 Stand: 16.10.2026, Branch codex/lane-wars.
 
-**Status: Designrichtung freigegeben; das [tatsächliche GLB](../factory-model/REVIEW.md) liegt jetzt gesondert zur Modellfreigabe vor.** Diese ursprüngliche Konzepttafel ist eine Illustration. Die Konzepttafel wurde mit dem eingebauten Imagegen-Werkzeug anhand unseres HQ-Referenzbilds erzeugt. Sie belegt weder Geometrie noch Animation oder Performance. Bestehende Fabriken und Modelle im Spiel sind unverändert.
+**Status: Designrichtung freigegeben; das [tatsächliche GLB](../factory-model/REVIEW.md) ist inzwischen zum Testen im Spiel eingebaut; siehe [Integrationsbericht](../factory-integration/REPORT.md).** Diese ursprüngliche Konzepttafel ist eine Illustration. Die Konzepttafel wurde mit dem eingebauten Imagegen-Werkzeug anhand unseres HQ-Referenzbilds erzeugt. Sie belegt weder Geometrie noch Animation oder Performance. Bestehende Fabriken und Modelle im Spiel sind unverändert.
 
 ![Fabrik: Orange, Blau und geöffnetes Tor](factory-concept-v1.png)
 
@@ -59,6 +59,6 @@ Nach der vom Nutzer ausdrücklich verlangten Modellfreigabe:
 4. Produktionskennzeichnung, Neubauanimation, Auswahl und Umrüstung erhalten.
 5. Acht gleichzeitige Gebäude, beide Fraktionen, alle drei Roboter, alle Plätze, offene Tore, Bauvorschauen und bestehende Missionen im laufenden Spiel prüfen.
 
-**In diesem Auftragsschritt wurde kein neues Fabrikmodell integriert.**
+**Historischer Konzeptschritt. Die anschließende Modellierung und Integration sind im verlinkten Bericht dokumentiert.**
 
 [Exakter Bildprompt und Generierung](PROMPT.txt)

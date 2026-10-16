@@ -1,8 +1,8 @@
-# Fabrik v1 – tatsächliches GLB zur Modellfreigabe
+# Fabrik v1 – tatsächliches GLB und Spielintegration
 
 Stand: 16.10.2026 · Branch `codex/lane-wars`.
 
-**Die Designrichtung ist freigegeben. Die Freigabe dieses tatsächlichen GLB steht noch aus.** Das Spiel verwendet weiterhin seine bisherigen Fabriken. Gameplay, Balance, Missionen und Kampflabor wurden in diesem Schritt nicht geändert.
+**Der Nutzer hat den Einbau zum Testen freigegeben.** Die Fabrik ist jetzt in den drei Lane-Wars-Missionen integriert. [Integration und Tests](../factory-integration/REPORT.md). Gameplay und Balance bleiben unverändert. Die folgenden Messwerte dokumentieren das unveränderte GLB und seine separate Modellansicht.
 
 [Öffentliche 3D-Vorschau](https://rawcdn.githack.com/emfau88/hexwars/4e7155295251af399a1057092a4ea09190a2c95d/experiments/hexfront-lane-wars/factory-preview.html) · [Drehbare Vorschau lokal](http://127.0.0.1:4181/factory-preview.html) · [GLB](../../public/models/factory-preview/factory.glb) · [Bearbeitbare Blender-Datei](../../art/factory-v1/factory-source.blend) · [Exportmanifest](../../public/models/factory-preview/manifest.json)
 
@@ -70,4 +70,4 @@ npm run build
 npm run test:factory-preview
 ```
 
-Der Build enthält die Modellvorschau und Blender-Quelle. Erst nach ausdrücklicher Modellfreigabe folgen Loader-Anbindung, Produktions-/Torereignisse, Bauanimationen und Prüfung aller bestehenden Missionen. Die unabhängige Torhierarchie darf dabei nicht durch den bisherigen statischen Modell-Merger verloren gehen.
+Der Build enthält die Modellvorschau und Blender-Quelle. Der Einbau zum Testen wurde anschließend ausdrücklich freigegeben und ist erfolgt; Details stehen im Integrationsbericht. Die unabhängige Torhierarchie darf dabei nicht durch den bisherigen statischen Modell-Merger verloren gehen.
