@@ -14,6 +14,7 @@ HUD und Hinweise lesen bereits den tatsächlichen Regelwert; kein neuer Anzeigew
 - Neue Tests prüfen beide Fraktionen an der Grenze 29,95 / 30,00 Sekunden, unveränderte Kosten und Spielregeln sowie alte und neue Spielstände.
 - **Browserprüfung bestanden:** tatsächlicher HUD-Klick, Anzeige 30,0 Sekunden, Kostenabzug 80, Speichern/Fortsetzen mit 18 Sekunden Restzeit, Ablehnung vor Ablauf, Freigabe bei Ablauf. Beide alten Missionen behalten ihre Werte. Keine Konsolen-, Seiten- oder Ressourcenfehler.
 - Statischer Build über npm run build geprüft.
+- Öffentlicher README-Playlink auf Laufzeitcommit c738c46 im Browser geprüft: echte Nachschubbestellung, Anzeige „Bereit in 30.0 s“, keine Seiten- oder Spielressourcenfehler. [Öffentliches Prüfergebnis](supply-30-qa/public.json).
 
 Reproduktion: npm test; npm run test:supply bei laufendem lokalen Server; npm run build.
 
