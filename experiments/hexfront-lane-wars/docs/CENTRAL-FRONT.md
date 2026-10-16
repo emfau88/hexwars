@@ -4,7 +4,7 @@ Stand: 16. Oktober 2026. Branch: `codex/lane-wars`. Ausgangsstand `4dee21b`, Sic
 ## Spielen und Umfang
 Die Hauptschaltfläche startet **Zentrale Front**: eine Lane, vier Bauplätze, zwei wählbare Startfabriken, die bisherigen drei Robotertypen. Gegnerwahl für neue Partien: Vorhut, Eisenkeil, Aufbaukommando oder abwechselnde Strategien. Sieg/Niederlage entsteht ausschließlich durch tatsächliche HQ-Zerstörung. Pause, Neustart und Fortsetzen einschließlich KI-Zustand sind vollständig integriert.
 
-[Lokale Partie](http://127.0.0.1:4181/) · [Kampflabor](http://127.0.0.1:4181/lab.html) · öffentlicher Playlink in der [Branch-README](../../../README.md).
+[Lokale Partie](http://127.0.0.1:4181/) · [Kampflabor](http://127.0.0.1:4181/lab.html) · [Öffentlicher Playlink](https://rawcdn.githack.com/emfau88/hexwars/9da12b8e4bac4fd8eff57fc3f91febae4da070dc/experiments/hexfront-lane-wars/index.html) (Laufzeitstand `9da12b8`). Bei einem Hinweis des Vorschauhosts „Open the page“ wählen.
 
 Erste Front bleibt eine eigene Einführung; ihr Sieg schaltet unverändert Wiesenkrieg frei. Alte Spielstände bleiben in getrennten Missionsfeldern erhalten. M1.5-Demo und sämtliche älteren Varianten sind weiterhin erreichbar.
 
@@ -86,6 +86,8 @@ Original-HQs, Roboter, Wiesen-Diorama und Keramik-HUD bleiben. Vier Fabriken ste
 - Produktionsbuild, Niederlagenanzeige, beide erhaltenen Missionen, Labor (14 Prüfungen) und M1.5 (12 Prüfungen) bestanden ohne Browserfehler. Einzelprotokolle: [Produktionsbuild](central-qa/production/results.json), [alte Missionen](central-qa/legacy-browser/browser-results.json), [Mobile](central-qa/mobile-regression/browser-results.json), [M1.5](central-qa/m15.json), [Node](central-qa/node-tests.txt).
 
 Ausführen: `npm test`, `npm run audit:central`, `npm run build`; mit laufendem Server `npm run test:central-browser`, `npm run test:match`, `npm run test:mobile`, `npm run test:browser`, `npm run test:visual`. Für den statischen Build: `MATCH_URL=http://127.0.0.1:4181/dist/`. Windows PowerShell: `$env:MATCH_URL='http://127.0.0.1:4181/dist/'`.
+
+Öffentliche Vorschau nach dem Push ebenfalls geprüft: vollständiger Sieg über echte Bedienelemente nach **6:37**, Fortsetzen nach Neuladen, Browser-/Node-Vergleiche für alle drei Gegner, echte Niederlage ohne Spieleraufträge und Touch-Bedienung. Keine Browserfehler. [Öffentliches Prüfprotokoll](central-qa/public/results.json).
 
 ## Offene spielerische Schwächen
 1. Starre oder exakt gespiegelte Produktionspläne können weiterhin lange offen bleiben. Ein natürlicher Durchbruch ist möglich, nicht für jede denkbare identische Eingabe erzwingbar.

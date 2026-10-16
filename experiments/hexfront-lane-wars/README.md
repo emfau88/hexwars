@@ -1,61 +1,63 @@
-# HEXFRONT Lane Wars · Meilenstein 2.1
+# HEXFRONT Lane Wars · Zentrale Front
 
-Eine spielbare Kampagne Mensch gegen KI mit **Erste Front** (eine Lane) und **Wiesenkrieg** (zwei Lanes). Die vorhandenen HEXFRONT-Modelle, Diorama-Materialien und das Keramik-HUD bleiben erhalten.
+Eine vollständige Partie Mensch gegen KI auf einer zentralen Lane: vier Fabrikplätze, zwei wählbare Startfabriken, die drei vorhandenen Robotertypen und unterschiedliche gegnerische Eröffnungen. Originalmodelle, Diorama-Landschaft und Keramik-HUD bleiben erhalten.
 
 ## Spielen
 
-**[▶ M2.1 im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/5016cb1caffc011a5dcd4df34f648994e86f724c/experiments/hexfront-lane-wars/index.html)** · **[Screenshots und Nachschubvideo](https://rawcdn.githack.com/emfau88/hexwars/5016cb1caffc011a5dcd4df34f648994e86f724c/experiments/hexfront-lane-wars/m21-review.html)**
+**[▶ Zentrale Front im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/9da12b8e4bac4fd8eff57fc3f91febae4da070dc/experiments/hexfront-lane-wars/index.html)** · **[Ergebnisse, Screenshots und offene Schwächen](docs/CENTRAL-FRONT.md)**
 
-Öffentliche Vorschau des Kampagnenstands `5016cb1`, ohne lokalen Server. Falls ein Hinweis erscheint, **Open the page** anklicken.
+Öffentlicher Laufzeitstand `9da12b8`, ohne lokalen Server. Falls ein Hinweis erscheint: **Open the page** anklicken.
 
 ```powershell
 node scripts/serve.mjs
 ```
 
-**[Kampagne lokal spielen](http://127.0.0.1:4181/)** · [Bilder und Nachschubdemo](http://127.0.0.1:4181/m21-review.html) · [Kampflabor](http://127.0.0.1:4181/lab.html) · [M1.5-Demo](http://127.0.0.1:4181/m15.html)
+[Lokale Partie](http://127.0.0.1:4181/) · [Kampflabor](http://127.0.0.1:4181/lab.html) · [M1.5-Demo](http://127.0.0.1:4181/m15.html)
 
-Für die lokalen Links wird der Server benötigt. Node.js ab Version 20 genügt; sämtliche Spielressourcen liegen im Experiment, ohne CDN oder Abhängigkeit von anderen HEXFRONT-Varianten.
+Node.js ab Version 20 genügt zum Starten. Alle Ressourcen liegen im Experiment. „Zentrale Front spielen“ startet den Hauptmodus. Vorher kannst du einen Gegner und unter „Zwei Startfabriken wählen“ die Produktion festlegen. „Abwechselnde Strategien“ wechselt bei neuen Partien zwischen Eisenkeil, Vorhut und Aufbaukommando.
 
-**Kampagne starten** beginnt sofort mit einer Drohnenfabrik. Ein Sieg in Erste Front schaltet Wiesenkrieg frei. Eigene Spielstände je Mission und Fortschritt bleiben lokal im Browser unter `hexfront-lane-wars-campaign-v1` erhalten. **Neu** ersetzt nach Bestätigung nur den gewählten Missionsspielstand.
+Unter „Weitere Missionen“ bleibt **Erste Front** als Einführung erhalten. Ihr Sieg schaltet unverändert die Zwei-Lane-Mission **Wiesenkrieg** frei. Getrennte lokale Spielstände bleiben unter `hexfront-lane-wars-campaign-v1` erhalten. „Neu“ ersetzt nach Bestätigung nur den ausgewählten Missionsspielstand.
 
-## Bedienung
+## Bedienung und Werte des Hauptmodus
 
-**Smartphone:** Die Fabrikverwaltung ist zunächst eingeklappt. **Fabriken & Wirtschaft** öffnet Karten, Ausbau und Kameraknöpfe. Nachschub und Richtungspfeile bleiben direkt erreichbar. **?** zeigt den kurzen Missionshinweis; Antippen einer Frontanzeige zeigt Verstärkungsdetails. [Mobile Korrektur und Bilder](docs/MOBILE-HUD.md).
+- **Fabrikkarte oder Gebäude:** bauen (120 Credits) oder umrüsten (30). Ein Auftrag gilt ab der nächsten gemeinsamen **20-Sekunden-Welle**. Neubauten erscheinen zunächst transparent; Korrektur und Storno erstatten die entsprechende Reservierung.
+- **Wirtschaft:** einmalig 80 Credits, Einkommen steigt von 2 auf 3,2 Credits/s. Nach Bezahlung der beiden Startfabriken bleiben 40 Credits.
+- **Sofortnachschub:** Typ antippen. Ein zusätzlicher Verband verlässt das HQ, kostet 80 Credits und hat 35 Sekunden Abklingzeit. Keine fortlaufenden manuellen Bestellungen nötig.
+- **Menü / Leertaste:** pausieren oder fortsetzen. Auch Tabwechsel pausiert; keine Offline-Produktion.
+- **Kamera:** Mausrad oder Plus/Minus, Ziehen zum Verschieben, ⌖ für Übersicht. Roboter anklicken zeigt ihre tatsächlichen Werte.
+- **Smartphone:** „Fabriken & Wirtschaft“ öffnet die Verwaltung; Nachschub und Pause bleiben erreichbar. „?“ zeigt Hinweise. Die Frontanzeige lässt sich für Verstärkungsdetails aufklappen.
 
-- **Fabrikkarte:** Typ bauen oder umrüsten. Neubauten erscheinen sofort transparent. Aufträge gelten ab der nächsten 15-Sekunden-Welle und sind bis dahin korrigierbar/stornierbar.
-- **← WEST / OST →:** am Gebäude oder in der Karte kostenlos die nächste Produktionsrichtung wechseln. Bestehende Roboter behalten ihre Lane.
-- **Nachschub:** Robotersymbol auf einen Weg ziehen; alternativ Typ antippen und anschließend Straße oder Frontanzeige antippen. In Erste Front genügt der Typ. 60 Credits, 15 Sekunden Abklingzeit, tatsächlicher Start am eigenen HQ.
-- **Wirtschaft:** einmalig 80 Credits für dauerhaft +1 Credit/s. Fabriken produzieren ohne weitere Bestellungen.
-- **Menü / Leertaste:** pausieren bzw. fortsetzen. Tabwechsel pausiert ebenfalls. Keine Offline-Produktion.
-- **Kamera:** Plus/Minus oder Mausrad zoomt; Ziehen verschiebt; ⌖ zeigt die Übersicht. Diorama/Taktik und Modellbewegung stehen in den Einstellungen.
-- **Roboter anklicken:** echte Lebenspunkte und Reichweite ansehen.
+HQs haben 1.200 LP. Ausschließlich tatsächliche Angriffe beenden die Partie. Die älteren Missionen behalten ihre bisherigen 15-Sekunden-Wellen und Kosten; Wiesenkrieg zusätzlich seine kostenlosen Richtungspfeile und die Nachschubwahl per Drag/Tap auf eine Lane.
 
-Das gegnerische HQ muss durch Angriffe zerstört werden. Kein künstliches Zeitlimit. [GDD mit freigegebener M2.1-Ergänzung](docs/GDD.md) · **[Ergebnisse, Teststatus und offene Schwächen](docs/MILESTONE-2.1.md)**.
+## Ergebnisse
+
+72 Logiktests bestanden. Vollständige Partien über die Browseroberfläche, Fortsetzen nach Neuladen, Sieg und Niederlage, Browser-/Node-Übereinstimmung sowie beide alten Missionen und das Labor sind geprüft. Die fünf Smartphone-Ansichten wurden mit allen drei Missionen geprüft.
+
+Die sechs reagierenden KI-Referenzpartien (drei Paarungen plus Fraktionstausch) enden nach **4:04, 4:55 und 6:37**. Die gesamte Untersuchung umfasst 56 Läufe einschließlich ungünstiger Parameterkontrollen: 42 HQ-Enden, 14 bei 12 Minuten noch offen. Keine künstliche Endbedingung. Starr fortgesetzte Produktion und perfekte Spiegelungen bleiben ein Problem; 5–8 Minuten werden noch nicht zuverlässig getroffen.
+
+Eine Reaktion nach 3:20 plus ein gezielter Nachschub bei 3:30 verändert einen offenen Verlauf zu einem Sieg nach 5:23. [Details, Ursachenanalyse und weitere Gegenbeispiele](docs/CENTRAL-FRONT.md) · [GDD v0.3](docs/GDD.md) · [Rohdaten](docs/central-qa/audit.json).
 
 ## Prüfen
 
 ```powershell
 npm test
-npm run audit:campaign
-npm run audit:campaign-late
+npm run audit:central
+npm run build
+npm run test:central-browser
 npm run test:match
+npm run test:mobile
 npm run test:browser
 npm run test:visual
-npm run test:exits
-npm run test:mobile
-npm run build
 ```
 
-Die ersten drei Befehle benötigen keinen Browser. Für Browsertests einmalig `npm ci` und gegebenenfalls `npx playwright install chromium`; der lokale Server muss laufen. `build` erzeugt einen eigenständigen statischen Build in `dist/`. Er ist über [localhost /dist/](http://127.0.0.1:4181/dist/) prüfbar. Browsertests lassen sich mit `MATCH_URL` auf diesen Build richten.
+Die ersten drei Befehle brauchen keinen Browser. Für Browsertests: `npm ci`, gegebenenfalls `npx playwright install chromium` und laufender lokaler Server. Der eigenständige statische Build liegt in `dist/` und ist unter [localhost /dist/](http://127.0.0.1:4181/dist/) erreichbar. Mit `$env:MATCH_URL='http://127.0.0.1:4181/dist/'` lässt sich der vollständige Hauptmodus dort testen.
 
-`window.__LANE_MATCH__` liefert Zustandskopien und Diagnosen. Nur `?qa=1` aktiviert die beschleunigte Teststeuerung mit derselben Simulation.
+`window.__LANE_MATCH__` liefert Zustandskopien und Diagnosen. Nur `?qa=1` aktiviert die beschleunigte Testuhr mit derselben Simulation.
 
-## Entwicklungsstand
+## Erhaltene Grundlagen
 
-- Sicherung vor M2.1: `1a40373`, Tag `codex/lane-wars-pre-m2.1`.
-- M1-Kampfkern und Roboterwerte bleiben unverändert. Missions-HQ-Werte und KI-Taktung sind im Ergebnisbericht dokumentiert.
-- Gleiche Ausfahrtszeit je Typ unabhängig von Fabrikplatz, Lane oder Fraktion.
-- Lange Patts bleiben bei bestimmten starren Produktionsplänen möglich. Der Fernkämpfer ist weiterhin ein Platzhalter, der Mech besitzt kein artikuliertes Lauf-Rig.
-- Der öffentliche Playlink oben zeigt die M2.1-Kampagne. Die [frühere M1.5-Vorschau](https://rawcdn.githack.com/emfau88/hexwars/c038ffed9718192a7249ec8764951d3f5d3293c2/experiments/hexfront-lane-wars/index.html) bleibt als historischer Stand erhalten.
+Sicherung vor Zentrale Front: `4dee21b`, Tag `codex/lane-wars-pre-central-front`. Der alte M1-Ablauf wird gegen eine eingefrorene Referenz pro Schritt geprüft; nur der neue Modus erhält eigene Einheitenwerte. Weitere Rollen lassen sich später über Profile und zugehörige Darstellung ergänzen. Jetzt gibt es keine zusätzlichen Einheiten, Gebäude oder Forschung.
 
-Historische Berichte: [M2](docs/MILESTONE-2.md), [Fabrikausfahrten](docs/FACTORY-EXITS.md), [M1.5](docs/VISUAL-INTEGRATION.md).
+Der Fernkämpfer bleibt ein Modellplatzhalter und der Mech verwendet weiterhin Ganzkörperanimation. Diese Erweiterung enthält keine neue Soundproduktion.
+
+Historische Berichte: [M2.1](docs/MILESTONE-2.1.md), [Mobile-HUD](docs/MOBILE-HUD.md), [M2](docs/MILESTONE-2.md), [Fabrikausfahrten](docs/FACTORY-EXITS.md), [M1.5](docs/VISUAL-INTEGRATION.md).

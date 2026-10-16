@@ -1,25 +1,25 @@
 # HEXFRONT
 
-## ▶ Lane Wars – Meilenstein 2.1
+## ▶ Lane Wars – Zentrale Front
 
-Spielbare Kampagne **Mensch gegen KI** im Branch `codex/lane-wars`: **Erste Front** mit einer Lane und **Wiesenkrieg** mit zwei Fronten. Direkte Gebäudepfeile, transparente Bauvorschauen, Nachschub per Drag/Tap und getrennte lokale Missionsspielstände. Die vorhandene Diorama-Architektur und der M1-Kampfkern bleiben erhalten.
+Vollständig spielbare **1v1-Partie Mensch gegen KI** mit einer zentralen Lane, vier Fabrikplätzen, drei Robotertypen und drei unterschiedlichen KI-Eröffnungen. Automatische Produktion, Wirtschaft, Umrüstung, begrenzter Sofortnachschub und echtes Spielende durch HQ-Zerstörung. Die bewährte HEXFRONT-Diorama-Optik und das Keramik-HUD bleiben erhalten.
 
-**[▶ M2.1 jetzt im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/5016cb1caffc011a5dcd4df34f648994e86f724c/experiments/hexfront-lane-wars/index.html)** · **[Screenshots und Nachschubvideo](https://rawcdn.githack.com/emfau88/hexwars/5016cb1caffc011a5dcd4df34f648994e86f724c/experiments/hexfront-lane-wars/m21-review.html)**
+**[▶ Zentrale Front jetzt im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/9da12b8e4bac4fd8eff57fc3f91febae4da070dc/experiments/hexfront-lane-wars/index.html)** · **[Ergebnisse, Balance und Screenshots](experiments/hexfront-lane-wars/docs/CENTRAL-FRONT.md)**
 
-**Mobile verbessert:** einklappbare Fabrikverwaltung und deutlich mehr freie Sicht im Hochformat. [Ansichten und Prüfungen](experiments/hexfront-lane-wars/docs/MOBILE-HUD.md).
+Der Playlink zeigt den festgelegten Spielstand `9da12b8` und benötigt keinen lokalen Server. Falls der Vorschauhost einen Hinweis zeigt, **Open the page** anklicken. Veröffentlicht ausschließlich im Branch `codex/lane-wars`; kein Merge nach main.
 
-Der öffentliche Playlink ist auf den Kampagnenstand `5016cb1` festgelegt und benötigt keinen lokalen Server. Falls der Vorschauhost einen Hinweis zeigt, **Open the page** anklicken. Dieser Branch veröffentlicht ausschließlich die Lane-Wars-Vorschau; die älteren Spielvarianten bleiben unverändert.
+**Erste Front** und die Zwei-Lane-Mission **Wiesenkrieg** bleiben unter „Weitere Missionen“ erhalten, ebenso ihre Spielstände, das Kampflabor und die M1.5-Demo. Im Hochformat bleibt die Fabrikverwaltung eingeklappt, bis du sie öffnest.
+
+**Geprüft:** 72 Logiktests, vollständige Browserpartien mit Sieg/Niederlage und Fortsetzen, alte Missionen sowie fünf Smartphone-Ansichten. Späte Gegenproduktion und gezielter Nachschub können Partien wenden. Lange Patts bei starren oder gespiegelten Plänen bleiben eine dokumentierte Balance-Schwäche; das Ziel von 5–8 Minuten wird noch nicht durchgehend erreicht.
 
 ```powershell
 cd experiments/hexfront-lane-wars
 node scripts/serve.mjs
 ```
 
-**[Kampagne lokal spielen](http://127.0.0.1:4181/)** · **[Bilder und Nachschubdemo](http://127.0.0.1:4181/m21-review.html)** · [Kampflabor](http://127.0.0.1:4181/lab.html) · [Bedienung und Tests](experiments/hexfront-lane-wars/README.md) · [M2.1-Ergebnisse](experiments/hexfront-lane-wars/docs/MILESTONE-2.1.md)
+[Zentrale Front lokal spielen](http://127.0.0.1:4181/) · [Kampflabor](http://127.0.0.1:4181/lab.html) · [Bedienung und Tests](experiments/hexfront-lane-wars/README.md) · [GDD v0.3](experiments/hexfront-lane-wars/docs/GDD.md)
 
-Die lokalen Links benötigen den laufenden Server. Node.js ab Version 20 genügt. **Kampagne starten** beginnt direkt; ein Sieg in Erste Front schaltet Wiesenkrieg frei.
-
-
+Historische Vorschau: [M2.1 mit Mobile-HUD](https://rawcdn.githack.com/emfau88/hexwars/5016cb1caffc011a5dcd4df34f648994e86f724c/experiments/hexfront-lane-wars/index.html). Die folgenden älteren HEXFRONT-Varianten bleiben unverändert.
 
 ## Mixed Squads — ältere Variante
 
