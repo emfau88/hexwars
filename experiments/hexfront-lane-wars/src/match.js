@@ -167,10 +167,17 @@ export class Match {
   static restore(data){
     if(!data||![1,2].includes(data.version)||!Number.isInteger(data.tick)||data.tick<0||!['setup','running','ended'].includes(data.phase))throw Error('Ungültiger Spielstand.');
     const unitSpecs=data.version===1&&data.mission==='central'?missionById('central').units:data.unitSpecs;
-    const m=new Match({mission:data.mission,rules:data.rules,unitSpecs});
+    // Only the retired central 35-second supply rule is migrated; preserve all other saved rules.
+    const oldSupply=data.mission==='central'&&data.rules?.supplyCooldown===35;
+    const rules=oldSupply?{...data.rules,supplyCooldown:missionById('central').rules.supplyCooldown}:data.rules;
+    const m=new Match({mission:data.mission,rules,unitSpecs});
     if(data.lanes?.length!==m.laneCount||OWNERS.some(o=>data.players?.[o]?.factories?.length!==m.slotCount||data.players[o].pending?.length!==m.slotCount))throw Error('Spielstand passt nicht zur Mission.');
     for(const name of ['tick','time','remainder','phase','result','wave','players','transit','serial','orders','peakUnits'])m[name]=clone(data[name]);
     for(const [i,g] of m.lanes.entries())for(const name of ['tick','time','result','units','stats','serial','remainder'])g[name]=clone(data.lanes[i][name]);
+    if(oldSupply){
+      const reduction=Math.round((data.rules.supplyCooldown-m.rules.supplyCooldown)/STEP);
+      for(const p of Object.values(m.players))if(p.supplyReady>m.tick)p.supplyReady=Math.max(m.tick,p.supplyReady-reduction);
+    }
     // Upgrade visual-only exits in old saves at their current physical position.
     // New saves preserve HP, targets, cooldowns and paused routes exactly.
     if(data.version===1&&m.mission?.id==='central'){

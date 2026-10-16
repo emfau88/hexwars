@@ -1,0 +1,3371 @@
+{
+  "cooldown": 30,
+  "limit": 720,
+  "note": "Mirrored runs also mirror controller execution order. No forced game ending.",
+  "games": [
+    {
+      "mirror": false,
+      "a": "pressure",
+      "b": "siege",
+      "reactive": true,
+      "result": "blue",
+      "time": 435.8,
+      "waves": 22,
+      "peakUnits": 23,
+      "hq": {
+        "orange": 0,
+        "blue": 590
+      },
+      "metrics": {
+        "orange": {
+          "spent": 1120,
+          "earned": 1185.76,
+          "produced": 165,
+          "hqDamage": 210,
+          "builds": 2,
+          "refits": 8,
+          "laneChanges": 0,
+          "supplies": 4,
+          "economyAt": 174,
+          "credits": 315.76
+        },
+        "blue": {
+          "spent": 1250,
+          "earned": 1293.76,
+          "produced": 106,
+          "hqDamage": 800,
+          "builds": 2,
+          "refits": 7,
+          "laneChanges": 0,
+          "supplies": 6,
+          "economyAt": 84,
+          "credits": 323.76
+        }
+      },
+      "lateOrders": 28,
+      "longestStill": 12,
+      "oldest": 47,
+      "old60": 0,
+      "maxHQQuiet": 77,
+      "checkpoints": [
+        {
+          "time": 60,
+          "hq": [
+            800,
+            800
+          ],
+          "units": 12,
+          "front": 26.547720706460264,
+          "oldest": 20,
+          "credits": [
+            40,
+            40
+          ]
+        },
+        {
+          "time": 120,
+          "hq": [
+            800,
+            800
+          ],
+          "units": 14,
+          "front": 8.441377534306897,
+          "oldest": 20,
+          "credits": [
+            10,
+            3.2
+          ]
+        },
+        {
+          "time": 180,
+          "hq": [
+            800,
+            800
+          ],
+          "units": 20,
+          "front": 2.2712284758497434,
+          "oldest": 40,
+          "credits": [
+            27.2,
+            85.2
+          ]
+        },
+        {
+          "time": 240,
+          "hq": [
+            710,
+            800
+          ],
+          "units": 20,
+          "front": 1.0399417671086995,
+          "oldest": 20,
+          "credits": [
+            189.2,
+            57.2
+          ]
+        },
+        {
+          "time": 300,
+          "hq": [
+            476,
+            800
+          ],
+          "units": 16,
+          "front": 23.375520884848463,
+          "oldest": 40,
+          "credits": [
+            241.2,
+            139.2
+          ]
+        },
+        {
+          "time": 360,
+          "hq": [
+            476,
+            590
+          ],
+          "units": 17,
+          "front": 17.279998485421356,
+          "oldest": 20,
+          "credits": [
+            213.2,
+            271.2
+          ]
+        },
+        {
+          "time": 420,
+          "hq": [
+            96,
+            590
+          ],
+          "units": 22,
+          "front": 1.0544497057315867,
+          "oldest": 40,
+          "credits": [
+            265.2,
+            273.2
+          ]
+        }
+      ],
+      "orders": [
+        {
+          "time": 42,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 0,
+          "type": "mech",
+          "lane": 0,
+          "paid": 120
+        },
+        {
+          "time": 42,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 0,
+          "type": "rail",
+          "lane": 0,
+          "paid": 120
+        },
+        {
+          "time": 84,
+          "owner": "blue",
+          "action": "economy"
+        },
+        {
+          "time": 102,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 120
+        },
+        {
+          "time": 120,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 120,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 120
+        },
+        {
+          "time": 132,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 150,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 174,
+          "owner": "orange",
+          "action": "economy"
+        },
+        {
+          "time": 174,
+          "owner": "blue",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 186,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 204,
+          "owner": "blue",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 210,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 234,
+          "owner": "blue",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 240,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 264,
+          "owner": "orange",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 264,
+          "owner": "blue",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 270,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 288,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 300,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 312,
+          "owner": "orange",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 318,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 330,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 342,
+          "owner": "orange",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 348,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 360,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 378,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 390,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 390,
+          "owner": "blue",
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 402,
+          "owner": "orange",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 420,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 420,
+          "owner": "blue",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 435.8,
+          "owner": null,
+          "action": "end",
+          "result": "blue"
+        }
+      ]
+    },
+    {
+      "mirror": true,
+      "a": "siege",
+      "b": "pressure",
+      "reactive": true,
+      "result": "orange",
+      "time": 435.8,
+      "waves": 22,
+      "peakUnits": 23,
+      "hq": {
+        "orange": 590,
+        "blue": 0
+      },
+      "metrics": {
+        "orange": {
+          "spent": 1250,
+          "earned": 1293.76,
+          "produced": 106,
+          "hqDamage": 800,
+          "builds": 2,
+          "refits": 7,
+          "laneChanges": 0,
+          "supplies": 6,
+          "economyAt": 84,
+          "credits": 323.76
+        },
+        "blue": {
+          "spent": 1120,
+          "earned": 1185.76,
+          "produced": 165,
+          "hqDamage": 210,
+          "builds": 2,
+          "refits": 8,
+          "laneChanges": 0,
+          "supplies": 4,
+          "economyAt": 174,
+          "credits": 315.76
+        }
+      },
+      "lateOrders": 28,
+      "longestStill": 12,
+      "oldest": 47,
+      "old60": 0,
+      "maxHQQuiet": 77,
+      "checkpoints": [
+        {
+          "time": 60,
+          "hq": [
+            800,
+            800
+          ],
+          "units": 12,
+          "front": 3.4522792935397337,
+          "oldest": 20,
+          "credits": [
+            40,
+            40
+          ]
+        },
+        {
+          "time": 120,
+          "hq": [
+            800,
+            800
+          ],
+          "units": 14,
+          "front": 21.5586224656931,
+          "oldest": 20,
+          "credits": [
+            3.2,
+            10
+          ]
+        },
+        {
+          "time": 180,
+          "hq": [
+            800,
+            800
+          ],
+          "units": 20,
+          "front": 27.728771524150247,
+          "oldest": 40,
+          "credits": [
+            85.2,
+            27.2
+          ]
+        },
+        {
+          "time": 240,
+          "hq": [
+            800,
+            710
+          ],
+          "units": 20,
+          "front": 28.960058232891328,
+          "oldest": 20,
+          "credits": [
+            57.2,
+            189.2
+          ]
+        },
+        {
+          "time": 300,
+          "hq": [
+            800,
+            476
+          ],
+          "units": 16,
+          "front": 6.624479115151542,
+          "oldest": 40,
+          "credits": [
+            139.2,
+            241.2
+          ]
+        },
+        {
+          "time": 360,
+          "hq": [
+            590,
+            476
+          ],
+          "units": 17,
+          "front": 12.720001514578444,
+          "oldest": 20,
+          "credits": [
+            271.2,
+            213.2
+          ]
+        },
+        {
+          "time": 420,
+          "hq": [
+            590,
+            96
+          ],
+          "units": 22,
+          "front": 28.945550294268436,
+          "oldest": 40,
+          "credits": [
+            273.2,
+            265.2
+          ]
+        }
+      ],
+      "orders": [
+        {
+          "time": 42,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 0,
+          "type": "mech",
+          "lane": 0,
+          "paid": 120
+        },
+        {
+          "time": 42,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 0,
+          "type": "rail",
+          "lane": 0,
+          "paid": 120
+        },
+        {
+          "time": 84,
+          "owner": "orange",
+          "action": "economy"
+        },
+        {
+          "time": 102,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 120
+        },
+        {
+          "time": 120,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 120,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 120
+        },
+        {
+          "time": 132,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 150,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 174,
+          "owner": "blue",
+          "action": "economy"
+        },
+        {
+          "time": 174,
+          "owner": "orange",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 186,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 204,
+          "owner": "orange",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 210,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 234,
+          "owner": "orange",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 240,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 264,
+          "owner": "blue",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 264,
+          "owner": "orange",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 270,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 288,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 300,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 312,
+          "owner": "blue",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 318,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 330,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 342,
+          "owner": "blue",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 348,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 360,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 378,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 390,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 390,
+          "owner": "orange",
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 402,
+          "owner": "blue",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 420,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 420,
+          "owner": "orange",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 435.8,
+          "owner": null,
+          "action": "end",
+          "result": "orange"
+        }
+      ]
+    },
+    {
+      "mirror": false,
+      "a": "pressure",
+      "b": "economy",
+      "reactive": true,
+      "result": "orange",
+      "time": 565.35,
+      "waves": 29,
+      "peakUnits": 29,
+      "hq": {
+        "orange": 800,
+        "blue": 0
+      },
+      "metrics": {
+        "orange": {
+          "spent": 1350,
+          "earned": 1621.92,
+          "produced": 232,
+          "hqDamage": 800,
+          "builds": 2,
+          "refits": 13,
+          "laneChanges": 0,
+          "supplies": 5,
+          "economyAt": 156,
+          "credits": 551.92
+        },
+        "blue": {
+          "spent": 1610,
+          "earned": 1780.32,
+          "produced": 201,
+          "hqDamage": 0,
+          "builds": 2,
+          "refits": 11,
+          "laneChanges": 0,
+          "supplies": 9,
+          "economyAt": 24,
+          "credits": 450.32
+        }
+      },
+      "lateOrders": 39,
+      "longestStill": 11,
+      "oldest": 48,
+      "old60": 0,
+      "maxHQQuiet": 227,
+      "checkpoints": [
+        {
+          "time": 60,
+          "hq": [
+            800,
+            800
+          ],
+          "units": 14,
+          "front": 28.11923817445037,
+          "oldest": 20,
+          "credits": [
+            40,
+            3.2
+          ]
+        },
+        {
+          "time": 120,
+          "hq": [
+            800,
+            800
+          ],
+          "units": 17,
+          "front": 15.926122044668395,
+          "oldest": 20,
+          "credits": [
+            40,
+            45.2
+          ]
+        },
+        {
+          "time": 180,
+          "hq": [
+            800,
+            800
+          ],
+          "units": 17,
+          "front": 7.188903518948926,
+          "oldest": 20,
+          "credits": [
+            48.8,
+            237.2
+          ]
+        },
+        {
+          "time": 240,
+          "hq": [
+            800,
+            800
+          ],
+          "units": 19,
+          "front": 2.6217232951205345,
+          "oldest": 20,
+          "credits": [
+            180.8,
+            209.2
+          ]
+        },
+        {
+          "time": 300,
+          "hq": [
+            800,
+            800
+          ],
+          "units": 24,
+          "front": 17.535106217806327,
+          "oldest": 20,
+          "credits": [
+            232.8,
+            261.2
+          ]
+        },
+        {
+          "time": 360,
+          "hq": [
+            800,
+            456
+          ],
+          "units": 25,
+          "front": 28.115886192639167,
+          "oldest": 20,
+          "credits": [
+            234.8,
+            313.2
+          ]
+        },
+        {
+          "time": 420,
+          "hq": [
+            800,
+            456
+          ],
+          "units": 18,
+          "front": 13.79560039843411,
+          "oldest": 20,
+          "credits": [
+            366.8,
+            425.2
+          ]
+        },
+        {
+          "time": 480,
+          "hq": [
+            800,
+            456
+          ],
+          "units": 18,
+          "front": 3.9759859567158684,
+          "oldest": 20,
+          "credits": [
+            528.8,
+            397.2
+          ]
+        },
+        {
+          "time": 540,
+          "hq": [
+            800,
+            456
+          ],
+          "units": 24,
+          "front": 28.647455657710765,
+          "oldest": 20,
+          "credits": [
+            580.8,
+            449.2
+          ]
+        }
+      ],
+      "orders": [
+        {
+          "time": 24,
+          "owner": "blue",
+          "action": "economy"
+        },
+        {
+          "time": 42,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 0,
+          "type": "mech",
+          "lane": 0,
+          "paid": 120
+        },
+        {
+          "time": 60,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 0,
+          "type": "rail",
+          "lane": 0,
+          "paid": 120
+        },
+        {
+          "time": 102,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 120
+        },
+        {
+          "time": 102,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 120
+        },
+        {
+          "time": 120,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 126,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 156,
+          "owner": "orange",
+          "action": "economy"
+        },
+        {
+          "time": 168,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 192,
+          "owner": "blue",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 198,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 210,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 222,
+          "owner": "blue",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 228,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 240,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 1,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 252,
+          "owner": "blue",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 258,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 270,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 288,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 294,
+          "owner": "orange",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 300,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 318,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 324,
+          "owner": "orange",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 324,
+          "owner": "blue",
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 330,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 354,
+          "owner": "orange",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 360,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 366,
+          "owner": "blue",
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 390,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 420,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 432,
+          "owner": "blue",
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 450,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 462,
+          "owner": "blue",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 468,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 480,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 492,
+          "owner": "blue",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 498,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 510,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 528,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 534,
+          "owner": "orange",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 540,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 558,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 558,
+          "owner": "blue",
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 564,
+          "owner": "orange",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 565.35,
+          "owner": null,
+          "action": "end",
+          "result": "orange"
+        }
+      ]
+    },
+    {
+      "mirror": true,
+      "a": "economy",
+      "b": "pressure",
+      "reactive": true,
+      "result": "blue",
+      "time": 565.35,
+      "waves": 29,
+      "peakUnits": 29,
+      "hq": {
+        "orange": 0,
+        "blue": 800
+      },
+      "metrics": {
+        "orange": {
+          "spent": 1610,
+          "earned": 1780.32,
+          "produced": 201,
+          "hqDamage": 0,
+          "builds": 2,
+          "refits": 11,
+          "laneChanges": 0,
+          "supplies": 9,
+          "economyAt": 24,
+          "credits": 450.32
+        },
+        "blue": {
+          "spent": 1350,
+          "earned": 1621.92,
+          "produced": 232,
+          "hqDamage": 800,
+          "builds": 2,
+          "refits": 13,
+          "laneChanges": 0,
+          "supplies": 5,
+          "economyAt": 156,
+          "credits": 551.92
+        }
+      },
+      "lateOrders": 39,
+      "longestStill": 11,
+      "oldest": 48,
+      "old60": 0,
+      "maxHQQuiet": 227,
+      "checkpoints": [
+        {
+          "time": 60,
+          "hq": [
+            800,
+            800
+          ],
+          "units": 14,
+          "front": 1.880761825549617,
+          "oldest": 20,
+          "credits": [
+            3.2,
+            40
+          ]
+        },
+        {
+          "time": 120,
+          "hq": [
+            800,
+            800
+          ],
+          "units": 17,
+          "front": 14.073877955331337,
+          "oldest": 20,
+          "credits": [
+            45.2,
+            40
+          ]
+        },
+        {
+          "time": 180,
+          "hq": [
+            800,
+            800
+          ],
+          "units": 17,
+          "front": 22.811096481050903,
+          "oldest": 20,
+          "credits": [
+            237.2,
+            48.8
+          ]
+        },
+        {
+          "time": 240,
+          "hq": [
+            800,
+            800
+          ],
+          "units": 19,
+          "front": 27.37827670487946,
+          "oldest": 20,
+          "credits": [
+            209.2,
+            180.8
+          ]
+        },
+        {
+          "time": 300,
+          "hq": [
+            800,
+            800
+          ],
+          "units": 24,
+          "front": 12.464893782193474,
+          "oldest": 20,
+          "credits": [
+            261.2,
+            232.8
+          ]
+        },
+        {
+          "time": 360,
+          "hq": [
+            456,
+            800
+          ],
+          "units": 25,
+          "front": 1.8841138073608195,
+          "oldest": 20,
+          "credits": [
+            313.2,
+            234.8
+          ]
+        },
+        {
+          "time": 420,
+          "hq": [
+            456,
+            800
+          ],
+          "units": 18,
+          "front": 16.204399601565658,
+          "oldest": 20,
+          "credits": [
+            425.2,
+            366.8
+          ]
+        },
+        {
+          "time": 480,
+          "hq": [
+            456,
+            800
+          ],
+          "units": 18,
+          "front": 26.024014043284165,
+          "oldest": 20,
+          "credits": [
+            397.2,
+            528.8
+          ]
+        },
+        {
+          "time": 540,
+          "hq": [
+            456,
+            800
+          ],
+          "units": 24,
+          "front": 1.3525443422892653,
+          "oldest": 20,
+          "credits": [
+            449.2,
+            580.8
+          ]
+        }
+      ],
+      "orders": [
+        {
+          "time": 24,
+          "owner": "orange",
+          "action": "economy"
+        },
+        {
+          "time": 42,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 0,
+          "type": "mech",
+          "lane": 0,
+          "paid": 120
+        },
+        {
+          "time": 60,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 0,
+          "type": "rail",
+          "lane": 0,
+          "paid": 120
+        },
+        {
+          "time": 102,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 120
+        },
+        {
+          "time": 102,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 120
+        },
+        {
+          "time": 120,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 126,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 156,
+          "owner": "blue",
+          "action": "economy"
+        },
+        {
+          "time": 168,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 192,
+          "owner": "orange",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 198,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 210,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 222,
+          "owner": "orange",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 228,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 240,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 1,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 252,
+          "owner": "orange",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 258,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 270,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 288,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 294,
+          "owner": "blue",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 300,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 318,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 324,
+          "owner": "blue",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 324,
+          "owner": "orange",
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 330,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 354,
+          "owner": "blue",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 360,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 366,
+          "owner": "orange",
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 390,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 420,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 432,
+          "owner": "orange",
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 450,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 462,
+          "owner": "orange",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 468,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 480,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 492,
+          "owner": "orange",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 498,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 510,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 528,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 534,
+          "owner": "blue",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 540,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 2,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 558,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 558,
+          "owner": "orange",
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 564,
+          "owner": "blue",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 565.35,
+          "owner": null,
+          "action": "end",
+          "result": "blue"
+        }
+      ]
+    },
+    {
+      "mirror": false,
+      "a": "siege",
+      "b": "economy",
+      "reactive": true,
+      "result": "unresolved",
+      "time": 720,
+      "waves": 37,
+      "peakUnits": 23,
+      "hq": {
+        "orange": 794,
+        "blue": 672
+      },
+      "metrics": {
+        "orange": {
+          "spent": 2170,
+          "earned": 2203.2,
+          "produced": 241,
+          "hqDamage": 128,
+          "builds": 2,
+          "refits": 19,
+          "laneChanges": 0,
+          "supplies": 13,
+          "economyAt": 84,
+          "credits": 313.2
+        },
+        "blue": {
+          "spent": 1350,
+          "earned": 2275.2,
+          "produced": 244,
+          "hqDamage": 6,
+          "builds": 2,
+          "refits": 21,
+          "laneChanges": 0,
+          "supplies": 2,
+          "economyAt": 24,
+          "credits": 1205.2
+        }
+      },
+      "lateOrders": 55,
+      "longestStill": 14,
+      "oldest": 43,
+      "old60": 0,
+      "maxHQQuiet": 499,
+      "checkpoints": [
+        {
+          "time": 60,
+          "hq": [
+            800,
+            800
+          ],
+          "units": 9,
+          "front": 22.255656661164895,
+          "oldest": 20,
+          "credits": [
+            40,
+            3.2
+          ]
+        },
+        {
+          "time": 120,
+          "hq": [
+            800,
+            690
+          ],
+          "units": 14,
+          "front": 18.92440997029919,
+          "oldest": 20,
+          "credits": [
+            3.2,
+            45.2
+          ]
+        },
+        {
+          "time": 180,
+          "hq": [
+            800,
+            690
+          ],
+          "units": 22,
+          "front": 14.280045754719879,
+          "oldest": 20,
+          "credits": [
+            55.2,
+            177.2
+          ]
+        },
+        {
+          "time": 240,
+          "hq": [
+            800,
+            672
+          ],
+          "units": 16,
+          "front": 26.407953890644798,
+          "oldest": 20,
+          "credits": [
+            57.2,
+            309.2
+          ]
+        },
+        {
+          "time": 300,
+          "hq": [
+            800,
+            672
+          ],
+          "units": 19,
+          "front": 22.897589577627812,
+          "oldest": 20,
+          "credits": [
+            109.2,
+            441.2
+          ]
+        },
+        {
+          "time": 360,
+          "hq": [
+            800,
+            672
+          ],
+          "units": 18,
+          "front": 20.425392016012722,
+          "oldest": 20,
+          "credits": [
+            81.2,
+            573.2
+          ]
+        },
+        {
+          "time": 420,
+          "hq": [
+            800,
+            672
+          ],
+          "units": 15,
+          "front": 17.704103164927925,
+          "oldest": 20,
+          "credits": [
+            53.2,
+            705.2
+          ]
+        },
+        {
+          "time": 480,
+          "hq": [
+            800,
+            672
+          ],
+          "units": 18,
+          "front": 17.641885566175745,
+          "oldest": 20,
+          "credits": [
+            105.2,
+            837.2
+          ]
+        },
+        {
+          "time": 540,
+          "hq": [
+            800,
+            672
+          ],
+          "units": 17,
+          "front": 17.418384083297372,
+          "oldest": 20,
+          "credits": [
+            157.2,
+            969.2
+          ]
+        },
+        {
+          "time": 600,
+          "hq": [
+            800,
+            672
+          ],
+          "units": 20,
+          "front": 28.09478855919219,
+          "oldest": 20,
+          "credits": [
+            129.2,
+            1101.2
+          ]
+        },
+        {
+          "time": 660,
+          "hq": [
+            800,
+            672
+          ],
+          "units": 19,
+          "front": 13.772892213350922,
+          "oldest": 20,
+          "credits": [
+            181.2,
+            1153.2
+          ]
+        },
+        {
+          "time": 720,
+          "hq": [
+            794,
+            672
+          ],
+          "units": 17,
+          "front": 12.220377911959083,
+          "oldest": 20,
+          "credits": [
+            313.2,
+            1205.2
+          ]
+        }
+      ],
+      "orders": [
+        {
+          "time": 24,
+          "owner": "blue",
+          "action": "economy"
+        },
+        {
+          "time": 42,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 0,
+          "type": "rail",
+          "lane": 0,
+          "paid": 120
+        },
+        {
+          "time": 60,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 0,
+          "type": "rail",
+          "lane": 0,
+          "paid": 120
+        },
+        {
+          "time": 84,
+          "owner": "orange",
+          "action": "economy"
+        },
+        {
+          "time": 102,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 120
+        },
+        {
+          "time": 114,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 1,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 120,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 120
+        },
+        {
+          "time": 132,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 144,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 162,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 174,
+          "owner": "orange",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 174,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 204,
+          "owner": "orange",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 204,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 228,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 234,
+          "owner": "orange",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 234,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 258,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 264,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 276,
+          "owner": "orange",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 288,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 294,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 312,
+          "owner": "orange",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 318,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 324,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 348,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 354,
+          "owner": "orange",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 354,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 378,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 384,
+          "owner": "orange",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 384,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 408,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 414,
+          "owner": "orange",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 414,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 438,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 444,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 456,
+          "owner": "orange",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 468,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 474,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 498,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 504,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 510,
+          "owner": "orange",
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 528,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 534,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 552,
+          "owner": "orange",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 558,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 564,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 582,
+          "owner": "orange",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 588,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 594,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 612,
+          "owner": "orange",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 618,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 624,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 648,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 654,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 660,
+          "owner": "blue",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 678,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 684,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 696,
+          "owner": "blue",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 708,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 714,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        }
+      ]
+    },
+    {
+      "mirror": true,
+      "a": "economy",
+      "b": "siege",
+      "reactive": true,
+      "result": "unresolved",
+      "time": 720,
+      "waves": 37,
+      "peakUnits": 23,
+      "hq": {
+        "orange": 672,
+        "blue": 794
+      },
+      "metrics": {
+        "orange": {
+          "spent": 1350,
+          "earned": 2275.2,
+          "produced": 244,
+          "hqDamage": 6,
+          "builds": 2,
+          "refits": 21,
+          "laneChanges": 0,
+          "supplies": 2,
+          "economyAt": 24,
+          "credits": 1205.2
+        },
+        "blue": {
+          "spent": 2170,
+          "earned": 2203.2,
+          "produced": 241,
+          "hqDamage": 128,
+          "builds": 2,
+          "refits": 19,
+          "laneChanges": 0,
+          "supplies": 13,
+          "economyAt": 84,
+          "credits": 313.2
+        }
+      },
+      "lateOrders": 55,
+      "longestStill": 14,
+      "oldest": 43,
+      "old60": 0,
+      "maxHQQuiet": 499,
+      "checkpoints": [
+        {
+          "time": 60,
+          "hq": [
+            800,
+            800
+          ],
+          "units": 9,
+          "front": 7.7443433388350105,
+          "oldest": 20,
+          "credits": [
+            3.2,
+            40
+          ]
+        },
+        {
+          "time": 120,
+          "hq": [
+            690,
+            800
+          ],
+          "units": 14,
+          "front": 11.07559002970078,
+          "oldest": 20,
+          "credits": [
+            45.2,
+            3.2
+          ]
+        },
+        {
+          "time": 180,
+          "hq": [
+            690,
+            800
+          ],
+          "units": 22,
+          "front": 15.719954245279997,
+          "oldest": 20,
+          "credits": [
+            177.2,
+            55.2
+          ]
+        },
+        {
+          "time": 240,
+          "hq": [
+            672,
+            800
+          ],
+          "units": 16,
+          "front": 3.592046109355203,
+          "oldest": 20,
+          "credits": [
+            309.2,
+            57.2
+          ]
+        },
+        {
+          "time": 300,
+          "hq": [
+            672,
+            800
+          ],
+          "units": 19,
+          "front": 7.102410422372163,
+          "oldest": 20,
+          "credits": [
+            441.2,
+            109.2
+          ]
+        },
+        {
+          "time": 360,
+          "hq": [
+            672,
+            800
+          ],
+          "units": 18,
+          "front": 9.574607983987239,
+          "oldest": 20,
+          "credits": [
+            573.2,
+            81.2
+          ]
+        },
+        {
+          "time": 420,
+          "hq": [
+            672,
+            800
+          ],
+          "units": 15,
+          "front": 12.295896835071872,
+          "oldest": 20,
+          "credits": [
+            705.2,
+            53.2
+          ]
+        },
+        {
+          "time": 480,
+          "hq": [
+            672,
+            800
+          ],
+          "units": 18,
+          "front": 12.358114433824056,
+          "oldest": 20,
+          "credits": [
+            837.2,
+            105.2
+          ]
+        },
+        {
+          "time": 540,
+          "hq": [
+            672,
+            800
+          ],
+          "units": 17,
+          "front": 12.581615916702589,
+          "oldest": 20,
+          "credits": [
+            969.2,
+            157.2
+          ]
+        },
+        {
+          "time": 600,
+          "hq": [
+            672,
+            800
+          ],
+          "units": 20,
+          "front": 1.905211440807791,
+          "oldest": 20,
+          "credits": [
+            1101.2,
+            129.2
+          ]
+        },
+        {
+          "time": 660,
+          "hq": [
+            672,
+            800
+          ],
+          "units": 19,
+          "front": 16.227107786648816,
+          "oldest": 20,
+          "credits": [
+            1153.2,
+            181.2
+          ]
+        },
+        {
+          "time": 720,
+          "hq": [
+            672,
+            794
+          ],
+          "units": 17,
+          "front": 17.779622088040878,
+          "oldest": 20,
+          "credits": [
+            1205.2,
+            313.2
+          ]
+        }
+      ],
+      "orders": [
+        {
+          "time": 24,
+          "owner": "orange",
+          "action": "economy"
+        },
+        {
+          "time": 42,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 0,
+          "type": "rail",
+          "lane": 0,
+          "paid": 120
+        },
+        {
+          "time": 60,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 0,
+          "type": "rail",
+          "lane": 0,
+          "paid": 120
+        },
+        {
+          "time": 84,
+          "owner": "blue",
+          "action": "economy"
+        },
+        {
+          "time": 102,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 120
+        },
+        {
+          "time": 114,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 1,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 120,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 120
+        },
+        {
+          "time": 132,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 2,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 144,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 162,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 174,
+          "owner": "blue",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 174,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 204,
+          "owner": "blue",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 204,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 228,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 234,
+          "owner": "blue",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 234,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 2,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 258,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 264,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 276,
+          "owner": "blue",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 288,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 294,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 312,
+          "owner": "blue",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 318,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 324,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 348,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 354,
+          "owner": "blue",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 354,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 378,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 384,
+          "owner": "blue",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 384,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 408,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 414,
+          "owner": "blue",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 414,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 438,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 444,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 456,
+          "owner": "blue",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 468,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 474,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 498,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 504,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 510,
+          "owner": "blue",
+          "action": "supply",
+          "type": "mech",
+          "lane": 0
+        },
+        {
+          "time": 528,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 534,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 552,
+          "owner": "blue",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 558,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 564,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 582,
+          "owner": "blue",
+          "action": "supply",
+          "type": "drone",
+          "lane": 0
+        },
+        {
+          "time": 588,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 594,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 612,
+          "owner": "blue",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 618,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 624,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 648,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 654,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "drone",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 660,
+          "owner": "orange",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 678,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 684,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "mech",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 696,
+          "owner": "orange",
+          "action": "supply",
+          "type": "rail",
+          "lane": 0
+        },
+        {
+          "time": 708,
+          "owner": "blue",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        },
+        {
+          "time": 714,
+          "owner": "orange",
+          "action": "factory",
+          "slot": 3,
+          "type": "rail",
+          "lane": 0,
+          "paid": 30
+        }
+      ]
+    }
+  ]
+}

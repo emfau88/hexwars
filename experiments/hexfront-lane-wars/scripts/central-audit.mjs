@@ -5,9 +5,9 @@ import {CentralAI,centralOpening} from '../src/central-ai.js';
 import {CENTRAL_UNITS} from '../src/central-rules.js';
 import {centralLate} from '../tests/fixtures/central-late.mjs';
 import {UNITS} from '../src/rules.js';
-export function run({a='pressure',b='siege',reactive=true,rules={},unitSpecs,limit=720,policy=null,orange=null,blue=null,aiOptions={},enemyOptions={}}={}){
+export function run({a='pressure',b='siege',reactive=true,rules={},unitSpecs,limit=720,policy=null,orange=null,blue=null,aiOptions={},enemyOptions={},reverseControllers=false}={}){
  const m=new Match({mission:'central',orange:orange||centralOpening(a),blue:blue||centralOpening(b),rules,unitSpecs});
- m.controllers=[new CentralAI('orange',{strategy:a,reactive,...aiOptions}),new CentralAI('blue',{strategy:b,...enemyOptions})];m.start();
+ m.controllers=[new CentralAI('orange',{strategy:a,reactive,...aiOptions}),new CentralAI('blue',{strategy:b,...enemyOptions})];if(reverseControllers)m.controllers.reverse();m.start();
  const checkpoints=[];let still=0,longestStill=0,lastHQ=m.rules.hqHP*2,lastContact=15,oldest=0,old60=0,hqQuiet=0,maxHQQuiet=0;
  while(m.phase==='running'&&m.time<limit){
   policy?.(m);m.advance(1);m.drainEvents();

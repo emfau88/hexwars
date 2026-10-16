@@ -156,7 +156,7 @@ Keine neuen Robotertypen, Forschung, Gebäudearten, Kontrollpunkte oder Multipla
 ## Freigegebene Ergänzung: Zentrale Front (16. Oktober 2026)
 Eine vollständige 1v1-Partie Mensch gegen KI auf einer zentralen Front wird Hauptmodus. Vier feste Fabrikplätze, zwei konfigurierbare bezahlte Startfabriken, drei bestehende Robotertypen, automatische gemeinsame Wellen, einmalige Wirtschaft, bezahlte Umrüstung und begrenzter Sofortnachschub bleiben der Kern. Erste Front, Wiesenkrieg, Kampflabor und ältere Varianten bleiben erhalten. Keine neuen Typen, Gebäudearten, Forschung, Kontrollpunkte oder Multiplayer.
 
-Für den Hauptmodus gelten: 280 Startcredits vor Fabrikbezahlung, 120 pro Fabrik, 30 pro Umrüstung, 2 Credits/s, einmalig 80 Credits für +1,2/s; 20-Sekunden-Wellen einschließlich Welle bei Start; Nachschub 80 Credits mit 35 Sekunden Abklingzeit. HQs haben nach der Fabrikkampf-Korrektur 800 LP, Reichweite 4 und eine gemeinsame Waffe mit 2 Schaden pro Sekunde. Ausschließlich echte HQ-Zerstörung beendet die Partie, angestrebt sind ungefähr 5–8 Minuten.
+Für den Hauptmodus gelten: 280 Startcredits vor Fabrikbezahlung, 120 pro Fabrik, 30 pro Umrüstung, 2 Credits/s, einmalig 80 Credits für +1,2/s; 20-Sekunden-Wellen einschließlich Welle bei Start; Nachschub 80 Credits mit 30 Sekunden Abklingzeit. HQs haben nach der Fabrikkampf-Korrektur 800 LP, Reichweite 4 und eine gemeinsame Waffe mit 2 Schaden pro Sekunde. Ausschließlich echte HQ-Zerstörung beendet die Partie, angestrebt sind ungefähr 5–8 Minuten.
 
 Drohnen behalten M1-Werte. Der Mech verwendet 110 LP, 9 Sekundärschaden und 2,8 Reichweite, der Fernkämpfer 55 Schaden und 2,8 Sekunden Intervall; übrige Werte bleiben bestehen. Diese Profile gelten nur in Zentrale Front. Der Kampfalgorithmus ist jetzt mit Einheitenprofilen parametrisierbar; seine alte Standardausführung ist gegen die eingefrorene M1-Version pro Simulationsschritt geprüft. Die historische Aussage „simulation.js bytegleich“ gilt damit nicht mehr für die aktuelle Engine, wohl aber deren alter Kampfablauf.
 
@@ -177,3 +177,10 @@ Mech-Reichweite 1,6 → **2,8**; Fernkämpfer weiterhin 4,0, Drohnen 1,1. Kein R
 Spielstände werden auf Version 2 gespeichert. Alte zentrale Ausfahrten werden an ihrer aktuellen sichtbaren Position in die Kampfsimulation übernommen. Der Browser weist beim Laden eines alten Stands darauf hin, für die aktuelle HQ-Balance eine neue Partie zu beginnen.
 
 Tests, Gegenproben und die weiterhin offenen Balanceprobleme: [DEPLOYMENT-COMBAT.md](DEPLOYMENT-COMBAT.md).
+
+
+### Nachschub-Korrektur und Fabrikkonzept · 16.10.2026
+
+Auf ausdrücklichen Wunsch sinkt ausschließlich der Nachschub-Cooldown von Zentrale Front von 35 auf **30 Sekunden**. Beide Fraktionen und gespeicherte zentrale Partien verwenden den neuen Wert; bereits verstrichene Abklingzeit wird angerechnet. Alle anderen Spielwerte und Missionen bleiben unverändert. Die Auswertungen im vorherigen Fabrikkampf-Bericht dokumentieren den damaligen 35-Sekunden-Stand. [Aktueller Prüfbericht](SUPPLY-30.md).
+
+Das [Fabrikkonzept](factory-concept/BRIEF.md) ist eine Designvorlage, kein integriertes GLB. Modellierung und technische Prüfung stehen aus. Vor dem Ersatz der bestehenden Fabriken ist die vom Nutzer verlangte Freigabe einzuholen.

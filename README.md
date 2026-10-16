@@ -12,7 +12,11 @@ Der Playlink zeigt den festgelegten Spielstand `4ec7337` und benötigt keinen lo
 
 **Neu:** Roboter kämpfen und sind direkt am Fabrikausgang angreifbar. Mechs schießen mit sichtbarem Abstand (Reichweite 2,8). Als Ausgleich für früher eingreifende Verteidiger haben neue zentrale Partien 800 HQ-LP und 2 HQ-Schaden/s. Bitte eine neue Partie starten; gespeicherte Partien behalten ihre alten HQ-Werte.
 
-**Geprüft:** 79 Logiktests, 30 gezielte 3D-Browserfälle, vollständige Build- und öffentliche Partien mit Sieg/Niederlage, Fortsetzen, Neustart und Hochformat-Touch sowie das Kampflabor. Die sechs reagierenden Referenzpartien dauern 5:27–7:00. Im breiten Audit sind jedoch 28 von 56 Läufen nach zwölf Minuten offen – mehr als zuvor. Diese Balance-Schwäche ist ausdrücklich dokumentiert.
+**Vorheriger Stand (35 Sekunden):** 79 Logiktests, 30 gezielte 3D-Browserfälle, vollständige Build- und öffentliche Partien mit Sieg/Niederlage, Fortsetzen, Neustart und Hochformat-Touch sowie das Kampflabor. Die sechs reagierenden Referenzpartien dauern 5:27–7:00. Im breiten Audit sind jedoch 28 von 56 Läufen nach zwölf Minuten offen – mehr als zuvor. Diese Balance-Schwäche ist ausdrücklich dokumentiert.
+
+**Aktuell:** Sofortnachschub im Hauptmodus hat **30 Sekunden** Cooldown, auch beim Fortsetzen. 83 Logiktests und gezielte HUD-/Speichertests bestanden. Die sechs neuen Referenzläufe ergeben vier HQ-Entscheidungen und zwei offene Partien nach zwölf Minuten; weitere Balancewerte wurden nicht verändert. [Prüfbericht](experiments/hexfront-lane-wars/docs/SUPPLY-30.md).
+
+**Fabrik zur Designprüfung:** [Konzepttafel und Modellierungsbrief](experiments/hexfront-lane-wars/docs/factory-concept/BRIEF.md). Noch kein neues GLB integriert; die Modellfreigabe steht aus.
 
 ```powershell
 cd experiments/hexfront-lane-wars

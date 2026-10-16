@@ -1,0 +1,9 @@
+{
+  "base": "http://127.0.0.1:4181/",
+  "checks": [
+    "Real HUD order costs 80 credits and starts a displayed 30.0-second cooldown",
+    "Reload retains 18 seconds; order rejected one tick early and accepted at 30 seconds",
+    "Both legacy missions still use 15 seconds and 60 credits"
+  ],
+  "errors": []
+}

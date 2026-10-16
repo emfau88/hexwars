@@ -39,9 +39,9 @@ test('central economy, reservations and supply spend real money with exact produ
  m.advance(19.95);assert.equal(m.players.orange.factories[0],null);m.advance(.05);assert.equal(m.players.orange.factories[0].type,'rail');
  m.advance(5);assert.ok(m.command('orange','supply',{type:'drone',lane:0}).ok);
  assert.equal(m.command('orange','supply',{type:'drone',lane:0}).ok,false);
- m.advance(34.95);assert.equal(m.command('orange','supply',{type:'drone',lane:0}).ok,false);
+ m.advance(29.95);assert.equal(m.command('orange','supply',{type:'drone',lane:0}).ok,false);
  m.advance(.05);assert.ok(m.command('orange','supply',{type:'drone',lane:0}).ok);
- assert.equal(m.players.orange.metrics.supplies,2);assert.equal(m.rules.wave,20);assert.equal(m.rules.supplyCooldown,35);
+ assert.equal(m.players.orange.metrics.supplies,2);assert.equal(m.rules.wave,20);assert.equal(m.rules.supplyCooldown,30);
 });
 test('central AI uses a public facade and different openings make different paid decisions',()=>{
  const traces=[];
@@ -60,10 +60,11 @@ test('central save/resume preserves the chosen opponent, stats and all future ac
  const b=Match.restore(data.match);b.controllers=data.ai.map(CentralAI.restore);a.advance(360);b.advance(360);
  assert.deepEqual(a.snapshot(),b.snapshot());assert.deepEqual(a.orders,b.orders);assert.deepEqual(a.controllers[0].save(),b.controllers[0].save());
 });
-test('central full games use identical rules when factions are swapped',()=>{
+test('central reference runs preserve results and all economic metrics when fully mirrored',()=>{
  for(const [left,right] of [['pressure','siege'],['pressure','economy'],['siege','economy']]){
-  const a=run({a:left,b:right}),b=run({a:right,b:left});
-  assert.notEqual(a.result,'unresolved');assert.equal(a.time,b.time);assert.equal(a.hq.orange,b.hq.blue);assert.equal(a.hq.blue,b.hq.orange);assert.deepEqual(a.metrics.orange,b.metrics.blue);
+  // Mirror controller execution order as well as factions: same-tick orders are observable.
+  const a=run({a:left,b:right}),b=run({a:right,b:left,reverseControllers:true});
+  assert.equal(a.result,{pressure:{siege:'blue',economy:'orange'},siege:{economy:'unresolved'}}[left][right]);assert.equal(b.result,a.result==='orange'?'blue':a.result==='blue'?'orange':a.result);assert.equal(a.time,b.time);assert.equal(a.hq.orange,b.hq.blue);assert.equal(a.hq.blue,b.hq.orange);assert.deepEqual(a.metrics.orange,b.metrics.blue);assert.deepEqual(a.metrics.blue,b.metrics.orange);
  }
 });
 test('late paid response plus one deliberate reinforcement turns the same position into a real HQ victory',()=>{

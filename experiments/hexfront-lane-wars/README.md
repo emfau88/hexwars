@@ -22,25 +22,32 @@ Unter „Weitere Missionen“ bleibt **Erste Front** als Einführung erhalten. I
 
 - **Fabrikkarte oder Gebäude:** bauen (120 Credits) oder umrüsten (30). Ein Auftrag gilt ab der nächsten gemeinsamen **20-Sekunden-Welle**. Neubauten erscheinen zunächst transparent; Korrektur und Storno erstatten die entsprechende Reservierung.
 - **Wirtschaft:** einmalig 80 Credits, Einkommen steigt von 2 auf 3,2 Credits/s. Nach Bezahlung der beiden Startfabriken bleiben 40 Credits.
-- **Sofortnachschub:** Typ antippen. Ein zusätzlicher Verband verlässt das HQ, kostet 80 Credits und hat 35 Sekunden Abklingzeit. Keine fortlaufenden manuellen Bestellungen nötig.
+- **Sofortnachschub:** Typ antippen. Ein zusätzlicher Verband verlässt das HQ, kostet 80 Credits und hat 30 Sekunden Abklingzeit. Keine fortlaufenden manuellen Bestellungen nötig.
 - **Menü / Leertaste:** pausieren oder fortsetzen. Auch Tabwechsel pausiert; keine Offline-Produktion.
 - **Kamera:** Mausrad oder Plus/Minus, Ziehen zum Verschieben, ⌖ für Übersicht. Roboter anklicken zeigt ihre tatsächlichen Werte.
 - **Smartphone:** „Fabriken & Wirtschaft“ öffnet die Verwaltung; Nachschub und Pause bleiben erreichbar. „?“ zeigt Hinweise. Die Frontanzeige lässt sich für Verstärkungsdetails aufklappen.
 
 HQs haben in neuen zentralen Partien 800 LP und verursachen 2 Schaden/s. Ausrückende Einheiten kämpfen und sind angreifbar, sobald sie vor dem Fabriktor erscheinen. Der Mech schießt mit 2,8 statt 1,6 Reichweite; Fernkämpfer bleiben bei 4,0. Ausschließlich tatsächliche Angriffe beenden die Partie. Die älteren Missionen behalten ihre bisherigen 15-Sekunden-Wellen und Kosten; Wiesenkrieg zusätzlich seine kostenlosen Richtungspfeile und die Nachschubwahl per Drag/Tap auf eine Lane.
 
-## Ergebnisse
+## Aktuelle Änderung
+
+Der Nachschub-Cooldown in Zentrale Front beträgt jetzt **30 Sekunden** für beide Fraktionen, auch beim Fortsetzen älterer Spielstände. Kosten, Wellen und alle übrigen Spielwerte bleiben unverändert. [Prüfbericht](docs/SUPPLY-30.md).
+
+Die neue Fabrik liegt als [Konzept zur Freigabe](docs/factory-concept/BRIEF.md) vor. Sie ist noch kein GLB und noch nicht im Spiel integriert.
+
+## Ergebnisse vor der Cooldown-Änderung (35 Sekunden)
 
 **79 Logiktests**, **30 gezielte 3D-Browserfälle** an Fabrik-/HQ-Ausgängen und vollständige Build-/öffentliche Partien bestanden. Ein Sieg mit tatsächlichen HUD-Eingaben endet nach 6:59; Speichern/Fortsetzen, Niederlage, Neustart und Hochformat-Touch sind geprüft. Das Kampflabor besteht seine 14 Browserprüfungen; die alten Kampfabläufe bleiben durch Regressionstests abgesichert.
 
 Die sechs reagierenden KI-Referenzpartien enden nach **5:27, 6:59 und 7:00**. Im breiten Audit bleiben jedoch **28 von 56 Läufen** nach zwölf Minuten offen (zuvor 14). Darin sind auch starre Pläne, Spiegelungen und Parameterkontrollen enthalten. Die Balance ist damit weiterhin nicht allgemein gelöst. [Details und Rohdaten](docs/DEPLOYMENT-COMBAT.md) · [GDD v0.3.1](docs/GDD.md).
 
-**Bitte für die aktuelle Balance eine neue zentrale Partie starten.** Bestehende Spielstände erhalten Fabrikkampf und Mech-Reichweite ebenfalls, behalten aber ihre bisherigen HQ-Werte. Wirtschaft, Produktionsrhythmus und Nachschub bleiben unverändert.
+**Bitte für die aktuelle Balance eine neue zentrale Partie starten.** Bestehende Spielstände erhalten Fabrikkampf und Mech-Reichweite ebenfalls, behalten aber ihre bisherigen HQ-Werte. Wirtschaft und Produktionsrhythmus bleiben unverändert. Der oben beschriebene Nachschub-Cooldown von 30 Sekunden gilt auch für diese Spielstände.
 
 ## Prüfen
 
 ```powershell
 npm test
+npm run test:supply
 npm run test:deployment
 npm run audit:central
 npm run build
