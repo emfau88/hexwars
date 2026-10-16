@@ -1,0 +1,64 @@
+{
+  "name": "HEXFRONT factory v1",
+  "status": "approval preview, not integrated",
+  "source": "art/factory-v1/factory-source.blend",
+  "authorship": "Original custom mesh surfaces authored with Blender 5.2.0 LTS",
+  "units": "game units; glTF Y up; front -Z",
+  "door": {
+    "nodes": [
+      "Hangar_Segment_1",
+      "Hangar_Segment_2",
+      "Hangar_Segment_3",
+      "Hangar_Segment_4"
+    ],
+    "clip": "Door_Open",
+    "duration": 1,
+    "clearWidth": 1.86,
+    "clearHeight": 1.64
+  },
+  "socket": "Production_Socket",
+  "teamVariants": [
+    "Orange",
+    "Blue"
+  ],
+  "assets": [
+    {
+      "file": "factory.glb",
+      "bytes": 785380,
+      "triangles": 16188,
+      "meshes": 13,
+      "materials": 7,
+      "primitives": 13,
+      "animations": [
+        "Door_Open"
+      ]
+    },
+    {
+      "file": "module-drone.glb",
+      "bytes": 99264,
+      "triangles": 2216,
+      "meshes": 4,
+      "materials": 5,
+      "primitives": 4,
+      "animations": []
+    },
+    {
+      "file": "module-mech.glb",
+      "bytes": 47512,
+      "triangles": 672,
+      "meshes": 3,
+      "materials": 4,
+      "primitives": 3,
+      "animations": []
+    },
+    {
+      "file": "module-rail.glb",
+      "bytes": 65588,
+      "triangles": 992,
+      "meshes": 4,
+      "materials": 5,
+      "primitives": 4,
+      "animations": []
+    }
+  ]
+}

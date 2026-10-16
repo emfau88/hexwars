@@ -1,8 +1,8 @@
-# Fabrik – Konzept zur Freigabe
+# Fabrik – freigegebene Designrichtung
 
 Stand: 16.10.2026, Branch codex/lane-wars.
 
-**Status: Designvorlage, kein vorhandenes oder geprüftes GLB.** Die Konzepttafel wurde mit dem eingebauten Imagegen-Werkzeug anhand unseres HQ-Referenzbilds erzeugt. Sie belegt weder Geometrie noch Animation oder Performance. Bestehende Fabriken und Modelle im Spiel sind unverändert.
+**Status: Designrichtung freigegeben; das [tatsächliche GLB](../factory-model/REVIEW.md) liegt jetzt gesondert zur Modellfreigabe vor.** Diese ursprüngliche Konzepttafel ist eine Illustration. Die Konzepttafel wurde mit dem eingebauten Imagegen-Werkzeug anhand unseres HQ-Referenzbilds erzeugt. Sie belegt weder Geometrie noch Animation oder Performance. Bestehende Fabriken und Modelle im Spiel sind unverändert.
 
 ![Fabrik: Orange, Blau und geöffnetes Tor](factory-concept-v1.png)
 
@@ -14,7 +14,7 @@ Orange und Blau verwenden dieselbe Geometrie, Keramik und dunkle Materialien; nu
 
 Referenz: [vorhandenes HQ](../../../hexfront-3d/docs/imported-assets/viewer-hq.png), insbesondere Materialkontrast, Rundungen und Fugen. Maßgeblich für den Größenvergleich sind die tatsächlich geladenen Dateien public/models/hq.glb und public/models/mech.glb, nicht die Perspektive der Konzepttafel.
 
-## Verbindliche technische Anpassung gegenüber dem Bild
+## Ursprüngliche Vorgaben – tatsächliche Maße siehe Modellbericht
 
 **Das Tor muss im realen Modell deutlich breiter ausfallen als auf der Konzepttafel.** Der Mech ist bei der aktuellen Darstellungsgröße ungefähr 1,62 breit und 1,45 hoch. Die Illustration ist keine maßhaltige Bauzeichnung. Dünnere seitliche Torpfosten, ein breiterer Durchlass und ein kompakterer Dachaufbau sind deshalb Teil der 3D-Ausarbeitung.
 

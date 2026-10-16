@@ -1,0 +1,31 @@
+{
+  "url": "http://127.0.0.1:4181/dist/factory-preview.html",
+  "checks": [
+    "Actual GLB loads; all four exported segments move and close exactly",
+    "Pointer drag rotates the actual model",
+    "Three separate modules visible from game camera, blue material variant and reversible construction transparency",
+    "Actual HQ and mech loaded at unchanged game normalization, beside the factory",
+    "Eight visible factories share geometry and textures; first gate can close independently",
+    "GLB and editable Blender source downloads resolve",
+    "Portrait viewer has no horizontal overflow"
+  ],
+  "errors": [],
+  "hostWarnings": [],
+  "baseAsset": {
+    "file": "factory.glb",
+    "bytes": 785380,
+    "triangles": 16188,
+    "meshes": 13,
+    "materials": 7,
+    "primitives": 13,
+    "animations": [
+      "Door_Open"
+    ]
+  },
+  "eight": {
+    "drawCalls": 24,
+    "geometries": 31,
+    "textures": 12,
+    "uniqueMeshGeometries": 24
+  }
+}
