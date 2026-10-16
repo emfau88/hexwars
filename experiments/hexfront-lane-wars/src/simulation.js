@@ -57,6 +57,8 @@ export class Combat {
     return Math.abs(difference) > 1e-8 ? difference : a.order - b.order;
   }
 
+  lateralLimit(unit) { return HALF_WIDTH; }
+
   move(unit, snapshot, engaged) {
     const spec = this.specs[unit.type];
     const dir = direction(unit.owner);
@@ -82,8 +84,10 @@ export class Combat {
     }
     const length = Math.hypot(dp, dx);
     if (length > spec.speed * STEP) { dp *= spec.speed * STEP / length; dx *= spec.speed * STEP / length; }
-    return { p: unit.p + dp, x: clamp(unit.x + dx, -HALF_WIDTH, HALF_WIDTH) };
+    return { p: unit.p + dp, x: clamp(unit.x + dx, -this.lateralLimit(unit), this.lateralLimit(unit)) };
   }
+
+  applyMovement(unit,position) { unit.p=position.p; unit.x=position.x; }
 
   step() {
     if (this.result) return;
@@ -100,7 +104,7 @@ export class Combat {
       const target = this.chooseTarget(before, snapshot);
       const position = this.move(before, snapshot, !!target);
       u.moving = Math.hypot(position.p - before.p, position.x - before.x) > 0.001;
-      u.p = position.p; u.x = position.x;
+      this.applyMovement(u,position);
       u.cooldown = Math.max(0, before.cooldown - STEP);
       u.target = target?.id ?? null;
       if (!target) { u.aiming = null; u.aimTime = 0; continue; }

@@ -21,7 +21,8 @@
     "audit:campaign-late": "node scripts/campaign-late-audit.mjs",
     "test:mobile": "node tests/mobile-hud-browser.mjs",
     "audit:central": "node scripts/central-audit.mjs",
-    "test:central-browser": "node tests/central-browser.mjs"
+    "test:central-browser": "node tests/central-browser.mjs",
+    "test:deployment": "node tests/deployment-browser.mjs"
   },
   "engines": {
     "node": ">=20"

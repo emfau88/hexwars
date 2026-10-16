@@ -1,7 +1,8 @@
 import {Combat} from './simulation.js';
-import {STEP,LENGTH,OWNERS,UNITS,other,distance} from './rules.js';
+import {STEP,LENGTH,HALF_WIDTH,OWNERS,UNITS,other,clamp} from './rules.js';
 import {exitDuration,laneEntry} from './match-layout.js';
 import {missionById} from './missions.js';
+import {deploymentPosition,deploymentMove} from './deployment.js';
 
 export const MATCH_RULES=Object.freeze({startCredits:200,factoryCost:100,refitCost:30,income:2,economyCost:80,economyIncome:1,supplyCost:60,supplyCooldown:15,wave:15,hqHP:1200,hqDamage:8,hqInterval:.8,hqRange:4});
 const clone=x=>structuredClone(x);
@@ -10,6 +11,21 @@ const clone=x=>structuredClone(x);
 export class MatchLane extends Combat {
   constructor(match,lane){super({specs:match.unitSpecs});this.match=match;this.lane=lane;this.result=null;}
   resolveResult() { this.result=null; }
+  lateralLimit(unit) {
+    // The physical apron is wider than the lane. Both sides must be able to
+    // reach defenders at every gate, with a smooth narrowing toward the road.
+    return this.match.mission?.id==='central'?HALF_WIDTH+1.8*clamp((6-Math.min(unit.p,LENGTH-unit.p))/6,0,1):super.lateralLimit(unit);
+  }
+  move(unit,snapshot,engaged) {
+    return unit.deployment?deploymentMove(unit,engaged):super.move(unit,snapshot,engaged);
+  }
+  applyMovement(unit,position) {
+    super.applyMovement(unit,position);
+    if(Object.hasOwn(position,'deployment')){
+      if(position.deployment)unit.deployment=position.deployment;
+      else delete unit.deployment;
+    }
+  }
   chooseTarget(unit,snapshot) {
     const robot=super.chooseTarget(unit,snapshot);if(robot)return robot;
     const owner=other(unit.owner),p=owner==='orange'?0:LENGTH;
@@ -72,12 +88,22 @@ export class Match {
     for(const owner of OWNERS){const p=this.players[owner];p.cents-=this.startSlots.length*this.rules.factoryCost*100;p.metrics.spent+=this.startSlots.length*this.rules.factoryCost;}
     this.phase='running';this.produceWave();return true;
   }
+  deploy(unit,elapsed=0) {
+    const g=this.lanes[unit.lane],deployment={elapsed,lateral:unit.x};
+    const pose=deploymentPosition({...unit,deployment},elapsed);
+    const active=g.addUnit({type:unit.type,owner:unit.owner,lane:unit.lane,p:pose.p,x:pose.x,hp:unit.hp});
+    Object.assign(active,{factory:unit.factory,spawnTime:unit.spawnTime,travelDuration:unit.travelDuration,missionId:unit.missionId,homeX:unit.x,
+      deployment:{...deployment,yaw:pose.yaw}});
+    return active;
+  }
   spawn(owner,factory,config) {
     for(let i=0;i<this.unitSpecs[config.type].count;i++){
       // Symmetric, modest separation prevents four factories stacking at exactly x=0.
       const lateral=(i-(this.unitSpecs[config.type].count-1)/2)*.58+(factory===null?0:(factory-(this.slotCount-1)/2)*(this.mission?.formationSpread||0));
       const duration=exitDuration(owner,factory,config.lane,config.type,lateral,this.mission,this.unitSpecs);
-      this.transit.push({id:-(++this.serial),owner,factory,type:config.type,lane:config.lane,missionId:this.mission?.id,hp:this.unitSpecs[config.type].hp,travelDuration:duration,x:lateral,spawnTime:this.time,arrivalTick:this.tick+Math.max(1,Math.ceil(duration/STEP-1e-9)),moving:true});
+      const unit={id:-(++this.serial),owner,factory,type:config.type,lane:config.lane,missionId:this.mission?.id,hp:this.unitSpecs[config.type].hp,travelDuration:duration,x:lateral,spawnTime:this.time,arrivalTick:this.tick+Math.max(1,Math.ceil(duration/STEP-1e-9)),moving:true};
+      if(this.mission?.id==='central')this.deploy(unit);
+      else this.transit.push(unit);
       this.players[owner].metrics.produced++;
     }
     this.events.push({kind:'production',owner,factory,lane:config.lane,type:config.type,time:this.time});
@@ -137,13 +163,20 @@ export class Match {
   }
   drainEvents(){return this.events.splice(0);}
   snapshot(){return clone({mission:this.mission?.id||null,tick:this.tick,phase:this.phase,result:this.result,wave:this.wave,players:this.players,lanes:this.lanes.map(g=>g.snapshot()),transit:this.transit});}
-  save(){return clone({version:1,mission:this.mission?.id||null,rules:this.rules,unitSpecs:this.unitSpecs,tick:this.tick,time:this.time,remainder:this.remainder,phase:this.phase,result:this.result,wave:this.wave,players:this.players,transit:this.transit,serial:this.serial,orders:this.orders,peakUnits:this.peakUnits,lanes:this.lanes.map(g=>({...g.snapshot(),serial:g.serial,remainder:g.remainder}))});}
+  save(){return clone({version:2,mission:this.mission?.id||null,rules:this.rules,unitSpecs:this.unitSpecs,tick:this.tick,time:this.time,remainder:this.remainder,phase:this.phase,result:this.result,wave:this.wave,players:this.players,transit:this.transit,serial:this.serial,orders:this.orders,peakUnits:this.peakUnits,lanes:this.lanes.map(g=>({...g.snapshot(),serial:g.serial,remainder:g.remainder}))});}
   static restore(data){
-    if(!data||data.version!==1||!Number.isInteger(data.tick)||data.tick<0||!['setup','running','ended'].includes(data.phase))throw Error('Ungültiger Spielstand.');
-    const m=new Match({mission:data.mission,rules:data.rules,unitSpecs:data.unitSpecs});
+    if(!data||![1,2].includes(data.version)||!Number.isInteger(data.tick)||data.tick<0||!['setup','running','ended'].includes(data.phase))throw Error('Ungültiger Spielstand.');
+    const unitSpecs=data.version===1&&data.mission==='central'?missionById('central').units:data.unitSpecs;
+    const m=new Match({mission:data.mission,rules:data.rules,unitSpecs});
     if(data.lanes?.length!==m.laneCount||OWNERS.some(o=>data.players?.[o]?.factories?.length!==m.slotCount||data.players[o].pending?.length!==m.slotCount))throw Error('Spielstand passt nicht zur Mission.');
     for(const name of ['tick','time','remainder','phase','result','wave','players','transit','serial','orders','peakUnits'])m[name]=clone(data[name]);
     for(const [i,g] of m.lanes.entries())for(const name of ['tick','time','result','units','stats','serial','remainder'])g[name]=clone(data.lanes[i][name]);
+    // Upgrade visual-only exits in old saves at their current physical position.
+    // New saves preserve HP, targets, cooldowns and paused routes exactly.
+    if(data.version===1&&m.mission?.id==='central'){
+      for(const u of m.transit)m.deploy(u,Math.min(u.travelDuration,m.time-u.spawnTime));
+      m.transit=[];
+    }
     return m;
   }
   summary(){return {result:this.result||'unresolved',time:this.time,waves:this.wave,peakUnits:this.peakUnits,hq:Object.fromEntries(OWNERS.map(o=>[o,this.players[o].hq])),metrics:Object.fromEntries(OWNERS.map(o=>[o,{...this.players[o].metrics,earned:Number(this.players[o].metrics.earned.toFixed(2)),credits:this.credits(o)}])),lateOrders:this.orders.filter(o=>o.time>=120&&['factory','supply','economy'].includes(o.action)).length};}

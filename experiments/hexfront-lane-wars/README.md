@@ -4,7 +4,7 @@ Eine vollständige Partie Mensch gegen KI auf einer zentralen Lane: vier Fabrikp
 
 ## Spielen
 
-**[▶ Zentrale Front im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/9da12b8e4bac4fd8eff57fc3f91febae4da070dc/experiments/hexfront-lane-wars/index.html)** · **[Ergebnisse, Screenshots und offene Schwächen](docs/CENTRAL-FRONT.md)**
+**[▶ Zentrale Front im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/9da12b8e4bac4fd8eff57fc3f91febae4da070dc/experiments/hexfront-lane-wars/index.html)** · **[Aktuelle Korrekturen, Tests und Balance](docs/DEPLOYMENT-COMBAT.md)**
 
 Öffentlicher Laufzeitstand `9da12b8`, ohne lokalen Server. Falls ein Hinweis erscheint: **Open the page** anklicken.
 
@@ -27,20 +27,21 @@ Unter „Weitere Missionen“ bleibt **Erste Front** als Einführung erhalten. I
 - **Kamera:** Mausrad oder Plus/Minus, Ziehen zum Verschieben, ⌖ für Übersicht. Roboter anklicken zeigt ihre tatsächlichen Werte.
 - **Smartphone:** „Fabriken & Wirtschaft“ öffnet die Verwaltung; Nachschub und Pause bleiben erreichbar. „?“ zeigt Hinweise. Die Frontanzeige lässt sich für Verstärkungsdetails aufklappen.
 
-HQs haben 1.200 LP. Ausschließlich tatsächliche Angriffe beenden die Partie. Die älteren Missionen behalten ihre bisherigen 15-Sekunden-Wellen und Kosten; Wiesenkrieg zusätzlich seine kostenlosen Richtungspfeile und die Nachschubwahl per Drag/Tap auf eine Lane.
+HQs haben in neuen zentralen Partien 800 LP und verursachen 2 Schaden/s. Ausrückende Einheiten kämpfen und sind angreifbar, sobald sie vor dem Fabriktor erscheinen. Der Mech schießt mit 2,8 statt 1,6 Reichweite; Fernkämpfer bleiben bei 4,0. Ausschließlich tatsächliche Angriffe beenden die Partie. Die älteren Missionen behalten ihre bisherigen 15-Sekunden-Wellen und Kosten; Wiesenkrieg zusätzlich seine kostenlosen Richtungspfeile und die Nachschubwahl per Drag/Tap auf eine Lane.
 
 ## Ergebnisse
 
-72 Logiktests bestanden. Vollständige Partien über die Browseroberfläche, Fortsetzen nach Neuladen, Sieg und Niederlage, Browser-/Node-Übereinstimmung sowie beide alten Missionen und das Labor sind geprüft. Die fünf Smartphone-Ansichten wurden mit allen drei Missionen geprüft.
+**79 Logiktests**, **30 gezielte 3D-Browserfälle** an Fabrik-/HQ-Ausgängen und vollständige Build-Partien bestanden. Ein Sieg mit tatsächlichen HUD-Eingaben endet nach 6:59; Speichern/Fortsetzen, Niederlage, Neustart und Hochformat-Touch sind geprüft. Das Kampflabor besteht seine 14 Browserprüfungen; die alten Kampfabläufe bleiben durch Regressionstests abgesichert.
 
-Die sechs reagierenden KI-Referenzpartien (drei Paarungen plus Fraktionstausch) enden nach **4:04, 4:55 und 6:37**. Die gesamte Untersuchung umfasst 56 Läufe einschließlich ungünstiger Parameterkontrollen: 42 HQ-Enden, 14 bei 12 Minuten noch offen. Keine künstliche Endbedingung. Starr fortgesetzte Produktion und perfekte Spiegelungen bleiben ein Problem; 5–8 Minuten werden noch nicht zuverlässig getroffen.
+Die sechs reagierenden KI-Referenzpartien enden nach **5:27, 6:59 und 7:00**. Im breiten Audit bleiben jedoch **28 von 56 Läufen** nach zwölf Minuten offen (zuvor 14). Darin sind auch starre Pläne, Spiegelungen und Parameterkontrollen enthalten. Die Balance ist damit weiterhin nicht allgemein gelöst. [Details und Rohdaten](docs/DEPLOYMENT-COMBAT.md) · [GDD v0.3.1](docs/GDD.md).
 
-Eine Reaktion nach 3:20 plus ein gezielter Nachschub bei 3:30 verändert einen offenen Verlauf zu einem Sieg nach 5:23. [Details, Ursachenanalyse und weitere Gegenbeispiele](docs/CENTRAL-FRONT.md) · [GDD v0.3](docs/GDD.md) · [Rohdaten](docs/central-qa/audit.json).
+**Bitte für die aktuelle Balance eine neue zentrale Partie starten.** Bestehende Spielstände erhalten Fabrikkampf und Mech-Reichweite ebenfalls, behalten aber ihre bisherigen HQ-Werte. Wirtschaft, Produktionsrhythmus und Nachschub bleiben unverändert.
 
 ## Prüfen
 
 ```powershell
 npm test
+npm run test:deployment
 npm run audit:central
 npm run build
 npm run test:central-browser
@@ -50,7 +51,7 @@ npm run test:browser
 npm run test:visual
 ```
 
-Die ersten drei Befehle brauchen keinen Browser. Für Browsertests: `npm ci`, gegebenenfalls `npx playwright install chromium` und laufender lokaler Server. Der eigenständige statische Build liegt in `dist/` und ist unter [localhost /dist/](http://127.0.0.1:4181/dist/) erreichbar. Mit `$env:MATCH_URL='http://127.0.0.1:4181/dist/'` lässt sich der vollständige Hauptmodus dort testen.
+Logiktests, Balance-Audits und Build brauchen keinen Browser. Für Browsertests: `npm ci`, gegebenenfalls `npx playwright install chromium` und laufender lokaler Server. Der eigenständige statische Build liegt in `dist/` und ist unter [localhost /dist/](http://127.0.0.1:4181/dist/) erreichbar. Mit `$env:MATCH_URL='http://127.0.0.1:4181/dist/'` lässt sich der vollständige Hauptmodus dort testen.
 
 `window.__LANE_MATCH__` liefert Zustandskopien und Diagnosen. Nur `?qa=1` aktiviert die beschleunigte Testuhr mit derselben Simulation.
 

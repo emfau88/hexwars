@@ -13,7 +13,7 @@ export class MatchView extends BattleView {
    const p=missionRoute(this.mission,u.lane,u.p,u.x);if(p)return new T.Vector3(p.x,firstHeight(p.x,p.z)+height,p.z);
    return super.point(u,height);
  }
- heading(u,lane,game){return u.departing?exitPose(u,this.matchTime||0).yaw:super.heading(u,lane,game);}
+ heading(u,lane,game){if(u.deployment&&u.target===null)return u.deployment.yaw;return u.departing?exitPose(u,this.matchTime||0).yaw:super.heading(u,lane,game);}
  pick(e){
    if(this.onLanePick?.(e))return;
    const rect=this.stage.getBoundingClientRect();this.raycaster.setFromCamera(new T.Vector2((e.clientX-rect.left)/rect.width*2-1,1-(e.clientY-rect.top)/rect.height*2),this.camera);

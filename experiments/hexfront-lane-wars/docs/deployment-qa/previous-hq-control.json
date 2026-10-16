@@ -1,0 +1,35 @@
+{
+  "note": "Same corrected deployment and range; only restore previous HQ HP and damage.",
+  "games": [
+    {
+      "a": "pressure",
+      "b": "siege",
+      "result": "blue",
+      "time": 232.70000000000002,
+      "hq": {
+        "orange": 0,
+        "blue": 1200
+      }
+    },
+    {
+      "a": "pressure",
+      "b": "economy",
+      "result": "unresolved",
+      "time": 720,
+      "hq": {
+        "orange": 1152,
+        "blue": 954
+      }
+    },
+    {
+      "a": "siege",
+      "b": "economy",
+      "result": "unresolved",
+      "time": 720,
+      "hq": {
+        "orange": 1200,
+        "blue": 887
+      }
+    }
+  ]
+}

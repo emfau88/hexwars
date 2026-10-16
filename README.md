@@ -4,20 +4,22 @@
 
 Vollständig spielbare **1v1-Partie Mensch gegen KI** mit einer zentralen Lane, vier Fabrikplätzen, drei Robotertypen und drei unterschiedlichen KI-Eröffnungen. Automatische Produktion, Wirtschaft, Umrüstung, begrenzter Sofortnachschub und echtes Spielende durch HQ-Zerstörung. Die bewährte HEXFRONT-Diorama-Optik und das Keramik-HUD bleiben erhalten.
 
-**[▶ Zentrale Front jetzt im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/9da12b8e4bac4fd8eff57fc3f91febae4da070dc/experiments/hexfront-lane-wars/index.html)** · **[Ergebnisse, Balance und Screenshots](experiments/hexfront-lane-wars/docs/CENTRAL-FRONT.md)**
+**[▶ Zentrale Front jetzt im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/9da12b8e4bac4fd8eff57fc3f91febae4da070dc/experiments/hexfront-lane-wars/index.html)** · **[Korrekturen, Balance und Tests](experiments/hexfront-lane-wars/docs/DEPLOYMENT-COMBAT.md)**
 
 Der Playlink zeigt den festgelegten Spielstand `9da12b8` und benötigt keinen lokalen Server. Falls der Vorschauhost einen Hinweis zeigt, **Open the page** anklicken. Veröffentlicht ausschließlich im Branch `codex/lane-wars`; kein Merge nach main.
 
 **Erste Front** und die Zwei-Lane-Mission **Wiesenkrieg** bleiben unter „Weitere Missionen“ erhalten, ebenso ihre Spielstände, das Kampflabor und die M1.5-Demo. Im Hochformat bleibt die Fabrikverwaltung eingeklappt, bis du sie öffnest.
 
-**Geprüft:** 72 Logiktests, vollständige Browserpartien mit Sieg/Niederlage und Fortsetzen, alte Missionen sowie fünf Smartphone-Ansichten. Späte Gegenproduktion und gezielter Nachschub können Partien wenden. Lange Patts bei starren oder gespiegelten Plänen bleiben eine dokumentierte Balance-Schwäche; das Ziel von 5–8 Minuten wird noch nicht durchgehend erreicht.
+**Neu:** Roboter kämpfen und sind direkt am Fabrikausgang angreifbar. Mechs schießen mit sichtbarem Abstand (Reichweite 2,8). Als Ausgleich für früher eingreifende Verteidiger haben neue zentrale Partien 800 HQ-LP und 2 HQ-Schaden/s. Bitte eine neue Partie starten; gespeicherte Partien behalten ihre alten HQ-Werte.
+
+**Geprüft:** 79 Logiktests, 30 gezielte 3D-Browserfälle, vollständige Build-Partien mit Sieg/Niederlage, Fortsetzen, Neustart und Hochformat-Touch sowie das Kampflabor. Die sechs reagierenden Referenzpartien dauern 5:27–7:00. Im breiten Audit sind jedoch 28 von 56 Läufen nach zwölf Minuten offen – mehr als zuvor. Diese Balance-Schwäche ist ausdrücklich dokumentiert.
 
 ```powershell
 cd experiments/hexfront-lane-wars
 node scripts/serve.mjs
 ```
 
-[Zentrale Front lokal spielen](http://127.0.0.1:4181/) · [Kampflabor](http://127.0.0.1:4181/lab.html) · [Bedienung und Tests](experiments/hexfront-lane-wars/README.md) · [GDD v0.3](experiments/hexfront-lane-wars/docs/GDD.md)
+[Zentrale Front lokal spielen](http://127.0.0.1:4181/) · [Kampflabor](http://127.0.0.1:4181/lab.html) · [Bedienung und Tests](experiments/hexfront-lane-wars/README.md) · [GDD v0.3.1](experiments/hexfront-lane-wars/docs/GDD.md)
 
 Historische Vorschau: [M2.1 mit Mobile-HUD](https://rawcdn.githack.com/emfau88/hexwars/5016cb1caffc011a5dcd4df34f648994e86f724c/experiments/hexfront-lane-wars/index.html). Die folgenden älteren HEXFRONT-Varianten bleiben unverändert.
 

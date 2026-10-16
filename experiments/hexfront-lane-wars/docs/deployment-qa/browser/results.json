@@ -1,0 +1,281 @@
+{
+  "base": "http://127.0.0.1:4181/",
+  "cases": [
+    {
+      "owner": "orange",
+      "slot": null,
+      "type": "drone",
+      "hp": 15,
+      "enemyHP": 92,
+      "firstShot": 0.1,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "orange",
+      "slot": null,
+      "type": "mech",
+      "hp": 100,
+      "enemyHP": 100,
+      "firstShot": 0.2,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "orange",
+      "slot": null,
+      "type": "rail",
+      "hp": 30,
+      "enemyHP": 55,
+      "firstShot": 0.35000000000000003,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "orange",
+      "slot": 0,
+      "type": "drone",
+      "hp": 15,
+      "enemyHP": 92,
+      "firstShot": 0.1,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "orange",
+      "slot": 0,
+      "type": "mech",
+      "hp": 100,
+      "enemyHP": 100,
+      "firstShot": 0.2,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "orange",
+      "slot": 0,
+      "type": "rail",
+      "hp": 30,
+      "enemyHP": 55,
+      "firstShot": 0.35000000000000003,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "orange",
+      "slot": 1,
+      "type": "drone",
+      "hp": 15,
+      "enemyHP": 92,
+      "firstShot": 0.1,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "orange",
+      "slot": 1,
+      "type": "mech",
+      "hp": 100,
+      "enemyHP": 100,
+      "firstShot": 0.2,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "orange",
+      "slot": 1,
+      "type": "rail",
+      "hp": 30,
+      "enemyHP": 55,
+      "firstShot": 0.35000000000000003,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "orange",
+      "slot": 2,
+      "type": "drone",
+      "hp": 15,
+      "enemyHP": 92,
+      "firstShot": 0.1,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "orange",
+      "slot": 2,
+      "type": "mech",
+      "hp": 100,
+      "enemyHP": 100,
+      "firstShot": 0.2,
+      "alignment": 0.9997683368713155
+    },
+    {
+      "owner": "orange",
+      "slot": 2,
+      "type": "rail",
+      "hp": 30,
+      "enemyHP": 55,
+      "firstShot": 0.35000000000000003,
+      "alignment": 0.9997683368713155
+    },
+    {
+      "owner": "orange",
+      "slot": 3,
+      "type": "drone",
+      "hp": 15,
+      "enemyHP": 92,
+      "firstShot": 0.1,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "orange",
+      "slot": 3,
+      "type": "mech",
+      "hp": 100,
+      "enemyHP": 100,
+      "firstShot": 0.2,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "orange",
+      "slot": 3,
+      "type": "rail",
+      "hp": 30,
+      "enemyHP": 55,
+      "firstShot": 0.35000000000000003,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "blue",
+      "slot": null,
+      "type": "drone",
+      "hp": 15,
+      "enemyHP": 92,
+      "firstShot": 0.1,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "blue",
+      "slot": null,
+      "type": "mech",
+      "hp": 100,
+      "enemyHP": 100,
+      "firstShot": 0.2,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "blue",
+      "slot": null,
+      "type": "rail",
+      "hp": 30,
+      "enemyHP": 55,
+      "firstShot": 0.35000000000000003,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "blue",
+      "slot": 0,
+      "type": "drone",
+      "hp": 15,
+      "enemyHP": 92,
+      "firstShot": 0.1,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "blue",
+      "slot": 0,
+      "type": "mech",
+      "hp": 100,
+      "enemyHP": 100,
+      "firstShot": 0.2,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "blue",
+      "slot": 0,
+      "type": "rail",
+      "hp": 30,
+      "enemyHP": 55,
+      "firstShot": 0.35000000000000003,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "blue",
+      "slot": 1,
+      "type": "drone",
+      "hp": 15,
+      "enemyHP": 92,
+      "firstShot": 0.1,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "blue",
+      "slot": 1,
+      "type": "mech",
+      "hp": 100,
+      "enemyHP": 100,
+      "firstShot": 0.2,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "blue",
+      "slot": 1,
+      "type": "rail",
+      "hp": 30,
+      "enemyHP": 55,
+      "firstShot": 0.35000000000000003,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "blue",
+      "slot": 2,
+      "type": "drone",
+      "hp": 15,
+      "enemyHP": 92,
+      "firstShot": 0.1,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "blue",
+      "slot": 2,
+      "type": "mech",
+      "hp": 100,
+      "enemyHP": 100,
+      "firstShot": 0.2,
+      "alignment": 0.9997683368713155
+    },
+    {
+      "owner": "blue",
+      "slot": 2,
+      "type": "rail",
+      "hp": 30,
+      "enemyHP": 55,
+      "firstShot": 0.35000000000000003,
+      "alignment": 0.9997683368713155
+    },
+    {
+      "owner": "blue",
+      "slot": 3,
+      "type": "drone",
+      "hp": 15,
+      "enemyHP": 92,
+      "firstShot": 0.1,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "blue",
+      "slot": 3,
+      "type": "mech",
+      "hp": 100,
+      "enemyHP": 100,
+      "firstShot": 0.2,
+      "alignment": 0.9997683368713154
+    },
+    {
+      "owner": "blue",
+      "slot": 3,
+      "type": "rail",
+      "hp": 30,
+      "enemyHP": 55,
+      "firstShot": 0.35000000000000003,
+      "alignment": 0.9997683368713154
+    }
+  ],
+  "range": {
+    "centerGap": 1.6559999999999633,
+    "modelGap": 0.6219473225110248,
+    "firstShot": 2
+  },
+  "errors": []
+}

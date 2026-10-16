@@ -1,4 +1,6 @@
-# Zentrale Front – spielbare 1v1-Partie
+# Zentrale Front – ursprünglicher Stand vor der Fabrikkampf-Korrektur
+**Historische Ergebnisse des ersten zentralen Laufzeitstands. Die aktuelle Korrektur, Balance und Prüfung stehen in [DEPLOYMENT-COMBAT.md](DEPLOYMENT-COMBAT.md).**
+
 Stand: 16. Oktober 2026. Branch: `codex/lane-wars`. Ausgangsstand `4dee21b`, Sicherungstag `codex/lane-wars-pre-central-front`. Keine Änderungen an den anderen HEXFRONT-Varianten, kein Merge nach main.
 
 ## Spielen und Umfang

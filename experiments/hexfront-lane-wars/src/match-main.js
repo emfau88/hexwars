@@ -59,6 +59,7 @@ async function prepare(id,{fresh=false,start=false}={}){
   $('battlefield').dataset.mission=id;$('fronts').innerHTML=Array.from({length:mission.lanes},(_,lane)=>`<button class="ceramic front" data-lane="${lane}" aria-label="${mission.lanes===1?'Front':laneName(lane)}"><strong></strong><span></span><div class="front-track"><i></i></div><small></small></button>`).join('');
   ready=true;if(start&&match.phase==='setup'){match.start();flush();}view.renderMatch(match,0);updateHUD();markers();$('loading').hidden=true;loading=false;
   if(start){setMenu(false);playing=match.phase==='running';save();}updateHUD();
+  if(saved?.match?.version===1&&id==='central')notify('Fabrikkampf aktualisiert. Für die neue HQ-Balance bitte eine neue Partie starten.');
  }catch(error){loading=false;console.error(error);$('loading').hidden=true;$('battle-error').hidden=false;$('battle-error').textContent='Die Mission konnte nicht geladen werden: '+error.message;}
 }
 async function openMission(id){
@@ -87,7 +88,7 @@ function toggleLane(slot){
 }
 function inspect(){
  if(!view||!match||inMenu)return;const u=view.inspect();$('selection').hidden=!u;if(!u)return;setDeck(false);hintOpen=false;$('orders').hidden=true;
- $('selected-name').textContent=(u.owner==='orange'?'Deine ':'Gegnerische ')+names[u.type];$('selected-details').textContent=`${u.hp} / ${match.unitSpecs[u.type].hp} LP · Reichweite ${match.unitSpecs[u.type].range}${u.departing?' · verlässt die Basis':''}`;
+ $('selected-name').textContent=(u.owner==='orange'?'Deine ':'Gegnerische ')+names[u.type];$('selected-details').textContent=`${u.hp} / ${match.unitSpecs[u.type].hp} LP · Reichweite ${match.unitSpecs[u.type].range}${u.deployment?' · kampfbereit vor der Fabrik':u.departing?' · verlässt die Basis':''}`;
 }
 function hint(){
  if(match.mission.id==='central'){

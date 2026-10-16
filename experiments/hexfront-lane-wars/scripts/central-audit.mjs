@@ -39,6 +39,6 @@ if(process.argv[1]===fileURLToPath(import.meta.url)){
   {initial:'drone',enemy:'mech',counter:'rail',supply:true,supplyAt:210,supplyType:'mech'}
  ].map(options=>({...options,...centralLate(options)}));
  const report={deliberate,generated:new Date().toISOString(),note:'Deterministic scripted probes, not human win rates. 720 s is a measurement cutoff, never an in-game end.',matches,controls,economics,late};
- await fs.mkdir('docs/central-qa',{recursive:true});await fs.writeFile('docs/central-qa/audit.json',JSON.stringify(report,null,2));
+ const out=process.env.CENTRAL_AUDIT_OUTPUT||'docs/central-qa';await fs.mkdir(out,{recursive:true});await fs.writeFile(out+'/audit.json',JSON.stringify(report,null,2));
  console.log(JSON.stringify({matches:matches.map(({a,b,reactive,result,time,hq,maxHQQuiet})=>({a,b,reactive,result,time,hq,maxHQQuiet})),late:late.map(({initial,reacts,result,time,hq})=>({initial,reacts,result,time,hq})),economics:economics.map(({a,b,economyFirst,result,time})=>({a,b,economyFirst,result,time}))},null,2));
 }

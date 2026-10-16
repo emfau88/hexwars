@@ -62,8 +62,8 @@ test('campaign deployments keep their heading, monotone route and exact combat h
   for(let i=1;i<=40;i++){const t=duration*i/40,p=exitPose(u,t),a=exitPose(u,t-.0001),b=exitPose(u,Math.min(duration,t+.0001));const dx=b.x-a.x,dz=b.z-a.z;
    assert.ok((p.x-last.x)*sign>=-1e-8);assert.ok((p.z-last.z)*(owner==='orange'?1:-1)<=1e-8);assert.ok((-Math.sin(p.yaw)*dx-Math.cos(p.yaw)*dz)/Math.hypot(dx,dz)>.999);last=p;
   }
-  const m=new Match({mission:mission.id});m.start();m.transit=[];m.lanes.forEach(g=>g.units=[]);m.spawn(owner,slot,{type,lane});const tick=m.transit[0].arrivalTick;
-  m.advance(tick*.05);const unit=m.lanes[lane].units.find(v=>v.factory===slot&&v.owner===owner);assert.ok(unit);assert.equal(unit.p,laneEntry(owner,mission));
+  const m=new Match({mission:mission.id});m.start();m.transit=[];m.lanes.forEach(g=>g.units=[]);m.spawn(owner,slot,{type,lane});const tick=mission.id==='central'?Math.ceil(m.lanes[lane].units[0].travelDuration/.05-1e-9):m.transit[0].arrivalTick;
+  m.advance(tick*.05);const unit=m.lanes[lane].units.find(v=>v.factory===slot&&v.owner===owner);assert.ok(unit);assert.ok(Math.abs(unit.p-laneEntry(owner,mission))<1e-8);
  }
 });
 test('campaign AI matches remain faction symmetric with swapped decision profiles',()=>{

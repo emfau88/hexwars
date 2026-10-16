@@ -1,4 +1,4 @@
-# HEXFRONT Lane Wars — GDD v0.3
+# HEXFRONT Lane Wars — GDD v0.3.1
 
 Stand: 16. Oktober 2026. **Zentrale Front ist der freigegebene Hauptmodus.** Der neue verbindliche Umfang und seine eigenen Balancewerte stehen in der Ergänzung „Zentrale Front“ am Dokumentende. Die bisherigen Zwei-Lane-Regeln und früheren Meilensteine bleiben für die erhaltenen Varianten gültig; ihre Beschreibungen sind historisch.
 
@@ -156,12 +156,24 @@ Keine neuen Robotertypen, Forschung, Gebäudearten, Kontrollpunkte oder Multipla
 ## Freigegebene Ergänzung: Zentrale Front (16. Oktober 2026)
 Eine vollständige 1v1-Partie Mensch gegen KI auf einer zentralen Front wird Hauptmodus. Vier feste Fabrikplätze, zwei konfigurierbare bezahlte Startfabriken, drei bestehende Robotertypen, automatische gemeinsame Wellen, einmalige Wirtschaft, bezahlte Umrüstung und begrenzter Sofortnachschub bleiben der Kern. Erste Front, Wiesenkrieg, Kampflabor und ältere Varianten bleiben erhalten. Keine neuen Typen, Gebäudearten, Forschung, Kontrollpunkte oder Multiplayer.
 
-Für den Hauptmodus gelten: 280 Startcredits vor Fabrikbezahlung, 120 pro Fabrik, 30 pro Umrüstung, 2 Credits/s, einmalig 80 Credits für +1,2/s; 20-Sekunden-Wellen einschließlich Welle bei Start; Nachschub 80 Credits mit 35 Sekunden Abklingzeit. HQs haben 1.200 LP, Reichweite 4 und eine gemeinsame Waffe mit 6 Schaden pro Sekunde. Ausschließlich echte HQ-Zerstörung beendet die Partie, angestrebt sind ungefähr 5–8 Minuten.
+Für den Hauptmodus gelten: 280 Startcredits vor Fabrikbezahlung, 120 pro Fabrik, 30 pro Umrüstung, 2 Credits/s, einmalig 80 Credits für +1,2/s; 20-Sekunden-Wellen einschließlich Welle bei Start; Nachschub 80 Credits mit 35 Sekunden Abklingzeit. HQs haben nach der Fabrikkampf-Korrektur 800 LP, Reichweite 4 und eine gemeinsame Waffe mit 2 Schaden pro Sekunde. Ausschließlich echte HQ-Zerstörung beendet die Partie, angestrebt sind ungefähr 5–8 Minuten.
 
-Drohnen behalten M1-Werte. Der Mech verwendet 110 LP und 9 Sekundärschaden, der Fernkämpfer 55 Schaden und 2,8 Sekunden Intervall; übrige Werte bleiben bestehen. Diese Profile gelten nur in Zentrale Front. Der Kampfalgorithmus ist jetzt mit Einheitenprofilen parametrisierbar; seine alte Standardausführung ist gegen die eingefrorene M1-Version pro Simulationsschritt geprüft. Die historische Aussage „simulation.js bytegleich“ gilt damit nicht mehr für die aktuelle Engine, wohl aber deren alter Kampfablauf.
+Drohnen behalten M1-Werte. Der Mech verwendet 110 LP, 9 Sekundärschaden und 2,8 Reichweite, der Fernkämpfer 55 Schaden und 2,8 Sekunden Intervall; übrige Werte bleiben bestehen. Diese Profile gelten nur in Zentrale Front. Der Kampfalgorithmus ist jetzt mit Einheitenprofilen parametrisierbar; seine alte Standardausführung ist gegen die eingefrorene M1-Version pro Simulationsschritt geprüft. Die historische Aussage „simulation.js bytegleich“ gilt damit nicht mehr für die aktuelle Engine, wohl aber deren alter Kampfablauf.
 
 Fabriken nutzen die vorhandene Architektur. Verbände treten mit symmetrisch versetzten Querpositionen in dieselbe Lane ein. Ausfahrtsdauer: 6 / Robotergeschwindigkeit, unabhängig von Platz und Fraktion. Darstellung, HUD, Spielstände und Nachschub berücksichtigen die tatsächlichen Profilwerte.
 
 Drei erkennbare KI-Eröffnungen (Vorhut, Eisenkeil, Aufbaukommando) verwenden dieselben Ressourcen und Befehle wie der Spieler. Beobachtung alle sechs Sekunden, Gegnerwissen aus der vorherigen Beobachtung, spätere Gegenproduktion bei zwei flexibel verwendbaren Fabriken. Weder versteckte Gegneraufträge noch Bonusressourcen.
 
 Begründungen, vollständige Partien, späte Reaktionen, technische Prüfungen und bekannte offene Balanceprobleme: [CENTRAL-FRONT.md](CENTRAL-FRONT.md). Messbudgets sind keine Endbedingungen. Die Automatiktests ersetzen keine menschliche Spielspaß-Abnahme.
+
+## Freigegebene Korrektur: Kampf am Fabriktor und Mech-Schussabstand
+
+Nur in **Zentrale Front** gehören produzierte Einheiten ab ihrem ersten sichtbaren Punkt vor dem Tor zur regulären Kampfsimulation. Dasselbe gilt am HQ-Ausgang für bezahlten Sofortnachschub. In Reichweite eines Gegners stoppen sie, richten sich aus und schießen nach ihrer normalen kurzen Zielerfassung. Sie können gleichzeitig beschossen, durch Flächenschaden getroffen und zerstört werden. Nach dem Gefecht setzen sie den unterbrochenen Weg fort. Der Lane-Eingang ist keine Eintrittsbedingung für Kampf mehr; Position, ID, LP, Ziel und Abklingzeit bleiben beim Übergang erhalten.
+
+Der bestehende Basisvorplatz erhält in der Bewegung die seitliche Breite seiner Fabriktore. Die Grenze verengt sich zur Lane hin stetig. So können Angreifer auch seitliche Verteidiger erreichen. Beide Fraktionen verwenden dieselbe gespiegelte Logik. Das Kampflabor und die erhaltenen alten Missionen behalten ihre bisherigen Abläufe.
+
+Mech-Reichweite 1,6 → **2,8**; Fernkämpfer weiterhin 4,0, Drohnen 1,1. Kein Rückwärtslaufen oder automatisches Abstandhalten: Ein Mech kann weiterhin von einem Schwarm bedrängt werden. Seine übrigen Werte bleiben unverändert. Die deutlich früher wirksamen Produktionsverteidiger erfordern als Balanceausgleich HQ-LP 1.200 → **800** und HQ-Schaden/s 6 → **2**. Diese spürbare Abschwächung gilt für neue zentrale Partien; alte gespeicherte Partien behalten ihre HQ-Werte. Wirtschaft, Produktionsrhythmus, Kosten und Nachschub bleiben unverändert.
+
+Spielstände werden auf Version 2 gespeichert. Alte zentrale Ausfahrten werden an ihrer aktuellen sichtbaren Position in die Kampfsimulation übernommen. Der Browser weist beim Laden eines alten Stands darauf hin, für die aktuelle HQ-Balance eine neue Partie zu beginnen.
+
+Tests, Gegenproben und die weiterhin offenen Balanceprobleme: [DEPLOYMENT-COMBAT.md](DEPLOYMENT-COMBAT.md).

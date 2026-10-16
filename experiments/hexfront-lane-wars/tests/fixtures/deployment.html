@@ -1,0 +1,40 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Central deployment combat regression</title>
+<script type="importmap">{"imports":{"three":"../../vendor/three.module.min.js"}}</script>
+<style>html,body,main,#stage{margin:0;width:100%;height:100%;overflow:hidden}#labels{display:none}</style></head>
+<body><main><div id="stage"></div><div id="labels"></div></main><script type="module">
+import * as T from 'three';
+import {Match} from '../../src/match.js';
+import {MatchView} from '../../src/match-view.js';
+import {MISSIONS} from '../../src/missions.js';
+import {other,direction} from '../../src/rules.js';
+const view=new MatchView(document.querySelector('#stage'),document.querySelector('#labels'),()=>{},()=>{},MISSIONS.central);
+await view.ready;view.safeBottom=0;view.safeTop=0;let match,actor,enemy,events=[];
+function state(){
+ const units=match.lanes[0].units.map(u=>{
+  const id='0:'+u.id,pose=view.poses.get(id),batch=u.owner+'-'+u.type,index=view.pickIds[batch].indexOf(id),matrix=new T.Matrix4();
+  view.batches[batch][0].getMatrixAt(index,matrix);const forward=new T.Vector3(0,0,-1).transformDirection(matrix),bounds=new T.Box3();
+  for(const mesh of view.batches[batch]){mesh.geometry.computeBoundingBox();bounds.union(mesh.geometry.boundingBox.clone().applyMatrix4(matrix));}
+  return {...u,world:{x:pose.position.x,z:pose.position.z},forward:{x:forward.x,z:forward.z},bounds:{min:bounds.min.toArray(),max:bounds.max.toArray()}};
+ });
+ return {time:match.time,units,actor:actor.id,enemy:enemy.id,shots:events.filter(e=>e.kind==='shot'),effects:view.effects.length};
+}
+window.DEPLOY_TEST={
+ prepare({mode='gate',owner='orange',slot=0,type='mech'}={}){
+  view.reset();match=new Match({mission:'central',rules:{hqDamage:0}});match.start();match.lanes[0].units=[];events=[];
+  for(const side of ['orange','blue'])match.players[side].factories=Array.from({length:4},()=>({type,lane:0}));
+  const g=match.lanes[0];
+  if(mode==='range'){actor=g.addUnit({owner:'orange',type:'mech',p:12});enemy=g.addUnit({owner:'blue',type:'mech',p:18});}
+  else{match.spawn(owner,slot,{type,lane:0});actor=g.units[0];enemy=g.addUnit({owner:other(owner),type:'mech',p:actor.p+direction(owner)*.65,x:actor.x+.25});}
+  for(const e of match.drainEvents())if(e.kind==='production')view.matchEvent(e);
+  view.renderMatch(match,0);view.selected='0:'+actor.id;view.focusSelected();return state();
+ },
+ step(seconds){
+  match.advance(seconds);const next=match.drainEvents();events.push(...next);
+  view.renderMatch(match,0,false);
+  for(const e of next)if(match.time-(e.time??match.time)<.2)view.matchEvent(e);
+  view.dirty=true;view.renderMatch(match,0);return state();
+ },
+ clearEnemy(){match.lanes[0].units=match.lanes[0].units.filter(u=>u.owner===actor.owner);},
+ resize(){view.resize();}
+};
+</script></body></html>

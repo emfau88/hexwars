@@ -7,7 +7,7 @@ import {Match} from '../src/match.js';
 const base=process.env.MATCH_URL||'http://127.0.0.1:4181/',out=process.env.CENTRAL_QA_OUTPUT||'docs/central-qa/browser/';
 await fs.mkdir(out,{recursive:true});
 const browser=await chromium.launch({headless:true}),errors=[],checks=[],games=[];
-function watch(p){p.on('pageerror',e=>errors.push(e.message));p.on('requestfailed',r=>errors.push(r.url()+': '+r.failure()?.errorText));}
+function watch(p){p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error')errors.push(m.text());});p.on('requestfailed',r=>errors.push(r.url()+': '+r.failure()?.errorText));}
 async function boot(p){await p.goto(base+'?qa=1',{timeout:90000});const gate=p.getByText('Open the page',{exact:true});if(await gate.count())await gate.click();await p.waitForFunction(()=>window.__LANE_MATCH_QA__,null,{timeout:90000});}
 const p=await browser.newPage({viewport:{width:1440,height:960}});watch(p);
 const observe=()=>p.evaluate(()=>window.__LANE_MATCH__.observe());
