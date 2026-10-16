@@ -4,7 +4,7 @@ Stand: 16.10.2026 · Branch `codex/lane-wars`.
 
 **Die Designrichtung ist freigegeben. Die Freigabe dieses tatsächlichen GLB steht noch aus.** Das Spiel verwendet weiterhin seine bisherigen Fabriken. Gameplay, Balance, Missionen und Kampflabor wurden in diesem Schritt nicht geändert.
 
-[Drehbare Vorschau lokal](http://127.0.0.1:4181/factory-preview.html) · [GLB](../../public/models/factory-preview/factory.glb) · [Bearbeitbare Blender-Datei](../../art/factory-v1/factory-source.blend) · [Exportmanifest](../../public/models/factory-preview/manifest.json)
+[Öffentliche 3D-Vorschau](https://rawcdn.githack.com/emfau88/hexwars/4e7155295251af399a1057092a4ea09190a2c95d/experiments/hexfront-lane-wars/factory-preview.html) · [Drehbare Vorschau lokal](http://127.0.0.1:4181/factory-preview.html) · [GLB](../../public/models/factory-preview/factory.glb) · [Bearbeitbare Blender-Datei](../../art/factory-v1/factory-source.blend) · [Exportmanifest](../../public/models/factory-preview/manifest.json)
 
 ## Modell und Bedienung
 
@@ -53,7 +53,7 @@ Die Grundgeometrie liegt über dem frühen Konzeptziel von 8–12 Tausend Dreiec
 - 13 Torstellungen während der gesamten Öffnung: keine Segment-/Segment- oder Segment-/Gehäuseüberschneidungen; auch das gefaltete Paket ist getrennt.
 - Browserprüfung: echte GLBs, Drehung, vier Torelemente, beide Farben, alle Module aus der Spielkamera, transparente Vorschau, HQ-/Mech-Vergleich, Durchfahrt, acht geteilte Instanzen mit unabhängigem Tor, Downloads und Hochformat.
 
-[Rohdaten Geometrie](qa/geometry.json) · [Browserprotokoll](qa/browser.json). Der Geometriebericht ist über SHA-256 an genau diese Fabrik- und Mechdatei gebunden. Es handelt sich um abgetastete Oberflächenprüfungen, nicht um einen kontinuierlichen mathematischen Kollisionsbeweis. Bodendreiecke unter 0,16 werden bei der Mechprüfung ausgelassen; Fuß-/Bodenauflage ist keine Wandkollision. Andere Missionen, Geländeanschlüsse und Produktionsereignisse werden beim später freigegebenen Einbau zusätzlich im laufenden Spiel geprüft.
+[Rohdaten Geometrie](qa/geometry.json) · [Browserprotokoll des Builds](qa/browser.json) · [Prüfung des öffentlichen Links](qa/public-browser.json). Beide Browserläufe bestanden ohne Anwendungs- oder Assetfehler. Der öffentliche Host meldete lediglich einen blockierten externen Werbeaufruf. Der Geometriebericht ist über SHA-256 an genau diese Fabrik- und Mechdatei gebunden. Es handelt sich um abgetastete Oberflächenprüfungen, nicht um einen kontinuierlichen mathematischen Kollisionsbeweis. Bodendreiecke unter 0,16 werden bei der Mechprüfung ausgelassen; Fuß-/Bodenauflage ist keine Wandkollision. Andere Missionen, Geländeanschlüsse und Produktionsereignisse werden beim später freigegebenen Einbau zusätzlich im laufenden Spiel geprüft.
 
 ## Bearbeiten und erneut prüfen
 
