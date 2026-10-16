@@ -4,7 +4,7 @@ Stand: 16.10.2026 · Branch `codex/lane-wars`.
 
 **Der Nutzer hat den Einbau zum Testen freigegeben.** Die Fabrik ist jetzt in den drei Lane-Wars-Missionen integriert. [Integration und Tests](../factory-integration/REPORT.md). Gameplay und Balance bleiben unverändert. Die folgenden Messwerte dokumentieren das unveränderte GLB und seine separate Modellansicht.
 
-[Öffentliche 3D-Vorschau](https://rawcdn.githack.com/emfau88/hexwars/4e7155295251af399a1057092a4ea09190a2c95d/experiments/hexfront-lane-wars/factory-preview.html) · [Drehbare Vorschau lokal](http://127.0.0.1:4181/factory-preview.html) · [GLB](../../public/models/factory-preview/factory.glb) · [Bearbeitbare Blender-Datei](../../art/factory-v1/factory-source.blend) · [Exportmanifest](../../public/models/factory-preview/manifest.json)
+[Öffentliche 3D-Vorschau](https://rawcdn.githack.com/emfau88/hexwars/a85ee3fc570a6aa25f1e4f819e6c58a16a335961/experiments/hexfront-lane-wars/factory-preview.html) · [Drehbare Vorschau lokal](http://127.0.0.1:4181/factory-preview.html) · [GLB](../../public/models/factory-preview/factory.glb) · [Bearbeitbare Blender-Datei](../../art/factory-v1/factory-source.blend) · [Exportmanifest](../../public/models/factory-preview/manifest.json)
 
 ## Modell und Bedienung
 

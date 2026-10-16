@@ -2,7 +2,7 @@
 
 Stand: 16.10.2026 · ausschließlich `codex/lane-wars`.
 
-Auf ausdrücklichen Wunsch ist das tatsächliche Fabrikmodell jetzt im Spiel testbar. Der aktuelle öffentliche Playlink steht in der Branch-README. Die separate Modellansicht und die bearbeitbare Blender-Datei bleiben erhalten.
+Auf ausdrücklichen Wunsch ist das tatsächliche Fabrikmodell jetzt im Spiel testbar. [Öffentliche Partie mit der neuen Fabrik](https://rawcdn.githack.com/emfau88/hexwars/a85ee3fc570a6aa25f1e4f819e6c58a16a335961/experiments/hexfront-lane-wars/index.html) – ebenfalls in der Branch-README verlinkt. Die separate Modellansicht und die bearbeitbare Blender-Datei bleiben erhalten.
 
 ## Eingebaut
 
@@ -22,7 +22,7 @@ Auf ausdrücklichen Wunsch ist das tatsächliche Fabrikmodell jetzt im Spiel tes
 
 Die gezielte Browserprüfung des Builds umfasst Produktionswelle, geöffnete und geschlossene Tore, echte Gebäudeklicks, Bauen, transparente Materialien ohne Übertragung auf andere Gebäude, Umrüstung, Save/Reload, Missionwechsel, beide Fraktionsfarben, alle Slots und Module sowie Hochformat. Eine zusätzliche Prüfung hält einen tatsächlich erzeugten Roboter im Durchlass fest: Das Tor bleibt offen und schließt nach Freigabe. Ein Vergleich der Match-Snapshots bestätigt, dass die Darstellung den Simulationszustand nicht verändert.
 
-[Integrationsprüfung](browser.json) · [Vollständige Partien und HUD-Prüfung](matches.json) · [30 Fabrik-/HQ-Kampffälle](deployment.json) · [12 Ausfahrtkonfigurationen](exits.json)
+[Integrationsprüfung des Builds](browser.json) · [Öffentlicher Playlink ebenfalls bestanden](public-browser.json) · [Vollständige Partien und HUD-Prüfung](matches.json) · [30 Fabrik-/HQ-Kampffälle](deployment.json) · [12 Ausfahrtkonfigurationen](exits.json)
 
 Die 30 bestehenden Kampffälle und zwölf Ausfahrtkonfigurationen mit allen drei Einheiten, beiden Fraktionen und beiden Lanes bestehen ohne Browserfehler. Die Modelle richten sich weiterhin nach ihrer tatsächlichen Bewegung aus; der Mech behält seinen sichtbaren Schussabstand.
 
