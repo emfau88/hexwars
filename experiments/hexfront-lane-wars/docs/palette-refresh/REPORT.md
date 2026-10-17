@@ -19,3 +19,5 @@ Behutsame Material-/Palettenänderung ohne globalen Bildschirmfilter:
 ![Neue Palette im Hochformat](after-390.png)
 
 Einheitenabstände und weitergehende Turmausrichtung bleiben vorgemerkte spätere Themen und wurden nicht geändert.
+
+Öffentlich geprüft: [Build c9b595d spielen](https://rawcdn.githack.com/emfau88/hexwars/c9b595d73635243728d1efa4e542cf74208c2c60/experiments/hexfront-lane-wars/index.html). [Browserprotokoll](public/public.json): Desktop und Hochformat, Bedienung, Bauen/Stornieren, Speichern/Fortsetzen, vorhandene animierte GLBs sowie vollständige Partie bis zur HQ-Zerstörung geprüft; keine JavaScript- oder Netzwerkanfragefehler. README-Playlinks aktualisiert.
