@@ -1,0 +1,59 @@
+{
+  "checks": [
+    "Real mirrored duel: two barrel rays per attack, one shot/impact sound per attack, two charge sounds; render does not mutate simulation",
+    "Both apertures follow world rotation, turret yaw, elevation and recoil transforms",
+    "Simultaneous volleys bounded to six shot/impact pairs; pause cancels voices",
+    "Viewer slow-motion sequence plays charge, shot and impact; pause/scrub are silent; mute persists across reload",
+    "Actual Web Audio graph produces signal; muted graph remains silent"
+  ],
+  "audit": {
+    "shots": [
+      {
+        "parallel": true,
+        "barrels": 2,
+        "gap": 0.2899999999999976,
+        "origins": [
+          0,
+          0
+        ],
+        "end": [
+          0,
+          0.65,
+          -1.559999999999988
+        ]
+      },
+      {
+        "parallel": true,
+        "barrels": 2,
+        "gap": 0.2900000000000713,
+        "origins": [
+          0,
+          0
+        ],
+        "end": [
+          0,
+          0.65,
+          1.559999999999988
+        ]
+      }
+    ],
+    "unchanged": true,
+    "audio": {
+      "enabled": true,
+      "active": true,
+      "state": "running",
+      "voices": 4,
+      "counts": {
+        "charge": 2,
+        "shot": 2,
+        "impact": 2,
+        "skipped": 0
+      }
+    }
+  },
+  "levels": {
+    "audible": 0.27905401587486267,
+    "muted": 0
+  },
+  "errors": []
+}

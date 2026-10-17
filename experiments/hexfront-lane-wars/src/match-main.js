@@ -1,3 +1,4 @@
+import {railAudio,bindRailSound} from './rail-audio.js';
 import {Match} from './match.js';
 import {CentralAI,CENTRAL_STRATEGIES,centralOpening} from './central-ai.js';
 import {MatchAI} from './match-ai.js';
@@ -175,6 +176,7 @@ function targetAt(x,y){const el=document.elementFromPoint(x,y),front=el?.closest
 function onFieldClick(e){if(!supplyType)return;e.stopImmediatePropagation();sendSupply(view.laneAt(e.clientX,e.clientY));}
 function advance(seconds,draw=true){match.advance(seconds);flush();if(match.phase==='ended'){playing=false;if(!endedSaved){endedSaved=true;save();}}view.renderMatch(match,seconds,draw);}
 function frame(now){
+ railAudio.setActive(ready&&!inMenu&&(playing||(match.phase==='ended'&&(view.effects.length||view.corpses.size))));
  const dt=Math.max(0,Math.min(.1,(now-last)/1000));last=now;
  if(ready){if(playing&&!inMenu)advance(dt);else view.renderMatch(match,!inMenu&&match.phase==='ended'&&(view.corpses.size||view.effects.length)?dt:0);hudClock+=dt;saveClock+=dt;
   if(hudClock>=.1){updateHUD();markers();hudClock=0;}if(saveClock>=2){if(playing)save();saveClock=0;}}
@@ -209,6 +211,7 @@ $('levels-toggle').onclick=()=>{$('level-list').hidden=!$('level-list').hidden;$
 $('settings-toggle').onclick=()=>{$('settings-panel').hidden=!$('settings-panel').hidden;$('level-list').hidden=true;};
 $('camera-setting').onchange=()=>{campaign.settings.camera=$('camera-setting').value;view?.setCamera(campaign.settings.camera);persist();};
 $('motion-setting').onchange=()=>{campaign.settings.motion=$('motion-setting').checked;if(view)view.reduced=!campaign.settings.motion;persist();};
+bindRailSound($('sound-setting'));
 $('hints-setting').onchange=()=>{campaign.settings.hints=$('hints-setting').checked;persist();};
 $('match-play').onclick=()=>{if(match.phase!=='running')return;playing=!playing;last=performance.now();save();updateHUD();};
 $('result-next').onclick=async()=>{if(match.result==='orange'&&match.mission.id==='first')await openMission('meadow');else await prepare(match.mission.id,{fresh:true,start:true});};
@@ -219,7 +222,7 @@ window.addEventListener('pagehide',save);
 window.addEventListener('resize',()=>{if(view){frameField();updateHUD();markers();}});
 document.addEventListener('keydown',e=>{if(e.code==='Escape'){cancelSupply();$('orders').hidden=true;if(!inMenu)setMenu(true);}if(e.code==='Space'&&!inMenu&&!['SELECT','INPUT','BUTTON'].includes(document.activeElement.tagName)){e.preventDefault();$('match-play').click();}});
 updateMenu();await prepare(campaign.active&&MISSIONS[campaign.active]?campaign.active:'central');requestAnimationFrame(frame);
-window.__LANE_MATCH__=Object.freeze({snapshot:()=>match.snapshot(),observe:()=>match.observe('orange'),summary:()=>match.summary(),diagnostics:()=>({...view.diagnostics(),factories:view.factoryScreens(),laneTargets:view.laneScreens(),fronts:frontReadings}),get playing(){return playing;},campaign:()=>structuredClone(campaign)});
+window.__LANE_MATCH__=Object.freeze({snapshot:()=>match.snapshot(),observe:()=>match.observe('orange'),summary:()=>match.summary(),diagnostics:()=>({...view.diagnostics(),audio:railAudio.inspect(),factories:view.factoryScreens(),laneTargets:view.laneScreens(),fronts:frontReadings}),get playing(){return playing;},campaign:()=>structuredClone(campaign)});
 if(new URLSearchParams(location.search).has('qa'))window.__LANE_MATCH_QA__=Object.freeze({
  load:async id=>{await prepare(id,{fresh:true,start:true});playing=false;updateHUD();},
  advance:seconds=>{playing=false;for(const effect of view.effects)view.disposeEffect(effect);view.effects=[];match.advance(seconds);const events=match.drainEvents();for(const e of events)if(e.kind==='production')view.matchEvent(e);view.renderMatch(match,0,false);for(const e of events){const age=Math.max(0,match.time-(e.time??match.time));if(e.kind==='production'||age>.65)continue;const before=view.effects.length;view.matchEvent(e);for(const effect of view.effects.slice(before))effect.age=age;}view.dirty=true;view.renderMatch(match,0);if(match.phase==='ended'){endedSaved=true;save();}updateHUD();markers();},

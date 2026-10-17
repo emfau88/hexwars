@@ -37,7 +37,7 @@ Leuchtende Rails beim Laden, kurzer heller Lichtstrahl und klarer Einschlag. Gam
 
 Das freigegebene vierbeinige GLB ist im Spiel eingebaut: Walk, Idle, Charge, Attack, Hit und Death, mit einzelnen Gelenken, sichtbarer Ladung, synchronem Rückstoß und Zusammenbruch. **[Railgun-Animationen prüfen](https://rawcdn.githack.com/emfau88/hexwars/6deae427cad60cc37409f89b9609e5f43f7fd111/experiments/hexfront-lane-wars/railgun-viewer.html)** · [GLB, Blender-Datei, Performance und Tests](docs/railgun-animation/REPORT.md). Die ursprüngliche [Modellfreigabe](railgun-preview.html) bleibt separat erhalten.
 
-Reichweite in **Zentrale Front: 4,8 statt 4,0 (+20 %)**, auch beim Fortsetzen alter zentraler Standardspielstände. Alle anderen Gameplaywerte bleiben unverändert. Die größere Reichweite beeinflusst einige Referenzpartien deutlich; [Reichweiten-Audit](docs/railgun-animation/range-audit.json).
+Reichweite in **Zentrale Front: 5,2 statt 4,8 (+8,3 %)**, auch beim Fortsetzen alter zentraler Standardspielstände. Alle anderen Gameplaywerte bleiben unverändert. Die größere Reichweite beeinflusst einige Referenzpartien deutlich; [Reichweiten-Audit](docs/railgun-animation/range-audit.json).
 
 ## Mech-Animation
 
@@ -85,3 +85,5 @@ Sicherung vor Zentrale Front: `4dee21b`, Tag `codex/lane-wars-pre-central-front`
 Der Fernkämpfer bleibt ein Modellplatzhalter und der Mech verwendet weiterhin Ganzkörperanimation. Diese Erweiterung enthält keine neue Soundproduktion.
 
 Historische Berichte: [M2.1](docs/MILESTONE-2.1.md), [Mobile-HUD](docs/MOBILE-HUD.md), [M2](docs/MILESTONE-2.md), [Fabrikausfahrten](docs/FACTORY-EXITS.md), [M1.5](docs/VISUAL-INTEGRATION.md).
+
+**Railgun-Update:** Zwei gerade Strahlen aus den Rohröffnungen, Lade-/Schuss-/Einschlagsound und weiter entfernte Vorschau im Viewer. Ton im Viewer bzw. in den Spieleinstellungen abschaltbar. Zentrale Front: Reichweite jetzt **5,2**. [Umsetzung, Tests und Balancefolgen](docs/railgun-sound/REPORT.md).

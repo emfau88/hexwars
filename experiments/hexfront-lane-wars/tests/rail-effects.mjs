@@ -15,7 +15,7 @@ try{
   if(s.events.some(e=>e.kind==='shot'&&e.type==='rail')){
    shot=true;const audit=await page.evaluate(()=>{
     const v=RAIL_TEST.view,before=JSON.stringify(RAIL_TEST.match.snapshot()),shots=v.effects.filter(e=>e.rail);
-    const states=shots.map(e=>({beam:e.beam.visible,opacity:e.beam.material.opacity,impact:e.impact.position.distanceTo(e.to),origin:e.muzzle.position.distanceTo(e.from),age:e.age}));
+    const states=shots.map(e=>({beam:e.beam.visible,opacity:e.beam.material.opacity,impact:e.impact.position.distanceTo(e.to),origin:e.muzzle.position.distanceTo(e.origins[0]),age:e.age}));
     v.renderMatch(RAIL_TEST.match,0);return {states,unchanged:before===JSON.stringify(RAIL_TEST.match.snapshot()),lights:Object.values(v.railLights).map(m=>m.count)};
    });assert.equal(audit.states.length,2);assert.ok(audit.states.every(s=>s.beam&&s.opacity>.8&&s.impact===0&&s.origin===0));assert.ok(audit.unchanged);assert.deepEqual(audit.lights,[0,0]);await page.screenshot({path:out+'game-shot.png'});
   }

@@ -1,5 +1,6 @@
+import {railAudio} from './rail-audio.js';
 import * as T from 'three';
-import {createRailCharge,writeRailCharge,finishRailCharge,createRailShot,sampleRailShot} from './rail-effects.js';
+import {railMuzzles,createRailCharge,writeRailCharge,finishRailCharge,createRailShot,sampleRailShot} from './rail-effects.js';
 import {RailAnimator} from './rail-animation.js';
 import {MechAnimator} from './mech-animation.js';
 import {UNITS} from './rules.js';
@@ -15,7 +16,7 @@ const shortest=(a,b)=>Math.atan2(Math.sin(b-a),Math.cos(b-a));
 
 export class BattleView {
   constructor(stage,labels,onSelect,options={}) {
-    this.corpses=new Map();this.options=options;this.specs=options.specs||UNITS;
+    this.audio=railAudio;this.corpses=new Map();this.options=options;this.specs=options.specs||UNITS;
     this.stage=stage;this.labels=labels;this.onSelect=onSelect;this.poses=new Map();this.health=new Map();this.effects=[];this.selected=null;this.zoom=1;this.pan={u:0,v:0};this.mode='diorama';this.elapsed=0;this.pickIds={};this.lastLanes=[];
     this.reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
     this.scene=new T.Scene();this.scene.background=new T.Color(0xadb699);this.scene.fog=new T.Fog(0xadb699,65,130);
@@ -83,7 +84,7 @@ export class BattleView {
     for(const mesh of selectable)mesh.computeBoundingSphere();
     const hit=this.raycaster.intersectObjects(selectable,false)[0];this.selected=hit?this.pickIds[hit.object.userData.batch]?.[hit.instanceId]??null:null;this.dirty=true;this.onSelect(this.selected);
   }
-  reset() {this.dirty=true;for(const e of this.effects)this.disposeEffect(e);this.effects=[];for(const p of [...this.poses.values(),...this.corpses.values()])p.animator?.dispose();this.corpses.clear();this.poses.clear();for(const label of this.health.values())label.remove();this.health.clear();this.selected=null;this.onSelect(null);}
+  reset() {this.audio.stopAll();this.dirty=true;for(const e of this.effects)this.disposeEffect(e);this.effects=[];for(const p of [...this.poses.values(),...this.corpses.values()])p.animator?.dispose();this.corpses.clear();this.poses.clear();for(const label of this.health.values())label.remove();this.health.clear();this.selected=null;this.onSelect(null);}
   disposeEffect(e) {e.root.removeFromParent();e.root.traverse(o=>{o.geometry?.dispose();o.material?.dispose();});}
   line(from,to,color,width=.025) {
     const delta=to.clone().sub(from),mesh=new T.Mesh(new T.CylinderGeometry(width,width,delta.length(),5),new T.MeshBasicMaterial({color,transparent:true,opacity:.8,depthWrite:false}));mesh.position.copy(from).add(to).multiplyScalar(.5);mesh.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),delta.normalize());return mesh;
@@ -95,9 +96,9 @@ export class BattleView {
       const root=new T.Group(),base=this.point({...event.from,lane}),to=this.point({...event.to,lane},.65),yaw=Math.atan2(base.x-to.x,base.z-to.z);
       const muzzleLocal=event.type==='mech'?new T.Vector3(.58,.72,-.54):event.type==='rail'?new T.Vector3(0,.91,-.96):new T.Vector3(0,.50,-.35);
       const from=base.clone().add(muzzleLocal.applyAxisAngle(new T.Vector3(0,1,0),yaw)),color=event.owner==='orange'?0xf6cb83:0xb8d9df;
-      if(source?.animator){source.animator.sample(0,0,!!(source.unit.moving||source.unit.departing),this.mechAim(source.position,source.yaw,to),source.unit.type==='rail'?this.railElevation(source.position,to):this.mechWeaponAim(source.position,to),source.unit);const world=new T.Matrix4().makeRotationY(source.yaw).setPosition(source.position);source.animator.muzzle(world,from);}
+      if(source?.animator){source.animator.sample(0,0,!!(source.unit.moving||source.unit.departing),this.mechAim(source.position,source.yaw,to),source.unit.type==='rail'?this.railElevation(source.position,to.clone().add(new T.Vector3(0,-.65,0))):this.mechWeaponAim(source.position,to),source.unit);const world=new T.Matrix4().makeRotationY(source.yaw).setPosition(source.position);source.animator.muzzle(world,from);}
       // Pure event visualization; projectiles never calculate damage.
-      if(event.type==='rail'){const effect=createRailShot(from,to);this.scene.add(effect.root);this.effects.push(effect);return;}
+      if(event.type==='rail'){const muzzleWorld=source?.animator?new T.Matrix4().makeRotationY(source.yaw).setPosition(source.position).multiply(source.animator.nodes.Muzzle.matrixWorld):new T.Matrix4().makeRotationY(yaw).setPosition(from);const effect=createRailShot(from,to,railMuzzles(muzzleWorld),new T.Vector3(0,0,-1).transformDirection(muzzleWorld));this.scene.add(effect.root);this.effects.push(effect);this.audio.shot(from.clone().project(this.camera).x,to.clone().project(this.camera).x);return;}
       const beam=this.line(from,to,color,event.type==='rail'?.026:.012);root.add(beam);if(this.options.clarity&&event.type!=='rail')beam.visible=false;
       const pulse=new T.Mesh(new T.SphereGeometry(event.type==='rail'?.09:.07,8,6),new T.MeshBasicMaterial({color}));pulse.position.copy(from);root.add(pulse);
       const muzzle=new T.Mesh(new T.SphereGeometry(event.type==='mech'?.12:.075,8,6),new T.MeshBasicMaterial({color,transparent:true,opacity:.8}));muzzle.position.copy(from);root.add(muzzle);
@@ -114,7 +115,7 @@ export class BattleView {
   render(lanes,seconds,dt=0,draw=true) {
     if(!this.batches)return;this.lastLanes=lanes;this.elapsed=seconds;
     const needed=this.corpses.size+Math.max(1,...['orange','blue'].flatMap(owner=>Object.keys(this.specs).map(type=>lanes.reduce((n,g)=>n+g.units.filter(u=>u.owner===owner&&u.type===type).length,0)))); if(needed>Object.values(this.batches)[0][0].instanceMatrix.count){const capacity=2**Math.ceil(Math.log2(needed));for(const mesh of Object.values(this.batches).flat()){mesh.removeFromParent();mesh.dispose();}this.batches=makeBatches(this.scene,this.library,capacity);this.createRailLights(capacity);} const alive=new Set(),counts={},ids={},lightCounts={orange:0,blue:0};for(const id of Object.keys(this.batches)){counts[id]=0;ids[id]=[];}
-    const low=this.zoom<1.8;if(this.railRig)for(const owner of ['orange','blue'])for(const [i,p] of this.library[owner].rail.entries())this.batches[owner+'-rail'][i].geometry=low?(this.railLowParts[p.node]||p.geometry):p.geometry;this.railDetail=low?'overview':'full';
+    const chargeSounds=[];const low=this.zoom<1.8;if(this.railRig)for(const owner of ['orange','blue'])for(const [i,p] of this.library[owner].rail.entries())this.batches[owner+'-rail'][i].geometry=low?(this.railLowParts[p.node]||p.geometry):p.geometry;this.railDetail=low?'overview':'full';
     for(const [lane,game] of lanes.entries())for(const u of game.units) {
       const id=key(lane,u.id),p=this.point({...u,lane}),yaw=this.heading(u,lane,game);alive.add(id);
       let pose=this.poses.get(id);if(!pose){pose={position:p.clone(),yaw,kick:0,hit:0,unit:u};this.poses.set(id,pose);}pose.unit=u;if(u.type==='mech'&&this.mechRig&&!pose.animator)pose.animator=new MechAnimator(this.mechRig,u.id);if(u.type==='rail'&&this.railRig&&!pose.animator)pose.animator=new RailAnimator(this.railRig,u.id);
@@ -129,7 +130,7 @@ export class BattleView {
       // Articulated robots share rigid-part instance batches while keeping individual poses.
       this.dummy.rotation.set(pose.kick*.035,pose.yaw,pose.hit*.055+(u.moving&&!this.reduced?Math.sin(seconds*8+u.id)*.016:0));if(pose.animator)this.dummy.rotation.set(0,pose.yaw,0);this.dummy.scale.setScalar(1);this.dummy.updateMatrix();
       const batch=`${u.owner}-${u.type}`,index=counts[batch]++;ids[batch].push(id);pose.world??=new T.Matrix4();pose.world.copy(this.dummy.matrix);if(pose.animator){pose.animator.sample(dt,distance*(u.departing?1:blend),!!(u.moving||u.departing),this.mechAim(pose.position,pose.yaw,targetPoint),u.type==='rail'?this.railElevation(pose.position,targetPoint):this.mechWeaponAim(pose.position,targetPoint),u);pose.animator.write(this.batches[batch],index,this.dummy.matrix,this.library[u.owner][u.type]);}else for(const mesh of this.batches[batch])mesh.setMatrixAt(index,this.dummy.matrix);
-      if(u.type==='rail'&&pose.animator?.charge>0){const carriage=new T.Matrix4().multiplyMatrices(pose.world,pose.animator.nodes.Recoil_Carriage.matrixWorld);lightCounts[u.owner]=writeRailCharge(this.railLights[u.owner],lightCounts[u.owner],carriage,pose.animator.charge);}
+      if(u.type==='rail'&&pose.animator?.charge>0){const carriage=new T.Matrix4().multiplyMatrices(pose.world,pose.animator.nodes.Recoil_Carriage.matrixWorld);lightCounts[u.owner]=writeRailCharge(this.railLights[u.owner],lightCounts[u.owner],carriage,pose.animator.charge);if(dt>0)chargeSounds.push({id,progress:pose.animator.charge,pan:pose.position.clone().project(this.camera).x});}
       let label=this.health.get(id);if(!label){label=document.createElement('div');label.className=`health ${u.owner}`;label.innerHTML='<i></i>';this.labels.append(label);this.health.set(id,label);}label.hidden=u.hp===this.specs[u.type].hp&&this.selected!==id;
       const q=pose.position.clone().add(new T.Vector3(0,u.type==='mech'?1.75:1.25,0)).project(this.camera);label.style.transform=`translate(${(q.x*.5+.5)*this.stage.clientWidth}px,${(-q.y*.5+.5)*this.stage.clientHeight}px)`;label.firstChild.style.width=`${u.hp/this.specs[u.type].hp*100}%`;label.dataset.unit=id;
     }
@@ -140,6 +141,7 @@ export class BattleView {
     }
     for(const [id,meshes] of Object.entries(this.batches))for(const mesh of meshes){mesh.count=counts[id];mesh.instanceMatrix.needsUpdate=true;}
     for(const [owner,mesh] of Object.entries(this.railLights))finishRailCharge(mesh,lightCounts[owner]);
+    if(dt>0)this.audio.updateCharges(chargeSounds);
     this.pickIds=ids;
     const selected=this.poses.get(this.selected);this.selection.visible=!!selected;if(selected)this.selection.position.copy(selected.position).add(new T.Vector3(0,.04,0));
     for(const effect of [...this.effects]) {

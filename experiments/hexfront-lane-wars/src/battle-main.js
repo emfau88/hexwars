@@ -1,3 +1,4 @@
+import {railAudio,bindRailSound} from './rail-audio.js';
 import {BattleView} from './battle-view.js';
 import {PRESENTATIONS,createPresentation} from './presentation.js';
 import {UNITS} from './rules.js';
@@ -30,6 +31,7 @@ function advance(seconds,draw=true) {
   visualTime+=seconds;view.render(battle.lanes,visualTime,seconds,draw);updateHUD();
 }
 function animate(now) {
+  railAudio.setActive(ready&&(playing||(battle.lanes.every(g=>g.result)&&(view.effects.length||view.corpses.size))));
   const dt=Math.min(.05,(now-last)/1000);last=now;
   if(ready){if(playing)advance(dt);else view.render(battle.lanes,visualTime,battle.lanes.every(g=>g.result)&&(view.corpses.size||view.effects.length)?dt:0);}
   requestAnimationFrame(animate);
@@ -42,6 +44,7 @@ try {
   if(new URLSearchParams(location.search).has('qa'))window.__LANE_WARS_QA__=Object.freeze({advance:seconds=>{playing=false;const steps=Math.round(seconds/.05);for(let i=0;i<steps;i++)advance(.05,i===steps-1);},select:id=>{view.selected=id;selection();},reset});
   requestAnimationFrame(animate);
 } catch(error) {console.error(error);$('loading').hidden=true;$('battle-error').hidden=false;$('battle-error').textContent=`Die 3D-Ansicht konnte nicht geladen werden: ${error.message}. Bitte WebGL und die lokalen Asset-Dateien prüfen. Das Kampflabor bleibt über lab.html erreichbar.`;}
+bindRailSound($('sound-setting'));
 $('battle-play').addEventListener('click',()=>{if(battle.lanes.every(g=>g.result))reset();playing=!playing;updateHUD();});
 $('battle-reset').addEventListener('click',reset);$('presentation').addEventListener('change',()=>{if(ready)reset();});
 $('camera-mode').addEventListener('click',()=>{const mode=view.mode==='tactical'?'diorama':'tactical';view.setCamera(mode);$('camera-mode').textContent=mode==='tactical'?'Taktik 70°':'Diorama 55°';});

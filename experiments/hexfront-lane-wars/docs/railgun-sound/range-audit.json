@@ -1,0 +1,74 @@
+[
+  {
+    "range": 4.8,
+    "a": "pressure",
+    "b": "siege",
+    "result": "blue",
+    "time": 371.70000000000005,
+    "hq": {
+      "orange": 0,
+      "blue": 800
+    },
+    "peakUnits": 23
+  },
+  {
+    "range": 4.8,
+    "a": "pressure",
+    "b": "economy",
+    "result": "blue",
+    "time": 638.2,
+    "hq": {
+      "orange": 0,
+      "blue": 752
+    },
+    "peakUnits": 27
+  },
+  {
+    "range": 4.8,
+    "a": "siege",
+    "b": "economy",
+    "result": "blue",
+    "time": 695.1500000000001,
+    "hq": {
+      "orange": 0,
+      "blue": 77
+    },
+    "peakUnits": 24
+  },
+  {
+    "range": 5.2,
+    "a": "pressure",
+    "b": "siege",
+    "result": "blue",
+    "time": 137.75,
+    "hq": {
+      "orange": 0,
+      "blue": 800
+    },
+    "peakUnits": 17
+  },
+  {
+    "range": 5.2,
+    "a": "pressure",
+    "b": "economy",
+    "result": "unresolved",
+    "time": 720,
+    "hq": {
+      "orange": 704,
+      "blue": 632
+    },
+    "peakUnits": 25
+  },
+  {
+    "range": 5.2,
+    "a": "siege",
+    "b": "economy",
+    "result": "orange",
+    "time": 93,
+    "hq": {
+      "orange": 800,
+      "blue": 0
+    },
+    "peakUnits": 14
+  }
+]

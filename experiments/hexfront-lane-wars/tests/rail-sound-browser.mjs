@@ -1,0 +1,27 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs/promises';
+import {chromium} from '@playwright/test';
+const out='docs/railgun-sound/',base=process.env.MATCH_URL||'http://127.0.0.1:4181/';await fs.mkdir(out,{recursive:true});
+const b=await chromium.launch({headless:true,channel:'chromium'}),p=await b.newPage({viewport:{width:1440,height:1000}}),errors=[],checks=[];p.on('pageerror',e=>errors.push(e.message));
+try{
+ await p.goto(base+'tests/fixtures/rail.html');await p.waitForFunction(()=>window.RAIL_TEST);await p.evaluate(()=>RAIL_TEST.duel(true));
+ assert.equal(await p.evaluate(()=>RAIL_TEST.view.audio.inspect().state),'locked');await p.mouse.click(30,30);await p.waitForFunction(()=>RAIL_TEST.view.audio.context?.state==='running');await p.evaluate(()=>RAIL_TEST.view.audio.setActive(true));
+ let shot=false;for(let i=0;i<400&&!shot;i++){
+  const step=await p.evaluate(()=>RAIL_TEST.step(.025));shot=step.events.some(e=>e.kind==='shot'&&e.type==='rail');
+ }
+ assert.ok(shot);const audit=await p.evaluate(()=>{
+  const v=RAIL_TEST.view,snapshot=JSON.stringify(RAIL_TEST.match.snapshot()),effects=v.effects.filter(e=>e.rail);
+  const shots=effects.map(e=>({parallel:e.ends.every((end,i)=>end.clone().sub(e.origins[i]).normalize().dot(e.axis)>1-1e-8),barrels:e.barrels.length,gap:e.origins[0].distanceTo(e.origins[1]),origins:e.barrels.map((b,i)=>b.muzzle.position.distanceTo(e.origins[i])),end:e.to.toArray()}));v.renderMatch(RAIL_TEST.match,0);
+  return {shots,unchanged:snapshot===JSON.stringify(RAIL_TEST.match.snapshot()),audio:v.audio.inspect()};
+ });assert.equal(audit.shots.length,2);assert.ok(audit.shots.every(s=>s.parallel&&s.barrels===2&&Math.abs(s.gap-.29)<1e-5&&s.origins.every(d=>d===0)));assert.ok(audit.unchanged);assert.equal(audit.audio.counts.shot,2);assert.equal(audit.audio.counts.impact,2);assert.equal(audit.audio.counts.charge,2);await p.screenshot({path:out+'game-twin-shot.png'});
+ checks.push('Real mirrored duel: two barrel rays per attack, one shot/impact sound per attack, two charge sounds; render does not mutate simulation');
+ const transform=await p.evaluate(async()=>{const T=await import('../../vendor/three.module.min.js'),{railMuzzles}=await import('../../src/rail-effects.js');const pose=[...RAIL_TEST.view.poses.values(),...RAIL_TEST.view.corpses.values()][0];pose.animator.sample(0,0,false,.6,.2);const world=new T.Matrix4().makeRotationY(1.3).setPosition(3,2,-5).multiply(pose.animator.nodes.Muzzle.matrixWorld),origins=railMuzzles(world);return origins.map(p=>p.applyMatrix4(world.clone().invert()).toArray());});assert.ok(Math.abs(transform[0][0]+.145)<1e-6&&Math.abs(transform[1][0]-.145)<1e-6&&transform.every(v=>Math.abs(v[2]+.036)<1e-6));checks.push('Both apertures follow world rotation, turret yaw, elevation and recoil transforms');
+ const cap=await p.evaluate(()=>{const a=RAIL_TEST.view.audio;a.stopAll();for(let i=0;i<80;i++)a.shot();const cap=a.voices.size;a.setActive(false);return {cap,after:a.voices.size};});assert.ok(cap.cap<=12);assert.equal(cap.after,0);checks.push('Simultaneous volleys bounded to six shot/impact pairs; pause cancels voices');
+ await p.goto(base+'railgun-viewer.html');await p.waitForFunction(()=>window.__RAIL_VIEWER__);await p.locator('#speed').selectOption('.25');await p.locator('#transition').click();await p.waitForFunction(()=>__RAIL_VIEWER__.audio.stats.charge>0);await p.waitForFunction(()=>__RAIL_VIEWER__.audio.stats.shot>0);await p.locator('#pause').click();await p.waitForFunction(()=>__RAIL_VIEWER__.audio.voices.size===0);assert.equal(await p.evaluate(()=>__RAIL_VIEWER__.audio.voices.size),0);
+ const before=await p.evaluate(()=>__RAIL_VIEWER__.audio.stats.shot);await p.evaluate(()=>__RAIL_VIEWER__.pose('Attack',.04));await p.waitForTimeout(150);assert.equal(await p.evaluate(()=>__RAIL_VIEWER__.audio.stats.shot),before);await p.screenshot({path:out+'viewer-twin-shot.png'});
+ await p.locator('#sound-setting').uncheck();await p.locator('#restart').click();await p.waitForTimeout(250);assert.equal(await p.evaluate(()=>__RAIL_VIEWER__.audio.stats.shot),before);await p.reload();await p.waitForFunction(()=>window.__RAIL_VIEWER__);assert.equal(await p.locator('#sound-setting').isChecked(),false);checks.push('Viewer slow-motion sequence plays charge, shot and impact; pause/scrub are silent; mute persists across reload');
+ await p.locator('#sound-setting').check();await p.locator('#restart').click();
+ // Capture real output graph samples through an analyser, independent of host speaker volume.
+ const levels=await p.evaluate(async()=>{const a=__RAIL_VIEWER__.audio;await a.unlock();a.setActive(true);const analyser=a.context.createAnalyser();analyser.fftSize=2048;a.master.connect(analyser);const measure=async mute=>{a.stopAll();a.setEnabled(!mute);a.shot();let peak=0;const buffer=new Float32Array(analyser.fftSize);for(let i=0;i<12;i++){await new Promise(r=>setTimeout(r,10));analyser.getFloatTimeDomainData(buffer);for(const v of buffer)peak=Math.max(peak,Math.abs(v));}return peak;};const audible=await measure(false);a.stopAll();await new Promise(r=>setTimeout(r,150));const muted=await measure(true);a.master.disconnect(analyser);return {audible,muted};});assert.ok(levels.audible>.01);assert.ok(levels.muted<.001);checks.push('Actual Web Audio graph produces signal; muted graph remains silent');
+ assert.deepEqual(errors,[]);await fs.writeFile(out+'tests.json',JSON.stringify({checks,audit,levels,errors},null,2));console.log(JSON.stringify({checks,audit,levels,errors},null,2));
+}finally{await b.close();}

@@ -18,7 +18,7 @@ Der Playlink zeigt den festgelegten Spielstand `6deae42` und benötigt keinen lo
 
 **Railgun-Schusseffekte:** Leuchtende Rails, kurzer heller Strahl und sichtbarer Einschlag; Gameplay unverändert. [Bilder und Tests](experiments/hexfront-lane-wars/docs/railgun-effects/REPORT.md).
 
-**Animierte Railgun im Spiel:** Das freigegebene vierbeinige GLB besitzt echte Beinbewegungen, Zielausrichtung, Ladung, Rückstoß, Trefferreaktion und Zusammenbruch. [Animationsviewer](https://rawcdn.githack.com/emfau88/hexwars/6deae427cad60cc37409f89b9609e5f43f7fd111/experiments/hexfront-lane-wars/railgun-viewer.html) · [GLB/Blender, Technik, Performance und Tests](experiments/hexfront-lane-wars/docs/railgun-animation/REPORT.md). Reichweite in **Zentrale Front: 4,8 statt 4,0 (+20 %)**; andere Gameplaywerte und historische Missionen bleiben unverändert.
+**Animierte Railgun im Spiel:** Das freigegebene vierbeinige GLB besitzt echte Beinbewegungen, Zielausrichtung, Ladung, Rückstoß, Trefferreaktion und Zusammenbruch. [Animationsviewer](https://rawcdn.githack.com/emfau88/hexwars/6deae427cad60cc37409f89b9609e5f43f7fd111/experiments/hexfront-lane-wars/railgun-viewer.html) · [GLB/Blender, Technik, Performance und Tests](experiments/hexfront-lane-wars/docs/railgun-animation/REPORT.md). Reichweite in **Zentrale Front: 5,2 statt 4,8 (+8,3 %)**; andere Gameplaywerte und historische Missionen bleiben unverändert.
 
 **Animierte Mechs:** Bewegliche Beine, Oberkörper und Waffen am ursprünglichen Modell; unabhängige Walk-, Idle-, Attack-, Hit- und Death-Animationen im Spiel. [GLB-Viewer](https://rawcdn.githack.com/emfau88/hexwars/1e8467ebb8fd74eeba4f33d15fcfc56e0362db1a/experiments/hexfront-lane-wars/mech-viewer.html) · [Modelldateien, Technik und Performance](experiments/hexfront-lane-wars/docs/mech-animation/REPORT.md).
 
@@ -166,3 +166,5 @@ npm run verify:production
 - [Visual design references](./docs/mockups/)
 
 The former turn-based prototype is preserved under [`legacy/tactics`](./legacy/tactics) and is not part of the current runtime.
+
+**Railgun-Update:** Zwei gerade Strahlen aus den Rohröffnungen, Lade-/Schuss-/Einschlagsound und weiter entfernte Vorschau im Viewer. Ton im Viewer bzw. in den Spieleinstellungen abschaltbar. Zentrale Front: Reichweite jetzt **5,2**. [Umsetzung, Tests und Balancefolgen](experiments/hexfront-lane-wars/docs/railgun-sound/REPORT.md).
