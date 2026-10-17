@@ -13,8 +13,6 @@ Eine vollständige Partie Mensch gegen KI auf einer zentralen Lane: vier Fabrikp
 
 ## Spielen
 
-**[▶ Zentrale Front im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/3f73f77d3d3c1db69d7049791fa24d11929364fa/experiments/hexfront-lane-wars/index.html)** · **[Railgun: Sound, Doppelstrahlen und Tests](docs/railgun-sound/REPORT.md)**
-
 **Aktuelle Einheitenwerte:** Railgun-Tempo **0,8**, Mech-Reichweite **3,0**, Drohnen-Tempo **1,8**. [Tests, Spielstände und Match-Ergebnisse](docs/central-role-tuning/REPORT.md).
 
 Öffentlicher Laufzeitstand `3f73f77`, ohne lokalen Server. Falls ein Hinweis erscheint: **Open the page** anklicken.

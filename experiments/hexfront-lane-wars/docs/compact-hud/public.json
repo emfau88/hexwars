@@ -1,0 +1,79 @@
+{
+  "base": "https://rawcdn.githack.com/emfau88/hexwars/3f73f77d3d3c1db69d7049791fa24d11929364fa/experiments/hexfront-lane-wars/",
+  "checks": [
+    "Served HTML, HUD CSS/JS and all three actual-GLB portraits match the tested source",
+    "Portrait: four accessible slots, build/cancel/refund, economy status, notifications clear of status bar, exact save/resume",
+    "Actual animated GLBs retained; complete match ends in HQ destruction and visible victory",
+    "Lab, M1.5 and model viewers remain reachable"
+  ],
+  "notification": {
+    "notice": {
+      "x": 98.140625,
+      "y": 643,
+      "width": 193.71875,
+      "height": 33,
+      "top": 643,
+      "right": 291.859375,
+      "bottom": 676,
+      "left": 98.140625
+    },
+    "deck": {
+      "x": 8,
+      "y": 686,
+      "width": 374,
+      "height": 150,
+      "top": 686,
+      "right": 382,
+      "bottom": 836,
+      "left": 8
+    },
+    "top": {
+      "x": 8,
+      "y": 6,
+      "width": 374,
+      "height": 83,
+      "top": 6,
+      "right": 382,
+      "bottom": 89,
+      "left": 8
+    }
+  },
+  "result": {
+    "result": "orange",
+    "time": 199,
+    "waves": 10,
+    "peakUnits": 20,
+    "hq": {
+      "orange": 800,
+      "blue": 0
+    },
+    "metrics": {
+      "orange": {
+        "spent": 750,
+        "earned": 536,
+        "produced": 34,
+        "hqDamage": 800,
+        "builds": 2,
+        "refits": 1,
+        "laneChanges": 0,
+        "supplies": 2,
+        "economyAt": 84,
+        "credits": 66
+      },
+      "blue": {
+        "spent": 620,
+        "earned": 428,
+        "produced": 73,
+        "hqDamage": 0,
+        "builds": 2,
+        "refits": 2,
+        "laneChanges": 0,
+        "supplies": 0,
+        "economyAt": 174,
+        "credits": 58
+      }
+    },
+    "lateOrders": 8
+  },
+  "errors": []
+}

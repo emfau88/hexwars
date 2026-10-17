@@ -13,8 +13,6 @@ Direkt online spielbar, ohne Installation oder lokalen Server. Laufzeitstand: `3
 
 Vollständig spielbare **1v1-Partie Mensch gegen KI** mit einer zentralen Lane, vier Fabrikplätzen, drei Robotertypen und drei unterschiedlichen KI-Eröffnungen. Automatische Produktion, Wirtschaft, Umrüstung, begrenzter Sofortnachschub und echtes Spielende durch HQ-Zerstörung. Die bewährte HEXFRONT-Diorama-Optik und das Keramik-HUD bleiben erhalten.
 
-**[▶ Zentrale Front jetzt im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/3f73f77d3d3c1db69d7049791fa24d11929364fa/experiments/hexfront-lane-wars/index.html)** · **[Railgun: Sound, Doppelstrahlen und Tests](experiments/hexfront-lane-wars/docs/railgun-sound/REPORT.md)**
-
 **Aktuelle Einheitenwerte:** Railgun-Tempo **0,8**, Mech-Reichweite **3,0**, Drohnen-Tempo **1,8**. [Tests, Spielstände und Match-Ergebnisse](experiments/hexfront-lane-wars/docs/central-role-tuning/REPORT.md).
 
 Der Playlink zeigt den aktuellen geprüften Laufzeitstand `3f73f77` und benötigt keinen lokalen Server. Falls der Vorschauhost einen Hinweis zeigt, **Open the page** anklicken. Veröffentlicht ausschließlich im Branch `codex/lane-wars`; kein Merge nach main.
