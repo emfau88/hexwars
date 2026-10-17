@@ -1,11 +1,12 @@
 import * as T from 'three';
+import {readableMechClips} from './weapon-effects.js';
 
 export const MECH_STRIDE=.28/.62;
 // Each robot owns only transform/animation state. Rendered parts share geometry and materials.
 export class MechAnimator {
  constructor(asset,seed=0){
   this.root=asset.scene.clone(true);this.mixer=new T.AnimationMixer(this.root);this.nodes={};this.root.traverse(o=>this.nodes[o.name]=o);
-  asset.runtimeClips??=asset.animations.map(clip=>['Attack','Hit'].includes(clip.name)?T.AnimationUtils.makeClipAdditive(clip.clone(),0):clip);
+  asset.runtimeClips??=readableMechClips(asset.animations).map(clip=>['Attack','Hit'].includes(clip.name)?T.AnimationUtils.makeClipAdditive(clip.clone(),0):clip);
   this.armBase=this.nodes.Shoulder_R.quaternion.clone();this.torsoBase=this.nodes.Torso.quaternion.clone();this.actions={};for(const data of asset.runtimeClips){const additive=['Attack','Hit'].includes(data.name);const a=this.mixer.clipAction(data);a.blendMode=additive?T.AdditiveAnimationBlendMode:T.NormalAnimationBlendMode;a.paused=true;a.play();this.actions[data.name]=a;}
   this.phase=(Number(seed)*.381966)%1;this.idleTime=this.phase*3;this.walkWeight=0;this.attackAge=Infinity;this.hitAge=Infinity;this.deathAge=null;this.world=new T.Matrix4();this.partMatrix=new T.Matrix4();this.aim=0;this.sample(0,0,false);
  }

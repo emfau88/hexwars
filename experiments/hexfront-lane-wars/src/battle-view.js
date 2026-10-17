@@ -1,3 +1,4 @@
+import {createMechShot,sampleMechShot} from './weapon-effects.js';
 import {railAudio} from './rail-audio.js';
 import * as T from 'three';
 import {railMuzzles,createRailCharge,writeRailCharge,finishRailCharge,createRailShot,sampleRailShot} from './rail-effects.js';
@@ -98,7 +99,8 @@ export class BattleView {
       const from=base.clone().add(muzzleLocal.applyAxisAngle(new T.Vector3(0,1,0),yaw)),color=event.owner==='orange'?0xf6cb83:0xb8d9df;
       if(source?.animator){source.animator.sample(0,0,!!(source.unit.moving||source.unit.departing),this.mechAim(source.position,source.yaw,to),source.unit.type==='rail'?this.railElevation(source.position,to.clone().add(new T.Vector3(0,-.65,0))):this.mechWeaponAim(source.position,to),source.unit);const world=new T.Matrix4().makeRotationY(source.yaw).setPosition(source.position);source.animator.muzzle(world,from);}
       // Pure event visualization; projectiles never calculate damage.
-      if(event.type==='rail'){const muzzleWorld=source?.animator?new T.Matrix4().makeRotationY(source.yaw).setPosition(source.position).multiply(source.animator.nodes.Muzzle.matrixWorld):new T.Matrix4().makeRotationY(yaw).setPosition(from);const effect=createRailShot(from,to,railMuzzles(muzzleWorld),new T.Vector3(0,0,-1).transformDirection(muzzleWorld));this.scene.add(effect.root);this.effects.push(effect);this.audio.shot(from.clone().project(this.camera).x,to.clone().project(this.camera).x);return;}
+      if(event.type==='rail'){const muzzleWorld=source?.animator?new T.Matrix4().makeRotationY(source.yaw).setPosition(source.position).multiply(source.animator.nodes.Muzzle.matrixWorld):new T.Matrix4().makeRotationY(yaw).setPosition(from);const effect=createRailShot(from,to,railMuzzles(muzzleWorld),new T.Vector3(0,0,-1).transformDirection(muzzleWorld),event.owner);this.scene.add(effect.root);this.effects.push(effect);this.audio.shot(from.clone().project(this.camera).x,to.clone().project(this.camera).x);return;}
+      if(event.type==='mech'){const effect=createMechShot(from,to,event.owner);this.scene.add(effect.root);this.effects.push(effect);return;}
       const beam=this.line(from,to,color,event.type==='rail'?.026:.012);root.add(beam);if(this.options.clarity&&event.type!=='rail')beam.visible=false;
       const pulse=new T.Mesh(new T.SphereGeometry(event.type==='rail'?.09:.07,8,6),new T.MeshBasicMaterial({color}));pulse.position.copy(from);root.add(pulse);
       const muzzle=new T.Mesh(new T.SphereGeometry(event.type==='mech'?.12:.075,8,6),new T.MeshBasicMaterial({color,transparent:true,opacity:.8}));muzzle.position.copy(from);root.add(muzzle);
@@ -146,7 +148,8 @@ export class BattleView {
     const selected=this.poses.get(this.selected);this.selection.visible=!!selected;if(selected)this.selection.position.copy(selected.position).add(new T.Vector3(0,.04,0));
     for(const effect of [...this.effects]) {
       effect.age+=dt;const t=effect.age/effect.life;if(t>=1){this.disposeEffect(effect);this.effects.splice(this.effects.indexOf(effect),1);continue;}
-      if(effect.rail)sampleRailShot(effect,effect.age);
+      if(effect.rail)sampleRailShot(effect,effect.age,this.frame.scale);
+      else if(effect.mech)sampleMechShot(effect,effect.age,this.frame.scale);
       else if(effect.kind==='shot'){effect.pulse.position.lerpVectors(effect.from,effect.to,Math.min(1,t*2));effect.pulse.visible=t<.65;effect.beam.material.opacity=(1-t)*.45;effect.muzzle.scale.setScalar(1-t);effect.muzzle.material.opacity=1-t;}
       else effect.root.children.forEach(m=>{m.position.addScaledVector(m.userData.velocity,dt);m.userData.velocity.y-=dt*.8;m.material.opacity=(1-t)*.7;m.scale.setScalar(1+t*.65);});
     }

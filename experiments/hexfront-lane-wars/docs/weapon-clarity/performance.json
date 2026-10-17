@@ -1,0 +1,77 @@
+{
+  "method": "Same desktop GPU, 64 stationary articulated robots, 8 Mech and 8 Railgun shots frozen at full brightness. Before=9cc31a6, after=working tree. 15 warmup + 60 RAF samples. Mobile viewport only; no phone hardware claim. Paired measurement is indicative, not a universal FPS guarantee.",
+  "results": [
+    {
+      "version": "before",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "cpuMs": {
+        "median": 9.5,
+        "p95": 11.399999976158142
+      },
+      "frameMs": {
+        "median": 11.699999988079071,
+        "p95": 16.099999994039536
+      },
+      "calls": 262,
+      "triangles": 2120552,
+      "geometries": 202
+    },
+    {
+      "version": "before",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "cpuMs": {
+        "median": 7.600000023841858,
+        "p95": 9.600000023841858
+      },
+      "frameMs": {
+        "median": 9.199999988079071,
+        "p95": 11.899999976158142
+      },
+      "calls": 243,
+      "triangles": 2120106,
+      "geometries": 192
+    },
+    {
+      "version": "after",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "cpuMs": {
+        "median": 10.199999988079071,
+        "p95": 13.400000005960464
+      },
+      "frameMs": {
+        "median": 11.599999994039536,
+        "p95": 14.900000005960464
+      },
+      "calls": 310,
+      "triangles": 2121256,
+      "geometries": 242
+    },
+    {
+      "version": "after",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "cpuMs": {
+        "median": 7.5,
+        "p95": 9.599999994039536
+      },
+      "frameMs": {
+        "median": 9.400000005960464,
+        "p95": 11.5
+      },
+      "calls": 277,
+      "triangles": 2120240,
+      "geometries": 223
+    }
+  ]
+}

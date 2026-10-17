@@ -70,3 +70,10 @@ meter{display:block;width:76px;height:6px;margin-top:5px;accent-color:#ba853f}.b
 }
 
 @media(max-width:760px) and (orientation:portrait){.route-button{width:calc(100% - 4px);margin:0 2px 4px}}
+
+/* Opening choices are always visible before a new central match. */
+.starting-factories h2{font-size:14px;letter-spacing:0;margin:16px 0 7px}
+.starting-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.starting-grid>div{min-width:0}.starting-grid select{width:100%;min-height:44px;font-size:13px}
+#restart-round{color:#80512e;border-color:#bea47a}
+@media(max-width:600px){.menu-sheet h1{font-size:28px;margin:10px 0}.menu-sheet>p{margin:10px 0;line-height:1.4}.menu-sheet{padding:20px}.starting-factories h2{font-size:13px}}

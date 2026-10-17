@@ -1,0 +1,578 @@
+
+> hexfront-lane-wars@0.2.1 test
+> node --test tests/*.test.mjs
+
+TAP version 13
+# Subtest: central: real lane/slot topology, no invalid lanes or duplicate waves
+ok 1 - central: real lane/slot topology, no invalid lanes or duplicate waves
+  ---
+  duration_ms: 43.7998
+  type: 'test'
+  ...
+# Subtest: central: every factory, lane, faction and formation has equal deployment time
+ok 2 - central: every factory, lane, faction and formation has equal deployment time
+  ---
+  duration_ms: 16.6728
+  type: 'test'
+  ...
+# Subtest: central: save/resume preserves credits, production, unit IDs and AI decisions exactly
+ok 3 - central: save/resume preserves credits, production, unit IDs and AI decisions exactly
+  ---
+  duration_ms: 1274.2012
+  type: 'test'
+  ...
+# Subtest: central: free pending direction change preserves paid refit and old units
+ok 4 - central: free pending direction change preserves paid refit and old units
+  ---
+  duration_ms: 59.8927
+  type: 'test'
+  ...
+# Subtest: first: real lane/slot topology, no invalid lanes or duplicate waves
+ok 5 - first: real lane/slot topology, no invalid lanes or duplicate waves
+  ---
+  duration_ms: 15.2686
+  type: 'test'
+  ...
+# Subtest: first: every factory, lane, faction and formation has equal deployment time
+ok 6 - first: every factory, lane, faction and formation has equal deployment time
+  ---
+  duration_ms: 1.9922
+  type: 'test'
+  ...
+# Subtest: first: save/resume preserves credits, production, unit IDs and AI decisions exactly
+ok 7 - first: save/resume preserves credits, production, unit IDs and AI decisions exactly
+  ---
+  duration_ms: 310.8964
+  type: 'test'
+  ...
+# Subtest: first: free pending direction change preserves paid refit and old units
+ok 8 - first: free pending direction change preserves paid refit and old units
+  ---
+  duration_ms: 18.0242
+  type: 'test'
+  ...
+# Subtest: meadow: real lane/slot topology, no invalid lanes or duplicate waves
+ok 9 - meadow: real lane/slot topology, no invalid lanes or duplicate waves
+  ---
+  duration_ms: 2.3059
+  type: 'test'
+  ...
+# Subtest: meadow: every factory, lane, faction and formation has equal deployment time
+ok 10 - meadow: every factory, lane, faction and formation has equal deployment time
+  ---
+  duration_ms: 5.3894
+  type: 'test'
+  ...
+# Subtest: meadow: save/resume preserves credits, production, unit IDs and AI decisions exactly
+ok 11 - meadow: save/resume preserves credits, production, unit IDs and AI decisions exactly
+  ---
+  duration_ms: 278.7546
+  type: 'test'
+  ...
+# Subtest: meadow: free pending direction change preserves paid refit and old units
+ok 12 - meadow: free pending direction change preserves paid refit and old units
+  ---
+  duration_ms: 10.2536
+  type: 'test'
+  ...
+# Subtest: mission saves stay independent; only real victory unlocks level two
+ok 13 - mission saves stay independent; only real victory unlocks level two
+  ---
+  duration_ms: 17.2503
+  type: 'test'
+  ...
+# Subtest: front indicators derive direction from position and warn at actual HQ approach
+ok 14 - front indicators derive direction from position and warn at actual HQ approach
+  ---
+  duration_ms: 0.9397
+  type: 'test'
+  ...
+# Subtest: campaign deployments keep their heading, monotone route and exact combat handoff
+ok 15 - campaign deployments keep their heading, monotone route and exact combat handoff
+  ---
+  duration_ms: 95.258
+  type: 'test'
+  ...
+# Subtest: campaign AI matches remain faction symmetric with swapped decision profiles
+ok 16 - campaign AI matches remain faction symmetric with swapped decision profiles
+  ---
+  duration_ms: 1368.7138
+  type: 'test'
+  ...
+# Subtest: a paid response at 3:20 can change a campaign loss to a victory
+ok 17 - a paid response at 3:20 can change a campaign loss to a victory
+  ---
+  duration_ms: 308.9719
+  type: 'test'
+  ...
+# Subtest: Central roles: both factions move at requested speeds and Mechs acquire at exactly 3.3
+ok 18 - Central roles: both factions move at requested speeds and Mechs acquire at exactly 3.3
+  ---
+  duration_ms: 5.5269
+  type: 'test'
+  ...
+# Subtest: Old central saves adopt only the requested defaults; custom values, missions and every saved unit state survive
+ok 19 - Old central saves adopt only the requested defaults; custom values, missions and every saved unit state survive
+  ---
+  duration_ms: 198.5563
+  type: 'test'
+  ...
+# Subtest: legacy engine fixture is the frozen M1 source; every scenario keeps identical tick traces
+ok 20 - legacy engine fixture is the frozen M1 source; every scenario keeps identical tick traces
+  ---
+  duration_ms: 898.2126
+  type: 'test'
+  ...
+# Subtest: unit profiles preserve legacy missions and retain three actual counter roles at squad scale
+ok 21 - unit profiles preserve legacy missions and retain three actual counter roles at squad scale
+  ---
+  duration_ms: 61.2125
+  type: 'test'
+  ...
+# Subtest: central economy, reservations and supply spend real money with exact production/cooldown boundaries
+ok 22 - central economy, reservations and supply spend real money with exact production/cooldown boundaries
+  ---
+  duration_ms: 251.7823
+  type: 'test'
+  ...
+# Subtest: central AI uses a public facade and different openings make different paid decisions
+ok 23 - central AI uses a public facade and different openings make different paid decisions
+  ---
+  duration_ms: 528.0241
+  type: 'test'
+  ...
+# Subtest: central save/resume preserves the chosen opponent, stats and all future actions exactly
+ok 24 - central save/resume preserves the chosen opponent, stats and all future actions exactly
+  ---
+  duration_ms: 272.8755
+  type: 'test'
+  ...
+# Subtest: central reference runs preserve results and all economic metrics when fully mirrored
+ok 25 - central reference runs preserve results and all economic metrics when fully mirrored
+  ---
+  duration_ms: 2217.6959
+  type: 'test'
+  ...
+# Subtest: central role tuning: late refit prevents defeat and timed drone reinforcement wins
+ok 26 - central role tuning: late refit prevents defeat and timed drone reinforcement wins
+  ---
+  duration_ms: 2157.4399
+  type: 'test'
+  ...
+# Subtest: central symmetric matches have no forced ending or expiring survivors
+ok 27 - central symmetric matches have no forced ending or expiring survivors
+  ---
+  duration_ms: 336.6611
+  type: 'test'
+  ...
+# Subtest: central deployment spreads same-type factories symmetrically without changing their travel time
+ok 28 - central deployment spreads same-type factories symmetrically without changing their travel time
+  ---
+  duration_ms: 1.5014
+  type: 'test'
+  ...
+# Subtest: three roles each win their intended equal-production duel
+ok 29 - three roles each win their intended equal-production duel
+  ---
+  duration_ms: 31.0992
+  type: 'test'
+  ...
+# Subtest: stationary friendly rail does not stop a mech behind it
+ok 30 - stationary friendly rail does not stop a mech behind it
+  ---
+  duration_ms: 2.2251
+  type: 'test'
+  ...
+# Subtest: allied front does not occlude rail shots
+ok 31 - allied front does not occlude rail shots
+  ---
+  duration_ms: 0.7802
+  type: 'test'
+  ...
+# Subtest: shots respect Euclidean range, including lateral separation
+ok 32 - shots respect Euclidean range, including lateral separation
+  ---
+  duration_ms: 41.4752
+  type: 'test'
+  ...
+# Subtest: a valid target is retained when a closer enemy appears
+ok 33 - a valid target is retained when a closer enemy appears
+  ---
+  duration_ms: 0.9971
+  type: 'test'
+  ...
+# Subtest: out-of-range targets are replaced by reachable targets
+ok 34 - out-of-range targets are replaced by reachable targets
+  ---
+  duration_ms: 0.3671
+  type: 'test'
+  ...
+# Subtest: shots never select targets from another lane
+ok 35 - shots never select targets from another lane
+  ---
+  duration_ms: 1.3308
+  type: 'test'
+  ...
+# Subtest: single-target overkill never spills to a second drone
+ok 36 - single-target overkill never spills to a second drone
+  ---
+  duration_ms: 0.5459
+  type: 'test'
+  ...
+# Subtest: mech splash has a radius and a two-secondary-target limit
+ok 37 - mech splash has a radius and a two-secondary-target limit
+  ---
+  duration_ms: 1.0919
+  type: 'test'
+  ...
+# Subtest: simultaneous lethal shots produce a draw
+ok 38 - simultaneous lethal shots produce a draw
+  ---
+  duration_ms: 1.3866
+  type: 'test'
+  ...
+# Subtest: advertised attack interval includes acquisition and is not shortened
+ok 39 - advertised attack interval includes acquisition and is not shortened
+  ---
+  duration_ms: 1.4752
+  type: 'test'
+  ...
+# Subtest: units converge on laterally separated enemies instead of walking past forever
+ok 40 - units converge on laterally separated enemies instead of walking past forever
+  ---
+  duration_ms: 1.0346
+  type: 'test'
+  ...
+# Subtest: same simulation duration is independent of browser frame slicing
+ok 41 - same simulation duration is independent of browser frame slicing
+  ---
+  duration_ms: 13.3254
+  type: 'test'
+  ...
+# Subtest: motion remains bounded by the configured unit speed
+ok 42 - motion remains bounded by the configured unit speed
+  ---
+  duration_ms: 25.7435
+  type: 'test'
+  ...
+# Subtest: reordering internal arrays does not change combat outcomes
+ok 43 - reordering internal arrays does not change combat outcomes
+  ---
+  duration_ms: 21.8937
+  type: 'test'
+  ...
+# Subtest: mirrored mixed combat preserves positions, HP and result every tick
+ok 44 - mirrored mixed combat preserves positions, HP and result every tick
+  ---
+  duration_ms: 78.3463
+  type: 'test'
+  ...
+# Subtest: Mech plus rail has a same-budget counter at three starting distances
+ok 45 - Mech plus rail has a same-budget counter at three starting distances
+  ---
+  duration_ms: 91.7205
+  type: 'test'
+  ...
+# Subtest: local steering is symmetric exactly at the approach threshold
+ok 46 - local steering is symmetric exactly at the approach threshold
+  ---
+  duration_ms: 48.7615
+  type: 'test'
+  ...
+# Subtest: the swarm counter itself loses to dedicated anti-swarm production
+ok 47 - the swarm counter itself loses to dedicated anti-swarm production
+  ---
+  duration_ms: 18.0664
+  type: 'test'
+  ...
+# Subtest: the strong three-mech mix loses to protected concentrated ranged fire
+ok 48 - the strong three-mech mix loses to protected concentrated ranged fire
+  ---
+  duration_ms: 15.5236
+  type: 'test'
+  ...
+# Subtest: time budgets report unresolved combat, never invent a winner
+ok 49 - time budgets report unresolved combat, never invent a winner
+  ---
+  duration_ms: 0.4294
+  type: 'test'
+  ...
+# Subtest: input validation prevents NaNs, negative HP and invalid formations
+ok 50 - input validation prevents NaNs, negative HP and invalid formations
+  ---
+  duration_ms: 1.8046
+  type: 'test'
+  ...
+# Subtest: all factory gates and HQ supply exits immediately trade real damage for either faction
+ok 51 - all factory gates and HQ supply exits immediately trade real damage for either faction
+  ---
+  duration_ms: 46.5865
+  type: 'test'
+  ...
+# Subtest: a robot killed at its gate never resurrects at the old lane entry time
+ok 52 - a robot killed at its gate never resurrects at the old lane entry time
+  ---
+  duration_ms: 3.4485
+  type: 'test'
+  ...
+# Subtest: a blocked exit resumes from the same position and saves cooldown, HP and route progress
+ok 53 - a blocked exit resumes from the same position and saves cooldown, HP and route progress
+  ---
+  duration_ms: 10.8997
+  type: 'test'
+  ...
+# Subtest: central approach remains continuous and mirrored for every gate, type and supply formation
+ok 54 - central approach remains continuous and mirrored for every gate, type and supply formation
+  ---
+  duration_ms: 157.9805
+  type: 'test'
+  ...
+# Subtest: short-range attackers can reach both outer gates instead of sticking to lane bounds
+ok 55 - short-range attackers can reach both outer gates instead of sticking to lane bounds
+  ---
+  duration_ms: 6.9973
+  type: 'test'
+  ...
+# Subtest: Mech fires from a visible gap while the rail unit still outranges and counters it
+ok 56 - Mech fires from a visible gap while the rail unit still outranges and counters it
+  ---
+  duration_ms: 2.3277
+  type: 'test'
+  ...
+# Subtest: old central saves migrate visible exits in place and keep their existing HQ balance
+ok 57 - old central saves migrate visible exits in place and keep their existing HQ balance
+  ---
+  duration_ms: 2.1971
+  type: 'test'
+  ...
+# Subtest: all factory and HQ exits move toward their lane without doubling back
+ok 58 - all factory and HQ exits move toward their lane without doubling back
+  ---
+  duration_ms: 124.0551
+  type: 'test'
+  ...
+# Subtest: exit poses face the actual motion, travel at unit speed and join the correct lane formation
+ok 59 - exit poses face the actual motion, travel at unit speed and join the correct lane formation
+  ---
+  duration_ms: 17.5805
+  type: 'test'
+  ...
+# Subtest: every exit position, heading and individual arrival time is faction mirrored
+ok 60 - every exit position, heading and individual arrival time is faction mirrored
+  ---
+  duration_ms: 9.9265
+  type: 'test'
+  ...
+# Subtest: arrival uses the physical merge point without teleporting the formation
+ok 61 - arrival uses the physical merge point without teleporting the formation
+  ---
+  duration_ms: 105.9469
+  type: 'test'
+  ...
+# Subtest: new reinforcements can still turn back to engage attackers at their own HQ
+ok 62 - new reinforcements can still turn back to engage attackers at their own HQ
+  ---
+  duration_ms: 4.4559
+  type: 'test'
+  ...
+# Subtest: factory approval assets are self-contained GLBs with embedded resources
+ok 63 - factory approval assets are self-contained GLBs with embedded resources
+  ---
+  duration_ms: 2.1599
+  type: 'test'
+  ...
+# Subtest: four actual door assemblies have independent translation channels in one one-second clip
+ok 64 - four actual door assemblies have independent translation channels in one one-second clip
+  ---
+  duration_ms: 1.7827
+  type: 'test'
+  ...
+# Subtest: factory and all visual modules support the same named team-colour variants and socket
+ok 65 - factory and all visual modules support the same named team-colour variants and socket
+  ---
+  duration_ms: 0.7383
+  type: 'test'
+  ...
+# Subtest: factory stays within the eight-instance geometry and payload budget
+ok 66 - factory stays within the eight-instance geometry and payload budget
+  ---
+  duration_ms: 0.6021
+  type: 'test'
+  ...
+# Subtest: exported geometry matches the clearance report and clears the mech and eight existing exit routes
+ok 67 - exported geometry matches the clearance report and clears the mech and eight existing exit routes
+  ---
+  duration_ms: 26.2144
+  type: 'test'
+  ...
+# Subtest: setup has exactly two configurable paid factories, no income or waves until start
+ok 68 - setup has exactly two configurable paid factories, no income or waves until start
+  ---
+  duration_ms: 13.2065
+  type: 'test'
+  ...
+# Subtest: income is exact; economy is paid once and changes future income only
+ok 69 - income is exact; economy is paid once and changes future income only
+  ---
+  duration_ms: 57.3975
+  type: 'test'
+  ...
+# Subtest: build/refit reservation, correction, cancellation and simultaneous wave commit
+ok 70 - build/refit reservation, correction, cancellation and simultaneous wave commit
+  ---
+  duration_ms: 85.3208
+  type: 'test'
+  ...
+# Subtest: an order after a wave waits for the following wave; no skipped production
+ok 71 - an order after a wave waits for the following wave; no skipped production
+  ---
+  duration_ms: 42.2437
+  type: 'test'
+  ...
+# Subtest: paid supply uses independent cooldown across wave boundary and persists existing robots
+ok 72 - paid supply uses independent cooldown across wave boundary and persists existing robots
+  ---
+  duration_ms: 32.1368
+  type: 'test'
+  ...
+# Subtest: factory exit travel has real type-dependent duration, mirrored for both factions
+ok 73 - factory exit travel has real type-dependent duration, mirrored for both factions
+  ---
+  duration_ms: 3.8858
+  type: 'test'
+  ...
+# Subtest: HQ targeting prefers reachable robots and ignores distant robots when HQ is reachable
+ok 74 - HQ targeting prefers reachable robots and ignores distant robots when HQ is reachable
+  ---
+  duration_ms: 1.4192
+  type: 'test'
+  ...
+# Subtest: one shared HQ weapon across both lanes and simultaneous HQ destruction
+ok 75 - one shared HQ weapon across both lanes and simultaneous HQ destruction
+  ---
+  duration_ms: 2.0463
+  type: 'test'
+  ...
+# Subtest: no artificial end, unit removal, or population gate in a long symmetric match
+ok 76 - no artificial end, unit removal, or population gate in a long symmetric match
+  ---
+  duration_ms: 292.6026
+  type: 'test'
+  ...
+# Subtest: observer hides enemy pending orders, resources and AI uses only public observations
+ok 77 - observer hides enemy pending orders, resources and AI uses only public observations
+  ---
+  duration_ms: 20.5568
+  type: 'test'
+  ...
+# Subtest: fixed and irregular frame slicing produce the same complete state with AI
+ok 78 - fixed and irregular frame slicing produce the same complete state with AI
+  ---
+  duration_ms: 360.9935
+  type: 'test'
+  ...
+# Subtest: bad and unaffordable actions are atomic
+ok 79 - bad and unaffordable actions are atomic
+  ---
+  duration_ms: 2.2816
+  type: 'test'
+  ...
+# Subtest: swapping factions preserves the entire AI match trace and economic spending
+ok 80 - swapping factions preserves the entire AI match trace and economic spending
+  ---
+  duration_ms: 347.017
+  type: 'test'
+  ...
+# Subtest: a correct visible production response after minute three changes the outcome
+ok 81 - a correct visible production response after minute three changes the outcome
+  ---
+  duration_ms: 325.4617
+  type: 'test'
+  ...
+# Subtest: unopposed surviving robots are not removed when a lane temporarily empties
+ok 82 - unopposed surviving robots are not removed when a lane temporarily empties
+  ---
+  duration_ms: 9.7477
+  type: 'test'
+  ...
+# Subtest: M1 rules and scenarios retain frozen hashes; engine compatibility has trace tests
+ok 83 - M1 rules and scenarios retain frozen hashes; engine compatibility has trace tests
+  ---
+  duration_ms: 58.1186
+  type: 'test'
+  ...
+# Subtest: both longer routes have equal length, mirrored positions and uniform progress
+ok 84 - both longer routes have equal length, mirrored positions and uniform progress
+  ---
+  duration_ms: 14.6385
+  type: 'test'
+  ...
+# Subtest: all visual preparations finish identically under irregular and fixed frame slicing
+ok 85 - all visual preparations finish identically under irregular and fixed frame slicing
+  ---
+  duration_ms: 388.4055
+  type: 'test'
+  ...
+# Subtest: mirrored west/east encounter swaps winners and preserves time and damage
+ok 86 - mirrored west/east encounter swaps winners and preserves time and damage
+  ---
+  duration_ms: 33.4369
+  type: 'test'
+  ...
+# Subtest: Rail audio is deterministic, finite, bounded and fades at both ends
+ok 87 - Rail audio is deterministic, finite, bounded and fades at both ends
+  ---
+  duration_ms: 79.1248
+  type: 'test'
+  ...
+# Subtest: Locked or muted audio never queues historical attacks or creates a context
+ok 88 - Locked or muted audio never queues historical attacks or creates a context
+  ---
+  duration_ms: 0.8908
+  type: 'test'
+  ...
+# Subtest: Central Railgun has the requested 5.5 range for both factions; historical profiles retain 4.0
+ok 89 - Central Railgun has the requested 5.5 range for both factions; historical profiles retain 4.0
+  ---
+  duration_ms: 17.537
+  type: 'test'
+  ...
+# Subtest: Central saves migrate previous standard range without altering state; custom and historical ranges survive
+ok 90 - Central saves migrate previous standard range without altering state; custom and historical ranges survive
+  ---
+  duration_ms: 252.8344
+  type: 'test'
+  ...
+# Subtest: only central supply cooldown changes; legacy modes retain 15 seconds
+ok 91 - only central supply cooldown changes; legacy modes retain 15 seconds
+  ---
+  duration_ms: 5.8867
+  type: 'test'
+  ...
+# Subtest: both factions pay 80 and can reinforce at exactly 30 seconds, never a tick earlier
+ok 92 - both factions pay 80 and can reinforce at exactly 30 seconds, never a tick earlier
+  ---
+  duration_ms: 271.0785
+  type: 'test'
+  ...
+# Subtest: old central saves count elapsed cooldown for both sides without changing other saved data
+ok 93 - old central saves count elapsed cooldown for both sides without changing other saved data
+  ---
+  duration_ms: 1491.4768
+  type: 'test'
+  ...
+# Subtest: legacy saves and central saves with other cooldown settings are restored unchanged
+ok 94 - legacy saves and central saves with other cooldown settings are restored unchanged
+  ---
+  duration_ms: 396.1588
+  type: 'test'
+  ...
+1..94
+# tests 94
+# suites 0
+# pass 94
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6932.1106

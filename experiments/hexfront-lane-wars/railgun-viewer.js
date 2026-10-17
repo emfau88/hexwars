@@ -26,7 +26,7 @@ function updateWeaponEffects(){
     if(clip==='Attack'&&model){
       const muzzleWorld=model.getObjectByName('Muzzle').matrixWorld,from=new T.Vector3().setFromMatrixPosition(muzzleWorld),axis=new T.Vector3(0,0,-1).transformDirection(muzzleWorld),to=from.clone().addScaledVector(axis,6);
       // Freeze shot endpoints at the start of this Attack, as in the game.
-      if(!previewShots[i]){previewShots[i]=createRailShot(from,to,railMuzzles(muzzleWorld),axis);scene.add(previewShots[i].root);}
+      if(!previewShots[i]){previewShots[i]=createRailShot(from,to,railMuzzles(muzzleWorld),axis,model===twin?'blue':$('team').value);scene.add(previewShots[i].root);}
       sampleRailShot(previewShots[i],action.time);
     }else if(previewShots[i])previewShots[i].root.visible=false;
   }

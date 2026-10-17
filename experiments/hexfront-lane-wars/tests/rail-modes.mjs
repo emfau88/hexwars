@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {chromium} from '@playwright/test';
-const base=process.env.MATCH_URL||'http://127.0.0.1:4181/',out='docs/railgun-animation/';
+const base=process.env.MATCH_URL||'http://127.0.0.1:4181/',out=process.env.RAIL_MODES_OUTPUT||'docs/railgun-animation/';
+await fs.mkdir(out,{recursive:true});
 const browser=await chromium.launch({headless:true,channel:'chromium'}),p=await browser.newPage({viewport:{width:1440,height:960}}),errors=[],checks=[],results=[];
 p.on('pageerror',e=>errors.push(e.message));
 try{

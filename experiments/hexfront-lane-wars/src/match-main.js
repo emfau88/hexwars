@@ -25,7 +25,7 @@ function frameField(){
  if(!$('orders').hidden&&!compact){const card=$('factory-cards').children[selected]?.getBoundingClientRect();if(card)$('orders').style.left=Math.max(16,Math.min(innerWidth-$('orders').offsetWidth-16,card.left))+'px';}
 }
 
-let campaign=readCampaign(localStorage),match,view,ready=false,playing=false,inMenu=true,selected=0,last=performance.now(),hudClock=0,saveClock=0,noticeUntil=0,cardKey='',restartId=null,markerElements=[],frontHistory=[],frontReadings=[],supplyType=null,targetLane=null,drag=null,ignoreSupplyClick=false,endedSaved=false,loading=false;
+let campaign=readCampaign(localStorage),match,view,ready=false,playing=false,inMenu=true,selected=0,last=performance.now(),hudClock=0,saveClock=0,noticeUntil=0,cardKey='',restartId=null,pendingCentralStart=false,markerElements=[],frontHistory=[],frontReadings=[],supplyType=null,targetLane=null,drag=null,ignoreSupplyClick=false,endedSaved=false,loading=false;
 function notify(message){$('notice').textContent=message;$('notice').hidden=false;noticeUntil=performance.now()+4500;}
 function persist(){
  try{writeCampaign(localStorage,campaign);$('save-note').textContent='Fortschritt wird lokal in diesem Browser gespeichert.';}
@@ -39,10 +39,12 @@ function issue(action,data={}){
  else{flush();view?.renderMatch(match,0);save();updateHUD();markers();}
  return result.ok;
 }
-function setMenu(show){inMenu=show;if(show){playing=false;save();cancelSupply();hintOpen=false;closeOrders();$('camera-panel').hidden=true;$('toggle-camera').setAttribute('aria-expanded','false');updateMenu();}else last=performance.now();$('main-menu').hidden=!show;$('game-ui').hidden=show;updateHUD();}
+function setMenu(show){$('restart-confirm').hidden=true;restartId=null;inMenu=show;if(show){playing=false;save();cancelSupply();hintOpen=false;closeOrders();$('camera-panel').hidden=true;$('toggle-camera').setAttribute('aria-expanded','false');updateMenu();}else last=performance.now();$('main-menu').hidden=!show;$('game-ui').hidden=show;updateHUD();}
 function updateMenu(){
  const active=campaign.active&&campaign.saves[campaign.active]?.match.phase==='running';
- $('resume-game').hidden=!active;$('campaign-go').textContent=campaign.saves.central?.match.phase==='running'?'Zentrale Front fortsetzen':'Zentrale Front spielen';
+ $('resume-game').hidden=!active;$('campaign-go').textContent=!pendingCentralStart&&campaign.saves.central?.match.phase==='running'?'Neue zentrale Runde vorbereiten':'Mit dieser Aufstellung starten';
+ $('restart-round').hidden=!match||match.phase==='setup'||pendingCentralStart;
+ $('restart-round').textContent='Runde neu starten · '+(match?.mission.name||'Zentrale Front');
  $('central-opponent').value=campaign.settings.centralStrategy||'cycle';
  for(let i=0;i<2;i++)$('start-type-'+i).value=campaign.settings.centralStart?.[i]||MISSIONS.central.start[i].type;
  $('level-list').innerHTML=Object.values(MISSIONS).map(m=>{
@@ -70,7 +72,7 @@ async function prepare(id,{fresh=false,start=false}={}){
   document.querySelector('.menu-caption span').textContent='0'+mission.number+' / '+mission.name.toUpperCase();document.querySelector('.menu-caption strong').innerHTML=mission.id==='central'?'Eine Front.<br>Deine Kriegsmaschinerie.':mission.lanes===1?'Ein Weg.<br>Deine erste Entscheidung.':'Zwei Wege.<br>Eine gemeinsame Front.';
   $('battlefield').dataset.mission=id;$('fronts').innerHTML=Array.from({length:mission.lanes},(_,lane)=>`<button class="ceramic front" data-lane="${lane}" aria-expanded="false" aria-label="${mission.lanes===1?'Front':laneName(lane)}"><strong></strong><span></span><div class="front-track"><i></i></div><small></small></button>`).join('');
   ready=true;if(start&&match.phase==='setup'){match.start();flush();}view.renderMatch(match,0);updateHUD();markers();$('loading').hidden=true;loading=false;
-  if(start){setMenu(false);playing=match.phase==='running';save();}updateHUD();
+  if(start){setMenu(false);playing=match.phase==='running';save();}else if(inMenu)updateMenu();updateHUD();
   if(saved?.match?.version===1&&id==='central')notify('Fabrikkampf aktualisiert. Für die neue HQ-Balance bitte eine neue Partie starten.');
  }catch(error){loading=false;console.error(error);$('loading').hidden=true;$('battle-error').hidden=false;$('battle-error').textContent='Die Mission konnte nicht geladen werden: '+error.message;}
 }
@@ -79,7 +81,7 @@ async function openMission(id){
  if(match?.mission.id===id&&match.phase==='running'){setMenu(false);playing=true;updateHUD();return;}
  await prepare(id,{start:true});
 }
-function requestRestart(id){restartId=id;$('restart-confirm').hidden=false;$('confirm-restart').textContent=MISSIONS[id].name+' neu beginnen';}
+function requestRestart(id){setMenu(true);restartId=id;$('restart-confirm').hidden=false;$('confirm-restart').textContent=id==='central'?'Zur neuen Startaufstellung':MISSIONS[id].name+' neu beginnen';$('confirm-restart').focus();}
 function selectFactory(slot){
  if(inMenu||!ready||match.phase!=='running')return;hintOpen=false;hintUntil=0;$('notice').hidden=true;noticeUntil=0;selected=slot;const p=match.players.orange,f=p.pending[slot]||p.factories[slot]||{type:'drone',lane:slot%match.laneCount};
  $('factory-type').value=f.type;$('factory-lane').value=f.lane;$('orders').hidden=false;$('selection').hidden=true;cancelSupply();updateEditor();updateFactorySelection();frameField();$('factory-type').focus({preventScroll:true});
@@ -215,12 +217,13 @@ $('cancel-order').onclick=()=>{if(issue('cancel',{slot:selected})){notify('Auftr
 $('close-orders').onclick=()=>closeOrders(true);
 $('economy').onclick=()=>{if(issue('economy')){notify('Wirtschaft ausgebaut: +'+match.income('orange')+' Credits/s.');}};
 $('open-menu').onclick=()=>setMenu(true);$('result-menu').onclick=()=>setMenu(true);
-$('campaign-go').onclick=()=>campaign.saves.central?.match.phase==='ended'?prepare('central',{fresh:true,start:true}):openMission('central');
+$('campaign-go').onclick=async()=>{if(!pendingCentralStart&&campaign.saves.central?.match.phase==='running'){requestRestart('central');return;}pendingCentralStart=false;await prepare('central',{fresh:true,start:true});};
+$('restart-round').onclick=()=>requestRestart(match.mission.id);
 $('central-opponent').onchange=()=>{campaign.settings.centralStrategy=$('central-opponent').value;persist();};
 for(let i=0;i<2;i++)$('start-type-'+i).onchange=()=>{campaign.settings.centralStart=[0,1].map(n=>$('start-type-'+n).value);persist();};
-$('resume-game').onclick=()=>openMission(campaign.active);
+$('resume-game').onclick=()=>{pendingCentralStart=false;openMission(campaign.active);};
 $('level-list').onclick=e=>{const level=e.target.closest('button[data-mission]'),restart=e.target.closest('[data-restart]');if(level)openMission(level.dataset.mission);if(restart)requestRestart(restart.dataset.restart);};
-$('confirm-restart').onclick=async()=>{const id=restartId;$('restart-confirm').hidden=true;await prepare(id,{fresh:true,start:true});};
+$('confirm-restart').onclick=async()=>{const id=restartId;if(!id)return;restartId=null;$('restart-confirm').hidden=true;if(id==='central'){pendingCentralStart=true;updateMenu();$('start-type-0').focus();return;}await prepare(id,{fresh:true,start:true});};
 $('cancel-restart').onclick=()=>{$('restart-confirm').hidden=true;restartId=null;};
 $('levels-toggle').onclick=()=>{$('level-list').hidden=!$('level-list').hidden;$('settings-panel').hidden=true;};
 $('settings-toggle').onclick=()=>{$('settings-panel').hidden=!$('settings-panel').hidden;$('level-list').hidden=true;};
@@ -229,7 +232,7 @@ $('motion-setting').onchange=()=>{campaign.settings.motion=$('motion-setting').c
 bindRailSound($('sound-setting'));
 $('hints-setting').onchange=()=>{campaign.settings.hints=$('hints-setting').checked;persist();};
 $('match-play').onclick=()=>{if(match.phase!=='running')return;playing=!playing;last=performance.now();save();updateHUD();};
-$('result-next').onclick=async()=>{if(match.result==='orange'&&match.mission.id==='first')await openMission('meadow');else await prepare(match.mission.id,{fresh:true,start:true});};
+$('result-next').onclick=async()=>{if(match.result==='orange'&&match.mission.id==='first')await openMission('meadow');else if(match.mission.id==='central'){setMenu(true);pendingCentralStart=true;updateMenu();$('start-type-0').focus();}else await prepare(match.mission.id,{fresh:true,start:true});};
 $('camera-home').onclick=()=>view.home();$('zoom-in').onclick=()=>view.zoomBy(1.25);$('zoom-out').onclick=()=>view.zoomBy(.8);
 $('close-selection').onclick=()=>{view.selected=null;$('selection').hidden=true;};$('focus-unit').onclick=()=>view.focusSelected();
 document.addEventListener('visibilitychange',()=>{if(document.hidden){playing=false;save();}last=performance.now();});

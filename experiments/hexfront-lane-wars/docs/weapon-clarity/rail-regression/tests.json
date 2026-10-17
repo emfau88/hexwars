@@ -1,0 +1,8 @@
+{
+  "checks": [
+    "Real charge and shot events for both factions: two aligned rails, bright instantaneous beams, impacts exactly at targets; no snapshot changes from rendering",
+    "Beam gone after 180 ms; impact outlives beam; effect resources removed after 340 ms",
+    "Shared viewer effects: both teams, frozen pause, scrubbed decay, idle clears effects, portrait viewport"
+  ],
+  "errors": []
+}

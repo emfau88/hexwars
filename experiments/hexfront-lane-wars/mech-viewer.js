@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {readableMechClips} from './src/weapon-effects.js';
 import {GLTFLoader} from './vendor/loaders/GLTFLoader.js';
 import {suppliedMaterial} from './src/team-material.js';
 const $=id=>document.getElementById(id),stage=$('stage');
@@ -8,6 +9,7 @@ scene.add(new T.HemisphereLight(0xffffff,0x7e8979,1.6));const sun=new T.Directio
 const floor=new T.Mesh(new T.PlaneGeometry(30,30),new T.MeshStandardMaterial({color:0xbfcbb4,roughness:1}));floor.rotation.x=-Math.PI/2;floor.receiveShadow=true;floor.position.y=-.003;scene.add(floor);
 const grid=new T.GridHelper(12,48,0x899b85,0xaabb9e);grid.position.y=.001;grid.material.transparent=true;grid.material.opacity=.25;scene.add(grid);
 const gltf=await new GLTFLoader().loadAsync('public/models/mech-animated/mech-rigged.glb');
+gltf.animations=readableMechClips(gltf.animations);
 const root=gltf.scene;scene.add(root);const materials=[];
 root.traverse(o=>{if(o.isMesh){const original=o.material;o.userData.original=original;o.material=original.name==='Supplied_Surface'?suppliedMaterial(original,'orange'):original.clone();materials.push(o);o.castShadow=o.receiveShadow=true;}});
 const twin=root.clone(true);scene.add(twin);twin.visible=false;const pairs=[];twin.traverse(o=>{const original=root.getObjectByName(o.name);if(original&&o!==twin)pairs.push([original,o]);if(o.isMesh)o.material=o.userData.original.name==='Supplied_Surface'?suppliedMaterial(original.userData.original,'blue'):o.material;});

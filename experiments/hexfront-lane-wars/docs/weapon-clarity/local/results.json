@@ -1,0 +1,176 @@
+{
+  "base": "http://127.0.0.1:4181/",
+  "checks": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "type": "mech",
+      "count": 2,
+      "scale": 40.86123558687855,
+      "teams": [
+        "blue",
+        "orange"
+      ],
+      "minCore": 2.206506721691442,
+      "parallel": true,
+      "life": [
+        0.28,
+        0.28
+      ],
+      "renderDoesNotMutate": true,
+      "recoil": 0.09777775297566556
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "type": "rail",
+      "count": 2,
+      "scale": 40.86123558687855,
+      "teams": [
+        "blue",
+        "orange"
+      ],
+      "minCore": 1.8796168369964132,
+      "parallel": true,
+      "life": [
+        0.34,
+        0.34
+      ],
+      "renderDoesNotMutate": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "setup": "choice before first production, cancel preserves match, restart returns to choice, new units verified, result returns to choice",
+      "result": {
+        "result": "orange",
+        "time": 119.5,
+        "waves": 6,
+        "peakUnits": 15,
+        "hq": {
+          "orange": 800,
+          "blue": 0
+        },
+        "metrics": {
+          "orange": {
+            "spent": 440,
+            "earned": 281.6,
+            "produced": 15,
+            "hqDamage": 800,
+            "builds": 1,
+            "refits": 0,
+            "laneChanges": 0,
+            "supplies": 0,
+            "economyAt": 84,
+            "credits": 121.6
+          },
+          "blue": {
+            "spent": 440,
+            "earned": 239,
+            "produced": 40,
+            "hqDamage": 0,
+            "builds": 1,
+            "refits": 0,
+            "laneChanges": 0,
+            "supplies": 1,
+            "economyAt": null,
+            "credits": 79
+          }
+        },
+        "lateOrders": 0
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "type": "mech",
+      "count": 2,
+      "scale": 18.7,
+      "teams": [
+        "blue",
+        "orange"
+      ],
+      "minCore": 1.8,
+      "parallel": true,
+      "life": [
+        0.28,
+        0.28
+      ],
+      "renderDoesNotMutate": true,
+      "recoil": 0.09777775297566556
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "type": "rail",
+      "count": 2,
+      "scale": 18.7,
+      "teams": [
+        "blue",
+        "orange"
+      ],
+      "minCore": 1.8,
+      "parallel": true,
+      "life": [
+        0.34,
+        0.34
+      ],
+      "renderDoesNotMutate": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "setup": "choice before first production, cancel preserves match, restart returns to choice, new units verified, result returns to choice",
+      "result": {
+        "result": "orange",
+        "time": 119.5,
+        "waves": 6,
+        "peakUnits": 15,
+        "hq": {
+          "orange": 800,
+          "blue": 0
+        },
+        "metrics": {
+          "orange": {
+            "spent": 440,
+            "earned": 281.6,
+            "produced": 15,
+            "hqDamage": 800,
+            "builds": 1,
+            "refits": 0,
+            "laneChanges": 0,
+            "supplies": 0,
+            "economyAt": 84,
+            "credits": 121.6
+          },
+          "blue": {
+            "spent": 440,
+            "earned": 239,
+            "produced": 40,
+            "hqDamage": 0,
+            "builds": 1,
+            "refits": 0,
+            "laneChanges": 0,
+            "supplies": 1,
+            "economyAt": null,
+            "credits": 79
+          }
+        },
+        "lateOrders": 0
+      }
+    }
+  ],
+  "errors": []
+}
