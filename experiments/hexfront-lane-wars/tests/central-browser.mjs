@@ -6,7 +6,7 @@ import {CENTRAL_UNITS,CENTRAL_RULES} from '../src/central-rules.js';
 import {Match} from '../src/match.js';
 const base=process.env.MATCH_URL||'http://127.0.0.1:4181/',out=process.env.CENTRAL_QA_OUTPUT||'docs/central-qa/browser/';
 await fs.mkdir(out,{recursive:true});
-const browser=await chromium.launch({headless:true}),errors=[],checks=[],games=[];
+const browser=await chromium.launch({headless:true,channel:'chromium'}),errors=[],checks=[],games=[];
 function watch(p){p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error')errors.push(m.text());});p.on('requestfailed',r=>errors.push(r.url()+': '+r.failure()?.errorText));}
 async function boot(p){await p.goto(base+'?qa=1',{timeout:90000});const gate=p.getByText('Open the page',{exact:true});if(await gate.count())await gate.click();await p.waitForFunction(()=>window.__LANE_MATCH_QA__,null,{timeout:90000});}
 const p=await browser.newPage({viewport:{width:1440,height:960}});watch(p);
@@ -23,7 +23,7 @@ try{
  await p.locator('#central-opponent').selectOption('pressure');await p.locator('#campaign-go').click();await p.locator('#loading').waitFor({state:'hidden'});await advance(0);
  let state=await observe();assert.equal(state.factories.length,4);assert.equal(state.laneCount,1);assert.ok(state.credits>=40&&state.credits<42);
  assert.equal(await p.locator('#lane-field').isVisible(),false);assert.equal(await p.locator('[data-route]').count(),0);
- assert.match(await p.locator('#reserved').innerText(),/20/);assert.match(await p.locator('#supply-title').innerText(),/80/);
+ assert.match(await p.locator('#wave-countdown').innerText(),/20/);assert.match(await p.locator('#supply-title').innerText(),/80/);
  // Exercise reservation/cancel without altering the full match's chosen strategy.
  await advance(42);const money=(await observe()).credits;
  await command('factory',{slot:0,type:'drone'});assert.equal((await observe()).pending[0].type,'drone');
@@ -64,7 +64,7 @@ try{
  checks.push('Actual defeat and result screen without modifying HQ values');
  const mobile=await browser.newPage({viewport:{width:390,height:844},hasTouch:true,isMobile:true});watch(mobile);await boot(mobile);
  await mobile.locator('#campaign-go').click();await mobile.locator('#loading').waitFor({state:'hidden'});await mobile.evaluate(()=>window.__LANE_MATCH_QA__.advance(80));
- await mobile.screenshot({path:out+'mobile.png'});await mobile.locator('#toggle-factories').tap();assert.equal(await mobile.locator('#factory-cards').isVisible(),true);
+ await mobile.screenshot({path:out+'mobile.png'});assert.equal(await mobile.locator('#factory-cards').isVisible(),true);
  await mobile.locator('[data-edit="0"]').first().tap();await mobile.locator('#factory-type').selectOption('drone');await mobile.locator('#apply-factory').tap();assert.equal((await mobile.evaluate(()=>window.__LANE_MATCH__.observe())).pending[0].type,'drone');
  checks.push('Portrait touch controls retain compact HUD and support all four factories');
  assert.deepEqual(errors,[]);await fs.writeFile(out+'results.json',JSON.stringify({base,checks,games,errors},null,2));console.log(JSON.stringify({checks,games:games.map(({result,time,hq})=>({result,time,hq})),errors},null,2));

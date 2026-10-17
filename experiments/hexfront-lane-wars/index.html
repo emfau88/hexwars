@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>HEXFRONT · Lane Wars</title><meta name="description" content="Eine zentrale Front, vier Fabriken, drei Robotertypen. HEXFRONT mit zusätzlichen Missionen.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%23eab176' d='M16 2 29 9v14L16 30 3 23V9z'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="./src/battle.css"><link rel="stylesheet" href="./src/campaign.css">
@@ -7,19 +7,22 @@
 <body><main id="battlefield">
 <div id="battle-stage" tabindex="0"></div><div id="battle-labels" aria-hidden="true"></div>
 <div id="game-ui" hidden>
-<header class="game-top">
- <button id="open-menu" class="ceramic menu-button" aria-label="Hauptmenü öffnen">☰ <span>HEXFRONT</span></button>
- <div class="ceramic game-status">
-  <div class="orange"><small>DEIN HQ</small><strong id="own-hq"></strong><meter id="own-health" min="0"></meter></div>
+<header class="game-top ceramic">
+ <button id="open-menu" class="menu-button" aria-label="Hauptmenü öffnen" title="Hauptmenü">☰</button>
+ <div class="game-status">
+  <div class="orange"><small>DEIN HQ</small><strong id="own-hq"></strong><meter id="own-health" min="0" aria-label="Dein HQ: Lebenspunkte"></meter></div>
   <div class="clock"><small id="mission-title"></small><strong id="battle-clock">00:00</strong><small id="phase-label"></small></div>
-  <div class="blue"><small>GEGNER-HQ</small><strong id="enemy-hq"></strong><meter id="enemy-health" min="0"></meter></div>
+  <div class="blue"><small>GEGNER-HQ</small><strong id="enemy-hq"></strong><meter id="enemy-health" min="0" aria-label="Gegner-HQ: Lebenspunkte"></meter></div>
  </div>
- <div class="ceramic wallet"><strong><span id="credits">0</span> <small>Credits</small></strong><small id="income"></small><span id="wave-countdown"></span></div>
+ <div class="wallet"><div><strong id="credits">0</strong><span>Credits</span><span id="economy-done" hidden title="Wirtschaft vollständig ausgebaut" aria-label="Wirtschaft ausgebaut">✓</span></div><small id="income"></small></div>
+ <div class="wave-status"><span id="wave-countdown"></span><div class="wave-track" aria-hidden="true"><i id="wave-progress"></i></div></div>
+ <div class="hud-tools"><button id="match-play" aria-label="Partie pausieren" title="Pause / Weiter · Leertaste">Ⅱ</button><button id="toggle-camera" aria-label="Kamerasteuerung öffnen" aria-controls="camera-panel" aria-expanded="false" title="Kamera">⌖</button><button id="toggle-hint" aria-label="Missionshinweis anzeigen" aria-expanded="false" aria-controls="hint" title="Hinweise">?</button></div>
 </header>
+<div class="ceramic camera-panel" id="camera-panel" hidden><button id="camera-home" aria-label="Gesamtes Schlachtfeld anzeigen">Übersicht</button><button id="zoom-in" aria-label="Hineinzoomen">+</button><button id="zoom-out" aria-label="Herauszoomen">−</button><button id="close-camera" aria-label="Kamerasteuerung schließen">×</button></div>
 <section id="fronts" aria-label="Aktuelle Fronten"></section>
-<aside id="hint" class="ceramic mission-hint"></aside>
+<aside id="hint" class="ceramic mission-hint"><button id="close-hint" aria-label="Hinweis schließen">×</button><div id="hint-copy"></div></aside>
 <div id="factory-labels"></div><svg id="building-leaders" aria-hidden="true"></svg>
-<section id="orders" class="ceramic order-panel" hidden aria-label="Fabrik bearbeiten">
+<section id="orders" class="ceramic order-panel" hidden aria-label="Fabrik bearbeiten" role="region">
  <div class="panel-heading"><small id="factory-number"></small><button id="close-orders" aria-label="Fabrikbearbeitung schließen">×</button></div>
  <h2 id="factory-title"></h2><p id="factory-status"></p>
  <label for="factory-type">Produktion</label><select id="factory-type"><option value="drone">3 Drohnen · schnell gegen Fernkämpfer</option><option value="mech">1 Mech · Flächenschaden gegen Drohnen</option><option value="rail">1 Fernkämpfer · stark gegen Mechs</option></select>
@@ -27,13 +30,11 @@
  <button id="apply-factory" class="primary"></button><button id="cancel-order" hidden></button><small id="order-help"></small>
 </section>
 <section class="ceramic unit-inspector" id="selection" hidden><button id="close-selection" aria-label="Auswahl schließen">×</button><strong id="selected-name"></strong><p id="selected-details"></p><button id="focus-unit">Näher ansehen</button></section>
-<footer class="command-deck" id="command-deck">
- <div class="mobile-deck-bar"><button id="toggle-factories" class="ceramic" aria-expanded="false" aria-controls="production-panel"><span>Fabriken &amp; Wirtschaft</span><small id="factory-summary"></small><b aria-hidden="true">⌃</b></button><button id="toggle-hint" class="ceramic" aria-label="Missionshinweis anzeigen" aria-expanded="false" aria-controls="hint">?</button></div>
- <section class="production" id="production-panel" aria-label="Eigene Fabriken"><div class="deck-heading"><strong>DEINE FABRIKEN</strong><small id="reserved"></small></div><div id="factory-cards"></div></section>
+<footer class="command-deck ceramic" id="command-deck">
+ <section class="production" id="production-panel" aria-label="Eigene Fabriken"><div class="deck-heading"><strong>FABRIKEN <span id="factory-summary"></span></strong><small id="reserved"></small></div><div id="factory-cards"></div></section>
  <div class="deck-bottom">
-  <button id="economy" class="ceramic"></button>
-  <section class="ceramic supply-tray" aria-label="Sofortnachschub"><div><strong id="supply-title">SOFORTNACHSCHUB</strong><small id="supply-status"></small></div><div id="supply-units"></div></section>
-  <div class="utility"><button id="match-play">Pause</button><button id="camera-home" aria-label="Gesamtes Schlachtfeld anzeigen">⌖</button><button id="zoom-in" aria-label="Hineinzoomen">+</button><button id="zoom-out" aria-label="Herauszoomen">−</button></div>
+  <button id="economy"></button>
+  <section class="supply-tray" aria-label="Sofortnachschub"><div class="supply-heading"><strong id="supply-title">NACHSCHUB</strong><small id="supply-status"></small></div><div id="supply-units"></div></section>
  </div>
 </footer>
 <div id="supply-targeting" class="ceramic" hidden aria-live="polite"><span></span><button id="cancel-supply" aria-label="Nachschubauswahl abbrechen">×</button></div>
@@ -44,6 +45,7 @@
  <div class="central-setup"><label for="central-opponent">Gegner für neue Partien</label><select id="central-opponent"><option value="cycle">Abwechselnde Strategien</option><option value="siege">Eisenkeil · schwere Produktion</option><option value="pressure">Vorhut · früher Druck</option><option value="economy">Aufbaukommando · Wirtschaft</option></select><details><summary>Zwei Startfabriken wählen</summary><label for="start-type-0">Fabrik 02</label><select id="start-type-0"><option value="drone">Drohnen</option><option value="mech" selected>Mech</option><option value="rail">Fernkämpfer</option></select><label for="start-type-1">Fabrik 03</label><select id="start-type-1"><option value="drone">Drohnen</option><option value="mech">Mech</option><option value="rail" selected>Fernkämpfer</option></select><small>Gilt für neue Partien. Die zwei Fabriken sind bereits bezahlt; 40 Credits bleiben zum Start.</small></details></div>
  <button id="campaign-go" class="primary">Zentrale Front spielen</button><button id="resume-game" hidden>Laufende Partie fortsetzen</button>
  <div class="menu-tabs"><button id="levels-toggle">Weitere Missionen</button><button id="settings-toggle">Einstellungen</button></div>
+ <div class="mobile-view-tools"><button id="show-camera">Kamera</button><button id="show-hint">Spielhinweise</button></div>
  <div id="level-list"></div>
  <div id="settings-panel" hidden><label><input type="checkbox" id="sound-setting"> Railgun-Sound</label><label>Kamera<select id="camera-setting"><option value="diorama">Diorama · 55°</option><option value="tactical">Taktik · 70°</option></select></label><label><input type="checkbox" id="motion-setting"> Modellbewegung</label><label><input type="checkbox" id="hints-setting"> Kurze Missionshinweise</label></div>
  <div id="restart-confirm" hidden><p>Diese Mission hat bereits einen Spielstand. Neu beginnen ersetzt nur den Spielstand dieser Mission.</p><button id="confirm-restart">Mission neu beginnen</button><button id="cancel-restart">Zurück</button></div>

@@ -1,0 +1,203 @@
+{
+  "base": "http://127.0.0.1:4181/",
+  "checks": [
+    "Main menu, three selectable opponents, four slots, real mode values, UI reservation/ghost/cancellation/refund",
+    "Real browser reload preserves running economy, opponent, armies and orders",
+    "Complete playable match from menu, actual factory/economy/refit/supply inputs, reload, HQ destruction and result screen",
+    "Actual defeat and result screen without modifying HQ values",
+    "Portrait touch controls retain compact HUD and support all four factories"
+  ],
+  "games": [
+    {
+      "control": "All orange orders through actual HUD buttons, only clock accelerated",
+      "result": "orange",
+      "time": 199,
+      "waves": 10,
+      "peakUnits": 20,
+      "hq": {
+        "orange": 800,
+        "blue": 0
+      },
+      "metrics": {
+        "orange": {
+          "spent": 750,
+          "earned": 535.82,
+          "produced": 34,
+          "hqDamage": 800,
+          "builds": 2,
+          "refits": 1,
+          "laneChanges": 0,
+          "supplies": 2,
+          "economyAt": 84.15,
+          "credits": 65.82
+        },
+        "blue": {
+          "spent": 620,
+          "earned": 428,
+          "produced": 73,
+          "hqDamage": 0,
+          "builds": 2,
+          "refits": 2,
+          "laneChanges": 0,
+          "supplies": 0,
+          "economyAt": 174,
+          "credits": 58
+        }
+      },
+      "lateOrders": 8
+    },
+    {
+      "opponent": "pressure",
+      "result": "orange",
+      "time": 199,
+      "waves": 10,
+      "peakUnits": 20,
+      "hq": {
+        "orange": 800,
+        "blue": 0
+      },
+      "metrics": {
+        "orange": {
+          "spent": 750,
+          "earned": 536,
+          "produced": 34,
+          "hqDamage": 800,
+          "builds": 2,
+          "refits": 1,
+          "laneChanges": 0,
+          "supplies": 2,
+          "economyAt": 84,
+          "credits": 66
+        },
+        "blue": {
+          "spent": 620,
+          "earned": 428,
+          "produced": 73,
+          "hqDamage": 0,
+          "builds": 2,
+          "refits": 2,
+          "laneChanges": 0,
+          "supplies": 0,
+          "economyAt": 174,
+          "credits": 58
+        }
+      },
+      "lateOrders": 8
+    },
+    {
+      "opponent": "siege",
+      "result": "unresolved",
+      "time": 720,
+      "waves": 37,
+      "peakUnits": 20,
+      "hq": {
+        "orange": 800,
+        "blue": 800
+      },
+      "metrics": {
+        "orange": {
+          "spent": 1160,
+          "earned": 2203.2,
+          "produced": 220,
+          "hqDamage": 0,
+          "builds": 2,
+          "refits": 20,
+          "laneChanges": 0,
+          "supplies": 0,
+          "economyAt": 84,
+          "credits": 1323.2
+        },
+        "blue": {
+          "spent": 1160,
+          "earned": 2203.2,
+          "produced": 220,
+          "hqDamage": 0,
+          "builds": 2,
+          "refits": 20,
+          "laneChanges": 0,
+          "supplies": 0,
+          "economyAt": 84,
+          "credits": 1323.2
+        }
+      },
+      "lateOrders": 42
+    },
+    {
+      "opponent": "economy",
+      "result": "orange",
+      "time": 97.2,
+      "waves": 5,
+      "peakUnits": 14,
+      "hq": {
+        "orange": 800,
+        "blue": 0
+      },
+      "metrics": {
+        "orange": {
+          "spent": 440,
+          "earned": 210.24,
+          "produced": 12,
+          "hqDamage": 800,
+          "builds": 1,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 0,
+          "economyAt": 84,
+          "credits": 50.24
+        },
+        "blue": {
+          "spent": 520,
+          "earned": 282.24,
+          "produced": 24,
+          "hqDamage": 0,
+          "builds": 1,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 1,
+          "economyAt": 24,
+          "credits": 42.24
+        }
+      },
+      "lateOrders": 0
+    },
+    {
+      "control": "No player orders: actual defeat through HQ destruction",
+      "result": "blue",
+      "time": 208.95000000000002,
+      "waves": 11,
+      "peakUnits": 17,
+      "hq": {
+        "orange": 0,
+        "blue": 65
+      },
+      "metrics": {
+        "orange": {
+          "spent": 240,
+          "earned": 417.9,
+          "produced": 22,
+          "hqDamage": 735,
+          "builds": 0,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 0,
+          "economyAt": null,
+          "credits": 457.9
+        },
+        "blue": {
+          "spent": 800,
+          "earned": 639.84,
+          "produced": 60,
+          "hqDamage": 800,
+          "builds": 2,
+          "refits": 0,
+          "laneChanges": 0,
+          "supplies": 3,
+          "economyAt": 24,
+          "credits": 119.84
+        }
+      },
+      "lateOrders": 3
+    }
+  ],
+  "errors": []
+}

@@ -34,3 +34,13 @@ art/railgun-v1/*.blend1
 art/railgun-animation/*.blend1
 docs/railgun-animation/central/*.png
 docs/railgun-animation/central-range/*.png
+
+# Reproducible responsive HUD captures; keep representative review images.
+docs/compact-hud/*.png
+!docs/compact-hud/central-1440x960.png
+!docs/compact-hud/central-390x844.png
+!docs/compact-hud/central-320x568.png
+!docs/compact-hud/meadow-390x844.png
+!docs/compact-hud/desktop-order.png
+docs/compact-hud/full-match/*.png
+docs/compact-hud/local-final/*.png

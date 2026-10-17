@@ -1,0 +1,19 @@
+{
+  "url": "https://rawcdn.githack.com/emfau88/hexwars/37a6864b689f4c3ad4052508de968b9cc2fd2fe6/experiments/hexfront-lane-wars/",
+  "results": [
+    {
+      "width": 1440,
+      "height": 960,
+      "deckHeight": 201,
+      "cardsVisible": true,
+      "worldLabels": 5
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "deckHeight": 111,
+      "cardsVisible": false,
+      "worldLabels": 5
+    }
+  ]
+}
