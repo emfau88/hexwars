@@ -18,3 +18,9 @@ Fehlende Credits werden einmal als ruhiger Hinweis unter dem gemeinsamen Preis a
 ![Fehlende Credits ohne verdeckte Roboterporträts](local/credits-390.jpg)
 
 [Verfügbarkeits- und Layouttests](local/results.json) · [Touchtests](touch/results.json)
+
+## Veröffentlichung
+
+Laufzeitstand `13060099fb563ffdfc4685dcc7edc5f570d29685`, ausschließlich Branch `codex/lane-wars`. Beide README-Playlinks sind aktualisiert.
+
+Zusätzlich über den öffentlichen Playlink bestanden: [radiale Anzeige und sämtliche Sperrzustände](public/results.json), [UI, Speichern/Fortsetzen und vollständige Partie](public-game/public.json). Keine Browserfehler. Referenzpartie unverändert: Orange gewinnt nach 213,5 Sekunden, HQ 764 : 0.
