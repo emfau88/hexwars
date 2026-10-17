@@ -30,3 +30,5 @@ Die saubereren Oberflächen sind eine bewusste erste Ausarbeitung; die stärkere
 `node tests/railgun-preview.mjs` lädt das tatsächliche GLB und prüft bewegte Geometrie, vier durchgehende Beinketten, Rückkehr zur Grundstellung, Pause, Teamfarben, Downloads und Hochformat. `validation.json` enthält die Ergebnisse. Screenshots in diesem Ordner stammen aus dem Echtzeitviewer; sie ersetzen ihn nicht.
 
 Reproduktion: Blender im Hintergrund mit `--python art/railgun-v1/build_railgun.py`, danach `node art/railgun-v1/capture.mjs`. Der lokale Server muss auf Port 4181 laufen. `npm run build` nimmt die separate Vorschau und Quelldatei in den statischen Build auf.
+
+Geprüft am 17.10.2026: 19/19 Browserprüfungen lokal und über den öffentlichen, auf c260fa8 festgelegten Vorschau-Link bestanden. Statischer Build erfolgreich. Keine Browser-Ausnahmen. Kein erneuter Balance-Audit nötig, da kein Spielcode geändert wurde.

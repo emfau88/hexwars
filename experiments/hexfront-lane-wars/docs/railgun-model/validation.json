@@ -1,5 +1,5 @@
 {
-  "base": "http://127.0.0.1:4181/railgun-preview.html",
+  "base": "https://rawcdn.githack.com/emfau88/hexwars/c260fa818d52a2b62a5de46ab6696c9ccd3abaf2/experiments/hexfront-lane-wars/railgun-preview.html",
   "checks": [
     "Four exported animation clips",
     "15 articulation axes",

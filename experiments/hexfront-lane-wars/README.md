@@ -29,6 +29,10 @@ Unter „Weitere Missionen“ bleibt **Erste Front** als Einführung erhalten. I
 
 HQs haben in neuen zentralen Partien 800 LP und verursachen 2 Schaden/s. Ausrückende Einheiten kämpfen und sind angreifbar, sobald sie vor dem Fabriktor erscheinen. Der Mech schießt mit 2,8 statt 1,6 Reichweite; Fernkämpfer bleiben bei 4,0. Ausschließlich tatsächliche Angriffe beenden die Partie. Die älteren Missionen behalten ihre bisherigen 15-Sekunden-Wellen und Kosten; Wiesenkrieg zusätzlich seine kostenlosen Richtungspfeile und die Nachschubwahl per Drag/Tap auf eine Lane.
 
+## Railgun-Modell zur Freigabe
+
+**[Vierbeiniges Railgun-GLB online ansehen](https://rawcdn.githack.com/emfau88/hexwars/c260fa818d52a2b62a5de46ab6696c9ccd3abaf2/experiments/hexfront-lane-wars/railgun-preview.html)** – drehen, Orange/Blau vergleichen, Gelenke und Rückstoß prüfen sowie HQ-/Mech-Größenvergleich. GLB und bearbeitbare Blender-Datei sind im Viewer verlinkt. Separater Entwurf; noch nicht im Spiel integriert. Die Beinprüfung ist noch keine fertige Laufanimation. [Modellbericht](docs/railgun-model/REVIEW.md).
+
 ## Mech-Animation
 
 Der originale Mech besitzt jetzt bewegliche mechanische Gelenke, Walk/Idle/Attack/Hit/Death und unabhängige Animationen im laufenden Spiel. [Animierten Mech drehen und prüfen](https://rawcdn.githack.com/emfau88/hexwars/1e8467ebb8fd74eeba4f33d15fcfc56e0362db1a/experiments/hexfront-lane-wars/mech-viewer.html) · [GLB, Blender-Datei, Performance und Testbericht](docs/mech-animation/REPORT.md). Gameplay und Fabrikmodell bleiben unverändert.
