@@ -13,7 +13,7 @@ function selection() {
   const u=view?.inspect();$('selection').hidden=!u;if(!u)return;
   $('selected-faction').textContent=`${u.owner==='orange'?'ORANGE':'BLAU'} · ${u.lane===0?'WESTWEG':'OSTWEG'}`;
   $('selected-name').textContent=names[u.type];
-  $('selected-details').textContent=`${u.hp} / ${UNITS[u.type].hp} LP · Reichweite ${UNITS[u.type].range}. ${u.type==='mech'?'Originalmodell · Bewegung vorläufig; noch kein Lauf-Rig.':u.type==='rail'?'Vorläufiges Modell · das finale GLB fehlt.':'Originalmodell · schwebend.'}`;
+  $('selected-details').textContent=`${u.hp} / ${UNITS[u.type].hp} LP · Reichweite ${UNITS[u.type].range}. ${u.type==='mech'?'Originalmodell · animierte mechanische Gelenke.':u.type==='rail'?'Vorläufiges Modell · das finale GLB fehlt.':'Originalmodell · schwebend.'}`;
 }
 function updateHUD() {
   const time=Math.max(...battle.lanes.map(g=>g.time));$('battle-clock').textContent=`${Math.floor(time/60).toString().padStart(2,'0')}:${Math.floor(time%60).toString().padStart(2,'0')}`;
@@ -31,7 +31,7 @@ function advance(seconds,draw=true) {
 }
 function animate(now) {
   const dt=Math.min(.05,(now-last)/1000);last=now;
-  if(ready){if(playing)advance(dt);else view.render(battle.lanes,visualTime,0);}
+  if(ready){if(playing)advance(dt);else view.render(battle.lanes,visualTime,battle.lanes.every(g=>g.result)&&(view.corpses.size||view.effects.length)?dt:0);}
   requestAnimationFrame(animate);
 }
 try {

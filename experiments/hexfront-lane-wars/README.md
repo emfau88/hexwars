@@ -29,6 +29,10 @@ Unter „Weitere Missionen“ bleibt **Erste Front** als Einführung erhalten. I
 
 HQs haben in neuen zentralen Partien 800 LP und verursachen 2 Schaden/s. Ausrückende Einheiten kämpfen und sind angreifbar, sobald sie vor dem Fabriktor erscheinen. Der Mech schießt mit 2,8 statt 1,6 Reichweite; Fernkämpfer bleiben bei 4,0. Ausschließlich tatsächliche Angriffe beenden die Partie. Die älteren Missionen behalten ihre bisherigen 15-Sekunden-Wellen und Kosten; Wiesenkrieg zusätzlich seine kostenlosen Richtungspfeile und die Nachschubwahl per Drag/Tap auf eine Lane.
 
+## Mech-Animation
+
+Der originale Mech besitzt jetzt bewegliche mechanische Gelenke, Walk/Idle/Attack/Hit/Death und unabhängige Animationen im laufenden Spiel. [Animierten Mech drehen und prüfen](mech-viewer.html) · [GLB, Blender-Datei, Performance und Testbericht](docs/mech-animation/REPORT.md). Gameplay und Fabrikmodell bleiben unverändert.
+
 ## Aktuelle Änderung
 
 Der Nachschub-Cooldown in Zentrale Front beträgt jetzt **30 Sekunden** für beide Fraktionen, auch beim Fortsetzen älterer Spielstände. Kosten, Wellen und alle übrigen Spielwerte bleiben unverändert. [Prüfbericht](docs/SUPPLY-30.md).

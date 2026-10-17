@@ -1,0 +1,92 @@
+{
+  "url": "http://127.0.0.1:4181/",
+  "browser": "151.0.7922.34",
+  "description": "Actual rendered instance matrices face their measured movement on every factory/HQ exit, for all three models and both factions/lanes.",
+  "cases": [
+    {
+      "type": "drone",
+      "lane": 0,
+      "supply": false,
+      "samples": 134,
+      "minAlignment": 0.9999874922597265
+    },
+    {
+      "type": "drone",
+      "lane": 0,
+      "supply": true,
+      "samples": 36,
+      "minAlignment": 0.9999983681660062
+    },
+    {
+      "type": "drone",
+      "lane": 1,
+      "supply": false,
+      "samples": 134,
+      "minAlignment": 0.9999874922597265
+    },
+    {
+      "type": "drone",
+      "lane": 1,
+      "supply": true,
+      "samples": 36,
+      "minAlignment": 0.9999983681660063
+    },
+    {
+      "type": "mech",
+      "lane": 0,
+      "supply": false,
+      "samples": 54,
+      "minAlignment": 0.9999701353094522
+    },
+    {
+      "type": "mech",
+      "lane": 0,
+      "supply": true,
+      "samples": 14,
+      "minAlignment": 0.9999814924555253
+    },
+    {
+      "type": "mech",
+      "lane": 1,
+      "supply": false,
+      "samples": 54,
+      "minAlignment": 0.9999701353094522
+    },
+    {
+      "type": "mech",
+      "lane": 1,
+      "supply": true,
+      "samples": 14,
+      "minAlignment": 0.9999814924555253
+    },
+    {
+      "type": "rail",
+      "lane": 0,
+      "supply": false,
+      "samples": 54,
+      "minAlignment": 0.9999488491037528
+    },
+    {
+      "type": "rail",
+      "lane": 0,
+      "supply": true,
+      "samples": 14,
+      "minAlignment": 0.9999708492155471
+    },
+    {
+      "type": "rail",
+      "lane": 1,
+      "supply": false,
+      "samples": 54,
+      "minAlignment": 0.9999488491037528
+    },
+    {
+      "type": "rail",
+      "lane": 1,
+      "supply": true,
+      "samples": 14,
+      "minAlignment": 0.9999708492155471
+    }
+  ],
+  "errors": []
+}

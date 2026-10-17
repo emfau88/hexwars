@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset="utf-8"><title>Factory exit regression fixture</title>
+<!doctype html><html><head><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%23eab176' d='M16 2 29 9v14L16 30 3 23V9z'/%3E%3C/svg%3E"><meta charset="utf-8"><title>Factory exit regression fixture</title>
 <script type="importmap">{"imports":{"three":"../../vendor/three.module.min.js"}}</script>
 <style>html,body,main,#stage{margin:0;width:100%;height:100%;overflow:hidden}#labels{display:none}</style></head>
 <body><main><div id="stage"></div><div id="labels"></div></main><script type="module">
@@ -22,7 +22,7 @@ window.EXIT_TEST={
   match.time=time;match.remainder=remainder;view.dirty=draw;view.renderMatch(match,.05,draw);
   return [...view.poses].map(([id,pose])=>{
    const batch=pose.unit.owner+'-'+pose.unit.type,index=view.pickIds[batch].indexOf(id),matrix=new T.Matrix4();
-   view.batches[batch][0].getMatrixAt(index,matrix);
+   matrix.copy(pose.world);
    const direction=new T.Vector3(0,0,-1).transformDirection(matrix);
    return {id,x:matrix.elements[12],z:matrix.elements[14],dx:direction.x,dz:direction.z};
   });

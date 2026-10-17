@@ -12,7 +12,7 @@ try {
   assert.equal(await page.locator('#battle-stage canvas').count(),1);
   const metrics=await page.evaluate(()=>window.__LANE_WARS__.diagnostics());
   assert.equal(metrics.assets.hoverbot.triangles,14070);assert.equal(metrics.assets.mech.triangles,23502);assert.equal(metrics.assets.hq.triangles,44540);
-  assert.equal(metrics.assets.mech.skins,0);assert.equal(metrics.assets.mech.animations,0);
+  assert.equal(metrics.assets.mech.skins,0);assert.equal(metrics.assets.mech.animations,0);assert.equal(metrics.assets.mechAnimated.animations,5);assert.equal(metrics.assets.mechAnimated.meshes,26);
   assert.equal(metrics.units.length,28);assert.equal(metrics.zoom,1);
   phase='interaction';
   for(const hq of metrics.headquarters){assert.ok(hq.bounds.top>90&&hq.bounds.bottom<770,`${hq.owner} HQ inside unobscured overview`);}

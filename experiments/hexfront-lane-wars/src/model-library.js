@@ -32,13 +32,15 @@ async function modelData(name){
  if(!modelBytes.has(name))modelBytes.set(name,fetch(url).then(response=>{if(!response.ok)throw Error('Modell '+name+': HTTP '+response.status);return response.arrayBuffer();}).catch(error=>{modelBytes.delete(name);throw error;}));
  return modelBytes.get(name);
 }
-export async function loadModels() {
-  const loader=new GLTFLoader(),entries=await Promise.all(['hoverbot','mech','hq'].map(async name=>[name,await loader.parseAsync(await modelData(name),new URL('../public/models/',import.meta.url).href)])),files=Object.fromEntries(entries),library={},metadata={};
+export async function loadModels({animatedMechs=true}={}) {
+  const loader=new GLTFLoader(),entries=await Promise.all(['hoverbot','mech','hq',...(animatedMechs?['mech-animated/mech-rigged']:[])].map(async name=>[name,await loader.parseAsync(await modelData(name),new URL('../public/models/',import.meta.url).href)])),files=Object.fromEntries(entries),library={},metadata={};
   for(const [name,gltf] of entries){let meshes=0,skins=0,triangles=0;gltf.scene.traverse(o=>{if(o.isMesh){meshes++;triangles+=(o.geometry.index?.count??o.geometry.attributes.position.count)/3;}if(o.isSkinnedMesh)skins++;});metadata[name]={meshes,skins,animations:gltf.animations.length,triangles};}
+  const rig=files['mech-animated/mech-rigged'];if(rig){metadata.mechAnimated=metadata['mech-animated/mech-rigged'];delete metadata['mech-animated/mech-rigged'];}
   for(const owner of ['orange','blue']) {
-    library[owner]={drone:partsOf(files.hoverbot.scene,{width:1.08,owner}),mech:partsOf(files.mech.scene,{height:1.45,owner}),hq:partsOf(files.hq.scene,{width:4.3,owner}),rail:partsOf(railPlaceholder(owner),{height:1.3,owner,supplied:false})};
+    const rigParts=[];const shared=new Map();if(rig)rig.scene.traverse(o=>{if(o.isMesh){if(!shared.has(o.material))shared.set(o.material,o.material.name==='Supplied_Surface'?suppliedMaterial(o.material,owner):o.material.clone());rigParts.push({geometry:o.geometry,material:shared.get(o.material),node:o.name});}});
+    library[owner]={drone:partsOf(files.hoverbot.scene,{width:1.08,owner}),mech:rig?rigParts:partsOf(files.mech.scene,{height:1.45,owner}),hq:partsOf(files.hq.scene,{width:4.3,owner}),rail:partsOf(railPlaceholder(owner),{height:1.3,owner,supplied:false})};
   }
-  return {library,metadata};
+  return {library,metadata,mechRig:rig};
 }
 export function makeBatches(scene,library,capacity=128) {
   const batches={};

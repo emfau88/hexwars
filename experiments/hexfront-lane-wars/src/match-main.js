@@ -176,7 +176,7 @@ function onFieldClick(e){if(!supplyType)return;e.stopImmediatePropagation();send
 function advance(seconds,draw=true){match.advance(seconds);flush();if(match.phase==='ended'){playing=false;if(!endedSaved){endedSaved=true;save();}}view.renderMatch(match,seconds,draw);}
 function frame(now){
  const dt=Math.max(0,Math.min(.1,(now-last)/1000));last=now;
- if(ready){if(playing&&!inMenu)advance(dt);else view.renderMatch(match,0);hudClock+=dt;saveClock+=dt;
+ if(ready){if(playing&&!inMenu)advance(dt);else view.renderMatch(match,!inMenu&&match.phase==='ended'&&(view.corpses.size||view.effects.length)?dt:0);hudClock+=dt;saveClock+=dt;
   if(hudClock>=.1){updateHUD();markers();hudClock=0;}if(saveClock>=2){if(playing)save();saveClock=0;}}
  if(noticeUntil&&now>noticeUntil){$('notice').hidden=true;noticeUntil=0;}requestAnimationFrame(frame);
 }

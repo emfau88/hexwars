@@ -8,7 +8,7 @@
       "hp": 15,
       "enemyHP": 92,
       "firstShot": 0.1,
-      "alignment": 0.9997683368713154
+      "alignment": 0.9997683368809316
     },
     {
       "owner": "orange",
@@ -17,7 +17,7 @@
       "hp": 100,
       "enemyHP": 100,
       "firstShot": 0.2,
-      "alignment": 0.9997683368713154
+      "alignment": 1
     },
     {
       "owner": "orange",
@@ -26,7 +26,7 @@
       "hp": 30,
       "enemyHP": 55,
       "firstShot": 0.35000000000000003,
-      "alignment": 0.9997683368713154
+      "alignment": 0.9997683368809316
     },
     {
       "owner": "orange",
@@ -35,7 +35,7 @@
       "hp": 15,
       "enemyHP": 92,
       "firstShot": 0.1,
-      "alignment": 0.9997683368713154
+      "alignment": 0.9997683368809316
     },
     {
       "owner": "orange",
@@ -44,7 +44,7 @@
       "hp": 100,
       "enemyHP": 100,
       "firstShot": 0.2,
-      "alignment": 0.9997683368713154
+      "alignment": 1
     },
     {
       "owner": "orange",
@@ -53,7 +53,7 @@
       "hp": 30,
       "enemyHP": 55,
       "firstShot": 0.35000000000000003,
-      "alignment": 0.9997683368713154
+      "alignment": 0.9997683368809316
     },
     {
       "owner": "orange",
@@ -62,7 +62,7 @@
       "hp": 15,
       "enemyHP": 92,
       "firstShot": 0.1,
-      "alignment": 0.9997683368713154
+      "alignment": 0.9997683368809316
     },
     {
       "owner": "orange",
@@ -71,7 +71,7 @@
       "hp": 100,
       "enemyHP": 100,
       "firstShot": 0.2,
-      "alignment": 0.9997683368713154
+      "alignment": 1
     },
     {
       "owner": "orange",
@@ -80,7 +80,7 @@
       "hp": 30,
       "enemyHP": 55,
       "firstShot": 0.35000000000000003,
-      "alignment": 0.9997683368713154
+      "alignment": 0.9997683368809316
     },
     {
       "owner": "orange",
@@ -89,7 +89,7 @@
       "hp": 15,
       "enemyHP": 92,
       "firstShot": 0.1,
-      "alignment": 0.9997683368713154
+      "alignment": 0.9997683368809316
     },
     {
       "owner": "orange",
@@ -98,7 +98,7 @@
       "hp": 100,
       "enemyHP": 100,
       "firstShot": 0.2,
-      "alignment": 0.9997683368713155
+      "alignment": 1.0000000000000002
     },
     {
       "owner": "orange",
@@ -107,7 +107,7 @@
       "hp": 30,
       "enemyHP": 55,
       "firstShot": 0.35000000000000003,
-      "alignment": 0.9997683368713155
+      "alignment": 0.9997683368809318
     },
     {
       "owner": "orange",
@@ -116,7 +116,7 @@
       "hp": 15,
       "enemyHP": 92,
       "firstShot": 0.1,
-      "alignment": 0.9997683368713154
+      "alignment": 0.9997683368809316
     },
     {
       "owner": "orange",
@@ -125,7 +125,7 @@
       "hp": 100,
       "enemyHP": 100,
       "firstShot": 0.2,
-      "alignment": 0.9997683368713154
+      "alignment": 1
     },
     {
       "owner": "orange",
@@ -134,7 +134,7 @@
       "hp": 30,
       "enemyHP": 55,
       "firstShot": 0.35000000000000003,
-      "alignment": 0.9997683368713154
+      "alignment": 0.9997683368809316
     },
     {
       "owner": "blue",
@@ -143,7 +143,7 @@
       "hp": 15,
       "enemyHP": 92,
       "firstShot": 0.1,
-      "alignment": 0.9997683368713154
+      "alignment": 0.9997683368809316
     },
     {
       "owner": "blue",
@@ -152,7 +152,7 @@
       "hp": 100,
       "enemyHP": 100,
       "firstShot": 0.2,
-      "alignment": 0.9997683368713154
+      "alignment": 1
     },
     {
       "owner": "blue",
@@ -161,7 +161,7 @@
       "hp": 30,
       "enemyHP": 55,
       "firstShot": 0.35000000000000003,
-      "alignment": 0.9997683368713154
+      "alignment": 0.9997683368809316
     },
     {
       "owner": "blue",
@@ -170,7 +170,7 @@
       "hp": 15,
       "enemyHP": 92,
       "firstShot": 0.1,
-      "alignment": 0.9997683368713154
+      "alignment": 0.9997683368809316
     },
     {
       "owner": "blue",
@@ -179,7 +179,7 @@
       "hp": 100,
       "enemyHP": 100,
       "firstShot": 0.2,
-      "alignment": 0.9997683368713154
+      "alignment": 1
     },
     {
       "owner": "blue",
@@ -188,7 +188,7 @@
       "hp": 30,
       "enemyHP": 55,
       "firstShot": 0.35000000000000003,
-      "alignment": 0.9997683368713154
+      "alignment": 0.9997683368809316
     },
     {
       "owner": "blue",
@@ -197,7 +197,7 @@
       "hp": 15,
       "enemyHP": 92,
       "firstShot": 0.1,
-      "alignment": 0.9997683368713154
+      "alignment": 0.9997683368809316
     },
     {
       "owner": "blue",
@@ -206,7 +206,7 @@
       "hp": 100,
       "enemyHP": 100,
       "firstShot": 0.2,
-      "alignment": 0.9997683368713154
+      "alignment": 1
     },
     {
       "owner": "blue",
@@ -215,7 +215,7 @@
       "hp": 30,
       "enemyHP": 55,
       "firstShot": 0.35000000000000003,
-      "alignment": 0.9997683368713154
+      "alignment": 0.9997683368809316
     },
     {
       "owner": "blue",
@@ -224,7 +224,7 @@
       "hp": 15,
       "enemyHP": 92,
       "firstShot": 0.1,
-      "alignment": 0.9997683368713154
+      "alignment": 0.9997683368809316
     },
     {
       "owner": "blue",
@@ -233,7 +233,7 @@
       "hp": 100,
       "enemyHP": 100,
       "firstShot": 0.2,
-      "alignment": 0.9997683368713155
+      "alignment": 1.0000000000000002
     },
     {
       "owner": "blue",
@@ -242,7 +242,7 @@
       "hp": 30,
       "enemyHP": 55,
       "firstShot": 0.35000000000000003,
-      "alignment": 0.9997683368713155
+      "alignment": 0.9997683368809319
     },
     {
       "owner": "blue",
@@ -251,7 +251,7 @@
       "hp": 15,
       "enemyHP": 92,
       "firstShot": 0.1,
-      "alignment": 0.9997683368713154
+      "alignment": 0.9997683368809316
     },
     {
       "owner": "blue",
@@ -260,7 +260,7 @@
       "hp": 100,
       "enemyHP": 100,
       "firstShot": 0.2,
-      "alignment": 0.9997683368713154
+      "alignment": 1
     },
     {
       "owner": "blue",
@@ -269,12 +269,12 @@
       "hp": 30,
       "enemyHP": 55,
       "firstShot": 0.35000000000000003,
-      "alignment": 0.9997683368713154
+      "alignment": 0.9997683368809316
     }
   ],
   "range": {
     "centerGap": 1.6559999999999633,
-    "modelGap": 0.6219473225110248,
+    "modelGap": 0.4045817372694461,
     "firstShot": 2
   },
   "errors": []

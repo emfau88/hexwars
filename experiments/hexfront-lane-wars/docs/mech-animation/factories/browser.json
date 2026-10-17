@@ -1,0 +1,45 @@
+{
+  "base": "http://127.0.0.1:4181/dist/",
+  "checks": [
+    "Actual GLB in the playable main mode, production opens four segments, idle doors close, model click opens the correct factory editor",
+    "Transparent construction without material leakage; pre-opening; production module changes at the paid refit wave; save/reload keeps simulation and models",
+    "All three missions, every slot and production module, shared geometry, both faction colours; gate stays open for a stationary robot; view does not mutate match state"
+  ],
+  "fixture": [
+    {
+      "mission": "central",
+      "asset": "factory.glb",
+      "batches": 32,
+      "instances": 8,
+      "colours": {
+        "orange": "f49a43",
+        "blue": "469dce"
+      },
+      "constructionMaterialsIsolated": true
+    },
+    {
+      "mission": "first",
+      "asset": "factory.glb",
+      "batches": 27,
+      "instances": 4,
+      "colours": {
+        "orange": "f49a43",
+        "blue": "469dce"
+      },
+      "constructionMaterialsIsolated": true
+    },
+    {
+      "mission": "meadow",
+      "asset": "factory.glb",
+      "batches": 32,
+      "instances": 8,
+      "colours": {
+        "orange": "f49a43",
+        "blue": "469dce"
+      },
+      "constructionMaterialsIsolated": true
+    }
+  ],
+  "errors": [],
+  "hostWarnings": []
+}

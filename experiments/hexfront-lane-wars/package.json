@@ -25,7 +25,9 @@
     "test:deployment": "node tests/deployment-browser.mjs",
     "test:supply": "node tests/supply-browser.mjs",
     "test:factory-preview": "node tests/factory-preview-browser.mjs",
-    "test:factory-game": "node tests/factory-game-browser.mjs"
+    "test:factory-game": "node tests/factory-game-browser.mjs",
+    "test:mech": "node tests/mech-browser.mjs",
+    "audit:mech-performance": "node tests/mech-performance.mjs"
   },
   "engines": {
     "node": ">=20"

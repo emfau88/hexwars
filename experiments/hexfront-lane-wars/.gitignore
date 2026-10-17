@@ -17,3 +17,14 @@ docs/deployment-qa/lab/*.png
 docs/deployment-qa/public-exits/*.png
 
 docs/factory-integration/failure.png
+
+art/mech-animation/*.blend1
+docs/mech-animation/study-*.png
+docs/mech-animation/side-*.png
+docs/mech-animation/teams.png
+docs/mech-animation/rig-audit-log.json
+docs/mech-animation/game-duel.png
+docs/mech-animation/central/*.png
+docs/mech-animation/factories/*.png
+docs/m21-qa/exits/*.png
+docs/m21-qa/lab/*.png
