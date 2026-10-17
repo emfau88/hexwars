@@ -26,7 +26,7 @@ Die historischen Missionen und das Kampflabor behalten Drohne 1,6 / 1,1, Mech 0,
 
 [Touch-Protokoll](results.json) · [Missions-/Layoutregression](responsive/browser-results.json) · [Node-Tests](unit-tests.txt)
 
-Die Prüfungen erfolgen in Desktop-Chromium mit Touch-Emulation; kein Test auf physischem iPhone/Android-Gerät. Der öffentliche Playlink wird nach dem Push nochmals geprüft.
+Die Prüfungen erfolgen in Desktop-Chromium mit Touch-Emulation; kein Test auf physischem iPhone/Android-Gerät. Der öffentliche Laufzeitstand `810d6a9` wurde nach dem Push ebenfalls geprüft: dieselben Touch-Gesten und sechs Layouts bestanden, keine Browser-/Ladefehler. Speichern/Fortsetzen und eine vollständige Partie bis zur HQ-Zerstörung (199 Sekunden, 800:0) bestanden. Die ausgelieferten HUD- und Kameradateien entsprechen den lokal geprüften Dateien. [Online-Touchtests](public/results.json) · [Online-Partie und Dateivergleich](public/public.json).
 
 ![Mobile Übersicht](central-390x844.png)
 
