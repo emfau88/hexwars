@@ -30,3 +30,7 @@ docs/m21-qa/exits/*.png
 docs/m21-qa/lab/*.png
 
 art/railgun-v1/*.blend1
+
+art/railgun-animation/*.blend1
+docs/railgun-animation/central/*.png
+docs/railgun-animation/central-range/*.png

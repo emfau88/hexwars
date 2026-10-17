@@ -1,0 +1,24 @@
+<!doctype html><html><head><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath fill='%23eab176' d='M16 2 29 9v14L16 30 3 23V9z'/%3E%3C/svg%3E"><meta charset="utf-8"><title>Mechanical animation regression and benchmark</title><script type="importmap">{"imports":{"three":"../../vendor/three.module.min.js"}}</script><style>html,body,main,#stage{margin:0;width:100%;height:100%;overflow:hidden}#labels{display:none}</style></head><body><main><div id="stage"></div><div id="labels"></div></main><script type="module">
+import * as T from 'three';
+import {BattleView} from '../../src/battle-view.js';
+import {MatchView} from '../../src/match-view.js';
+import {Match} from '../../src/match.js';
+import {MISSIONS} from '../../src/missions.js';
+import {RailAnimator,RAIL_STRIDE} from '../../src/rail-animation.js';
+let view,match,seconds=0,lanes;
+async function setup(animated=true,combat=false){view?.dispose();view=combat?new MatchView(document.querySelector('#stage'),document.querySelector('#labels'),()=>{},()=>{},MISSIONS.central):new BattleView(document.querySelector('#stage'),document.querySelector('#labels'),()=>{},{single:true,animatedRails:animated});await view.ready;view.safeTop=view.safeBottom=0;view.resize();seconds=0;}
+function crowd(count){view.reset();lanes=[{units:Array.from({length:count},(_,id)=>({id,type:'rail',owner:id%2?'blue':'orange',p:5+Math.floor(id/10)*2,x:(id%10-4.5)*.65,target:null,hp:40,moving:true}))}];view.render(lanes,0,0);}
+function frame(draw=true){seconds+=1/60;for(const u of lanes[0].units)u.p+=(u.owner==='orange'?1:-1)*1/60;view.dirty=true;const t=performance.now();view.render(lanes,seconds,1/60,draw);return performance.now()-t;}
+function animation(){return [...view.poses].map(([id,p])=>({id,owner:p.unit.owner,position:p.position.toArray(),phase:p.animator?.phase,walk:p.animator?.walkWeight,attack:p.animator?.attackAge,hit:p.animator?.hitAge,hip:p.animator?.nodes.Hip_RF?.quaternion.toArray(),barrel:p.animator?.nodes.Recoil_Carriage?.position.toArray()}));}
+window.RAIL_TEST={setup,crowd,frame,animation,get match(){return match;},get view(){return view;},
+ rigAudit(){const a=new RailAnimator(view.railRig),b=new RailAnimator(view.railRig,7),out={feet:[],clips:view.railRig.animations.map(c=>c.name)};
+  const v=new T.Vector3();for(const [leg,offset] of [['LF',0],['RB',0],['RF',.5],['LB',.5]])for(let i=0;i<120;i++){
+   const q=i/120;a.phase=(q-offset+1)%1;a.walkWeight=1;a.sample(0,0,true);const p=a.nodes['Ankle_'+leg].getWorldPosition(v);out.feet.push({leg,phase:q,x:p.x,y:p.y,z:p.z-q*RAIL_STRIDE});}
+  a.walkWeight=0;a.sample(0,0,false);const rest=a.nodes.Recoil_Carriage.position.clone();a.shot();a.sample(.05,0,false);out.recoil=rest.distanceTo(a.nodes.Recoil_Carriage.position);out.independent=b.attackAge===Infinity&&a.attackAge===.05;
+  a.sample(0,0,false,.4,.1);const aim=a.nodes.Turret_Yaw.quaternion.clone(),pitch=a.nodes.Gun_Pitch.quaternion.clone();for(let i=0;i<100;i++)a.sample(0,0,false,.4,.1);out.aimDrift=aim.normalize().angleTo(a.nodes.Turret_Yaw.quaternion.clone().normalize());out.pitchDrift=pitch.normalize().angleTo(a.nodes.Gun_Pitch.quaternion.clone().normalize());a.die();a.sample(1.1,0,false);out.collapse=a.nodes.Body.position.y;out.parts=Object.values(a.nodes).filter(o=>o.isMesh).length;a.dispose();b.dispose();return out;
+ },
+ async duel(mirror=false){await setup(true,true);match=new Match({mission:'central',rules:{hqDamage:0}});match.start();match.lanes[0].units=[];match.players.orange.factories=Array(4).fill(null);match.players.blue.factories=Array(4).fill(null);for(const owner of ['orange','blue'])match.lanes[0].addUnit({owner,type:owner==='orange'||mirror?'rail':'mech',p:owner==='orange'?11:19});match.drainEvents();view.renderMatch(match,0);view.selected='0:'+match.lanes[0].units[0].id;view.focusSelected();return match.snapshot();},
+ step(dt){match.advance(dt);const events=match.drainEvents();const muzzleErrors=[];for(const e of events){view.matchEvent(e);if(e.kind==='shot'&&e.type==='rail'){const source=view.poses.get(e.lane+':'+e.source),effect=view.effects.at(-1);if(source&&effect?.from)muzzleErrors.push(effect.from.distanceTo(source.animator.muzzle(new T.Matrix4().makeRotationY(source.yaw).setPosition(source.position))));}}view.renderMatch(match,dt);return {events,muzzleErrors,units:animation(),corpses:view.corpses.size,effects:view.effects.map(e=>e.kind),snapshot:match.snapshot()};},
+ benchmark(){return {calls:view.renderer.info.render.calls,triangles:view.renderer.info.render.triangles,renderer:view.renderer.getContext().getParameter(view.renderer.getContext().getExtension('WEBGL_debug_renderer_info').UNMASKED_RENDERER_WEBGL)};}
+};
+</script></body></html>

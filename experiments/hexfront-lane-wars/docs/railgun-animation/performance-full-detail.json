@@ -1,0 +1,246 @@
+{
+  "browser": "151.0.7922.34",
+  "method": "Same landscape, HQs, shadows, previous geometric rail placeholder versus approved animated GLB. 15 warm-up + 90 RAF samples; 150 warmed CPU-only transform samples. Mobile is viewport/DPR emulation on this GPU, not physical phone hardware.",
+  "results": [
+    {
+      "device": "Desktop",
+      "animated": false,
+      "count": 16,
+      "cpu": {
+        "median": 3.5,
+        "p95": 4.600000023841858
+      },
+      "frame": {
+        "median": 6.300000011920929,
+        "p95": 8.900000005960464
+      },
+      "transforms": {
+        "median": 0.09999999403953552,
+        "p95": 0.20000001788139343
+      },
+      "calls": 50,
+      "triangles": 492536,
+      "renderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    {
+      "device": "Desktop",
+      "animated": false,
+      "count": 64,
+      "cpu": {
+        "median": 4.199999988079071,
+        "p95": 5.699999988079071
+      },
+      "frame": {
+        "median": 7.5,
+        "p95": 10.5
+      },
+      "transforms": {
+        "median": 0.5999999940395355,
+        "p95": 0.800000011920929
+      },
+      "calls": 50,
+      "triangles": 718136,
+      "renderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    {
+      "device": "Desktop",
+      "animated": false,
+      "count": 128,
+      "cpu": {
+        "median": 4.5,
+        "p95": 5.9000000059604645
+      },
+      "frame": {
+        "median": 8.099999994039536,
+        "p95": 11.100000023841858
+      },
+      "transforms": {
+        "median": 1.100000023841858,
+        "p95": 1.800000011920929
+      },
+      "calls": 50,
+      "triangles": 1018936,
+      "renderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    {
+      "device": "Desktop",
+      "animated": true,
+      "count": 16,
+      "cpu": {
+        "median": 7.5999999940395355,
+        "p95": 8.800000011920929
+      },
+      "frame": {
+        "median": 9.300000011920929,
+        "p95": 13.400000005960464
+      },
+      "transforms": {
+        "median": 1.100000023841858,
+        "p95": 1.7000000178813934
+      },
+      "calls": 106,
+      "triangles": 1335928,
+      "renderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    {
+      "device": "Desktop",
+      "animated": true,
+      "count": 64,
+      "cpu": {
+        "median": 9.799999982118607,
+        "p95": 13.599999994039536
+      },
+      "frame": {
+        "median": 13.199999988079071,
+        "p95": 15.599999994039536
+      },
+      "transforms": {
+        "median": 4.600000023841858,
+        "p95": 5.9000000059604645
+      },
+      "calls": 106,
+      "triangles": 4091704,
+      "renderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    {
+      "device": "Desktop",
+      "animated": true,
+      "count": 128,
+      "cpu": {
+        "median": 12.800000011920929,
+        "p95": 20
+      },
+      "frame": {
+        "median": 19.400000005960464,
+        "p95": 24.30000001192093
+      },
+      "transforms": {
+        "median": 10.5,
+        "p95": 12.300000011920929
+      },
+      "calls": 106,
+      "triangles": 7766072,
+      "renderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    {
+      "device": "Mobile viewport",
+      "animated": false,
+      "count": 16,
+      "cpu": {
+        "median": 4.100000023841858,
+        "p95": 5.5999999940395355
+      },
+      "frame": {
+        "median": 5.200000017881393,
+        "p95": 8.199999988079071
+      },
+      "transforms": {
+        "median": 0.19999998807907104,
+        "p95": 0.29999998211860657
+      },
+      "calls": 44,
+      "triangles": 492464,
+      "renderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    {
+      "device": "Mobile viewport",
+      "animated": false,
+      "count": 64,
+      "cpu": {
+        "median": 3.4000000059604645,
+        "p95": 4.5999999940395355
+      },
+      "frame": {
+        "median": 5.699999988079071,
+        "p95": 9
+      },
+      "transforms": {
+        "median": 0.5,
+        "p95": 0.9000000059604645
+      },
+      "calls": 44,
+      "triangles": 718064,
+      "renderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    {
+      "device": "Mobile viewport",
+      "animated": false,
+      "count": 128,
+      "cpu": {
+        "median": 4.100000023841858,
+        "p95": 5.800000011920929
+      },
+      "frame": {
+        "median": 7.200000017881393,
+        "p95": 9.400000005960464
+      },
+      "transforms": {
+        "median": 0.9000000059604645,
+        "p95": 1.5999999940395355
+      },
+      "calls": 44,
+      "triangles": 1018864,
+      "renderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    {
+      "device": "Mobile viewport",
+      "animated": true,
+      "count": 16,
+      "cpu": {
+        "median": 5.5999999940395355,
+        "p95": 6.799999982118607
+      },
+      "frame": {
+        "median": 8.099999994039536,
+        "p95": 10.299999982118607
+      },
+      "transforms": {
+        "median": 0.6000000238418579,
+        "p95": 1.2000000178813934
+      },
+      "calls": 100,
+      "triangles": 1335856,
+      "renderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    {
+      "device": "Mobile viewport",
+      "animated": true,
+      "count": 64,
+      "cpu": {
+        "median": 7.9000000059604645,
+        "p95": 10.5
+      },
+      "frame": {
+        "median": 11.5,
+        "p95": 14
+      },
+      "transforms": {
+        "median": 4,
+        "p95": 5
+      },
+      "calls": 100,
+      "triangles": 4091632,
+      "renderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    {
+      "device": "Mobile viewport",
+      "animated": true,
+      "count": 128,
+      "cpu": {
+        "median": 11.400000005960464,
+        "p95": 15.199999988079071
+      },
+      "frame": {
+        "median": 17,
+        "p95": 21.400000005960464
+      },
+      "transforms": {
+        "median": 10.799999982118607,
+        "p95": 13.800000011920929
+      },
+      "calls": 100,
+      "triangles": 7766000,
+      "renderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    }
+  ]
+}

@@ -166,8 +166,10 @@ export class Match {
   save(){return clone({version:2,mission:this.mission?.id||null,rules:this.rules,unitSpecs:this.unitSpecs,tick:this.tick,time:this.time,remainder:this.remainder,phase:this.phase,result:this.result,wave:this.wave,players:this.players,transit:this.transit,serial:this.serial,orders:this.orders,peakUnits:this.peakUnits,lanes:this.lanes.map(g=>({...g.snapshot(),serial:g.serial,remainder:g.remainder}))});}
   static restore(data){
     if(!data||![1,2].includes(data.version)||!Number.isInteger(data.tick)||data.tick<0||!['setup','running','ended'].includes(data.phase))throw Error('Ungültiger Spielstand.');
-    const unitSpecs=data.version===1&&data.mission==='central'?missionById('central').units:data.unitSpecs;
-    // Only the retired central 35-second supply rule is migrated; preserve all other saved rules.
+    let unitSpecs=data.version===1&&data.mission==='central'?missionById('central').units:data.unitSpecs;
+    // Migrate only the previous standard Railgun range; retain custom profiles and all unit state.
+    if(data.mission==='central'&&unitSpecs?.rail?.range===4)unitSpecs={...unitSpecs,rail:{...unitSpecs.rail,range:missionById('central').units.rail.range}};
+    // Migrate the retired central supply cooldown; preserve other saved rules.
     const oldSupply=data.mission==='central'&&data.rules?.supplyCooldown===35;
     const rules=oldSupply?{...data.rules,supplyCooldown:missionById('central').rules.supplyCooldown}:data.rules;
     const m=new Match({mission:data.mission,rules,unitSpecs});

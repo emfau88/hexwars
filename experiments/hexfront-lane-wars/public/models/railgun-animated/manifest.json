@@ -1,0 +1,19 @@
+{
+  "source": "approved railgun-v1, geometry and materials unchanged",
+  "clips": [
+    "Idle",
+    "Walk",
+    "Charge",
+    "Attack",
+    "Hit",
+    "Death"
+  ],
+  "stride": 0.34375,
+  "stance": 0.64,
+  "stroke": 0.22,
+  "fps": 60,
+  "axes": "glTF +Y up, -Z forward",
+  "triangles": 57412,
+  "overviewTriangles": 20654,
+  "overviewZoomBelow": 1.8
+}

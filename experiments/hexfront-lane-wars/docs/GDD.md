@@ -184,3 +184,10 @@ Tests, Gegenproben und die weiterhin offenen Balanceprobleme: [DEPLOYMENT-COMBAT
 Auf ausdrücklichen Wunsch sinkt ausschließlich der Nachschub-Cooldown von Zentrale Front von 35 auf **30 Sekunden**. Beide Fraktionen und gespeicherte zentrale Partien verwenden den neuen Wert; bereits verstrichene Abklingzeit wird angerechnet. Alle anderen Spielwerte und Missionen bleiben unverändert. Die Auswertungen im vorherigen Fabrikkampf-Bericht dokumentieren den damaligen 35-Sekunden-Stand. [Aktueller Prüfbericht](SUPPLY-30.md).
 
 Das [Fabrikkonzept](factory-concept/BRIEF.md) ist eine Designvorlage, kein integriertes GLB. Modellierung und technische Prüfung stehen aus. Vor dem Ersatz der bestehenden Fabriken ist die vom Nutzer verlangte Freigabe einzuholen.
+
+
+## Railgun-Integration und Reichweitenfreigabe – 17.10.2026
+
+Das freigegebene vierbeinige GLB besitzt echte Gelenkanimationen für Walk, Idle, Charge, Attack, Hit und Death. Diese lesen ausschließlich Simulationszustände und Ereignisse. Das bisherige Modell bleibt als historische Freigabevorschau erhalten.
+
+Auf ausdrücklichen nachträglichen Wunsch beträgt die Railgun-Reichweite in **Zentrale Front jetzt 4,8 statt 4,0 (+20 %)**. Alle übrigen Werte bleiben unverändert; die älteren Missionen und das historische Kampflabor behalten 4,0. Bestehende zentrale Standardspielstände werden beim Laden auf 4,8 umgestellt. [Animations-, Leistungs- und Reichweitenbericht](railgun-animation/REPORT.md).

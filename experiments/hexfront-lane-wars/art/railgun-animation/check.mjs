@@ -1,0 +1,5 @@
+import {chromium} from '@playwright/test';
+const b=await chromium.launch({headless:true,channel:'chromium'});const p=await b.newPage({viewport:{width:1440,height:1000}});p.on('pageerror',console.log);
+try{await p.goto('http://127.0.0.1:4181/tests/fixtures/rail.html');await p.waitForFunction(()=>window.RAIL_TEST);await p.evaluate(()=>RAIL_TEST.setup());const r=await p.evaluate(()=>RAIL_TEST.rigAudit());console.log(JSON.stringify({...r,feet:undefined}));for(const leg of ['LF','RF','LB','RB']){const fs=r.feet.filter(f=>f.leg===leg&&f.phase<.64);console.log(leg,'slip',Math.max(...fs.map(f=>f.z))-Math.min(...fs.map(f=>f.z)),'height',Math.min(...fs.map(f=>f.y)),Math.max(...fs.map(f=>f.y)));}
+await p.goto('http://127.0.0.1:4181/railgun-viewer.html');await p.waitForFunction(()=>window.__RAIL_VIEWER__);for(const [n,t]of [['Walk',.2],['Attack',.08],['Death',1.1]]){await p.evaluate(([n,t])=>__RAIL_VIEWER__.pose(n,t),[n,t]);await p.screenshot({path:'docs/railgun-animation/viewer-'+n+'.png'});}
+}finally{await b.close();}

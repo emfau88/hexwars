@@ -1,0 +1,50 @@
+{
+  "base": "http://127.0.0.1:4181/",
+  "checks": [
+    "Full central match through real HQ destruction, new Railgun walks out of factory; original Mech/factory GLBs; save/reload exact",
+    "first mission loads, produces and fights with preserved models",
+    "meadow mission loads, produces and fights with preserved models",
+    "M1.5 two-lane demo retains new articulated renderer",
+    "Combat laboratory remains separately accessible"
+  ],
+  "results": [
+    {
+      "result": "orange",
+      "time": 218.45000000000002,
+      "waves": 11,
+      "peakUnits": 20,
+      "hq": {
+        "orange": 800,
+        "blue": 0
+      },
+      "metrics": {
+        "orange": {
+          "spent": 750,
+          "earned": 598.24,
+          "produced": 38,
+          "hqDamage": 800,
+          "builds": 2,
+          "refits": 1,
+          "laneChanges": 0,
+          "supplies": 2,
+          "economyAt": 84,
+          "credits": 98.24
+        },
+        "blue": {
+          "spent": 730,
+          "earned": 490.24,
+          "produced": 80,
+          "hqDamage": 0,
+          "builds": 2,
+          "refits": 3,
+          "laneChanges": 0,
+          "supplies": 1,
+          "economyAt": 174,
+          "credits": 40.24
+        }
+      },
+      "lateOrders": 10
+    }
+  ],
+  "errors": []
+}

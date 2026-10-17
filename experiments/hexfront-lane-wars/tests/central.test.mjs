@@ -64,13 +64,13 @@ test('central reference runs preserve results and all economic metrics when full
  for(const [left,right] of [['pressure','siege'],['pressure','economy'],['siege','economy']]){
   // Mirror controller execution order as well as factions: same-tick orders are observable.
   const a=run({a:left,b:right}),b=run({a:right,b:left,reverseControllers:true});
-  assert.equal(a.result,{pressure:{siege:'blue',economy:'orange'},siege:{economy:'unresolved'}}[left][right]);assert.equal(b.result,a.result==='orange'?'blue':a.result==='blue'?'orange':a.result);assert.equal(a.time,b.time);assert.equal(a.hq.orange,b.hq.blue);assert.equal(a.hq.blue,b.hq.orange);assert.deepEqual(a.metrics.orange,b.metrics.blue);assert.deepEqual(a.metrics.blue,b.metrics.orange);
+  assert.equal(a.result,{pressure:{siege:'blue',economy:'blue'},siege:{economy:'blue'}}[left][right]);assert.equal(b.result,a.result==='orange'?'blue':a.result==='blue'?'orange':a.result);assert.equal(a.time,b.time);assert.equal(a.hq.orange,b.hq.blue);assert.equal(a.hq.blue,b.hq.orange);assert.deepEqual(a.metrics.orange,b.metrics.blue);assert.deepEqual(a.metrics.blue,b.metrics.orange);
  }
 });
-test('late paid response plus one deliberate reinforcement turns the same position into a real HQ victory',()=>{
+test('at 4.8 Railgun range a late refit prevents defeat; the former winning burst now stalemates',()=>{
  const ignored=centralLate({reacts:false}),response=centralLate({reacts:true}),burst=centralLate({reacts:true,supply:true,supplyAt:210,supplyType:'drone'});
  assert.deepEqual(ignored.decision,response.decision);assert.deepEqual(response.decision,burst.decision);
- assert.equal(burst.result,'orange');assert.ok(burst.time>300&&burst.time<600);assert.equal(burst.hq.blue,0);assert.equal(burst.metrics.orange.supplies,1);
+ assert.equal(ignored.result,'blue');assert.equal(burst.result,'unresolved');assert.equal(burst.time,720);assert.equal(burst.hq.orange,800);assert.equal(burst.hq.blue,800);assert.equal(burst.metrics.orange.supplies,1);
  assert.notEqual(ignored.result,'orange');assert.ok(ignored.hq.orange<=burst.hq.orange);assert.equal(response.result,'unresolved');
  const a=centralLate({initial:'rail',enemy:'drone',counter:'mech',reacts:false}),b=centralLate({initial:'rail',enemy:'drone',counter:'mech'});
  assert.notEqual(a.result,'orange');assert.equal(b.result,'orange');assert.deepEqual(a.decision,b.decision);

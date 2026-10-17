@@ -16,7 +16,7 @@ Der Playlink zeigt den festgelegten Spielstand `1e8467e` und benötigt keinen lo
 
 **Aktuell:** Sofortnachschub im Hauptmodus hat **30 Sekunden** Cooldown, auch beim Fortsetzen. 83 Logiktests und gezielte HUD-/Speichertests bestanden. Die sechs neuen Referenzläufe ergeben vier HQ-Entscheidungen und zwei offene Partien nach zwölf Minuten; weitere Balancewerte wurden nicht verändert. [Prüfbericht](experiments/hexfront-lane-wars/docs/SUPPLY-30.md).
 
-**Railgun-Modell zur Freigabe:** [Echtes vierbeiniges GLB online drehen und prüfen](https://rawcdn.githack.com/emfau88/hexwars/c260fa818d52a2b62a5de46ab6696c9ccd3abaf2/experiments/hexfront-lane-wars/railgun-preview.html). Mit beweglichen Beinketten, Drehkranz, Waffenhöhe, Rückstoß, Orange/Blau und Größenvergleich. GLB/Blender-Download im Viewer. Noch keine Spielintegration; Gelenkprüfung statt fertiger Laufanimation.
+**Animierte Railgun im Spiel:** Das freigegebene vierbeinige GLB besitzt echte Beinbewegungen, Zielausrichtung, Ladung, Rückstoß, Trefferreaktion und Zusammenbruch. [Animationsviewer](experiments/hexfront-lane-wars/railgun-viewer.html) · [GLB/Blender, Technik, Performance und Tests](experiments/hexfront-lane-wars/docs/railgun-animation/REPORT.md). Reichweite in **Zentrale Front: 4,8 statt 4,0 (+20 %)**; andere Gameplaywerte und historische Missionen bleiben unverändert.
 
 **Animierte Mechs:** Bewegliche Beine, Oberkörper und Waffen am ursprünglichen Modell; unabhängige Walk-, Idle-, Attack-, Hit- und Death-Animationen im Spiel. [GLB-Viewer](https://rawcdn.githack.com/emfau88/hexwars/1e8467ebb8fd74eeba4f33d15fcfc56e0362db1a/experiments/hexfront-lane-wars/mech-viewer.html) · [Modelldateien, Technik und Performance](experiments/hexfront-lane-wars/docs/mech-animation/REPORT.md).
 

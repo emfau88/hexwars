@@ -27,7 +27,10 @@
     "test:factory-preview": "node tests/factory-preview-browser.mjs",
     "test:factory-game": "node tests/factory-game-browser.mjs",
     "test:mech": "node tests/mech-browser.mjs",
-    "audit:mech-performance": "node tests/mech-performance.mjs"
+    "audit:mech-performance": "node tests/mech-performance.mjs",
+    "test:rail": "node tests/rail-browser.mjs",
+    "test:rail-modes": "node tests/rail-modes.mjs",
+    "audit:rail-performance": "node tests/rail-performance.mjs"
   },
   "engines": {
     "node": ">=20"
