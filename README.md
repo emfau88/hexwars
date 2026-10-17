@@ -1,16 +1,25 @@
 # HEXFRONT
 
+[![▶ Aktuellen HEXFRONT-Stand im Browser spielen](experiments/hexfront-lane-wars/public/ui/play-lane-wars.svg)](https://rawcdn.githack.com/emfau88/hexwars/3f73f77d3d3c1db69d7049791fa24d11929364fa/experiments/hexfront-lane-wars/index.html)
+
+## [▶ JETZT SPIELEN – aktueller Lane-Wars-Build](https://rawcdn.githack.com/emfau88/hexwars/3f73f77d3d3c1db69d7049791fa24d11929364fa/experiments/hexfront-lane-wars/index.html)
+
+**Neu: kompaktes Keramik-HUD mit direkter Fabrikleiste und mehr freier Sicht aufs Gefecht.** Desktop und Smartphone-Hochformat geprüft. Gameplay und Balance unverändert. [Bilder und Testbericht](experiments/hexfront-lane-wars/docs/compact-hud/REPORT.md).
+
+Direkt online spielbar, ohne Installation oder lokalen Server. Laufzeitstand: `3f73f77`. Falls ein Hinweis erscheint, **Open the page** anklicken.
+
+
 ## ▶ Lane Wars – Zentrale Front
 
 Vollständig spielbare **1v1-Partie Mensch gegen KI** mit einer zentralen Lane, vier Fabrikplätzen, drei Robotertypen und drei unterschiedlichen KI-Eröffnungen. Automatische Produktion, Wirtschaft, Umrüstung, begrenzter Sofortnachschub und echtes Spielende durch HQ-Zerstörung. Die bewährte HEXFRONT-Diorama-Optik und das Keramik-HUD bleiben erhalten.
 
-**[▶ Zentrale Front jetzt im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/37a6864b689f4c3ad4052508de968b9cc2fd2fe6/experiments/hexfront-lane-wars/index.html)** · **[Railgun: Sound, Doppelstrahlen und Tests](experiments/hexfront-lane-wars/docs/railgun-sound/REPORT.md)**
+**[▶ Zentrale Front jetzt im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/3f73f77d3d3c1db69d7049791fa24d11929364fa/experiments/hexfront-lane-wars/index.html)** · **[Railgun: Sound, Doppelstrahlen und Tests](experiments/hexfront-lane-wars/docs/railgun-sound/REPORT.md)**
 
 **Aktuelle Einheitenwerte:** Railgun-Tempo **0,8**, Mech-Reichweite **3,0**, Drohnen-Tempo **1,8**. [Tests, Spielstände und Match-Ergebnisse](experiments/hexfront-lane-wars/docs/central-role-tuning/REPORT.md).
 
-Der Playlink zeigt den festgelegten Spielstand `37a6864` und benötigt keinen lokalen Server. Falls der Vorschauhost einen Hinweis zeigt, **Open the page** anklicken. Veröffentlicht ausschließlich im Branch `codex/lane-wars`; kein Merge nach main.
+Der Playlink zeigt den aktuellen geprüften Laufzeitstand `3f73f77` und benötigt keinen lokalen Server. Falls der Vorschauhost einen Hinweis zeigt, **Open the page** anklicken. Veröffentlicht ausschließlich im Branch `codex/lane-wars`; kein Merge nach main.
 
-**Erste Front** und die Zwei-Lane-Mission **Wiesenkrieg** bleiben unter „Weitere Missionen“ erhalten, ebenso ihre Spielstände, das Kampflabor und die M1.5-Demo. Im Hochformat bleibt die Fabrikverwaltung eingeklappt, bis du sie öffnest.
+**Erste Front** und die Zwei-Lane-Mission **Wiesenkrieg** bleiben unter „Weitere Missionen“ erhalten, ebenso ihre Spielstände, das Kampflabor und die M1.5-Demo. Auch im Hochformat bleiben die Fabrikplätze direkt erreichbar; Bearbeiten öffnet ein kompaktes Panel über der Leiste.
 
 **Neu:** Roboter kämpfen und sind direkt am Fabrikausgang angreifbar. Mechs schießen mit sichtbarem Abstand (Reichweite 3,0). Als Ausgleich für früher eingreifende Verteidiger haben neue zentrale Partien 800 HQ-LP und 2 HQ-Schaden/s. Bitte eine neue Partie starten; gespeicherte Partien behalten ihre alten HQ-Werte.
 
@@ -20,7 +29,7 @@ Der Playlink zeigt den festgelegten Spielstand `37a6864` und benötigt keinen lo
 
 **Railgun-Schusseffekte:** Leuchtende Rails, kurzer heller Strahl und sichtbarer Einschlag; Gameplay unverändert. [Bilder und Tests](experiments/hexfront-lane-wars/docs/railgun-effects/REPORT.md).
 
-**Animierte Railgun im Spiel:** Das freigegebene vierbeinige GLB besitzt echte Beinbewegungen, Zielausrichtung, Ladung, Rückstoß, Trefferreaktion und Zusammenbruch. [Animationsviewer](https://rawcdn.githack.com/emfau88/hexwars/37a6864b689f4c3ad4052508de968b9cc2fd2fe6/experiments/hexfront-lane-wars/railgun-viewer.html) · [GLB/Blender, Technik, Performance und Tests](experiments/hexfront-lane-wars/docs/railgun-animation/REPORT.md). Reichweite in **Zentrale Front: 5,2 statt 4,8 (+8,3 %)**; zusätzlich gelten Railgun-Tempo 0,8, Mech-Reichweite 3,0 und Drohnen-Tempo 1,8. Historische Missionen bleiben unverändert.
+**Animierte Railgun im Spiel:** Das freigegebene vierbeinige GLB besitzt echte Beinbewegungen, Zielausrichtung, Ladung, Rückstoß, Trefferreaktion und Zusammenbruch. [Animationsviewer](https://rawcdn.githack.com/emfau88/hexwars/3f73f77d3d3c1db69d7049791fa24d11929364fa/experiments/hexfront-lane-wars/railgun-viewer.html) · [GLB/Blender, Technik, Performance und Tests](experiments/hexfront-lane-wars/docs/railgun-animation/REPORT.md). Reichweite in **Zentrale Front: 5,2 statt 4,8 (+8,3 %)**; zusätzlich gelten Railgun-Tempo 0,8, Mech-Reichweite 3,0 und Drohnen-Tempo 1,8. Historische Missionen bleiben unverändert.
 
 **Animierte Mechs:** Bewegliche Beine, Oberkörper und Waffen am ursprünglichen Modell; unabhängige Walk-, Idle-, Attack-, Hit- und Death-Animationen im Spiel. [GLB-Viewer](https://rawcdn.githack.com/emfau88/hexwars/1e8467ebb8fd74eeba4f33d15fcfc56e0362db1a/experiments/hexfront-lane-wars/mech-viewer.html) · [Modelldateien, Technik und Performance](experiments/hexfront-lane-wars/docs/mech-animation/REPORT.md).
 
