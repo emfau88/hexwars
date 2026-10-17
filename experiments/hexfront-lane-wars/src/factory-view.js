@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {SUPPLIED_TEAMS} from './team-material.js';
 import {GLTFLoader} from '../vendor/loaders/GLTFLoader.js';
 import {factoryPosition,exitPose} from './match-layout.js';
 import {missionRoute} from './missions.js';
@@ -21,7 +22,7 @@ export async function createFactories(scene,mission=null){
  system.material=(source,owner,ghost)=>{
   const key=source.uuid+':'+(source.name==='Team'?owner:'neutral')+':'+ghost;
   if(!materials.has(key)){
-   const m=source.clone();if(source.name==='Team')m.color.setHex(owner==='orange'?0xf49a43:0x469dce);
+   const m=source.clone();if(source.name==='Team')m.color.setHex(SUPPLIED_TEAMS[owner]);
    m.transparent=ghost;m.opacity=ghost?.34:1;m.depthWrite=!ghost;materials.set(key,m);
   }
   return materials.get(key);

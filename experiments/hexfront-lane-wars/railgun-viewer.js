@@ -2,7 +2,7 @@ import {railAudio,bindRailSound} from './src/rail-audio.js';
 import * as T from 'three';
 import {railMuzzles,createRailCharge,writeRailCharge,finishRailCharge,createRailShot,sampleRailShot} from './src/rail-effects.js';
 import {GLTFLoader} from './vendor/loaders/GLTFLoader.js';
-import {suppliedMaterial} from './src/team-material.js';
+import {suppliedMaterial,SUPPLIED_TEAMS} from './src/team-material.js';
 const $=id=>document.getElementById(id),stage=$('stage'),loader=new GLTFLoader();
 const renderer=new T.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;stage.append(renderer.domElement);
 const scene=new T.Scene();scene.background=new T.Color('#dde0d5');const camera=new T.PerspectiveCamera(35,1,.02,80);scene.add(new T.HemisphereLight(0xe9f1f4,0x899783,1.1));
@@ -12,7 +12,7 @@ const floor=new T.Mesh(new T.PlaneGeometry(60,60),new T.MeshStandardMaterial({co
 const grid=new T.GridHelper(14,56,0x9caa92,0xacb79f);grid.position.y=-.003;grid.material.transparent=true;grid.material.opacity=.22;scene.add(grid);
 const chargeLights=createRailCharge(2);scene.add(chargeLights);const previewShots=[];
 let gltf,root,twin,mech,hq,mixer,action;const pairs=[],helpers=[];let heardAttack=false;let transitionTime=null,travelDistance=0;let dirty=true,paused=false,speed=1,clip='Idle',last=performance.now(),yaw=-.60,pitch=.36,distance=4.4,drag=null,mode='single';const target=new T.Vector3(0,.64,0);
-function recolor(object,owner){object.traverse(o=>{if(o.isMesh&&o.material.name==='Team')o.material.color.setHex(owner==='blue'?0x469dce:0xf49a43);});}
+function recolor(object,owner){object.traverse(o=>{if(o.isMesh&&o.material.name==='Team')o.material.color.setHex(SUPPLIED_TEAMS[owner]);});}
 function prepare(object){const shared=new Map();object.traverse(o=>{if(o.isMesh){if(!shared.has(o.material))shared.set(o.material,o.material.clone());o.material=shared.get(o.material);o.castShadow=o.receiveShadow=true;}});}
 function reference(gltf,{height,width}){const root=gltf.scene;root.updateMatrixWorld(true);const box=new T.Box3().setFromObject(root),size=box.getSize(new T.Vector3()),center=box.getCenter(new T.Vector3()),scale=height?height/size.y:width/Math.max(size.x,size.z),wrap=new T.Group();root.position.set(-center.x,-box.min.y,-center.z);wrap.add(root);wrap.scale.setScalar(scale);root.traverse(o=>{if(o.isMesh){o.userData.sourceMaterial=o.material;o.material=suppliedMaterial(o.material,'orange');o.castShadow=o.receiveShadow=true;}});scene.add(wrap);return wrap;}
 function updateWeaponEffects(){

@@ -1,0 +1,45 @@
+{
+  "method": "Identical central match after 7 seconds. Before uses HEAD source overrides; after uses working tree. Both viewport snapshots identical; desktop Chromium with mobile touch emulation.",
+  "results": [
+    {
+      "version": "before",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "drawCalls": 197,
+      "triangles": 591808,
+      "errors": []
+    },
+    {
+      "version": "before",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "drawCalls": 190,
+      "triangles": 591724,
+      "errors": []
+    },
+    {
+      "version": "after",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "drawCalls": 197,
+      "triangles": 591808,
+      "errors": []
+    },
+    {
+      "version": "after",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "drawCalls": 190,
+      "triangles": 591724,
+      "errors": []
+    }
+  ]
+}

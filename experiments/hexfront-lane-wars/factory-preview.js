@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {GLTFLoader} from './vendor/loaders/GLTFLoader.js';
-import {suppliedMaterial} from './src/team-material.js';
+import {suppliedMaterial,SUPPLIED_TEAMS} from './src/team-material.js';
 const $=id=>document.getElementById(id),stage=$('stage'),loader=new GLTFLoader();
 const renderer=new T.WebGLRenderer({antialias:true,alpha:false,preserveDrawingBuffer:true});
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
@@ -44,7 +44,7 @@ const materialCache=new Map();
 function materialFor(source,owner,isGhost){
  const key=source.uuid+':'+(source.name==='Team'?owner:'shared')+':'+isGhost;if(materialCache.has(key))return materialCache.get(key);
  const m=source.clone();
- if(source.name==='Team')m.color.setHex(owner==='blue'?0x469dce:0xf49a43);
+ if(source.name==='Team')m.color.setHex(SUPPLIED_TEAMS[owner]);
  m.transparent=isGhost;m.opacity=isGhost?.34:1;m.depthWrite=!isGhost;
  materialCache.set(key,m);return m;
 }

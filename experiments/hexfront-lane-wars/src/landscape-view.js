@@ -19,7 +19,7 @@ function groundTexture(earth,pathDistance=meadowDistance) {
     const apron=1-smooth(2.2,4.7,Math.hypot(x*.9,Math.abs(z)-10.3));
     const worn=Math.max(trail,apron*.9);
     const green=smooth(.15,.82,patch*.6+broad*.4)*(1-worn*.94);
-    const grass=[111,142,78],soil=[183,161,123];
+    const grass=[98,143,61],soil=[188,160,110];
     const pi=(((Math.floor(z*38)%256+256)%256)*256+(Math.floor(x*38)%256+256)%256)*4;
     const texture=(pixels[pi]+pixels[pi+1]+pixels[pi+2])/3-115;
     const relief=texture*.2+(fine-.5)*9+(broad-.5)*12;
@@ -86,6 +86,6 @@ export async function buildLandscape(scene,single=false,slots=single?2:4) {
   const fern=await loadFern();
   fern.updateMatrixWorld(true);const b=new T.Box3().setFromObject(fern),c=b.getCenter(new T.Vector3()),sz=b.getSize(new T.Vector3()),scale=1.1/Math.max(sz.x,sz.z);
   const fernPoints=single?[[-6,3.3],[-7,-2.4],[6,-4.7],[7,1.9]]:[[-15.5,3.3],[-16.1,-2.4],[-1.8,-4.7],[2.2,1.9],[15,5.7],[16,-5.0]];
-  fern.traverse(o=>{if(!o.isMesh)return;const g=o.geometry.clone().applyMatrix4(o.matrixWorld);g.translate(-c.x,-b.min.y,-c.z);g.scale(scale,scale,scale);g.deleteAttribute('color');const m=o.material.clone();m.vertexColors=false;m.color.setHex(0xa7bf86);m.roughness=.95;instances(root,g,m,fernPoints.map(([x,z],i)=>({x,z,r:i*1.3})),false);});
+  fern.traverse(o=>{if(!o.isMesh)return;const g=o.geometry.clone().applyMatrix4(o.matrixWorld);g.translate(-c.x,-b.min.y,-c.z);g.scale(scale,scale,scale);g.deleteAttribute('color');const m=o.material.clone();m.vertexColors=false;m.color.setHex(0x9dbf74);m.roughness=.95;instances(root,g,m,fernPoints.map(([x,z],i)=>({x,z,r:i*1.3})),false);});
   return root;
 }

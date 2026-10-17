@@ -39,7 +39,7 @@ export async function loadModels({animatedMechs=true,animatedRails=true}={}) {
   const rig=files['mech-animated/mech-rigged'];if(rig){metadata.mechAnimated=metadata['mech-animated/mech-rigged'];delete metadata['mech-animated/mech-rigged'];}
   for(const owner of ['orange','blue']) {
     const rigParts=[];const shared=new Map();if(rig)rig.scene.traverse(o=>{if(o.isMesh){if(!shared.has(o.material))shared.set(o.material,o.material.name==='Supplied_Surface'?suppliedMaterial(o.material,owner):o.material.clone());rigParts.push({geometry:o.geometry,material:shared.get(o.material),node:o.name});}});
-    const railParts=[],railShared=new Map();if(railRig)railRig.scene.traverse(o=>{if(o.isMesh){if(!railShared.has(o.material)){const m=o.material.clone();if(m.name==='Team')m.color.setHex(owner==='blue'?0x469dce:0xf49a43);railShared.set(o.material,m);}railParts.push({geometry:o.geometry,material:railShared.get(o.material),node:o.name});}});
+    const railParts=[],railShared=new Map();if(railRig)railRig.scene.traverse(o=>{if(o.isMesh){if(!railShared.has(o.material)){const m=o.material.clone();if(m.name==='Team')m.color.setHex(SUPPLIED_TEAMS[owner]);railShared.set(o.material,m);}railParts.push({geometry:o.geometry,material:railShared.get(o.material),node:o.name});}});
     library[owner]={drone:partsOf(files.hoverbot.scene,{width:1.08,owner}),mech:rig?rigParts:partsOf(files.mech.scene,{height:1.45,owner}),hq:partsOf(files.hq.scene,{width:4.3,owner}),rail:railRig?railParts:partsOf(railPlaceholder(owner),{height:1.3,owner,supplied:false})};
   }
   return {library,metadata,mechRig:rig,railRig,railLod};

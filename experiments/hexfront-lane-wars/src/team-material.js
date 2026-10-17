@@ -1,5 +1,5 @@
 import * as T from 'three';
-export const SUPPLIED_TEAMS={orange:0xf49a43,blue:0x469dce,neutral:0x849793};
+export const SUPPLIED_TEAMS={orange:0xf48924,blue:0x258fd6,neutral:0x849793};
 /** Repaint only saturated warm source texels. White ceramic and dark metal
  * are never multiplied by team colour. Instanced drones share these materials. */
 export function suppliedMaterial(source,owner='orange',instanced=false){
