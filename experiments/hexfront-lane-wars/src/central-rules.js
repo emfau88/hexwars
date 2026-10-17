@@ -1,7 +1,7 @@
 import {UNITS} from './rules.js';
 // Mode-scoped balance. Historical missions and the laboratory retain UNITS.
 // Roles, formation order and counter weights are data, not extra unit classes.
-export const CENTRAL_UNITS=Object.freeze(Object.fromEntries(Object.entries(UNITS).map(([id,spec])=>[id,Object.freeze({...spec,...(id==='mech'?{hp:110,secondary:9,range:3.0}:id==='rail'?{interval:2.8,damage:55,range:5.2,speed:0.8}:id==='drone'?{speed:1.8}:{}),
+export const CENTRAL_UNITS=Object.freeze(Object.fromEntries(Object.entries(UNITS).map(([id,spec])=>[id,Object.freeze({...spec,...(id==='mech'?{hp:110,secondary:9,range:3.3,speed:1.1}:id==='rail'?{interval:2.8,damage:55,range:5.5,speed:0.8}:id==='drone'?{speed:2.1}:{}),
  role:{drone:'Schwarm',mech:'Flächenkämpfer',rail:'Panzerbrecher'}[id],
  formation:{mech:0,drone:1,rail:2}[id],
  counters:{drone:{drone:0,mech:-1,rail:1},mech:{drone:1,mech:0,rail:-1},rail:{drone:-1,mech:1,rail:0}}[id]

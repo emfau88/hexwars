@@ -80,6 +80,6 @@ test('old central saves migrate visible exits in place and keep their existing H
  save.transit=[{...u,id:-1,x:u.homeX,arrivalTick:134}];save.lanes[0].units=[];
  const pose=exitPose(save.transit[0],save.time),restored=Match.restore(save),active=restored.lanes[0].units[0],actual=missionRoute(restored.mission,0,active.p,active.x);
  near(actual.x,pose.x);near(actual.z,pose.z);assert.equal(restored.transit.length,0);
- assert.equal(restored.rules.hqHP,1200);assert.equal(restored.players.orange.hq,900);assert.equal(restored.unitSpecs.mech.range,3.0);
+ assert.equal(restored.rules.hqHP,1200);assert.equal(restored.players.orange.hq,900);assert.equal(restored.unitSpecs.mech.range,3.3);
  restored.advance(.4);assert.ok(active.deployment.elapsed>1);
 });
