@@ -1,0 +1,110 @@
+{
+  "base": "http://127.0.0.1:4181/",
+  "checks": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mission": "central",
+      "visible": 4,
+      "minDiameter": 34.95232073587706,
+      "synchronized": true,
+      "paused": true,
+      "warning": true,
+      "spawnPulse": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mission": "first",
+      "visible": 2,
+      "minDiameter": 34.952320735876974,
+      "synchronized": true,
+      "paused": true,
+      "warning": true,
+      "spawnPulse": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "mission": "meadow",
+      "visible": 4,
+      "minDiameter": 32.4363040215501,
+      "synchronized": true,
+      "paused": true,
+      "warning": true,
+      "spawnPulse": true
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "fixture": {
+        "all": 8,
+        "sharedGeometry": 1,
+        "materials": 2,
+        "disposed": true,
+        "saveUnchanged": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "mission": "central",
+      "visible": 4,
+      "minDiameter": 32.399999999999956,
+      "synchronized": true,
+      "paused": true,
+      "warning": true,
+      "spawnPulse": true
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fixture": {
+        "all": 8,
+        "sharedGeometry": 1,
+        "materials": 2,
+        "disposed": true,
+        "saveUnchanged": true
+      }
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "mission": "central",
+      "visible": 4,
+      "minDiameter": 32.399999999999956,
+      "synchronized": true,
+      "paused": true,
+      "warning": true,
+      "spawnPulse": true
+    },
+    {
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "fixture": {
+        "all": 8,
+        "sharedGeometry": 1,
+        "materials": 2,
+        "disposed": true,
+        "saveUnchanged": true
+      }
+    }
+  ],
+  "errors": []
+}

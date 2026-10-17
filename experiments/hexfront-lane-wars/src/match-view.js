@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {FactoryWaveRings} from './factory-wave-rings.js';
 import {bindMatchCamera} from './match-camera-input.js';
 import {BattleView} from './battle-view.js';
 import {createFactories,updateFactories,disposeFactories,factoryDiagnostics} from './factory-view.js';
@@ -7,7 +8,7 @@ import {groundHeight,routePoint} from './routes.js';
 import {missionRoute} from './missions.js';
 import {firstHeight} from './landscape-view.js';
 export class MatchView extends BattleView {
- constructor(stage,labels,onSelect,onFactory,mission=null){super(stage,labels,onSelect,{single:mission?.lanes===1,slots:mission?.slots,specs:mission?.units,clarity:mission?.id==='central'});this.mission=mission;this.onFactory=onFactory;this.factoryBuildings={};const factoriesReady=createFactories(this.scene,mission).then(items=>{this.factoryBuildings=items;});this.ready=Promise.all([this.ready,factoriesReady]).then(()=>{this.dirty=true;this.resize();});this.factoryLabels=[];this.safeBottom=330;this.resize();}
+ constructor(stage,labels,onSelect,onFactory,mission=null){super(stage,labels,onSelect,{single:mission?.lanes===1,slots:mission?.slots,specs:mission?.units,clarity:mission?.id==='central'});this.mission=mission;this.waveRings=new FactoryWaveRings(this.scene);this.onFactory=onFactory;this.factoryBuildings={};const factoriesReady=createFactories(this.scene,mission).then(items=>{this.factoryBuildings=items;});this.ready=Promise.all([this.ready,factoriesReady]).then(()=>{this.dirty=true;this.resize();});this.factoryLabels=[];this.safeBottom=330;this.resize();}
  bind(){this.disposeCameraInput=bindMatchCamera(this);}
  point(u,height=0){
    if(u.hq)return new T.Vector3(0,height+.9,baseSign(u.hq)*10.3);
@@ -35,7 +36,7 @@ export class MatchView extends BattleView {
  }
  renderMatch(match,dt=0,draw=true){
    this.currentMatch=match;this.specs=match.unitSpecs;const state=JSON.stringify([match.tick,match.phase,match.players.orange.factories,match.players.orange.pending,match.players.blue.factories]);if(state!==this.renderState)this.dirty=true;this.renderState=state;
-   this.matchTime=match.time+Math.max(0,match.remainder||0);updateFactories(this.factoryBuildings,match);
+   this.matchTime=match.time+Math.max(0,match.remainder||0);updateFactories(this.factoryBuildings,match);this.waveRings.update(this.factoryBuildings,match,this.camera,this.frame.scale);
    const lanes=match.lanes.map((g,lane)=>({units:[...g.units,...match.transit.filter(u=>u.lane===lane).map(u=>({...u,departing:true,p:laneEntry(u.owner,this.mission),target:null}))]}));
 
    if(this.hqs)for(const [i,hq] of this.hqs.entries()){const owner=i===0?'orange':'blue';const scale=match.players[owner].hq>0?1:.28;if(hq.scale.y!==scale)this.dirty=true;hq.scale.y=scale;hq.position.y=match.players[owner].hq>0?.04:-.25;}
@@ -49,8 +50,8 @@ export class MatchView extends BattleView {
  }
  highlightLane(lane){if(this.laneHighlight){this.laneHighlight.removeFromParent();this.laneHighlight.geometry.dispose();this.laneHighlight.material.dispose();this.laneHighlight=null;}if(lane===null)return;const pts=[];for(let p=4;p<=26;p+=.25)pts.push(this.point({lane,p,x:0},.08));const curve=new T.CatmullRomCurve3(pts);this.laneHighlight=new T.Mesh(new T.TubeGeometry(curve,90,.16,6,false),new T.MeshBasicMaterial({color:0xffd790,transparent:true,opacity:.85,depthWrite:false}));this.scene.add(this.laneHighlight);this.dirty=true;}
  laneScreens(){return Array.from({length:this.mission?.lanes||2},(_,lane)=>{const p=this.point({lane,p:15,x:0}).project(this.camera);return {lane,x:(p.x*.5+.5)*this.stage.clientWidth,y:(-.5*p.y+.5)*this.stage.clientHeight};});}
- dispose(){this.disposeCameraInput?.();disposeFactories(this.factoryBuildings);super.dispose();}
- diagnostics(){return {...super.diagnostics(),factoryModel:factoryDiagnostics(this.factoryBuildings)};}
+ dispose(){this.waveRings.dispose();this.disposeCameraInput?.();disposeFactories(this.factoryBuildings);super.dispose();}
+ diagnostics(){return {...super.diagnostics(),factoryModel:factoryDiagnostics(this.factoryBuildings),waveRings:this.waveRings.diagnostics()};}
  factoryScreens(){
    return Object.values(this.factoryBuildings).map(f=>{const v=f.root.position.clone().add(new T.Vector3(0,2.45,0)).project(this.camera);return {owner:f.owner,slot:f.slot,state:f.root.userData.state,visible:f.root.visible,asset:f.asset,module:f.type,ghost:f.ghost,door:f.open,segments:[1,2,3,4].map(i=>f.root.getObjectByName("Hangar_Segment_"+i).position.toArray()),opacity:f.ghost?.34:1,bounds:this.buildingBounds(f.root),x:(v.x*.5+.5)*this.stage.clientWidth,y:(-.5*v.y+.5)*this.stage.clientHeight};});
  }
