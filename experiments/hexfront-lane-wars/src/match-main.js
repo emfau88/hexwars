@@ -19,7 +19,7 @@ function updateFactorySelection(){for(const card of $('factory-cards').children)
 function frameField(){
  if(!view)return;const mobile=mobileHUD(),supply=document.querySelector('.supply-tray'),host=mobile?$('mobile-supply'):document.querySelector('.deck-bottom');if(supply.parentElement!==host)host.append(supply);
  const compact=compactHUD(),shown=!$('game-ui').hidden,top=shown?document.querySelector('.game-top').getBoundingClientRect().bottom:80,deck=shown?$('command-deck').getBoundingClientRect():null;
- const safeTop=top+14,safeBottom=deck?innerHeight-deck.top+12:160,half=compact?(match.mission.lanes===1?6.8:14.3):undefined;
+ const safeTop=top+(mobile?8:14),safeBottom=deck?innerHeight-deck.top+(mobile?8:12):160,half=compact?(match.mission.lanes===1?6.8:14.3):undefined;
  $('battlefield').style.setProperty('--hud-bottom',top+'px');$('battlefield').style.setProperty('--dock-height',(deck?.height||140)+'px');
  if(view.safeTop!==safeTop||view.safeBottom!==safeBottom||view.fitHalfWidth!==half){view.safeTop=safeTop;view.safeBottom=safeBottom;view.fitHalfWidth=half;view.resize();}
  if(!$('orders').hidden&&!compact){const card=$('factory-cards').children[selected]?.getBoundingClientRect();if(card)$('orders').style.left=Math.max(16,Math.min(innerWidth-$('orders').offsetWidth-16,card.left))+'px';}

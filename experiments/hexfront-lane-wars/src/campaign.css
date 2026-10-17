@@ -96,20 +96,33 @@ meter{display:block;width:76px;height:6px;margin-top:5px;accent-color:#ba853f}.b
 .supply-badge{position:absolute;inset:0;display:grid;place-items:center;color:#fff9ec;font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1;text-shadow:0 2px 3px #000,0 0 6px #111;pointer-events:none}
 .supply-badge:empty{display:none}
 #supply-units button[data-state=ended] .ability-face{filter:grayscale(1);opacity:.65}
+/* Mobile: edge docks and three independent ceramic ability discs. */
 @media(max-width:760px),(max-height:500px) and (max-width:1000px){
- #mobile-supply{width:70px}
- #mobile-supply .supply-tray{gap:3px;padding:5px 4px;background:linear-gradient(135deg,#faf4e7f2,#e6ddc9eb)}
- #mobile-supply #supply-status{order:2;min-height:11px;font-size:9px;text-align:center;line-height:11px}
- #mobile-supply #supply-money{font-size:9px}
- #mobile-supply #supply-units{order:3;gap:4px}
- #mobile-supply #supply-units button{min-height:66px;padding:3px 2px;gap:2px;border-radius:9px}
- #mobile-supply #supply-units .ability-face{width:50px;height:50px}
- #mobile-supply #supply-units small{font-size:9px;line-height:10px}
- #mobile-supply .supply-badge{font-size:26px}
+ #battlefield{--hud-edge-top:4px;--dock-bottom:4px}
+ .game-top,.command-deck{left:max(4px,env(safe-area-inset-left));right:max(4px,env(safe-area-inset-right));transform:none;width:auto}
+ .game-top{top:var(--hud-edge-top);padding-top:2px;padding-bottom:2px;border-radius:12px}
+ .command-deck{bottom:var(--dock-bottom);padding:5px;border-radius:12px}
+ #mobile-supply{width:60px;right:max(4px,env(safe-area-inset-right))}
+ #mobile-supply .supply-tray{width:100%;min-width:0;padding:0;gap:3px;background:none;border:0;border-radius:0;box-shadow:none;pointer-events:none}
+ #mobile-supply .supply-label{display:none}
+ #mobile-supply #supply-units{order:0;gap:18px;align-items:center}
+ #mobile-supply #supply-units button{flex:none;width:52px;height:52px;min-height:52px;padding:3px;gap:0;border-radius:50%;overflow:visible;pointer-events:auto}
+ #mobile-supply #supply-units .ability-face{width:44px;height:44px;border-radius:50%}
+ #mobile-supply #supply-units button small{position:absolute;top:calc(100% + 2px);left:50%;transform:translateX(-50%);font-size:9px;line-height:11px;white-space:nowrap;color:#354332;text-shadow:0 1px 2px #fff9e8,0 0 4px #fff9e8}
+ #mobile-supply .supply-badge{font-size:25px}
+ #mobile-supply #supply-title{order:1;margin-top:15px;font-size:10px;line-height:12px;color:#354332;text-shadow:0 1px 2px #fff9e8,0 0 4px #fff9e8}
+ #mobile-supply #supply-title[data-blocked=true]{color:#7a3f26}
+ #mobile-supply #supply-status{order:2;min-height:11px;font-size:9px;text-align:center;line-height:11px;text-shadow:0 1px 2px #fff9e8,0 0 4px #fff9e8}
+ #mobile-supply #supply-money{font-size:9px;color:#7a3f26}
 }
-@media(max-height:500px) and (max-width:1000px){
- #mobile-supply .supply-tray{gap:2px;padding-top:4px;padding-bottom:4px}
- #mobile-supply #supply-units button{min-height:54px;padding:2px;gap:0}
- #mobile-supply #supply-units .ability-face{width:40px;height:40px}
- #mobile-supply .supply-badge{font-size:23px}
+@media(max-width:760px){
+ .game-top{row-gap:2px}
+ .wallet,.wave-status{padding-top:3px}
+ .wave-track{margin-top:3px}
 }
+/* Browser chrome already bounds the content viewport. Standalone/fullscreen
+   presentations additionally reserve the device's notch and home-indicator. */
+@media(display-mode:standalone),(display-mode:fullscreen){
+ #battlefield{--hud-edge-top:max(4px,env(safe-area-inset-top));--dock-bottom:max(4px,env(safe-area-inset-bottom))}
+}
+:fullscreen #battlefield,#battlefield:fullscreen{--hud-edge-top:max(4px,env(safe-area-inset-top));--dock-bottom:max(4px,env(safe-area-inset-bottom))}
