@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';import fs from 'node:fs/promises';import {chromium} from '@playwright/test';
-const base=process.env.PUBLIC_PLAY_URL||'http://127.0.0.1:4181/',out=process.env.SUPPLY_STATUS_OUTPUT||'docs/supply-readiness/local';await fs.mkdir(out,{recursive:true});
+const base=process.env.PUBLIC_PLAY_URL||'http://127.0.0.1:4181/',out=process.env.SUPPLY_STATUS_OUTPUT||'docs/supply-abilities/local';await fs.mkdir(out,{recursive:true});
 const browser=await chromium.launch({headless:true,channel:'chromium'}),checks=[],errors=[];
 try{
  const context=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true}),p=await context.newPage();p.on('pageerror',e=>errors.push(e.message));
@@ -7,17 +7,17 @@ try{
  const snapshot=()=>p.evaluate(()=>__LANE_MATCH__.snapshot());
  const advance=s=>p.evaluate(s=>__LANE_MATCH_QA__.advance(s),s);
  const load=()=>p.evaluate(async()=>{await __LANE_MATCH_QA__.load('central');__LANE_MATCH_QA__.advance(0);});
- const state=()=>p.evaluate(()=>({money:document.querySelector('#supply-money').textContent,timer:document.querySelector('#supply-cooldown').textContent,buttons:[...document.querySelectorAll('#supply-units button')].map(b=>({disabled:b.getAttribute('aria-disabled'),state:b.dataset.state,badge:b.querySelector('.supply-badge').textContent,label:b.getAttribute('aria-label')}))}));
+ const state=()=>p.evaluate(()=>({money:document.querySelector('#supply-money').textContent,buttons:[...document.querySelectorAll('#supply-units button')].map(b=>({disabled:b.getAttribute('aria-disabled'),state:b.dataset.state,badge:b.querySelector('.supply-badge').textContent,label:b.getAttribute('aria-label'),sweep:getComputedStyle(b.querySelector('.ability-sweep')).display,angle:b.style.getPropertyValue('--supply-charge-angle')}))}));
  for(const [width,height] of [[390,844],[320,568],[844,390],[1440,900]]){
-  await p.setViewportSize({width,height});await load();let s=await state();assert.equal(s.money,'−40 Cr');assert.equal(s.timer,'✓ Geladen');assert.ok(s.buttons.every(b=>b.state==='credits'&&b.badge==='−40 Cr'));
+  await p.setViewportSize({width,height});await load();let s=await state();assert.equal(s.money,'40 Cr fehlen');assert.ok(s.buttons.every(b=>b.state==='credits'&&b.badge===''&&b.sweep==='none'));await p.screenshot({path:out+'/credits-'+width+'.jpg',quality:85});
   const before=await snapshot();await p.locator('#supply-units [data-type=mech]').click({force:true});assert.deepEqual(await snapshot(),before);assert.match(await p.locator('#notice').textContent(),/40 Credits/);assert.equal(await p.locator('#supply-targeting').isVisible(),false);
-  await advance(20);s=await state();assert.equal(s.timer,'✓ Bereit');assert.ok(s.buttons.every(b=>b.disabled==='false'&&b.badge===''));
-  await p.locator('#supply-units [data-type=mech]').click();s=await state();assert.equal(s.money,'−80 Cr');assert.equal(s.timer,'◷ 30 s');assert.ok(s.buttons.every(b=>b.state==='cooldown'&&b.badge==='◷ 30 s'&&b.label.includes('80 Credits')&&b.label.includes('30 Sekunden')));
+  await advance(20);s=await state();assert.equal(s.money,'');assert.ok(s.buttons.every(b=>b.disabled==='false'&&b.badge===''));
+  await p.locator('#supply-units [data-type=mech]').click();s=await state();assert.equal(s.money,'80 Cr fehlen');assert.ok(s.buttons.every(b=>b.state==='cooldown'&&b.badge==='30'&&b.sweep==='block'&&b.angle==='0deg'&&b.label.includes('80 Credits')&&b.label.includes('30 Sekunden')));
   const blocked=await snapshot();await p.locator('#supply-units [data-type=rail]').click({force:true});assert.deepEqual(await snapshot(),blocked);const reason=await p.locator('#notice').textContent();assert.match(reason,/80 Credits/);assert.match(reason,/30 Sekunden/);
-  await advance(30);s=await state();assert.equal(s.money,'−20 Cr');assert.equal(s.timer,'✓ Geladen');assert.ok(s.buttons.every(b=>b.disabled==='true'));
-  await advance(10);s=await state();assert.equal(s.timer,'✓ Bereit');assert.ok(s.buttons.every(b=>b.disabled==='false'));
+  await advance(30);s=await state();assert.equal(s.money,'20 Cr fehlen');assert.ok(s.buttons.every(b=>b.sweep==='none'&&b.badge===''));assert.ok(s.buttons.every(b=>b.disabled==='true'));
+  await advance(10);s=await state();assert.equal(s.money,'');assert.ok(s.buttons.every(b=>b.disabled==='false'));
   await p.screenshot({path:out+'/ready-'+width+'.jpg',quality:85});
-  await load();await advance(50);await p.locator('#supply-units [data-type=drone]').click();await advance(10);s=await state();assert.equal(s.money,'✓ Credits');assert.equal(s.timer,'◷ 20 s');assert.ok(s.buttons.every(b=>b.disabled==='true'&&b.badge==='◷ 20 s'));
+  await load();await advance(50);await p.locator('#supply-units [data-type=drone]').click();await advance(10);s=await state();assert.equal(s.money,'');assert.ok(s.buttons.every(b=>b.disabled==='true'&&b.badge==='20'&&b.sweep==='block'&&Math.abs(parseFloat(b.angle)-120)<.001));
   if(await p.locator('#hint').isVisible())await p.locator('#close-hint').click();
   await p.screenshot({path:out+'/funded-cooldown-'+width+'.jpg',quality:85});
   const layout=await p.evaluate(()=>{const rect=s=>document.querySelector(s).getBoundingClientRect().toJSON(),tray=rect('.supply-tray'),deck=rect('#command-deck'),header=rect('.game-top');return {tray,deck,header,overflow:document.documentElement.scrollWidth>innerWidth,buttons:[...document.querySelectorAll('#supply-units button')].map(b=>{const r=b.getBoundingClientRect();return {...r.toJSON(),hit:b.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))};})};});

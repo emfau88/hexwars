@@ -1,0 +1,327 @@
+{
+  "base": "http://127.0.0.1:4181/",
+  "checks": [
+    {
+      "width": 390,
+      "height": 844,
+      "states": [
+        "credits only",
+        "ready",
+        "credits + cooldown",
+        "funded + cooldown",
+        "ready at exact cooldown boundary"
+      ],
+      "blockedClickUnchanged": true,
+      "layout": {
+        "tray": {
+          "x": 312,
+          "y": 288.5,
+          "width": 70,
+          "height": 276,
+          "top": 288.5,
+          "right": 382,
+          "bottom": 564.5,
+          "left": 312
+        },
+        "deck": {
+          "x": 8,
+          "y": 764,
+          "width": 374,
+          "height": 72,
+          "top": 764,
+          "right": 382,
+          "bottom": 836,
+          "left": 8
+        },
+        "header": {
+          "x": 8,
+          "y": 6,
+          "width": 374,
+          "height": 83,
+          "top": 6,
+          "right": 382,
+          "bottom": 89,
+          "left": 8
+        },
+        "overflow": false,
+        "buttons": [
+          {
+            "x": 317,
+            "y": 340.5,
+            "width": 60,
+            "height": 70,
+            "top": 340.5,
+            "right": 377,
+            "bottom": 410.5,
+            "left": 317,
+            "hit": true
+          },
+          {
+            "x": 317,
+            "y": 414.5,
+            "width": 60,
+            "height": 70,
+            "top": 414.5,
+            "right": 377,
+            "bottom": 484.5,
+            "left": 317,
+            "hit": true
+          },
+          {
+            "x": 317,
+            "y": 488.5,
+            "width": 60,
+            "height": 70,
+            "top": 488.5,
+            "right": 377,
+            "bottom": 558.5,
+            "left": 317,
+            "hit": true
+          }
+        ]
+      }
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "states": [
+        "credits only",
+        "ready",
+        "credits + cooldown",
+        "funded + cooldown",
+        "ready at exact cooldown boundary"
+      ],
+      "blockedClickUnchanged": true,
+      "layout": {
+        "tray": {
+          "x": 242,
+          "y": 150.5,
+          "width": 70,
+          "height": 276,
+          "top": 150.5,
+          "right": 312,
+          "bottom": 426.5,
+          "left": 242
+        },
+        "deck": {
+          "x": 8,
+          "y": 488,
+          "width": 304,
+          "height": 72,
+          "top": 488,
+          "right": 312,
+          "bottom": 560,
+          "left": 8
+        },
+        "header": {
+          "x": 8,
+          "y": 6,
+          "width": 304,
+          "height": 83,
+          "top": 6,
+          "right": 312,
+          "bottom": 89,
+          "left": 8
+        },
+        "overflow": false,
+        "buttons": [
+          {
+            "x": 247,
+            "y": 202.5,
+            "width": 60,
+            "height": 70,
+            "top": 202.5,
+            "right": 307,
+            "bottom": 272.5,
+            "left": 247,
+            "hit": true
+          },
+          {
+            "x": 247,
+            "y": 276.5,
+            "width": 60,
+            "height": 70,
+            "top": 276.5,
+            "right": 307,
+            "bottom": 346.5,
+            "left": 247,
+            "hit": true
+          },
+          {
+            "x": 247,
+            "y": 350.5,
+            "width": 60,
+            "height": 70,
+            "top": 350.5,
+            "right": 307,
+            "bottom": 420.5,
+            "left": 247,
+            "hit": true
+          }
+        ]
+      }
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "states": [
+        "credits only",
+        "ready",
+        "credits + cooldown",
+        "funded + cooldown",
+        "ready at exact cooldown boundary"
+      ],
+      "blockedClickUnchanged": true,
+      "layout": {
+        "tray": {
+          "x": 766,
+          "y": 63,
+          "width": 70,
+          "height": 229,
+          "top": 63,
+          "right": 836,
+          "bottom": 292,
+          "left": 766
+        },
+        "deck": {
+          "x": 16,
+          "y": 305,
+          "width": 812,
+          "height": 80,
+          "top": 305,
+          "right": 828,
+          "bottom": 385,
+          "left": 16
+        },
+        "header": {
+          "x": 16,
+          "y": 5,
+          "width": 812,
+          "height": 52,
+          "top": 5,
+          "right": 828,
+          "bottom": 57,
+          "left": 16
+        },
+        "overflow": false,
+        "buttons": [
+          {
+            "x": 771,
+            "y": 111,
+            "width": 60,
+            "height": 56,
+            "top": 111,
+            "right": 831,
+            "bottom": 167,
+            "left": 771,
+            "hit": true
+          },
+          {
+            "x": 771,
+            "y": 171,
+            "width": 60,
+            "height": 56,
+            "top": 171,
+            "right": 831,
+            "bottom": 227,
+            "left": 771,
+            "hit": true
+          },
+          {
+            "x": 771,
+            "y": 231,
+            "width": 60,
+            "height": 56,
+            "top": 231,
+            "right": 831,
+            "bottom": 287,
+            "left": 771,
+            "hit": true
+          }
+        ]
+      }
+    },
+    {
+      "width": 1440,
+      "height": 900,
+      "states": [
+        "credits only",
+        "ready",
+        "credits + cooldown",
+        "funded + cooldown",
+        "ready at exact cooldown boundary"
+      ],
+      "blockedClickUnchanged": true,
+      "layout": {
+        "tray": {
+          "x": 1023,
+          "y": 794,
+          "width": 224,
+          "height": 84,
+          "top": 794,
+          "right": 1247,
+          "bottom": 878,
+          "left": 1023
+        },
+        "deck": {
+          "x": 180,
+          "y": 784,
+          "width": 1080,
+          "height": 104,
+          "top": 784,
+          "right": 1260,
+          "bottom": 888,
+          "left": 180
+        },
+        "header": {
+          "x": 180,
+          "y": 12,
+          "width": 1080,
+          "height": 64.1875,
+          "top": 12,
+          "right": 1260,
+          "bottom": 76.1875,
+          "left": 180
+        },
+        "overflow": false,
+        "buttons": [
+          {
+            "x": 1023,
+            "y": 814,
+            "width": 71.328125,
+            "height": 64,
+            "top": 814,
+            "right": 1094.328125,
+            "bottom": 878,
+            "left": 1023,
+            "hit": true
+          },
+          {
+            "x": 1099.328125,
+            "y": 814,
+            "width": 71.34375,
+            "height": 64,
+            "top": 814,
+            "right": 1170.671875,
+            "bottom": 878,
+            "left": 1099.328125,
+            "hit": true
+          },
+          {
+            "x": 1175.671875,
+            "y": 814,
+            "width": 71.328125,
+            "height": 64,
+            "top": 814,
+            "right": 1247,
+            "bottom": 878,
+            "left": 1175.671875,
+            "hit": true
+          }
+        ]
+      }
+    },
+    "Two-lane targeting and historical 15-second supply cooldown retained"
+  ],
+  "errors": []
+}

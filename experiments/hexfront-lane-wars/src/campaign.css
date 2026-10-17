@@ -78,27 +78,38 @@ meter{display:block;width:76px;height:6px;margin-top:5px;accent-color:#ba853f}.b
 #restart-round{color:#80512e;border-color:#bea47a}
 @media(max-width:600px){.menu-sheet h1{font-size:28px;margin:10px 0}.menu-sheet>p{margin:10px 0;line-height:1.4}.menu-sheet{padding:20px}.starting-factories h2{font-size:13px}}
 
-/* Reinforcement readiness: credits and shared cooldown stay independently visible. */
-#supply-status{display:flex;gap:4px;white-space:nowrap;font-variant-numeric:tabular-nums}
-#supply-status span{font-size:9px;font-weight:650;padding:2px 4px;border:1px solid #b6c6b8;border-radius:5px;background:#eaf1e6;color:#365a48;line-height:1.2}
-#supply-status span[data-blocked=true]{color:#815318;background:#f5e8ce;border-color:#d8bb8c}
+/* Ability-style reinforcement icons: radial cooldown, no status badges. */
 .supply-heading{height:auto;min-height:20px;gap:5px;flex-wrap:wrap}
-#supply-units button{position:relative;overflow:hidden}
-#supply-units button[aria-disabled=true]{opacity:1;cursor:default;background:linear-gradient(#eee9de,#e6dfd0);border-color:#c8beab}
-#supply-units button[aria-disabled=true] .unit-portrait{opacity:.42;filter:saturate(.45)}
-#supply-units button[aria-disabled=true] small{color:#655f53}
-#supply-units button[data-state=ready]{border-color:#9eaf94;box-shadow:inset 0 1px #fff,0 1px 2px #314a2520}
-#supply-units button[data-state=cooldown]::after{content:'';position:absolute;bottom:0;left:0;height:3px;width:calc(100% * var(--supply-charge));background:#a67a34}
-.supply-badge{position:absolute;top:9px;left:50%;transform:translateX(-50%);white-space:nowrap;padding:2px 4px;border:1px solid #cab48e;border-radius:5px;background:#fff8e9f5;color:#634419;box-shadow:0 1px 3px #332a1a24;font-size:11px;font-weight:750;line-height:1.2;font-variant-numeric:tabular-nums;pointer-events:none}
+#supply-status{white-space:nowrap;min-height:12px;line-height:12px}
+#supply-money{font-size:10px;font-weight:600;color:#98543b}
+#supply-title[data-blocked=true]{color:#98543b}
+#supply-units button{position:relative;overflow:hidden;gap:2px;padding:3px;background:linear-gradient(145deg,#fffaf0,#e5dcc9);border-color:#c9b58d;box-shadow:inset 0 1px #fff,0 2px 3px #30332322}
+#supply-units button[aria-disabled=true]{opacity:1;cursor:default}
+#supply-units button .ability-face{position:relative;display:block;width:42px;height:42px;flex-shrink:0;border-radius:7px;overflow:hidden;background:radial-gradient(ellipse at 50% 30%,#e7dfcc,#b4b6a3);box-shadow:inset 0 0 0 1px #51473538}
+#supply-units button .unit-portrait{position:relative;display:block;width:100%;height:100%;object-fit:contain;opacity:1;filter:drop-shadow(0 2px 1px #20292160);transform:scale(1.12)}
+#supply-units button[data-money=missing] .unit-portrait{filter:saturate(.25) brightness(.82) drop-shadow(0 2px 1px #20292160)}
+#supply-units button[data-money=missing]{border-color:#b8ac99}
+#supply-units button[data-state=ready]{border-color:#bc934b;box-shadow:inset 0 1px #fff,0 0 0 1px #f6d79155,0 2px 4px #30332322}
+#supply-units button small{color:#4e5549;font-weight:600;font-size:10px;line-height:12px}
+.ability-sweep{display:none;position:absolute;inset:0;background:conic-gradient(from 0deg,transparent 0deg var(--supply-charge-angle),#122028d4 var(--supply-charge-angle) 360deg);box-shadow:inset 0 0 0 1px #f5e7b64a}
+[data-state=cooldown] .ability-sweep{display:block}
+.supply-badge{position:absolute;inset:0;display:grid;place-items:center;color:#fff9ec;font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1;text-shadow:0 2px 3px #000,0 0 6px #111;pointer-events:none}
 .supply-badge:empty{display:none}
+#supply-units button[data-state=ended] .ability-face{filter:grayscale(1);opacity:.65}
 @media(max-width:760px),(max-height:500px) and (max-width:1000px){
- #mobile-supply{width:72px}
- #mobile-supply #supply-status{order:2;display:flex;flex-direction:column;gap:3px;min-height:0}
- #mobile-supply #supply-status span{font-size:10px;padding:2px 3px}
- #mobile-supply #supply-units{order:3}
- #mobile-supply .supply-badge{top:7px}
+ #mobile-supply{width:70px}
+ #mobile-supply .supply-tray{gap:3px;padding:5px 4px;background:linear-gradient(135deg,#faf4e7f2,#e6ddc9eb)}
+ #mobile-supply #supply-status{order:2;min-height:11px;font-size:9px;text-align:center;line-height:11px}
+ #mobile-supply #supply-money{font-size:9px}
+ #mobile-supply #supply-units{order:3;gap:4px}
+ #mobile-supply #supply-units button{min-height:66px;padding:3px 2px;gap:2px;border-radius:9px}
+ #mobile-supply #supply-units .ability-face{width:50px;height:50px}
+ #mobile-supply #supply-units small{font-size:9px;line-height:10px}
+ #mobile-supply .supply-badge{font-size:26px}
 }
 @media(max-height:500px) and (max-width:1000px){
  #mobile-supply .supply-tray{gap:2px;padding-top:4px;padding-bottom:4px}
- #mobile-supply #supply-status span{padding-top:1px;padding-bottom:1px}
+ #mobile-supply #supply-units button{min-height:54px;padding:2px;gap:0}
+ #mobile-supply #supply-units .ability-face{width:40px;height:40px}
+ #mobile-supply .supply-badge{font-size:23px}
 }

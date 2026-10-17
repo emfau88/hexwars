@@ -138,16 +138,17 @@ function updateHUD(){
  $('economy').hidden=p.economy;$('economy-done').hidden=!p.economy;$('economy').innerHTML='<strong>'+(mobileHUD()?'Eco ↑':'Wirtschaft ↑')+'</strong><small>'+match.rules.economyCost+' Cr · +'+match.rules.economyIncome.toLocaleString('de-DE')+'/s</small>';$('economy').setAttribute('aria-label','Wirtschaft ausbauen: '+match.rules.economyCost+' Credits, Einkommen einmalig um '+match.rules.economyIncome+' Credits pro Sekunde erhöhen');
  $('supply-title').textContent=(mobileHUD()?'':'NACHSCHUB · ')+match.rules.supplyCost+' Cr';
  const availability=supplyAvailability();
- const money=$('supply-money'),timer=$('supply-cooldown');
- money.textContent=availability.missing?'−'+availability.missing+' Cr':'✓ Credits';money.dataset.blocked=String(availability.missing>0);
- timer.textContent=ended?'Beendet':availability.cool?'◷ '+Math.ceil(availability.cool)+' s':availability.missing?'✓ Geladen':'✓ Bereit';timer.dataset.blocked=String(availability.cool>0||ended);
+ const money=$('supply-money');
+ money.textContent=availability.missing?availability.missing+' Cr fehlen':'';money.dataset.blocked=String(availability.missing>0);
+ $('supply-title').dataset.blocked=String(availability.missing>0);
  $('supply-status').setAttribute('aria-label',availability.reason);$('supply-status').title=availability.reason;
  $('supply-lanes').hidden=match.laneCount===1;
  for(const b of $('supply-units').children){
   b.setAttribute('aria-disabled',String(availability.blocked));b.setAttribute('aria-label',names[b.dataset.type]+' Sofortnachschub: '+availability.reason);b.title=availability.reason;
   b.dataset.state=ended?'ended':availability.cool?'cooldown':availability.missing?'credits':'ready';
-  b.style.setProperty('--supply-charge',String(1-availability.cool/match.rules.supplyCooldown));
-  b.querySelector('.supply-badge').textContent=ended?'—':availability.cool?'◷ '+Math.ceil(availability.cool)+' s':availability.missing?'−'+availability.missing+' Cr':'';
+  b.style.setProperty('--supply-charge-angle',(Math.max(0,Math.min(1,1-availability.cool/match.rules.supplyCooldown))*360)+'deg');
+  b.dataset.money=availability.missing?'missing':'enough';
+  b.querySelector('.supply-badge').textContent=ended?'—':availability.cool?String(Math.ceil(availability.cool)):'';
   b.classList.toggle('selected',b.dataset.type===supplyType);b.disabled=ended;
  }
  const key=JSON.stringify([p.factories,p.pending,ended,match.laneCount]);
@@ -207,7 +208,7 @@ function frame(now){
   if(hudClock>=.1){updateHUD();markers();hudClock=0;}if(saveClock>=2){if(playing)save();saveClock=0;}}
  if(noticeUntil&&now>noticeUntil){$('notice').hidden=true;noticeUntil=0;}requestAnimationFrame(frame);
 }
-$('supply-units').innerHTML=Object.keys(names).map(type=>'<button data-type="'+type+'" aria-label="'+names[type]+' Sofortnachschub">'+portrait(type)+'<span class="supply-badge" aria-hidden="true"></span><small>'+labels[type]+'</small></button>').join('');
+$('supply-units').innerHTML=Object.keys(names).map(type=>'<button data-type="'+type+'" aria-label="'+names[type]+' Sofortnachschub"><span class="ability-face">'+portrait(type)+'<span class="ability-sweep" aria-hidden="true"></span><span class="supply-badge" aria-hidden="true"></span></span><small>'+labels[type]+'</small></button>').join('');
 $('supply-units').addEventListener('pointerdown',e=>{const b=e.target.closest('[data-type]');if(!b||b.disabled||!ready)return;if(supplyAvailability().blocked)return;ignoreSupplyClick=false;hintOpen=false;$('selection').hidden=true;$('orders').hidden=true;supplyType=b.dataset.type;drag={id:e.pointerId,x:e.clientX,y:e.clientY,moved:false};b.setPointerCapture(e.pointerId);updateSupplyFeedback();});
 $('supply-units').addEventListener('pointermove',e=>{if(!drag||e.pointerId!==drag.id)return;if(Math.hypot(e.clientX-drag.x,e.clientY-drag.y)>8)drag.moved=true;if(drag.moved)setTarget(targetAt(e.clientX,e.clientY));});
 $('supply-units').addEventListener('pointerup',e=>{if(!drag)return;const moved=drag.moved;drag=null;if(moved){ignoreSupplyClick=true;const lane=targetAt(e.clientX,e.clientY);if(lane===null)cancelSupply();else sendSupply(lane);}});
