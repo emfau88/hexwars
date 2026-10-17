@@ -2,6 +2,7 @@
   "checks": [
     "Six real GLB clips; four planted stance feet, lifted swing feet, <0.1 mm slip; independent recoil, collapse, no aim drift",
     "32 independent robots, both factions, rigid shared render batches",
+    "Moved instance remains selectable in overview and full-detail geometry",
     "Existing target windup charges weapon; actual shot triggers recoil, clears glow and starts beam at animated muzzle",
     "Actual nonlethal damage triggers Railgun hit reaction",
     "Both factions collapse after genuine lethal shots; dead units leave simulation immediately and visual corpses expire after 1.2 s",

@@ -77,7 +77,10 @@ export class BattleView {
   }
   pick(e) {
     if(!this.batches)return;const rect=this.stage.getBoundingClientRect();this.raycaster.setFromCamera(new T.Vector2((e.clientX-rect.left)/rect.width*2-1,1-(e.clientY-rect.top)/rect.height*2),this.camera);
-    const hit=this.raycaster.intersectObjects(Object.values(this.batches).flat(),false)[0];this.selected=hit?this.pickIds[hit.object.userData.batch]?.[hit.instanceId]??null:null;this.dirty=true;this.onSelect(this.selected);
+    const selectable=Object.values(this.batches).flat();
+    // Instance transforms and LOD geometry move after the first render; refresh pick bounds on demand.
+    for(const mesh of selectable)mesh.computeBoundingSphere();
+    const hit=this.raycaster.intersectObjects(selectable,false)[0];this.selected=hit?this.pickIds[hit.object.userData.batch]?.[hit.instanceId]??null:null;this.dirty=true;this.onSelect(this.selected);
   }
   reset() {this.dirty=true;for(const e of this.effects)this.disposeEffect(e);this.effects=[];for(const p of [...this.poses.values(),...this.corpses.values()])p.animator?.dispose();this.corpses.clear();this.poses.clear();for(const label of this.health.values())label.remove();this.health.clear();this.selected=null;this.onSelect(null);}
   disposeEffect(e) {e.root.removeFromParent();e.root.traverse(o=>{o.geometry?.dispose();o.material?.dispose();});}

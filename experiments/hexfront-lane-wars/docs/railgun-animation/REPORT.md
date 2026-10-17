@@ -66,3 +66,5 @@ Schussdarstellung: Kurze sichtbare Ladung während der vorhandenen Zielerfassung
 Nach der Reichweitenänderung: **90/90 Regeltests bestanden**, Railgun-Animations- und Missionsprüfungen erneut bestanden. Die zusätzliche vollständige Browserpartie endet nun nach **218,45 s** statt 374,55 s. Reichweite 4,8 erlaubt außerdem Beschuss außerhalb der unveränderten zentralen HQ-Verteidigungsreichweite 4,0. Diese stärkere Belagerungswirkung ist eine direkte Folge der gewünschten Reichweite.
 
 Finaler statischer Build mit 4,8 Reichweite: vollständige HUD-Partie gewonnen nach 218,10 s; drei Gegnervergleiche stimmen exakt mit Node überein (Sieg 371,70 s, Spiegelung nach 720 s offen, Niederlage 695,15 s). Ohne Spielerbefehle Niederlage nach 153,50 s. Hochformat-Touchprüfung bestanden. Rohdaten: central-range/results.json.
+
+Auswahlregression behoben: Instanz-Grenzkugeln werden beim Anklicken neu berechnet, weil Animation, Bewegung und Detailwechsel sie verändern. Reale Railgun-Auswahl und Reichweitenanzeige sind bei Übersicht und Nahansicht geprüft. Keine zusätzliche Arbeit pro Animationsframe.
