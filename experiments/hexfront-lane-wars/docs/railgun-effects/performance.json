@@ -1,0 +1,77 @@
+{
+  "method": "64 static animated Railguns, baseline versus all 64 charging and 16 simultaneous frozen full-bright shots; 20 warmup + 80 RAF samples. Same desktop GPU; mobile viewport only, not phone hardware. No dynamic point lights or bloom passes.",
+  "results": [
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "effects": false,
+      "cpuMs": {
+        "median": 8.400000005960464,
+        "p95": 10.600000023841858
+      },
+      "frameMs": {
+        "median": 10.400000005960464,
+        "p95": 12.400000005960464
+      },
+      "calls": 106,
+      "triangles": 1739192,
+      "renderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "effects": true,
+      "cpuMs": {
+        "median": 9.699999988079071,
+        "p95": 11.900000005960464
+      },
+      "frameMs": {
+        "median": 11.200000017881393,
+        "p95": 13.599999994039536
+      },
+      "calls": 220,
+      "triangles": 1744600,
+      "renderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "effects": false,
+      "cpuMs": {
+        "median": 7.5,
+        "p95": 9.5
+      },
+      "frameMs": {
+        "median": 8.699999988079071,
+        "p95": 10.5
+      },
+      "calls": 100,
+      "triangles": 1739120,
+      "renderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    },
+    {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "effects": true,
+      "cpuMs": {
+        "median": 8.200000017881393,
+        "p95": 11.5
+      },
+      "frameMs": {
+        "median": 9.699999988079071,
+        "p95": 12.300000011920929
+      },
+      "calls": 186,
+      "triangles": 1743684,
+      "renderer": "ANGLE (AMD, AMD Radeon(TM) Graphics (0x00001681) Direct3D11 vs_5_0 ps_5_0, D3D11)"
+    }
+  ]
+}

@@ -29,6 +29,10 @@ Unter „Weitere Missionen“ bleibt **Erste Front** als Einführung erhalten. I
 
 HQs haben in neuen zentralen Partien 800 LP und verursachen 2 Schaden/s. Ausrückende Einheiten kämpfen und sind angreifbar, sobald sie vor dem Fabriktor erscheinen. Der Mech schießt mit 2,8 statt 1,6 Reichweite; Fernkämpfer haben jetzt 4,8 Reichweite (+20 % auf ausdrücklichen Wunsch; ältere Missionen und Kampflabor bleiben bei 4,0). Ausschließlich tatsächliche Angriffe beenden die Partie. Die älteren Missionen behalten ihre bisherigen 15-Sekunden-Wellen und Kosten; Wiesenkrieg zusätzlich seine kostenlosen Richtungspfeile und die Nachschubwahl per Drag/Tap auf eine Lane.
 
+## Sichtbare Railgun-Schüsse
+
+Leuchtende Rails beim Laden, kurzer heller Lichtstrahl und klarer Einschlag. Gameplay und Balance unverändert. [Effekte, Screenshots und Tests](docs/railgun-effects/REPORT.md).
+
 ## Animierte Railgun
 
 Das freigegebene vierbeinige GLB ist im Spiel eingebaut: Walk, Idle, Charge, Attack, Hit und Death, mit einzelnen Gelenken, sichtbarer Ladung, synchronem Rückstoß und Zusammenbruch. **[Railgun-Animationen prüfen](https://rawcdn.githack.com/emfau88/hexwars/a2d2809dd76efe15d71eab528103259668aa0f24/experiments/hexfront-lane-wars/railgun-viewer.html)** · [GLB, Blender-Datei, Performance und Tests](docs/railgun-animation/REPORT.md). Die ursprüngliche [Modellfreigabe](railgun-preview.html) bleibt separat erhalten.

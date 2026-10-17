@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {createRailCharge,writeRailCharge,finishRailCharge,createRailShot,sampleRailShot} from './rail-effects.js';
 import {RailAnimator} from './rail-animation.js';
 import {MechAnimator} from './mech-animation.js';
 import {UNITS} from './rules.js';
@@ -32,7 +33,7 @@ export class BattleView {
   }
   createRailLights(capacity){
     for(const mesh of Object.values(this.railLights||{})){mesh.removeFromParent();mesh.geometry.dispose();mesh.material.dispose();mesh.dispose();}
-    this.railLights={};if(!this.railRig)return;for(const owner of ['orange','blue']){const mesh=new T.InstancedMesh(new T.SphereGeometry(.055,6,4),new T.MeshBasicMaterial({color:0xa5f4ef}),capacity);mesh.count=0;mesh.frustumCulled=false;this.railLights[owner]=mesh;this.scene.add(mesh);}
+    this.railLights={};if(!this.railRig)return;for(const owner of ['orange','blue']){const mesh=createRailCharge(capacity);mesh.count=0;mesh.frustumCulled=false;this.railLights[owner]=mesh;this.scene.add(mesh);}
   }
   railElevation(position,target){return target?Math.atan2(target.y+.65-position.y-1.055,Math.max(.5,Math.hypot(target.x-position.x,target.z-position.z))):0;}
   dispose(){this.observer.disconnect();this.reset();const geometries=new Set(),materials=new Set(),textures=new Set();this.scene.traverse(o=>{if(o.geometry)geometries.add(o.geometry);for(const m of (Array.isArray(o.material)?o.material:[o.material]).filter(Boolean)){materials.add(m);for(const v of Object.values(m))if(v?.isTexture)textures.add(v);}});geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());for(const g of Object.values(this.railLowParts||{}))g.dispose();for(const parts of Object.values(this.library||{}))for(const p of parts.rail||[])p.geometry.dispose();this.renderer.dispose();this.renderer.forceContextLoss();this.renderer.domElement.remove();}
@@ -96,6 +97,7 @@ export class BattleView {
       const from=base.clone().add(muzzleLocal.applyAxisAngle(new T.Vector3(0,1,0),yaw)),color=event.owner==='orange'?0xf6cb83:0xb8d9df;
       if(source?.animator){source.animator.sample(0,0,!!(source.unit.moving||source.unit.departing),this.mechAim(source.position,source.yaw,to),source.unit.type==='rail'?this.railElevation(source.position,to):this.mechWeaponAim(source.position,to),source.unit);const world=new T.Matrix4().makeRotationY(source.yaw).setPosition(source.position);source.animator.muzzle(world,from);}
       // Pure event visualization; projectiles never calculate damage.
+      if(event.type==='rail'){const effect=createRailShot(from,to);this.scene.add(effect.root);this.effects.push(effect);return;}
       const beam=this.line(from,to,color,event.type==='rail'?.026:.012);root.add(beam);if(this.options.clarity&&event.type!=='rail')beam.visible=false;
       const pulse=new T.Mesh(new T.SphereGeometry(event.type==='rail'?.09:.07,8,6),new T.MeshBasicMaterial({color}));pulse.position.copy(from);root.add(pulse);
       const muzzle=new T.Mesh(new T.SphereGeometry(event.type==='mech'?.12:.075,8,6),new T.MeshBasicMaterial({color,transparent:true,opacity:.8}));muzzle.position.copy(from);root.add(muzzle);
@@ -127,7 +129,7 @@ export class BattleView {
       // Articulated robots share rigid-part instance batches while keeping individual poses.
       this.dummy.rotation.set(pose.kick*.035,pose.yaw,pose.hit*.055+(u.moving&&!this.reduced?Math.sin(seconds*8+u.id)*.016:0));if(pose.animator)this.dummy.rotation.set(0,pose.yaw,0);this.dummy.scale.setScalar(1);this.dummy.updateMatrix();
       const batch=`${u.owner}-${u.type}`,index=counts[batch]++;ids[batch].push(id);pose.world??=new T.Matrix4();pose.world.copy(this.dummy.matrix);if(pose.animator){pose.animator.sample(dt,distance*(u.departing?1:blend),!!(u.moving||u.departing),this.mechAim(pose.position,pose.yaw,targetPoint),u.type==='rail'?this.railElevation(pose.position,targetPoint):this.mechWeaponAim(pose.position,targetPoint),u);pose.animator.write(this.batches[batch],index,this.dummy.matrix,this.library[u.owner][u.type]);}else for(const mesh of this.batches[batch])mesh.setMatrixAt(index,this.dummy.matrix);
-      if(u.type==='rail'&&pose.animator?.charge>0){this.dummy.position.copy(pose.animator.muzzle(pose.world));this.dummy.rotation.set(0,0,0);this.dummy.scale.setScalar(.25+pose.animator.charge);this.dummy.updateMatrix();this.railLights[u.owner].setMatrixAt(lightCounts[u.owner]++,this.dummy.matrix);}
+      if(u.type==='rail'&&pose.animator?.charge>0){const carriage=new T.Matrix4().multiplyMatrices(pose.world,pose.animator.nodes.Recoil_Carriage.matrixWorld);lightCounts[u.owner]=writeRailCharge(this.railLights[u.owner],lightCounts[u.owner],carriage,pose.animator.charge);}
       let label=this.health.get(id);if(!label){label=document.createElement('div');label.className=`health ${u.owner}`;label.innerHTML='<i></i>';this.labels.append(label);this.health.set(id,label);}label.hidden=u.hp===this.specs[u.type].hp&&this.selected!==id;
       const q=pose.position.clone().add(new T.Vector3(0,u.type==='mech'?1.75:1.25,0)).project(this.camera);label.style.transform=`translate(${(q.x*.5+.5)*this.stage.clientWidth}px,${(-q.y*.5+.5)*this.stage.clientHeight}px)`;label.firstChild.style.width=`${u.hp/this.specs[u.type].hp*100}%`;label.dataset.unit=id;
     }
@@ -137,12 +139,13 @@ export class BattleView {
       const batch=pose.unit.owner+'-'+pose.unit.type,index=counts[batch]++;ids[batch].push(null);pose.animator.write(this.batches[batch],index,pose.world,this.library[pose.unit.owner][pose.unit.type]);
     }
     for(const [id,meshes] of Object.entries(this.batches))for(const mesh of meshes){mesh.count=counts[id];mesh.instanceMatrix.needsUpdate=true;}
-    for(const [owner,mesh] of Object.entries(this.railLights)){mesh.count=lightCounts[owner];mesh.instanceMatrix.needsUpdate=true;}
+    for(const [owner,mesh] of Object.entries(this.railLights))finishRailCharge(mesh,lightCounts[owner]);
     this.pickIds=ids;
     const selected=this.poses.get(this.selected);this.selection.visible=!!selected;if(selected)this.selection.position.copy(selected.position).add(new T.Vector3(0,.04,0));
     for(const effect of [...this.effects]) {
       effect.age+=dt;const t=effect.age/effect.life;if(t>=1){this.disposeEffect(effect);this.effects.splice(this.effects.indexOf(effect),1);continue;}
-      if(effect.kind==='shot'){effect.pulse.position.lerpVectors(effect.from,effect.to,Math.min(1,t*2));effect.pulse.visible=t<.65;effect.beam.material.opacity=(1-t)*.45;effect.muzzle.scale.setScalar(1-t);effect.muzzle.material.opacity=1-t;}
+      if(effect.rail)sampleRailShot(effect,effect.age);
+      else if(effect.kind==='shot'){effect.pulse.position.lerpVectors(effect.from,effect.to,Math.min(1,t*2));effect.pulse.visible=t<.65;effect.beam.material.opacity=(1-t)*.45;effect.muzzle.scale.setScalar(1-t);effect.muzzle.material.opacity=1-t;}
       else effect.root.children.forEach(m=>{m.position.addScaledVector(m.userData.velocity,dt);m.userData.velocity.y-=dt*.8;m.material.opacity=(1-t)*.7;m.scale.setScalar(1+t*.65);});
     }
     if(draw&&(dt>0||this.dirty)){this.renderer.render(this.scene,this.camera);this.dirty=false;}
