@@ -34,3 +34,7 @@ Messdaten: [range-audit.json](range-audit.json), [tests.json](tests.json), [mode
 
 ![Gerade Doppelstrahlen im Viewer](viewer-twin-shot.png)
 ![Doppelstrahlen im tatsächlichen Gefecht](game-twin-shot.png)
+
+## Öffentliche Prüfung
+
+Commit `65ba8647138cba8ec3f940160f21f0ca6be8bdf0` über den echten rawcdn.githack.com-Link geprüft: beide Strahlenachsen, Soundfreigabe und Stummschaltung im Viewer, Audio im Echtzeitspiel, Pause, angezeigte Reichweite 5,2 und vollständige Partie bis HQ-Zerstörung nach 137,75 s. Keine Browserfehler. [Öffentliches Prüfprotokoll](public.json).

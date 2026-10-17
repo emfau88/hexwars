@@ -4,9 +4,9 @@ Eine vollständige Partie Mensch gegen KI auf einer zentralen Lane: vier Fabrikp
 
 ## Spielen
 
-**[▶ Zentrale Front im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/6deae427cad60cc37409f89b9609e5f43f7fd111/experiments/hexfront-lane-wars/index.html)** · **[Railgun-Animationen, Reichweite und Tests](docs/railgun-animation/REPORT.md)**
+**[▶ Zentrale Front im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/65ba8647138cba8ec3f940160f21f0ca6be8bdf0/experiments/hexfront-lane-wars/index.html)** · **[Railgun: Sound, Doppelstrahlen und Tests](docs/railgun-sound/REPORT.md)**
 
-Öffentlicher Laufzeitstand `6deae42`, ohne lokalen Server. Falls ein Hinweis erscheint: **Open the page** anklicken.
+Öffentlicher Laufzeitstand `65ba864`, ohne lokalen Server. Falls ein Hinweis erscheint: **Open the page** anklicken.
 
 ```powershell
 node scripts/serve.mjs
@@ -27,7 +27,7 @@ Unter „Weitere Missionen“ bleibt **Erste Front** als Einführung erhalten. I
 - **Kamera:** Mausrad oder Plus/Minus, Ziehen zum Verschieben, ⌖ für Übersicht. Roboter anklicken zeigt ihre tatsächlichen Werte.
 - **Smartphone:** „Fabriken & Wirtschaft“ öffnet die Verwaltung; Nachschub und Pause bleiben erreichbar. „?“ zeigt Hinweise. Die Frontanzeige lässt sich für Verstärkungsdetails aufklappen.
 
-HQs haben in neuen zentralen Partien 800 LP und verursachen 2 Schaden/s. Ausrückende Einheiten kämpfen und sind angreifbar, sobald sie vor dem Fabriktor erscheinen. Der Mech schießt mit 2,8 statt 1,6 Reichweite; Fernkämpfer haben jetzt 4,8 Reichweite (+20 % auf ausdrücklichen Wunsch; ältere Missionen und Kampflabor bleiben bei 4,0). Ausschließlich tatsächliche Angriffe beenden die Partie. Die älteren Missionen behalten ihre bisherigen 15-Sekunden-Wellen und Kosten; Wiesenkrieg zusätzlich seine kostenlosen Richtungspfeile und die Nachschubwahl per Drag/Tap auf eine Lane.
+HQs haben in neuen zentralen Partien 800 LP und verursachen 2 Schaden/s. Ausrückende Einheiten kämpfen und sind angreifbar, sobald sie vor dem Fabriktor erscheinen. Der Mech schießt mit 2,8 statt 1,6 Reichweite; Fernkämpfer haben jetzt 5,2 Reichweite (zuletzt von 4,8 angehoben; ältere Missionen und Kampflabor bleiben bei 4,0). Ausschließlich tatsächliche Angriffe beenden die Partie. Die älteren Missionen behalten ihre bisherigen 15-Sekunden-Wellen und Kosten; Wiesenkrieg zusätzlich seine kostenlosen Richtungspfeile und die Nachschubwahl per Drag/Tap auf eine Lane.
 
 ## Sichtbare Railgun-Schüsse
 
@@ -35,9 +35,9 @@ Leuchtende Rails beim Laden, kurzer heller Lichtstrahl und klarer Einschlag. Gam
 
 ## Animierte Railgun
 
-Das freigegebene vierbeinige GLB ist im Spiel eingebaut: Walk, Idle, Charge, Attack, Hit und Death, mit einzelnen Gelenken, sichtbarer Ladung, synchronem Rückstoß und Zusammenbruch. **[Railgun-Animationen prüfen](https://rawcdn.githack.com/emfau88/hexwars/6deae427cad60cc37409f89b9609e5f43f7fd111/experiments/hexfront-lane-wars/railgun-viewer.html)** · [GLB, Blender-Datei, Performance und Tests](docs/railgun-animation/REPORT.md). Die ursprüngliche [Modellfreigabe](railgun-preview.html) bleibt separat erhalten.
+Das freigegebene vierbeinige GLB ist im Spiel eingebaut: Walk, Idle, Charge, Attack, Hit und Death, mit einzelnen Gelenken, sichtbarer Ladung, synchronem Rückstoß und Zusammenbruch. **[Railgun-Animationen prüfen](https://rawcdn.githack.com/emfau88/hexwars/65ba8647138cba8ec3f940160f21f0ca6be8bdf0/experiments/hexfront-lane-wars/railgun-viewer.html)** · [GLB, Blender-Datei, Performance und Tests](docs/railgun-animation/REPORT.md). Die ursprüngliche [Modellfreigabe](railgun-preview.html) bleibt separat erhalten.
 
-Reichweite in **Zentrale Front: 5,2 statt 4,8 (+8,3 %)**, auch beim Fortsetzen alter zentraler Standardspielstände. Alle anderen Gameplaywerte bleiben unverändert. Die größere Reichweite beeinflusst einige Referenzpartien deutlich; [Reichweiten-Audit](docs/railgun-animation/range-audit.json).
+Reichweite in **Zentrale Front: 5,2 statt 4,8 (+8,3 %)**, auch beim Fortsetzen alter zentraler Standardspielstände. Alle anderen Gameplaywerte bleiben unverändert. Die größere Reichweite beeinflusst einige Referenzpartien deutlich; [Reichweiten-Audit](docs/railgun-sound/range-audit.json).
 
 ## Mech-Animation
 
