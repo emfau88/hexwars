@@ -4,11 +4,11 @@ Eine vollständige Partie Mensch gegen KI auf einer zentralen Lane: vier Fabrikp
 
 ## Spielen
 
-**[▶ Zentrale Front im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/65ba8647138cba8ec3f940160f21f0ca6be8bdf0/experiments/hexfront-lane-wars/index.html)** · **[Railgun: Sound, Doppelstrahlen und Tests](docs/railgun-sound/REPORT.md)**
+**[▶ Zentrale Front im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/37a6864b689f4c3ad4052508de968b9cc2fd2fe6/experiments/hexfront-lane-wars/index.html)** · **[Railgun: Sound, Doppelstrahlen und Tests](docs/railgun-sound/REPORT.md)**
 
 **Aktuelle Einheitenwerte:** Railgun-Tempo **0,8**, Mech-Reichweite **3,0**, Drohnen-Tempo **1,8**. [Tests, Spielstände und Match-Ergebnisse](docs/central-role-tuning/REPORT.md).
 
-Öffentlicher Laufzeitstand `65ba864`, ohne lokalen Server. Falls ein Hinweis erscheint: **Open the page** anklicken.
+Öffentlicher Laufzeitstand `37a6864`, ohne lokalen Server. Falls ein Hinweis erscheint: **Open the page** anklicken.
 
 ```powershell
 node scripts/serve.mjs
@@ -37,7 +37,7 @@ Leuchtende Rails beim Laden, kurzer heller Lichtstrahl und klarer Einschlag. Gam
 
 ## Animierte Railgun
 
-Das freigegebene vierbeinige GLB ist im Spiel eingebaut: Walk, Idle, Charge, Attack, Hit und Death, mit einzelnen Gelenken, sichtbarer Ladung, synchronem Rückstoß und Zusammenbruch. **[Railgun-Animationen prüfen](https://rawcdn.githack.com/emfau88/hexwars/65ba8647138cba8ec3f940160f21f0ca6be8bdf0/experiments/hexfront-lane-wars/railgun-viewer.html)** · [GLB, Blender-Datei, Performance und Tests](docs/railgun-animation/REPORT.md). Die ursprüngliche [Modellfreigabe](railgun-preview.html) bleibt separat erhalten.
+Das freigegebene vierbeinige GLB ist im Spiel eingebaut: Walk, Idle, Charge, Attack, Hit und Death, mit einzelnen Gelenken, sichtbarer Ladung, synchronem Rückstoß und Zusammenbruch. **[Railgun-Animationen prüfen](https://rawcdn.githack.com/emfau88/hexwars/37a6864b689f4c3ad4052508de968b9cc2fd2fe6/experiments/hexfront-lane-wars/railgun-viewer.html)** · [GLB, Blender-Datei, Performance und Tests](docs/railgun-animation/REPORT.md). Die ursprüngliche [Modellfreigabe](railgun-preview.html) bleibt separat erhalten.
 
 Reichweite in **Zentrale Front: 5,2 statt 4,8 (+8,3 %)**, auch beim Fortsetzen alter zentraler Standardspielstände. Aktuell gilt zusätzlich: Railgun-Tempo 0,8, Mech-Reichweite 3,0 und Drohnen-Tempo 1,8. Die größere Reichweite beeinflusst einige Referenzpartien deutlich; [Reichweiten-Audit](docs/railgun-sound/range-audit.json).
 

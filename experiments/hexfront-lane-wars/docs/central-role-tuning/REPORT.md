@@ -32,3 +32,7 @@ Im vorbereiteten Spätentscheidungsfall verliert Nichtreagieren nach 256,7 s. Um
 Die drei reinen Einheitenkonter bleiben in den geprüften Gefechten bei einer und vier Fabriken erhalten. **Eine reine Vier-Fabriken-Drohnenarmee schlägt die Mischung aus zwei Mech- und zwei Railgun-Fabriken in diesem direkten Test jedoch nicht mehr** (beide Fraktionen geprüft). Weitere Werte wurden zur Kompensation ausdrücklich nicht verändert. Erwartete Testergebnisse wurden entsprechend dokumentiert aktualisiert; die Prüfungen auf Symmetrie und tatsächliche Konter bleiben bestehen.
 
 Protokolle: [Matchdaten](matches.json), [Testlauf](unit-tests.txt), [lokaler Browserlauf](local-playback.json).
+
+## Öffentlicher Playlink
+
+Runtime-Commit `37a6864b689f4c3ad4052508de968b9cc2fd2fe6` über rawcdn.githack.com erfolgreich geprüft: drei gewünschte Werte im realen Spielstand, Mech-Reichweite im HUD, unveränderter Railgun-Sound und Doppelstrahlen, reguläres Spielende durch HQ-Zerstörung nach 179,25 s. Keine Browserfehler. [Öffentliches Prüfprotokoll](public.json). Beide Branch-READMEs verlinken diesen Stand.
