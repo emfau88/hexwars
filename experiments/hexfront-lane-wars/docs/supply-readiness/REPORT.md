@@ -26,3 +26,9 @@ Keine Änderungen an Simulation, Preisen, Wirtschaft, KI, Einheiten oder Produkt
 ![Querformat](local/funded-cooldown-844.jpg)
 
 [Statusprüfungen](local/results.json) · [Touch und sechs Layouts](touch/results.json) · [Komplette Partie](local-game/public.json)
+
+## Online-Veröffentlichung
+
+Laufzeitstand `2f92e0e7ea5d043dc522c41806dc49191c3436dc`, ausschließlich Branch `codex/lane-wars`. Beide READMEs verlinken den neuen Build.
+
+Auch über den öffentlichen Playlink bestanden: [alle Verfügbarkeitszustände in vier Größen](public/results.json) und [UI/Spielstand/komplette Partie](public-game/public.json). Keine Browserfehler. Lokale und öffentliche Referenzpartie unverändert: Orange gewinnt nach 213,5 Sekunden bei HQ 764 : 0.
