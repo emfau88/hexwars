@@ -22,6 +22,9 @@ Rechts ersetzen drei unabhängige runde Keramikbuttons die große gemeinsame Pla
 
 ## Laufzeitstand und Veröffentlichung
 
-Laufzeitcommit `8f3ceaec3c514f27e992c9f1359fc56b6bb306a6`, Branch `codex/lane-wars`. Die README-Playlinks sind für diesen Build vorbereitet. Die ersten beiden Push-Versuche scheiterten an einer nicht erreichbaren Verbindung zu github.com:443; eine öffentliche Prüfung steht noch aus.
+Laufzeitcommit `8f3ceaec3c514f27e992c9f1359fc56b6bb306a6`, Branch `codex/lane-wars`. Der Build ist auf GitHub veröffentlicht; beide README-Playlinks zeigen auf diesen Stand.
 
 Die zusätzliche [lokale UI- und vollständige Match-Prüfung](local-game/public.json) ist bestanden: Bau/Abbruch, Wirtschaft, Speichern/Fortsetzen, Modellanzeige, historische Seiten und Partie. Die Referenzpartie endet unverändert nach 213,5 Sekunden mit HQ 764 : 0.
+
+Auch die [vollständige öffentliche Partie und UI-Prüfung](public-game/public.json) ist bestanden: unverändertes Ergebnis nach 213,5 Sekunden bei HQ 764 : 0, keine Browserfehler.
+Die [öffentlichen Status- und Layoutprüfungen](public/results.json) bestätigen ebenfalls Kreisform, freie Außenflächen, Randabstände und sämtliche Cooldown-/Credit-Zustände in vier Größen.
