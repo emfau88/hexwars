@@ -77,3 +77,28 @@ meter{display:block;width:76px;height:6px;margin-top:5px;accent-color:#ba853f}.b
 .starting-grid>div{min-width:0}.starting-grid select{width:100%;min-height:44px;font-size:13px}
 #restart-round{color:#80512e;border-color:#bea47a}
 @media(max-width:600px){.menu-sheet h1{font-size:28px;margin:10px 0}.menu-sheet>p{margin:10px 0;line-height:1.4}.menu-sheet{padding:20px}.starting-factories h2{font-size:13px}}
+
+/* Reinforcement readiness: credits and shared cooldown stay independently visible. */
+#supply-status{display:flex;gap:4px;white-space:nowrap;font-variant-numeric:tabular-nums}
+#supply-status span{font-size:9px;font-weight:650;padding:2px 4px;border:1px solid #b6c6b8;border-radius:5px;background:#eaf1e6;color:#365a48;line-height:1.2}
+#supply-status span[data-blocked=true]{color:#815318;background:#f5e8ce;border-color:#d8bb8c}
+.supply-heading{height:auto;min-height:20px;gap:5px;flex-wrap:wrap}
+#supply-units button{position:relative;overflow:hidden}
+#supply-units button[aria-disabled=true]{opacity:1;cursor:default;background:linear-gradient(#eee9de,#e6dfd0);border-color:#c8beab}
+#supply-units button[aria-disabled=true] .unit-portrait{opacity:.42;filter:saturate(.45)}
+#supply-units button[aria-disabled=true] small{color:#655f53}
+#supply-units button[data-state=ready]{border-color:#9eaf94;box-shadow:inset 0 1px #fff,0 1px 2px #314a2520}
+#supply-units button[data-state=cooldown]::after{content:'';position:absolute;bottom:0;left:0;height:3px;width:calc(100% * var(--supply-charge));background:#a67a34}
+.supply-badge{position:absolute;top:9px;left:50%;transform:translateX(-50%);white-space:nowrap;padding:2px 4px;border:1px solid #cab48e;border-radius:5px;background:#fff8e9f5;color:#634419;box-shadow:0 1px 3px #332a1a24;font-size:11px;font-weight:750;line-height:1.2;font-variant-numeric:tabular-nums;pointer-events:none}
+.supply-badge:empty{display:none}
+@media(max-width:760px),(max-height:500px) and (max-width:1000px){
+ #mobile-supply{width:72px}
+ #mobile-supply #supply-status{order:2;display:flex;flex-direction:column;gap:3px;min-height:0}
+ #mobile-supply #supply-status span{font-size:10px;padding:2px 3px}
+ #mobile-supply #supply-units{order:3}
+ #mobile-supply .supply-badge{top:7px}
+}
+@media(max-height:500px) and (max-width:1000px){
+ #mobile-supply .supply-tray{gap:2px;padding-top:4px;padding-bottom:4px}
+ #mobile-supply #supply-status span{padding-top:1px;padding-bottom:1px}
+}

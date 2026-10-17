@@ -122,6 +122,12 @@ function hint(){
  if(supplyType)return ['Nachschub vom HQ','Tippe West oder Ost an – oder ziehe ein Robotersymbol direkt auf den Weg.'];
  return ['Behalte beide Wege im Blick','Die Frontanzeigen messen Position und Bewegung. Unterwegs zeigt deine anrückenden Verstärkungen.'];
 }
+function supplyAvailability(){
+ const cool=Math.max(0,(match.players.orange.supplyReady-match.tick)*.05),missing=Math.max(0,Math.ceil(match.rules.supplyCost-match.credits('orange')));
+ const reasons=[missing?'Es fehlen '+missing+' Credits':'',cool?'Noch '+Math.ceil(cool)+' Sekunden Abklingzeit':''].filter(Boolean);
+ return {cool,missing,blocked:match.phase!=='running'||cool>0||missing>0,reason:match.phase==='ended'?'Partie beendet':match.phase==='setup'?'Zuerst die Partie starten':reasons.length?reasons.join(' · '):'Bereit zum Senden · '+match.rules.supplyCost+' Credits'};
+}
+function supplyBlocked(){const state=supplyAvailability();if(!state.blocked)return false;cancelSupply();notify(state.reason);return true;}
 function updateHUD(){
  if(!match)return;const p=match.players.orange,enemy=match.players.blue,ended=match.phase==='ended';
  $('mission-title').textContent=match.mission.name.toUpperCase();$('battle-clock').textContent=timeText(match.time);$('phase-label').textContent=ended?'BEENDET':playing?'WELLE '+match.wave:'PAUSE';
@@ -131,10 +137,19 @@ function updateHUD(){
  $('economy').disabled=ended||p.economy||match.credits('orange')<match.rules.economyCost;
  $('economy').hidden=p.economy;$('economy-done').hidden=!p.economy;$('economy').innerHTML='<strong>'+(mobileHUD()?'Eco ↑':'Wirtschaft ↑')+'</strong><small>'+match.rules.economyCost+' Cr · +'+match.rules.economyIncome.toLocaleString('de-DE')+'/s</small>';$('economy').setAttribute('aria-label','Wirtschaft ausbauen: '+match.rules.economyCost+' Credits, Einkommen einmalig um '+match.rules.economyIncome+' Credits pro Sekunde erhöhen');
  $('supply-title').textContent=(mobileHUD()?'':'NACHSCHUB · ')+match.rules.supplyCost+' Cr';
- const cool=Math.max(0,(p.supplyReady-match.tick)*.05);
- $('supply-status').textContent=ended?'Beendet':cool?'Noch '+Math.ceil(cool)+' s':match.credits('orange')<match.rules.supplyCost?'Fehlen '+Math.ceil(match.rules.supplyCost-match.credits('orange'))+' Cr':'Bereit';
+ const availability=supplyAvailability();
+ const money=$('supply-money'),timer=$('supply-cooldown');
+ money.textContent=availability.missing?'−'+availability.missing+' Cr':'✓ Credits';money.dataset.blocked=String(availability.missing>0);
+ timer.textContent=ended?'Beendet':availability.cool?'◷ '+Math.ceil(availability.cool)+' s':availability.missing?'✓ Geladen':'✓ Bereit';timer.dataset.blocked=String(availability.cool>0||ended);
+ $('supply-status').setAttribute('aria-label',availability.reason);$('supply-status').title=availability.reason;
  $('supply-lanes').hidden=match.laneCount===1;
- for(const b of $('supply-units').children){b.setAttribute('aria-disabled',String(ended||cool>0||match.credits('orange')<match.rules.supplyCost));b.classList.toggle('selected',b.dataset.type===supplyType);b.disabled=ended;}
+ for(const b of $('supply-units').children){
+  b.setAttribute('aria-disabled',String(availability.blocked));b.setAttribute('aria-label',names[b.dataset.type]+' Sofortnachschub: '+availability.reason);b.title=availability.reason;
+  b.dataset.state=ended?'ended':availability.cool?'cooldown':availability.missing?'credits':'ready';
+  b.style.setProperty('--supply-charge',String(1-availability.cool/match.rules.supplyCooldown));
+  b.querySelector('.supply-badge').textContent=ended?'—':availability.cool?'◷ '+Math.ceil(availability.cool)+' s':availability.missing?'−'+availability.missing+' Cr':'';
+  b.classList.toggle('selected',b.dataset.type===supplyType);b.disabled=ended;
+ }
  const key=JSON.stringify([p.factories,p.pending,ended,match.laneCount]);
  if(key!==cardKey){cardKey=key;$('factory-cards').innerHTML=p.factories.map((f,i)=>{
   const pending=p.pending[i],next=pending||f,shown=f||pending;
@@ -177,11 +192,11 @@ function markers(){
 function setTarget(lane){if(targetLane===lane)return;targetLane=lane;view?.highlightLane(lane);updateSupplyFeedback();}
 function cancelSupply(){supplyType=null;drag=null;setTarget(null);$('supply-targeting').hidden=true;}
 function updateSupplyFeedback(){
- if(!match||!supplyType)return;$('supply-targeting').hidden=false;const cool=Math.max(0,(match.players.orange.supplyReady-match.tick)*.05),money=match.credits('orange');
- $('supply-targeting').querySelector('span').textContent=names[supplyType]+' · '+match.rules.supplyCost+' Credits · '+(cool?'noch '+cool.toFixed(1)+' s Abklingzeit':money<match.rules.supplyCost?'noch '+Math.ceil(match.rules.supplyCost-money)+' Credits nötig':targetLane===null?'Ziel-Lane wählen':laneName(targetLane)+' · loslassen / antippen');
+ if(!match||!supplyType)return;$('supply-targeting').hidden=false;const availability=supplyAvailability();
+ $('supply-targeting').querySelector('span').textContent=names[supplyType]+' · '+match.rules.supplyCost+' Credits · '+(availability.blocked?availability.reason:targetLane===null?'Ziel-Lane wählen':laneName(targetLane)+' · loslassen / antippen');
  for(const el of $('fronts').children)el.classList.toggle('target',Number(el.dataset.lane)===targetLane);
 }
-function sendSupply(lane){if(!supplyType||lane===null)return false;const type=supplyType;if(issue('supply',{type,lane})){cancelSupply();notify(names[type]+'-Nachschub verlässt dein HQ.');return true;}return false;}
+function sendSupply(lane){if(!supplyType||lane===null)return false;if(supplyBlocked())return false;const type=supplyType;if(issue('supply',{type,lane})){cancelSupply();notify(names[type]+'-Nachschub verlässt dein HQ.');return true;}return false;}
 function targetAt(x,y){const el=document.elementFromPoint(x,y),front=el?.closest('[data-lane]');if(front)return Number(front.dataset.lane);if(el?.closest('.command-deck,.order-panel,.game-top,.building-marker,.menu-layer,#mobile-supply,#supply-targeting'))return null;return view.laneAt(x,y);}
 function onFieldClick(e){if(!supplyType)return;e.stopImmediatePropagation();sendSupply(view.laneAt(e.clientX,e.clientY));}
 function advance(seconds,draw=true){match.advance(seconds);flush();if(match.phase==='ended'){playing=false;if(!endedSaved){endedSaved=true;save();}}view.renderMatch(match,seconds,draw);}
@@ -192,12 +207,12 @@ function frame(now){
   if(hudClock>=.1){updateHUD();markers();hudClock=0;}if(saveClock>=2){if(playing)save();saveClock=0;}}
  if(noticeUntil&&now>noticeUntil){$('notice').hidden=true;noticeUntil=0;}requestAnimationFrame(frame);
 }
-$('supply-units').innerHTML=Object.keys(names).map(type=>'<button data-type="'+type+'" aria-label="'+names[type]+' Sofortnachschub">'+portrait(type)+'<small>'+labels[type]+'</small></button>').join('');
-$('supply-units').addEventListener('pointerdown',e=>{const b=e.target.closest('[data-type]');if(!b||b.disabled||!ready)return;ignoreSupplyClick=false;hintOpen=false;$('selection').hidden=true;$('orders').hidden=true;supplyType=b.dataset.type;drag={id:e.pointerId,x:e.clientX,y:e.clientY,moved:false};b.setPointerCapture(e.pointerId);updateSupplyFeedback();});
+$('supply-units').innerHTML=Object.keys(names).map(type=>'<button data-type="'+type+'" aria-label="'+names[type]+' Sofortnachschub">'+portrait(type)+'<span class="supply-badge" aria-hidden="true"></span><small>'+labels[type]+'</small></button>').join('');
+$('supply-units').addEventListener('pointerdown',e=>{const b=e.target.closest('[data-type]');if(!b||b.disabled||!ready)return;if(supplyAvailability().blocked)return;ignoreSupplyClick=false;hintOpen=false;$('selection').hidden=true;$('orders').hidden=true;supplyType=b.dataset.type;drag={id:e.pointerId,x:e.clientX,y:e.clientY,moved:false};b.setPointerCapture(e.pointerId);updateSupplyFeedback();});
 $('supply-units').addEventListener('pointermove',e=>{if(!drag||e.pointerId!==drag.id)return;if(Math.hypot(e.clientX-drag.x,e.clientY-drag.y)>8)drag.moved=true;if(drag.moved)setTarget(targetAt(e.clientX,e.clientY));});
 $('supply-units').addEventListener('pointerup',e=>{if(!drag)return;const moved=drag.moved;drag=null;if(moved){ignoreSupplyClick=true;const lane=targetAt(e.clientX,e.clientY);if(lane===null)cancelSupply();else sendSupply(lane);}});
 $('supply-units').addEventListener('pointercancel',cancelSupply);
-$('supply-units').addEventListener('click',e=>{if(ignoreSupplyClick&&e.detail!==0){ignoreSupplyClick=false;return;}const b=e.target.closest('[data-type]');if(!b)return;supplyType=b.dataset.type;$('orders').hidden=true;if(match.laneCount===1)sendSupply(0);else updateSupplyFeedback();});
+$('supply-units').addEventListener('click',e=>{if(ignoreSupplyClick&&e.detail!==0){ignoreSupplyClick=false;return;}const b=e.target.closest('[data-type]');if(!b||!ready)return;if(supplyBlocked())return;supplyType=b.dataset.type;$('orders').hidden=true;if(match.laneCount===1)sendSupply(0);else updateSupplyFeedback();});
 $('fronts').onclick=e=>{const b=e.target.closest('[data-lane]');if(!b)return;if(supplyType)sendSupply(Number(b.dataset.lane));else{const show=!b.classList.contains('detail');for(const front of $('fronts').children){front.classList.remove('detail');front.setAttribute('aria-expanded','false');}b.classList.toggle('detail',show);b.setAttribute('aria-expanded',String(show));}};
 $('cancel-supply').onclick=cancelSupply;
 $('supply-lanes').onclick=e=>{const button=e.target.closest('[data-supply-lane]');if(button)sendSupply(Number(button.dataset.supplyLane));};
