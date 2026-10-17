@@ -1,0 +1,49 @@
+{
+  "base": "https://rawcdn.githack.com/emfau88/hexwars/1e8467ebb8fd74eeba4f33d15fcfc56e0362db1a/experiments/hexfront-lane-wars/",
+  "checks": [
+    "Public viewer loads all five real clips; GLB and Blender downloads byte-identical to tested local files",
+    "Public game uses animated Mechs with running joint states and the preserved GLB factories",
+    "Public match reaches real HQ destruction and victory screen"
+  ],
+  "result": {
+    "result": "orange",
+    "time": 435.8,
+    "waves": 22,
+    "peakUnits": 23,
+    "hq": {
+      "orange": 590,
+      "blue": 0
+    },
+    "metrics": {
+      "orange": {
+        "spent": 1250,
+        "earned": 1293.76,
+        "produced": 106,
+        "hqDamage": 800,
+        "builds": 2,
+        "refits": 7,
+        "laneChanges": 0,
+        "supplies": 6,
+        "economyAt": 84,
+        "credits": 323.76
+      },
+      "blue": {
+        "spent": 1120,
+        "earned": 1185.76,
+        "produced": 165,
+        "hqDamage": 210,
+        "builds": 2,
+        "refits": 8,
+        "laneChanges": 0,
+        "supplies": 4,
+        "economyAt": 174,
+        "credits": 315.76
+      }
+    },
+    "lateOrders": 28
+  },
+  "errors": [],
+  "warnings": [
+    "https://server.ethicalads.io/api/v1/decision/?publisher=githackcom&ad_types=image-v1&div_ids=githack-other-ad&callback=ad_1792250505047_590732&keywords=&campaign_types=paid%7Cpublisher-house%7Ccommunity%7Chouse&format=jsonp&client_version=2.5.0&placement_index=0&url=https%3A%2F%2Frawcdn.githack.com%2Femfau88%2Fhexwars%2F1e8467ebb8fd74eeba4f33d15fcfc56e0362db1a%2Fexperiments%2Fhexfront-lane-wars%2Fmech-viewer.html: net::ERR_BLOCKED_BY_RESPONSE.NotSameOrigin"
+  ]
+}

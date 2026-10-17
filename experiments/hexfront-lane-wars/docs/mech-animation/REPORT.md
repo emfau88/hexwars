@@ -56,6 +56,10 @@ Im Hochformat 390 × 844 mit angefordertem DPR 2 (Spiel begrenzt auf 1,6) betrug
 
 Die automatisierten Referenzpartien stimmen exakt mit Node-Ergebnissen überein. Der HUD-Lauf ist zeitlich von den echten Browserbedienungen abhängig und kein deterministischer Balancebenchmark. [Vollständige Ergebnisse](central/results.json). Bestehende Pattsituationen und lange Partien sind weiterhin eine spielerische Schwäche; dieser reine Animationsauftrag verändert sie nicht.
 
+## Öffentliche Prüfung
+
+Der festgelegte Build `1e8467e` wurde auf rawcdn.githack.com geprüft: Viewer mit allen fünf Clips, beide Teamfarben, tatsächlich animierte Mechs im Spiel und erhaltene GLB-Fabriken. Die öffentlich heruntergeladenen GLB- und Blender-Dateien stimmen per SHA-256 mit den lokal geprüften Dateien überein. Eine öffentliche Partie mit automatisierten Spielerbefehlen endete nach **7:15,80 durch HQ-Zerstörung**. Keine Spiel- oder Modellladefehler; lediglich eine blockierte Werbung des Vorschauhosts wurde separat als Host-Warnung erfasst. [Öffentliches Prüfprotokoll](public.json).
+
 ## Bearbeitung und Reproduktion
 
 `art/mech-animation/mech-rig.blend` enthält die getrennten Geometrien, mechanischen Pivot-Objekte, Materialien und NLA-Clips. Im Texteditor liegt **PLAY_ANIMATION.py**: dort `clip` auswählen und ausführen, um denselben NLA-Clip auf allen Gelenken einzuschalten. Alternativ lassen sich die entsprechend benannten NLA-Tracks manuell aktivieren. Die Datei öffnet sich ohne übereinander abgespielte Clips.

@@ -4,9 +4,9 @@ Eine vollständige Partie Mensch gegen KI auf einer zentralen Lane: vier Fabrikp
 
 ## Spielen
 
-**[▶ Zentrale Front im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/a85ee3fc570a6aa25f1e4f819e6c58a16a335961/experiments/hexfront-lane-wars/index.html)** · **[Aktuelle Cooldown-Änderung und Tests](docs/SUPPLY-30.md)**
+**[▶ Zentrale Front im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/1e8467ebb8fd74eeba4f33d15fcfc56e0362db1a/experiments/hexfront-lane-wars/index.html)** · **[Aktuelle Cooldown-Änderung und Tests](docs/SUPPLY-30.md)**
 
-Öffentlicher Laufzeitstand `a85ee3f`, ohne lokalen Server. Falls ein Hinweis erscheint: **Open the page** anklicken.
+Öffentlicher Laufzeitstand `1e8467e`, ohne lokalen Server. Falls ein Hinweis erscheint: **Open the page** anklicken.
 
 ```powershell
 node scripts/serve.mjs
@@ -31,7 +31,7 @@ HQs haben in neuen zentralen Partien 800 LP und verursachen 2 Schaden/s. Ausrüc
 
 ## Mech-Animation
 
-Der originale Mech besitzt jetzt bewegliche mechanische Gelenke, Walk/Idle/Attack/Hit/Death und unabhängige Animationen im laufenden Spiel. [Animierten Mech drehen und prüfen](mech-viewer.html) · [GLB, Blender-Datei, Performance und Testbericht](docs/mech-animation/REPORT.md). Gameplay und Fabrikmodell bleiben unverändert.
+Der originale Mech besitzt jetzt bewegliche mechanische Gelenke, Walk/Idle/Attack/Hit/Death und unabhängige Animationen im laufenden Spiel. [Animierten Mech drehen und prüfen](https://rawcdn.githack.com/emfau88/hexwars/1e8467ebb8fd74eeba4f33d15fcfc56e0362db1a/experiments/hexfront-lane-wars/mech-viewer.html) · [GLB, Blender-Datei, Performance und Testbericht](docs/mech-animation/REPORT.md). Gameplay und Fabrikmodell bleiben unverändert.
 
 ## Aktuelle Änderung
 

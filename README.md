@@ -4,9 +4,9 @@
 
 Vollständig spielbare **1v1-Partie Mensch gegen KI** mit einer zentralen Lane, vier Fabrikplätzen, drei Robotertypen und drei unterschiedlichen KI-Eröffnungen. Automatische Produktion, Wirtschaft, Umrüstung, begrenzter Sofortnachschub und echtes Spielende durch HQ-Zerstörung. Die bewährte HEXFRONT-Diorama-Optik und das Keramik-HUD bleiben erhalten.
 
-**[▶ Zentrale Front jetzt im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/a85ee3fc570a6aa25f1e4f819e6c58a16a335961/experiments/hexfront-lane-wars/index.html)** · **[Cooldown-Änderung und Tests](experiments/hexfront-lane-wars/docs/SUPPLY-30.md)**
+**[▶ Zentrale Front jetzt im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/1e8467ebb8fd74eeba4f33d15fcfc56e0362db1a/experiments/hexfront-lane-wars/index.html)** · **[Cooldown-Änderung und Tests](experiments/hexfront-lane-wars/docs/SUPPLY-30.md)**
 
-Der Playlink zeigt den festgelegten Spielstand `a85ee3f` und benötigt keinen lokalen Server. Falls der Vorschauhost einen Hinweis zeigt, **Open the page** anklicken. Veröffentlicht ausschließlich im Branch `codex/lane-wars`; kein Merge nach main.
+Der Playlink zeigt den festgelegten Spielstand `1e8467e` und benötigt keinen lokalen Server. Falls der Vorschauhost einen Hinweis zeigt, **Open the page** anklicken. Veröffentlicht ausschließlich im Branch `codex/lane-wars`; kein Merge nach main.
 
 **Erste Front** und die Zwei-Lane-Mission **Wiesenkrieg** bleiben unter „Weitere Missionen“ erhalten, ebenso ihre Spielstände, das Kampflabor und die M1.5-Demo. Im Hochformat bleibt die Fabrikverwaltung eingeklappt, bis du sie öffnest.
 
@@ -16,9 +16,9 @@ Der Playlink zeigt den festgelegten Spielstand `a85ee3f` und benötigt keinen lo
 
 **Aktuell:** Sofortnachschub im Hauptmodus hat **30 Sekunden** Cooldown, auch beim Fortsetzen. 83 Logiktests und gezielte HUD-/Speichertests bestanden. Die sechs neuen Referenzläufe ergeben vier HQ-Entscheidungen und zwei offene Partien nach zwölf Minuten; weitere Balancewerte wurden nicht verändert. [Prüfbericht](experiments/hexfront-lane-wars/docs/SUPPLY-30.md).
 
-**Animierte Mechs:** Bewegliche Beine, Oberkörper und Waffen am ursprünglichen Modell; unabhängige Walk-, Idle-, Attack-, Hit- und Death-Animationen im Spiel. [GLB-Viewer](experiments/hexfront-lane-wars/mech-viewer.html) · [Modelldateien, Technik und Performance](experiments/hexfront-lane-wars/docs/mech-animation/REPORT.md).
+**Animierte Mechs:** Bewegliche Beine, Oberkörper und Waffen am ursprünglichen Modell; unabhängige Walk-, Idle-, Attack-, Hit- und Death-Animationen im Spiel. [GLB-Viewer](https://rawcdn.githack.com/emfau88/hexwars/1e8467ebb8fd74eeba4f33d15fcfc56e0362db1a/experiments/hexfront-lane-wars/mech-viewer.html) · [Modelldateien, Technik und Performance](experiments/hexfront-lane-wars/docs/mech-animation/REPORT.md).
 
-**Neu im Spiel:** Die GLB-Fabriken besitzen vier animierte Torsegmente, einen sichtbaren Innenraum, Orange/Blau und austauschbare Produktionsmodule. Bauen, Umrüstung und bestehende Ausfahrten sind angebunden. [Integration und Tests](experiments/hexfront-lane-wars/docs/factory-integration/REPORT.md) · [Separate Modellansicht](https://rawcdn.githack.com/emfau88/hexwars/a85ee3fc570a6aa25f1e4f819e6c58a16a335961/experiments/hexfront-lane-wars/factory-preview.html). Gameplay und Balance bleiben unverändert.
+**Neu im Spiel:** Die GLB-Fabriken besitzen vier animierte Torsegmente, einen sichtbaren Innenraum, Orange/Blau und austauschbare Produktionsmodule. Bauen, Umrüstung und bestehende Ausfahrten sind angebunden. [Integration und Tests](experiments/hexfront-lane-wars/docs/factory-integration/REPORT.md) · [Separate Modellansicht](https://rawcdn.githack.com/emfau88/hexwars/1e8467ebb8fd74eeba4f33d15fcfc56e0362db1a/experiments/hexfront-lane-wars/factory-preview.html). Gameplay und Balance bleiben unverändert.
 
 ```powershell
 cd experiments/hexfront-lane-wars
