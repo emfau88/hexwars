@@ -22,3 +22,9 @@ Die Anzeige bleibt mindestens 30 CSS-Pixel groß, auch beim Herauszoomen und auf
 ![Querformat, halber Fortschritt](local/central-half-844.jpg)
 
 Messprotokolle: [Ringe](local/results.json), [vollständige Partie und UI](local-game/public.json).
+
+## Veröffentlichung
+
+Laufzeitstand: `e7070886216f3061d9f0685a299c938d825ea04f`, ausschließlich auf `codex/lane-wars`. Die hervorgehobenen Playlinks in beiden READMEs zeigen auf diesen unveränderlichen Build.
+
+Beide Browserprüfungen zusätzlich erfolgreich über den öffentlichen rawcdn.githack.com-Link durchgeführt: [Desktop, Hoch-/Querformat und Ringe](public/results.json), [UI und vollständige Partie](public-game/public.json). Keine Browser-/Shaderfehler. Die Online-Referenzpartie endet ebenfalls nach 213,5 Sekunden mit HQ 764 : 0.

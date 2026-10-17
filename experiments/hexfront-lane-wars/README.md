@@ -1,8 +1,10 @@
 # HEXFRONT Lane Wars · Zentrale Front
 
-[![▶ Aktuellen HEXFRONT-Stand im Browser spielen](public/ui/play-lane-wars.svg)](https://rawcdn.githack.com/emfau88/hexwars/c9b595d73635243728d1efa4e542cf74208c2c60/experiments/hexfront-lane-wars/index.html)
+[![▶ Aktuellen HEXFRONT-Stand im Browser spielen](public/ui/play-lane-wars.svg)](https://rawcdn.githack.com/emfau88/hexwars/e7070886216f3061d9f0685a299c938d825ea04f/experiments/hexfront-lane-wars/index.html)
 
-## [▶ JETZT SPIELEN – aktueller Lane-Wars-Build](https://rawcdn.githack.com/emfau88/hexwars/c9b595d73635243728d1efa4e542cf74208c2c60/experiments/hexfront-lane-wars/index.html)
+## [▶ JETZT SPIELEN – aktueller Lane-Wars-Build](https://rawcdn.githack.com/emfau88/hexwars/e7070886216f3061d9f0685a299c938d825ea04f/experiments/hexfront-lane-wars/index.html)
+
+**Neu: Produktionsringe über den Fabriken.** Gemeinsamer Wellenfortschritt, helleres Signal in den letzten drei Sekunden und kurzer Produktionsimpuls – auch auf Mobile gut sichtbar. Wirtschaft und Balance unverändert. [Ansichten und Tests](docs/factory-rings/REPORT.md).
 
 **Farben aufgefrischt:** Etwas sattere Wiesen und Wege sowie kräftigeres Orange und Blau an HQs, Robotern und Fabriken. Keramikoptik und Gameplay bleiben erhalten. [Vorher/Nachher und Prüfung](docs/palette-refresh/REPORT.md).
 
@@ -10,7 +12,7 @@
 
 **Auf Smartphones: Zwei-Finger-Zoom, freie Frontansicht und drei Nachschub-Buttons am rechten Rand.** Desktop und Smartphone-Hochformat geprüft; die aktuellen Tempo-/Reichweitenänderungen stehen unten. [Bilder und Testbericht](docs/mobile-touch/REPORT.md).
 
-Direkt online spielbar, ohne Installation oder lokalen Server. Laufzeitstand: `c9b595d`. Falls ein Hinweis erscheint, **Open the page** anklicken.
+Direkt online spielbar, ohne Installation oder lokalen Server. Laufzeitstand: `e707088`. Falls ein Hinweis erscheint, **Open the page** anklicken.
 
 
 Eine vollständige Partie Mensch gegen KI auf einer zentralen Lane: vier Fabrikplätze, zwei wählbare Startfabriken, die drei vorhandenen Robotertypen und unterschiedliche gegnerische Eröffnungen. Originalmodelle, Diorama-Landschaft und Keramik-HUD bleiben erhalten.
@@ -19,7 +21,7 @@ Eine vollständige Partie Mensch gegen KI auf einer zentralen Lane: vier Fabrikp
 
 **Aktuelle Einheitenwerte:** Drohnen-Tempo **2,1**, Mech-Tempo **1,1**, Mech-Reichweite **3,3**, Railgun-Reichweite **5,5**; Railgun-Tempo bleibt **0,8**. [Tests, Spielstände und Match-Ergebnisse](docs/central-mobility/REPORT.md).
 
-Öffentlicher Laufzeitstand `c9b595d`, ohne lokalen Server. Falls ein Hinweis erscheint: **Open the page** anklicken.
+Öffentlicher Laufzeitstand `e707088`, ohne lokalen Server. Falls ein Hinweis erscheint: **Open the page** anklicken.
 
 ```powershell
 node scripts/serve.mjs
@@ -48,7 +50,7 @@ Leuchtende Rails beim Laden, kurzer heller Lichtstrahl und klarer Einschlag. Gam
 
 ## Animierte Railgun
 
-Das freigegebene vierbeinige GLB ist im Spiel eingebaut: Walk, Idle, Charge, Attack, Hit und Death, mit einzelnen Gelenken, sichtbarer Ladung, synchronem Rückstoß und Zusammenbruch. **[Railgun-Animationen prüfen](https://rawcdn.githack.com/emfau88/hexwars/c9b595d73635243728d1efa4e542cf74208c2c60/experiments/hexfront-lane-wars/railgun-viewer.html)** · [GLB, Blender-Datei, Performance und Tests](docs/railgun-animation/REPORT.md). Die ursprüngliche [Modellfreigabe](railgun-preview.html) bleibt separat erhalten.
+Das freigegebene vierbeinige GLB ist im Spiel eingebaut: Walk, Idle, Charge, Attack, Hit und Death, mit einzelnen Gelenken, sichtbarer Ladung, synchronem Rückstoß und Zusammenbruch. **[Railgun-Animationen prüfen](https://rawcdn.githack.com/emfau88/hexwars/e7070886216f3061d9f0685a299c938d825ea04f/experiments/hexfront-lane-wars/railgun-viewer.html)** · [GLB, Blender-Datei, Performance und Tests](docs/railgun-animation/REPORT.md). Die ursprüngliche [Modellfreigabe](railgun-preview.html) bleibt separat erhalten.
 
 Reichweite in **Zentrale Front: 5,5**, auch beim Fortsetzen alter zentraler Standardspielstände. Aktuell gilt zusätzlich: Railgun-Tempo 0,8, Mech-Tempo 1,1, Mech-Reichweite 3,3 und Drohnen-Tempo 2,1. Die vier Änderungen beeinflussen einige Referenzpartien deutlich; [Vergleich und aktuelle HP-/DPS-Werte](docs/central-mobility/REPORT.md).
 
