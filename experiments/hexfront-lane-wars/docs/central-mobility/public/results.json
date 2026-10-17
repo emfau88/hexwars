@@ -1,0 +1,50 @@
+{
+  "base": "https://rawcdn.githack.com/emfau88/hexwars/9cc31a630445fd7781b604a788bf6a80519d8c95/experiments/hexfront-lane-wars/",
+  "checks": [
+    "Public actual GLB viewer: charged rails, strong beam and impact, both factions",
+    "Public audio unlocked by interaction; charge, shot and impact play; mute stops voices",
+    "Public shared effects module equals tested local source",
+    "Public main mode displays actual requested range 5.5",
+    "Requested role values present in runtime and actual game save; Mech HUD displays range 3.3",
+    "Public real-time match emits railgun audio; pause silences it",
+    "Public game: existing models preserved; full match ends with actual HQ destruction and victory"
+  ],
+  "result": {
+    "result": "orange",
+    "time": 198.9,
+    "waves": 10,
+    "peakUnits": 19,
+    "hq": {
+      "orange": 764,
+      "blue": 0
+    },
+    "metrics": {
+      "orange": {
+        "spent": 750,
+        "earned": 537.6,
+        "produced": 35,
+        "hqDamage": 800,
+        "builds": 2,
+        "refits": 1,
+        "laneChanges": 0,
+        "supplies": 2,
+        "economyAt": 82.4,
+        "credits": 67.6
+      },
+      "blue": {
+        "spent": 620,
+        "earned": 397.8,
+        "produced": 74,
+        "hqDamage": 36,
+        "builds": 2,
+        "refits": 2,
+        "laneChanges": 0,
+        "supplies": 1,
+        "economyAt": null,
+        "credits": 27.8
+      }
+    },
+    "lateOrders": 7
+  },
+  "errors": []
+}

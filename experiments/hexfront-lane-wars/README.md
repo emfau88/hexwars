@@ -1,21 +1,21 @@
 # HEXFRONT Lane Wars · Zentrale Front
 
-[![▶ Aktuellen HEXFRONT-Stand im Browser spielen](public/ui/play-lane-wars.svg)](https://rawcdn.githack.com/emfau88/hexwars/810d6a977af048732c625fabae274af2f058ce88/experiments/hexfront-lane-wars/index.html)
+[![▶ Aktuellen HEXFRONT-Stand im Browser spielen](public/ui/play-lane-wars.svg)](https://rawcdn.githack.com/emfau88/hexwars/9cc31a630445fd7781b604a788bf6a80519d8c95/experiments/hexfront-lane-wars/index.html)
 
-## [▶ JETZT SPIELEN – aktueller Lane-Wars-Build](https://rawcdn.githack.com/emfau88/hexwars/810d6a977af048732c625fabae274af2f058ce88/experiments/hexfront-lane-wars/index.html)
+## [▶ JETZT SPIELEN – aktueller Lane-Wars-Build](https://rawcdn.githack.com/emfau88/hexwars/9cc31a630445fd7781b604a788bf6a80519d8c95/experiments/hexfront-lane-wars/index.html)
 
-**Neu auf Smartphones: Zwei-Finger-Zoom, freie Frontansicht und drei Nachschub-Buttons am rechten Rand.** Desktop und Smartphone-Hochformat geprüft. Gameplay und Balance unverändert. [Bilder und Testbericht](docs/mobile-touch/REPORT.md).
+**Neu auf Smartphones: Zwei-Finger-Zoom, freie Frontansicht und drei Nachschub-Buttons am rechten Rand.** Desktop und Smartphone-Hochformat geprüft; die aktuellen Tempo-/Reichweitenänderungen stehen unten. [Bilder und Testbericht](docs/mobile-touch/REPORT.md).
 
-Direkt online spielbar, ohne Installation oder lokalen Server. Laufzeitstand: `810d6a9`. Falls ein Hinweis erscheint, **Open the page** anklicken.
+Direkt online spielbar, ohne Installation oder lokalen Server. Laufzeitstand: `9cc31a6`. Falls ein Hinweis erscheint, **Open the page** anklicken.
 
 
 Eine vollständige Partie Mensch gegen KI auf einer zentralen Lane: vier Fabrikplätze, zwei wählbare Startfabriken, die drei vorhandenen Robotertypen und unterschiedliche gegnerische Eröffnungen. Originalmodelle, Diorama-Landschaft und Keramik-HUD bleiben erhalten.
 
 ## Spielen
 
-**Aktuelle Einheitenwerte:** Railgun-Tempo **0,8**, Mech-Reichweite **3,0**, Drohnen-Tempo **1,8**. [Tests, Spielstände und Match-Ergebnisse](docs/central-role-tuning/REPORT.md).
+**Aktuelle Einheitenwerte:** Drohnen-Tempo **2,1**, Mech-Tempo **1,1**, Mech-Reichweite **3,3**, Railgun-Reichweite **5,5**; Railgun-Tempo bleibt **0,8**. [Tests, Spielstände und Match-Ergebnisse](docs/central-mobility/REPORT.md).
 
-Öffentlicher Laufzeitstand `810d6a9`, ohne lokalen Server. Falls ein Hinweis erscheint: **Open the page** anklicken.
+Öffentlicher Laufzeitstand `9cc31a6`, ohne lokalen Server. Falls ein Hinweis erscheint: **Open the page** anklicken.
 
 ```powershell
 node scripts/serve.mjs
@@ -36,7 +36,7 @@ Unter „Weitere Missionen“ bleibt **Erste Front** als Einführung erhalten. I
 - **Kamera:** Mausrad oder Plus/Minus, Ziehen zum Verschieben, ⌖ für Übersicht. Roboter anklicken zeigt ihre tatsächlichen Werte.
 - **Smartphone:** Zwei Finger auseinander-/zusammenziehen zum Zoomen, ein Finger zum Verschieben. Fabrikplätze unten direkt antippen; Nachschub steht rechts in drei Buttons. In Wiesenkrieg anschließend West/Ost wählen oder direkt die Lane antippen. Die Front-Verlaufskachel ist mobil ausgeblendet. Kameraübersicht und Spielhinweise bleiben im Menü erreichbar.
 
-HQs haben in neuen zentralen Partien 800 LP und verursachen 2 Schaden/s. Ausrückende Einheiten kämpfen und sind angreifbar, sobald sie vor dem Fabriktor erscheinen. Der Mech schießt mit 3,0 Reichweite; Fernkämpfer haben jetzt 5,2 Reichweite (zuletzt von 4,8 angehoben; ältere Missionen und Kampflabor bleiben bei 4,0). Ausschließlich tatsächliche Angriffe beenden die Partie. Die älteren Missionen behalten ihre bisherigen 15-Sekunden-Wellen und Kosten; Wiesenkrieg zusätzlich seine kostenlosen Richtungspfeile und die Nachschubwahl per Drag/Tap auf eine Lane.
+HQs haben in neuen zentralen Partien 800 LP und verursachen 2 Schaden/s. Ausrückende Einheiten kämpfen und sind angreifbar, sobald sie vor dem Fabriktor erscheinen. Der Mech schießt mit 3,3 Reichweite; Fernkämpfer haben jetzt 5,5 Reichweite (zuletzt von 5,2 angehoben; ältere Missionen und Kampflabor bleiben bei 4,0). Ausschließlich tatsächliche Angriffe beenden die Partie. Die älteren Missionen behalten ihre bisherigen 15-Sekunden-Wellen und Kosten; Wiesenkrieg zusätzlich seine kostenlosen Richtungspfeile und die Nachschubwahl per Drag/Tap auf eine Lane.
 
 ## Sichtbare Railgun-Schüsse
 
@@ -44,9 +44,9 @@ Leuchtende Rails beim Laden, kurzer heller Lichtstrahl und klarer Einschlag. Gam
 
 ## Animierte Railgun
 
-Das freigegebene vierbeinige GLB ist im Spiel eingebaut: Walk, Idle, Charge, Attack, Hit und Death, mit einzelnen Gelenken, sichtbarer Ladung, synchronem Rückstoß und Zusammenbruch. **[Railgun-Animationen prüfen](https://rawcdn.githack.com/emfau88/hexwars/810d6a977af048732c625fabae274af2f058ce88/experiments/hexfront-lane-wars/railgun-viewer.html)** · [GLB, Blender-Datei, Performance und Tests](docs/railgun-animation/REPORT.md). Die ursprüngliche [Modellfreigabe](railgun-preview.html) bleibt separat erhalten.
+Das freigegebene vierbeinige GLB ist im Spiel eingebaut: Walk, Idle, Charge, Attack, Hit und Death, mit einzelnen Gelenken, sichtbarer Ladung, synchronem Rückstoß und Zusammenbruch. **[Railgun-Animationen prüfen](https://rawcdn.githack.com/emfau88/hexwars/9cc31a630445fd7781b604a788bf6a80519d8c95/experiments/hexfront-lane-wars/railgun-viewer.html)** · [GLB, Blender-Datei, Performance und Tests](docs/railgun-animation/REPORT.md). Die ursprüngliche [Modellfreigabe](railgun-preview.html) bleibt separat erhalten.
 
-Reichweite in **Zentrale Front: 5,2 statt 4,8 (+8,3 %)**, auch beim Fortsetzen alter zentraler Standardspielstände. Aktuell gilt zusätzlich: Railgun-Tempo 0,8, Mech-Reichweite 3,0 und Drohnen-Tempo 1,8. Die größere Reichweite beeinflusst einige Referenzpartien deutlich; [Reichweiten-Audit](docs/railgun-sound/range-audit.json).
+Reichweite in **Zentrale Front: 5,5**, auch beim Fortsetzen alter zentraler Standardspielstände. Aktuell gilt zusätzlich: Railgun-Tempo 0,8, Mech-Tempo 1,1, Mech-Reichweite 3,3 und Drohnen-Tempo 2,1. Die vier Änderungen beeinflussen einige Referenzpartien deutlich; [Vergleich und aktuelle HP-/DPS-Werte](docs/central-mobility/REPORT.md).
 
 ## Mech-Animation
 
@@ -95,4 +95,4 @@ Der Fernkämpfer bleibt ein Modellplatzhalter und der Mech verwendet weiterhin G
 
 Historische Berichte: [M2.1](docs/MILESTONE-2.1.md), [Mobile-HUD](docs/MOBILE-HUD.md), [M2](docs/MILESTONE-2.md), [Fabrikausfahrten](docs/FACTORY-EXITS.md), [M1.5](docs/VISUAL-INTEGRATION.md).
 
-**Railgun-Update:** Zwei gerade Strahlen aus den Rohröffnungen, Lade-/Schuss-/Einschlagsound und weiter entfernte Vorschau im Viewer. Ton im Viewer bzw. in den Spieleinstellungen abschaltbar. Zentrale Front: Reichweite jetzt **5,2**. [Umsetzung, Tests und Balancefolgen](docs/railgun-sound/REPORT.md).
+**Railgun-Update:** Zwei gerade Strahlen aus den Rohröffnungen, Lade-/Schuss-/Einschlagsound und weiter entfernte Vorschau im Viewer. Ton im Viewer bzw. in den Spieleinstellungen abschaltbar. Zentrale Front: Reichweite jetzt **5,5**. [Umsetzung, Tests und Balancefolgen](docs/railgun-sound/REPORT.md).
