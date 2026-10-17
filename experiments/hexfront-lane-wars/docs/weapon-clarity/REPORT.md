@@ -44,3 +44,9 @@ Die kleinen Unterschiede liegen teilweise im Messrauschen. Zusätzliche Zeichens
 ![Railgun-Doppelstrahlen im Hochformat](local/rail-390.png)
 
 Reproduktion: `npm test`, `npm run build`, `node tests/weapon-clarity-browser.mjs`, `node tests/rail-effects.mjs`. Für den öffentlichen Browserlauf `PUBLIC_PLAY_URL` auf das Build-Verzeichnis setzen und `WEAPON_OUTPUT` als separaten Ergebnisordner wählen. Der Performancevergleich ist mit `node tests/weapon-clarity-performance.mjs` reproduzierbar.
+
+## Öffentlich geprüft
+
+[Build 5809ed7 spielen](https://rawcdn.githack.com/emfau88/hexwars/5809ed7b2e83489e51f9d3a092507a41c04e29c3/experiments/hexfront-lane-wars/index.html). Der [öffentliche Browserlauf](public/results.json) bestätigt die Effekte beider Fraktionen, Rückstoß und Mindestbreiten sowie Startauswahl, Abbruch, Neustart und vollständige Partien auf Desktop und im Touch-Hochformat. Tatsächliche Schüsse wurden zusätzlich im normalen Spiel mit HUD aufgenommen. Keine JavaScript-Fehler. Die hervorgehobenen Playlinks beider READMEs zeigen auf diesen Laufzeitstand.
+
+Die anschließend angesprochenen Themen Einheitenabstand/Überlappungen und eine weitergehende Turmausrichtung wurden nur geprüft und besprochen. In diesem Update wurden weder Abstandshalter noch Zielausrichtung, Zielwahl oder Drehbegrenzungen geändert.

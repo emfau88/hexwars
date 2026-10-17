@@ -1,12 +1,14 @@
 # HEXFRONT Lane Wars · Zentrale Front
 
-[![▶ Aktuellen HEXFRONT-Stand im Browser spielen](public/ui/play-lane-wars.svg)](https://rawcdn.githack.com/emfau88/hexwars/9cc31a630445fd7781b604a788bf6a80519d8c95/experiments/hexfront-lane-wars/index.html)
+[![▶ Aktuellen HEXFRONT-Stand im Browser spielen](public/ui/play-lane-wars.svg)](https://rawcdn.githack.com/emfau88/hexwars/5809ed7b2e83489e51f9d3a092507a41c04e29c3/experiments/hexfront-lane-wars/index.html)
 
-## [▶ JETZT SPIELEN – aktueller Lane-Wars-Build](https://rawcdn.githack.com/emfau88/hexwars/9cc31a630445fd7781b604a788bf6a80519d8c95/experiments/hexfront-lane-wars/index.html)
+## [▶ JETZT SPIELEN – aktueller Lane-Wars-Build](https://rawcdn.githack.com/emfau88/hexwars/5809ed7b2e83489e51f9d3a092507a41c04e29c3/experiments/hexfront-lane-wars/index.html)
 
-**Neu auf Smartphones: Zwei-Finger-Zoom, freie Frontansicht und drei Nachschub-Buttons am rechten Rand.** Desktop und Smartphone-Hochformat geprüft; die aktuellen Tempo-/Reichweitenänderungen stehen unten. [Bilder und Testbericht](docs/mobile-touch/REPORT.md).
+**Neu: sichtbare Mech-Bolzen und stärkere Railgun-Doppelstrahlen, auch im Hochformat. Startfabriken vor der Partie wählen; Runde im Menü neu starten.** [Bilder, Technik und Tests](docs/weapon-clarity/REPORT.md).
 
-Direkt online spielbar, ohne Installation oder lokalen Server. Laufzeitstand: `9cc31a6`. Falls ein Hinweis erscheint, **Open the page** anklicken.
+**Auf Smartphones: Zwei-Finger-Zoom, freie Frontansicht und drei Nachschub-Buttons am rechten Rand.** Desktop und Smartphone-Hochformat geprüft; die aktuellen Tempo-/Reichweitenänderungen stehen unten. [Bilder und Testbericht](docs/mobile-touch/REPORT.md).
+
+Direkt online spielbar, ohne Installation oder lokalen Server. Laufzeitstand: `5809ed7`. Falls ein Hinweis erscheint, **Open the page** anklicken.
 
 
 Eine vollständige Partie Mensch gegen KI auf einer zentralen Lane: vier Fabrikplätze, zwei wählbare Startfabriken, die drei vorhandenen Robotertypen und unterschiedliche gegnerische Eröffnungen. Originalmodelle, Diorama-Landschaft und Keramik-HUD bleiben erhalten.
@@ -15,7 +17,7 @@ Eine vollständige Partie Mensch gegen KI auf einer zentralen Lane: vier Fabrikp
 
 **Aktuelle Einheitenwerte:** Drohnen-Tempo **2,1**, Mech-Tempo **1,1**, Mech-Reichweite **3,3**, Railgun-Reichweite **5,5**; Railgun-Tempo bleibt **0,8**. [Tests, Spielstände und Match-Ergebnisse](docs/central-mobility/REPORT.md).
 
-Öffentlicher Laufzeitstand `9cc31a6`, ohne lokalen Server. Falls ein Hinweis erscheint: **Open the page** anklicken.
+Öffentlicher Laufzeitstand `5809ed7`, ohne lokalen Server. Falls ein Hinweis erscheint: **Open the page** anklicken.
 
 ```powershell
 node scripts/serve.mjs
@@ -23,7 +25,7 @@ node scripts/serve.mjs
 
 [Lokale Partie](http://127.0.0.1:4181/) · [Kampflabor](http://127.0.0.1:4181/lab.html) · [M1.5-Demo](http://127.0.0.1:4181/m15.html)
 
-Node.js ab Version 20 genügt zum Starten. Alle Ressourcen liegen im Experiment. „Zentrale Front spielen“ startet den Hauptmodus. Vorher kannst du einen Gegner und unter „Zwei Startfabriken wählen“ die Produktion festlegen. „Abwechselnde Strategien“ wechselt bei neuen Partien zwischen Eisenkeil, Vorhut und Aufbaukommando.
+Node.js ab Version 20 genügt zum Starten. Alle Ressourcen liegen im Experiment. Im Hauptmenü wählst du Gegner und beide Startfabriken. Erst „Mit dieser Aufstellung starten“ beginnt die Partie. „Runde neu starten“ im Pausenmenü führt nach Bestätigung zurück zur Startauswahl. „Abwechselnde Strategien“ wechselt bei neuen Partien zwischen Eisenkeil, Vorhut und Aufbaukommando.
 
 Unter „Weitere Missionen“ bleibt **Erste Front** als Einführung erhalten. Ihr Sieg schaltet unverändert die Zwei-Lane-Mission **Wiesenkrieg** frei. Getrennte lokale Spielstände bleiben unter `hexfront-lane-wars-campaign-v1` erhalten. „Neu“ ersetzt nach Bestätigung nur den ausgewählten Missionsspielstand.
 
@@ -44,7 +46,7 @@ Leuchtende Rails beim Laden, kurzer heller Lichtstrahl und klarer Einschlag. Gam
 
 ## Animierte Railgun
 
-Das freigegebene vierbeinige GLB ist im Spiel eingebaut: Walk, Idle, Charge, Attack, Hit und Death, mit einzelnen Gelenken, sichtbarer Ladung, synchronem Rückstoß und Zusammenbruch. **[Railgun-Animationen prüfen](https://rawcdn.githack.com/emfau88/hexwars/9cc31a630445fd7781b604a788bf6a80519d8c95/experiments/hexfront-lane-wars/railgun-viewer.html)** · [GLB, Blender-Datei, Performance und Tests](docs/railgun-animation/REPORT.md). Die ursprüngliche [Modellfreigabe](railgun-preview.html) bleibt separat erhalten.
+Das freigegebene vierbeinige GLB ist im Spiel eingebaut: Walk, Idle, Charge, Attack, Hit und Death, mit einzelnen Gelenken, sichtbarer Ladung, synchronem Rückstoß und Zusammenbruch. **[Railgun-Animationen prüfen](https://rawcdn.githack.com/emfau88/hexwars/5809ed7b2e83489e51f9d3a092507a41c04e29c3/experiments/hexfront-lane-wars/railgun-viewer.html)** · [GLB, Blender-Datei, Performance und Tests](docs/railgun-animation/REPORT.md). Die ursprüngliche [Modellfreigabe](railgun-preview.html) bleibt separat erhalten.
 
 Reichweite in **Zentrale Front: 5,5**, auch beim Fortsetzen alter zentraler Standardspielstände. Aktuell gilt zusätzlich: Railgun-Tempo 0,8, Mech-Tempo 1,1, Mech-Reichweite 3,3 und Drohnen-Tempo 2,1. Die vier Änderungen beeinflussen einige Referenzpartien deutlich; [Vergleich und aktuelle HP-/DPS-Werte](docs/central-mobility/REPORT.md).
 
