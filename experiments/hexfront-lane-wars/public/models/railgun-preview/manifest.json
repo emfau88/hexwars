@@ -1,0 +1,46 @@
+{
+  "status": "separate approval model; no game integration",
+  "height": 1.29,
+  "front": "-Z",
+  "joints": [
+    "Railgun_Root",
+    "Body",
+    "Turret_Yaw",
+    "Gun_Pitch",
+    "Recoil_Carriage",
+    "Muzzle",
+    "Charge_Socket",
+    "Hip_LF",
+    "Knee_LF",
+    "Ankle_LF",
+    "Hip_LB",
+    "Knee_LB",
+    "Ankle_LB",
+    "Hip_RF",
+    "Knee_RF",
+    "Ankle_RF",
+    "Hip_RB",
+    "Knee_RB",
+    "Ankle_RB"
+  ],
+  "materials": [
+    "Railgun_Surface",
+    "Team"
+  ],
+  "clips": [
+    "Idle",
+    "Aim_Check",
+    "Joint_Check",
+    "Recoil_Check"
+  ],
+  "note": "Joint_Check proves articulated geometry. It is not a finished grounded locomotion clip.",
+  "palette": [
+    "Ceramic",
+    "Team",
+    "Graphite",
+    "Rubber",
+    "Alloy",
+    "Optics",
+    "Marking"
+  ]
+}

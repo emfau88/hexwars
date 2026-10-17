@@ -1,0 +1,32 @@
+{
+  "triangles": 57412,
+  "meshes": 32,
+  "bounds": [
+    1.5899999141693115,
+    1.2899999469518661,
+    1.8089999966323376
+  ],
+  "clips": [
+    {
+      "name": "Joint_Check",
+      "tracks": 12,
+      "duration": 4
+    },
+    {
+      "name": "Aim_Check",
+      "tracks": 2,
+      "duration": 4
+    },
+    {
+      "name": "Idle",
+      "tracks": 1,
+      "duration": 3
+    },
+    {
+      "name": "Recoil_Check",
+      "tracks": 1,
+      "duration": 1.5
+    }
+  ],
+  "joints": 15
+}

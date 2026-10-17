@@ -1,0 +1,73 @@
+{
+  "base": "http://127.0.0.1:4181/railgun-preview.html",
+  "checks": [
+    "Four exported animation clips",
+    "15 articulation axes",
+    "Authored scale and ground",
+    "Four connected hip/knee/foot chains with real geometry",
+    "Joint_Check moves mesh transforms",
+    "Aim_Check moves mesh transforms",
+    "Recoil_Check moves mesh transforms",
+    "Idle moves mesh transforms",
+    "Rest restores all rigid geometry transforms",
+    "Finite geometry coordinates",
+    "Pause holds joint pose",
+    "Team swap preserves ceramic/metal palette",
+    "Team accents turn blue",
+    "Comparison forces Orange / Blue",
+    "Download public/models/railgun-preview/railgun.glb",
+    "Download art/railgun-v1/railgun-source.blend",
+    "Download docs/railgun-model/REVIEW.md",
+    "Portrait has usable canvas",
+    "No browser exceptions"
+  ],
+  "info": {
+    "triangles": 57412,
+    "meshes": 32,
+    "bounds": [
+      1.5899999141693115,
+      1.2899999469518661,
+      1.8089999966323376
+    ],
+    "clips": [
+      {
+        "name": "Joint_Check",
+        "tracks": 12,
+        "duration": 4
+      },
+      {
+        "name": "Aim_Check",
+        "tracks": 2,
+        "duration": 4
+      },
+      {
+        "name": "Idle",
+        "tracks": 1,
+        "duration": 3
+      },
+      {
+        "name": "Recoil_Check",
+        "tracks": 1,
+        "duration": 1.5
+      }
+    ],
+    "joints": 15
+  },
+  "rig": {
+    "hierarchy": [
+      true,
+      true,
+      true,
+      true
+    ],
+    "changes": {
+      "Joint_Check": 24,
+      "Aim_Check": 6,
+      "Recoil_Check": 2,
+      "Idle": 4
+    },
+    "finite": true,
+    "restored": true
+  },
+  "errors": []
+}
