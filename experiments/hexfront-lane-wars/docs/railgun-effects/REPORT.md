@@ -30,3 +30,7 @@ Der Mobile-Viewport läuft auf derselben Desktop-GPU; dies ist **keine Messung a
 ![Rails beim Laden](viewer-charge.png)
 ![Strahl und Einschlag im Viewer](viewer-shot.png)
 ![Tatsächliches Gefecht beider Fraktionen](game-shot.png)
+
+## Öffentlicher Playlink
+
+Runtime-Commit `6deae427cad60cc37409f89b9609e5f43f7fd111` auf rawcdn.githack.com geprüft: Viewer mit beiden Fraktionen und allen neuen Effekten, ausgeliefertes Effektmodul identisch zur geprüften lokalen Quelle. Eine vollständige öffentliche Testpartie endete nach 371,7 Sekunden mit HQ-Zerstörung (Orange 800, Blau 0). Keine Browserfehler. Details: [public.json](public.json). Beide Branch-READMEs verlinken diesen festen Spielstand.
