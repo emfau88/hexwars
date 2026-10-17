@@ -29,7 +29,9 @@ test('unit profiles preserve legacy missions and retain three actual counter rol
   const duel=new Combat({orange:{[a]:batches},blue:{[b]:batches},specs:CENTRAL_UNITS});
   assert.equal(duel.run().result,'orange',a+' counters '+b+' at '+batches+' factories');
  }
- assert.equal(new Combat({orange:{drone:4},blue:{mech:2,rail:2},specs:CENTRAL_UNITS}).run().result,'orange');
+ // With Mech range 3.0, the mixed formation withstands this pure-drone assault.
+ assert.equal(new Combat({orange:{drone:4},blue:{mech:2,rail:2},specs:CENTRAL_UNITS}).run().result,'blue');
+ assert.equal(new Combat({orange:{mech:2,rail:2},blue:{drone:4},specs:CENTRAL_UNITS}).run().result,'orange');
 });
 test('central economy, reservations and supply spend real money with exact production/cooldown boundaries',()=>{
  const m=new Match({mission:'central'});assert.equal(m.command('orange','configure',{slot:1,type:'toString',lane:0}).ok,false);assert.equal(m.command('orange','configure',{slot:0,type:'drone',lane:0}).ok,false);
@@ -64,13 +66,13 @@ test('central reference runs preserve results and all economic metrics when full
  for(const [left,right] of [['pressure','siege'],['pressure','economy'],['siege','economy']]){
   // Mirror controller execution order as well as factions: same-tick orders are observable.
   const a=run({a:left,b:right}),b=run({a:right,b:left,reverseControllers:true});
-  assert.equal(a.result,{pressure:{siege:'blue',economy:'unresolved'},siege:{economy:'orange'}}[left][right]);assert.equal(b.result,a.result==='orange'?'blue':a.result==='blue'?'orange':a.result);assert.equal(a.time,b.time);assert.equal(a.hq.orange,b.hq.blue);assert.equal(a.hq.blue,b.hq.orange);assert.deepEqual(a.metrics.orange,b.metrics.blue);assert.deepEqual(a.metrics.blue,b.metrics.orange);
+  assert.equal(a.result,{pressure:{siege:'blue',economy:'blue'},siege:{economy:'orange'}}[left][right]);assert.equal(b.result,a.result==='orange'?'blue':a.result==='blue'?'orange':a.result);assert.equal(a.time,b.time);assert.equal(a.hq.orange,b.hq.blue);assert.equal(a.hq.blue,b.hq.orange);assert.deepEqual(a.metrics.orange,b.metrics.blue);assert.deepEqual(a.metrics.blue,b.metrics.orange);
  }
 });
-test('at 5.2 Railgun range a late refit prevents defeat; the former winning burst now stalemates',()=>{
+test('central role tuning: late refit prevents defeat and timed drone reinforcement wins',()=>{
  const ignored=centralLate({reacts:false}),response=centralLate({reacts:true}),burst=centralLate({reacts:true,supply:true,supplyAt:210,supplyType:'drone'});
  assert.deepEqual(ignored.decision,response.decision);assert.deepEqual(response.decision,burst.decision);
- assert.equal(ignored.result,'blue');assert.equal(burst.result,'unresolved');assert.equal(burst.time,720);assert.equal(burst.hq.orange,800);assert.equal(burst.hq.blue,800);assert.equal(burst.metrics.orange.supplies,1);
+ assert.equal(ignored.result,'blue');assert.equal(burst.result,'orange');assert.ok(Math.abs(burst.time-402.45)<.001);assert.equal(burst.hq.orange,800);assert.equal(burst.hq.blue,0);assert.equal(burst.metrics.orange.supplies,1);
  assert.notEqual(ignored.result,'orange');assert.ok(ignored.hq.orange<=burst.hq.orange);assert.equal(response.result,'unresolved');
  const a=centralLate({initial:'rail',enemy:'drone',counter:'mech',reacts:false}),b=centralLate({initial:'rail',enemy:'drone',counter:'mech'});
  assert.notEqual(a.result,'orange');assert.equal(b.result,'orange');assert.deepEqual(a.decision,b.decision);

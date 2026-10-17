@@ -1,0 +1,50 @@
+{
+  "base": "http://127.0.0.1:4181/",
+  "checks": [
+    "Public actual GLB viewer: charged rails, strong beam and impact, both factions",
+    "Public audio unlocked by interaction; charge, shot and impact play; mute stops voices",
+    "Public shared effects module equals tested local source",
+    "Public main mode displays actual requested range 5.2",
+    "Requested role values present in runtime and actual game save; Mech HUD displays range 3.0",
+    "Public real-time match emits railgun audio; pause silences it",
+    "Public game: existing models preserved; full match ends with actual HQ destruction and victory"
+  ],
+  "result": {
+    "result": "orange",
+    "time": 179.25,
+    "waves": 9,
+    "peakUnits": 20,
+    "hq": {
+      "orange": 800,
+      "blue": 0
+    },
+    "metrics": {
+      "orange": {
+        "spent": 670,
+        "earned": 473.28,
+        "produced": 28,
+        "hqDamage": 800,
+        "builds": 2,
+        "refits": 1,
+        "laneChanges": 0,
+        "supplies": 1,
+        "economyAt": 83.60000000000001,
+        "credits": 83.28
+      },
+      "blue": {
+        "spent": 620,
+        "earned": 358.5,
+        "produced": 66,
+        "hqDamage": 0,
+        "builds": 2,
+        "refits": 2,
+        "laneChanges": 0,
+        "supplies": 1,
+        "economyAt": null,
+        "credits": 18.5
+      }
+    },
+    "lateOrders": 5
+  },
+  "errors": []
+}

@@ -169,6 +169,10 @@ export class Match {
     let unitSpecs=data.version===1&&data.mission==='central'?missionById('central').units:data.unitSpecs;
     // Migrate only the previous standard Railgun range; retain custom profiles and all unit state.
     if(data.mission==='central'&&[4,4.8].includes(unitSpecs?.rail?.range))unitSpecs={...unitSpecs,rail:{...unitSpecs.rail,range:missionById('central').units.rail.range}};
+    // Adopt the three requested central defaults without changing other saved values or unit state.
+    if(data.mission==='central')for(const [type,field,previous] of [['rail','speed',1],['mech','range',2.8],['drone','speed',1.6]]){
+      if(unitSpecs?.[type]?.[field]===previous)unitSpecs={...unitSpecs,[type]:{...unitSpecs[type],[field]:missionById('central').units[type][field]}};
+    }
     // Migrate the retired central supply cooldown; preserve other saved rules.
     const oldSupply=data.mission==='central'&&data.rules?.supplyCooldown===35;
     const rules=oldSupply?{...data.rules,supplyCooldown:missionById('central').rules.supplyCooldown}:data.rules;
