@@ -9,7 +9,7 @@ Rechts ersetzen drei unabhängige runde Keramikbuttons die große gemeinsame Pla
 - 94 bestehende Tests bestanden; statischer Build erfolgreich.
 - Alle Nachschubzustände, exakter Cooldown-Ablauf, Pause, gesperrte Klicks ohne Matchänderung und Zwei-Lane-Nachschub geprüft.
 - Kreisform, 52×52-Pixel-Touchflächen, fehlende Außenplatte, Randabstände und Durchlässigkeit der freien Seitenfläche zum Canvas explizit geprüft.
-- Touch-Zoom/Pan/Abbruch und Bedienung von Bau, Umrüstung/Wirtschaft und Nachschub in sechs Größen: 320×568, 360×640, 390×844, 412×915, 844×390 und Desktop 1440×960. Keine horizontale Überbreite und keine durch andere HUD-Elemente verdeckten Buttons.
+- Touch-Zoom/Pan/Abbruch und Bedienung von Bau, Abbruch, Wirtschaft und Nachschub in sechs Größen: 320×568, 360×640, 390×844, 412×915, 844×390 und Desktop 1440×960. Keine horizontale Überbreite und keine durch andere HUD-Elemente verdeckten Buttons.
 - Gemessene Änderung bei 390×844: obere HUD-Unterkante 89 → 79 Pixel, Fabrikleiste 72 → 68 Pixel hoch und näher am unteren Rand. Freie vertikale Strecke zwischen beiden Leisten 675 → 693 Pixel. Die Nachschubgruppe ist 60 statt 70 Pixel breit und hat keine flächige Hintergrundplatte mehr.
 - Browseremulation, keine Prüfung auf physischem Smartphone. Betriebssystem- und Browserleisten außerhalb der Webseite werden nicht verändert.
 - Keine Änderung an Simulation, Wirtschaft, Balance, Produktionszeiten, Missionen oder KI.
@@ -19,3 +19,9 @@ Rechts ersetzen drei unabhängige runde Keramikbuttons die große gemeinsame Pla
 ![Fehlende Credits](local/credits-390.jpg)
 
 [Status- und Layoutprüfung](local/results.json) · [Touch und sechs Bildschirmgrößen](touch/results.json)
+
+## Laufzeitstand und Veröffentlichung
+
+Laufzeitcommit `8f3ceaec3c514f27e992c9f1359fc56b6bb306a6`, Branch `codex/lane-wars`. Die README-Playlinks sind für diesen Build vorbereitet. Die ersten beiden Push-Versuche scheiterten an einer nicht erreichbaren Verbindung zu github.com:443; eine öffentliche Prüfung steht noch aus.
+
+Die zusätzliche [lokale UI- und vollständige Match-Prüfung](local-game/public.json) ist bestanden: Bau/Abbruch, Wirtschaft, Speichern/Fortsetzen, Modellanzeige, historische Seiten und Partie. Die Referenzpartie endet unverändert nach 213,5 Sekunden mit HQ 764 : 0.
