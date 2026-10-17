@@ -30,7 +30,8 @@
     "audit:mech-performance": "node tests/mech-performance.mjs",
     "test:rail": "node tests/rail-browser.mjs",
     "test:rail-modes": "node tests/rail-modes.mjs",
-    "audit:rail-performance": "node tests/rail-performance.mjs"
+    "audit:rail-performance": "node tests/rail-performance.mjs",
+    "test:touch": "node tests/touch-camera-browser.mjs"
   },
   "engines": {
     "node": ">=20"

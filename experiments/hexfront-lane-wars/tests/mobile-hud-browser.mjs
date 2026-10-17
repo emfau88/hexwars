@@ -10,7 +10,7 @@ async function layout(p){return p.evaluate(()=>{
  const overlap=(a,b)=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;
  const diag=__LANE_MATCH__.diagnostics(),controls=[...document.querySelectorAll('.factory-open,.route-button,#economy,#supply-units button,#match-play,#open-menu')].filter(b=>b.getClientRects().length&&!b.disabled);
  const buttons=controls.map(b=>{const r=rect(b);return {label:b.getAttribute('aria-label')||b.textContent,...r.toJSON(),uncovered:b.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))};});
- return {width:innerWidth,height:innerHeight,mission:__LANE_MATCH__.snapshot().mission,clearFraction:(deck.top-front.bottom)/innerHeight,deckHeight:deck.height,hqHidden:diag.headquarters.some(h=>[...document.querySelectorAll('.front')].map(rect).concat([deck,top]).some(r=>overlap(h.bounds,r))),overflow:document.documentElement.scrollWidth>innerWidth||document.documentElement.scrollHeight>innerHeight,buttons};
+ return {width:innerWidth,height:innerHeight,mission:__LANE_MATCH__.snapshot().mission,clearFraction:(deck.top-Math.max(top.bottom,front.bottom))/innerHeight,deckHeight:deck.height,hqHidden:diag.headquarters.some(h=>[...document.querySelectorAll('.front')].map(rect).concat([deck,top]).some(r=>overlap(h.bounds,r))),overflow:document.documentElement.scrollWidth>innerWidth||document.documentElement.scrollHeight>innerHeight,buttons};
 });}
 const observe=p=>p.evaluate(()=>__LANE_MATCH__.observe());
 const advance=(p,s)=>p.evaluate(s=>__LANE_MATCH_QA__.advance(s),s);
@@ -46,8 +46,8 @@ try{
    await p.locator('#open-menu').tap();await p.locator('#show-camera').tap();await p.locator('#zoom-in').tap();await p.locator('#camera-home').tap();await p.locator('#close-camera').tap();assert.equal(await p.locator('#camera-panel').isVisible(),false);
    await p.locator('#open-menu').tap();await p.locator('#show-hint').tap();assert.equal(await p.locator('#hint').isVisible(),true);await p.locator('#close-hint').tap();assert.equal(await p.locator('#hint').isVisible(),false);
    await p.evaluate(()=>__LANE_MATCH_QA__.load('meadow'));await advance(p,80);await edit(p,0);await p.locator('#factory-lane').selectOption('1');await p.locator('#apply-factory').tap();assert.equal((await observe(p)).pending[0].lane,1);
-   await p.locator('#supply-units [data-type="mech"]').tap();await p.locator('#fronts [data-lane="1"]').tap();assert.equal((await observe(p)).supplyCooldown,15);
-   await p.locator('#fronts [data-lane="0"]').tap();assert.equal(await p.locator('#fronts [data-lane="0"] small').isVisible(),true);
+   await p.locator('#supply-units [data-type="mech"]').tap();await p.locator('[data-supply-lane="1"]').tap();assert.equal((await observe(p)).supplyCooldown,15);
+   assert.equal(await p.locator('#fronts').isVisible(),false);
    checks.push('Portrait touch: all slots, build/reserve/cancel/refund, refit on next wave, economy collapse, supply cost/cooldown, camera and hints, two-lane routing and supply');
   }
   if(width===1440){await p.evaluate(()=>__LANE_MATCH_QA__.load('central'));await advance(p,100);await edit(p,1);await p.screenshot({path:out+'desktop-order.png'});await p.keyboard.press('Escape');assert.equal(await p.locator('#orders').isVisible(),false);assert.equal(await p.locator('#main-menu').isVisible(),false);await p.locator('#toggle-camera').click();await p.locator('#zoom-in').click();await p.locator('#camera-home').click();await p.locator('#close-camera').click();checks.push('Desktop editor selection, Escape dismisses the editor without opening the menu, camera controls');}

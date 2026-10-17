@@ -11,13 +11,15 @@ const portrait=type=>`<img class="unit-portrait" src="./public/ui/${type}.png" a
 const $=id=>document.getElementById(id),names={drone:'Drohne',mech:'Mech',rail:'Fernkämpfer'};
 const timeText=t=>`${Math.floor(t/60).toString().padStart(2,'0')}:${Math.floor(t%60).toString().padStart(2,'0')}`;
 const laneName=lane=>lane===0?'West':'Ost';
+const mobileHUD=()=>matchMedia('(max-width:760px), (max-height:500px) and (max-width:1000px)').matches;
 const compactHUD=()=>matchMedia('(max-width:760px)').matches;
 let hintOpen=false,hintUntil=0,hoverFactory=null,factoryScreens=[];
 function closeOrders(restoreFocus=false){$('orders').hidden=true;if(restoreFocus)document.querySelector('#factory-cards [data-edit="'+selected+'"]')?.focus();updateFactorySelection();}
 function updateFactorySelection(){for(const card of $('factory-cards').children){const active=!$('orders').hidden&&Number(card.dataset.slot)===selected;card.classList.toggle('selected',active);card.querySelector('[data-edit]').setAttribute('aria-expanded',String(active));}}
 function frameField(){
- if(!view)return;const compact=compactHUD(),shown=!$('game-ui').hidden,top=shown?document.querySelector('.game-top').getBoundingClientRect().bottom:80,deck=shown?$('command-deck').getBoundingClientRect():null;
- const safeTop=top+(compact?58:14),safeBottom=deck?innerHeight-deck.top+12:160,half=compact?(match.mission.lanes===1?6.8:14.3):undefined;
+ if(!view)return;const mobile=mobileHUD(),supply=document.querySelector('.supply-tray'),host=mobile?$('mobile-supply'):document.querySelector('.deck-bottom');if(supply.parentElement!==host)host.append(supply);
+ const compact=compactHUD(),shown=!$('game-ui').hidden,top=shown?document.querySelector('.game-top').getBoundingClientRect().bottom:80,deck=shown?$('command-deck').getBoundingClientRect():null;
+ const safeTop=top+14,safeBottom=deck?innerHeight-deck.top+12:160,half=compact?(match.mission.lanes===1?6.8:14.3):undefined;
  $('battlefield').style.setProperty('--hud-bottom',top+'px');$('battlefield').style.setProperty('--dock-height',(deck?.height||140)+'px');
  if(view.safeTop!==safeTop||view.safeBottom!==safeBottom||view.fitHalfWidth!==half){view.safeTop=safeTop;view.safeBottom=safeBottom;view.fitHalfWidth=half;view.resize();}
  if(!$('orders').hidden&&!compact){const card=$('factory-cards').children[selected]?.getBoundingClientRect();if(card)$('orders').style.left=Math.max(16,Math.min(innerWidth-$('orders').offsetWidth-16,card.left))+'px';}
@@ -50,7 +52,7 @@ function updateMenu(){
  $('camera-setting').value=campaign.settings.camera;$('motion-setting').checked=campaign.settings.motion;$('hints-setting').checked=campaign.settings.hints;
 }
 async function prepare(id,{fresh=false,start=false}={}){
- if(loading)return;loading=true;ready=false;playing=false;save();$('loading').hidden=false;cancelSupply();
+ if(loading)return;loading=true;ready=false;playing=false;$('notice').hidden=true;noticeUntil=0;save();$('loading').hidden=false;cancelSupply();
  try{
   const saved=!fresh&&campaign.saves[id],mission=MISSIONS[id];
   const strategy=campaign.settings.centralStrategy&&campaign.settings.centralStrategy!=='cycle'?campaign.settings.centralStrategy:['siege','pressure','economy'][(campaign.centralRuns||0)%3];
@@ -125,10 +127,11 @@ function updateHUD(){
  $('credits').textContent=Math.floor(match.credits('orange'));$('income').textContent='+'+match.income('orange').toLocaleString('de-DE')+' / s';$('income').title='Einkommen: '+match.income('orange')+' Credits pro Sekunde';$('wave-countdown').textContent=ended?'Partie beendet':'Welle in '+Math.ceil(match.nextWave)+' s';$('wave-progress').style.width=(ended?0:100*(1-match.nextWave/match.rules.wave))+'%';
  $('match-play').textContent=playing?'Ⅱ':'▶';$('match-play').setAttribute('aria-label',playing?'Partie pausieren':'Partie fortsetzen');$('match-play').disabled=ended;
  $('economy').disabled=ended||p.economy||match.credits('orange')<match.rules.economyCost;
- $('economy').hidden=p.economy;$('economy-done').hidden=!p.economy;$('economy').innerHTML='<strong>Wirtschaft ↑</strong><small>'+match.rules.economyCost+' Cr · +'+match.rules.economyIncome.toLocaleString('de-DE')+'/s</small>';$('economy').setAttribute('aria-label','Wirtschaft ausbauen: '+match.rules.economyCost+' Credits, Einkommen einmalig um '+match.rules.economyIncome+' Credits pro Sekunde erhöhen');
- $('supply-title').textContent='NACHSCHUB · '+match.rules.supplyCost+' Cr';
+ $('economy').hidden=p.economy;$('economy-done').hidden=!p.economy;$('economy').innerHTML='<strong>'+(mobileHUD()?'Eco ↑':'Wirtschaft ↑')+'</strong><small>'+match.rules.economyCost+' Cr · +'+match.rules.economyIncome.toLocaleString('de-DE')+'/s</small>';$('economy').setAttribute('aria-label','Wirtschaft ausbauen: '+match.rules.economyCost+' Credits, Einkommen einmalig um '+match.rules.economyIncome+' Credits pro Sekunde erhöhen');
+ $('supply-title').textContent=(mobileHUD()?'':'NACHSCHUB · ')+match.rules.supplyCost+' Cr';
  const cool=Math.max(0,(p.supplyReady-match.tick)*.05);
  $('supply-status').textContent=ended?'Beendet':cool?'Noch '+Math.ceil(cool)+' s':match.credits('orange')<match.rules.supplyCost?'Fehlen '+Math.ceil(match.rules.supplyCost-match.credits('orange'))+' Cr':'Bereit';
+ $('supply-lanes').hidden=match.laneCount===1;
  for(const b of $('supply-units').children){b.setAttribute('aria-disabled',String(ended||cool>0||match.credits('orange')<match.rules.supplyCost));b.classList.toggle('selected',b.dataset.type===supplyType);b.disabled=ended;}
  const key=JSON.stringify([p.factories,p.pending,ended,match.laneCount]);
  if(key!==cardKey){cardKey=key;$('factory-cards').innerHTML=p.factories.map((f,i)=>{
@@ -177,7 +180,7 @@ function updateSupplyFeedback(){
  for(const el of $('fronts').children)el.classList.toggle('target',Number(el.dataset.lane)===targetLane);
 }
 function sendSupply(lane){if(!supplyType||lane===null)return false;const type=supplyType;if(issue('supply',{type,lane})){cancelSupply();notify(names[type]+'-Nachschub verlässt dein HQ.');return true;}return false;}
-function targetAt(x,y){const el=document.elementFromPoint(x,y),front=el?.closest('[data-lane]');if(front)return Number(front.dataset.lane);if(el?.closest('.command-deck,.order-panel,.game-top,.building-marker,.menu-layer'))return null;return view.laneAt(x,y);}
+function targetAt(x,y){const el=document.elementFromPoint(x,y),front=el?.closest('[data-lane]');if(front)return Number(front.dataset.lane);if(el?.closest('.command-deck,.order-panel,.game-top,.building-marker,.menu-layer,#mobile-supply,#supply-targeting'))return null;return view.laneAt(x,y);}
 function onFieldClick(e){if(!supplyType)return;e.stopImmediatePropagation();sendSupply(view.laneAt(e.clientX,e.clientY));}
 function advance(seconds,draw=true){match.advance(seconds);flush();if(match.phase==='ended'){playing=false;if(!endedSaved){endedSaved=true;save();}}view.renderMatch(match,seconds,draw);}
 function frame(now){
@@ -195,6 +198,7 @@ $('supply-units').addEventListener('pointercancel',cancelSupply);
 $('supply-units').addEventListener('click',e=>{if(ignoreSupplyClick&&e.detail!==0){ignoreSupplyClick=false;return;}const b=e.target.closest('[data-type]');if(!b)return;supplyType=b.dataset.type;$('orders').hidden=true;if(match.laneCount===1)sendSupply(0);else updateSupplyFeedback();});
 $('fronts').onclick=e=>{const b=e.target.closest('[data-lane]');if(!b)return;if(supplyType)sendSupply(Number(b.dataset.lane));else{const show=!b.classList.contains('detail');for(const front of $('fronts').children){front.classList.remove('detail');front.setAttribute('aria-expanded','false');}b.classList.toggle('detail',show);b.setAttribute('aria-expanded',String(show));}};
 $('cancel-supply').onclick=cancelSupply;
+$('supply-lanes').onclick=e=>{const button=e.target.closest('[data-supply-lane]');if(button)sendSupply(Number(button.dataset.supplyLane));};
 $('toggle-camera').onclick=()=>{const open=$('camera-panel').hidden;$('camera-panel').hidden=!open;$('toggle-camera').setAttribute('aria-expanded',String(open));};
 $('close-hint').onclick=()=>{hintOpen=false;hintUntil=0;updateHUD();};
 $('close-camera').onclick=()=>{$('camera-panel').hidden=true;$('toggle-camera').setAttribute('aria-expanded','false');};

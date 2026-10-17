@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {bindMatchCamera} from './match-camera-input.js';
 import {BattleView} from './battle-view.js';
 import {createFactories,updateFactories,disposeFactories,factoryDiagnostics} from './factory-view.js';
 import {exitPose,laneEntry,baseSign} from './match-layout.js';
@@ -7,6 +8,7 @@ import {missionRoute} from './missions.js';
 import {firstHeight} from './landscape-view.js';
 export class MatchView extends BattleView {
  constructor(stage,labels,onSelect,onFactory,mission=null){super(stage,labels,onSelect,{single:mission?.lanes===1,slots:mission?.slots,specs:mission?.units,clarity:mission?.id==='central'});this.mission=mission;this.onFactory=onFactory;this.factoryBuildings={};const factoriesReady=createFactories(this.scene,mission).then(items=>{this.factoryBuildings=items;});this.ready=Promise.all([this.ready,factoriesReady]).then(()=>{this.dirty=true;this.resize();});this.factoryLabels=[];this.safeBottom=330;this.resize();}
+ bind(){this.disposeCameraInput=bindMatchCamera(this);}
  point(u,height=0){
    if(u.hq)return new T.Vector3(0,height+.9,baseSign(u.hq)*10.3);
    if(u.departing){const p=exitPose(u,this.matchTime||0);return new T.Vector3(p.x,(this.mission?.lanes===1?firstHeight:groundHeight)(p.x,p.z)+height,p.z);}
@@ -47,7 +49,7 @@ export class MatchView extends BattleView {
  }
  highlightLane(lane){if(this.laneHighlight){this.laneHighlight.removeFromParent();this.laneHighlight.geometry.dispose();this.laneHighlight.material.dispose();this.laneHighlight=null;}if(lane===null)return;const pts=[];for(let p=4;p<=26;p+=.25)pts.push(this.point({lane,p,x:0},.08));const curve=new T.CatmullRomCurve3(pts);this.laneHighlight=new T.Mesh(new T.TubeGeometry(curve,90,.16,6,false),new T.MeshBasicMaterial({color:0xffd790,transparent:true,opacity:.85,depthWrite:false}));this.scene.add(this.laneHighlight);this.dirty=true;}
  laneScreens(){return Array.from({length:this.mission?.lanes||2},(_,lane)=>{const p=this.point({lane,p:15,x:0}).project(this.camera);return {lane,x:(p.x*.5+.5)*this.stage.clientWidth,y:(-.5*p.y+.5)*this.stage.clientHeight};});}
- dispose(){disposeFactories(this.factoryBuildings);super.dispose();}
+ dispose(){this.disposeCameraInput?.();disposeFactories(this.factoryBuildings);super.dispose();}
  diagnostics(){return {...super.diagnostics(),factoryModel:factoryDiagnostics(this.factoryBuildings)};}
  factoryScreens(){
    return Object.values(this.factoryBuildings).map(f=>{const v=f.root.position.clone().add(new T.Vector3(0,2.45,0)).project(this.camera);return {owner:f.owner,slot:f.slot,state:f.root.userData.state,visible:f.root.visible,asset:f.asset,module:f.type,ghost:f.ghost,door:f.open,segments:[1,2,3,4].map(i=>f.root.getObjectByName("Hangar_Segment_"+i).position.toArray()),opacity:f.ghost?.34:1,bounds:this.buildingBounds(f.root),x:(v.x*.5+.5)*this.stage.clientWidth,y:(-.5*v.y+.5)*this.stage.clientHeight};});

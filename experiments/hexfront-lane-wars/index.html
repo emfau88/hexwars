@@ -30,14 +30,15 @@
  <button id="apply-factory" class="primary"></button><button id="cancel-order" hidden></button><small id="order-help"></small>
 </section>
 <section class="ceramic unit-inspector" id="selection" hidden><button id="close-selection" aria-label="Auswahl schließen">×</button><strong id="selected-name"></strong><p id="selected-details"></p><button id="focus-unit">Näher ansehen</button></section>
+<aside id="mobile-supply" aria-label="Sofortnachschub"></aside>
 <footer class="command-deck ceramic" id="command-deck">
  <section class="production" id="production-panel" aria-label="Eigene Fabriken"><div class="deck-heading"><strong>FABRIKEN <span id="factory-summary"></span></strong><small id="reserved"></small></div><div id="factory-cards"></div></section>
  <div class="deck-bottom">
   <button id="economy"></button>
-  <section class="supply-tray" aria-label="Sofortnachschub"><div class="supply-heading"><strong id="supply-title">NACHSCHUB</strong><small id="supply-status"></small></div><div id="supply-units"></div></section>
+  <section class="supply-tray" aria-label="Sofortnachschub"><div class="supply-heading"><span class="supply-label">Nachschub</span><strong id="supply-title">NACHSCHUB</strong><small id="supply-status"></small></div><div id="supply-units"></div></section>
  </div>
 </footer>
-<div id="supply-targeting" class="ceramic" hidden aria-live="polite"><span></span><button id="cancel-supply" aria-label="Nachschubauswahl abbrechen">×</button></div>
+<div id="supply-targeting" class="ceramic" hidden aria-live="polite"><span></span><div id="supply-lanes" hidden><button data-supply-lane="0">← West</button><button data-supply-lane="1">Ost →</button></div><button id="cancel-supply" aria-label="Nachschubauswahl abbrechen">×</button></div>
 <section class="ceramic result-panel" id="match-result" hidden aria-live="polite"><small>MISSION BEENDET</small><h1 id="result-title"></h1><p id="result-details"></p><button id="result-next" class="primary"></button><button id="result-menu">Zum Hauptmenü</button></section>
 </div>
 <section id="main-menu" class="menu-layer" aria-label="Hauptmenü">

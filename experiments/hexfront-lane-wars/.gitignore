@@ -44,3 +44,9 @@ docs/compact-hud/*.png
 !docs/compact-hud/desktop-order.png
 docs/compact-hud/full-match/*.png
 docs/compact-hud/local-final/*.png
+
+# Touch QA captures are reproducible; retain the main portrait and zoom examples.
+docs/mobile-touch/**/*.png
+docs/mobile-touch/*.png
+!docs/mobile-touch/central-390x844.png
+!docs/mobile-touch/pinch-390x844.png

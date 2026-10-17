@@ -55,3 +55,18 @@ meter{display:block;width:76px;height:6px;margin-top:5px;accent-color:#ba853f}.b
 
 .production-count{display:none}
 @media(max-width:760px) and (orientation:portrait){.production-count{display:block;position:absolute;top:4px;right:4px;font-size:9px;color:#6a725f}.factory-card.pending .pending-dot{top:21px}}
+
+/* Touch: keep the central battle clear, with reinforcement types on the outer edge. */
+#mobile-supply,.supply-label{display:none}#supply-lanes{display:flex;gap:5px}#supply-lanes button{font-size:11px;white-space:nowrap;padding:0 10px}
+@media(max-width:760px),(max-height:500px) and (max-width:1000px){
+ #fronts{display:none}
+ #mobile-supply{display:block;position:absolute;right:max(8px,env(safe-area-inset-right));top:calc((var(--hud-bottom) + 100dvh - var(--dock-height) - var(--dock-bottom))/2);transform:translateY(-50%);width:64px;z-index:7;pointer-events:none}
+ #mobile-supply .supply-tray{min-width:0;width:100%;padding:5px 4px;gap:4px;background:linear-gradient(130deg,#fcf7eb,#f0e7d6);border:1px solid #cabea7;border-radius:13px;box-shadow:inset 0 1px #fff,0 4px 12px #26352b22;pointer-events:auto}
+ #mobile-supply .supply-heading{display:contents}#mobile-supply .supply-label{display:block;order:0;font-size:9px;text-align:center;font-weight:650}#mobile-supply #supply-title{order:1;text-align:center;font-size:10px;letter-spacing:0}#mobile-supply #supply-status{order:3;text-align:center;font-size:9px;min-height:12px}
+ #mobile-supply #supply-units{order:2;flex-direction:column;gap:4px}#mobile-supply #supply-units button{width:100%;min-height:48px;flex-direction:column;padding:2px;gap:0}#mobile-supply .unit-portrait{width:30px;height:30px}#mobile-supply #supply-units small{font-size:9px}
+ .command-deck{display:flex;gap:6px;align-items:stretch}.command-deck .production{flex:1;min-width:0}.command-deck .deck-bottom{margin:0;padding:0;border:0;flex:none;width:62px;align-items:stretch}.command-deck .deck-bottom:has(#economy[hidden]){display:none}#economy{width:100%;min-width:0;min-height:54px;padding:5px;text-align:center;display:flex;flex-direction:column;justify-content:center}#economy strong{font-size:11px}#economy small{font-size:9px;line-height:1.4}
+ #supply-targeting{flex-wrap:wrap;justify-content:center;gap:5px}#supply-targeting>span{flex:1 0 calc(100% - 50px)}#supply-targeting #cancel-supply{position:absolute;right:3px;top:3px}#supply-targeting>span{padding-right:30px}
+ .order-panel,.unit-inspector{z-index:9}
+}
+
+@media(max-width:760px) and (orientation:portrait){.route-button{width:calc(100% - 4px);margin:0 2px 4px}}
