@@ -68,3 +68,5 @@ Nach der Reichweitenänderung: **90/90 Regeltests bestanden**, Railgun-Animation
 Finaler statischer Build mit 4,8 Reichweite: vollständige HUD-Partie gewonnen nach 218,10 s; drei Gegnervergleiche stimmen exakt mit Node überein (Sieg 371,70 s, Spiegelung nach 720 s offen, Niederlage 695,15 s). Ohne Spielerbefehle Niederlage nach 153,50 s. Hochformat-Touchprüfung bestanden. Rohdaten: central-range/results.json.
 
 Auswahlregression behoben: Instanz-Grenzkugeln werden beim Anklicken neu berechnet, weil Animation, Bewegung und Detailwechsel sie verändern. Reale Railgun-Auswahl und Reichweitenanzeige sind bei Übersicht und Nahansicht geprüft. Keine zusätzliche Arbeit pro Animationsframe.
+
+Öffentlich geprüft: Laufzeitstand a2d2809. Sechs echte GLB-Clips im Viewer, GLB/LOD/Blender-Downloads bytegleich, animierte Fabrikausfahrt und Modellklick mit Anzeige 4,8. Die vollständige Online-Partie endet nach 235,95 s durch HQ-Zerstörung und zeigt den Siegschirm. Keine Browser-Ausnahmen. Details: public.json.

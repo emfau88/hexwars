@@ -4,9 +4,9 @@ Eine vollständige Partie Mensch gegen KI auf einer zentralen Lane: vier Fabrikp
 
 ## Spielen
 
-**[▶ Zentrale Front im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/1e8467ebb8fd74eeba4f33d15fcfc56e0362db1a/experiments/hexfront-lane-wars/index.html)** · **[Aktuelle Cooldown-Änderung und Tests](docs/SUPPLY-30.md)**
+**[▶ Zentrale Front im Browser spielen](https://rawcdn.githack.com/emfau88/hexwars/a2d2809dd76efe15d71eab528103259668aa0f24/experiments/hexfront-lane-wars/index.html)** · **[Railgun-Animationen, Reichweite und Tests](docs/railgun-animation/REPORT.md)**
 
-Öffentlicher Laufzeitstand `1e8467e`, ohne lokalen Server. Falls ein Hinweis erscheint: **Open the page** anklicken.
+Öffentlicher Laufzeitstand `a2d2809`, ohne lokalen Server. Falls ein Hinweis erscheint: **Open the page** anklicken.
 
 ```powershell
 node scripts/serve.mjs
@@ -31,7 +31,7 @@ HQs haben in neuen zentralen Partien 800 LP und verursachen 2 Schaden/s. Ausrüc
 
 ## Animierte Railgun
 
-Das freigegebene vierbeinige GLB ist im Spiel eingebaut: Walk, Idle, Charge, Attack, Hit und Death, mit einzelnen Gelenken, sichtbarer Ladung, synchronem Rückstoß und Zusammenbruch. **[Railgun-Animationen prüfen](railgun-viewer.html)** · [GLB, Blender-Datei, Performance und Tests](docs/railgun-animation/REPORT.md). Die ursprüngliche [Modellfreigabe](railgun-preview.html) bleibt separat erhalten.
+Das freigegebene vierbeinige GLB ist im Spiel eingebaut: Walk, Idle, Charge, Attack, Hit und Death, mit einzelnen Gelenken, sichtbarer Ladung, synchronem Rückstoß und Zusammenbruch. **[Railgun-Animationen prüfen](https://rawcdn.githack.com/emfau88/hexwars/a2d2809dd76efe15d71eab528103259668aa0f24/experiments/hexfront-lane-wars/railgun-viewer.html)** · [GLB, Blender-Datei, Performance und Tests](docs/railgun-animation/REPORT.md). Die ursprüngliche [Modellfreigabe](railgun-preview.html) bleibt separat erhalten.
 
 Reichweite in **Zentrale Front: 4,8 statt 4,0 (+20 %)**, auch beim Fortsetzen alter zentraler Standardspielstände. Alle anderen Gameplaywerte bleiben unverändert. Die größere Reichweite beeinflusst einige Referenzpartien deutlich; [Reichweiten-Audit](docs/railgun-animation/range-audit.json).
 
@@ -39,7 +39,7 @@ Reichweite in **Zentrale Front: 4,8 statt 4,0 (+20 %)**, auch beim Fortsetzen al
 
 Der originale Mech besitzt jetzt bewegliche mechanische Gelenke, Walk/Idle/Attack/Hit/Death und unabhängige Animationen im laufenden Spiel. [Animierten Mech drehen und prüfen](https://rawcdn.githack.com/emfau88/hexwars/1e8467ebb8fd74eeba4f33d15fcfc56e0362db1a/experiments/hexfront-lane-wars/mech-viewer.html) · [GLB, Blender-Datei, Performance und Testbericht](docs/mech-animation/REPORT.md). Gameplay und Fabrikmodell bleiben unverändert.
 
-## Aktuelle Änderung
+## Fabriken und Sofortnachschub
 
 Der Nachschub-Cooldown in Zentrale Front beträgt jetzt **30 Sekunden** für beide Fraktionen, auch beim Fortsetzen älterer Spielstände. Kosten, Wellen und alle übrigen Spielwerte bleiben unverändert. [Prüfbericht](docs/SUPPLY-30.md).
 

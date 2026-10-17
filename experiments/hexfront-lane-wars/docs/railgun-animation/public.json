@@ -1,0 +1,46 @@
+{
+  "base": "https://rawcdn.githack.com/emfau88/hexwars/a2d2809dd76efe15d71eab528103259668aa0f24/experiments/hexfront-lane-wars/",
+  "checks": [
+    "Public six-clip viewer, team comparison; GLB, LOD and Blender downloads byte-identical",
+    "Public game walks articulated Railguns from factories; actual model picking displays range 4.8; original Mech/factory preserved",
+    "Public full match reaches real HQ destruction and victory screen"
+  ],
+  "result": {
+    "result": "orange",
+    "time": 235.95000000000002,
+    "waves": 12,
+    "peakUnits": 22,
+    "hq": {
+      "orange": 800,
+      "blue": 0
+    },
+    "metrics": {
+      "orange": {
+        "spent": 780,
+        "earned": 658.92,
+        "produced": 44,
+        "hqDamage": 800,
+        "builds": 2,
+        "refits": 2,
+        "laneChanges": 0,
+        "supplies": 2,
+        "economyAt": 80.10000000000001,
+        "credits": 158.92
+      },
+      "blue": {
+        "spent": 730,
+        "earned": 546.24,
+        "produced": 86,
+        "hqDamage": 0,
+        "builds": 2,
+        "refits": 3,
+        "laneChanges": 0,
+        "supplies": 1,
+        "economyAt": 174,
+        "credits": 96.24
+      }
+    },
+    "lateOrders": 10
+  },
+  "errors": []
+}
