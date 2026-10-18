@@ -16,16 +16,16 @@ export class FactoryWaveRings {
     uniform float progress,warning,flash;
     void main(){
      float r=length(point);
-     float edge=(1.0-smoothstep(.97,1.0,r))*smoothstep(.55,.58,r);
+     float edge=(1.0-smoothstep(.97,1.0,r))*smoothstep(.69,.72,r);
      if(edge<.001)discard;
      float angle=mod(atan(point.x,point.y)+6.2831853,6.2831853)/6.2831853;
-     float band=smoothstep(.62,.65,r)*(1.0-smoothstep(.87,.90,r));
+     float band=smoothstep(.74,.77,r)*(1.0-smoothstep(.90,.93,r));
      float filled=step(angle,progress);
-     vec3 ceramic=vec3(.78,.81,.78);
+     vec3 ceramic=vec3(.10,.13,.11);
      vec3 track=vec3(.035,.065,.075);
-     vec3 ink=mix(team,vec3(1.0),max(warning*.36,flash*.85));
+     vec3 ink=mix(team,vec3(1.0),max(warning*.18,flash*.40));
      vec3 color=mix(ceramic,mix(track,ink,filled),band);
-     gl_FragColor=vec4(color,edge*.96);
+     gl_FragColor=vec4(color,edge*.93);
      #include <colorspace_fragment>
     }`
   })]));
@@ -47,9 +47,9 @@ export class FactoryWaveRings {
    const ring=this.items.get(id);
    ring.visible=match.phase==='running'&&!!match.players[factory.owner].factories[factory.slot];
    // Screen-facing and pixel-sized: the circular indicator stays legible in portrait.
-   const diameter=T.MathUtils.clamp(pixelsPerUnit*1.05,30,38)*(1+flash*.08);
+   const diameter=T.MathUtils.clamp(pixelsPerUnit*.77,22,28)*(1+flash*.03);
    ring.position.copy(factory.root.position);ring.position.y+=2.65;
-   this.up.set(0,1,0).applyQuaternion(camera.quaternion);ring.position.addScaledVector(this.up,diameter*.75/pixelsPerUnit);
+   this.up.set(0,1,0).applyQuaternion(camera.quaternion);ring.position.addScaledVector(this.up,Math.max(24,diameter*.75)/pixelsPerUnit);
    ring.quaternion.copy(camera.quaternion);ring.scale.setScalar(diameter/(2*pixelsPerUnit));
    ring.userData={progress,remaining,flash,warning,diameter};
   }

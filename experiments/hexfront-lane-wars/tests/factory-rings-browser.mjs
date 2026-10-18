@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import {chromium} from '@playwright/test';
-const base=process.env.PUBLIC_PLAY_URL||'http://127.0.0.1:4181/',out=process.env.RINGS_OUTPUT||'docs/factory-rings/local';
+const base=process.env.PUBLIC_PLAY_URL||'http://127.0.0.1:4181/',out=process.env.RINGS_OUTPUT||'docs/factory-rings-subtle/local';
 await fs.mkdir(out,{recursive:true});const browser=await chromium.launch({headless:true,channel:'chromium'}),checks=[],errors=[];
 try{
  for(const viewport of [{width:1440,height:900},{width:390,height:844},{width:844,height:390}]){
@@ -13,11 +13,11 @@ try{
    const period=mission==='central'?20:15;
    const expected=await p.evaluate(()=>Object.values(__LANE_MATCH__.snapshot().players).reduce((n,p)=>n+p.factories.filter(Boolean).length,0));
    const sample=async seconds=>{await p.evaluate(s=>__LANE_MATCH_QA__.advance(s),seconds);return p.evaluate(()=>__LANE_MATCH__.diagnostics().waveRings);};
-   let rings=await sample(period/2);let visible=rings.filter(r=>r.visible);assert.equal(visible.length,expected);assert.ok(visible.every(r=>Math.abs(r.progress-.5)<.001&&r.diameter>=30&&r.warning===0));
+   let rings=await sample(period/2);let visible=rings.filter(r=>r.visible);assert.equal(visible.length,expected);assert.ok(visible.every(r=>Math.abs(r.progress-.5)<.001&&r.diameter>=22&&r.diameter<=28&&r.warning===0));
    const paused=await p.evaluate(()=>__LANE_MATCH__.snapshot());await p.waitForTimeout(150);assert.deepEqual(await p.evaluate(()=>__LANE_MATCH__.snapshot()),paused);
    await p.screenshot({path:out+'/'+mission+'-half-'+viewport.width+'.jpg',quality:85});
    rings=await sample(period/2-2);visible=rings.filter(r=>r.visible);assert.ok(visible.every(r=>r.warning>0&&Math.abs(r.remaining-2)<.001));await p.screenshot({path:out+'/'+mission+'-ready-'+viewport.width+'.jpg',quality:85});
-   rings=await sample(2);visible=rings.filter(r=>r.visible);assert.ok(visible.every(r=>r.flash>.99&&r.progress<.001));await p.screenshot({path:out+'/'+mission+'-spawn-'+viewport.width+'.jpg',quality:85});
+   rings=await sample(2);visible=rings.filter(r=>r.visible);assert.ok(visible.every(r=>r.flash>.99&&r.progress<.001&&r.diameter<=28.85));await p.screenshot({path:out+'/'+mission+'-spawn-'+viewport.width+'.jpg',quality:85});
    rings=await sample(1);assert.ok(rings.filter(r=>r.visible).every(r=>r.flash===0&&Math.abs(r.progress-1/period)<.001));
    checks.push({viewport,mission,visible:visible.length,minDiameter:Math.min(...visible.map(r=>r.diameter)),synchronized:true,paused:true,warning:true,spawnPulse:true});
   }
