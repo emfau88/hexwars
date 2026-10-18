@@ -17,3 +17,9 @@ Die Mindestgröße von 22 Pixel bleibt auch auf Mobile erhalten. Ein Mindestabst
 ![Querformat](local/central-ready-844.jpg)
 
 [Lokale Prüfergebnisse](local/results.json)
+
+## Veröffentlichung
+
+Laufzeitstand `8b043347f01102b87f478848769364ef7bfaa78f`, ausschließlich auf `codex/lane-wars`. Beide README-Playlinks zeigen auf diesen Stand.
+
+Auch die [öffentliche Browserprüfung](public/results.json) ist bestanden: Desktop sowie Mobile-Hoch- und Querformat, alle drei Missionen, Ringzustände und unveränderter Matchzustand. Keine Browser- oder Shaderfehler.
