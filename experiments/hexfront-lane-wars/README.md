@@ -1,5 +1,7 @@
 # HEXFRONT Lane Wars · Zentrale Front
 
+**Aktiver 3D-Entwicklungsbranch: `codex/lane-wars`.** 3D-Diorama und Mixed Squads bleiben als eigene Spielverzeichnisse und unter veröffentlichten Archiv-Tags erhalten. [Alle Varianten und Archivstände](../../README.md#3d-entwicklung-und-archiv).
+
 [![▶ Aktuellen HEXFRONT-Stand im Browser spielen](public/ui/play-lane-wars.svg)](https://rawcdn.githack.com/emfau88/hexwars/8b043347f01102b87f478848769364ef7bfaa78f/experiments/hexfront-lane-wars/index.html)
 
 ## [▶ JETZT SPIELEN – aktueller Lane-Wars-Build](https://rawcdn.githack.com/emfau88/hexwars/8b043347f01102b87f478848769364ef7bfaa78f/experiments/hexfront-lane-wars/index.html)

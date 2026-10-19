@@ -52,23 +52,34 @@ node scripts/serve.mjs
 
 Historische Vorschau: [M2.1 mit Mobile-HUD](https://rawcdn.githack.com/emfau88/hexwars/5016cb1caffc011a5dcd4df34f648994e86f724c/experiments/hexfront-lane-wars/index.html). Die folgenden älteren HEXFRONT-Varianten bleiben unverändert.
 
-## Mixed Squads — ältere Variante
+## 3D-Entwicklung und Archiv
+
+**Aktiver 3D-Entwicklungsbranch: [`codex/lane-wars`](https://github.com/emfau88/hexwars/tree/codex/lane-wars).** Die Entwicklung verlief von 3D-Diorama über Mixed Squads zu Lane Wars; sämtliche Vorgänger-Commits sind darin enthalten. Die beiden früheren Entwicklungsbranches wurden am 19. Oktober 2026 durch veröffentlichte, annotierte Archiv-Tags ersetzt.
+
+| Erhaltene Variante | Archiv des letzten Branchstands | Verzeichnis im aktiven Branch |
+| --- | --- | --- |
+| 3D-Diorama / Field Operations | [`archive/hexfront-3d-diorama`](https://github.com/emfau88/hexwars/tree/archive/hexfront-3d-diorama) · `b4f3dd0` | [`experiments/hexfront-3d`](experiments/hexfront-3d) |
+| Mixed Squads | [`archive/mixed-squads`](https://github.com/emfau88/hexwars/tree/archive/mixed-squads) · `f187bc3` | [`experiments/hexfront-mixed-squads`](experiments/hexfront-mixed-squads) |
+
+Alle Spielvarianten, Modelle, Kampflabor und historischen Vorschauen bleiben erhalten. Die bestehenden Playlinks verwenden feste Commits und benötigen die alten Branchnamen nicht. `main`, das ursprüngliche Spiel und die Portal-Arbeiten werden durch diese Archivierung nicht verändert.
+
+### Mixed Squads — archivierte Variante
 
 **[Mixed Squads im Browser starten](https://rawcdn.githack.com/emfau88/hexwars/3e514efbe53e463c4e844ddb676ce9da72daaad6/experiments/hexfront-mixed-squads/preview/index.html)**
 
-Vorschau für **`experiment/mixed-squads`**: drei bildschirmfüllende Landschaften, Drohnen und Mechs, cozy Sci-Fi-Menüs und HUD, klarere Hexkonturen und Fraktionsfarben. Falls der Vorschauhost einen Hinweis zeigt, **Open the page** anklicken. Der Link ist auf den geprüften Spielstand `3e514ef` festgelegt.
+Vorschau der archivierten **Mixed-Squads-Variante**: drei bildschirmfüllende Landschaften, Drohnen und Mechs, cozy Sci-Fi-Menüs und HUD, klarere Hexkonturen und Fraktionsfarben. Falls der Vorschauhost einen Hinweis zeigt, **Open the page** anklicken. Der Link ist auf den geprüften Spielstand `3e514ef` festgelegt.
 
 **[22 Screenshots und Analyse für die weitere Review](experiments/hexfront-mixed-squads/docs/review-2026-10-13)** · [Screenshot-Galerie öffnen](https://rawcdn.githack.com/emfau88/hexwars/3e514efbe53e463c4e844ddb676ce9da72daaad6/experiments/hexfront-mixed-squads/docs/review-2026-10-13/index.html) · [Start, Steuerung und Prüfungen](experiments/hexfront-mixed-squads/README.md)
 
 28 Logiktests und drei Browser-Prüfungen bestanden; alle drei Maps auf Desktop und mobilen Bildschirmformaten geprüft. Die ursprünglichen Spielvarianten und ihre Veröffentlichung bleiben unverändert. Die folgenden Links gehören zu diesen älteren Varianten.
 
-## Isolated 3D experiment — Field Operations
+### 3D-Diorama / Field Operations — archivierte Variante
 
 Three playable missions and a redesigned full-screen campaign menu with real 3D map previews, saved unlocks and replay. The original Morgenwacht battlefield is preserved. Windpass adds a canyon with two routes; Auenstrom adds three river crossings.
 
-**[Play the three-mission campaign](https://rawcdn.githack.com/emfau88/hexwars/a1ad71d0361d552086896b68566bbe2bfd26574e/experiments/hexfront-3d/preview/index.html)** · [Previous economy](https://rawcdn.githack.com/emfau88/hexwars/a1ad71d0361d552086896b68566bbe2bfd26574e/experiments/hexfront-3d/preview/index.html?economy=legacy-local) · [Experiment branch](https://github.com/emfau88/hexwars/tree/experiment/hexfront-3d-diorama). If the host shows a notice, click **Open the page**.
+**[Play the three-mission campaign](https://rawcdn.githack.com/emfau88/hexwars/a1ad71d0361d552086896b68566bbe2bfd26574e/experiments/hexfront-3d/preview/index.html)** · [Previous economy](https://rawcdn.githack.com/emfau88/hexwars/a1ad71d0361d552086896b68566bbe2bfd26574e/experiments/hexfront-3d/preview/index.html?economy=legacy-local) · [Archived source](https://github.com/emfau88/hexwars/tree/archive/hexfront-3d-diorama). If the host shows a notice, click **Open the page**.
 
-Runtime commit: `a1ad71d0361d552086896b68566bbe2bfd26574e`. The pinned preview becomes available after this branch is pushed; local start works independently of GitHub.
+Runtime commit: `a1ad71d0361d552086896b68566bbe2bfd26574e`. The published preview is pinned to that commit and remains independent of the archived branch name; local start works independently of GitHub.
 
 **[Rotate all four supplied 3D models](https://rawcdn.githack.com/emfau88/hexwars/a1ad71d0361d552086896b68566bbe2bfd26574e/experiments/hexfront-3d/preview/public/models.html)** · [New HQ / supplied asset pass and comparisons](experiments/hexfront-3d/docs/SUPPLIED_ASSETS.md)
 

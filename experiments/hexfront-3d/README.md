@@ -1,5 +1,7 @@
 # HEXFRONT — Field Operations
 
+**Archivierte Variante.** Der letzte Stand des früheren 3D-Diorama-Branches ist unter [`archive/hexfront-3d-diorama`](https://github.com/emfau88/hexwars/tree/archive/hexfront-3d-diorama) (`b4f3dd0`) gesichert. Die laufende 3D-Entwicklung findet auf `codex/lane-wars` statt; dort bleibt dieses Spielverzeichnis ebenfalls erhalten. [Entwicklung und Archiv](../../README.md#3d-entwicklung-und-archiv).
+
 Drei spielbare 3D-Missionen. Neu integriert: das detaillierte freistehende HQ mit sauber geschlossenem Boden und Radaranimation, der gelieferte Hover-Bot und das Relais. Der Mech bleibt eine separate Modellstudie.
 
 - **Morgenwacht:** bestehende Festung unverändert, 37 Sektoren.
@@ -26,10 +28,10 @@ Spielstand: `a1ad71d0361d552086896b68566bbe2bfd26574e`. Der feste Testlink ist n
 
 Node.js 20 oder neuer. Das Experiment hat keine zur Laufzeit zu installierenden npm-Abhängigkeiten: Three.js und die benötigten Asset-Dateien sind versioniert und liegen lokal vor.
 
-Im vorhandenen vollständigen Arbeitsordner direkt mit `cd hexwars-art-publish/experiments/hexfront-3d`, `npm ci` und `npm run dev` starten. Ein eigener Checkout lässt sich so anlegen:
+Im vorhandenen vollständigen Arbeitsordner direkt mit `cd hexwars-art-publish/experiments/hexfront-3d`, `npm ci` und `npm run dev` starten. Ein eigener Checkout des eingefrorenen Archivstands lässt sich so anlegen (Git checkt den Tag ohne aktiven Entwicklungsbranch aus):
 
 ```sh
-git clone --branch experiment/hexfront-3d-diorama https://github.com/emfau88/hexwars.git
+git clone --branch archive/hexfront-3d-diorama https://github.com/emfau88/hexwars.git
 cd hexwars/experiments/hexfront-3d
 npm ci
 npm run dev
