@@ -4,6 +4,31 @@
 
 ## [▶ JETZT SPIELEN – aktueller Lane-Wars-Build](https://rawcdn.githack.com/emfau88/hexwars/8b043347f01102b87f478848769364ef7bfaa78f/experiments/hexfront-lane-wars/index.html)
 
+## Aktuelle Spielansichten
+
+Aufgenommen am **19. Oktober 2026** aus der unveränderten lokalen Spielfassung des verlinkten Laufzeitstands `8b04334`: aktuelle GLB-Roboter und Fabriken, kompakte Keramikleisten, runde Mobile-Nachschubbuttons und kleinere Produktionsringe. Die Gefechtsbilder zeigen dieselbe laufende Partie, für die Aufnahme pausiert.
+
+**Zentrale Front – Gefecht und Stützpunkte auf Desktop**
+
+![Aktuelles HEXFRONT Lane Wars: Mechs und Railguns im Gefecht, beide HQs mit Produktionsfabriken und kompakte Fabrikleiste](experiments/hexfront-lane-wars/docs/readme-gallery/gefecht-desktop.jpg)
+
+<table>
+  <tr>
+    <td width="65%" valign="top">
+      <p><strong>Kampfdetails – Mechs, Drohnen und Railgun-Doppelstrahlen</strong></p>
+      <img src="experiments/hexfront-lane-wars/docs/readme-gallery/kampfdetails.jpg" width="100%" alt="Vergrößerte echte Spielansicht mit Mechs, Drohnen und zwei schießenden Railguns">
+      <p><strong>Startaufstellung – Gegner und beide Startfabriken wählen</strong></p>
+      <img src="experiments/hexfront-lane-wars/docs/readme-gallery/startaufstellung.jpg" width="100%" alt="HEXFRONT-Startmenü mit Gegnerauswahl und frei wählbaren Produktionstypen der zwei Startfabriken">
+    </td>
+    <td width="35%" valign="top" align="center">
+      <p><strong>Smartphone-Hochformat</strong></p>
+      <img src="experiments/hexfront-lane-wars/docs/readme-gallery/gefecht-hochformat.jpg" width="280" alt="Aktuelles Mobile-HUD: randnahe Status- und Fabrikleiste, drei runde Nachschubbuttons und dezente Ringe über den Fabriken">
+      <p>Kompaktes HUD bei 390 × 844 Pixeln; Aufnahme aus der Browseremulation.</p>
+    </td>
+  </tr>
+</table>
+
+
 **Neu auf Mobile: mehr freie Sicht.** Randnahe, flachere HUD-Leisten und drei freie runde Nachschubbuttons mit radialem Cooldown. Die große rechte Platte entfällt. [Ansichten und Tests](experiments/hexfront-lane-wars/docs/mobile-discs/REPORT.md).
 
 **Nachschub als Fähigkeiten-Icons.** Große Roboterporträts, dunkler radialer Cooldown und zentrale Sekundenanzeige. Fehlende Credits erscheinen einmal unter dem Preis. Keramikoptik und Gameplay bleiben erhalten. [Ansichten und Tests](experiments/hexfront-lane-wars/docs/supply-abilities/REPORT.md).
@@ -99,7 +124,7 @@ HEXFRONT is a compact real-time tactics game for desktop browsers and mobile por
   <img src="./docs/portal/kongregate/hexfront-icon.png" width="625" alt="HEXFRONT portal artwork with orange and blue bases on a compact hex battlefield">
 </p>
 
-## Current screenshots
+## Ursprüngliches HEXFRONT – frühere Screenshots
 
 ### Campaign atlas
 
