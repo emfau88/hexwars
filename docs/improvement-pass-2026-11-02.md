@@ -83,3 +83,11 @@ Arbeitsgrundlage: [Verbesserungsplan](hexfront-verbesserungsplan-2026-11-02.md).
 - Kongregates öffentlich ausgelieferte HTML-/JS-Dateien geprüft: SDK dort vorhanden, aber Hostprüfung akzeptiert die echte `game324999.konggames.com`-Adresse nicht. Lokal fehlen außerdem SDK-Lader und Login-Neuübertragung. Korrigiert und durch acht gezielte Tests plus Browserablauf mit SDK-Ersatz abgesichert. Report: `kongregate-statistics-audit-2026-11-02.md`.
 - Keine neuen Upload-ZIPs erstellt. Vorhandene ZIPs enthalten die Nutzerkorrekturen noch nicht; kein Upload/keine Veröffentlichung. Menschliche Spieltests, physische Geräte und tatsächliche Portal-Annahme bleiben offen.
 - Aktuelle Ansichten unter `qa/improvement-level10/current-ice-*-de.png`; Änderungsübersicht in `improvement-release-notes-2026-11-02.md`. Der Verbesserungsplan wurde entsprechend nachgeführt.
+
+## Branch-Sicherung und öffentliche Handy-Testvorschau
+
+- Spieländerungen, Tests, Assets, Verbesserungsplan und manuelle Testcheckliste sind als `b46c11e` auf `codex/improve-mobile-onboarding-copy` gesichert und gepusht. Bestehende separate Experimente und Chat-Anhänge wurden nicht aufgenommen.
+- Auf Nutzerwunsch wurde eine unabhängig auf dem Handy erreichbare Browser-Vorschau erstellt. Die 106 Laufzeitdateien entsprechen bytegenau dem zuvor geprüften Standard-Produktions-Build; Debugfunktionen fehlen. Statischer Build unter `previews/hexfront-improvements-2026-11-02`, Vorschau-Commit `789a38c`.
+- Der Playlink nutzt dieselbe githack-Vorschau wie andere Spielvarianten im Repository und ist auf diesen Commit festgelegt. Er steht oben in der Branch-README; die manuelle Testcheckliste ist unmittelbar daneben verlinkt.
+- Den echten öffentlichen URL in Chromium bei 390/1440 Pixeln geöffnet, die reguläre Host-Zwischenseite bestätigt und Touch-Spielstart, Pause/Fortsetzen, Sprachwechsel, den alten 9/10-Spielstand und das Eis-Finale geprüft: keine Laufzeitfehler, keine fehlenden Assets. Die tatsächliche Hardwareprüfung bleibt beim Nutzer. Evidenz: `public-preview/results.json`.
+- Kein Merge nach `main`, keine Änderung der GitHub-Pages-Auslieferung und kein Kongregate-/Y8-/GameMonetize-Upload. Die Vorschau dient der ausstehenden manuellen Abnahme; lokale beziehungsweise Portal-Spielstände werden nicht automatisch auf den Vorschauhost übertragen.
