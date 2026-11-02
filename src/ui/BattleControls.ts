@@ -20,6 +20,7 @@ export class BattleControls {
   private readonly hold = document.getElementById('holdField') as HTMLButtonElement;
   private readonly status = document.getElementById('battleStatus')!;
   private readonly selection = document.getElementById('fieldStatus')!;
+  private readonly preview = document.getElementById('commandPreview')!;
   private readonly warning = document.getElementById('storageWarning')!;
   private readonly dialog = document.getElementById('pauseDialog') as HTMLDialogElement;
   private previousFocus: HTMLElement | null = null;
@@ -78,9 +79,9 @@ export class BattleControls {
     this.hold.textContent = t(owned && hex.supplyHeld ? 'battle.hold.on' : 'battle.hold.off');
     this.hold.title = t('battle.hold.help');
     this.selection.textContent = hex ? `${hex.col + 1}/${hex.row + 1} · ${Math.floor(hex.units)}` : t('battle.select');
-    const preview = document.getElementById('commandPreview')!;
-    preview.hidden = !this.renderer.commandPreview;
-    preview.textContent = this.renderer.commandPreview;
+    this.preview.hidden = !this.renderer.commandPreview;
+    // A live region must not be replaced every animation frame: announce only new amounts.
+    if (this.preview.textContent !== this.renderer.commandPreview) this.preview.textContent = this.renderer.commandPreview;
     const copy = {
       pauseButton: 'battle.pause', resumeButton: 'battle.resume', pauseRestart: 'battle.restart',
       pauseMap: 'battle.leave', pauseTitle: 'battle.paused', pauseHelp: 'battle.help',

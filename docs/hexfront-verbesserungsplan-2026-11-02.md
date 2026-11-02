@@ -7,6 +7,15 @@
 
 **Ziel:** Ein zuverlässig spielbares, verständlicheres und besser lesbares HEXFRONT mit sinnvoller automatischer Versorgung und einer abgeschlossenen Zehn-Level-Kampagne.
 
+**Nachtrag aus dem Handy-Test:** Das bei Ziehbewegungen gemeldete Hinweisflackern wurde reproduziert und behoben. Alle zehn Karten sind erneut in sieben Fenstergrößen und beiden Sprachen einschließlich Ziehbewegung geprüft (140 Fälle). Details und Vorschläge je Karte stehen in der [mobilen Kartenprüfung](mobile-kartenpruefung-2026-11-02.md). Kartenausschnitt und Vergrößerung sind noch nicht geändert; diese Designentscheidung und die erneute physische Abnahme bleiben offen.
+
+**Prüfumfang ab diesem Nachtrag:** Auf Nutzerwunsch künftig gängige Handygrößen (360×800, 390×844, 430×932), Tablet (768×1024) und Desktop (1440×900) verwenden. Zusätzliche Sondergrößen sind keine erforderliche Abnahme.
+
+- [x] Befehlsvorschau von der Hinweiszeile trennen, ohne Kartenhöhe während Aktionen zu verändern.
+- [x] Zehn Karten einzeln auf mobile Größenreserve und besondere Randbereiche prüfen.
+- [ ] Korrigierte Hinweiszeile auf dem tatsächlichen Handy erneut testen.
+- [ ] Über die vorgeschlagene Vergrößerung je Karte und kompaktere Hochkant-Bedienung entscheiden; erst danach umsetzen und prüfen.
+
 Dieser Plan enthält die im Chat ausgearbeiteten 13 Bulks mit offenen Checkboxen. Er ist die Arbeitsgrundlage für diesen neuen Verbesserungspass. Die älteren Dokumente `next-development-pass-plan.md` und `campaign-roadmap.md` bleiben historische Referenzen; deren Bulk-Nummern und Abschlussstände gelten nicht für diesen Plan.
 
 Der Nutzer hat am 2. November 2026 die Umsetzung mit gezielten Prüfungen beauftragt. Laufende Ergebnisse stehen in `improvement-pass-2026-11-02.md`. Veröffentlichungen erfolgen als gesonderter Auslieferungsschritt.

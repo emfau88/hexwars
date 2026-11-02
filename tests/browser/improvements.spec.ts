@@ -1,5 +1,34 @@
 import { expect, test } from '@playwright/test';
 
+test('repeated drag previews leave the coaching hint readable and the board stationary', async ({ page }) => {
+  await page.goto('/?unlock=1&autostart=1&level=3');
+  await expect(page.locator('#hint')).toContainText('choose GROUP');
+  await page.evaluate(() => window.__HEXFRONT__!.setOpponentEnabled(false));
+  const canvas = await page.locator('#gameCanvas').boundingBox();
+  const board = await page.evaluate(() => window.__HEXFRONT__!.getBoard());
+  const source = board.find(h => h.owner === 1 && h.terrain === 4)!;
+  const target = board.find(h => h.col === source.col && h.row === source.row - 1)!;
+  const originalHint = await page.locator('#hint').textContent();
+  for (let attempt = 0; attempt < 3; attempt++) {
+    await page.mouse.move(canvas!.x + source.x, canvas!.y + source.y);
+    await page.mouse.down();
+    await page.mouse.move(canvas!.x + target.x, canvas!.y + target.y, { steps: 6 });
+    await expect(page.locator('#commandPreview')).toBeVisible();
+    await expect(page.locator('#commandPreview')).toContainText('SEND');
+    await expect(page.locator('#hint')).toHaveText(originalHint!);
+    await expect(page.locator('#hint')).toHaveCSS('opacity', '1');
+    const hint = await page.locator('#hint').boundingBox();
+    const preview = await page.locator('#commandPreview').boundingBox();
+    expect(preview!.y + preview!.height).toBeLessThanOrEqual(hint!.y);
+    expect(await page.locator('#gameCanvas').boundingBox()).toEqual(canvas);
+    if (attempt < 2) await page.keyboard.press('Escape');
+    await page.mouse.up();
+    await expect(page.locator('#commandPreview')).toBeHidden();
+    await expect(page.locator('#hint')).toHaveCSS('opacity', '1');
+  }
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__!.getState().actions)).toBe(1);
+});
+
 test('an existing nine-mission save unlocks the ice finale and retains campaign completion', async ({ page }) => {
   await page.goto('/');
   await page.evaluate(() => localStorage.setItem('hexfront_campaign_progress_v2', JSON.stringify({

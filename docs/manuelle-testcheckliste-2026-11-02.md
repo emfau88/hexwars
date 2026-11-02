@@ -12,6 +12,8 @@ Stand: 2. November 2026. Für die nächste Testsitzung auf `codex/improve-mobile
 
 ## 2. Kampagne und Spielstände
 
+- [ ] **Handy-Nachprüfung der Hinweise:** Mehrmals ziehen, abbrechen und senden; besonders die Gruppen-Einführung in Level 4 prüfen. Die Truppenmenge steht in der schmalen Statuszeile, die Anleitung darunter wird nicht bei jedem Ziehen verdeckt. Die Karte springt dabei nicht. Auch 50 %, Gruppe und einen Rücklaufhinweis prüfen.
+
 - [ ] **Frischer Start:** Nur Level 1 ist freigeschaltet. Die erste Anweisung ist verständlich; vor dem ersten gültigen Befehl läuft die Schlacht noch nicht los.
 - [ ] **Alle zehn Level:** Jeden Sieg regulär erspielen. „Weiter“ und die Kampagnenkarte führen zur nächsten freigeschalteten Mission. Nach ausgewählten Siegen neu laden: Fortschritt und Bestzeit bleiben erhalten.
 - [ ] **Vor Level 9 gewonnen wurde:** Level 10 bleibt gesperrt. **Nach einem Sieg in Level 9:** Level 10 wird direkt angeboten und ist auf der Kampagnenkarte spielbar.
