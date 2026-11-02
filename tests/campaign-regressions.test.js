@@ -99,8 +99,8 @@ test('campaign state emblems stay compact and distinguish cleared, open and lock
   assert.match(atlasStyles, /\.mapNode\.comingSoon/);
 });
 
-test('unfinished maps stay visible but cannot be launched from campaign UI', () => {
-  assert.match(atlas, /RELEASED_CAMPAIGN_LEVELS = 9/);
+test('all ten maps are released while progression still controls launch availability', () => {
+  assert.match(atlas, /RELEASED_CAMPAIGN_LEVELS = 10/);
   assert.match(atlas, /comingSoon = levelIndex >= RELEASED_CAMPAIGN_LEVELS/);
   assert.match(campaignUi, /available = !comingSoon && unlocked/);
   assert.match(campaignUi, /nextButton\.hidden = !victory \|\| finalLevel \|\| !hasReleasedNextLevel/);
@@ -178,7 +178,8 @@ test('guardian shields use compact state art and keep their readable status abov
   const boardRenderer = read('../src/rendering/BoardRenderer.ts');
   for (const name of names) assert.match(structureRenderer, new RegExp(name.replace('.', '\\.')));
   assert.match(boardRenderer, /hex\.y - this\.radius \* 2\.08/);
-  assert.match(boardRenderer, /commandDockClearance/);
+  assert.doesNotMatch(boardRenderer, /commandDockClearance/);
+  assert.match(read('../index.html'), /<aside id="sidePanel">\s*<section id="commandDock"/);
 });
 
 test('illustrated maps draw grid contours only for playable cells', () => {

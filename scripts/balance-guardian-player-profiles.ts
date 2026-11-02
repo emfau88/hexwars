@@ -25,11 +25,11 @@ export function runGuardianPlayerProfiles(scenario: GuardianScenario = 'current'
 }
 
 export function summarizeGuardianPlayerProfiles(rows: readonly ProfileBalanceRow[]) {
-  return (['west', 'east'] as const).map((flank) => {
+  return (['west', 'east', null] as const).map((flank) => {
     const group = rows.filter((row) => row.firstNorthernFlank === flank);
     const victories = group.filter((row) => row.result === 'victory');
     return {
-      firstFlank: flank,
+      firstFlank: flank ?? 'not-reached',
       runs: group.length,
       wins: victories.length,
       guardianCaptures: group.filter((row) => row.guardianCaptureSeconds !== null).length,

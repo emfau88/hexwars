@@ -1,11 +1,13 @@
 import type { FeatureFlags, SendMode } from '../core/types';
+import { SafeStorage, browserStorage, type SettingsStorage } from './SafeStorage';
 
 export const SEND_MODE_STORAGE_KEY = 'hexfront:preferred-send-mode';
 
 const isSendMode = (value: string | null): value is SendMode => value === 'all' || value === 'half' || value === 'group';
 
 export class SendModePreferenceStore {
-  constructor(private readonly storage: Pick<Storage, 'getItem' | 'setItem'> | null = typeof localStorage === 'undefined' ? null : localStorage) {}
+  private readonly storage: SafeStorage;
+  constructor(storage: SettingsStorage | null = browserStorage()) { this.storage = new SafeStorage(storage); }
 
   load(): SendMode {
     try {

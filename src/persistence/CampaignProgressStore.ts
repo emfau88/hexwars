@@ -1,6 +1,7 @@
 import { SAVE_KEY } from '../core/config';
 import type { CampaignProgress } from '../core/types';
 import { LEVELS } from '../levels';
+import { SafeStorage, browserStorage, type SettingsStorage } from './SafeStorage';
 
 const blank = (): CampaignProgress => ({
   completed: LEVELS.map(() => false),
@@ -14,7 +15,8 @@ const blank = (): CampaignProgress => ({
 });
 
 export class CampaignProgressStore {
-  constructor(private readonly storage: Storage | null = typeof localStorage === 'undefined' ? null : localStorage) {}
+  private readonly storage: SafeStorage;
+  constructor(storage: SettingsStorage | null = browserStorage()) { this.storage = new SafeStorage(storage); }
 
   load(): CampaignProgress {
     try {
@@ -22,7 +24,10 @@ export class CampaignProgressStore {
       if (parsed && Array.isArray(parsed.completed) && Array.isArray(parsed.best)) {
         return {
           completed: LEVELS.map((_, index) => Boolean(parsed.completed?.[index])),
-          best: LEVELS.map((_, index) => Number(parsed.best?.[index]) || 0),
+          best: LEVELS.map((_, index) => {
+            const seconds = Number(parsed.best?.[index]);
+            return Number.isFinite(seconds) && seconds > 0 ? seconds : 0;
+          }),
           halfSendUsed: Boolean(parsed.halfSendUsed || parsed.completed?.[1]),
           guardianBriefingSeen: Boolean(parsed.guardianBriefingSeen || parsed.completed?.[4]),
           relayBriefingSeen: Boolean(parsed.relayBriefingSeen || parsed.completed?.[6]),

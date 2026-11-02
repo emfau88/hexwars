@@ -55,6 +55,10 @@ const bases = level.bases ?? { player: PLAYER_BASE, enemy: ENEMY_BASE };
 const safeAreas = [
   { kind: 'enemy-hq', owner: Owner.Enemy, ...bases.enemy, radius: 35 },
   { kind: 'player-hq', owner: Owner.Player, ...bases.player, radius: 35 },
+  ...hexes.filter(hex => hex.terrain === Terrain.Relay || hex.terrain === Terrain.Hill).map(hex => ({
+    kind: hex.terrain === Terrain.Relay ? 'relay' : 'hill', owner: Owner.Neutral,
+    col: hex.col, row: hex.row, radius: 30,
+  })),
   ...(level.structures ?? []).map((structure) => ({
     kind: structure.type, owner: structure.owner ?? Owner.Neutral,
     col: structure.col, row: structure.row, radius: radius * (structure.footprint ?? .78),

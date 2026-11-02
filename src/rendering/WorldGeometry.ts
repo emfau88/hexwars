@@ -37,7 +37,7 @@ export function calculateWorldGeometry(
   const byWidth = (safeWidth - padding * 2) / ((columns + .5) * horizontalFactor);
   const byHeight = (safeHeight - padding * 2) / (rows * 1.5 + .5);
   const desktopCap = safeWidth >= 1100 && safeHeight >= 780 ? 42 : 34;
-  const radius = Math.max(18, Math.min(safeWidth < 520 ? 31 : desktopCap, byWidth, byHeight));
+  const radius = Math.max(.1, Math.min(safeWidth < 520 ? 31 : desktopCap, byWidth, byHeight));
   const horizontal = horizontalFactor * radius;
   const vertical = 1.5 * radius;
   const gridWidth = (columns + .5) * horizontal;

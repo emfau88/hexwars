@@ -10,7 +10,11 @@ HEXFRONT is a compact real-time tactics game for desktop browsers and mobile por
 
 ## Current screenshots
 
-These captures show the current campaign presentation, the compact desktop command panel, guardian shields and the dual-relay battlefield.
+The November improvement pass adds protected supply, lossless overflow returns, tap/keyboard controls, pause, and the illustrated ice finale. Implementation and remaining external checks are tracked in [the improvement plan](docs/hexfront-verbesserungsplan-2026-11-02.md); reproducible strategy comparisons are in [the current balance report](docs/improvement-balance-2026-11-02.md).
+
+![The Ring ice finale with supply and hold controls](docs/qa/improvement-level10/ice-runtime-v2-mobile.png)
+
+The following captures document the preceding campaign presentation, guardian shields and the dual-relay battlefield.
 
 ### Current campaign and battles
 
@@ -50,7 +54,10 @@ The upload-ready portal package contains one 1000 × 800 icon and three 1600 × 
 
 [Play the current GitHub Pages build](https://emfau88.github.io/hexwars/)
 
-- Drag from an orange field to a reachable target.
+- Drag from your field to a reachable target, or tap the source and then its target.
+- Focus the board and use arrow keys plus Enter to select/send. Escape cancels a selection; `P` opens pause/help. Restart and leaving the mission are explicit actions in that menu.
+- Select a field and choose **HOLD HERE** to prevent automatic departures while still allowing manual commands. The global **SUPPLY** preference persists across missions and reloads. Switching it off leaves existing convoys in flight.
+- Pause/help also offers board enlargement; scroll or swipe to pan the enlarged board and use tap commands.
 - `100%` is the immediate default; your chosen send mode persists between missions and reloads.
 - Level II unlocks the tactical `50%` reserve send, while later missions add grouped sends and automatic supply.
 - Capture the blue base to win the mission.
@@ -59,10 +66,10 @@ The upload-ready portal package contains one 1000 × 800 icon and three 1600 × 
 
 HEXFRONT is a public, playable vertical slice and browser-portal release candidate with a production-safe build and upload artwork. It is not yet a finished commercial release.
 
-- Nine playable deterministic campaign levels plus a tenth coming-soon mission, with sequential unlocks and best-time persistence
+- Ten playable deterministic campaign levels, including the ice finale unlocked by completing Level 9, with sequential unlocks and best-time persistence
 - Real-time AI, combat, supply, reinforcement and visible endgame systems
 - Production terrain-atlas campaign menu with responsive mission dossiers and map previews
-- Desktop and mobile-portrait layouts with mouse, touch-drag and fullscreen support
+- Desktop and mobile layouts with drag, tap, keyboard, pause, zoom and fullscreen support
 - English by default with a persistent in-game `EN | DE` switch
 - Campaign-aligned victory, defeat, retry and next-mission flows
 - Connected water and shore rendering plus a restrained 16-asset environment set
@@ -75,9 +82,13 @@ The default `decor-v2` presentation uses mountains, marsh vegetation, snow and n
 
 Production builds ignore development query parameters and do not expose the `window.__HEXFRONT__` inspection API. Development and automated-test builds retain those tools for balancing, visual review and browser automation.
 
-Before a commercial release, the remaining priorities are human playtesting and balance evidence, keyboard/tap accessibility, a commercially cleared product name, final audio mix validation on physical devices and validation inside the target distribution portal.
+Before a commercial release, the remaining priorities are human playtesting, a commercially cleared product name, final audio mix validation on physical devices and validation inside the target distribution portal. Local browser emulation and simulations are documented separately from these external checks.
 
 ## Kongregate package
+
+The November 2 improvement pass is still a local test candidate. Existing upload ZIPs predate the latest movement and statistics fixes. Check the [active improvement plan](docs/hexfront-verbesserungsplan-2026-11-02.md) before rebuilding or publishing; a successful build is not release approval. The [Kongregate statistics audit](docs/kongregate-statistics-audit-2026-11-02.md) explains the confirmed live bug and the remaining portal test.
+
+Current local screenshots: [desktop ice finale](docs/qa/improvement-level10/current-ice-desktop-de.png), [mobile ice finale](docs/qa/improvement-level10/current-ice-mobile-de.png), both with German UI. See the [change summary and remaining checks](docs/improvement-release-notes-2026-11-02.md).
 
 Create a fresh portal build with:
 
@@ -97,7 +108,7 @@ Create the isolated Y8 build with:
 npm run package:y8
 ```
 
-The upload-ready artifact is `dist-y8/hexfront-y8.zip`. Only this build loads and initializes the Y8 SDK; the regular production and Kongregate packages remain Y8-free. Its `index.html` and `assets/` directory are stored at the ZIP root for a self-contained HTML5 upload.
+The build artifact is `dist-y8/hexfront-y8-improved-2026-11-02-r1.zip`. The release ID is also visible in Settings and stored in `build-info.json` inside the ZIP. Only this build loads and initializes the Y8 SDK; the regular production and Kongregate packages remain Y8-free. Its `index.html` and `assets/` directory are stored at the ZIP root for a self-contained HTML5 upload. The Y8 layout removes in-game fullscreen controls, keeps campaign navigation inside the viewport, and uses readable native mission buttons and a 14-pixel minimum for board number badges. Ads are requested after victory or defeat; Y8 decides whether an ad is delivered.
 
 ## GameMonetize package
 
@@ -107,7 +118,7 @@ Create the isolated GameMonetize build with:
 npm run package:gamemonetize
 ```
 
-The upload-ready artifact is `dist-gamemonetize/hexfront-gamemonetize.zip`. Only this build loads the GameMonetize SDK and requests one ad at the first mission start of a browser session. It does not request ads after victories or defeats. Main, Kongregate and Y8 builds remain GameMonetize-free.
+The build artifact is `dist-gamemonetize/hexfront-gamemonetize.zip`. Only this build loads the GameMonetize SDK and requests one ad at the first mission start of a browser session. It does not request ads after victories or defeats. Main, Kongregate and Y8 builds remain GameMonetize-free.
 
 ## Local development
 

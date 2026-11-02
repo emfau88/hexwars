@@ -5,7 +5,7 @@ import { LEVELS } from '../levels';
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const HTML_NS = 'http://www.w3.org/1999/xhtml';
 const ATLAS_ASPECT = 1468 / 1096;
-export const RELEASED_CAMPAIGN_LEVELS = 9;
+export const RELEASED_CAMPAIGN_LEVELS = 10;
 
 type AtlasPoint = { x: number; y: number };
 type AtlasStation = AtlasPoint & { levelIndex: number };
@@ -83,6 +83,15 @@ export class CampaignAtlas {
     }
 
     const nodes = svgNode('g', { id:'mapNodes', 'aria-label':this.i18n.t('campaign.atlasGroupAria') });
+    // Portal frames can be much smaller than the atlas's SVG viewBox. Native
+    // buttons keep labels and hit targets at their actual CSS pixel size.
+    this.body?.querySelector('.portalMissionPicker')?.remove();
+    const picker = this.svg.dataset.presentation === 'cards' ? document.createElement('div') : null;
+    if (picker) {
+      picker.className = 'portalMissionPicker';
+      picker.setAttribute('role', 'group');
+      picker.setAttribute('aria-label', this.i18n.t('campaign.atlasGroupAria'));
+    }
     const assetRoot = `${import.meta.env.BASE_URL}assets/ui/`;
     for (const { x, y, levelIndex } of layout.stations) {
       const foreign = svgNode('foreignObject', {
@@ -112,9 +121,28 @@ export class CampaignAtlas {
             : 'campaign.nodeLocked');
       button.innerHTML = `<img class="atlasStateAsset" src="${assetRoot}${icon}" alt="" aria-hidden="true" draggable="false"><span class="atlasLevelNumber">${String(levelIndex + 1).padStart(2, '0')}</span><span class="atlasNodeStatus" aria-hidden="true">${status}</span>`;
       button.addEventListener('click', () => onSelect(levelIndex));
+      if (picker) {
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.className = button.className;
+        card.dataset.level = String(levelIndex);
+        card.setAttribute('aria-label', button.getAttribute('aria-label')!);
+        card.setAttribute('aria-pressed', String(selected === levelIndex));
+        const number = document.createElement('b');
+        number.textContent = String(levelIndex + 1).padStart(2, '0');
+        const name = document.createElement('span');
+        name.className = 'portalMissionName';
+        name.textContent = this.i18n.text(LEVELS[levelIndex].short);
+        const state = document.createElement('small');
+        state.textContent = status;
+        card.append(number, name, state);
+        card.addEventListener('click', () => onSelect(levelIndex));
+        picker.append(card);
+      }
       foreign.append(button); nodes.append(foreign);
     }
     this.svg.append(nodes);
+    if (picker) this.body?.append(picker);
   }
 
   private finishBackdrop(loaded: boolean): void {

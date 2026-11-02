@@ -1,12 +1,13 @@
 import { GameState } from '../src/core/GameState';
 import { Owner } from '../src/core/types';
 import { LEVELS } from '../src/levels';
+import { positionFor, REFERENCE_WORLD_GEOMETRY } from '../src/rendering/WorldGeometry';
 
 type BalanceRow = { level: number; name: string; result: string | null; seconds: number; fields: string; forces: string };
 
 function run(level: number): BalanceRow {
   const game = new GameState();
-  game.start(level, (col, row) => ({ x: col * 50 + (row % 2 ? 25 : 0), y: row * 45 }));
+  game.start(level, (col, row) => positionFor(REFERENCE_WORLD_GEOMETRY, col, row));
   let nextDecision = 2.5;
   while (game.running && game.elapsed < 300) {
     game.update(.05); game.drainEvents();

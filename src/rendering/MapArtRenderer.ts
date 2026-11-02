@@ -8,7 +8,7 @@ export type PreparedMapStyle = 'classic' | 'modern' | 'failed';
 
 export const MAP_ART_RENDER_LAYERS = Object.freeze([
   'backdrop-bleed', 'map-core', 'water', 'shore', 'atmosphere', 'grid',
-  'territory-selection', 'structures', 'units-movement', 'gameplay-fx',
+  'territory-selection', 'structures', 'units-movement', 'gameplay-fx', 'field-strength',
 ]);
 
 export interface MapArtStatus {

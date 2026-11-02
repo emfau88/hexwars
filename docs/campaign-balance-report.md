@@ -2,6 +2,8 @@
 
 Stand: 2026-08-12
 
+Historischer Bericht. Die aktuelle Prüfung mit realer Geometrie, mehreren Strategien, gezieltem Sammeln und kostengünstigen HQ-Routen steht in [improvement-balance-2026-11-02.md](improvement-balance-2026-11-02.md).
+
 ## Methodik und Grenze
 
 Jedes Level wird deterministisch mit derselben Spielsimulation, realer Bewegung, Kampf, Wachstum und Supply gespielt. Ein schnelles kompetentes Spielermodell entscheidet ab 2,5 Sekunden ungefähr alle 1,4 Sekunden mit Skill 0,94; die Gegner-KI verwendet die echten Levelwerte. Das ist ein reproduzierbarer Smoke-Test für Blockaden, extreme Dauer und grobe Machtspitzen – kein Ersatz für Human-Playtests, Lesbarkeit oder subjektiven Spielspaß.

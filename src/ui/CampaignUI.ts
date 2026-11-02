@@ -227,7 +227,11 @@ export class CampaignUI {
     this.selectedMenuLevel = Math.max(0, Math.min(LEVELS.length - 1, index));
     const level = LEVELS[this.selectedMenuLevel]; const actIndex = campaignActForLevel(this.selectedMenuLevel); const act = CAMPAIGN_ACTS[actIndex];
     if (this.atlas.needsLayoutUpdate()) this.renderAtlas(this.selectedMenuLevel);
-    document.querySelectorAll<HTMLElement>('.mapNode').forEach((node) => node.classList.toggle('current', Number(node.dataset.level) === this.selectedMenuLevel));
+    document.querySelectorAll<HTMLElement>('.mapNode').forEach((node) => {
+      const selected = Number(node.dataset.level) === this.selectedMenuLevel;
+      node.classList.toggle('current', selected);
+      if (node.hasAttribute('aria-pressed')) node.setAttribute('aria-pressed', String(selected));
+    });
     required('menuActLabel').textContent = `${this.i18n.text(act.roman)} · ${this.i18n.text(act.name)}`;
     required('menuLevelName').textContent = this.i18n.text(level.name);
     required('menuLevelText').textContent = this.i18n.text(level.blurb);
@@ -341,6 +345,7 @@ export class CampaignUI {
     this.lastProgress = progress;
     const victory = state.result === 'victory';
     const finalLevel = state.currentLevel >= LEVELS.length - 1;
+    const campaignComplete = progress.completed.every(Boolean);
     const hasReleasedNextLevel = state.currentLevel + 1 < RELEASED_CAMPAIGN_LEVELS;
     const halfSendUnlock = victory && state.currentLevel === 0 && showHalfSendUnlock;
     this.halfSendUnlockVisible = halfSendUnlock;
@@ -362,9 +367,9 @@ export class CampaignUI {
       required('resultAdvanceName').textContent = this.i18n.t('result.unlock.name');
       required('resultAdvanceRule').textContent = this.i18n.t('result.unlock.detail');
     } else if (victory && finalLevel) {
-      required('resultAdvanceLabel').textContent = this.i18n.t('result.campaignComplete');
-      required('resultAdvanceName').textContent = 'HEXFRONT';
-      required('resultAdvanceRule').textContent = this.i18n.t('result.campaignCompleteSub');
+      required('resultAdvanceLabel').textContent = this.i18n.t(campaignComplete ? 'result.campaignComplete' : 'result.finaleWon');
+      required('resultAdvanceName').textContent = this.i18n.t('result.finaleTitle');
+      required('resultAdvanceRule').textContent = this.i18n.t('result.finaleStory');
     } else if (victory && !hasReleasedNextLevel) {
       const next = LEVELS[state.currentLevel + 1];
       required('resultAdvanceLabel').textContent = this.i18n.t('campaign.state.comingSoon');
@@ -379,14 +384,28 @@ export class CampaignUI {
     const nextButton = required<HTMLButtonElement>('nextLevelBtn');
     nextButton.hidden = !victory || finalLevel || !hasReleasedNextLevel;
     nextButton.textContent = this.i18n.t(halfSendUnlock ? 'result.unlock.continue' : 'result.next');
+    required('resultCampaignSummary').hidden = !victory || !finalLevel;
+    this.overlay.classList.toggle('campaignFinished', victory && finalLevel);
+    if (victory && finalLevel) {
+      required('campaignTotals').textContent = this.i18n.t('result.campaignTotals', {
+        count: progress.completed.filter(Boolean).length,
+        time: this.time(progress.best.reduce((sum, seconds) => sum + seconds, 0)),
+      });
+      const list = required('campaignBestTimes'); list.replaceChildren();
+      LEVELS.forEach((level, index) => {
+        const item = document.createElement('li');
+        item.textContent = `${this.i18n.text(level.short)} · ${progress.best[index] ? this.time(progress.best[index]) : '—'}`;
+        list.append(item);
+      });
+    }
     this.overlay.classList.toggle('victory', victory);
     this.overlay.classList.toggle('defeat', !victory);
     this.overlay.classList.add('show'); this.app.classList.add('resultOpen');
   }
 
-  showToast(message: string): void {
+  showToast(message: string, duration = 3000): void {
     this.toast.textContent = message; this.toast.classList.add('show'); clearTimeout(this.toastTimer);
-    this.toastTimer = window.setTimeout(() => this.toast.classList.remove('show'), 1700);
+    this.toastTimer = window.setTimeout(() => this.toast.classList.remove('show'), duration);
   }
 
   syncSound(enabled: boolean): void { for (const id of ['soundBtn', 'sideSoundBtn']) required(id).textContent = this.i18n.t(enabled ? 'settings.soundOn' : 'settings.soundOff'); }

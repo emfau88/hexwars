@@ -1,3 +1,5 @@
+import { SafeStorage } from '../persistence/SafeStorage';
+
 export type AudioCue = 'confirm' | 'navigate' | 'denied' | 'toggle' | 'send' | 'capture' | 'loss' | 'victory' | 'defeat';
 
 interface CueConfig {
@@ -23,6 +25,7 @@ const CUES: Record<AudioCue, CueConfig> = {
 };
 
 export class AudioController {
+  private readonly storage = new SafeStorage();
   enabled = this.loadEnabled();
   activated = false;
   private suspended = false;
@@ -103,10 +106,10 @@ export class AudioController {
   }
 
   private loadEnabled(): boolean {
-    try { return localStorage.getItem(STORAGE_KEY) !== 'off'; } catch { return true; }
+    return this.storage.getItem(STORAGE_KEY) !== 'off';
   }
 
   private saveEnabled(): void {
-    try { localStorage.setItem(STORAGE_KEY, this.enabled ? 'on' : 'off'); } catch { /* Keep the session setting. */ }
+    this.storage.setItem(STORAGE_KEY, this.enabled ? 'on' : 'off');
   }
 }

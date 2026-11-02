@@ -18,16 +18,19 @@ export function defenseMultiplier(hex: HexState): number {
   return 1;
 }
 
-export function resolveArrival(movement: ArmyMovement, target: HexState | null): void {
-  if (!target || !isPlayable(target)) return;
+/** Returns cargo that could not be delivered, for visible return/wait handling. */
+export function resolveArrival(movement: ArmyMovement, target: HexState | null): number {
+  if (!target || !isPlayable(target)) return movement.units;
   if (target.owner === movement.owner) {
-    target.units = Math.min(GAME_CONFIG.maxStack, target.units + movement.units);
-    target.flash = 0.15;
-    return;
+    const accepted = Math.min(movement.units, Math.max(0, GAME_CONFIG.maxStack - target.units));
+    target.units += accepted;
+    if (accepted > 0) target.flash = 0.15;
+    return movement.units - accepted;
   }
   target.siege ??= {};
   target.siege[movement.owner] = (target.siege[movement.owner] ?? 0) + movement.units;
   target.flash = 0.18;
+  return 0;
 }
 
 export function updateCombat(

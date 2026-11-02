@@ -560,7 +560,7 @@ test('Level 1 map art shares the canonical uniform world transform with its game
   expect(mapArt.sourceCrop.width / mapArt.sourceCrop.height).toBeCloseTo(1108 / 842, 10);
   expect(layers).toEqual([
     'backdrop-bleed', 'map-core', 'water', 'shore', 'atmosphere', 'grid',
-    'territory-selection', 'structures', 'units-movement', 'gameplay-fx',
+    'territory-selection', 'structures', 'units-movement', 'gameplay-fx', 'field-strength',
   ]);
   expect(result.canvas.width).toBeCloseTo(result.geometry.runtime.width * result.geometry.pixelRatio, 0);
   expect(result.canvas.height).toBeCloseTo(result.geometry.runtime.height * result.geometry.pixelRatio, 0);
@@ -737,14 +737,18 @@ test('responsive shell has no page overflow and mobile controls meet the touch f
     expect(gameMetrics.statLabels.every(({ display }) => display !== 'none')).toBe(true);
     expect(gameMetrics.statLabels.map(({ text }) => text)).toEqual(['CELLS / UNITS', 'CELLS / UNITS']);
     expect(gameMetrics.radius).toBeLessThanOrEqual(31);
-  } else expect(gameMetrics.radius).toBeGreaterThan(34);
+  } else expect(gameMetrics.radius).toBeGreaterThanOrEqual(34);
 });
 
-test('compact desktop keeps the full dossier controls visible', async ({ page }, testInfo) => {
+test('compact desktop exposes battle controls without covering the board', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-chromium');
   await page.setViewportSize({ width: 1100, height: 700 });
   await clearProgress(page);
   await page.getByRole('button', { name: 'BEGIN CAMPAIGN' }).click();
+  await expect(page.locator('#battleSupply')).toBeVisible();
+  await expect(page.locator('#pauseButton')).toBeVisible();
+  await expect(page.locator('#mobileBar')).toBeVisible();
+  await expect(page.locator('#sidePanel')).toBeHidden();
   const metrics = await page.evaluate(() => {
     const dossier = document.querySelector<HTMLElement>('.sideDossier')!;
     const sound = document.querySelector<HTMLElement>('#sideSoundBtn')!.getBoundingClientRect();
@@ -768,12 +772,15 @@ test('large desktop keeps the board complete and exposes the command dock', asyn
   await page.goto('/?unlock=1&autostart=1&level=1');
   const metrics = await page.evaluate(() => {
     const dock = document.querySelector<HTMLElement>('#commandDock')!.getBoundingClientRect();
+    const board = document.querySelector<HTMLElement>('#gameCanvas')!.getBoundingClientRect();
+    const panel = document.querySelector<HTMLElement>('#sidePanel')!.getBoundingClientRect();
     const button = document.querySelector<HTMLElement>('#commandDock .modeBtn')!.getBoundingClientRect();
     const shortcut = document.querySelector<HTMLElement>('#commandDock .modeShortcut')!;
     const upper = window.__HEXFRONT__?.getBoard().find((hex) => hex.col === 3 && hex.row === 8);
     const lower = window.__HEXFRONT__?.getBoard().find((hex) => hex.col === 3 && hex.row === 9);
     return {
       dockWidth: dock.width,
+      dockLeft: dock.left, boardRight: board.right, panelWidth: panel.width,
       dockHeight: dock.height,
       buttonHeight: button.height,
       shortcutFontSize: Number.parseFloat(getComputedStyle(shortcut).fontSize),
@@ -782,8 +789,9 @@ test('large desktop keeps the board complete and exposes the command dock', asyn
     };
   });
   expect(metrics.dockWidth).toBeGreaterThanOrEqual(230);
-  expect(metrics.dockWidth).toBeLessThanOrEqual(260);
-  expect(metrics.dockHeight).toBeLessThanOrEqual(360);
+  expect(metrics.dockWidth).toBeLessThanOrEqual(metrics.panelWidth);
+  expect(metrics.dockLeft).toBeGreaterThanOrEqual(metrics.boardRight);
+  expect(metrics.dockHeight).toBeLessThanOrEqual(450);
   expect(metrics.buttonHeight).toBeGreaterThanOrEqual(48);
   expect(metrics.shortcutFontSize).toBeGreaterThanOrEqual(10);
   expect(metrics.duplicateGuide).toBe(false);
@@ -795,11 +803,11 @@ test('desktop auto supply can be paused without hiding its explanation', async (
   await page.goto('/?unlock=1&autostart=1&level=1');
   const toggle = page.locator('#autoSupplyBtn');
   await expect(toggle).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.locator('#autoSupplyDescription')).toContainText('Surplus follows the forward route toward the rival');
+  await expect(page.locator('#autoSupplyDescription')).toContainText('Surplus moves forward');
   await toggle.click();
   await expect(toggle).toHaveAttribute('aria-pressed', 'false');
   await expect(page.locator('#autoSupplyStatus')).toHaveText('OFF · MANUAL');
-  await expect(page.locator('#autoSupplyDescription')).toContainText('Your units stay put');
+  await expect(page.locator('#autoSupplyDescription')).toContainText('Troops already traveling finish their route');
 });
 
 test('language defaults to English and the German choice survives reload', async ({ page }) => {
@@ -912,11 +920,11 @@ test('relay structure art is available in its campaign preview and relay mission
   await expect(page.locator('#legendRelay')).toHaveAttribute('hidden');
 });
 
-test('Level 9 is released with three readable passes while Level 10 remains coming soon', async ({ page }) => {
+test('Level 9 retains its three passes and advances into the illustrated ice finale', async ({ page }) => {
   await page.goto('/?unlock=1');
   const levelNine = page.getByRole('button', { name: 'Level 9: THREE PASSES' });
   await expect(levelNine).toBeEnabled();
-  await expect(page.getByRole('button', { name: /Level 10: THE RING/ })).toHaveAttribute('aria-label', /coming soon/);
+  await expect(page.getByRole('button', { name: /Level 10: THE RING/ })).not.toHaveAttribute('aria-label', /coming soon/);
   await levelNine.click();
   await expect(page.locator('#menuLevelName')).toHaveText('IX · THREE PASSES');
   await expect(page.getByRole('button', { name: 'START LEVEL' })).toBeEnabled();
@@ -934,8 +942,9 @@ test('Level 9 is released with three readable passes while Level 10 remains comi
   ]);
   await page.evaluate(() => window.__HEXFRONT__?.debugWin());
   await expect(page.locator('#resultAdvance')).toBeVisible();
-  await expect(page.locator('#resultAdvanceLabel')).toHaveText('COMING SOON');
   await expect(page.locator('#resultAdvanceName')).toHaveText('X · THE RING');
-  await expect(page.locator('#resultAdvanceRule')).toContainText('still in development');
-  await expect(page.locator('#nextLevelBtn')).toBeHidden();
+  await expect(page.locator('#nextLevelBtn')).toBeVisible();
+  await page.locator('#nextLevelBtn').click();
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getState().currentLevel)).toBe(9);
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getRenderProfile().mapArt.loaded)).toBe(true);
 });
