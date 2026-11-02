@@ -1,0 +1,60 @@
+/* Battle controls reserve layout space; no permanent panel covers a board cell. */
+#battleBar { flex:0 0 auto; display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:6px; padding:5px 10px; border-bottom:1px solid var(--line); background:#17231f; font-size:11px; }
+#battleBar[hidden],#storageWarning[hidden] { display:none; }
+#battleBar button,#pauseDialog button { min-height:44px; padding:8px 12px; border:1px solid #697b6b; border-radius:5px; background:#24382d; color:#f2ecda; font-family:inherit; font-size:12px; font-weight:700; line-height:1.25; cursor:pointer; }
+#battleBar button[aria-pressed="true"] { border-color:#e8c07d; color:#ffe2a9; background:#3b3927; }
+#battleBar button:disabled { opacity:.45; cursor:default; }
+#battleReadout { position:relative; display:flex; align-items:center; justify-content:space-between; flex:1 1 240px; min-width:0; gap:12px; }
+#battleStatus { font-variant-numeric:tabular-nums; }
+#fieldStatus { color:#c8d6c9; }
+#storageWarning { padding:4px 8px; background:#604a23; color:#fff2c9; text-align:center; font-size:11px; }
+#battleNotices { flex:0 0 auto; position:relative; min-height:42px; background:#17231f; }
+#battleNotices #hint,#battleNotices #toast { position:relative; inset:auto; transform:none; width:100%; max-width:none; margin:0; border:0; border-radius:0; padding:6px 12px; font-size:11px; line-height:1.35; text-align:center; }
+#battleNotices #toast { position:absolute; inset:0; display:grid; place-items:center; z-index:9; }
+#commandPreview { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:#17231f; color:#ffe2a9; font-size:inherit; white-space:nowrap; }
+#commandPreview[hidden] { display:none; }
+.menuOpen #battleNotices,.resultOpen #battleNotices { display:none; }
+#sidePanel #commandDock { position:relative; inset:auto; width:100%; max-width:none; display:block; margin:0 0 10px; transform:none; z-index:auto; }
+#sidePanel { min-width:0; }
+#gameCanvas { touch-action:none; }
+#stage.boardZoomed { overflow:auto; overscroll-behavior:contain; }
+#stage.boardZoomed #gameCanvas { touch-action:pan-x pan-y; }
+button:focus-visible,#gameCanvas:focus-visible { outline:3px solid #ffe2a9; outline-offset:-3px; }
+#pauseDialog { margin:auto; padding:24px; width:min(94vw,600px); max-height:90dvh; overflow:auto; border:1px solid #8e987e; border-radius:14px; background:#18271f; color:#efeddf; box-shadow:0 20px 70px #0008; }
+#pauseDialog::backdrop { background:#09150dcc; }
+#pauseDialog h2 { margin-bottom:14px; color:#e8c07d; }
+#pauseDialog #resumeButton { width:100%; background:#e8c07d; color:#16231a; font-weight:800; }
+#pauseHelp { margin:18px 0; font-size:14px; line-height:1.65; white-space:pre-line; }
+.pauseActions { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+#resultOverlay.campaignFinished .modalBox { max-height:92dvh; overflow:auto; }
+#resultCampaignSummary { margin:0 0 16px; padding:10px; border:1px solid #9ba68c; border-radius:8px; color:#233b36; font-size:12px; line-height:1.5; }
+#resultCampaignSummary[hidden] { display:none; }
+#resultLoadStatus { margin:0 0 12px; color:#8a3026; font-size:13px; line-height:1.4; }
+#resultLoadStatus[hidden] { display:none; }
+#resultOverlay button:disabled { cursor:progress; opacity:.75; }
+#resultCampaignSummary summary { cursor:pointer; padding:10px 0; font-weight:700; }
+#campaignBestTimes { padding-left:24px; }
+@media(max-width:1150px) {
+  #app #layout { grid-template-columns:minmax(0,1fr); }
+  #app #sidePanel { display:none; }
+  #app #mobileBar { display:grid; grid-template-columns:1.2fr 1.2fr 1.4fr .7fr .7fr .7fr; gap:5px; flex:0 0 auto; }
+  #app.menuOpen #mobileBar,#app.resultOpen #mobileBar { display:none; }
+  #mobileBar button { min-height:44px; }
+}
+@media(max-width:560px) {
+  #battleBar { display:grid; grid-template-columns:1fr 1fr 1fr; padding:4px 6px; gap:4px; }
+  #battleReadout { grid-column:1 / 4; grid-row:1; font-size:10px; }
+  #battleStatus { text-align:left; }
+  #fieldStatus { text-align:right; }
+  #battleSupply { grid-column:1; grid-row:2; }
+  #pauseButton { grid-column:2; grid-row:2; }
+  #holdField { grid-column:3; grid-row:2; }
+  #battleBar button { padding:6px; }
+  #battleNotices { min-height:40px; }
+  #battleNotices #hint { font-size:10px; padding:5px 8px; }
+  #holdField { min-height:44px; }
+  #pauseDialog { padding:16px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+}

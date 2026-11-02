@@ -134,6 +134,12 @@ export class GameState {
     return this.playerSupplyEnabled;
   }
 
+  toggleHold(hex: HexState): boolean {
+    if (hex.owner !== Owner.Player || !isPlayable(hex) || this.structureAt(hex.col, hex.row)?.type === 'guardian') return false;
+    hex.supplyHeld = !hex.supplyHeld;
+    return hex.supplyHeld;
+  }
+
   think(owner: Owner, skill: number, count = 1): number {
     const context: AIContext = {
       owner, elapsed: this.elapsed, endgameStage: this.endgameStage, hexes: this.hexes, structures: this.structures,
@@ -166,14 +172,16 @@ export class GameState {
       }
     }
     updateCombat(this.hexes, deltaSeconds, this.random, (target, oldOwner, newOwner) => {
+      target.supplyHeld = false;
       syncStructureCapture(this.structures, target, newOwner);
       if (newOwner === Owner.Player) this.captures += 1;
       this.events.push({ type: 'capture', detail: { oldOwner, newOwner, target } });
     }, (target, defendingOwner, requested) => absorbHqShield(this.structures, target, defendingOwner, requested),
     this.onCombatExchange ?? undefined);
     updateMovements(this.armies, this.hexes, deltaSeconds, (movement, target) => {
-      resolveArrival(movement, target);
-      if (target) this.events.push({ type: 'arrival', detail: { owner: movement.owner, target, kind: movement.kind } });
+      const remainder = resolveArrival(movement, target);
+      if (target && remainder < movement.units) this.events.push({ type: 'arrival', detail: { owner: movement.owner, target, kind: movement.kind } });
+      return remainder;
     });
     if (this.opponentEnabled && this.elapsed >= this.level.aiDelaySeconds) {
       this.aiTimerMs += deltaSeconds * 1000;

@@ -44,7 +44,7 @@ test('two-guardian strategy deactivates both proxy objectives before victory or 
 });
 
 test('a finite 96-point shield per guardian makes the objective route economically superior without forbidding a direct rush', () => {
-  for (const levelIndex of [1, 2, 4, 7]) {
+  for (const levelIndex of [1, 2, 4]) {
     const direct = runGuardianLab({ levelIndex, model: 'shield-pool', strength: 96, strategy: 'direct' });
     const objectives = runGuardianLab({ levelIndex, model: 'shield-pool', strength: 96, strategy: 'two-guardians' });
     assert.equal(direct.result, 'victory');

@@ -8,7 +8,7 @@ export type PreparedMapStyle = 'classic' | 'modern' | 'failed';
 
 export const MAP_ART_RENDER_LAYERS = Object.freeze([
   'backdrop-bleed', 'map-core', 'water', 'shore', 'atmosphere', 'grid',
-  'territory-selection', 'structures', 'units-movement', 'gameplay-fx',
+  'territory-selection', 'structures', 'units-movement', 'gameplay-fx', 'field-strength',
 ]);
 
 export interface MapArtStatus {
@@ -46,6 +46,12 @@ export class MapArtRenderer {
 
   supports(levelIndex: number): boolean {
     return this.mode !== 'classic' && !this.classicFallbackLevels.has(levelIndex) && mapArtForLevel(levelIndex) !== null;
+  }
+
+  preload(levelIndex: number): void {
+    // Request/decode the next map without starting a timeout or choosing a
+    // fallback before the player actually proceeds.
+    if (this.supports(levelIndex)) this.ensure(levelIndex);
   }
 
   async prepare(levelIndex: number, timeoutMs = 20_000): Promise<PreparedMapStyle> {

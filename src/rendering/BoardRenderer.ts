@@ -3,7 +3,7 @@ import { GAME_CONFIG } from '../core/config';
 import { hexDistance, isPlayable } from '../core/hex';
 import { Owner, Terrain, type HexState, type Point, type SendMode, type StructureState, type VisualVariant } from '../core/types';
 import { terrainCapacity } from '../systems/GrowthSystem';
-import { hqShield } from '../systems/StructureSystem';
+import { hqShield, linkedGuardians } from '../systems/StructureSystem';
 import { EffectsRenderer } from './EffectsRenderer';
 import { LandscapeRenderer } from './LandscapeRenderer';
 import { MAP_ART_RENDER_LAYERS, MapArtRenderer, type MapStyleMode, type PreparedMapStyle } from './MapArtRenderer';
@@ -27,7 +27,13 @@ export class BoardRenderer {
   dragPosition: Point | null = null;
   sendMode: SendMode = 'all';
   sendLabel = 'SEND';
+  returnLabel = 'RETURN';
+  commandPreview = '';
   shieldLabel = 'SHIELD';
+  /** Optional screen-pixel floor for small embedded portal viewports. */
+  minimumLabelPixels = 14;
+  keyboardFocus: HexState | null = null;
+  zoom = 1;
   readonly effects = new EffectsRenderer();
   private runtimeGeometry: WorldGeometry = calculateWorldGeometry(1, 1);
   private worldTransform: WorldTransform = transformBetween(REFERENCE_WORLD_GEOMETRY, this.runtimeGeometry);
@@ -45,6 +51,8 @@ export class BoardRenderer {
   private environmentLayerDirty = true;
   private lastEnvironmentFrame = -Infinity;
   private lastMapArtLevel = -1;
+  private readonly previousHqShields = new Map<string, number>();
+  private readonly shieldImpactUntil = new Map<string, number>();
 
   constructor(readonly canvas: HTMLCanvasElement, readonly stage: HTMLElement, visualVariant: VisualVariant = 'production', mapStyle: MapStyleMode = 'auto') {
     const context = canvas.getContext('2d', { alpha: true });
@@ -79,8 +87,14 @@ export class BoardRenderer {
     return layer;
   }
 
+  preloadLevel(levelIndex: number): void {
+    this.mapArt.preload(levelIndex);
+  }
+
   resize(): boolean {
-    const width = Math.max(1, this.stage.clientWidth); const height = Math.max(1, this.stage.clientHeight);
+    this.stage.classList.toggle('boardZoomed', this.zoom > 1);
+    const width = Math.max(1, Math.round(this.stage.clientWidth * this.zoom));
+    const height = Math.max(1, Math.round(this.stage.clientHeight * this.zoom));
     const ratio = Math.min(window.devicePixelRatio || 1, 2);
     if (width === this.width && height === this.height && ratio === this.pixelRatio) return false;
     this.width = width; this.height = height; this.pixelRatio = ratio;
@@ -169,6 +183,8 @@ export class BoardRenderer {
     const mapArtEnabled = state.hexes.length > 0 && this.mapArt.supports(state.currentLevel);
     if (this.lastMapArtLevel !== state.currentLevel) {
       this.lastMapArtLevel = state.currentLevel;
+      this.previousHqShields.clear();
+      this.shieldImpactUntil.clear();
       this.mapLayerDirty = true;
       this.environmentLayerDirty = true;
       this.lastEnvironmentFrame = -Infinity;
@@ -197,10 +213,27 @@ export class BoardRenderer {
     for (const army of state.armies) {
       this.context.save(); this.context.globalAlpha = army.kind === 'supply' ? .24 : .18; this.context.strokeStyle = army.kind === 'supply' ? '#e8c07d' : OWNER_COLORS[army.owner].edge;
       this.context.lineWidth = army.kind === 'supply' ? 2 : 1.5; this.context.beginPath(); this.context.moveTo(army.x0, army.y0); this.context.lineTo(army.cx, army.cy); this.context.stroke(); this.context.restore();
-      this.drawArmy(army.owner, army.units, army.cx, army.cy, army.kind === 'supply');
+      // Keep the convoy on its real path. Threshold-based badge avoidance made
+      // it jump sideways twice per field; field labels are already drawn last.
+      this.drawArmy(army.owner, army.units, army.cx, army.cy, army.kind === 'supply', army.returning, army.waiting);
     }
     this.effects.draw(this.context);
     this.drawDrag(state);
+    for (const hex of state.hexes) {
+      if (!isPlayable(hex)) continue;
+      this.drawNumberBadge(hex.owner, Math.floor(hex.units), hex.x, this.badgeY(state, hex));
+      if (hex.supplyHeld && hex.owner === Owner.Player) {
+        this.context.fillStyle = '#ffe2a9'; this.context.strokeStyle = '#19261e'; this.context.lineWidth = 3;
+        this.context.font = `800 ${14 / this.worldTransform.scale}px ui-monospace`;
+        this.context.strokeText('Ⅱ', hex.x - this.radius * .55, hex.y);
+        this.context.fillText('Ⅱ', hex.x - this.radius * .55, hex.y);
+      }
+    }
+    if (this.keyboardFocus && state.hexes.includes(this.keyboardFocus) && document.activeElement === this.canvas) {
+      BoardRenderer.path(this.context, this.keyboardFocus.x, this.keyboardFocus.y, this.radius * .88);
+      this.context.strokeStyle = '#fff9d9'; this.context.lineWidth = 3;
+      this.context.setLineDash([4, 3]); this.context.stroke(); this.context.setLineDash([]);
+    }
     this.context.restore();
   }
 
@@ -246,16 +279,12 @@ export class BoardRenderer {
       this.context.fillStyle = 'rgba(213,106,97,.12)'; this.context.fill();
     }
     if (this.selected === hex) { BoardRenderer.path(this.context, hex.x, hex.y, this.radius * .99); this.context.strokeStyle = '#e5a33d'; this.context.lineWidth = 3; this.context.stroke(); }
-    if (hex.terrain === Terrain.Base && this.structureAssets.drawHq(this.context, hex.owner, hex.x, hex.y, this.radius)) {
-      this.drawNumberBadge(hex.owner, Math.floor(hex.units), hex.x, hex.y + this.radius * .58);
-    } else if (state.structureAt(hex.col, hex.row)?.type !== 'guardian') {
+    if (hex.terrain === Terrain.Base) this.structureAssets.drawHq(this.context, hex.owner, hex.x, hex.y, this.radius);
+    else if (state.structureAt(hex.col, hex.row)?.type !== 'guardian') {
       if (hex.terrain === Terrain.Relay) {
         this.drawRelay(hex, phase);
-        this.drawNumberBadge(hex.owner, Math.floor(hex.units), hex.x, hex.y + this.radius * .62);
       } else {
         this.terrainGlyph(hex);
-        this.context.fillStyle = colors.text; this.context.font = `700 ${Math.max(11, Math.floor(this.radius * .52))}px system-ui,sans-serif`;
-        this.context.textAlign = 'center'; this.context.textBaseline = 'middle'; this.context.fillText(String(Math.floor(hex.units)), hex.x, hex.y - this.radius * .04);
       }
     }
   }
@@ -364,10 +393,17 @@ export class BoardRenderer {
       if (!hex) continue;
       if (structure.type === 'guardian') {
         this.drawGuardian(structure, hex, phase);
-        this.drawNumberBadge(hex.owner, Math.floor(hex.units), hex.x, hex.y + this.radius * .62);
       } else if (structure.type === 'hq') {
         const shield = hqShield(state.structures, structure.id);
-        if (shield.current > 0) this.drawHqShield(hex, structure, shield.current, shield.maximum, phase);
+        if (shield.current > 0) this.drawHqShield(
+          hex,
+          structure,
+          shield.current,
+          shield.maximum,
+          linkedGuardians(state.structures, structure.id),
+          phase,
+        );
+        else if (shield.maximum > 0) this.drawShieldStatus(hex, 0, linkedGuardians(state.structures, structure.id));
       }
     }
     this.context.restore();
@@ -422,28 +458,92 @@ export class BoardRenderer {
     this.context.restore();
   }
 
-  private drawHqShield(hex: HexState, structure: StructureState, current: number, maximum: number, phase: number): void {
+  private drawHqShield(
+    hex: HexState,
+    structure: StructureState,
+    current: number,
+    maximum: number,
+    guardians: StructureState[],
+    phase: number,
+  ): void {
     const colors = OWNER_COLORS[structure.owner]; const ratio = maximum > 0 ? current / maximum : 0;
+    const previous = this.previousHqShields.get(structure.id);
+    if (previous !== undefined && current < previous - .001) this.shieldImpactUntil.set(structure.id, phase + .34);
+    this.previousHqShields.set(structure.id, current);
+    const impact = phase > 0 && (this.shieldImpactUntil.get(structure.id) ?? -1) > phase;
     this.context.save();
-    this.context.beginPath(); this.context.arc(hex.x, hex.y, this.radius * (1.02 + Math.sin(phase * 1.8) * .012), 0, Math.PI * 2);
-    this.context.fillStyle = colors.low; this.context.globalAlpha = .1 + ratio * .08; this.context.fill();
-    this.context.strokeStyle = colors.high; this.context.globalAlpha = .62 + ratio * .2; this.context.lineWidth = 2.8; this.context.stroke();
-    const label = `${this.shieldLabel} ${Math.ceil(current)}`; this.context.font = `800 ${Math.max(9, Math.floor(this.radius * .24))}px ui-monospace,monospace`;
-    const width = this.context.measureText(label).width + 12; const y = hex.y - this.radius * 1.04;
-    this.context.globalAlpha = .94; this.context.fillStyle = 'rgba(17,24,22,.92)'; this.context.fillRect(hex.x - width / 2, y - 9, width, 18);
-    this.context.fillStyle = '#eef4ed'; this.context.textAlign = 'center'; this.context.textBaseline = 'middle'; this.context.fillText(label, hex.x, y);
+    const pulse = this.reducedMotion.matches ? 1 : 1 + Math.sin(phase * 1.8) * .015;
+    this.context.translate(hex.x, hex.y); this.context.scale(pulse, pulse); this.context.translate(-hex.x, -hex.y);
+    this.context.globalAlpha = .7 + ratio * .22;
+    const assetDrawn = this.structureAssets.drawHqShield(this.context, hex.x, hex.y, this.radius, ratio, impact);
+    if (!assetDrawn) {
+      this.context.beginPath(); this.context.arc(hex.x, hex.y, this.radius * 1.08, 0, Math.PI * 2);
+      this.context.fillStyle = colors.low; this.context.globalAlpha = .1 + ratio * .08; this.context.fill();
+      this.context.strokeStyle = colors.high; this.context.globalAlpha = .62 + ratio * .2; this.context.lineWidth = 2.8; this.context.stroke();
+    }
+    this.context.restore();
+    this.drawShieldStatus(hex, current, guardians);
+  }
+
+  private drawShieldStatus(hex: HexState, current: number, guardians: StructureState[]): void {
+    if (this.worldTransform.scale < .65) {
+      const scale = this.worldTransform.scale;
+      const width = 44 / scale; const height = 21 / scale;
+      const left = hex.x + this.radius; const top = hex.y - height * .65;
+      this.context.save(); this.context.fillStyle = '#102c30';
+      this.context.strokeStyle = current > 0 ? '#a8f5f3' : '#87928c'; this.context.lineWidth = 1 / scale;
+      this.context.beginPath(); this.context.roundRect(left, top, width, height, 4 / scale); this.context.fill(); this.context.stroke();
+      this.context.font = `800 ${12 / scale}px ui-monospace`; this.context.fillStyle = '#edffff';
+      this.context.textAlign = 'center'; this.context.textBaseline = 'middle';
+      this.context.fillText(`◇ ${Math.ceil(current)}`, left + width / 2, top + height / 2);
+      this.context.restore(); return;
+    }
+    const width = Math.max(104, this.radius * 2.78); const height = Math.max(30, this.radius * .76);
+    const left = hex.x - width / 2; const top = hex.y - this.radius * 2.08;
+    const iconX = left + 16; const centerY = top + height * .46;
+    this.context.save();
+    const background = this.context.createLinearGradient(left, top, left, top + height);
+    background.addColorStop(0, 'rgba(22,42,46,.97)'); background.addColorStop(1, 'rgba(8,20,24,.97)');
+    this.context.beginPath(); this.context.roundRect(left, top, width, height, 7);
+    this.context.fillStyle = background; this.context.fill();
+    this.context.strokeStyle = 'rgba(143,239,244,.9)'; this.context.lineWidth = 1.4; this.context.stroke();
+    this.context.beginPath(); this.context.arc(iconX, centerY, 7, Math.PI * .12, Math.PI * .88);
+    this.context.lineTo(iconX, centerY + 8); this.context.closePath();
+    this.context.fillStyle = 'rgba(80,209,220,.2)'; this.context.fill();
+    this.context.strokeStyle = '#a8f5f3'; this.context.lineWidth = 1.2; this.context.stroke();
+    this.context.textBaseline = 'middle'; this.context.textAlign = 'left';
+    this.context.fillStyle = '#9bc7c8'; this.context.font = `800 ${Math.max(7, Math.floor(this.radius * .18))}px ui-monospace,monospace`;
+    this.context.fillText(this.shieldLabel, left + 28, centerY - 1);
+    this.context.textAlign = 'right'; this.context.fillStyle = '#f3ffff';
+    this.context.font = `900 ${Math.max(13, Math.floor(this.radius * .34))}px ui-monospace,monospace`;
+    this.context.fillText(String(Math.ceil(current)), left + width - 8, centerY - 1);
+    const gap = 3; const barLeft = left + 8; const barTop = top + height - 6; const barWidth = width - 16;
+    const segmentWidth = (barWidth - gap * Math.max(0, guardians.length - 1)) / Math.max(1, guardians.length);
+    guardians.forEach((guardian, index) => {
+      const x = barLeft + index * (segmentWidth + gap); const ratio = guardian.maxShield > 0 ? guardian.shield / guardian.maxShield : 0;
+      this.context.fillStyle = 'rgba(141,202,204,.18)'; this.context.fillRect(x, barTop, segmentWidth, 3);
+      this.context.fillStyle = ratio > .55 ? '#82ece8' : ratio > .22 ? '#e4c86a' : '#df755f';
+      this.context.fillRect(x, barTop, segmentWidth * ratio, 3);
+    });
     this.context.restore();
   }
 
   private drawGarrison(hex: HexState, phase: number): void {
     if (hex.terrain === Terrain.Relay) this.drawRelay(hex, phase);
     else if (hex.terrain !== Terrain.Base) this.terrainGlyph(hex);
-    const centerY = hex.y + (hex.terrain === Terrain.Base
+  }
+
+  private badgeY(state: GameState, hex: HexState): number {
+    const offset = state.structureAt(hex.col, hex.row)?.type === 'guardian' ? this.radius * .62 : hex.terrain === Terrain.Base
       ? this.radius * .58
       : hex.terrain === Terrain.Relay
         ? this.radius * .62
-        : -this.radius * .04);
-    this.drawNumberBadge(hex.owner, Math.floor(hex.units), hex.x, centerY);
+        : -this.radius * .04;
+    const fontSize = Math.max(11, Math.floor(this.radius * .43), this.minimumLabelPixels / this.worldTransform.scale);
+    const height = Math.max(18, this.radius * .54, fontSize * 1.35);
+    // On short mobile boards a low building badge can collide with the next row.
+    const clearance = Math.max(0, this.radius * 1.5 - height - 2 / this.worldTransform.scale);
+    return hex.y + Math.min(offset, clearance);
   }
 
   private drawRelayRange(state: GameState, phase: number): void {
@@ -524,8 +624,8 @@ export class BoardRenderer {
   private drawNumberBadge(owner: Owner, value: number, centerX: number, centerY: number): void {
     const colors = OWNER_COLORS[owner];
     const label = String(value);
-    const fontSize = Math.max(11, Math.floor(this.radius * .43));
-    const height = Math.max(18, this.radius * .54);
+    const fontSize = Math.max(11, Math.floor(this.radius * .43), this.minimumLabelPixels / this.worldTransform.scale);
+    const height = Math.max(18, this.radius * .54, this.minimumLabelPixels ? fontSize * 1.35 : 0);
     this.context.save();
     this.context.font = `800 ${fontSize}px ui-monospace,monospace`;
     this.context.textAlign = 'center'; this.context.textBaseline = 'middle';
@@ -544,7 +644,9 @@ export class BoardRenderer {
     this.context.closePath();
     this.context.fillStyle = 'rgba(17,24,22,.9)'; this.context.fill();
     this.context.strokeStyle = owner === Owner.Neutral ? 'rgba(228,232,216,.58)' : colors.edge;
+    if (owner === Owner.Enemy) this.context.setLineDash([3 / this.worldTransform.scale, 2 / this.worldTransform.scale]);
     this.context.lineWidth = owner === Owner.Neutral ? 1.1 : 1.6; this.context.stroke();
+    this.context.setLineDash([]);
     if (owner !== Owner.Neutral) {
       this.context.beginPath();
       this.context.moveTo(left + corner, top + 1.4); this.context.lineTo(left + width - corner, top + 1.4);
@@ -565,14 +667,23 @@ export class BoardRenderer {
     this.context.restore();
   }
 
-  private drawArmy(owner: Owner, units: number, x: number, y: number, supply: boolean): void {
-    const colors = OWNER_COLORS[owner]; const radius = Math.max(5, Math.min(this.radius * .38, 5 + units * .16));
+  private drawArmy(owner: Owner, units: number, x: number, y: number, supply: boolean, returning = false, waiting = false): void {
+    const colors = OWNER_COLORS[owner];
+    const radius = Math.max(5, Math.min(this.radius * .38, 5 + units * .16), this.minimumLabelPixels * .7 / this.worldTransform.scale);
     this.context.beginPath(); this.context.arc(x, y, radius, 0, Math.PI * 2); this.context.fillStyle = colors.high; this.context.fill();
     this.context.strokeStyle = supply ? '#e8c07d' : colors.edge; this.context.lineWidth = supply ? 2 : 1.4; this.context.stroke();
-    this.context.fillStyle = colors.text; this.context.font = `700 ${Math.max(8, Math.floor(radius * .9))}px ui-monospace`; this.context.textAlign = 'center'; this.context.textBaseline = 'middle'; this.context.fillText(String(Math.floor(units)), x, y);
+    this.context.fillStyle = colors.text; this.context.font = `700 ${Math.max(8, Math.floor(radius * .9), this.minimumLabelPixels * .85 / this.worldTransform.scale)}px ui-monospace`; this.context.textAlign = 'center'; this.context.textBaseline = 'middle'; this.context.fillText(String(Math.floor(units)), x, y);
+    if (returning) {
+      this.context.fillStyle = '#f5f2e7'; this.context.strokeStyle = '#17231e'; this.context.lineWidth = 3;
+      // A stationary convoy can sit behind the field badge. Keep its waiting
+      // amount visible above it without moving the convoy when it resumes.
+      const marker = waiting ? `Ⅱ ${Math.floor(units)}` : '↩';
+      this.context.strokeText(marker, x, y - radius - 6); this.context.fillText(marker, x, y - radius - 6);
+    }
   }
 
   private drawDrag(state: GameState): void {
+    this.commandPreview = '';
     if (!this.selected || !this.dragPosition) return;
     const target = this.findHex(state, this.dragPosition); const valid = Boolean(target && state.canSend(this.selected, target));
     this.context.strokeStyle = valid ? '#4a9d63' : target && target !== this.selected ? '#d56a61' : '#e8c07d'; this.context.lineWidth = 2.5; this.context.setLineDash([6, 5]);
@@ -581,10 +692,15 @@ export class BoardRenderer {
       BoardRenderer.path(this.context, target.x, target.y, this.radius * 1.02); this.context.strokeStyle = valid ? '#4a9d63' : '#d56a61'; this.context.lineWidth = 3.5; this.context.stroke();
     }
     const sent = this.sendMode === 'group' && target ? state.groupPotential(target, Owner.Player, this.selected) : Math.floor(this.selected.units * (this.sendMode === 'all' ? 1 : .5));
-    const label = `${Math.floor(this.selected.units)}  →  ${sent} ${this.sendLabel}`;
-    this.context.font = `700 ${Math.max(10, Math.floor(this.radius * .28))}px ui-monospace`; this.context.textAlign = 'center';
-    const width = this.context.measureText(label).width + 16; const x = this.selected.x; const y = this.selected.y - this.radius * .72;
-    this.context.fillStyle = 'rgba(25,36,31,.94)'; this.context.fillRect(x - width / 2, y - 11, width, 20);
-    this.context.fillStyle = '#f4f0dd'; this.context.fillText(label, x, y);
+    const contributors = this.sendMode === 'group' && target && valid ? state.groupContributors(target, Owner.Player, this.selected) : [];
+    for (const source of contributors) {
+      BoardRenderer.path(this.context, source.x, source.y, this.radius * .94);
+      this.context.strokeStyle = '#ffe2a9'; this.context.lineWidth = 3; this.context.stroke();
+      this.context.beginPath(); this.context.moveTo(source.x, source.y); this.context.lineTo(target!.x, target!.y);
+      this.context.strokeStyle = '#ffe2a980'; this.context.lineWidth = 1.5; this.context.stroke();
+    }
+    const overflow = target?.owner === Owner.Player && valid
+      ? Math.min(sent, Math.max(0, Math.ceil(target.units + state.incomingTo(target, Owner.Player) + sent - GAME_CONFIG.maxStack))) : 0;
+    this.commandPreview = `${contributors.length ? contributors.map(hex => Math.floor(hex.units * .5)).join(' + ') : Math.floor(this.selected.units)} → ${sent} ${this.sendLabel}${overflow ? ` · ↩${overflow} ${this.returnLabel}` : ''}`;
   }
 }

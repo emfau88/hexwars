@@ -2,8 +2,7 @@ import { GameState } from '../src/core/GameState';
 import { cellKey, isPlayable, neighborsOf } from '../src/core/hex';
 import { Owner, Terrain, type HexState } from '../src/core/types';
 import { LEVELS } from '../src/levels';
-
-const POSITION_SCALE = { column: 50, row: 45, stagger: 25 };
+import { positionFor, REFERENCE_WORLD_GEOMETRY } from '../src/rendering/WorldGeometry';
 
 export interface DoomstackMetrics {
   level: number;
@@ -21,7 +20,7 @@ export interface DoomstackMetrics {
 }
 
 export function doomstackPositionFor(col: number, row: number) {
-  return { x: col * POSITION_SCALE.column + (row % 2 ? POSITION_SCALE.stagger : 0), y: row * POSITION_SCALE.row };
+  return positionFor(REFERENCE_WORLD_GEOMETRY, col, row);
 }
 
 export function shortestPlayableRoute(

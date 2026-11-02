@@ -159,4 +159,5 @@ test('map-art render layers keep atmosphere below all gameplay information', () 
   assert.ok(structures > territory);
   assert.ok(units > structures);
   assert.ok(MAP_ART_RENDER_LAYERS.indexOf('gameplay-fx') > units);
+  assert.ok(MAP_ART_RENDER_LAYERS.indexOf('field-strength') > MAP_ART_RENDER_LAYERS.indexOf('gameplay-fx'));
 });

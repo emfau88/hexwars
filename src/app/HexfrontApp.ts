@@ -6,13 +6,18 @@ import { I18n } from '../i18n/I18n';
 import type { Locale } from '../i18n/types';
 import { InputController, type InputError } from '../input/InputController';
 import { CampaignProgressStore } from '../persistence/CampaignProgressStore';
+import { SendModePreferenceStore } from '../persistence/SendModePreferenceStore';
+import { SupplyPreferenceStore } from '../persistence/SupplyPreferenceStore';
+import { BattleControls } from '../ui/BattleControls';
 import { KongregateStats } from '../platform/KongregateStats';
+import { NOOP_PORTAL_ADAPTER, type PortalAdapter } from '../platform/PortalAdapter';
 import { BoardRenderer } from '../rendering/BoardRenderer';
 import type { MapStyleMode } from '../rendering/MapArtRenderer';
 import { OWNER_COLORS } from '../rendering/palette';
 import { CampaignUI } from '../ui/CampaignUI';
 import { LevelOneTutorial } from '../ui/LevelOneTutorial';
 import { GuardianBriefing } from '../ui/GuardianBriefing';
+import { RelayTutorial } from '../ui/RelayTutorial';
 import { LEVELS } from '../levels';
 
 const DEBUG_ENABLED = import.meta.env.DEV || import.meta.env.MODE === 'test';
@@ -36,12 +41,17 @@ export class HexfrontApp {
   readonly ui: CampaignUI;
   readonly tutorial: LevelOneTutorial;
   readonly guardianBriefing: GuardianBriefing;
+  readonly relayTutorial: RelayTutorial;
   readonly audio = new AudioController();
   readonly i18n = new I18n();
   readonly progressStore = new CampaignProgressStore();
+  readonly sendModeStore = new SendModePreferenceStore();
+  readonly supplyStore = new SupplyPreferenceStore();
+  readonly battleControls: BattleControls;
   readonly kongregateStats = new KongregateStats();
   progress: CampaignProgress;
   sendMode: SendMode = 'all';
+  private preferredSendMode: SendMode;
   private readonly input: InputController;
   private readonly visualVariant = VISUAL_VARIANT;
   private stageResizeObserver: ResizeObserver | null = null;
@@ -51,23 +61,34 @@ export class HexfrontApp {
   private levelStartRequest = 0;
   private waitingForFirstMove = false;
   private waitingForBriefing = false;
+  private portalPaused = false;
+  private userPaused = false;
+  private supplyExplained = false;
 
-  constructor() {
+  constructor(private readonly portal: PortalAdapter = NOOP_PORTAL_ADAPTER) {
     const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement | null;
     const stage = document.getElementById('stage');
     if (!canvas || !stage) throw new Error('HEXFRONT canvas shell is incomplete.');
     this.state.autoplay = DEBUG_AUTOPLAY;
     this.progress = this.progressStore.load();
+    this.preferredSendMode = this.sendModeStore.load();
     this.renderer = new BoardRenderer(canvas, stage, this.visualVariant, MAP_STYLE);
     this.renderer.sendLabel = this.i18n.t('drag.send');
+    this.renderer.returnLabel = this.i18n.t('drag.return');
     this.renderer.shieldLabel = this.i18n.t('guardian.shield');
     this.ui = new CampaignUI({
-      startLevel: (index) => this.startLevel(index), showMap: (focus) => this.showMap(focus),
+      startLevel: (index) => { if (index === undefined && this.state.running) this.setPaused(true); else this.startLevel(index); },
+      showMap: (focus) => { if (this.state.running) this.setPaused(true); else this.showMap(focus); },
       setMode: (mode) => this.setMode(mode), toggleSound: () => this.toggleSound(),
       togglePlayerSupply: () => this.togglePlayerSupply(),
       toggleFullscreen: () => void this.toggleFullscreen(), resetProgress: () => this.resetProgress(), activate: () => this.audio.activate(),
       setLocale: (locale) => this.setLocale(locale),
     }, this.i18n, this.visualVariant, MAP_STYLE);
+    this.battleControls = new BattleControls(this.state, this.renderer, this.i18n, {
+      supply: () => this.togglePlayerSupply(), pause: (paused) => this.setPaused(paused),
+      restart: () => this.startLevel(), map: () => this.showMap(), sound: () => this.toggleSound(),
+      locale: () => this.setLocale(this.i18n.locale === 'en' ? 'de' : 'en'),
+    });
     this.tutorial = new LevelOneTutorial(stage, this.renderer, this.i18n, {
       showHint: (message) => this.ui.showTutorialHint(message),
       hideHint: () => this.ui.hideTutorialHint(),
@@ -80,8 +101,26 @@ export class HexfrontApp {
         if (introduction) this.progress = this.progressStore.markGuardianBriefingSeen(this.progress);
       },
     });
+    this.relayTutorial = new RelayTutorial(stage, this.renderer, this.i18n, {
+      onOpen: () => { this.waitingForBriefing = true; },
+      onClose: (introduction, levelId) => {
+        this.waitingForBriefing = false;
+        if (introduction) this.progress = levelId === 'signal-gardens'
+          ? this.progressStore.markRelayMasteryBriefingSeen(this.progress)
+          : this.progressStore.markRelayBriefingSeen(this.progress);
+      },
+      onComplete: (levelId) => {
+        this.progress = levelId === 'signal-gardens'
+          ? this.progressStore.markRelayMasteryUsed(this.progress)
+          : this.progressStore.markRelaySendUsed(this.progress);
+      },
+      showHint: (message) => this.ui.showTutorialHint(message),
+      hideHint: () => this.ui.hideTutorialHint(),
+      showSuccess: (message) => this.ui.showToast(message),
+    });
     this.input = new InputController(canvas, this.state, this.renderer, {
       getMode: () => this.sendMode,
+      canInteract: () => !this.userPaused && !this.portalPaused && !this.waitingForBriefing,
       onCommand: () => {
         this.beginLevelOneBattle();
         if (this.state.currentLevel === 1 && this.sendMode === 'half') {
@@ -91,13 +130,26 @@ export class HexfrontApp {
         navigator.vibrate?.(10); this.audio.play('send');
       },
       onInvalid: (error) => { this.audio.play('denied'); this.ui.showToast(this.i18n.t(this.inputErrorKey(error))); }, onActivate: () => this.audio.activate(),
-      onGestureStart: (source, pointerType) => this.tutorial.gestureStart(this.state, source, pointerType),
-      onGestureMove: (_source, target) => this.tutorial.gestureMove(this.state, target),
-      onGestureEnd: (sent) => this.tutorial.gestureEnd(this.state, sent),
+      onGestureStart: (source, pointerType) => {
+        this.tutorial.gestureStart(this.state, source, pointerType);
+        this.relayTutorial.gestureStart(this.state, source);
+      },
+      onGestureMove: (source, target) => {
+        this.tutorial.gestureMove(this.state, target);
+        this.relayTutorial.gestureMove(this.state, source, target);
+      },
+      onGestureEnd: (sent, source, target) => {
+        this.tutorial.gestureEnd(this.state, sent);
+        this.relayTutorial.gestureEnd(this.state, sent, source, target);
+      },
     });
     this.showMap(this.progressStore.focus(this.progress));
     this.bindWindowEvents();
     this.resizeLayout();
+    this.portal.initialize({
+      pauseForAd: () => this.setPortalPaused(true),
+      resumeAfterAd: () => this.setPortalPaused(false),
+    });
     this.kongregateStats.initialize(() => this.submitCampaignStatistics());
     if (DEBUG_ENABLED) {
       installDebugApi({
@@ -164,24 +216,40 @@ export class HexfrontApp {
     if (request !== this.levelStartRequest) return;
     this.ui.setMapLoading(false);
     if (prepared === 'failed') {
-      this.ui.showToast(this.i18n.t('toast.mapLoadFailed'));
+      this.ui.showMapLoadError();
       return;
     }
     this.state.start(index, (col, row) => this.renderer.positionFor(col, row));
+    this.renderer.zoom = 1;
+    this.input.cancel();
+    this.userPaused = false; this.battleControls.showPause(false);
+    this.audio.setSuspended(this.portalPaused);
+    this.state.playerSupplyEnabled = this.supplyStore.load();
     this.waitingForFirstMove = this.state.currentLevel === 0 && !this.state.autoplay;
     this.waitingForBriefing = false;
-    this.sendMode = this.state.level.features.half ? 'half' : 'all'; this.renderer.sendMode = this.sendMode;
+    this.sendMode = this.sendModeStore.resolve(this.preferredSendMode, this.state.level.features); this.renderer.sendMode = this.sendMode;
     this.ui.startMission(this.state, this.progress); this.ui.setMode(this.sendMode, this.state); this.ui.syncPlayerSupply(this.state.playerSupplyEnabled); this.audio.play('confirm');
     this.resizeLayout();
     this.tutorial.start(this.state);
     this.guardianBriefing.start(this.state, !this.progress.guardianBriefingSeen);
+    const relayMastery = this.state.level.id === 'signal-gardens';
+    this.relayTutorial.start(
+      this.state,
+      relayMastery ? !this.progress.relayMasteryBriefingSeen : !this.progress.relayBriefingSeen,
+      relayMastery ? this.progress.relayMasteryUsed : this.progress.relaySendUsed,
+    );
+    this.portal.missionStarted(this.state.currentLevel);
     this.lastFrame = performance.now();
   }
 
   showMap(focus = this.state.currentLevel): void {
+    this.renderer.zoom = 1;
+    this.userPaused = false; this.battleControls.showPause(false); this.input.cancel();
+    this.audio.setSuspended(this.portalPaused);
     this.levelStartRequest += 1;
     this.tutorial.stop(false);
     this.guardianBriefing.stop();
+    this.relayTutorial.stop(false);
     this.state.running = false;
     this.waitingForFirstMove = false;
     this.waitingForBriefing = false;
@@ -193,6 +261,7 @@ export class HexfrontApp {
   setMode(mode: SendMode): void {
     const features = this.state.level.features;
     if ((mode === 'half' && !features.half) || (mode === 'all' && !features.all) || (mode === 'group' && !features.group)) return;
+    this.preferredSendMode = mode; this.sendModeStore.save(mode);
     this.sendMode = mode; this.renderer.sendMode = mode; this.ui.setMode(mode, this.state);
     this.audio.play('navigate');
     this.ui.showToast(this.i18n.t(mode === 'half' ? 'toast.mode.half' : mode === 'all' ? 'toast.mode.all' : 'toast.mode.group'));
@@ -200,6 +269,7 @@ export class HexfrontApp {
 
   private togglePlayerSupply(): void {
     const enabled = this.state.togglePlayerSupply();
+    this.supplyStore.save(enabled);
     this.ui.syncPlayerSupply(enabled);
     this.audio.play('navigate');
     this.ui.showToast(this.i18n.t(enabled ? 'toast.supply.on' : 'toast.supply.off'));
@@ -212,7 +282,8 @@ export class HexfrontApp {
       this.renderer.effects.update(delta * DEBUG_SPEED); this.ui.updateHUD(this.state);
     }
     this.consumeEvents();
-    this.renderer.draw(this.state, time); this.tutorial.updatePosition(); this.guardianBriefing.updatePosition(); this.animationFrame = requestAnimationFrame(this.frame);
+    this.battleControls.update();
+    this.renderer.draw(this.state, time); this.tutorial.updatePosition(); this.guardianBriefing.updatePosition(); this.relayTutorial.updatePosition(); this.animationFrame = requestAnimationFrame(this.frame);
   };
 
   private consumeEvents(): void {
@@ -224,21 +295,36 @@ export class HexfrontApp {
   }
 
   private simulationPaused(): boolean {
-    return this.waitingForFirstMove || this.waitingForBriefing;
+    return this.waitingForFirstMove || this.waitingForBriefing || this.portalPaused || this.userPaused;
+  }
+
+  private setPaused(paused: boolean): void {
+    if (!this.state.running || this.portalPaused) return;
+    this.userPaused = paused;
+    this.input.cancel();
+    this.battleControls.showPause(paused);
+    this.audio.setSuspended(paused);
+    this.lastFrame = performance.now();
   }
 
   private handleEvent(event: GameEvent): void {
+    if (event.type === 'supply' && event.detail.owner === Owner.Player && !this.supplyExplained) {
+      this.supplyExplained = true;
+      this.ui.showToast(this.i18n.t('toast.supply.first'), 6500);
+    }
     if (event.type === 'send') this.renderer.effects.burst(event.detail.from, OWNER_COLORS[event.detail.owner].edge, 5);
     if (event.type === 'arrival' && event.detail.kind !== 'supply') this.audio.beep(145, .035, .02);
     if (event.type === 'capture') {
       this.renderer.effects.burst(event.detail.target, OWNER_COLORS[event.detail.newOwner].edge, 14);
       if (event.detail.newOwner === Owner.Player) this.audio.play('capture');
       else if (event.detail.oldOwner === Owner.Player) this.audio.play('loss');
+      this.relayTutorial.capture(this.state, event.detail.target);
     }
     if (event.type === 'endgame') { this.ui.updateEndgame(this.state); this.ui.showToast(this.i18n.t(event.detail.stage === 1 ? 'toast.endgame.decline' : 'toast.endgame.decision')); }
     if (event.type === 'result') {
       this.tutorial.stop(false);
       this.guardianBriefing.stop();
+      this.relayTutorial.stop(false);
       const firstHalfSendUnlock = event.detail.result === 'victory'
         && this.state.currentLevel === 0
         && !this.progress.completed[0];
@@ -246,9 +332,22 @@ export class HexfrontApp {
         this.progress = this.progressStore.complete(this.progress, this.state.currentLevel, this.state.elapsed);
         this.submitCampaignStatistics();
         this.audio.play('victory');
+        const nextLevel = this.state.currentLevel + 1;
+        if (nextLevel < LEVELS.length && this.progressStore.isUnlocked(this.progress, nextLevel)) this.renderer.preloadLevel(nextLevel);
       } else this.audio.play('defeat');
       this.ui.showResult(this.state, this.progress, firstHalfSendUnlock);
+      this.portal.missionCompleted({
+        result:event.detail.result,
+        levelIndex:this.state.currentLevel,
+        elapsedSeconds:this.state.elapsed,
+      });
     }
+  }
+
+  private setPortalPaused(paused: boolean): void {
+    this.portalPaused = paused;
+    this.audio.setSuspended(paused || this.userPaused);
+    this.lastFrame = performance.now();
   }
 
   private toggleSound(): void { this.ui.syncSound(this.audio.toggle()); }
@@ -277,10 +376,14 @@ export class HexfrontApp {
   private setLocale(locale: Locale): void {
     this.i18n.setLocale(locale);
     this.renderer.sendLabel = this.i18n.t('drag.send');
+    this.renderer.returnLabel = this.i18n.t('drag.return');
     this.renderer.shieldLabel = this.i18n.t('guardian.shield');
     this.ui.refreshLanguage(this.state, this.audio.enabled);
+    this.ui.syncPlayerSupply(this.state.playerSupplyEnabled);
+    this.battleControls.update();
     this.tutorial.refreshCopy();
     this.guardianBriefing.refreshCopy();
+    this.relayTutorial.refreshCopy();
   }
 
   private inputErrorKey(error: InputError): 'toast.invalid.decor' | 'toast.invalid.target' {
@@ -296,9 +399,16 @@ export class HexfrontApp {
       this.stageResizeObserver.observe(this.renderer.stage);
     }
     window.addEventListener('keydown', (event) => {
+      if (this.portalPaused || this.waitingForBriefing || !this.state.running) return;
+      if (event.key === 'Escape' || event.key.toLowerCase() === 'p') {
+        event.preventDefault(); this.setPaused(!this.userPaused); return;
+      }
+      if (this.userPaused || event.target instanceof HTMLButtonElement) return;
       if (event.key === '1') this.setMode('all'); if (event.key === '2') this.setMode('half'); if (event.key === '3') this.setMode('group');
-      if (event.key.toLowerCase() === 'r') this.startLevel(); if (event.key === 'Escape') this.showMap();
+      if (event.key.toLowerCase() === 'r') this.setPaused(true);
     });
+    document.addEventListener('visibilitychange', () => { if (document.hidden) this.setPaused(true); });
+    window.addEventListener('blur', () => this.setPaused(true));
   }
 
   private resizeLayout = (): void => {

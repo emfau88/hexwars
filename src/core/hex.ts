@@ -35,31 +35,32 @@ export function findOwnedPath(
   hexes: readonly HexState[],
   start: HexState,
   goal: HexState,
+  canStep?: (from: HexState, to: HexState) => boolean,
 ): HexState[] | null {
   if (start.owner !== goal.owner || start.owner === 0) return null;
-  const byKey = new Map(hexes.map((hex) => [cellKey(hex), hex]));
-  const startKey = cellKey(start);
-  const goalKey = cellKey(goal);
-  const queue = [startKey];
-  const previous = new Map<string, string | null>([[startKey, null]]);
+  return ownedPathsFrom(hexes, start, canStep, goal).get(cellKey(goal)) ?? null;
+}
+
+/** One breadth-first search for all supply destinations, with constraints on each edge. */
+export function ownedPathsFrom(
+  hexes: readonly HexState[], start: HexState,
+  canStep: (from: HexState, to: HexState) => boolean = () => true,
+  goal?: HexState,
+): Map<string, HexState[]> {
+  const paths = new Map<string, HexState[]>();
+  if (start.owner === 0 || !isPlayable(start)) return paths;
+  const queue = [start];
+  paths.set(cellKey(start), [start]);
   for (let index = 0; index < queue.length; index += 1) {
-    const currentKey = queue[index];
-    if (currentKey === goalKey) break;
-    const current = byKey.get(currentKey);
-    if (!current) continue;
+    const current = queue[index];
+    if (current === goal) break;
     for (const next of neighborsOf(hexes, current)) {
       const nextKey = cellKey(next);
-      if (next.owner !== start.owner || previous.has(nextKey)) continue;
-      previous.set(nextKey, currentKey);
-      queue.push(nextKey);
+      if (next.owner !== start.owner || paths.has(nextKey) || !canStep(current, next)) continue;
+      paths.set(nextKey, [...paths.get(cellKey(current))!, next]);
+      queue.push(next);
     }
   }
-  if (!previous.has(goalKey)) return null;
-  const path: HexState[] = [];
-  for (let cursor: string | null = goalKey; cursor; cursor = previous.get(cursor) ?? null) {
-    const hex = byKey.get(cursor);
-    if (hex) path.push(hex);
-  }
-  return path.reverse();
+  return paths;
 }
 

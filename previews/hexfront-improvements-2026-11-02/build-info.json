@@ -1,0 +1,11 @@
+{
+  "name": "HEXFRONT improvement preview",
+  "date": "2026-11-02",
+  "sourceCommit": "9812ced1bd30d323549130862aa16b5bab7ccbe4",
+  "branch": "codex/improve-mobile-onboarding-copy",
+  "mode": "production",
+  "status": "manual-testing-pending",
+  "bundles": {
+    "index-Dnu5fC_w.js": "29ad3256316cdba5549cb067a2344a622e268e09c6ac25ebec127a49b723b538"
+  }
+}

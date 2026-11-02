@@ -1,0 +1,29 @@
+{
+  "url": "https://rawcdn.githack.com/emfau88/hexwars/d2201fb3e40ab88f443b0fee5c5e863d4756f806/previews/hexfront-improvements-2026-11-02/index.html",
+  "results": [
+    {
+      "width": 390,
+      "confirmation": true,
+      "dragHintSeparated": true,
+      "firstTapCommand": true,
+      "iceFinale": true,
+      "language": true,
+      "pause": true,
+      "debugAbsent": true,
+      "errors": [],
+      "badAssets": []
+    },
+    {
+      "width": 1440,
+      "confirmation": true,
+      "dragHintSeparated": true,
+      "firstTapCommand": true,
+      "iceFinale": true,
+      "language": true,
+      "pause": true,
+      "debugAbsent": true,
+      "errors": [],
+      "badAssets": []
+    }
+  ]
+}

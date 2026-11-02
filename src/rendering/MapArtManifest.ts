@@ -251,6 +251,26 @@ export const LEVEL_NINE_MAP_ART = Object.freeze({
   fog: '228,235,224',
 } as const satisfies MapArtManifest);
 
+export const LEVEL_TEN_MAP_ART = Object.freeze({
+  levelIndex: 9,
+  core: {
+    source: `${ASSET_BASE}assets/maps/level10-core-ice-v2.webp`,
+    previewSource: `${ASSET_BASE}assets/map-previews/level10-preview-ice-v2.webp`,
+    sourceWidth: 1439, sourceHeight: 1093,
+  },
+  worldRect: { x: 0, y: 0, width: REFERENCE_WORLD_WIDTH, height: REFERENCE_WORLD_HEIGHT },
+  structureSafeAreas: [
+    { kind: 'hq', col: 3, row: 1, radius: 35 },
+    { kind: 'hq', col: 3, row: 11, radius: 35 },
+    { kind: 'relay', col: 1, row: 6, radius: 30 },
+    { kind: 'relay', col: 5, row: 6, radius: 30 },
+    { kind: 'hill', col: 2, row: 9, radius: 30 },
+    { kind: 'hill', col: 4, row: 3, radius: 30 },
+  ],
+  backdrop: ['#466b83', '#91aebb', '#d9e6ed', '#647e99'],
+  fog: '222,237,247',
+} as const satisfies MapArtManifest);
+
 export const MAP_ART_MANIFESTS: readonly MapArtManifest[] = Object.freeze([
   LEVEL_ONE_MAP_ART,
   LEVEL_TWO_MAP_ART,
@@ -261,6 +281,7 @@ export const MAP_ART_MANIFESTS: readonly MapArtManifest[] = Object.freeze([
   LEVEL_SEVEN_MAP_ART,
   LEVEL_EIGHT_MAP_ART,
   LEVEL_NINE_MAP_ART,
+  LEVEL_TEN_MAP_ART,
 ]);
 
 export function mapArtForLevel(levelIndex: number): MapArtManifest | null {

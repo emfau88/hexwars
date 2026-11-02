@@ -1,5 +1,6 @@
 import { TRANSLATIONS, type TranslationKey } from './catalog';
 import { isLocale, type Locale, type LocalizedText } from './types';
+import { SafeStorage, browserStorage, type SettingsStorage } from '../persistence/SafeStorage';
 
 export const LOCALE_STORAGE_KEY = 'hexfront_locale_v1';
 
@@ -12,9 +13,9 @@ function format(template: string, parameters: Parameters): string {
 export class I18n {
   private current: Locale;
 
-  constructor(storage: Pick<Storage, 'getItem' | 'setItem'> | null = typeof localStorage === 'undefined' ? null : localStorage) {
-    this.storage = storage;
-    const saved = storage?.getItem(LOCALE_STORAGE_KEY);
+  constructor(storage: SettingsStorage | null = browserStorage()) {
+    this.storage = new SafeStorage(storage);
+    const saved = this.storage.getItem(LOCALE_STORAGE_KEY);
     this.current = isLocale(saved) ? saved : 'en';
   }
 

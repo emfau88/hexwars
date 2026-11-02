@@ -106,6 +106,7 @@ export interface HexState extends Cell, Point {
   siege: Partial<Record<Owner, number>> | null;
   flash: number;
   fixedUnits: number | null;
+  supplyHeld?: boolean;
 }
 
 export interface ArmyMovement {
@@ -124,6 +125,8 @@ export interface ArmyMovement {
   kind: 'command' | 'reinforcement' | 'supply';
   path: string[];
   pathIndex: number;
+  returning?: boolean;
+  waiting?: boolean;
 }
 
 export interface Particle extends Point {
@@ -139,6 +142,10 @@ export interface CampaignProgress {
   best: number[];
   halfSendUsed: boolean;
   guardianBriefingSeen: boolean;
+  relayBriefingSeen: boolean;
+  relaySendUsed: boolean;
+  relayMasteryBriefingSeen: boolean;
+  relayMasteryUsed: boolean;
 }
 
 export interface GameSnapshot {

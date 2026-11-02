@@ -19,7 +19,11 @@ test('profile balance runner covers three styles and five reproducible variants'
 test('Level 6 player profiles record their actual flank and guardian capture', () => {
   const rows = runGuardianPlayerProfiles();
   assert.equal(rows.length, PLAYER_PROFILES.length * PROFILE_VARIANTS.length);
-  assert.ok(rows.every((row) => row.firstNorthernFlank === 'west' || row.firstNorthernFlank === 'east'));
+  assert.ok(rows.every((row) => row.firstNorthernFlank === 'west' || row.firstNorthernFlank === 'east'
+    || (row.firstNorthernFlank === null && row.result === 'defeat')),
+  'A defeated player may lose before reaching either northern flank.');
+  assert.ok(rows.some((row) => row.firstNorthernFlank === 'west'));
+  assert.ok(rows.some((row) => row.firstNorthernFlank === 'east'));
   assert.ok(rows.some((row) => row.guardianCaptureSeconds !== null));
   const summary = summarizeGuardianPlayerProfiles(rows);
   assert.equal(summary.reduce((total, group) => total + group.runs, 0), rows.length);

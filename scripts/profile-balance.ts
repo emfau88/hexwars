@@ -5,8 +5,7 @@ import { Owner, Terrain, type HexState } from '../src/core/types';
 import { defenseMultiplier } from '../src/systems/CombatSystem';
 import { hqShield, structureAt } from '../src/systems/StructureSystem';
 import { LEVELS } from '../src/levels';
-
-const POSITION_SCALE = { column: 50, row: 45, stagger: 25 };
+import { positionFor as worldPositionFor, REFERENCE_WORLD_GEOMETRY } from '../src/rendering/WorldGeometry';
 const MAX_SECONDS = 300;
 const STEP_SECONDS = .05;
 
@@ -72,7 +71,7 @@ export const PROFILE_VARIANTS: readonly ProfileVariant[] = [
 ];
 
 function positionFor(col: number, row: number) {
-  return { x: col * POSITION_SCALE.column + (row % 2 ? POSITION_SCALE.stagger : 0), y: row * POSITION_SCALE.row };
+  return worldPositionFor(REFERENCE_WORLD_GEOMETRY, col, row);
 }
 
 function enemyBase(game: GameState): HexState | null {

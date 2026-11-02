@@ -6,9 +6,11 @@ import type { Locale } from '../i18n/types';
 import { buildLevel } from '../levels/buildLevel';
 import { CAMPAIGN_ACTS, campaignActForLevel, LEVELS } from '../levels';
 import { createSeededRandom } from '../core/random';
+import { buildStructures } from '../systems/StructureSystem';
 import { BoardRenderer } from '../rendering/BoardRenderer';
 import { LandscapeRenderer } from '../rendering/LandscapeRenderer';
 import { OWNER_COLORS } from '../rendering/palette';
+import { StructureAssetRenderer } from '../rendering/StructureAssetRenderer';
 import { centeredAspectCrop, mapArtForLevel } from '../rendering/MapArtManifest';
 import { mapArtImage, type MapArtImageRecord } from '../rendering/MapArtAssetStore';
 import type { MapStyleMode } from '../rendering/MapArtRenderer';
@@ -38,13 +40,18 @@ export class CampaignUI {
   readonly hint = required('hint'); readonly toast = required('toast');
   selectedMenuLevel = 0;
   private toastTimer = 0; private hintTimer = 0;
+  private mapLoading = false;
   private readonly previewLandscape: LandscapeRenderer;
+  private readonly previewStructures: StructureAssetRenderer;
   private readonly atlas: CampaignAtlas;
   private readonly previewMapSubscriptions = new Set<string>();
   private readonly warmedPreviewLevels = new Set<number>();
 
   constructor(private readonly callbacks: UICallbacks, private readonly i18n: I18n, visualVariant: VisualVariant = 'production', private readonly mapStyle: MapStyleMode = 'auto') {
     this.previewLandscape = new LandscapeRenderer(() => this.renderPreview(this.selectedMenuLevel), visualVariant);
+    this.previewStructures = new StructureAssetRenderer(() => {
+      if (this.menu.classList.contains('show')) this.renderPreview(this.selectedMenuLevel);
+    });
     this.atlas = new CampaignAtlas(required<SVGSVGElement>('campaignAtlasSvg'), i18n);
     required('playLevelBtn').addEventListener('click', () => callbacks.startLevel(this.selectedMenuLevel));
     for (const id of ['restartBtn', 'mobileRestartBtn', 'retryBtn']) required(id).addEventListener('click', () => callbacks.startLevel());
@@ -72,7 +79,11 @@ export class CampaignUI {
     this.applyStaticTranslations(); this.syncLocaleControls(); this.syncCommandDockToggle();
   }
 
-  private lastProgress: CampaignProgress = { completed: LEVELS.map(() => false), best: LEVELS.map(() => 0), halfSendUsed: false, guardianBriefingSeen: false };
+  private lastProgress: CampaignProgress = {
+    completed: LEVELS.map(() => false), best: LEVELS.map(() => 0), halfSendUsed: false,
+    guardianBriefingSeen: false, relayBriefingSeen: false, relaySendUsed: false,
+    relayMasteryBriefingSeen: false, relayMasteryUsed: false,
+  };
   private lastUnlocked = (_index: number) => false;
   private halfSendUnlockVisible = false;
 
@@ -165,6 +176,9 @@ export class CampaignUI {
   }
 
   setMapLoading(loading: boolean): void {
+    this.mapLoading = loading;
+    this.syncResultLoadingControls();
+    if (loading) required('resultLoadStatus').hidden = true;
     const play = required<HTMLButtonElement>('playLevelBtn');
     play.classList.toggle('loading', loading);
     play.setAttribute('aria-busy', String(loading));
@@ -176,6 +190,28 @@ export class CampaignUI {
     }
     if (this.menu.classList.contains('show')) {
       this.selectLevel(this.selectedMenuLevel, this.lastProgress, this.lastUnlocked, false);
+    }
+  }
+
+  private syncResultLoadingControls(): void {
+    for (const [id, label] of [
+      ['nextLevelBtn', this.halfSendUnlockVisible ? 'result.unlock.continue' : 'result.next'],
+      ['retryBtn', 'result.retry'],
+    ] as const) {
+      const button = required<HTMLButtonElement>(id);
+      button.disabled = this.mapLoading;
+      button.setAttribute('aria-busy', String(this.mapLoading));
+      button.textContent = this.i18n.t(this.mapLoading ? 'campaign.play.loading' : label);
+    }
+  }
+
+  showMapLoadError(): void {
+    const message = this.i18n.t('toast.mapLoadFailed');
+    this.showToast(message);
+    if (this.overlay.classList.contains('show')) {
+      const status = required('resultLoadStatus');
+      status.textContent = message;
+      status.hidden = false;
     }
   }
 
@@ -217,7 +253,11 @@ export class CampaignUI {
     this.selectedMenuLevel = Math.max(0, Math.min(LEVELS.length - 1, index));
     const level = LEVELS[this.selectedMenuLevel]; const actIndex = campaignActForLevel(this.selectedMenuLevel); const act = CAMPAIGN_ACTS[actIndex];
     if (this.atlas.needsLayoutUpdate()) this.renderAtlas(this.selectedMenuLevel);
-    document.querySelectorAll<HTMLElement>('.mapNode').forEach((node) => node.classList.toggle('current', Number(node.dataset.level) === this.selectedMenuLevel));
+    document.querySelectorAll<HTMLElement>('.mapNode').forEach((node) => {
+      const selected = Number(node.dataset.level) === this.selectedMenuLevel;
+      node.classList.toggle('current', selected);
+      if (node.hasAttribute('aria-pressed')) node.setAttribute('aria-pressed', String(selected));
+    });
     required('menuActLabel').textContent = `${this.i18n.text(act.roman)} · ${this.i18n.text(act.name)}`;
     required('menuLevelName').textContent = this.i18n.text(level.name);
     required('menuLevelText').textContent = this.i18n.text(level.blurb);
@@ -331,6 +371,7 @@ export class CampaignUI {
     this.lastProgress = progress;
     const victory = state.result === 'victory';
     const finalLevel = state.currentLevel >= LEVELS.length - 1;
+    const campaignComplete = progress.completed.every(Boolean);
     const hasReleasedNextLevel = state.currentLevel + 1 < RELEASED_CAMPAIGN_LEVELS;
     const halfSendUnlock = victory && state.currentLevel === 0 && showHalfSendUnlock;
     this.halfSendUnlockVisible = halfSendUnlock;
@@ -352,9 +393,9 @@ export class CampaignUI {
       required('resultAdvanceName').textContent = this.i18n.t('result.unlock.name');
       required('resultAdvanceRule').textContent = this.i18n.t('result.unlock.detail');
     } else if (victory && finalLevel) {
-      required('resultAdvanceLabel').textContent = this.i18n.t('result.campaignComplete');
-      required('resultAdvanceName').textContent = 'HEXFRONT';
-      required('resultAdvanceRule').textContent = this.i18n.t('result.campaignCompleteSub');
+      required('resultAdvanceLabel').textContent = this.i18n.t(campaignComplete ? 'result.campaignComplete' : 'result.finaleWon');
+      required('resultAdvanceName').textContent = this.i18n.t('result.finaleTitle');
+      required('resultAdvanceRule').textContent = this.i18n.t('result.finaleStory');
     } else if (victory && !hasReleasedNextLevel) {
       const next = LEVELS[state.currentLevel + 1];
       required('resultAdvanceLabel').textContent = this.i18n.t('campaign.state.comingSoon');
@@ -369,14 +410,30 @@ export class CampaignUI {
     const nextButton = required<HTMLButtonElement>('nextLevelBtn');
     nextButton.hidden = !victory || finalLevel || !hasReleasedNextLevel;
     nextButton.textContent = this.i18n.t(halfSendUnlock ? 'result.unlock.continue' : 'result.next');
+    required('resultCampaignSummary').hidden = !victory || !finalLevel;
+    this.overlay.classList.toggle('campaignFinished', victory && finalLevel);
+    if (victory && finalLevel) {
+      required('campaignTotals').textContent = this.i18n.t('result.campaignTotals', {
+        count: progress.completed.filter(Boolean).length,
+        time: this.time(progress.best.reduce((sum, seconds) => sum + seconds, 0)),
+      });
+      const list = required('campaignBestTimes'); list.replaceChildren();
+      LEVELS.forEach((level, index) => {
+        const item = document.createElement('li');
+        item.textContent = `${this.i18n.text(level.short)} · ${progress.best[index] ? this.time(progress.best[index]) : '—'}`;
+        list.append(item);
+      });
+    }
     this.overlay.classList.toggle('victory', victory);
     this.overlay.classList.toggle('defeat', !victory);
+    required('resultLoadStatus').hidden = true;
+    this.syncResultLoadingControls();
     this.overlay.classList.add('show'); this.app.classList.add('resultOpen');
   }
 
-  showToast(message: string): void {
+  showToast(message: string, duration = 3000): void {
     this.toast.textContent = message; this.toast.classList.add('show'); clearTimeout(this.toastTimer);
-    this.toastTimer = window.setTimeout(() => this.toast.classList.remove('show'), 1700);
+    this.toastTimer = window.setTimeout(() => this.toast.classList.remove('show'), duration);
   }
 
   syncSound(enabled: boolean): void { for (const id of ['soundBtn', 'sideSoundBtn']) required(id).textContent = this.i18n.t(enabled ? 'settings.soundOn' : 'settings.soundOff'); }
@@ -442,6 +499,14 @@ export class CampaignUI {
       context.lineWidth = hex.terrain === Terrain.Base ? 2 : .8; context.stroke();
     }
     if (!hasMapArt) this.previewLandscape.drawWaterShores(context, hexes, radius, level.landscapeStyle, BoardRenderer.path);
+    const structures = buildStructures(level, hexes);
+    for (const structure of structures) {
+      const hex = hexes.find(({ col, row }) => col === structure.col && row === structure.row);
+      if (!hex) continue;
+      if (structure.type === 'hq') this.previewStructures.drawHq(context, structure.owner, hex.x, hex.y, radius);
+      else if (structure.type === 'guardian') this.previewStructures.drawGuardian(context, hex.x, hex.y, radius);
+      else if (structure.type === 'relay') this.previewStructures.drawRelay(context, hex.x, hex.y, radius);
+    }
     if (hasMapArt) this.warmAdjacentPreviews(levelIndex);
   }
 

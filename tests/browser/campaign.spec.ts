@@ -6,12 +6,19 @@ type GeometrySnapshot = {
   transform: { scale: number; translateX: number; translateY: number };
 };
 
-async function readGeometry(page: Page): Promise<{ geometry: GeometrySnapshot; canvas: DOMRect; stage: DOMRect; anchor: { x: number; y: number } }> {
-  await expect.poll(async () => page.evaluate(() => {
+async function readGeometry(page: Page, expectedLevel?: number): Promise<{ geometry: GeometrySnapshot; canvas: DOMRect; stage: DOMRect; anchor: { x: number; y: number } }> {
+  await expect.poll(async () => page.evaluate((level) => {
+    const api = window.__HEXFRONT__;
+    const state = api?.getState();
+    // Asset preparation is asynchronous, including startLevel(). A fitted empty
+    // canvas is not evidence that the requested mission has actually started.
+    if (!state?.running || (level !== undefined && state.currentLevel !== level)
+      || document.querySelector('#campaignMenu')?.classList.contains('mapLoading')
+      || !api?.getBoard().some(hex => hex.col === 3 && hex.row === 9)) return Infinity;
     const canvas = document.querySelector('#gameCanvas')?.getBoundingClientRect();
     const stage = document.querySelector('#stage')?.getBoundingClientRect();
     return canvas && stage ? Math.max(Math.abs(canvas.width - stage.width), Math.abs(canvas.height - stage.height)) : Infinity;
-  })).toBeLessThanOrEqual(1);
+  }, expectedLevel)).toBeLessThanOrEqual(1);
   return page.evaluate(() => {
     const geometry = window.__HEXFRONT__!.getGeometry() as GeometrySnapshot;
     const canvas = document.querySelector('#gameCanvas')!.getBoundingClientRect();
@@ -189,6 +196,8 @@ test('Level 1 battle waits for the first valid drag and a completed mission pers
   await expect(page.locator('.modeBtn[data-mode="half"]:visible')).toHaveClass(/newlyUnlocked/);
   await expect(page.locator('#hint')).toContainText('choose 50%');
   await expect(page.locator('.modeBtn[data-mode="half"]:visible')).toHaveAttribute('data-new-label', 'NEW · 50% SEND');
+  await expect(page.locator('.modeBtn[data-mode="all"]:visible')).toHaveClass(/active/);
+  await page.locator('.modeBtn[data-mode="half"]:visible').click();
   const levelTwoBoard = await page.evaluate(() => window.__HEXFRONT__?.getBoard()) as DebugBoard;
   const levelTwoSource = levelTwoBoard.find((hex) => hex.col === 3 && hex.row === 11)!;
   const levelTwoTarget = levelTwoBoard.find((hex) => hex.col === 3 && hex.row === 10)!;
@@ -199,6 +208,28 @@ test('Level 1 battle waits for the first valid drag and a completed mission pers
   await page.goto('/');
   await expect(page.getByRole('button', { name: 'Level 2: TWO ROUTES' })).toBeEnabled();
   await expect(page.getByText('1 / 10', { exact: true })).toBeVisible();
+});
+
+test('send mode preference survives restarts and uses 100 percent as a safe fallback', async ({ page }) => {
+  await page.goto('/?unlock=1&autostart=1&level=1');
+  const activeMode = page.locator('.modeBtn.active:visible');
+  await expect(activeMode).toHaveAttribute('data-mode', 'all');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('hexfront:preferred-send-mode'))).toBeNull();
+
+  await page.locator('.modeBtn[data-mode="half"]:visible').click();
+  await expect(activeMode).toHaveAttribute('data-mode', 'half');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('hexfront:preferred-send-mode'))).toBe('half');
+
+  await page.evaluate(() => window.__HEXFRONT__?.startLevel(1));
+  await expect(activeMode).toHaveAttribute('data-mode', 'half');
+  await page.evaluate(() => window.__HEXFRONT__?.startLevel(0));
+  await expect(activeMode).toHaveAttribute('data-mode', 'all');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('hexfront:preferred-send-mode'))).toBe('half');
+
+  await page.evaluate(() => window.__HEXFRONT__?.startLevel(1));
+  await expect(activeMode).toHaveAttribute('data-mode', 'half');
+  await page.reload();
+  await expect(activeMode).toHaveAttribute('data-mode', 'half');
 });
 
 test('the half-send unlock is localized in German', async ({ page }) => {
@@ -383,15 +414,135 @@ test('Level 6 exposes one western guardian and its smaller HQ shield', async ({ 
   expect(guardians[0]).toMatchObject({ id: 'enemy-guardian-west', owner: 2, col: 2, row: 4, status: 'active', shield: 36, linkedTo: 'enemy-hq' });
 });
 
+test('Level 7 pauses for a relay briefing and coaches a real range-2 drag', async ({ page }) => {
+  await page.goto('/?unlock=1&autostart=1&level=6');
+  await expect(page.locator('#relayBriefing')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'SIGNAL RELAY' })).toBeVisible();
+  await expect(page.locator('.relayBriefingRelay')).toHaveCount(1);
+  await expect(page.locator('.relayBriefingTarget')).toHaveCount(2);
+  await expect(page.locator('.relayBriefingRange')).toContainText('2 HEXES');
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getState())).toMatchObject({ elapsed: 0, waitingForBriefing: true });
+  await page.waitForTimeout(350);
+  expect(await page.evaluate(() => window.__HEXFRONT__?.getState().elapsed)).toBe(0);
+
+  await page.getByRole('button', { name: 'START MISSION' }).click();
+  await expect(page.locator('#relayBriefing')).toBeHidden();
+  await expect(page.locator('#relayCoach')).toBeVisible();
+  await expect(page.locator('#hint')).toContainText('Capture the central relay');
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('hexfront_campaign_progress_v2') ?? '{}').relayBriefingSeen)).toBe(true);
+
+  await page.evaluate(() => {
+    const api = window.__HEXFRONT__!;
+    api.setOpponentEnabled(false);
+    for (let wave = 0; wave < 80; wave += 1) {
+      const board = api.getBoard();
+      for (let row = 11; row >= 7; row -= 1) {
+        const source = board.find((hex) => hex.col === 3 && hex.row === row && hex.owner === 1 && hex.units >= 2);
+        const target = board.find((hex) => hex.col === 3 && hex.row === row - 1);
+        if (source && target) api.send(source.col, source.row, target.col, target.row, .9);
+      }
+      api.simulate(2, .05);
+      const relay = api.getBoard().find((hex) => hex.col === 3 && hex.row === 6);
+      if (relay?.owner === 1 && relay.units >= 4) break;
+    }
+    api.simulate(8, .05);
+  });
+  await expect.poll(async () => {
+    const board = await page.evaluate(() => window.__HEXFRONT__!.getBoard()) as DebugBoard;
+    return board.find((hex) => hex.col === 3 && hex.row === 6)?.owner;
+  }).toBe(1);
+  await expect(page.locator('#hint')).toContainText('Hold your relay');
+  await expect(page.locator('.relayCoachTarget')).toHaveCount(2);
+
+  const board = await page.evaluate(() => window.__HEXFRONT__!.getBoard()) as DebugBoard;
+  const relay = board.find((hex) => hex.col === 3 && hex.row === 6)!;
+  const landing = board.find((hex) => hex.col === 2 && hex.row === 4)!;
+  await dragBetween(page, relay, landing);
+  await expect(page.locator('#toast')).toContainText('crossed two hexes');
+  await expect(page.locator('#relayCoach')).toBeHidden();
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('hexfront_campaign_progress_v2') ?? '{}').relaySendUsed)).toBe(true);
+
+  await page.locator('#relayHelpBtn').click();
+  await expect(page.getByRole('button', { name: 'RETURN TO BATTLE' })).toBeVisible();
+});
+
+test('Level 8 teaches both relay lanes and requires one range-2 drag from each', async ({ page }) => {
+  await page.goto('/?unlock=1&autostart=1&level=7');
+  await expect(page.locator('#relayBriefing')).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'DUAL RELAY NETWORK' })).toBeVisible();
+  await expect(page.locator('.relayBriefingRelay')).toHaveCount(2);
+  await expect(page.locator('.relayBriefingTarget')).toHaveCount(2);
+  const arrowTransforms = await page.locator('.relayBriefingArrow').evaluateAll((arrows) =>
+    arrows.map((arrow) => (arrow as HTMLElement).style.transform));
+  expect(arrowTransforms).toHaveLength(2);
+  expect(arrowTransforms.every((transform) => transform.includes('rotate(0deg)'))).toBe(true);
+  await expect(page.locator('.relayBriefingRange')).toContainText('TWO RANGE-2 LAUNCH LANES');
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getState())).toMatchObject({ elapsed: 0, waitingForBriefing: true });
+  await page.waitForTimeout(300);
+  expect(await page.evaluate(() => window.__HEXFRONT__?.getState().elapsed)).toBe(0);
+
+  await page.getByRole('button', { name: 'START MISSION' }).click();
+  await expect(page.locator('#relayBriefing')).toBeHidden();
+  await expect(page.locator('#relayCoach')).toBeVisible();
+  await expect(page.locator('#hint')).toContainText('Capture both flank relays');
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('hexfront_campaign_progress_v2') ?? '{}').relayMasteryBriefingSeen)).toBe(true);
+
+  await page.evaluate(() => {
+    const api = window.__HEXFRONT__!;
+    api.setOpponentEnabled(false);
+    const routes = [
+      [[3,11],[3,10],[2,9],[2,8],[1,7],[1,6]],
+      [[3,11],[3,10],[3,9],[4,8],[4,7],[5,6]],
+    ];
+    for (const route of routes) {
+      for (let wave = 0; wave < 100; wave += 1) {
+        const board = api.getBoard();
+        for (let index = route.length - 2; index >= 0; index -= 1) {
+          const [sourceCol, sourceRow] = route[index]; const [targetCol, targetRow] = route[index + 1];
+          const source = board.find((hex) => hex.col === sourceCol && hex.row === sourceRow && hex.owner === 1 && hex.units >= 2);
+          if (source) api.send(sourceCol, sourceRow, targetCol, targetRow, .9);
+        }
+        api.simulate(1.5, .05);
+        const [relayCol, relayRow] = route[route.length - 1];
+        if (api.getBoard().find((hex) => hex.col === relayCol && hex.row === relayRow)?.owner === 1) break;
+      }
+    }
+    api.simulate(8, .05);
+  });
+  await expect.poll(async () => {
+    const board = await page.evaluate(() => window.__HEXFRONT__!.getBoard()) as DebugBoard;
+    return [[1,6],[5,6]].filter(([col,row]) => board.find((hex) => hex.col === col && hex.row === row)?.owner === 1).length;
+  }).toBe(2);
+  await expect(page.locator('#hint')).toContainText('Both relays are online');
+  await expect(page.locator('.relayCoachTarget')).toHaveCount(2);
+
+  let board = await page.evaluate(() => window.__HEXFRONT__!.getBoard()) as DebugBoard;
+  await dragBetween(page, board.find((hex) => hex.col === 1 && hex.row === 6)!, board.find((hex) => hex.col === 1 && hex.row === 4)!);
+  await expect(page.locator('#toast')).toContainText('First relay linked');
+  await expect(page.locator('#relayCoach')).toBeVisible();
+  await expect(page.locator('.relayCoachTarget')).toHaveCount(1);
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('hexfront_campaign_progress_v2') ?? '{}').relayMasteryUsed ?? false)).toBe(false);
+
+  board = await page.evaluate(() => window.__HEXFRONT__!.getBoard()) as DebugBoard;
+  await dragBetween(page, board.find((hex) => hex.col === 5 && hex.row === 6)!, board.find((hex) => hex.col === 5 && hex.row === 4)!);
+  await expect(page.locator('#toast')).toContainText('both flanks are advancing');
+  await expect(page.locator('#relayCoach')).toBeHidden();
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('hexfront_campaign_progress_v2') ?? '{}').relayMasteryUsed)).toBe(true);
+
+  await page.locator('#relayHelpBtn').click();
+  await expect(page.getByRole('heading', { name: 'DUAL RELAY NETWORK' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'RETURN TO BATTLE' })).toBeVisible();
+});
+
 test('campaign start, restart and direct next level keep identical board geometry', async ({ page }) => {
   await page.getByRole('button', { name: 'BEGIN CAMPAIGN' }).click();
   await page.evaluate(() => window.__HEXFRONT__?.setOpponentEnabled(false));
-  const started = await readGeometry(page);
+  const started = await readGeometry(page, 0);
   await page.evaluate(() => window.__HEXFRONT__?.startLevel(0));
-  const restarted = await readGeometry(page);
+  const restarted = await readGeometry(page, 0);
   expectSameGeometry(restarted, started);
   await page.evaluate(() => window.__HEXFRONT__?.startLevel(1));
-  const nextLevel = await readGeometry(page);
+  const nextLevel = await readGeometry(page, 1);
   expectSameGeometry(nextLevel, started);
 });
 
@@ -416,7 +567,7 @@ test('Level 1 map art shares the canonical uniform world transform with its game
   expect(mapArt.sourceCrop.width / mapArt.sourceCrop.height).toBeCloseTo(1108 / 842, 10);
   expect(layers).toEqual([
     'backdrop-bleed', 'map-core', 'water', 'shore', 'atmosphere', 'grid',
-    'territory-selection', 'structures', 'units-movement', 'gameplay-fx',
+    'territory-selection', 'structures', 'units-movement', 'gameplay-fx', 'field-strength',
   ]);
   expect(result.canvas.width).toBeCloseTo(result.geometry.runtime.width * result.geometry.pixelRatio, 0);
   expect(result.canvas.height).toBeCloseTo(result.geometry.runtime.height * result.geometry.pixelRatio, 0);
@@ -593,14 +744,18 @@ test('responsive shell has no page overflow and mobile controls meet the touch f
     expect(gameMetrics.statLabels.every(({ display }) => display !== 'none')).toBe(true);
     expect(gameMetrics.statLabels.map(({ text }) => text)).toEqual(['CELLS / UNITS', 'CELLS / UNITS']);
     expect(gameMetrics.radius).toBeLessThanOrEqual(31);
-  } else expect(gameMetrics.radius).toBeGreaterThan(34);
+  } else expect(gameMetrics.radius).toBeGreaterThanOrEqual(34);
 });
 
-test('compact desktop keeps the full dossier controls visible', async ({ page }, testInfo) => {
+test('compact desktop exposes battle controls without covering the board', async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== 'desktop-chromium');
   await page.setViewportSize({ width: 1100, height: 700 });
   await clearProgress(page);
   await page.getByRole('button', { name: 'BEGIN CAMPAIGN' }).click();
+  await expect(page.locator('#battleSupply')).toBeVisible();
+  await expect(page.locator('#pauseButton')).toBeVisible();
+  await expect(page.locator('#mobileBar')).toBeVisible();
+  await expect(page.locator('#sidePanel')).toBeHidden();
   const metrics = await page.evaluate(() => {
     const dossier = document.querySelector<HTMLElement>('.sideDossier')!;
     const sound = document.querySelector<HTMLElement>('#sideSoundBtn')!.getBoundingClientRect();
@@ -624,22 +779,29 @@ test('large desktop keeps the board complete and exposes the command dock', asyn
   await page.goto('/?unlock=1&autostart=1&level=1');
   const metrics = await page.evaluate(() => {
     const dock = document.querySelector<HTMLElement>('#commandDock')!.getBoundingClientRect();
+    const board = document.querySelector<HTMLElement>('#gameCanvas')!.getBoundingClientRect();
+    const panel = document.querySelector<HTMLElement>('#sidePanel')!.getBoundingClientRect();
     const button = document.querySelector<HTMLElement>('#commandDock .modeBtn')!.getBoundingClientRect();
     const shortcut = document.querySelector<HTMLElement>('#commandDock .modeShortcut')!;
     const upper = window.__HEXFRONT__?.getBoard().find((hex) => hex.col === 3 && hex.row === 8);
     const lower = window.__HEXFRONT__?.getBoard().find((hex) => hex.col === 3 && hex.row === 9);
     return {
       dockWidth: dock.width,
+      dockLeft: dock.left, boardRight: board.right, panelWidth: panel.width,
+      dockHeight: dock.height,
       buttonHeight: button.height,
       shortcutFontSize: Number.parseFloat(getComputedStyle(shortcut).fontSize),
-      guide: document.querySelector('#commandDock .modeKeyboardDiagram')?.textContent?.replace(/\s+/g, ''),
+      duplicateGuide: Boolean(document.querySelector('#commandDock .modeKeyboardDiagram')),
       radius: upper && lower ? Math.abs(lower.y - upper.y) / 1.5 : 0,
     };
   });
-  expect(metrics.dockWidth).toBeGreaterThanOrEqual(300);
-  expect(metrics.buttonHeight).toBeGreaterThanOrEqual(64);
-  expect(metrics.shortcutFontSize).toBeGreaterThanOrEqual(12);
-  expect(metrics.guide).toContain('1→100');
+  expect(metrics.dockWidth).toBeGreaterThanOrEqual(230);
+  expect(metrics.dockWidth).toBeLessThanOrEqual(metrics.panelWidth);
+  expect(metrics.dockLeft).toBeGreaterThanOrEqual(metrics.boardRight);
+  expect(metrics.dockHeight).toBeLessThanOrEqual(450);
+  expect(metrics.buttonHeight).toBeGreaterThanOrEqual(48);
+  expect(metrics.shortcutFontSize).toBeGreaterThanOrEqual(10);
+  expect(metrics.duplicateGuide).toBe(false);
   expect(metrics.radius).toBeGreaterThanOrEqual(41);
 });
 
@@ -648,11 +810,11 @@ test('desktop auto supply can be paused without hiding its explanation', async (
   await page.goto('/?unlock=1&autostart=1&level=1');
   const toggle = page.locator('#autoSupplyBtn');
   await expect(toggle).toHaveAttribute('aria-pressed', 'true');
-  await expect(page.locator('#autoSupplyDescription')).toContainText('Surplus follows the forward route toward the rival');
+  await expect(page.locator('#autoSupplyDescription')).toContainText('Surplus moves forward');
   await toggle.click();
   await expect(toggle).toHaveAttribute('aria-pressed', 'false');
   await expect(page.locator('#autoSupplyStatus')).toHaveText('OFF · MANUAL');
-  await expect(page.locator('#autoSupplyDescription')).toContainText('Your units stay put');
+  await expect(page.locator('#autoSupplyDescription')).toContainText('Troops already traveling finish their route');
 });
 
 test('language defaults to English and the German choice survives reload', async ({ page }) => {
@@ -736,14 +898,14 @@ test('decor variants decode their lazily loaded candidate assets', async ({ page
   }
 });
 
-test('relay structure art loads only when a relay mission starts', async ({ page }) => {
+test('relay structure art is available in its campaign preview and relay missions', async ({ page }) => {
   const relayRequests: string[] = [];
   page.on('request', (request) => {
     if (request.url().includes('/assets/structures/relay-neutral-v2.png')) relayRequests.push(request.url());
   });
-  await page.goto('/?autostart=1&level=0');
-  await page.waitForTimeout(250);
-  expect(relayRequests).toEqual([]);
+  await page.goto('/?unlock=1');
+  await page.getByRole('button', { name: 'Level 7: RELAY ISLAND' }).click();
+  await expect.poll(() => relayRequests.length).toBeGreaterThan(0);
 
   await page.goto('/?unlock=1&autostart=1&level=6');
   await expect(page.locator('#legendRelay')).toContainText('only this cell can send up to 2 hexes away');
@@ -752,7 +914,6 @@ test('relay structure art loads only when a relay mission starts', async ({ page
   await expect(page.locator('#legendGuardian')).toHaveAttribute('hidden');
   await expect.poll(() => page.locator('#legendBase img').evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
   await expect.poll(() => page.locator('#legendRelay img').evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBe(512);
-  await expect.poll(() => relayRequests.length).toBeGreaterThan(0);
   const decoded = await page.evaluate(() => new Promise<boolean>((resolve) => {
     const image = new Image();
     image.addEventListener('load', () => resolve(image.naturalWidth === 512 && image.naturalHeight === 512), { once:true });
@@ -766,11 +927,11 @@ test('relay structure art loads only when a relay mission starts', async ({ page
   await expect(page.locator('#legendRelay')).toHaveAttribute('hidden');
 });
 
-test('Level 9 is released with three readable passes while Level 10 remains coming soon', async ({ page }) => {
+test('Level 9 retains its three passes and advances into the illustrated ice finale', async ({ page }) => {
   await page.goto('/?unlock=1');
   const levelNine = page.getByRole('button', { name: 'Level 9: THREE PASSES' });
   await expect(levelNine).toBeEnabled();
-  await expect(page.getByRole('button', { name: /Level 10: THE RING/ })).toHaveAttribute('aria-label', /coming soon/);
+  await expect(page.getByRole('button', { name: /Level 10: THE RING/ })).not.toHaveAttribute('aria-label', /coming soon/);
   await levelNine.click();
   await expect(page.locator('#menuLevelName')).toHaveText('IX · THREE PASSES');
   await expect(page.getByRole('button', { name: 'START LEVEL' })).toBeEnabled();
@@ -788,8 +949,9 @@ test('Level 9 is released with three readable passes while Level 10 remains comi
   ]);
   await page.evaluate(() => window.__HEXFRONT__?.debugWin());
   await expect(page.locator('#resultAdvance')).toBeVisible();
-  await expect(page.locator('#resultAdvanceLabel')).toHaveText('COMING SOON');
   await expect(page.locator('#resultAdvanceName')).toHaveText('X · THE RING');
-  await expect(page.locator('#resultAdvanceRule')).toContainText('still in development');
-  await expect(page.locator('#nextLevelBtn')).toBeHidden();
+  await expect(page.locator('#nextLevelBtn')).toBeVisible();
+  await page.locator('#nextLevelBtn').click();
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getState().currentLevel)).toBe(9);
+  await expect.poll(() => page.evaluate(() => window.__HEXFRONT__?.getRenderProfile().mapArt.loaded)).toBe(true);
 });

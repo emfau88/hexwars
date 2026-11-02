@@ -1,5 +1,5 @@
 import { GAME_CONFIG, SUPPLY_CONFIG } from '../core/config';
-import { cellKey, findOwnedPath, hexDistance, neighborsOf } from '../core/hex';
+import { cellKey, hexDistance, neighborsOf, ownedPathsFrom } from '../core/hex';
 import { Owner, Terrain, type ArmyMovement, type HexState, type StructureState } from '../core/types';
 import { terrainCapacity } from './GrowthSystem';
 import { createMovement } from './MovementSystem';
@@ -60,7 +60,7 @@ export function isForwardSupplyPath(path: readonly HexState[], targetBase: HexSt
 
 function supplySources(hexes: readonly HexState[], owner: Owner, structures: readonly StructureState[] = []): HexState[] {
   return hexes
-    .filter((hex) => hex.owner === owner && !isGuardianCell(structures, hex))
+    .filter((hex) => hex.owner === owner && !hex.supplyHeld && !isGuardianCell(structures, hex))
     .sort((first, second) => {
       const firstFront = isFrontHex(hexes, first, owner);
       const secondFront = isFrontHex(hexes, second, owner);
@@ -74,6 +74,14 @@ export function hasContestedFront(hexes: readonly HexState[], owner: Owner): boo
   return hexes.some((hex) => hex.owner === owner && neighborsOf(hexes, hex).some((neighbor) => neighbor.owner === opponent));
 }
 
+/** Committed attacks must not make automatic logistics evacuate their defenders. */
+export function isUnderAttack(context: SupplyContext, hex: HexState): boolean {
+  const opponent = hex.owner === Owner.Player ? Owner.Enemy : Owner.Player;
+  return (hex.siege?.[opponent] ?? 0) > 0
+    || context.armies.some((army) => army.owner === opponent && army.kind === 'command'
+      && army.toKey === cellKey(hex) && army.units > 0);
+}
+
 export function chooseSupplyRoute(
   context: SupplyContext,
   source: HexState,
@@ -81,22 +89,23 @@ export function chooseSupplyRoute(
 ): { target: HexState; path: HexState[] } | null {
   const targetBase = enemyBase(context.hexes, owner);
   const structures = context.structures ?? [];
+  const paths = ownedPathsFrom(context.hexes, source, (from, to) => !targetBase || hexDistance(to, targetBase) <= hexDistance(from, targetBase));
   const incoming = new Map<string, number>();
   for (const army of context.armies) {
-    if (army.owner === owner && army.kind === 'supply') incoming.set(army.toKey, (incoming.get(army.toKey) ?? 0) + army.units);
+    if (army.owner === owner) incoming.set(army.toKey, (incoming.get(army.toKey) ?? 0) + army.units);
   }
   const candidates = context.hexes
     .filter((target) => target.owner === owner && !isGuardianCell(structures, target))
     .filter((target) => target !== source)
-    .map((target) => ({ target, path: findOwnedPath(context.hexes, source, target) }))
+    .map((target) => ({ target, path: paths.get(cellKey(target)) }))
     .filter((candidate): candidate is { target: HexState; path: HexState[] } => Boolean(candidate.path && candidate.path.length > 1))
     .filter(({ target }) => !targetBase || hexDistance(target, targetBase) < hexDistance(source, targetBase))
-    .filter((candidate) => !targetBase || isForwardSupplyPath(candidate.path, targetBase))
     .filter(({ target }) => target.units + (incoming.get(cellKey(target)) ?? 0) < supplyTargetCapacity(target))
     .map((candidate) => {
       const distanceToBase = targetBase ? hexDistance(candidate.target, targetBase) : candidate.path.length - 1;
       const load = (candidate.target.units + (incoming.get(cellKey(candidate.target)) ?? 0)) / Math.max(1, supplyTargetCapacity(candidate.target));
-      return { ...candidate, score: distanceToBase * 10 + load * SUPPLY_CONFIG.loadBalanceWeight + (candidate.path.length - 1) * .15 };
+      const defencePriority = targetBase && isUnderAttack(context, candidate.target) ? 16 : 0;
+      return { ...candidate, score: distanceToBase * 10 + load * SUPPLY_CONFIG.loadBalanceWeight + (candidate.path.length - 1) * .15 - defencePriority };
     })
     .sort((a, b) => a.score - b.score || cellKey(a.target).localeCompare(cellKey(b.target)));
   return candidates[0] ?? null;
@@ -118,12 +127,13 @@ export class SupplySystem {
       if (accumulated < interval) { this.accumulators[owner] = accumulated; continue; }
       this.accumulators[owner] = accumulated % interval;
       for (const source of supplySources(context.hexes, owner, context.structures)) {
+        if (isUnderAttack(context, source)) continue;
         const reserve = supplyReserveFor(source, isFrontHex(context.hexes, source, owner));
         const surplus = Math.floor(source.units - reserve);
         if (surplus < SUPPLY_CONFIG.dispatchThreshold) continue;
         const route = chooseSupplyRoute(context, source, owner);
         if (!route) continue;
-        const incoming = context.armies.filter((army) => army.owner === owner && army.kind === 'supply' && army.toKey === cellKey(route.target)).reduce((sum, army) => sum + army.units, 0);
+        const incoming = context.armies.filter((army) => army.owner === owner && army.toKey === cellKey(route.target)).reduce((sum, army) => sum + army.units, 0);
         const targetCapacity = supplyTargetCapacity(route.target);
         const amount = Math.min(surplus, Math.max(0, Math.floor(targetCapacity - route.target.units - incoming)));
         if (amount < SUPPLY_CONFIG.dispatchThreshold) continue;
