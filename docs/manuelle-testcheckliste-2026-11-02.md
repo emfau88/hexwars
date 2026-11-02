@@ -4,7 +4,7 @@ Stand: 2. November 2026. Für die nächste Testsitzung auf `codex/improve-mobile
 
 ## 1. Den richtigen Stand starten
 
-- [ ] **Direkt auf dem Handy oder PC:** [Aktuellen Teststand öffnen](https://rawcdn.githack.com/emfau88/hexwars/789a38cfda751e28c1314a21b432c3378acc5029/previews/hexfront-improvements-2026-11-02/index.html). Kein lokaler Server nötig. Falls der Host eine Zwischenseite zeigt, **Open the page** antippen. Das ist Spielquellstand `b46c11e`, festgehalten in Vorschau-Commit `789a38c`.
+- [ ] **Direkt auf dem Handy oder PC:** [Aktuellen Teststand öffnen](https://rawcdn.githack.com/emfau88/hexwars/d2201fb3e40ab88f443b0fee5c5e863d4756f806/previews/hexfront-improvements-2026-11-02/index.html). Kein lokaler Server nötig. Falls der Host eine Zwischenseite zeigt, **Open the page** antippen. Das ist Spielquellstand `9812ced`, festgehalten in Vorschau-Commit `d2201fb`.
 - [ ] **Alternativ lokal:** Im Projektordner den genannten Branch verwenden und mit `npm run dev` starten. Die im Terminal angezeigte Adresse öffnen, normalerweise `http://127.0.0.1:5173/`.
 - [ ] Die Seite einmal neu laden. Ohne Entwicklungsparameter wie `unlock`, `autoplay` oder `speed` testen, damit Freischaltung und Tempo dem normalen Spiel entsprechen.
 - [ ] Bestehenden Fortschritt zunächst im bisherigen Browserprofil auf demselben Host prüfen. Spielstände werden nicht automatisch zwischen localhost, der Handy-Vorschau und Kongregate synchronisiert. Für den frischen Kampagnendurchlauf ein separates Profil oder privates Fenster verwenden; den alten Spielstand nicht dafür löschen. Private Fenster verlieren ihren Speicher üblicherweise beim Schließen.

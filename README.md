@@ -1,12 +1,12 @@
 # HEXFRONT
 
-**[▶ Aktuellen Teststand auf dem Handy oder PC spielen](https://rawcdn.githack.com/emfau88/hexwars/789a38cfda751e28c1314a21b432c3378acc5029/previews/hexfront-improvements-2026-11-02/index.html)**
+**[▶ Aktuellen Teststand auf dem Handy oder PC spielen](https://rawcdn.githack.com/emfau88/hexwars/d2201fb3e40ab88f443b0fee5c5e863d4756f806/previews/hexfront-improvements-2026-11-02/index.html)**
 
-Teststand vom **2. November 2026**: verbesserter Nachschub, Tap-/Tastatursteuerung, Pause und Eis-Finale. Funktioniert direkt im Browser ohne lokalen Server. Falls der Vorschauhost einen Hinweis zeigt, **Open the page** antippen.
+Teststand vom **2. November 2026**: verbesserter Nachschub, Tap-/Tastatursteuerung, Pause, Eis-Finale und korrigierte mobile Hinweiszeile. Funktioniert direkt im Browser ohne lokalen Server. Falls der Vorschauhost einen Hinweis zeigt, **Open the page** antippen.
 
 **[✓ Testcheckliste mit konkreten Prüfschritten](docs/manuelle-testcheckliste-2026-11-02.md)** · [Verbesserungsplan und offene Abnahme](docs/hexfront-verbesserungsplan-2026-11-02.md)
 
-Der Playlink ist fest auf Vorschau-Commit `789a38c` mit Spielquellstand `b46c11e` gesetzt. Die manuelle Abnahme steht noch aus. Kongregate-Statistiken werden erst innerhalb von Kongregate übertragen.
+Der Playlink ist fest auf Vorschau-Commit `d2201fb` mit Spielquellstand `9812ced` gesetzt. Die manuelle Abnahme steht noch aus. Kongregate-Statistiken werden erst innerhalb von Kongregate übertragen.
 
 [![Verify and deploy](https://github.com/emfau88/hexwars/actions/workflows/pages.yml/badge.svg)](https://github.com/emfau88/hexwars/actions/workflows/pages.yml)
 
@@ -60,7 +60,7 @@ The upload-ready portal package contains one 1000 × 800 icon and three 1600 × 
 
 ## Play
 
-[Play this branch's current improvement preview](https://rawcdn.githack.com/emfau88/hexwars/789a38cfda751e28c1314a21b432c3378acc5029/previews/hexfront-improvements-2026-11-02/index.html)
+[Play this branch's current improvement preview](https://rawcdn.githack.com/emfau88/hexwars/d2201fb3e40ab88f443b0fee5c5e863d4756f806/previews/hexfront-improvements-2026-11-02/index.html)
 
 The [earlier GitHub Pages build](https://emfau88.github.io/hexwars/) is separate from this branch preview.
 
