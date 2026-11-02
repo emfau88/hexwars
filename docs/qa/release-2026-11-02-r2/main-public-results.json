@@ -1,0 +1,29 @@
+{
+  "url": "https://emfau88.github.io/hexwars/",
+  "results": [
+    {
+      "width": 390,
+      "confirmation": false,
+      "dragHintSeparated": true,
+      "firstTapCommand": true,
+      "iceFinale": true,
+      "language": true,
+      "pause": true,
+      "debugAbsent": true,
+      "errors": [],
+      "badAssets": []
+    },
+    {
+      "width": 1440,
+      "confirmation": false,
+      "dragHintSeparated": true,
+      "firstTapCommand": true,
+      "iceFinale": true,
+      "language": true,
+      "pause": true,
+      "debugAbsent": true,
+      "errors": [],
+      "badAssets": []
+    }
+  ]
+}

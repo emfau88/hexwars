@@ -16,7 +16,7 @@
 - [ ] Korrigierte Hinweiszeile auf dem tatsächlichen Handy erneut testen.
 - [x] Entscheidung zum Kartenausschnitt: Der Nutzer bewertet die getestete Ansicht als gut; sie bleibt für dieses Update erhalten. Zusätzliche automatische Vergrößerung und kompaktere Hochkant-Bedienung sind zurückgestellte Optionen, nicht umgesetzt.
 
-**Merge und Pakete:** Der beauftragte Merge nach `main` ist lokal als `d053f9b` abgeschlossen. Neue Kongregate-/Y8-Pakete r2 wurden daraus erstellt, entpackt und geprüft. [Paketbericht und Prüfsummen](releases/hexfront-2026-11-02-r2.md). GitHub Pages wird über den bestehenden Main-Workflow aktualisiert; Portal-Upload und echte Portalprüfung bleiben gesondert.
+**Merge und Pakete:** Der beauftragte Merge nach `main` ist als `d053f9b` abgeschlossen und gepusht. Neue Kongregate-/Y8-Pakete r2 wurden daraus erstellt, entpackt und geprüft. [Paketbericht und Prüfsummen](releases/hexfront-2026-11-02-r2.md). GitHub Pages wird über den bestehenden Main-Workflow aktualisiert; Portal-Upload und echte Portalprüfung bleiben gesondert.
 
 **Zusätzlicher Nutzerfund beim Levelwechsel:** Die nächste Karte wurde erst nach dem Klick geladen; nur der unsichtbare Startbutton im Kampagnenmenü zeigte einen Ladezustand. Der sichtbare Weiter-Button blieb unverändert. Das ist auf Mobil reproduziert, kein ausschließlich am Nutzergerät beobachteter Effekt.
 
@@ -37,7 +37,7 @@ Der Nutzer hat am 2. November 2026 die Umsetzung mit gezielten Prüfungen beauft
 
 **Paketstand nach Nutzerfeedback:** Kongregate-/Y8-Pakete r2 enthalten Bewegungs-, Statistik-, Hinweis- und Levelwechsel-Korrekturen sowie Eis-Level 10. Genau diese ZIPs sind lokal geprüft. Frühere r1-/generische ZIPs bleiben ältere Teststände; GameMonetize wurde diesmal nicht neu paketiert.
 
-**Neuester belegter Prüfstand:** 162/162 Logiktests bestanden. Vollständiger Browserlauf: 76 bestanden, sechs projektbedingt übersprungen, kein Fehler. Die anschließende Begrenzung externer Kongregate-Einbindungen auf tatsächliche Iframes wurde gezielt nachgeprüft. Zusätzlich 140 Karten-/Sprach-/Größenfälle ohne verdeckte Feldmitte oder horizontalen Seitenüberlauf, Bewegungsvergleich, Schildzustände, Gruppenvorschau und Browser-Touchereignisse geprüft. Eine automatisierte Kampagne mit echten Kämpfen und Speichern/Neuladen gewinnt alle zehn Level. Alte Spielstände und Level 9 → 10 sind separat im Browser geprüft. Menschliche Durchläufe, physische Geräte und veröffentlichte Portale bleiben offen. Kongregate-Ursache, Korrektur und Statistikvorschläge: `kongregate-statistics-audit-2026-11-02.md`.
+**Neuester belegter Prüfstand:** Der [GitHub-Main-Workflow für 80b3396](https://github.com/emfau88/hexwars/actions/runs/41528320094) ist erfolgreich: Typprüfung, 162 Logiktests, 88 bestandene Browserfälle und sechs projektbedingte Ausnahmen, Produktionsprüfung und Pages-Deployment. Anschließend den veröffentlichten Main-Spielstand bei 390×844/1440×900 ohne Laufzeit-/Assetfehler geprüft. Die beiden endgültigen r2-ZIPs bestehen acht lokale Browser-/Iframefälle und die vollständige Archivprüfung. Frühere Karten-, Bewegungs- und Simulationsnachweise bleiben im Arbeitsprotokoll erhalten. Menschlicher Gesamtdurchlauf, vollständige physische Prüfung sowie echte Kongregate-Statistikannahme und Y8-Werbeauslieferung bleiben offen.
 
 ## Leitplanken für eine sichere Umsetzung
 
