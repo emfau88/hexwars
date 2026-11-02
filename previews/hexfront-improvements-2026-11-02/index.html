@@ -8,8 +8,8 @@
   <link rel="preload" as="image" href="./assets/ui/campaign-atlas-v2.webp" type="image/webp" />
   <title>HEXFRONT</title>
   <script src="https://cdn1.kongregate.com/javascripts/kongregate_api.js"></script>
-  <script type="module" crossorigin src="./assets/index-w4YLMTkA.js"></script>
-  <link rel="stylesheet" crossorigin href="./assets/index-DNorEMaH.css">
+  <script type="module" crossorigin src="./assets/index-Dnu5fC_w.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-CiI6I38W.css">
 </head>
 <body>
 <div id="app">
@@ -27,10 +27,13 @@
 
   <div id="storageWarning" role="status" hidden></div>
   <section id="battleBar" hidden>
-    <span id="battleStatus"></span>
+    <div id="battleReadout">
+      <span id="battleStatus"></span>
+      <span id="fieldStatus"></span>
+      <span id="commandPreview" role="status" hidden></span>
+    </div>
     <button id="battleSupply" type="button" aria-pressed="true"></button>
     <button id="pauseButton" type="button"></button>
-    <span id="fieldStatus"></span>
     <button id="holdField" type="button" aria-pressed="false" disabled></button>
   </section>
   <dialog id="pauseDialog" aria-labelledby="pauseTitle">
@@ -46,9 +49,8 @@
     </div>
   </dialog>
   <div id="battleNotices">
-    <div id="commandPreview" role="status" hidden></div>
-      <div id="hint" data-i18n="hint.default">Drag from an orange cell to a reachable target.</div>
-      <div id="toast"></div>
+    <div id="hint" data-i18n="hint.default">Drag from an orange cell to a reachable target.</div>
+    <div id="toast" role="status"></div>
   </div>
   <div id="layout">
     <div id="stage">
