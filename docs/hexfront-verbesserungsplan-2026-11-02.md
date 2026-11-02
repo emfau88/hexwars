@@ -2,12 +2,12 @@
 
 **Stand:** 2. November 2026
 
-**Status:** Bulks 0–8 lokal geprüft; Balance und Finale lokal geprüft; Eis-Level 10 nach Level 9 spielbar; menschliche/physische/Live-Portal-Abnahme und endgültige Auslieferung offen
+**Status:** Verbesserungen nach main zusammengeführt; Kongregate-/Y8-Pakete r2 lokal als fertige ZIPs geprüft; menschliche/physische/Live-Portal-Abnahme und Portal-Upload weiterhin offen
 **Grundlage:** Audit des aktuellen lokalen Repository-Stands vom 2. November 2026
 
 **Ziel:** Ein zuverlässig spielbares, verständlicheres und besser lesbares HEXFRONT mit sinnvoller automatischer Versorgung und einer abgeschlossenen Zehn-Level-Kampagne.
 
-**Nachtrag aus dem Handy-Test:** Das bei Ziehbewegungen gemeldete Hinweisflackern wurde reproduziert und behoben. Alle zehn Karten sind erneut in sieben Fenstergrößen und beiden Sprachen einschließlich Ziehbewegung geprüft (140 Fälle). Details und Vorschläge je Karte stehen in der [mobilen Kartenprüfung](mobile-kartenpruefung-2026-11-02.md). Kartenausschnitt und Vergrößerung sind noch nicht geändert; diese Designentscheidung und die erneute physische Abnahme bleiben offen.
+**Nachtrag aus dem Handy-Test:** Das bei Ziehbewegungen gemeldete Hinweisflackern wurde reproduziert und behoben. Alle zehn Karten sind erneut in sieben Fenstergrößen und beiden Sprachen einschließlich Ziehbewegung geprüft (140 Fälle). Details und Vorschläge je Karte stehen in der [mobilen Kartenprüfung](mobile-kartenpruefung-2026-11-02.md). Der Nutzer ist mit der getesteten Kartenansicht zufrieden; eine zusätzliche automatische Vergrößerung bleibt für dieses Update zurückgestellt. Die vollständige physische Abnahme bleibt offen.
 
 **Prüfumfang ab diesem Nachtrag:** Auf Nutzerwunsch künftig gängige Handygrößen (360×800, 390×844, 430×932), Tablet (768×1024) und Desktop (1440×900) verwenden. Zusätzliche Sondergrößen sind keine erforderliche Abnahme.
 
@@ -16,7 +16,7 @@
 - [ ] Korrigierte Hinweiszeile auf dem tatsächlichen Handy erneut testen.
 - [x] Entscheidung zum Kartenausschnitt: Der Nutzer bewertet die getestete Ansicht als gut; sie bleibt für dieses Update erhalten. Zusätzliche automatische Vergrößerung und kompaktere Hochkant-Bedienung sind zurückgestellte Optionen, nicht umgesetzt.
 
-**Freigegebener nächster Schritt:** Der Nutzer hat den Merge nach `main` und neue Kongregate-/Y8-Pakete beauftragt. Merge und Paketprüfung werden jetzt durchgeführt. Die ausstehenden echten Portalprüfungen bleiben offen; ein Portal-Upload ist nicht Teil dieses Schritts. GitHub Pages wird durch den vorhandenen Main-Workflow aktualisiert.
+**Merge und Pakete:** Der beauftragte Merge nach `main` ist lokal als `d053f9b` abgeschlossen. Neue Kongregate-/Y8-Pakete r2 wurden daraus erstellt, entpackt und geprüft. [Paketbericht und Prüfsummen](releases/hexfront-2026-11-02-r2.md). GitHub Pages wird über den bestehenden Main-Workflow aktualisiert; Portal-Upload und echte Portalprüfung bleiben gesondert.
 
 **Zusätzlicher Nutzerfund beim Levelwechsel:** Die nächste Karte wurde erst nach dem Klick geladen; nur der unsichtbare Startbutton im Kampagnenmenü zeigte einen Ladezustand. Der sichtbare Weiter-Button blieb unverändert. Das ist auf Mobil reproduziert, kein ausschließlich am Nutzergerät beobachteter Effekt.
 
@@ -31,11 +31,11 @@ Der Nutzer hat am 2. November 2026 die Umsetzung mit gezielten Prüfungen beauft
 
 **Übergabe zur manuellen Abnahme:** Der Nutzer möchte den aktuellen Stand committen und pushen und die offenen manuellen Prüfungen in der nächsten Sitzung selbst durchführen. Die konkrete [Testcheckliste](manuelle-testcheckliste-2026-11-02.md) enthält Schritte und erwartete Ergebnisse. Diese Prüfungen bleiben bis dahin offen; Commit und Push sind keine Release-Freigabe.
 
-**Handy-Vorschau:** [Spielbaren Teststand öffnen](https://rawcdn.githack.com/emfau88/hexwars/d2201fb3e40ab88f443b0fee5c5e863d4756f806/previews/hexfront-improvements-2026-11-02/index.html). Der statische Produktions-Build ist auf Vorschau-Commit `d2201fb` festgelegt und enthält Spielquellstand `9812ced`. Er funktioniert ohne lokalen Server. Der aktualisierte Produktions-Build enthält die Hinweis-Korrektur und wurde lokal mit Ziehen, Touch, Pause, Sprachwechsel und Eis-Finale geprüft. Diese Testvorschau ersetzt weder die Portalprüfung noch die endgültige Veröffentlichung.
+**Spielstand:** [Aktuellen Main-Stand öffnen](https://emfau88.github.io/hexwars/); der Main-Workflow veröffentlicht ihn nach bestandenen Prüfungen. Der frühere festgelegte Testlink `d2201fb` bleibt als Vergleichsstand erhalten und enthält die jüngste Lade-Korrektur noch nicht.
 
-**Lokaler Teststand, kein fertiger Release:** Das Spiel läuft unter `http://127.0.0.1:5173/`. Die bereits erzeugten Kongregate-, Y8- und GameMonetize-ZIPs dienen der Paket- und Produktionsprüfung. Es wurde nichts hochgeladen. Ihre Existenz bedeutet ausdrücklich nicht, dass dieser Plan abgeschlossen ist. Vor Auslieferung müssen die verbleibenden lokalen Prüfungen erledigt und externe Prüfungen beziehungsweise bewusste Zurückstellungen geklärt sein. Der Server muss für den Testlink weiterlaufen.
+**Arbeitskopien:** Der Main-Merge wurde in `.worktrees/hexfront-main-release` vorbereitet, damit lokale unversionierte Experimente im ursprünglichen Arbeitsordner erhalten bleiben. Ein dort noch laufender Entwicklungsserver auf Port 5173 kann weiterhin den alten Feature-Branch zeigen; für den aktuellen Stand den Main-Spiel-Link verwenden.
 
-**Paketstand nach Nutzerfeedback:** Bewegungs- und Kongregate-Fixes sowie die aktualisierte Einstiegshilfe sind im Entwicklungsserver enthalten, noch nicht in den zuvor erzeugten Test-ZIPs. Aktuelle Produktions-Builds wurden separat für Browserprüfungen erstellt; neue Upload-ZIPs wurden nicht erstellt. Die nächste Paketierung folgt nach Abschluss der lokalen Abnahme.
+**Paketstand nach Nutzerfeedback:** Kongregate-/Y8-Pakete r2 enthalten Bewegungs-, Statistik-, Hinweis- und Levelwechsel-Korrekturen sowie Eis-Level 10. Genau diese ZIPs sind lokal geprüft. Frühere r1-/generische ZIPs bleiben ältere Teststände; GameMonetize wurde diesmal nicht neu paketiert.
 
 **Neuester belegter Prüfstand:** 162/162 Logiktests bestanden. Vollständiger Browserlauf: 76 bestanden, sechs projektbedingt übersprungen, kein Fehler. Die anschließende Begrenzung externer Kongregate-Einbindungen auf tatsächliche Iframes wurde gezielt nachgeprüft. Zusätzlich 140 Karten-/Sprach-/Größenfälle ohne verdeckte Feldmitte oder horizontalen Seitenüberlauf, Bewegungsvergleich, Schildzustände, Gruppenvorschau und Browser-Touchereignisse geprüft. Eine automatisierte Kampagne mit echten Kämpfen und Speichern/Neuladen gewinnt alle zehn Level. Alte Spielstände und Level 9 → 10 sind separat im Browser geprüft. Menschliche Durchläufe, physische Geräte und veröffentlichte Portale bleiben offen. Kongregate-Ursache, Korrektur und Statistikvorschläge: `kongregate-statistics-audit-2026-11-02.md`.
 
@@ -338,7 +338,7 @@ Eine vollständige Garantie gegen Folgefehler ist bei Änderungen an einem Spiel
 
 **Voraussetzung:** Alle vorgesehenen Änderungen aus Bulks 0–11 abgeschlossen und geprüft; bewusst verworfene oder zurückgestellte Designoptionen dokumentiert.
 
-**Status:** Lokale Teilprüfungen und Testpakete vorhanden; keine Release-Freigabe, keine Veröffentlichung
+**Status:** Main-Merge und aktuelle Kongregate-/Y8-Pakete lokal geprüft; tatsächliche Portal-Abnahme und Upload offen
 
 - [ ] Einen vollständigen Kampagnendurchlauf mit frischem Spielstand durchführen.
 - [x] Fortsetzen mit bestehenden Spielständen und bereits abgeschlossenen Missionen prüfen.
@@ -355,13 +355,13 @@ Eine vollständige Garantie gegen Folgefehler ist bei Änderungen an einem Spiel
 
 **Abschlussbedingung:** Es gibt ein klar identifizierbares, geprüftes Paket und keine offenen Fehler, die Spielfelder verdecken, unbeabsichtigt Truppen verlieren lassen oder den Spielstart verhindern. Ausstehende Prüfungen dürfen nicht als bestanden gelten.
 
-**Zwischenstand:** Frische Kampagne automatisiert mit echten Kämpfen, Speichern/Neuladen und Freischaltung nach jedem Sieg geprüft (`fresh-campaign.json`). Ein vollständiger menschlicher Durchlauf bleibt offen. Bei 100 Transporten: Zeichenzeit lokal im Headless-Browser Median 0,8 ms, p95 1,3 ms, keine physische Mobilmessung. Aktuelle Produktions-Builds aller drei Varianten bestehen lokale Browserchecks bei 390/1440 Pixeln; zusätzlich Iframe mit normalem/blockiertem Speicher (`production-final/results.json`). Der zuvor unvollständige GameMonetize-Test verwies auf das durch die Paketierung entfernte Staging-Verzeichnis; der neue Test nutzt separate Build-Verzeichnisse. Alle zehn Karten sind bei sieben Fenstergrößen in beiden Sprachen geprüft (`matrix-final/results.json`: 140 Fälle). Aktuelle Ansichten und Änderungsübersicht sind verlinkt; alte ZIPs bleiben veraltet.
+**Zwischenstand:** Frische Kampagne automatisiert mit echten Kämpfen, Speichern/Neuladen und Freischaltung nach jedem Sieg geprüft (`fresh-campaign.json`). Ein vollständiger menschlicher Durchlauf bleibt offen. Bei 100 Transporten: Zeichenzeit lokal im Headless-Browser Median 0,8 ms, p95 1,3 ms, keine physische Mobilmessung. Aktuelle Produktions-Builds aller drei Varianten bestehen lokale Browserchecks bei 390/1440 Pixeln; zusätzlich Iframe mit normalem/blockiertem Speicher (`production-final/results.json`). Der zuvor unvollständige GameMonetize-Test verwies auf das durch die Paketierung entfernte Staging-Verzeichnis; der neue Test nutzt separate Build-Verzeichnisse. Alle zehn Karten sind bei sieben Fenstergrößen in beiden Sprachen geprüft (`matrix-final/results.json`: 140 Fälle). Aktuelle Ansichten und Änderungsübersicht sind verlinkt; frühere ZIPs bleiben veraltet. Die anschließend ausdrücklich beauftragten r2-Pakete sind separat im Paketbericht nachgewiesen.
 
 ### Noch ausstehende Freigabe
 
 - [ ] Echten Kongregate-Statistikeintrag aus der Portal-Vorschau nachweisen; SDK-Bereitschaft allein genügt nicht.
 - [ ] `missions_completed` im Portal als sichtbare Rangliste aktivieren; Namen und Typen passen bereits.
-- [ ] Neue Upload-ZIPs aus dem abschließend geprüften Stand erstellen und genau diese Artefakte verifizieren. Die vorhandenen ZIPs enthalten jüngste Korrekturen nicht.
+- [x] Neue Kongregate-/Y8-Upload-ZIPs r2 aus `d053f9b` erstellen und genau diese Artefakte entpackt verifizieren: Integrität, Build-Abgleich, Entwicklungsfreiheit, Start, Touch, Speicher, Eis-Finale und Iframe-Prüfung bestanden. Portal-SDKs im lokalen Browser ersetzt; Live-Portal-Abnahme bleibt offen.
 - [ ] Offene menschliche/physische Prüfungen durchführen oder deren Zurückstellung ausdrücklich entscheiden; bis dahin bleiben sie offen.
 
 ## Reihenfolge und Abschlussführung

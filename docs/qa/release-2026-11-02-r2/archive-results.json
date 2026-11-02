@@ -1,0 +1,30 @@
+[
+  {
+    "variant": "kongregate",
+    "sourceCommit": "d053f9b9a1a5071dcf5302f2a0722bac87658074",
+    "fileName": "hexfront-kongregate-complete.zip",
+    "bytes": 18069582,
+    "sha256": "ffce0a0745d548be7849ebe433cb68f806db7b147b116d702153ffc7047dfb51",
+    "files": 106,
+    "zipIntegrity": true,
+    "matchesBuild": true,
+    "debugAbsent": true,
+    "portalSeparation": true,
+    "iceFinale": true,
+    "hintFix": true
+  },
+  {
+    "variant": "y8",
+    "sourceCommit": "d053f9b9a1a5071dcf5302f2a0722bac87658074",
+    "fileName": "hexfront-y8-improved-2026-11-02-r2.zip",
+    "bytes": 18631426,
+    "sha256": "35bd2d670adb04262c752afe4b857033a3f0579d67d993d51cd51d0296032bd8",
+    "files": 108,
+    "zipIntegrity": true,
+    "matchesBuild": true,
+    "debugAbsent": true,
+    "portalSeparation": true,
+    "iceFinale": true,
+    "hintFix": true
+  }
+]

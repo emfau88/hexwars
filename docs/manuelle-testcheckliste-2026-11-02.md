@@ -1,14 +1,14 @@
 # HEXFRONT – Manuelle Testcheckliste
 
-Stand: 2. November 2026. Für die nächste Testsitzung auf `codex/improve-mobile-onboarding-copy`. Alle Checkboxen unten sind manuelle Prüfungen und deshalb zunächst offen. Automatische Ergebnisse und Gesamtstatus stehen im [Verbesserungsplan](hexfront-verbesserungsplan-2026-11-02.md).
+Stand: 2. November 2026. Für die nächste Testsitzung mit `main` beziehungsweise den Portalpaketen r2. Alle Checkboxen unten sind manuelle Prüfungen und deshalb zunächst offen. Automatische Ergebnisse und Gesamtstatus stehen im [Verbesserungsplan](hexfront-verbesserungsplan-2026-11-02.md).
 
 ## 1. Den richtigen Stand starten
 
-- [ ] **Direkt auf dem Handy oder PC:** [Aktuellen Teststand öffnen](https://rawcdn.githack.com/emfau88/hexwars/d2201fb3e40ab88f443b0fee5c5e863d4756f806/previews/hexfront-improvements-2026-11-02/index.html). Kein lokaler Server nötig. Falls der Host eine Zwischenseite zeigt, **Open the page** antippen. Das ist Spielquellstand `9812ced`, festgehalten in Vorschau-Commit `d2201fb`.
+- [ ] **Direkt auf dem Handy oder PC:** [Aktuellen Main-Stand öffnen](https://emfau88.github.io/hexwars/). Der Main-Workflow aktualisiert ihn nach seinen Prüfungen; die frühere feste githack-Vorschau enthält die jüngste Lade-Korrektur nicht.
 - [ ] **Alternativ lokal:** Im Projektordner den genannten Branch verwenden und mit `npm run dev` starten. Die im Terminal angezeigte Adresse öffnen, normalerweise `http://127.0.0.1:5173/`.
 - [ ] Die Seite einmal neu laden. Ohne Entwicklungsparameter wie `unlock`, `autoplay` oder `speed` testen, damit Freischaltung und Tempo dem normalen Spiel entsprechen.
 - [ ] Bestehenden Fortschritt zunächst im bisherigen Browserprofil auf demselben Host prüfen. Spielstände werden nicht automatisch zwischen localhost, der Handy-Vorschau und Kongregate synchronisiert. Für den frischen Kampagnendurchlauf ein separates Profil oder privates Fenster verwenden; den alten Spielstand nicht dafür löschen. Private Fenster verlieren ihren Speicher üblicherweise beim Schließen.
-- [ ] Für spätere Portaltests ein frisch gebautes Paket dieses Quellstands in der Portal-Vorschau verwenden. Die bereits vorhandenen ZIPs und die bisher veröffentlichte Version enthalten die jüngsten Korrekturen noch nicht. Lokal werden absichtlich keine Kongregate-Werte übertragen.
+- [ ] Für spätere Portaltests ein frisch gebautes Paket dieses Quellstands in der Portal-Vorschau verwenden. Die neuen r2-Dateien sind im [Paketbericht](releases/hexfront-2026-11-02-r2.md) eindeutig benannt; ältere ZIPs und bisherige Portalversionen enthalten die jüngsten Korrekturen nicht. Lokal werden absichtlich keine Kongregate-Werte übertragen.
 
 ## 2. Kampagne und Spielstände
 

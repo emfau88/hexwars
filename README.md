@@ -1,12 +1,12 @@
 # HEXFRONT
 
-**[▶ Aktuellen Teststand auf dem Handy oder PC spielen](https://rawcdn.githack.com/emfau88/hexwars/d2201fb3e40ab88f443b0fee5c5e863d4756f806/previews/hexfront-improvements-2026-11-02/index.html)**
+**[▶ Aktuellen HEXFRONT-Stand auf Handy oder PC spielen](https://emfau88.github.io/hexwars/)**
 
-Teststand vom **2. November 2026**: verbesserter Nachschub, Tap-/Tastatursteuerung, Pause, Eis-Finale und korrigierte mobile Hinweiszeile. Funktioniert direkt im Browser ohne lokalen Server. Falls der Vorschauhost einen Hinweis zeigt, **Open the page** antippen.
+Update vom **2. November 2026**: verbesserter Nachschub, Tap-/Tastatursteuerung, Pause, Eis-Finale, ruhige mobile Hinweiszeile und schnellerer Wechsel zur nächsten Mission. Der Main-Workflow aktualisiert diesen Link nach bestandenen Prüfungen.
 
 **[✓ Testcheckliste mit konkreten Prüfschritten](docs/manuelle-testcheckliste-2026-11-02.md)** · [Verbesserungsplan und offene Abnahme](docs/hexfront-verbesserungsplan-2026-11-02.md)
 
-Der Playlink ist fest auf Vorschau-Commit `d2201fb` mit Spielquellstand `9812ced` gesetzt. Die manuelle Abnahme steht noch aus. Kongregate-Statistiken werden erst innerhalb von Kongregate übertragen.
+[Kongregate-/Y8-Paketstand r2 und Prüfnachweise](docs/releases/hexfront-2026-11-02-r2.md). Portalbetrieb und vollständige manuelle Abnahme bleiben offen; Kongregate-Statistiken werden erst innerhalb von Kongregate übertragen.
 
 ## ▶ Lane Wars – Meilenstein 2.1
 
@@ -109,9 +109,9 @@ The upload-ready portal package contains one 1000 × 800 icon and three 1600 × 
 
 ## Play
 
-[Play this branch's current improvement preview](https://rawcdn.githack.com/emfau88/hexwars/d2201fb3e40ab88f443b0fee5c5e863d4756f806/previews/hexfront-improvements-2026-11-02/index.html)
+[Play the current main build](https://emfau88.github.io/hexwars/)
 
-The [earlier GitHub Pages build](https://emfau88.github.io/hexwars/) is separate from this branch preview.
+The [earlier pinned phone preview](https://rawcdn.githack.com/emfau88/hexwars/d2201fb3e40ab88f443b0fee5c5e863d4756f806/previews/hexfront-improvements-2026-11-02/index.html) remains available for comparison; it predates the faster next-level transition.
 
 - Drag from your field to a reachable target, or tap the source and then its target.
 - Focus the board and use arrow keys plus Enter to select/send. Escape cancels a selection; `P` opens pause/help. Restart and leaving the mission are explicit actions in that menu.

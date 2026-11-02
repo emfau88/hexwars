@@ -1,6 +1,6 @@
 # HEXFRONT – Änderungen und ausstehende Abnahme
 
-Stand: 2. November 2026. Lokaler Testkandidat, noch keine Veröffentlichung. Verbindlicher Status: [Verbesserungsplan](hexfront-verbesserungsplan-2026-11-02.md).
+Stand: 2. November 2026. Main-Merge und lokal geprüfte Portalpakete r2; noch kein Portal-Upload. Verbindlicher Status: [Verbesserungsplan](hexfront-verbesserungsplan-2026-11-02.md).
 
 Für die nächste manuelle Testsitzung: [Konkrete Testcheckliste mit erwarteten Ergebnissen](manuelle-testcheckliste-2026-11-02.md).
 
@@ -41,6 +41,6 @@ Für die nächste manuelle Testsitzung: [Konkrete Testcheckliste mit erwarteten 
 - Physische Touchgeräte einschließlich Audio, Gesten und Bildlauf.
 - Tatsächlicher Portalbetrieb; bei Kongregate insbesondere echter Statistikeintrag, Reload, Level-10-Abschluss und positive Finalzeit.
 - Sichtbare Fortschrittsrangliste im Portal aktivieren; neue Statistiken sind optionale Vorschläge, keine Voraussetzung für die Fehlerkorrektur.
-- Neue Upload-ZIPs aus dem geprüften Stand erstellen und genau diese Dateien abnehmen. Die früher erzeugten ZIPs enthalten die jüngsten Korrekturen nicht.
+Die neuen Kongregate-/Y8-ZIPs r2 sind erstellt und lokal geprüft; genaue Dateinamen, Quellstand und Prüfsummen stehen im [Paketbericht](releases/hexfront-2026-11-02-r2.md).
 
-Die Quelländerungen sind lokal verfügbar unter `http://127.0.0.1:5173/`, solange der Entwicklungsserver läuft. Kein Update wurde hochgeladen. [Kongregate-Diagnose und Statistikvorschläge](kongregate-statistics-audit-2026-11-02.md).
+Der aktuelle Main-Stand wird nach erfolgreichem Workflow unter https://emfau88.github.io/hexwars/ bereitgestellt. Die Portalpakete wurden noch nicht hochgeladen. [Kongregate-Diagnose und Statistikvorschläge](kongregate-statistics-audit-2026-11-02.md).

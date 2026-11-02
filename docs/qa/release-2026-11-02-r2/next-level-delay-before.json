@@ -1,0 +1,12 @@
+{
+  "viewport": "390x844",
+  "simulatedAssetLatencyMs": 1500,
+  "requestsBeforeClick": 0,
+  "requestsAfterClick": 3,
+  "feedbackAfter100ms": {
+    "label": "CONTINUE TO LEVEL 2",
+    "disabled": false,
+    "busy": null
+  },
+  "nextLevelVisibleAfterMs": 1639
+}

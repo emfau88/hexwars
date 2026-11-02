@@ -1,0 +1,102 @@
+[
+  {
+    "variant": "kongregate",
+    "width": 390,
+    "freshStart": true,
+    "touchCommand": true,
+    "hintStable": true,
+    "pause": true,
+    "language": true,
+    "oldSaveUnlocksIceFinale": true,
+    "supplyPreferencePersists": true,
+    "debugAbsent": true,
+    "errors": [],
+    "badAssets": [],
+    "sdk": "local stub; live portal pending"
+  },
+  {
+    "variant": "kongregate",
+    "width": 1440,
+    "freshStart": true,
+    "touchCommand": true,
+    "hintStable": true,
+    "pause": true,
+    "language": true,
+    "oldSaveUnlocksIceFinale": true,
+    "supplyPreferencePersists": true,
+    "debugAbsent": true,
+    "errors": [],
+    "badAssets": [],
+    "sdk": "local stub; live portal pending"
+  },
+  {
+    "variant": "y8",
+    "width": 390,
+    "freshStart": true,
+    "touchCommand": true,
+    "hintStable": true,
+    "pause": true,
+    "language": true,
+    "oldSaveUnlocksIceFinale": true,
+    "supplyPreferencePersists": true,
+    "debugAbsent": true,
+    "errors": [],
+    "badAssets": [],
+    "sdk": "local stub; live portal pending"
+  },
+  {
+    "variant": "y8",
+    "width": 1440,
+    "freshStart": true,
+    "touchCommand": true,
+    "hintStable": true,
+    "pause": true,
+    "language": true,
+    "oldSaveUnlocksIceFinale": true,
+    "supplyPreferencePersists": true,
+    "debugAbsent": true,
+    "errors": [],
+    "badAssets": [],
+    "sdk": "local stub; live portal pending"
+  },
+  {
+    "variant": "kongregate",
+    "iframe": true,
+    "blockedStorage": false,
+    "start": true,
+    "pause": true,
+    "language": true,
+    "errors": [],
+    "sdk": "local stub; live portal pending"
+  },
+  {
+    "variant": "kongregate",
+    "iframe": true,
+    "blockedStorage": true,
+    "start": true,
+    "pause": true,
+    "language": true,
+    "errors": [],
+    "sdk": "local stub; live portal pending"
+  },
+  {
+    "variant": "y8",
+    "iframe": true,
+    "blockedStorage": false,
+    "start": true,
+    "pause": true,
+    "language": true,
+    "errors": [],
+    "sdk": "local stub; live portal pending"
+  },
+  {
+    "variant": "y8",
+    "iframe": true,
+    "blockedStorage": true,
+    "start": true,
+    "pause": true,
+    "language": true,
+    "errors": [],
+    "sdk": "local stub; live portal pending"
+  }
+]

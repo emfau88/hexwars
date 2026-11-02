@@ -1,0 +1,26 @@
+[
+  {
+    "readyBeforeClick": false,
+    "simulatedAssetLatencyMs": 1500,
+    "requestsBeforeClick": 3,
+    "requestsAfterClick": 3,
+    "feedbackImmediatelyAfterClick": {
+      "label": "LOADING MAP…",
+      "disabled": true,
+      "busy": "true"
+    },
+    "nextLevelVisibleAfterMs": 1248
+  },
+  {
+    "readyBeforeClick": true,
+    "simulatedAssetLatencyMs": 1500,
+    "requestsBeforeClick": 3,
+    "requestsAfterClick": 3,
+    "feedbackImmediatelyAfterClick": {
+      "label": "CONTINUE TO LEVEL 2",
+      "disabled": false,
+      "busy": "false"
+    },
+    "nextLevelVisibleAfterMs": 168
+  }
+]
